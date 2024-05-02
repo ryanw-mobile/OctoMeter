@@ -17,11 +17,11 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: set up JDK 21
+      - name: set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
-          java-version: '21'
+          java-version: '17'
           cache: gradle
 
       - name: Grant execute permission for gradlew
@@ -30,11 +30,11 @@ jobs:
       - name: Gradle build
         run: ./gradlew bundleRelease assembleRelease --no-daemon
         env:
-          BITRISE: 'true'
+          CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
-          BITRISEIO_ANDROID_KEYSTORE_ALIAS: ${{ secrets.BITRISEIO_ANDROID_KEYSTORE_ALIAS }}
-          BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD: ${{ secrets.BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD }}
-          BITRISEIO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.BITRISEIO_ANDROID_KEYSTORE_PASSWORD }}
+          CI_ANDROID_KEYSTORE_ALIAS: ${{ secrets.BITRISEIO_ANDROID_KEYSTORE_ALIAS }}
+          CI_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD: ${{ secrets.BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD }}
+          CI_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.BITRISEIO_ANDROID_KEYSTORE_PASSWORD }}
 
       - name: Extract Version Number
         run: echo "version=${GITHUB_REF#refs/tags/release/}" >> $GITHUB_ENV
@@ -59,13 +59,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app/build/outputs/mapping/release/mapping.txt
+          asset_path: ./composeApp/build/outputs/mapping/release/mapping.txt
           asset_name: mapping-${{ env.version }}.txt
           asset_content_type: text/plain
 
       - name: Find APK file
         run: |
-          apk_path=$(find ./app/build/outputs/apk/release -name "cidemo-*.apk" | head -n 1)
+          apk_path=$(find ./composeApp/build/outputs/apk/release -name "roctopus-*.apk" | head -n 1)
           echo "apk_path=$apk_path" >> $GITHUB_ENV
 
       - name: Upload Release Asset APK
@@ -80,7 +80,7 @@ jobs:
 
       - name: Find AAB file
         run: |
-          aab_path=$(find ./app/build/outputs/bundle/release -name "cidemo-*.aab" | head -n 1)
+          aab_path=$(find ./composeApp/build/outputs/bundle/release -name "roctopus-*.aab" | head -n 1)
           echo "aab_path=$aab_path" >> $GITHUB_ENV
 
       - name: Upload Release Asset AAB
