@@ -61,8 +61,8 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.ktor.client.cio)
             implementation(libs.kotlinx.coroutines.android)
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -73,6 +73,8 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.kermit)
             implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
@@ -81,9 +83,8 @@ kotlin {
         desktopMain.dependencies {
             implementation("org.jetbrains.skiko:skiko-awt-runtime-$skikoTarget:$skikoVersion")
             implementation(compose.desktop.currentOs)
-            implementation(libs.ktor.client.cio)
-            implementation(libs.koin.android)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.koin.jvm)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -247,7 +248,7 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "com.rwmobi.roctopus.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
