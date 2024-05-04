@@ -51,6 +51,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.kermit)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -59,6 +60,20 @@ kotlin {
 }
 
 android {
+    fun setOutputFileName() {
+        applicationVariants.all {
+            val variant = this
+            variant.outputs
+                .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+                .forEach { output ->
+                    val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
+                    val outputFileName =
+                        "roctopus-${variant.versionName}-$timestamp-${variant.name}.apk"
+                    output.outputFileName = outputFileName
+                }
+        }
+    }
+
     namespace = "com.rwmobi.roctopus"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
@@ -117,20 +132,6 @@ android {
     }
 
     buildTypes {
-        fun setOutputFileName() {
-            applicationVariants.all {
-                val variant = this
-                variant.outputs
-                    .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
-                    .forEach { output ->
-                        val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
-                        val outputFileName =
-                            "roctopus-${variant.versionName}-$timestamp-${variant.name}.apk"
-                        output.outputFileName = outputFileName
-                    }
-            }
-        }
-
         getByName("debug") {
             applicationIdSuffix = ".debug"
             isMinifyEnabled = false
@@ -153,7 +154,6 @@ android {
             signingConfigs.getByName("release").keyAlias?.let {
                 signingConfig = signingConfigs.getByName("release")
             }
-
             setOutputFileName()
         }
     }

@@ -1,11 +1,4 @@
 [versions]
-# App configurations, not dependencies
-versionCode = "1"
-versionName = "1.0.0"
-minsdk = "26"
-targetsdk = "34"
-compilesdk = "34"
-
 agp = "8.4.0"
 android-compileSdk = "34"
 android-minSdk = "24"
@@ -19,12 +12,22 @@ androidx-material = "1.12.0"
 androidx-test-junit = "1.1.5"
 compose = "1.6.7"
 compose-plugin = "1.6.2"
+kermit = "2.0.3"
 kotlin = "1.9.23"
 junit = "4.13.2"
 kover = "0.7.6"
 ktlint = "12.1.0"
 
+# App configurations, not dependencies
+versionCode = "1"
+versionName = "1.0.0"
+minsdk = "26"
+targetsdk = "34"
+compilesdk = "34"
+
+
 [libraries]
+kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
