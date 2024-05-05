@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.kotlinxKover)
     alias(libs.plugins.gradleKtlint)
+    alias(libs.plugins.serialization)
 }
 
 kotlin {
@@ -78,6 +79,7 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.datetime)
             implementation(libs.koin.core)
         }
         desktopMain.dependencies {
