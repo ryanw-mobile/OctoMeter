@@ -7,13 +7,16 @@
 
 package com.rwmobi.roctopus.di
 
+import com.rwmobi.roctopus.data.source.network.ProductsEndpoint
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
+@OptIn(ExperimentalSerializationApi::class)
 val ktorModule = module {
     single { CIO.create() }
     single {
@@ -24,9 +27,15 @@ val ktorModule = module {
                         ignoreUnknownKeys = true
                         prettyPrint = true
                         isLenient = true
+                        allowTrailingComma = true
                     },
                 )
             }
         }
+    }
+
+    // Provide ProductsEndpoint
+    factory {
+        ProductsEndpoint(httpClient = get())
     }
 }
