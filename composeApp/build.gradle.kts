@@ -37,12 +37,32 @@ kotlin {
         }
     }
 
+    // https://github.com/JetBrains/compose-multiplatform/issues/3123
+    val osName = System.getProperty("os.name")
+    val targetOs = when {
+        osName == "Mac OS X" -> "macos"
+        osName.startsWith("Win") -> "windows"
+        osName.startsWith("Linux") -> "linux"
+        else -> error("Unsupported OS: $osName")
+    }
+
+    val targetArch = when (val osArch = System.getProperty("os.arch")) {
+        "x86_64", "amd64" -> "x64"
+        "aarch64" -> "arm64"
+        else -> error("Unsupported arch: $osArch")
+    }
+
+    val skikoVersion = "0.7.70" // or any more recent version
+    val skikoTarget = "$targetOs-$targetArch"
+
     sourceSets {
         val desktopMain by getting
 
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.kotlinx.coroutines.android)
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -51,14 +71,55 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.kermit)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.koin.core)
         }
         desktopMain.dependencies {
+            implementation("org.jetbrains.skiko:skiko-awt-runtime-$skikoTarget:$skikoVersion")
             implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.koin.jvm)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(kotlin("test-common"))
+            implementation(kotlin("test-annotations-common"))
+
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlin.test.junit)
+            implementation(libs.kotlinx.coroutines.test)
+            // implementation(libs.mockk)
+            implementation(libs.ktor.client.mock)
+            implementation(libs.kotest.assertions.core)
+            implementation(libs.koin.test)
         }
     }
 }
 
 android {
+    fun setOutputFileName() {
+        applicationVariants.all {
+            val variant = this
+            variant.outputs
+                .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+                .forEach { output ->
+                    val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
+                    val outputFileName =
+                        "roctopus-${variant.versionName}-$timestamp-${variant.name}.apk"
+                    output.outputFileName = outputFileName
+                }
+        }
+    }
+
     namespace = "com.rwmobi.roctopus"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
@@ -117,20 +178,6 @@ android {
     }
 
     buildTypes {
-        fun setOutputFileName() {
-            applicationVariants.all {
-                val variant = this
-                variant.outputs
-                    .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
-                    .forEach { output ->
-                        val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
-                        val outputFileName =
-                            "roctopus-${variant.versionName}-$timestamp-${variant.name}.apk"
-                        output.outputFileName = outputFileName
-                    }
-            }
-        }
-
         getByName("debug") {
             applicationIdSuffix = ".debug"
             isMinifyEnabled = false
@@ -153,7 +200,6 @@ android {
             signingConfigs.getByName("release").keyAlias?.let {
                 signingConfig = signingConfigs.getByName("release")
             }
-
             setOutputFileName()
         }
     }
@@ -202,12 +248,12 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "com.rwmobi.roctopus.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.rwmobi.roctopus"
-            packageVersion = "1.0.0"
+            packageVersion = libs.versions.versionName.get()
         }
     }
 }
