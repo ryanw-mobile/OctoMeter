@@ -7,6 +7,7 @@
 
 package com.rwmobi.roctopus.data.source.network
 
+import com.rwmobi.roctopus.data.source.network.samples.GetDayUnitRatesSampleData
 import com.rwmobi.roctopus.data.source.network.samples.GetProductsSampleData
 import com.rwmobi.roctopus.data.source.network.samples.GetStandardUnitRatesSampleData
 import com.rwmobi.roctopus.data.source.network.samples.GetStandingChargesSampleData
@@ -156,6 +157,44 @@ class ProductsEndpointTest {
 
         shouldThrowExactly<NoTransformationFoundException> {
             productsEndpoint.getStandingCharges(
+                productCode = "fake-product-code",
+                tariffCode = "fake-tariff-code",
+            )
+        }
+    }
+
+    // 🗂 getDayUnitRates
+    @Test
+    fun getDayUnitRates_ShouldReturnExpectedDto_WhenHttpStatusIsOK() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.OK,
+                contentType = "application/json",
+                payload = GetDayUnitRatesSampleData.json,
+            ),
+        )
+
+        val result = productsEndpoint.getDayUnitRates(
+            productCode = "fake-product-code",
+            tariffCode = "fake-tariff-code",
+        )
+        result shouldBe GetDayUnitRatesSampleData.dto
+    }
+
+    @Test
+    fun getDayUnitRates_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.InternalServerError,
+                contentType = "text/html",
+                payload = "Internal Server Error",
+            ),
+        )
+
+        shouldThrowExactly<NoTransformationFoundException> {
+            productsEndpoint.getDayUnitRates(
                 productCode = "fake-product-code",
                 tariffCode = "fake-tariff-code",
             )
