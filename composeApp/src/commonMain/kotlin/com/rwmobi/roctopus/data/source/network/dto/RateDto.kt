@@ -16,6 +16,6 @@ data class RateDto(
     @SerialName("value_exc_vat") val vatExclusivePrice: Double,
     @SerialName("value_inc_vat") val vatInclusivePrice: Double,
     @SerialName("valid_from") val validFrom: Instant,
-    @SerialName("valid_to") val validTo: Instant,
+    @SerialName("valid_to") val validTo: Instant?,
     @SerialName("payment_method") val paymentMethod: String?,
 )

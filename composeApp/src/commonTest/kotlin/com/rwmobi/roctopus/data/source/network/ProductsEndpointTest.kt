@@ -7,6 +7,9 @@
 
 package com.rwmobi.roctopus.data.source.network
 
+import com.rwmobi.roctopus.data.source.network.samples.GetProductsSampleData
+import com.rwmobi.roctopus.data.source.network.samples.GetStandardUnitRatesSampleData
+import com.rwmobi.roctopus.data.source.network.samples.GetStandingChargesSampleData
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
@@ -51,6 +54,7 @@ class ProductsEndpointTest {
         }
     }
 
+    // 🗂 getProducts
     @Test
     fun getProducts_ShouldReturnExpectedDto_WhenHttpStatusIsOK() = runTest {
         val productsEndpoint = ProductsEndpoint(
@@ -82,6 +86,7 @@ class ProductsEndpointTest {
         }
     }
 
+    // 🗂 getStandardUnitRates
     @Test
     fun getStandardUnitRates_ShouldReturnExpectedDto_WhenHttpStatusIsOK() = runTest {
         val productsEndpoint = ProductsEndpoint(
@@ -118,4 +123,43 @@ class ProductsEndpointTest {
             )
         }
     }
+
+    // 🗂 getStandingCharges
+    @Test
+    fun getStandingCharges_ShouldReturnExpectedDto_WhenHttpStatusIsOK() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.OK,
+                contentType = "application/json",
+                payload = GetStandingChargesSampleData.json,
+            ),
+        )
+
+        val result = productsEndpoint.getStandingCharges(
+            productCode = "fake-product-code",
+            tariffCode = "fake-tariff-code",
+        )
+        result shouldBe GetStandingChargesSampleData.dto
+    }
+
+    @Test
+    fun getStandingCharges_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.InternalServerError,
+                contentType = "text/html",
+                payload = "Internal Server Error",
+            ),
+        )
+
+        shouldThrowExactly<NoTransformationFoundException> {
+            productsEndpoint.getStandingCharges(
+                productCode = "fake-product-code",
+                tariffCode = "fake-tariff-code",
+            )
+        }
+    }
+
 }

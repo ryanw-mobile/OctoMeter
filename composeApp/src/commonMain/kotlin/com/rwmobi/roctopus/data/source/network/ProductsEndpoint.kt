@@ -7,8 +7,8 @@
 
 package com.rwmobi.roctopus.data.source.network
 
-import com.rwmobi.roctopus.data.source.network.dto.ProductsApiResponse
 import com.rwmobi.roctopus.data.source.network.dto.PricesApiResponse
+import com.rwmobi.roctopus.data.source.network.dto.ProductsApiResponse
 import com.rwmobi.roctopus.domain.extensions.formatInstantWithoutSeconds
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -56,6 +56,21 @@ class ProductsEndpoint(
     ): PricesApiResponse? {
         return withContext(dispatcher) {
             httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/standard-unit-rates") {
+                parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
+                parameter("period_to", periodTo?.formatInstantWithoutSeconds())
+            }.body()
+        }
+    }
+
+    // Fixed price contracts / standard variable price contracts / standing charges
+    suspend fun getStandingCharges(
+        productCode: String,
+        tariffCode: String,
+        periodFrom: Instant? = null,
+        periodTo: Instant? = null,
+    ): PricesApiResponse? {
+        return withContext(dispatcher) {
+            httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/standing-charges") {
                 parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
                 parameter("period_to", periodTo?.formatInstantWithoutSeconds())
             }.body()
