@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.roctopus.data.source.network
+package com.rwmobi.roctopus.data.source.network.samples
 
 import com.rwmobi.roctopus.data.source.network.dto.LinkDto
 import com.rwmobi.roctopus.data.source.network.dto.ProductDetailsDto

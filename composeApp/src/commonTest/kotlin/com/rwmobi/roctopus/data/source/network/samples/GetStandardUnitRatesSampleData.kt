@@ -5,10 +5,10 @@
  *
  */
 
-package com.rwmobi.roctopus.data.source.network
+package com.rwmobi.roctopus.data.source.network.samples
 
-import com.rwmobi.roctopus.data.source.network.dto.RateDto
 import com.rwmobi.roctopus.data.source.network.dto.PricesApiResponse
+import com.rwmobi.roctopus.data.source.network.dto.RateDto
 import kotlinx.datetime.Instant
 
 object GetStandardUnitRatesSampleData {
