@@ -81,4 +81,41 @@ class ProductsEndpointTest {
             productsEndpoint.getProducts()
         }
     }
+
+    @Test
+    fun getStandardUnitRates_ShouldReturnExpectedDto_WhenHttpStatusIsOK() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.OK,
+                contentType = "application/json",
+                payload = GetStandardUnitRatesSampleData.json,
+            ),
+        )
+
+        val result = productsEndpoint.getStandardUnitRates(
+            productCode = "fake-product-code",
+            tariffCode = "fake-tariff-code",
+        )
+        result shouldBe GetStandardUnitRatesSampleData.dto
+    }
+
+    @Test
+    fun getStandardUnitRates_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.InternalServerError,
+                contentType = "text/html",
+                payload = "Internal Server Error",
+            ),
+        )
+
+        shouldThrowExactly<NoTransformationFoundException> {
+            productsEndpoint.getStandardUnitRates(
+                productCode = "fake-product-code",
+                tariffCode = "fake-tariff-code",
+            )
+        }
+    }
 }

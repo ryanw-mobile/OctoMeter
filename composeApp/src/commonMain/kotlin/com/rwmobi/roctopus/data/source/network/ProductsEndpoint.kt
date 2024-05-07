@@ -8,6 +8,8 @@
 package com.rwmobi.roctopus.data.source.network
 
 import com.rwmobi.roctopus.data.source.network.dto.ProductsApiResponse
+import com.rwmobi.roctopus.data.source.network.dto.StandardUnitRatesApiResponse
+import com.rwmobi.roctopus.domain.extensions.formatInstantWithoutSeconds
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -16,6 +18,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Instant
 
 class ProductsEndpoint(
     baseUrl: String,
@@ -43,4 +46,20 @@ class ProductsEndpoint(
             }.body()
         }
     }
+
+    // Agile prices, Go prices only differs by productCode and tariffCode
+    suspend fun getStandardUnitRates(
+        productCode: String,
+        tariffCode: String,
+        periodFrom: Instant? = null,
+        periodTo: Instant? = null,
+    ): StandardUnitRatesApiResponse? {
+        return withContext(dispatcher) {
+            httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/standard-unit-rates") {
+                parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
+                parameter("period_to", periodTo?.formatInstantWithoutSeconds())
+            }.body()
+        }
+    }
+
 }
