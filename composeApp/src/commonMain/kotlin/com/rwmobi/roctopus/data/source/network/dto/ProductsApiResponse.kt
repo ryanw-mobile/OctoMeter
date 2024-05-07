@@ -10,9 +10,9 @@ package com.rwmobi.roctopus.data.source.network.dto
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class StandardUnitRatesApiResponse(
+data class ProductsApiResponse(
     val count: Int,
     val next: String?,
     val previous: String?,
-    val results: List<RateDto>,
+    val results: List<ProductDetailsDto>,
 )

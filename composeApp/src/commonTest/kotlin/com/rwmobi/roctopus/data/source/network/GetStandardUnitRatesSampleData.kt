@@ -8,7 +8,7 @@
 package com.rwmobi.roctopus.data.source.network
 
 import com.rwmobi.roctopus.data.source.network.dto.RateDto
-import com.rwmobi.roctopus.data.source.network.dto.StandardUnitRatesApiResponse
+import com.rwmobi.roctopus.data.source.network.dto.PricesApiResponse
 import kotlinx.datetime.Instant
 
 object GetStandardUnitRatesSampleData {
@@ -56,7 +56,7 @@ object GetStandardUnitRatesSampleData {
 }
     """.trimIndent()
 
-    val dto = StandardUnitRatesApiResponse(
+    val dto = PricesApiResponse(
         count = 26588,
         next = "https://api.octopus.energy/v1/products/AGILE-FLEX-22-11-25/electricity-tariffs/E-1R-AGILE-FLEX-22-11-25-J/standard-unit-rates/?page=2",
         previous = null,
