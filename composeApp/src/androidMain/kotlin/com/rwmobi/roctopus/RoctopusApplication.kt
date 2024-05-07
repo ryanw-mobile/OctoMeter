@@ -10,6 +10,7 @@ package com.rwmobi.roctopus
 import android.app.Application
 import com.rwmobi.roctopus.di.appModule
 import com.rwmobi.roctopus.di.ktorModule
+import com.rwmobi.roctopus.di.repositoryModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
@@ -24,6 +25,7 @@ class RoctopusApplication : Application() {
             modules(
                 appModule,
                 ktorModule,
+                repositoryModule,
             )
         }
     }

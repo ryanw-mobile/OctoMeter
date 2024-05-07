@@ -5,14 +5,14 @@
  *
  */
 
-package com.rwmobi.roctopus.data.source.network
+package com.rwmobi.roctopus.data.source.network.samples
 
-import com.rwmobi.roctopus.data.source.network.dto.Link
-import com.rwmobi.roctopus.data.source.network.dto.ProductDetails
+import com.rwmobi.roctopus.data.source.network.dto.LinkDto
+import com.rwmobi.roctopus.data.source.network.dto.ProductDetailsDto
 import com.rwmobi.roctopus.data.source.network.dto.ProductsApiResponse
 import kotlinx.datetime.Instant
 
-object ProductsEndpointSampleData {
+object GetProductsSampleData {
     val json =
         """{
     "count": 5,
@@ -148,7 +148,7 @@ object ProductsEndpointSampleData {
         next = null,
         previous = null,
         results = listOf(
-            ProductDetails(
+            ProductDetailsDto(
                 code = "AGILE-24-04-03",
                 direction = "IMPORT",
                 fullName = "Agile Octopus April 2024 v1",
@@ -163,8 +163,8 @@ object ProductsEndpointSampleData {
                 term = 12,
                 availableFrom = Instant.parse("2024-04-02T23:00:00Z"),
                 availableTo = null,
-                links = listOf(
-                    Link(
+                linkDtos = listOf(
+                    LinkDto(
                         href = "https://api.octopus.energy/v1/products/AGILE-24-04-03/",
                         method = "GET",
                         rel = "self",
@@ -172,7 +172,7 @@ object ProductsEndpointSampleData {
                 ),
                 brand = "OCTOPUS_ENERGY",
             ),
-            ProductDetails(
+            ProductDetailsDto(
                 code = "AGILE-BB-24-04-03",
                 direction = "IMPORT",
                 fullName = "Agile Octopus April 2024 v1",
@@ -187,8 +187,8 @@ object ProductsEndpointSampleData {
                 term = 12,
                 availableFrom = Instant.parse("2024-04-02T23:00:00Z"),
                 availableTo = null,
-                links = listOf(
-                    Link(
+                linkDtos = listOf(
+                    LinkDto(
                         href = "https://api.octopus.energy/v1/products/AGILE-BB-24-04-03/",
                         method = "GET",
                         rel = "self",
@@ -196,7 +196,7 @@ object ProductsEndpointSampleData {
                 ),
                 brand = "BULB",
             ),
-            ProductDetails(
+            ProductDetailsDto(
                 code = "AGILE-OUTGOING-19-05-13",
                 direction = "EXPORT",
                 fullName = "Agile Outgoing Octopus May 2019",
@@ -211,8 +211,8 @@ object ProductsEndpointSampleData {
                 term = 12,
                 availableFrom = Instant.parse("2018-01-01T00:00:00Z"),
                 availableTo = null,
-                links = listOf(
-                    Link(
+                linkDtos = listOf(
+                    LinkDto(
                         href = "https://api.octopus.energy/v1/products/AGILE-OUTGOING-19-05-13/",
                         method = "GET",
                         rel = "self",
@@ -220,7 +220,7 @@ object ProductsEndpointSampleData {
                 ),
                 brand = "OCTOPUS_ENERGY",
             ),
-            ProductDetails(
+            ProductDetailsDto(
                 code = "AGILE-OUTGOING-BB-23-02-28",
                 direction = "EXPORT",
                 fullName = "Agile Outgoing Octopus February 2023 v1",
@@ -235,8 +235,8 @@ object ProductsEndpointSampleData {
                 term = 12,
                 availableFrom = Instant.parse("2023-02-27T00:00:00Z"),
                 availableTo = null,
-                links = listOf(
-                    Link(
+                linkDtos = listOf(
+                    LinkDto(
                         href = "https://api.octopus.energy/v1/products/AGILE-OUTGOING-BB-23-02-28/",
                         method = "GET",
                         rel = "self",
@@ -244,7 +244,7 @@ object ProductsEndpointSampleData {
                 ),
                 brand = "BULB",
             ),
-            ProductDetails(
+            ProductDetailsDto(
                 code = "COOP-FIX-12M-24-05-04",
                 direction = "IMPORT",
                 fullName = "Co-op 12M Fixed May 2024 v1",
@@ -259,8 +259,8 @@ object ProductsEndpointSampleData {
                 term = 12,
                 availableFrom = Instant.parse("2024-05-03T23:00:00Z"),
                 availableTo = null,
-                links = listOf(
-                    Link(
+                linkDtos = listOf(
+                    LinkDto(
                         href = "https://api.octopus.energy/v1/products/COOP-FIX-12M-24-05-04/",
                         method = "GET",
                         rel = "self",

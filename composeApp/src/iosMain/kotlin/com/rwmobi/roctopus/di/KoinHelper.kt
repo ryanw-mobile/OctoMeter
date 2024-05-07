@@ -13,6 +13,7 @@ fun initKoin() {
         modules(
             appModule,
             ktorModule,
+            repositoryModule,
         )
     }
 }

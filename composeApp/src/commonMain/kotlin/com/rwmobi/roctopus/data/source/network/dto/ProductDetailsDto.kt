@@ -12,15 +12,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ProductsApiResponse(
-    val count: Int,
-    val next: String?,
-    val previous: String?,
-    val results: List<ProductDetails>,
-)
-
-@Serializable
-data class ProductDetails(
+data class ProductDetailsDto(
     @SerialName("code") val code: String,
     @SerialName("direction") val direction: String,
     @SerialName("full_name") val fullName: String,
@@ -35,13 +27,6 @@ data class ProductDetails(
     @SerialName("term") val term: Int?,
     @SerialName("available_from") val availableFrom: Instant,
     @SerialName("available_to") val availableTo: Instant?,
-    @SerialName("links") val links: List<Link>,
+    @SerialName("links") val linkDtos: List<LinkDto>,
     @SerialName("brand") val brand: String,
-)
-
-@Serializable
-data class Link(
-    @SerialName("href") val href: String,
-    @SerialName("method") val method: String,
-    @SerialName("rel") val rel: String,
 )
