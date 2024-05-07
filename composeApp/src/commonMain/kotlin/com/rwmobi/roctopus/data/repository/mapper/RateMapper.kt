@@ -11,14 +11,10 @@ import com.rwmobi.roctopus.data.source.network.dto.RateDto
 import com.rwmobi.roctopus.domain.model.PaymentMethod
 import com.rwmobi.roctopus.domain.model.Rate
 
-fun RateDto.toRate(): Rate {
-    return Rate(
-        vatExclusivePrice = vatExclusivePrice,
-        vatInclusivePrice = vatInclusivePrice,
-        validFrom = validFrom,
-        validTo = validTo,
-        paymentMethod = PaymentMethod.fromValue(paymentMethod),
-    )
-}
-
-fun List<RateDto>.toRate(): List<Rate> = map { it.toRate() }
+fun RateDto.toRate() = Rate(
+    vatExclusivePrice = vatExclusivePrice,
+    vatInclusivePrice = vatInclusivePrice,
+    validFrom = validFrom,
+    validTo = validTo,
+    paymentMethod = PaymentMethod.fromValue(paymentMethod),
+)

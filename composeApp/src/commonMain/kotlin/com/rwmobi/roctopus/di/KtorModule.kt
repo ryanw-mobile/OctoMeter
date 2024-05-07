@@ -7,6 +7,7 @@
 
 package com.rwmobi.roctopus.di
 
+import com.rwmobi.roctopus.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.roctopus.data.source.network.ProductsEndpoint
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -36,9 +37,13 @@ val ktorModule = module {
         }
     }
 
-    // Provide ProductsEndpoint
     factory {
         ProductsEndpoint(
+            baseUrl = BASE_URL,
+            httpClient = get(),
+        )
+
+        ElectricityMeterPointsEndpoint(
             baseUrl = BASE_URL,
             httpClient = get(),
         )
