@@ -8,6 +8,7 @@
 package com.rwmobi.roctopus.data.source.network
 
 import com.rwmobi.roctopus.data.source.network.samples.GetDayUnitRatesSampleData
+import com.rwmobi.roctopus.data.source.network.samples.GetNightUnitRatesSampleData
 import com.rwmobi.roctopus.data.source.network.samples.GetProductsSampleData
 import com.rwmobi.roctopus.data.source.network.samples.GetStandardUnitRatesSampleData
 import com.rwmobi.roctopus.data.source.network.samples.GetStandingChargesSampleData
@@ -201,4 +202,41 @@ class ProductsEndpointTest {
         }
     }
 
+    // 🗂 getNightUnitRates
+    @Test
+    fun getNightUnitRates_ShouldReturnExpectedDto_WhenHttpStatusIsOK() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.OK,
+                contentType = "application/json",
+                payload = GetNightUnitRatesSampleData.json,
+            ),
+        )
+
+        val result = productsEndpoint.getNightUnitRates(
+            productCode = "fake-product-code",
+            tariffCode = "fake-tariff-code",
+        )
+        result shouldBe GetNightUnitRatesSampleData.dto
+    }
+
+    @Test
+    fun getNightUnitRates_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.InternalServerError,
+                contentType = "text/html",
+                payload = "Internal Server Error",
+            ),
+        )
+
+        shouldThrowExactly<NoTransformationFoundException> {
+            productsEndpoint.getNightUnitRates(
+                productCode = "fake-product-code",
+                tariffCode = "fake-tariff-code",
+            )
+        }
+    }
 }

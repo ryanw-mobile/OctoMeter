@@ -91,4 +91,17 @@ class ProductsEndpoint(
         }
     }
 
+    suspend fun getNightUnitRates(
+        productCode: String,
+        tariffCode: String,
+        periodFrom: Instant? = null,
+        periodTo: Instant? = null,
+    ): PricesApiResponse? {
+        return withContext(dispatcher) {
+            httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/night-unit-rates") {
+                parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
+                parameter("period_to", periodTo?.formatInstantWithoutSeconds())
+            }.body()
+        }
+    }
 }
