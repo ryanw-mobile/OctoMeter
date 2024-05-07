@@ -7,8 +7,8 @@
 
 package com.rwmobi.roctopus.data.source.network
 
+import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeTypeOf
 import io.ktor.client.HttpClient
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.engine.mock.MockEngine
@@ -25,6 +25,8 @@ import kotlinx.serialization.json.Json
 import kotlin.test.Test
 
 class ProductsEndpointTest {
+    private val fakeBaseUrl = "https://some.fakeurl.com"
+
     @OptIn(ExperimentalSerializationApi::class)
     private fun setupEngine(status: HttpStatusCode, contentType: String, payload: String): HttpClient {
         val mockEngine = MockEngine { _ ->
@@ -52,6 +54,7 @@ class ProductsEndpointTest {
     @Test
     fun getProducts_ShouldReturnExpectedDto_WhenHttpStatusIsOK() = runTest {
         val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
                 status = HttpStatusCode.OK,
                 contentType = "application/json",
@@ -60,13 +63,13 @@ class ProductsEndpointTest {
         )
 
         val result = productsEndpoint.getProducts()
-        result.isSuccess shouldBe true
-        result.getOrNull() shouldBe ProductsEndpointSampleData.dto
+        result shouldBe ProductsEndpointSampleData.dto
     }
 
     @Test
     fun getProducts_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
         val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
                 status = HttpStatusCode.InternalServerError,
                 contentType = "text/html",
@@ -74,8 +77,8 @@ class ProductsEndpointTest {
             ),
         )
 
-        val result = productsEndpoint.getProducts()
-        result.isFailure shouldBe true
-        result.exceptionOrNull()!!.shouldBeTypeOf<NoTransformationFoundException>()
+        shouldThrowExactly<NoTransformationFoundException> {
+            productsEndpoint.getProducts()
+        }
     }
 }

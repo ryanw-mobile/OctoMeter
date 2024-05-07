@@ -16,6 +16,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
+const val BASE_URL = "https://api.octopus.energy"
+
 @OptIn(ExperimentalSerializationApi::class)
 val ktorModule = module {
     single { CIO.create() }
@@ -36,6 +38,9 @@ val ktorModule = module {
 
     // Provide ProductsEndpoint
     factory {
-        ProductsEndpoint(httpClient = get())
+        ProductsEndpoint(
+            baseUrl = BASE_URL,
+            httpClient = get(),
+        )
     }
 }
