@@ -11,24 +11,20 @@ import com.rwmobi.roctopus.data.source.network.dto.ProductDetailsDto
 import com.rwmobi.roctopus.domain.model.Product
 import com.rwmobi.roctopus.domain.model.ProductDirection
 
-fun ProductDetailsDto.toProduct(): Product {
-    return Product(
-        code = code,
-        direction = ProductDirection.fromValue(direction),
-        fullName = fullName,
-        displayName = displayName,
-        description = description,
-        isVariable = isVariable,
-        isGreen = isGreen,
-        isTracker = isTracker,
-        isPrepay = isPrepay,
-        isBusiness = isBusiness,
-        isRestricted = isRestricted,
-        term = term,
-        availableFrom = availableFrom,
-        availableTo = availableTo,
-        brand = brand,
-    )
-}
-
-fun List<ProductDetailsDto>.toProduct(): List<Product> = map { it.toProduct() }
+fun ProductDetailsDto.toProduct() = Product(
+    code = code,
+    direction = ProductDirection.fromValue(direction),
+    fullName = fullName,
+    displayName = displayName,
+    description = description,
+    isVariable = isVariable,
+    isGreen = isGreen,
+    isTracker = isTracker,
+    isPrepay = isPrepay,
+    isBusiness = isBusiness,
+    isRestricted = isRestricted,
+    term = term,
+    availableFrom = availableFrom,
+    availableTo = availableTo,
+    brand = brand,
+)

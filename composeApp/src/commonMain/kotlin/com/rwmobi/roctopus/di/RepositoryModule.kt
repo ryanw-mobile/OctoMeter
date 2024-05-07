@@ -15,6 +15,7 @@ val repositoryModule = module {
     single<OctopusRepository> {
         OctopusRestApiRepository(
             productsEndpoint = get(),
+            electricityMeterPointsEndpoint = get(),
         )
     }
 }
