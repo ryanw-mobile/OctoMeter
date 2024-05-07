@@ -40,7 +40,7 @@ class ProductsEndpoint(
                 parameter("available_at", availableAt)
                 parameter("is_green", isGreen)
                 parameter("is_prepay", isPrepay)
-            }.body() as ProductsApiResponse?
+            }.body()
         }
     }
 }

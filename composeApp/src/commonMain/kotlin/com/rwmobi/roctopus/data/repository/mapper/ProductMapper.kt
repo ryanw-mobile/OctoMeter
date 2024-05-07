@@ -7,11 +7,11 @@
 
 package com.rwmobi.roctopus.data.repository.mapper
 
-import com.rwmobi.roctopus.data.source.network.dto.ProductDetails
+import com.rwmobi.roctopus.data.source.network.dto.ProductDetailsDto
 import com.rwmobi.roctopus.domain.model.Product
 import com.rwmobi.roctopus.domain.model.ProductDirection
 
-fun ProductDetails.toProduct(): Product {
+fun ProductDetailsDto.toProduct(): Product {
     return Product(
         code = code,
         direction = ProductDirection.fromValue(direction),
@@ -31,4 +31,4 @@ fun ProductDetails.toProduct(): Product {
     )
 }
 
-fun List<ProductDetails>.toProduct(): List<Product> = map { it.toProduct() }
+fun List<ProductDetailsDto>.toProduct(): List<Product> = map { it.toProduct() }

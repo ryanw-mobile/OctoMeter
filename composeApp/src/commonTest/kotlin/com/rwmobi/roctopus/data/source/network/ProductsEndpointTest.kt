@@ -58,12 +58,12 @@ class ProductsEndpointTest {
             httpClient = setupEngine(
                 status = HttpStatusCode.OK,
                 contentType = "application/json",
-                payload = ProductsEndpointSampleData.json,
+                payload = GetProductsSampleData.json,
             ),
         )
 
         val result = productsEndpoint.getProducts()
-        result shouldBe ProductsEndpointSampleData.dto
+        result shouldBe GetProductsSampleData.dto
     }
 
     @Test
