@@ -42,7 +42,9 @@ val ktorModule = module {
             baseUrl = BASE_URL,
             httpClient = get(),
         )
+    }
 
+    factory {
         ElectricityMeterPointsEndpoint(
             baseUrl = BASE_URL,
             httpClient = get(),

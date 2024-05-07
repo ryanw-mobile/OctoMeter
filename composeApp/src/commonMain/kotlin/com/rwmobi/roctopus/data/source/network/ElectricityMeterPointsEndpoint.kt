@@ -16,15 +16,14 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
+import io.ktor.utils.io.core.toByteArray
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Instant
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonPrimitive
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 class ElectricityMeterPointsEndpoint(
     baseUrl: String,
@@ -58,9 +57,8 @@ class ElectricityMeterPointsEndpoint(
         }
     }
 
+    @OptIn(ExperimentalEncodingApi::class)
     private fun encodeApiKey(apiKey: String): String {
-        // This uses JSON encoding to indirectly perform Base64 encoding
-        val jsonElement = Json.encodeToJsonElement(JsonPrimitive(apiKey))
-        return jsonElement.jsonPrimitive.content
+        return Base64.encode("$apiKey:".toByteArray())
     }
 }
