@@ -7,14 +7,17 @@
 
 package com.rwmobi.roctopus.data.repository
 
+import com.rwmobi.roctopus.data.repository.mapper.toAccount
 import com.rwmobi.roctopus.data.repository.mapper.toConsumption
 import com.rwmobi.roctopus.data.repository.mapper.toProduct
 import com.rwmobi.roctopus.data.repository.mapper.toRate
+import com.rwmobi.roctopus.data.source.network.AccountEndpoint
 import com.rwmobi.roctopus.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.roctopus.data.source.network.ProductsEndpoint
 import com.rwmobi.roctopus.data.source.network.model.ConsumptionGrouping
 import com.rwmobi.roctopus.data.source.network.model.ConsumptionOrdering
 import com.rwmobi.roctopus.domain.exceptions.except
+import com.rwmobi.roctopus.domain.model.Account
 import com.rwmobi.roctopus.domain.model.Consumption
 import com.rwmobi.roctopus.domain.model.Product
 import com.rwmobi.roctopus.domain.model.Rate
@@ -27,6 +30,7 @@ import kotlin.coroutines.cancellation.CancellationException
 class OctopusRestApiRepository(
     private val productsEndpoint: ProductsEndpoint,
     private val electricityMeterPointsEndpoint: ElectricityMeterPointsEndpoint,
+    private val accountEndpoint: AccountEndpoint,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : OctopusRepository {
 
@@ -114,6 +118,21 @@ class OctopusRestApiRepository(
                     groupBy = ConsumptionGrouping.HALF_HOURLY,
                 )
                 apiResponse?.results?.map { it.toConsumption() } ?: emptyList()
+            }.except<CancellationException, _>()
+        }
+    }
+
+    override suspend fun getAccount(
+        apiKey: String,
+        accountNumber: String,
+    ): Result<List<Account>> {
+        return withContext(dispatcher) {
+            runCatching {
+                val apiResponse = accountEndpoint.getAccount(
+                    apiKey = apiKey,
+                    accountNumber = accountNumber,
+                )
+                apiResponse?.properties?.map { it.toAccount() } ?: emptyList()
             }.except<CancellationException, _>()
         }
     }

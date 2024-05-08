@@ -25,7 +25,7 @@ class ProductsEndpoint(
     private val httpClient: HttpClient,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) {
-    private val endpointUrl = "$baseUrl/v1/products/"
+    private val endpointUrl = "$baseUrl/v1/products"
 
     suspend fun getProducts(
         brand: String? = null,
@@ -36,7 +36,7 @@ class ProductsEndpoint(
         isPrepay: Boolean? = null,
     ): ProductsApiResponse? {
         return withContext(dispatcher) {
-            httpClient.get(endpointUrl) {
+            httpClient.get("$endpointUrl/") {
                 parameter("brand", brand)
                 parameter("is_variable", isVariable)
                 parameter("is_business", isBusiness)
