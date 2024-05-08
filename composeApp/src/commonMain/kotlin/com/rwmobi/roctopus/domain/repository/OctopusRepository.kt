@@ -7,6 +7,7 @@
 
 package com.rwmobi.roctopus.domain.repository
 
+import com.rwmobi.roctopus.domain.model.Account
 import com.rwmobi.roctopus.domain.model.Consumption
 import com.rwmobi.roctopus.domain.model.Product
 import com.rwmobi.roctopus.domain.model.Rate
@@ -18,4 +19,5 @@ interface OctopusRepository {
     suspend fun getDayUnitRates(productCode: String, tariffCode: String): Result<List<Rate>>
     suspend fun getNightUnitRates(productCode: String, tariffCode: String): Result<List<Rate>>
     suspend fun getConsumption(apiKey: String, mpan: String, meterSerialNumber: String): Result<List<Consumption>>
+    suspend fun getAccount(apiKey: String, accountNumber: String): Result<List<Account>>
 }
