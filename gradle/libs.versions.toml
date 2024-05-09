@@ -1,14 +1,8 @@
 [versions]
 agp = "8.4.0"
-android-compileSdk = "34"
-android-minSdk = "24"
-android-targetSdk = "34"
 androidx-activityCompose = "1.9.0"
-androidx-appcompat = "1.6.1"
-androidx-constraintlayout = "2.1.4"
 androidx-core-ktx = "1.13.1"
 androidx-espresso-core = "3.5.1"
-androidx-material = "1.12.0"
 androidx-test-junit = "1.1.5"
 compose = "1.6.7"
 compose-plugin = "1.6.2"
@@ -25,13 +19,14 @@ kover = "0.7.6"
 ktlint = "12.1.1"
 material3WindowSizeClassMultiplatform = "0.5.0"
 mockk = "1.13.10"
+navigationCompose = "2.7.0-alpha03"
 
 # App configurations, not dependencies
 versionCode = "1"
 versionName = "1.0.0"
-minsdk = "26"
-targetsdk = "34"
-compilesdk = "34"
+android-minSdk = "26"
+android-targetSdk = "34"
+android-compileSdk = "34"
 
 
 [libraries]
@@ -42,8 +37,6 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
 androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-espresso-core" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
-androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
@@ -68,6 +61,7 @@ koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = 
 koin-jvm = { group = "io.insert-koin", name = "koin-core-jvm", version.ref = "koin" }
 koin-iosx64 = { group = "io.insert-koin", name = "koin-core-iosx64", version.ref = "koin" }
 koin-iosarm64 = { group = "io.insert-koin", name = "koin-core-iosarm64", version.ref = "koin" }
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
