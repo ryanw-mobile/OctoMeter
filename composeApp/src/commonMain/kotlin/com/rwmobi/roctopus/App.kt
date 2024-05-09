@@ -17,9 +17,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
@@ -30,17 +30,19 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import roctopus.composeapp.generated.resources.Res
 import roctopus.composeapp.generated.resources.app_name
 
-@OptIn(ExperimentalResourceApi::class)
+@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 @Preview
 fun App(strings: List<String> = emptyList()) {
     Logger.d(tag = "tag", messageString = "This is how we log in this project.")
+    val windowSizeClass = calculateWindowSizeClass()
 
     AppTheme {
         Surface {
 //            var showContent by remember { mutableStateOf(false) }
             Column {
                 Text(text = stringResource(Res.string.app_name))
+                Text(text = "Window Size Class: width = ${windowSizeClass.widthSizeClass}, height = ${windowSizeClass.heightSizeClass}")
 //                Button(onClick = { showContent = !showContent }) {
 //                    Text("Click me!")
 //                }
