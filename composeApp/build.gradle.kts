@@ -245,6 +245,10 @@ android {
             isReturnDefaultValues = true
         }
     }
+
+    dependencies {
+        debugImplementation(libs.compose.ui.tooling)
+    }
 }
 
 compose.desktop {
