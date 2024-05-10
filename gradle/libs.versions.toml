@@ -19,7 +19,7 @@ kover = "0.7.6"
 ktlint = "12.1.1"
 material3WindowSizeClassMultiplatform = "0.5.0"
 mockk = "1.13.10"
-navigationCompose = "2.7.0-alpha03"
+navigationCompose = "2.7.0-alpha04"
 
 # App configurations, not dependencies
 versionCode = "1"
