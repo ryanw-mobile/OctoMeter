@@ -8,8 +8,11 @@
 package com.rwmobi.roctopus.ui.utils
 
 import androidx.compose.runtime.Composable
+import platform.UIKit.UIScreen
+import platform.UIKit.UIUserInterfaceStyle
 
 @Composable
 actual fun shouldUseDarkTheme(): Boolean {
-    return false
+    val uiStyle = UIScreen.mainScreen.traitCollection.userInterfaceStyle
+    return uiStyle == UIUserInterfaceStyle.UIUserInterfaceStyleDark
 }
