@@ -15,6 +15,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.rwmobi.roctopus.ui.destinations.account.AccountScreen
+import com.rwmobi.roctopus.ui.destinations.account.AccountUIEvent
+import com.rwmobi.roctopus.ui.destinations.account.AccountUIState
 import com.rwmobi.roctopus.ui.destinations.onboarding.OnboardingScreen
 import com.rwmobi.roctopus.ui.destinations.tariffs.TariffsScreen
 import com.rwmobi.roctopus.ui.destinations.usage.UsageScreen
@@ -55,6 +57,8 @@ fun AppNavigationHost(
             val accountViewModel = viewModel { AccountViewModel() }
             AccountScreen(
                 modifier = Modifier.fillMaxSize(),
+                uiState = AccountUIState(isLoading = false, errorMessages = listOf()),
+                uiEvent = AccountUIEvent(onErrorShown = { }, onShowSnackbar = {}),
             )
         }
     }
