@@ -38,8 +38,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
@@ -48,7 +46,6 @@ import com.rwmobi.roctopus.ui.components.AppNavigationRail
 import com.rwmobi.roctopus.ui.navigation.AppNavigationHost
 import com.rwmobi.roctopus.ui.navigation.AppNavigationItem
 import com.rwmobi.roctopus.ui.theme.AppTheme
-import com.rwmobi.roctopus.ui.theme.getDimension
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -82,14 +79,11 @@ private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?): Na
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 @Preview
-fun App(
-    strings: List<String> = emptyList(),
-    navController: NavHostController = rememberNavController(),
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
-) {
+fun App() {
     val windowSizeClass = calculateWindowSizeClass()
     val lastDoubleTappedNavItem = remember { mutableStateOf<AppNavigationItem?>(null) }
-    val dimension = LocalDensity.current.getDimension()
+    val navController = rememberNavController()
+    val snackbarHostState = remember { SnackbarHostState() }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val navigationLayoutType = windowSizeClass.calculateNavigationLayout(
@@ -170,42 +164,6 @@ fun App(
                     )
                 }
             }
-
-//
-// //            var showContent by remember { mutableStateOf(false) }
-//            Column {
-//                Text(text = stringResource(Res.string.app_name))
-//                Text(text = "Window Size Class: width = ${windowSizeClass.widthSizeClass}, height = ${windowSizeClass.heightSizeClass}")
-// //                Button(onClick = { showContent = !showContent }) {
-// //                    Text("Click me!")
-// //                }
-// //                AnimatedVisibility(showContent) {
-// //                    val greeting = remember { Greeting().greet() }
-// //                    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-// //                        Image(painterResource(Res.drawable.compose_multiplatform), null)
-// //                        Text("Compose: $greeting")
-// //                    }
-// //                }
-//                LazyColumn(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .fillMaxHeight(1f),
-//                ) {
-//                    items(strings) {
-//                        Text(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .wrapContentHeight(),
-//                            text = it,
-//                        )
-//                        HorizontalDivider(
-//                            modifier = Modifier
-//                                .padding(vertical = 8.dp)
-//                                .fillMaxWidth(),
-//                        )
-//                    }
-//                }
-//            }
         }
     }
 }
