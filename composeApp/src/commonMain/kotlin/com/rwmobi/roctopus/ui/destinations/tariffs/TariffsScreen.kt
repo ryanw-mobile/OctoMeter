@@ -11,17 +11,25 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
 fun TariffsScreen(
     modifier: Modifier = Modifier,
+    uiState: TariffsUIState,
+    uiEvent: TariffsUIEvent,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Text("Tariffs screen")
+        Text(uiState.products.toString())
+    }
+
+    LaunchedEffect(true) {
+        uiEvent.onRefresh()
     }
 }

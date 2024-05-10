@@ -26,10 +26,9 @@ fun AccountScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Text(text= "Account screen")
+        Text(text = "Account screen")
     }
 }
-
 
 @Composable
 @Preview

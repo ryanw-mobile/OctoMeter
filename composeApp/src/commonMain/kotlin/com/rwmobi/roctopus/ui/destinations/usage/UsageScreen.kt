@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 @Composable
 fun UsageScreen(
     modifier: Modifier = Modifier,
+    uiState: UsageUIState,
+    uiEvent: UsageUIEvent,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

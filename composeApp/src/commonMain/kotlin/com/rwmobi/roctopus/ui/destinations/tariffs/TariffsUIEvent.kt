@@ -5,9 +5,10 @@
  *
  */
 
-package com.rwmobi.roctopus.ui.destinations.account
+package com.rwmobi.roctopus.ui.destinations.tariffs
 
-data class AccountUIEvent(
+data class TariffsUIEvent(
+    val onRefresh: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,
 )

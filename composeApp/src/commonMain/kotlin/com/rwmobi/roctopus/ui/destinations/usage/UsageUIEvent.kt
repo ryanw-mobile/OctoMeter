@@ -5,9 +5,9 @@
  *
  */
 
-package com.rwmobi.roctopus.ui.destinations.account
+package com.rwmobi.roctopus.ui.destinations.usage
 
-data class AccountUIEvent(
+data class UsageUIEvent(
     val onErrorShown: (errorId: Long) -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,
 )
