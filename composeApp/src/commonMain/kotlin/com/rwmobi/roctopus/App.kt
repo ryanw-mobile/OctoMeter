@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -36,6 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -45,6 +48,7 @@ import com.rwmobi.roctopus.ui.components.AppNavigationRail
 import com.rwmobi.roctopus.ui.navigation.AppNavigationHost
 import com.rwmobi.roctopus.ui.navigation.AppNavigationItem
 import com.rwmobi.roctopus.ui.theme.AppTheme
+import com.rwmobi.roctopus.ui.theme.getDimension
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -85,6 +89,7 @@ fun App(
 ) {
     val windowSizeClass = calculateWindowSizeClass()
     val lastDoubleTappedNavItem = remember { mutableStateOf<AppNavigationItem?>(null) }
+    val dimension = LocalDensity.current.getDimension()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val navigationLayoutType = windowSizeClass.calculateNavigationLayout(
@@ -103,7 +108,9 @@ fun App(
                 ) {
                     Row {
                         AppNavigationRail(
-                            modifier = Modifier.fillMaxHeight(),
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .wrapContentWidth(),
                             navController = navController,
                             onCurrentRouteSecondTapped = { lastDoubleTappedNavItem.value = it },
                         )
@@ -135,6 +142,9 @@ fun App(
                                 )
 
                                 AppBottomNavigationBar(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight(),
                                     navController = navController,
                                     onCurrentRouteSecondTapped = { lastDoubleTappedNavItem.value = it },
                                 )

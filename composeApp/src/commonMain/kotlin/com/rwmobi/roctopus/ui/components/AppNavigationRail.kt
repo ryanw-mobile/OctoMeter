@@ -9,11 +9,16 @@
 
 package com.rwmobi.roctopus.ui.components
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,11 +26,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.rwmobi.roctopus.ui.navigation.AppNavigationItem
+import com.rwmobi.roctopus.ui.theme.AppTheme
 import com.rwmobi.roctopus.ui.theme.getDimension
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import roctopus.composeapp.generated.resources.Res
 import roctopus.composeapp.generated.resources.content_description_navigation_rail
@@ -69,10 +78,11 @@ fun AppNavigationRail(
                     }
                 },
                 icon = {
-//                    Icon(
-//                        painter = painterResource(id = item.iconResId),
-//                        contentDescription = null,
-//                    )
+                    Icon(
+                        modifier = Modifier.size(size = dimension.navigationIconSize),
+                        painter = painterResource(resource = item.iconResId),
+                        contentDescription = null,
+                    )
                 },
                 label = {
                     Text(
@@ -86,19 +96,19 @@ fun AppNavigationRail(
         Spacer(Modifier.weight(1f))
     }
 }
-//
-// @PreviewLightDark
-// @Composable
-// private fun NavigationRailPreview() {
-//    DAZNCodeChallengeTheme {
-//        Surface {
-//            AppNavigationRail(
-//                modifier = Modifier
-//                    .wrapContentHeight()
-//                    .padding(0.dp),
-//                navController = rememberNavController(),
-//                onCurrentRouteSecondTapped = {},
-//            )
-//        }
-//    }
-// }
+
+@Preview
+@Composable
+private fun NavigationRailPreview() {
+    AppTheme {
+        Surface {
+            AppNavigationRail(
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .padding(0.dp),
+                navController = rememberNavController(),
+                onCurrentRouteSecondTapped = {},
+            )
+        }
+    }
+}

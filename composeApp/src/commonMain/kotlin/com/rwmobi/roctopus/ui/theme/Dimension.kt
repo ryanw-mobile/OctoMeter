@@ -36,6 +36,7 @@ class Dimension(
     val defaultFullPadding: Dp = 16.dp,
     val defaultHalfPadding: Dp = 8.dp,
     val imageButtonSize: Dp = 48.dp,
+    val navigationIconSize: Dp = 24.dp,
 )
 
 val smallDimension = Dimension(
