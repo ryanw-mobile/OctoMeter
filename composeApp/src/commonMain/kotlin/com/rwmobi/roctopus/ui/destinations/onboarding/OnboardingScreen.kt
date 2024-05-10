@@ -17,11 +17,14 @@ import androidx.compose.ui.Modifier
 @Composable
 fun OnboardingScreen(
     modifier: Modifier = Modifier,
+    uiState: OnboardingUIState,
+    uiEvent: OnboardingUIEvent,
 ) {
     Column(
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Text("Account screen")
+        Text("Onboarding")
     }
 }

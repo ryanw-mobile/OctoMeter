@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -36,7 +38,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
@@ -78,13 +79,11 @@ private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?): Na
 @OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 @Preview
-fun App(
-    strings: List<String> = emptyList(),
-    navController: NavHostController = rememberNavController(),
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
-) {
+fun App() {
     val windowSizeClass = calculateWindowSizeClass()
     val lastDoubleTappedNavItem = remember { mutableStateOf<AppNavigationItem?>(null) }
+    val navController = rememberNavController()
+    val snackbarHostState = remember { SnackbarHostState() }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val navigationLayoutType = windowSizeClass.calculateNavigationLayout(
@@ -103,7 +102,9 @@ fun App(
                 ) {
                     Row {
                         AppNavigationRail(
-                            modifier = Modifier.fillMaxHeight(),
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .wrapContentWidth(),
                             navController = navController,
                             onCurrentRouteSecondTapped = { lastDoubleTappedNavItem.value = it },
                         )
@@ -135,6 +136,9 @@ fun App(
                                 )
 
                                 AppBottomNavigationBar(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight(),
                                     navController = navController,
                                     onCurrentRouteSecondTapped = { lastDoubleTappedNavItem.value = it },
                                 )
@@ -160,42 +164,6 @@ fun App(
                     )
                 }
             }
-
-//
-// //            var showContent by remember { mutableStateOf(false) }
-//            Column {
-//                Text(text = stringResource(Res.string.app_name))
-//                Text(text = "Window Size Class: width = ${windowSizeClass.widthSizeClass}, height = ${windowSizeClass.heightSizeClass}")
-// //                Button(onClick = { showContent = !showContent }) {
-// //                    Text("Click me!")
-// //                }
-// //                AnimatedVisibility(showContent) {
-// //                    val greeting = remember { Greeting().greet() }
-// //                    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-// //                        Image(painterResource(Res.drawable.compose_multiplatform), null)
-// //                        Text("Compose: $greeting")
-// //                    }
-// //                }
-//                LazyColumn(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .fillMaxHeight(1f),
-//                ) {
-//                    items(strings) {
-//                        Text(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .wrapContentHeight(),
-//                            text = it,
-//                        )
-//                        HorizontalDivider(
-//                            modifier = Modifier
-//                                .padding(vertical = 8.dp)
-//                                .fillMaxWidth(),
-//                        )
-//                    }
-//                }
-//            }
         }
     }
 }

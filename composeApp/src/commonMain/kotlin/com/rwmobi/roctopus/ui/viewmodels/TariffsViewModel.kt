@@ -10,7 +10,7 @@ package com.rwmobi.roctopus.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rwmobi.roctopus.domain.repository.OctopusRepository
-import com.rwmobi.roctopus.ui.destinations.account.AccountUIState
+import com.rwmobi.roctopus.ui.destinations.tariffs.TariffsUIState
 import com.rwmobi.roctopus.ui.model.ErrorMessage
 import com.rwmobi.roctopus.ui.utils.generateRandomLong
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,11 +20,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class AccountViewModel(
+class TariffsViewModel(
     private val octopusRepository: OctopusRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<AccountUIState> = MutableStateFlow(AccountUIState(isLoading = true))
+    private val _uiState: MutableStateFlow<TariffsUIState> = MutableStateFlow(TariffsUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
     fun errorShown(errorId: Long) {
@@ -36,7 +36,13 @@ class AccountViewModel(
 
     fun refresh() {
         viewModelScope.launch(dispatcher) {
-            // TODO
+            val products = octopusRepository.getProducts().getOrNull()
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    isLoading = false,
+                    products = products ?: emptyList(),
+                )
+            }
         }
     }
 

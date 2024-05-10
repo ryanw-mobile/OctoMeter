@@ -9,6 +9,7 @@ package com.rwmobi.roctopus.di
 
 import com.rwmobi.roctopus.data.repository.OctopusRestApiRepository
 import com.rwmobi.roctopus.domain.repository.OctopusRepository
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -17,6 +18,7 @@ val repositoryModule = module {
             productsEndpoint = get(),
             electricityMeterPointsEndpoint = get(),
             accountEndpoint = get(),
+            dispatcher = get(named("DefaultDispatcher")),
         )
     }
 }

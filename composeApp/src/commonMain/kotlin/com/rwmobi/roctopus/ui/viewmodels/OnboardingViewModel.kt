@@ -10,7 +10,7 @@ package com.rwmobi.roctopus.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rwmobi.roctopus.domain.repository.OctopusRepository
-import com.rwmobi.roctopus.ui.destinations.account.AccountUIState
+import com.rwmobi.roctopus.ui.destinations.onboarding.OnboardingUIState
 import com.rwmobi.roctopus.ui.model.ErrorMessage
 import com.rwmobi.roctopus.ui.utils.generateRandomLong
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,11 +20,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class AccountViewModel(
+class OnboardingViewModel(
     private val octopusRepository: OctopusRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<AccountUIState> = MutableStateFlow(AccountUIState(isLoading = true))
+    private val _uiState: MutableStateFlow<OnboardingUIState> = MutableStateFlow(OnboardingUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
     fun errorShown(errorId: Long) {
