@@ -14,7 +14,6 @@ import kotlinx.cinterop.get
 import kotlinx.cinterop.memScoped
 import platform.Foundation.NSUUID
 
-
 @OptIn(ExperimentalForeignApi::class)
 actual fun generateRandomLong(): Long {
     // Proposed by ChatGPT

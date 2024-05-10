@@ -17,8 +17,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.rwmobi.roctopus.ui.destinations.account.AccountScreen
 import com.rwmobi.roctopus.ui.destinations.account.AccountUIEvent
-import com.rwmobi.roctopus.ui.destinations.account.AccountUIState
 import com.rwmobi.roctopus.ui.destinations.onboarding.OnboardingScreen
+import com.rwmobi.roctopus.ui.destinations.onboarding.OnboardingUIEvent
 import com.rwmobi.roctopus.ui.destinations.tariffs.TariffsScreen
 import com.rwmobi.roctopus.ui.destinations.tariffs.TariffsUIEvent
 import com.rwmobi.roctopus.ui.destinations.usage.UsageScreen
@@ -26,7 +26,9 @@ import com.rwmobi.roctopus.ui.destinations.usage.UsageUIEvent
 import com.rwmobi.roctopus.ui.destinations.usage.UsageUIState
 import com.rwmobi.roctopus.ui.utils.collectAsStateMultiplatform
 import com.rwmobi.roctopus.ui.viewmodels.AccountViewModel
+import com.rwmobi.roctopus.ui.viewmodels.OnboardingViewModel
 import com.rwmobi.roctopus.ui.viewmodels.TariffsViewModel
+import com.rwmobi.roctopus.ui.viewmodels.UsageViewModel
 import org.koin.mp.KoinPlatform.getKoin
 
 @Composable
@@ -43,18 +45,29 @@ fun AppNavigationHost(
         startDestination = AppNavigationItem.Tariffs.name,
     ) {
         composable(route = AppNavigationItem.Onboarding.name) {
+            val viewModel: OnboardingViewModel = viewModel { getKoin().get() }
+            val uiState by viewModel.uiState.collectAsStateMultiplatform()
+
             OnboardingScreen(
                 modifier = Modifier.fillMaxSize(),
+                uiState = uiState,
+                uiEvent = OnboardingUIEvent(
+                    onErrorShown = viewModel::errorShown,
+                    onShowSnackbar = onShowSnackbar,
+                ),
             )
         }
 
         composable(route = AppNavigationItem.Usage.name) {
+            val viewModel: UsageViewModel = viewModel { getKoin().get() }
+            val uiState by viewModel.uiState.collectAsStateMultiplatform()
+
             UsageScreen(
                 modifier = Modifier.fillMaxSize(),
                 uiState = UsageUIState(isLoading = false, errorMessages = listOf()),
                 uiEvent = UsageUIEvent(
-                    onErrorShown = { },
-                    onShowSnackbar = {},
+                    onErrorShown = viewModel::errorShown,
+                    onShowSnackbar = onShowSnackbar,
                 ),
             )
         }
@@ -68,18 +81,23 @@ fun AppNavigationHost(
                 uiState = uiState,
                 uiEvent = TariffsUIEvent(
                     onRefresh = viewModel::refresh,
-                    onErrorShown = { },
-                    onShowSnackbar = {},
+                    onErrorShown = viewModel::errorShown,
+                    onShowSnackbar = onShowSnackbar,
                 ),
             )
         }
 
         composable(route = AppNavigationItem.Account.name) {
-            val accountViewModel = viewModel { AccountViewModel() }
+            val viewModel: AccountViewModel = viewModel { getKoin().get() }
+            val uiState by viewModel.uiState.collectAsStateMultiplatform()
+
             AccountScreen(
                 modifier = Modifier.fillMaxSize(),
-                uiState = AccountUIState(isLoading = false, errorMessages = listOf()),
-                uiEvent = AccountUIEvent(onErrorShown = { }, onShowSnackbar = {}),
+                uiState = uiState,
+                uiEvent = AccountUIEvent(
+                    onErrorShown = viewModel::errorShown,
+                    onShowSnackbar = onShowSnackbar,
+                ),
             )
         }
     }
