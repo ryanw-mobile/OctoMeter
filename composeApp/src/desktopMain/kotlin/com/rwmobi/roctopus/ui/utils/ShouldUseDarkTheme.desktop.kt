@@ -8,8 +8,21 @@
 package com.rwmobi.roctopus.ui.utils
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.jthemedetecor.OsThemeDetector
+import javax.swing.SwingUtilities
 
 @Composable
 actual fun shouldUseDarkTheme(): Boolean {
-    return false
+    val detector: OsThemeDetector = OsThemeDetector.getDetector()
+    var isSystemInDarkTheme by remember { mutableStateOf(detector.isDark) }
+    detector.registerListener { isDark: Boolean ->
+        SwingUtilities.invokeLater {
+            isSystemInDarkTheme = isDark
+        }
+    }
+    return isSystemInDarkTheme
 }
