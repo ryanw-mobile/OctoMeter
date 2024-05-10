@@ -17,6 +17,7 @@ ktor = "2.3.11"
 junit = "4.13.2"
 kover = "0.7.6"
 ktlint = "12.1.1"
+lifecycleRuntimeCompose = "2.7.0"
 material3WindowSizeClassMultiplatform = "0.5.0"
 mockk = "1.13.10"
 navigationCompose = "2.7.0-alpha04"
@@ -62,6 +63,7 @@ koin-jvm = { group = "io.insert-koin", name = "koin-core-jvm", version.ref = "ko
 koin-iosx64 = { group = "io.insert-koin", name = "koin-core-iosx64", version.ref = "koin" }
 koin-iosarm64 = { group = "io.insert-koin", name = "koin-core-iosarm64", version.ref = "koin" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

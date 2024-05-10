@@ -62,6 +62,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.koin.android)
         }
@@ -243,10 +244,6 @@ android {
             isIncludeAndroidResources = true
             isReturnDefaultValues = true
         }
-    }
-
-    dependencies {
-        debugImplementation(libs.compose.ui.tooling)
     }
 }
 
