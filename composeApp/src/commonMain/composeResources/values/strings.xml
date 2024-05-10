@@ -8,4 +8,11 @@
 <resources>
     <string name="app_name">Roctopus</string>
     <string name="title">Some title</string>
+    <string name="navigation_onboarding">Onboarding</string>
+    <string name="navigation_usage">Usage</string>
+    <string name="navigation_tariffs">Tariffs</string>
+    <string name="navigation_account">Account</string>
+    <string name="ok">OK</string>
+    <string name="content_description_navigation_bar">Navigation Bar</string>
+    <string name="content_description_navigation_rail">Navigation Rail</string>
 </resources>
