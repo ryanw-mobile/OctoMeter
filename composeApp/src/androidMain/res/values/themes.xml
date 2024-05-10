@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2024. Ryan Wong
+  ~ https://github.com/ryanw-mobile
+  ~ Sponsored by RW MobiMedia UK Limited
+  ~
+  -->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.Kunigame" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:colorPrimary">@color/splash_background</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/splash_background</item>
+    </style>
+
+    <style name="Theme.Kunigame.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/black</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/black</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.Kunigame</item>
+    </style>
+
+</resources>

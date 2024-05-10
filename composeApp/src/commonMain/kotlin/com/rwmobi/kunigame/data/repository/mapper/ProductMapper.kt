@@ -1,0 +1,30 @@
+/*
+ * Copyright (c) 2024. Ryan Wong
+ * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
+ */
+
+package com.rwmobi.kunigame.data.repository.mapper
+
+import com.rwmobi.kunigame.data.source.network.dto.ProductDetailsDto
+import com.rwmobi.kunigame.domain.model.Product
+import com.rwmobi.kunigame.domain.model.ProductDirection
+
+fun ProductDetailsDto.toProduct() = Product(
+    code = code,
+    direction = ProductDirection.fromValue(direction),
+    fullName = fullName,
+    displayName = displayName,
+    description = description,
+    isVariable = isVariable,
+    isGreen = isGreen,
+    isTracker = isTracker,
+    isPrepay = isPrepay,
+    isBusiness = isBusiness,
+    isRestricted = isRestricted,
+    term = term,
+    availableFrom = availableFrom,
+    availableTo = availableTo,
+    brand = brand,
+)
