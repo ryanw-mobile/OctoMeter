@@ -5,7 +5,9 @@
  *
  */
 
-package com.rwmobi.roctopus
+package com.rwmobi.roctopus.ui.components
+
+import com.rwmobi.roctopus.getPlatform
 
 class Greeting {
     private val platform = getPlatform()
