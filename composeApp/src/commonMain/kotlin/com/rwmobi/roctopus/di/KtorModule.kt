@@ -16,6 +16,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 const val BASE_URL = "https://api.octopus.energy"
@@ -42,6 +43,7 @@ val ktorModule = module {
         ProductsEndpoint(
             baseUrl = BASE_URL,
             httpClient = get(),
+            dispatcher = get(named("IODispatcher")),
         )
     }
 
@@ -49,6 +51,7 @@ val ktorModule = module {
         ElectricityMeterPointsEndpoint(
             baseUrl = BASE_URL,
             httpClient = get(),
+            dispatcher = get(named("IODispatcher")),
         )
     }
 
@@ -56,6 +59,7 @@ val ktorModule = module {
         AccountEndpoint(
             baseUrl = BASE_URL,
             httpClient = get(),
+            dispatcher = get(named("IODispatcher")),
         )
     }
 }

@@ -12,6 +12,8 @@ fun initKoin() {
     startKoin {
         modules(
             appModule,
+            dispatcherModule,
+            viewModelModule,
             ktorModule,
             repositoryModule,
         )
