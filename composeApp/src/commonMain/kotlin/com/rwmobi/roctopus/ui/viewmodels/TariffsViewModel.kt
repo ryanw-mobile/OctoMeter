@@ -9,6 +9,7 @@ package com.rwmobi.roctopus.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.touchlab.kermit.Logger
 import com.rwmobi.roctopus.domain.repository.OctopusRepository
 import com.rwmobi.roctopus.ui.destinations.tariffs.TariffsUIState
 import com.rwmobi.roctopus.ui.model.ErrorMessage
@@ -36,18 +37,23 @@ class TariffsViewModel(
 
     fun refresh() {
         viewModelScope.launch(dispatcher) {
-            val products = octopusRepository.getProducts().getOrNull()
-            _uiState.update { currentUiState ->
-                currentUiState.copy(
-                    isLoading = false,
-                    products = products ?: emptyList(),
-                )
+            val products = octopusRepository.getProducts()
+            if (products.isSuccess) {
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        isLoading = false,
+                        products = products.getOrNull() ?: emptyList(),
+                    )
+                }
+            } else {
+                updateUIForError(message = products.exceptionOrNull()?.message ?: "Error when retrieving tariffs")
+                Logger.e("TariffsViewModel", throwable = products.exceptionOrNull(), message = { "Error when retrieving tariffs" })
             }
         }
     }
 
     private fun updateUIForError(message: String) {
-        if (_uiState.value.errorMessages.filter { it.message == message }.isNotEmpty()) {
+        if (_uiState.value.errorMessages.any { it.message == message }) {
             return
         }
 

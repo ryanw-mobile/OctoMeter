@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
@@ -20,6 +22,16 @@ fun UsageScreen(
     uiState: UsageUIState,
     uiEvent: UsageUIEvent,
 ) {
+    if (uiState.errorMessages.isNotEmpty()) {
+        val errorMessage = remember(uiState) { uiState.errorMessages[0] }
+        val errorMessageText = errorMessage.message
+
+        LaunchedEffect(errorMessage.id) {
+            uiEvent.onShowSnackbar(errorMessageText)
+            uiEvent.onErrorShown(errorMessage.id)
+        }
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
