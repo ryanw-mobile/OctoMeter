@@ -120,13 +120,13 @@ android {
                 .forEach { output ->
                     val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
                     val outputFileName =
-                        "roctopus-${variant.versionName}-$timestamp-${variant.name}.apk"
+                        "kunigame-${variant.versionName}-$timestamp-${variant.name}.apk"
                     output.outputFileName = outputFileName
                 }
         }
     }
 
-    namespace = "com.rwmobi.roctopus"
+    namespace = "com.rwmobi.kunigame"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -165,7 +165,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.rwmobi.roctopus"
+        applicationId = "com.rwmobi.kunigame"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = libs.versions.versionCode.get().toInt()
@@ -173,14 +173,14 @@ android {
 
         resourceConfigurations += setOf("en")
 
-        testInstrumentationRunner = "com.rwmobi.roctopus.ui.test.CustomTestRunner"
+        testInstrumentationRunner = "com.rwmobi.kunigame.ui.test.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
 
         // Bundle output filename
         val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
-        setProperty("archivesBaseName", "roctopus-$versionName-$timestamp")
+        setProperty("archivesBaseName", "kunigame-$versionName-$timestamp")
     }
 
     buildTypes {
@@ -254,11 +254,11 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.rwmobi.roctopus.MainKt"
+        mainClass = "com.rwmobi.kunigame.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.rwmobi.roctopus"
+            packageName = "com.rwmobi.kunigame"
             packageVersion = libs.versions.versionName.get()
         }
     }
@@ -291,17 +291,17 @@ koverReport {
             // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
             classes(
                 listOf(
-                    "com.rwmobi.roctopus.RoctopusApplication",
-                    "com.rwmobi.roctopus.*.*MembersInjector",
-                    "com.rwmobi.roctopus.*.*Factory",
-                    "com.rwmobi.roctopus.*.*HiltModules*",
-                    "com.rwmobi.roctopus.data.source.local.*_Impl*",
-                    "com.rwmobi.roctopus.data.source.local.*Impl_Factory",
-                    "com.rwmobi.roctopus.BR",
-                    "com.rwmobi.roctopus.BuildConfig",
-                    "com.rwmobi.roctopus.Hilt*",
-                    "com.rwmobi.roctopus.*.Hilt_*",
-                    "com.rwmobi.roctopus.ComposableSingletons*",
+                    "com.rwmobi.kunigame.KunigameApplication",
+                    "com.rwmobi.kunigame.*.*MembersInjector",
+                    "com.rwmobi.kunigame.*.*Factory",
+                    "com.rwmobi.kunigame.*.*HiltModules*",
+                    "com.rwmobi.kunigame.data.source.local.*_Impl*",
+                    "com.rwmobi.kunigame.data.source.local.*Impl_Factory",
+                    "com.rwmobi.kunigame.BR",
+                    "com.rwmobi.kunigame.BuildConfig",
+                    "com.rwmobi.kunigame.Hilt*",
+                    "com.rwmobi.kunigame.*.Hilt_*",
+                    "com.rwmobi.kunigame.ComposableSingletons*",
                     "*Fragment",
                     "*Fragment\$*",
                     "*Activity",
@@ -313,13 +313,13 @@ koverReport {
             // excludes all classes located in specified package and it subpackages, wildcards '*' and '?' are available
             packages(
                 listOf(
-                    "com.rwmobi.roctopus.di",
-                    "com.rwmobi.roctopus.ui.components",
-                    "com.rwmobi.roctopus.ui.destinations",
-                    "com.rwmobi.roctopus.ui.navigation",
-                    "com.rwmobi.roctopus.ui.previewparameter",
-                    "com.rwmobi.roctopus.ui.theme",
-                    "com.rwmobi.roctopus.ui.utils",
+                    "com.rwmobi.kunigame.di",
+                    "com.rwmobi.kunigame.ui.components",
+                    "com.rwmobi.kunigame.ui.destinations",
+                    "com.rwmobi.kunigame.ui.navigation",
+                    "com.rwmobi.kunigame.ui.previewparameter",
+                    "com.rwmobi.kunigame.ui.theme",
+                    "com.rwmobi.kunigame.ui.utils",
                     "androidx",
                     "dagger.hilt.internal.aggregatedroot.codegen",
                     "hilt_aggregated_deps",
