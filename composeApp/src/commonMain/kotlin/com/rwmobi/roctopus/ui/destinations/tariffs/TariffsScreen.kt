@@ -7,13 +7,18 @@
 
 package com.rwmobi.roctopus.ui.destinations.tariffs
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import com.rwmobi.roctopus.ui.components.ProductItem
+import com.rwmobi.roctopus.ui.theme.getDimension
 
 @Composable
 fun TariffsScreen(
@@ -21,12 +26,28 @@ fun TariffsScreen(
     uiState: TariffsUIState,
     uiEvent: TariffsUIEvent,
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+    val dimension = LocalDensity.current.getDimension()
+
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
     ) {
-        Text("Tariffs screen")
-        Text(uiState.products.toString())
+        itemsIndexed(
+            items = uiState.products,
+            key = { _, product -> product.code },
+        ) { index, product ->
+            ProductItem(
+                modifier = Modifier.fillMaxWidth(),
+                product = product,
+            )
+
+            if (index < uiState.products.lastIndex) {
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(vertical = dimension.grid_1)
+                        .fillMaxWidth(),
+                )
+            }
+        }
     }
 
     LaunchedEffect(true) {
