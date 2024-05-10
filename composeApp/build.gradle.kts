@@ -90,6 +90,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.koin.jvm)
+            implementation(libs.themedetector)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

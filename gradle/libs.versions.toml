@@ -15,6 +15,7 @@ kotlinxDatetime = "0.5.0"
 kotlinxSerialization = "1.6.3"
 ktor = "2.3.11"
 junit = "4.13.2"
+jSystemThemeDetector = "3.9.1"
 kover = "0.7.6"
 ktlint = "12.1.1"
 lifecycleRuntimeCompose = "2.7.0"
@@ -64,6 +65,7 @@ koin-iosx64 = { group = "io.insert-koin", name = "koin-core-iosx64", version.ref
 koin-iosarm64 = { group = "io.insert-koin", name = "koin-core-iosarm64", version.ref = "koin" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
+themedetector = { group = "com.github.Dansoftowner", name = "jSystemThemeDetector", version.ref = "jSystemThemeDetector" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

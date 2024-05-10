@@ -11,7 +11,6 @@ import com.rwmobi.roctopus.data.source.network.AccountEndpoint
 import com.rwmobi.roctopus.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.roctopus.data.source.network.ProductsEndpoint
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -23,7 +22,7 @@ const val BASE_URL = "https://api.octopus.energy"
 
 @OptIn(ExperimentalSerializationApi::class)
 val ktorModule = module {
-    single { CIO.create() }
+    single { getKtorEngine() }
     single {
         HttpClient(engine = get()) {
             install(ContentNegotiation) {

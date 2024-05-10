@@ -41,7 +41,7 @@ class OnboardingViewModel(
     }
 
     private fun updateUIForError(message: String) {
-        if (_uiState.value.errorMessages.filter { it.message == message }.isNotEmpty()) {
+        if (_uiState.value.errorMessages.any { it.message == message }) {
             return
         }
 

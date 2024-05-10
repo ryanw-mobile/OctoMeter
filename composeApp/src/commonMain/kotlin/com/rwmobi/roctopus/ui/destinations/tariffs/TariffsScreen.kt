@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.roctopus.ui.components.ProductItem
@@ -26,6 +27,16 @@ fun TariffsScreen(
     uiState: TariffsUIState,
     uiEvent: TariffsUIEvent,
 ) {
+    if (uiState.errorMessages.isNotEmpty()) {
+        val errorMessage = remember(uiState) { uiState.errorMessages[0] }
+        val errorMessageText = errorMessage.message
+
+        LaunchedEffect(errorMessage.id) {
+            uiEvent.onShowSnackbar(errorMessageText)
+            uiEvent.onErrorShown(errorMessage.id)
+        }
+    }
+
     val dimension = LocalDensity.current.getDimension()
 
     LazyColumn(
