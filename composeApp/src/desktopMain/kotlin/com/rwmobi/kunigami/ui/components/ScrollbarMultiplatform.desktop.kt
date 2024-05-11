@@ -35,14 +35,14 @@ actual fun ScrollbarMultiplatform(
     modifier: Modifier,
     enabled: Boolean,
     lazyListState: LazyListState,
-    content: @Composable () -> Unit,
+    content: @Composable (scrollbarPadding: Modifier) -> Unit,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
     Box(
         modifier = modifier,
     ) {
-        content()
+        content(Modifier.padding(end = dimension.grid_1))
 
         val scrollbarAdapter = rememberScrollbarAdapter(scrollState = lazyListState)
         if (enabled) {

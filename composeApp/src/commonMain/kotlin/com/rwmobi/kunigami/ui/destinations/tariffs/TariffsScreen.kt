@@ -46,9 +46,11 @@ fun TariffsScreen(
         modifier = Modifier.fillMaxSize(),
         enabled = uiState.products.isNotEmpty(),
         lazyListState = lazyListState,
-    ) {
+    ) { scrollbarPadding ->
         LazyColumn(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier
+                .fillMaxSize()
+                .then(scrollbarPadding),
             state = lazyListState,
         ) {
             itemsIndexed(

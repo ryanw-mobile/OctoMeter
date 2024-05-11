@@ -16,7 +16,7 @@ actual fun ScrollbarMultiplatform(
     modifier: Modifier,
     enabled: Boolean,
     lazyListState: LazyListState,
-    content: @Composable () -> Unit,
+    content: @Composable (scrollbarPadding: Modifier) -> Unit,
 ) {
-    content()
+    content(Modifier)
 }
