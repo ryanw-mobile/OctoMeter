@@ -14,6 +14,7 @@ fun initKoin() {
             appModule,
             dispatcherModule,
             viewModelModule,
+            userCaseModule,
             ktorModule,
             repositoryModule,
         )

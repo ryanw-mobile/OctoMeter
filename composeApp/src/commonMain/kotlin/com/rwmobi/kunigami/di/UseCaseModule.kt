@@ -1,0 +1,21 @@
+/*
+ * Copyright (c) 2024. Ryan Wong
+ * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
+ */
+
+package com.rwmobi.kunigami.di
+
+import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+
+val userCaseModule = module {
+    factory {
+        GetFilteredProductsUseCase(
+            octopusRepository = get(),
+            dispatcher = get(named("DefaultDispatcher")),
+        )
+    }
+}

@@ -12,6 +12,7 @@ import com.rwmobi.kunigami.di.appModule
 import com.rwmobi.kunigami.di.dispatcherModule
 import com.rwmobi.kunigami.di.ktorModule
 import com.rwmobi.kunigami.di.repositoryModule
+import com.rwmobi.kunigami.di.userCaseModule
 import com.rwmobi.kunigami.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -28,6 +29,7 @@ class KunigamiApplication : Application() {
                 appModule,
                 dispatcherModule,
                 viewModelModule,
+                userCaseModule,
                 ktorModule,
                 repositoryModule,
             )

@@ -10,9 +10,7 @@ package com.rwmobi.kunigami.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.rwmobi.kunigami.domain.model.ProductDirection
-import com.rwmobi.kunigami.domain.model.ProductFeature
-import com.rwmobi.kunigami.domain.repository.OctopusRepository
+import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
@@ -24,7 +22,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TariffsViewModel(
-    private val octopusRepository: OctopusRepository,
+    private val getFilteredProductsUseCase: GetFilteredProductsUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<TariffsUIState> = MutableStateFlow(TariffsUIState(isLoading = true))
@@ -39,24 +37,21 @@ class TariffsViewModel(
 
     fun refresh() {
         viewModelScope.launch(dispatcher) {
-            val products = octopusRepository.getProducts()
-            if (products.isSuccess) {
-                _uiState.update { currentUiState ->
-                    currentUiState.copy(
-                        isLoading = false,
-                        products = products.getOrNull()?.filter {
-                            // Present only the options relevant to the targeted residential users
-                            it.direction == ProductDirection.IMPORT &&
-                                it.brand == "OCTOPUS_ENERGY" &&
-                                !it.features.contains(ProductFeature.BUSINESS) &&
-                                !it.features.contains(ProductFeature.RESTRICTED)
-                        } ?: emptyList(),
-                    )
-                }
-            } else {
-                updateUIForError(message = products.exceptionOrNull()?.message ?: "Error when retrieving tariffs")
-                Logger.e("TariffsViewModel", throwable = products.exceptionOrNull(), message = { "Error when retrieving tariffs" })
-            }
+            val filteredProducts = getFilteredProductsUseCase()
+            filteredProducts.fold(
+                onSuccess = { products ->
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            isLoading = false,
+                            products = products,
+                        )
+                    }
+                },
+                onFailure = { throwable ->
+                    updateUIForError(message = throwable.message ?: "Error when retrieving tariffs")
+                    Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                },
+            )
         }
     }
 
