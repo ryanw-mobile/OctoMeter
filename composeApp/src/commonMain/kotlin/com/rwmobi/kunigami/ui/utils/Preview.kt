@@ -5,7 +5,7 @@
  *
  */
 
-package androidx.compose.desktop.ui.tooling.preview
+package com.rwmobi.kunigami.ui.utils
 
 @Retention(AnnotationRetention.SOURCE)
 @Target(

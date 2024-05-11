@@ -9,7 +9,6 @@
 
 package com.rwmobi.kunigami.ui.components
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -27,6 +26,7 @@ import com.rwmobi.kunigami.domain.model.ProductDirection
 import com.rwmobi.kunigami.domain.model.ProductFeature
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.utils.Preview
 import kotlinx.datetime.Instant
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource

@@ -7,7 +7,6 @@
 
 package com.rwmobi.kunigami.ui.destinations.account
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
@@ -17,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.rwmobi.kunigami.ui.theme.AppTheme
+import com.rwmobi.kunigami.ui.utils.Preview
 
 @Composable
 fun AccountScreen(
