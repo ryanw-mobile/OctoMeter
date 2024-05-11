@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.ui.destinations.tariffs
 
 data class TariffsUIEvent(
     val onRefresh: () -> Unit,
+    val onProductItemClick: (productCode: String) -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,
 )

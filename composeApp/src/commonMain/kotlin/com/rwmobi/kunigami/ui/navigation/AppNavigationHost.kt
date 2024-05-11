@@ -81,6 +81,7 @@ fun AppNavigationHost(
                 uiState = uiState,
                 uiEvent = TariffsUIEvent(
                     onRefresh = viewModel::refresh,
+                    onProductItemClick = {}, // TODO: Not sure where to go
                     onErrorShown = viewModel::errorShown,
                     onShowSnackbar = onShowSnackbar,
                 ),

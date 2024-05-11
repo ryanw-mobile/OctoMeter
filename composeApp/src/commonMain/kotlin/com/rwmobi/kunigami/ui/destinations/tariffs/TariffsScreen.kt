@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.ui.destinations.tariffs
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -58,15 +59,16 @@ fun TariffsScreen(
                 key = { _, product -> product.code },
             ) { index, product ->
                 ProductItem(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
+                        .fillMaxWidth()
+                        .padding(vertical = dimension.grid_1),
                     product = product,
                 )
 
                 if (index < uiState.products.lastIndex) {
                     HorizontalDivider(
-                        modifier = Modifier
-                            .padding(vertical = dimension.grid_1)
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }
