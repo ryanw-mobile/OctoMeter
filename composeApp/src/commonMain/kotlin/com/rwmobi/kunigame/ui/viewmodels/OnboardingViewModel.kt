@@ -5,14 +5,14 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.viewmodels
+package com.rwmobi.kunigami.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rwmobi.kunigame.domain.repository.OctopusRepository
-import com.rwmobi.kunigame.ui.destinations.onboarding.OnboardingUIState
-import com.rwmobi.kunigame.ui.model.ErrorMessage
-import com.rwmobi.kunigame.ui.utils.generateRandomLong
+import com.rwmobi.kunigami.domain.repository.OctopusRepository
+import com.rwmobi.kunigami.ui.destinations.onboarding.OnboardingUIState
+import com.rwmobi.kunigami.ui.model.ErrorMessage
+import com.rwmobi.kunigami.ui.utils.generateRandomLong
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

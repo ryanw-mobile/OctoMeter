@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.domain.model
+package com.rwmobi.kunigami.domain.model
 
 enum class PaymentMethod {
     UNKNOWN,

@@ -5,11 +5,11 @@
  *
  */
 
-package com.rwmobi.kunigame.di
+package com.rwmobi.kunigami.di
 
-import com.rwmobi.kunigame.data.source.network.AccountEndpoint
-import com.rwmobi.kunigame.data.source.network.ElectricityMeterPointsEndpoint
-import com.rwmobi.kunigame.data.source.network.ProductsEndpoint
+import com.rwmobi.kunigami.data.source.network.AccountEndpoint
+import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
+import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json

@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame
+package com.rwmobi.kunigami
 
 import androidx.compose.ui.window.ComposeUIViewController
 

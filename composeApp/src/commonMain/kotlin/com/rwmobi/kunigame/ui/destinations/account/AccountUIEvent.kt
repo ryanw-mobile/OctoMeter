@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.destinations.account
+package com.rwmobi.kunigami.ui.destinations.account
 
 data class AccountUIEvent(
     val onErrorShown: (errorId: Long) -> Unit,

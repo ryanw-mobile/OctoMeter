@@ -2,7 +2,7 @@
  * Copyright (c) 2022-2024. Ryan Wong (hello@ryanwebmail.com)
  */
 
-package com.rwmobi.kunigame.domain.exceptions
+package com.rwmobi.kunigami.domain.exceptions
 
 /***
  * Workaround to rethrow CancellationException

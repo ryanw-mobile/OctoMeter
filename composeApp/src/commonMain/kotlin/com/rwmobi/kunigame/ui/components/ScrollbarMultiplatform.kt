@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.components
+package com.rwmobi.kunigami.ui.components
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable

@@ -7,7 +7,7 @@
 
 @file:OptIn(ExperimentalLayoutApi::class, ExperimentalResourceApi::class)
 
-package com.rwmobi.kunigame.ui.components
+package com.rwmobi.kunigami.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
@@ -23,10 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import com.rwmobi.kunigame.domain.model.Product
-import com.rwmobi.kunigame.domain.model.ProductDirection
-import com.rwmobi.kunigame.ui.theme.AppTheme
-import com.rwmobi.kunigame.ui.theme.getDimension
+import com.rwmobi.kunigami.domain.model.Product
+import com.rwmobi.kunigami.domain.model.ProductDirection
+import com.rwmobi.kunigami.ui.theme.AppTheme
+import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Instant
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource

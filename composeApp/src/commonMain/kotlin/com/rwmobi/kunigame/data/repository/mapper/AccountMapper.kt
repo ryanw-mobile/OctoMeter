@@ -5,10 +5,10 @@
  *
  */
 
-package com.rwmobi.kunigame.data.repository.mapper
+package com.rwmobi.kunigami.data.repository.mapper
 
-import com.rwmobi.kunigame.data.source.network.dto.PropertyDto
-import com.rwmobi.kunigame.domain.model.Account
+import com.rwmobi.kunigami.data.source.network.dto.PropertyDto
+import com.rwmobi.kunigami.domain.model.Account
 
 fun PropertyDto.toAccount() = Account(
     id = id,

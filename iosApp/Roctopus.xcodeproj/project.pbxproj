@@ -117,7 +117,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				CLASSPREFIX = com.rwmobi.kunigame;
+				CLASSPREFIX = com.rwmobi.kunigami;
 				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1530;
 				ORGANIZATIONNAME = "RW MobiMedia UK";
@@ -343,7 +343,7 @@
 					"-framework",
 					composeApp,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rwmobi.kunigame;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rwmobi.kunigami;
 				PRODUCT_NAME = "${APP_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -378,7 +378,7 @@
 					"-framework",
 					composeApp,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.rwmobi.kunigame;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rwmobi.kunigami;
 				PRODUCT_NAME = "${APP_NAME}";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

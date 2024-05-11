@@ -5,11 +5,11 @@
  *
  */
 
-package com.rwmobi.kunigame.data.source.network.samples
+package com.rwmobi.kunigami.data.source.network.samples
 
-import com.rwmobi.kunigame.data.source.network.dto.LinkDto
-import com.rwmobi.kunigame.data.source.network.dto.ProductDetailsDto
-import com.rwmobi.kunigame.data.source.network.dto.ProductsApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.LinkDto
+import com.rwmobi.kunigami.data.source.network.dto.ProductDetailsDto
+import com.rwmobi.kunigami.data.source.network.dto.ProductsApiResponse
 import kotlinx.datetime.Instant
 
 object GetProductsSampleData {

@@ -5,9 +5,9 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.destinations.onboarding
+package com.rwmobi.kunigami.ui.destinations.onboarding
 
-import com.rwmobi.kunigame.ui.model.ErrorMessage
+import com.rwmobi.kunigami.ui.model.ErrorMessage
 
 data class OnboardingUIState(
     val isLoading: Boolean = true,

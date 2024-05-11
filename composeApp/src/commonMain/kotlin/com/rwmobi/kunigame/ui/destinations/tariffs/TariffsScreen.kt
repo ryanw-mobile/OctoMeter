@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.destinations.tariffs
+package com.rwmobi.kunigami.ui.destinations.tariffs
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,9 +19,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import com.rwmobi.kunigame.ui.components.ProductItem
-import com.rwmobi.kunigame.ui.components.ScrollbarMultiplatform
-import com.rwmobi.kunigame.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.components.ProductItem
+import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
+import com.rwmobi.kunigami.ui.theme.getDimension
 
 @Composable
 fun TariffsScreen(

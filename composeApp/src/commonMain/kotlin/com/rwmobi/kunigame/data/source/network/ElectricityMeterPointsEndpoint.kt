@@ -5,13 +5,13 @@
  *
  */
 
-package com.rwmobi.kunigame.data.source.network
+package com.rwmobi.kunigami.data.source.network
 
-import com.rwmobi.kunigame.data.source.network.dto.ConsumptionApiResponse
-import com.rwmobi.kunigame.data.source.network.extensions.encodeApiKey
-import com.rwmobi.kunigame.data.source.network.model.ConsumptionGrouping
-import com.rwmobi.kunigame.data.source.network.model.ConsumptionOrdering
-import com.rwmobi.kunigame.domain.extensions.formatInstantWithoutSeconds
+import com.rwmobi.kunigami.data.source.network.dto.ConsumptionApiResponse
+import com.rwmobi.kunigami.data.source.network.extensions.encodeApiKey
+import com.rwmobi.kunigami.data.source.network.model.ConsumptionGrouping
+import com.rwmobi.kunigami.data.source.network.model.ConsumptionOrdering
+import com.rwmobi.kunigami.domain.extensions.formatInstantWithoutSeconds
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

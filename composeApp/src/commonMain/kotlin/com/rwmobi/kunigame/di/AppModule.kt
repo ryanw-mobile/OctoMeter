@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.di
+package com.rwmobi.kunigami.di
 
 import org.koin.dsl.module
 

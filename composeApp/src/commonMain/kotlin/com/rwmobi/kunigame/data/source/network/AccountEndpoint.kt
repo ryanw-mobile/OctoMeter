@@ -5,10 +5,10 @@
  *
  */
 
-package com.rwmobi.kunigame.data.source.network
+package com.rwmobi.kunigami.data.source.network
 
-import com.rwmobi.kunigame.data.source.network.dto.AccountApiResponse
-import com.rwmobi.kunigame.data.source.network.extensions.encodeApiKey
+import com.rwmobi.kunigami.data.source.network.dto.AccountApiResponse
+import com.rwmobi.kunigami.data.source.network.extensions.encodeApiKey
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

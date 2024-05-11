@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.di
+package com.rwmobi.kunigami.di
 
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.cio.CIO

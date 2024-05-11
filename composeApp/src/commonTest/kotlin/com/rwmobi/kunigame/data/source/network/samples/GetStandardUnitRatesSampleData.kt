@@ -5,10 +5,10 @@
  *
  */
 
-package com.rwmobi.kunigame.data.source.network.samples
+package com.rwmobi.kunigami.data.source.network.samples
 
-import com.rwmobi.kunigame.data.source.network.dto.PricesApiResponse
-import com.rwmobi.kunigame.data.source.network.dto.RateDto
+import com.rwmobi.kunigami.data.source.network.dto.PricesApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.RateDto
 import kotlinx.datetime.Instant
 
 object GetStandardUnitRatesSampleData {

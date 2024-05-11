@@ -5,9 +5,9 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.destinations.account
+package com.rwmobi.kunigami.ui.destinations.account
 
-import com.rwmobi.kunigame.ui.model.ErrorMessage
+import com.rwmobi.kunigami.ui.model.ErrorMessage
 
 data class AccountUIState(
     val isLoading: Boolean = true,

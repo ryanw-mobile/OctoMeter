@@ -1,4 +1,4 @@
-package com.rwmobi.kunigame.ui.theme
+package com.rwmobi.kunigami.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -6,7 +6,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
-import com.rwmobi.kunigame.ui.utils.shouldUseDarkTheme
+import com.rwmobi.kunigami.ui.utils.shouldUseDarkTheme
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 private val lightScheme = lightColorScheme(

@@ -1,4 +1,4 @@
-# Project Kunigame ![Gradle Build](https://github.com/ryanw-mobile/Roctopus/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/Roctopus/graph/badge.svg?token=fGinpoyVUp)](https://codecov.io/gh/ryanw-mobile/Roctopus)
+# Project Kunigami ![Gradle Build](https://github.com/ryanw-mobile/Roctopus/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/Roctopus/graph/badge.svg?token=fGinpoyVUp)](https://codecov.io/gh/ryanw-mobile/Roctopus)
 ## A Kotlin Multiplatform project targeting Android, iOS, Desktop.
 
 <p><img src="cover.jpg" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>

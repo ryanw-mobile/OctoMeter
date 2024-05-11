@@ -5,10 +5,10 @@
  *
  */
 
-package com.rwmobi.kunigame.data.source.network.samples
+package com.rwmobi.kunigami.data.source.network.samples
 
-import com.rwmobi.kunigame.data.source.network.dto.ConsumptionApiResponse
-import com.rwmobi.kunigame.data.source.network.dto.ConsumptionDto
+import com.rwmobi.kunigami.data.source.network.dto.ConsumptionApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.ConsumptionDto
 import kotlinx.datetime.Instant
 
 object GetConsumptionSampleData {

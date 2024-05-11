@@ -5,12 +5,12 @@
  *
  */
 
-package com.rwmobi.kunigame.data.repository.mapper
+package com.rwmobi.kunigami.data.repository.mapper
 
-import com.rwmobi.kunigame.data.source.network.dto.ProductDetailsDto
-import com.rwmobi.kunigame.domain.model.Product
-import com.rwmobi.kunigame.domain.model.ProductDirection
-import com.rwmobi.kunigame.domain.model.ProductFeature
+import com.rwmobi.kunigami.data.source.network.dto.ProductDetailsDto
+import com.rwmobi.kunigami.domain.model.Product
+import com.rwmobi.kunigami.domain.model.ProductDirection
+import com.rwmobi.kunigami.domain.model.ProductFeature
 
 fun ProductDetailsDto.toProduct() = Product(
     code = code,

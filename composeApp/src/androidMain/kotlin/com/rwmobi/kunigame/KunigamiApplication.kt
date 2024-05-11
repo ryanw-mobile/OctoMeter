@@ -5,25 +5,25 @@
  *
  */
 
-package com.rwmobi.kunigame
+package com.rwmobi.kunigami
 
 import android.app.Application
-import com.rwmobi.kunigame.di.appModule
-import com.rwmobi.kunigame.di.dispatcherModule
-import com.rwmobi.kunigame.di.ktorModule
-import com.rwmobi.kunigame.di.repositoryModule
-import com.rwmobi.kunigame.di.viewModelModule
+import com.rwmobi.kunigami.di.appModule
+import com.rwmobi.kunigami.di.dispatcherModule
+import com.rwmobi.kunigami.di.ktorModule
+import com.rwmobi.kunigami.di.repositoryModule
+import com.rwmobi.kunigami.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.core.logger.Level
 
-class KunigameApplication : Application() {
+class KunigamiApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
             androidLogger(Level.ERROR)
-            androidContext(this@KunigameApplication)
+            androidContext(this@KunigamiApplication)
             modules(
                 appModule,
                 dispatcherModule,

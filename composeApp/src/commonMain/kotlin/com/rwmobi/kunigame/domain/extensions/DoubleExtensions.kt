@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.domain.extensions
+package com.rwmobi.kunigami.domain.extensions
 
 import kotlin.math.roundToLong
 

@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.di
+package com.rwmobi.kunigami.di
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

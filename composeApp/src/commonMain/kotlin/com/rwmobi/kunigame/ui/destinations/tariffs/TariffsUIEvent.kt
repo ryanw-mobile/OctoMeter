@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.destinations.tariffs
+package com.rwmobi.kunigami.ui.destinations.tariffs
 
 data class TariffsUIEvent(
     val onRefresh: () -> Unit,

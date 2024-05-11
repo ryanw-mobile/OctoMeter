@@ -5,9 +5,9 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.components
+package com.rwmobi.kunigami.ui.components
 
-import com.rwmobi.kunigame.getPlatform
+import com.rwmobi.kunigami.getPlatform
 
 class Greeting {
     private val platform = getPlatform()

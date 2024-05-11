@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame
+package com.rwmobi.kunigami
 
 class JVMPlatform : Platform {
     override val name: String = "Java ${System.getProperty("java.version")}"

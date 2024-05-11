@@ -5,15 +5,15 @@
  *
  */
 
-package com.rwmobi.kunigame.data.source.network.samples
+package com.rwmobi.kunigami.data.source.network.samples
 
-import com.rwmobi.kunigame.data.source.network.dto.AccountApiResponse
-import com.rwmobi.kunigame.data.source.network.dto.AgreementDto
-import com.rwmobi.kunigame.data.source.network.dto.ElectricityMeterPointDto
-import com.rwmobi.kunigame.data.source.network.dto.GasMeterPointDto
-import com.rwmobi.kunigame.data.source.network.dto.MeterDto
-import com.rwmobi.kunigame.data.source.network.dto.PropertyDto
-import com.rwmobi.kunigame.data.source.network.dto.RegisterDto
+import com.rwmobi.kunigami.data.source.network.dto.AccountApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.AgreementDto
+import com.rwmobi.kunigami.data.source.network.dto.ElectricityMeterPointDto
+import com.rwmobi.kunigami.data.source.network.dto.GasMeterPointDto
+import com.rwmobi.kunigami.data.source.network.dto.MeterDto
+import com.rwmobi.kunigami.data.source.network.dto.PropertyDto
+import com.rwmobi.kunigami.data.source.network.dto.RegisterDto
 import kotlinx.datetime.Instant
 
 object GetAccountSampleData {

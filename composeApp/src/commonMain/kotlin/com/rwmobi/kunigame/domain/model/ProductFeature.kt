@@ -7,7 +7,7 @@
 
 @file:OptIn(ExperimentalResourceApi::class)
 
-package com.rwmobi.kunigame.domain.model
+package com.rwmobi.kunigami.domain.model
 
 import co.touchlab.kermit.Logger
 import kunigami.composeapp.generated.resources.Res

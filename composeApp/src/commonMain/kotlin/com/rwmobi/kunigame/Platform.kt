@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame
+package com.rwmobi.kunigami
 
 interface Platform {
     val name: String

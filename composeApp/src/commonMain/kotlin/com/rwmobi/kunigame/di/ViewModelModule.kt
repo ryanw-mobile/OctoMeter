@@ -5,12 +5,12 @@
  *
  */
 
-package com.rwmobi.kunigame.di
+package com.rwmobi.kunigami.di
 
-import com.rwmobi.kunigame.ui.viewmodels.AccountViewModel
-import com.rwmobi.kunigame.ui.viewmodels.OnboardingViewModel
-import com.rwmobi.kunigame.ui.viewmodels.TariffsViewModel
-import com.rwmobi.kunigame.ui.viewmodels.UsageViewModel
+import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
+import com.rwmobi.kunigami.ui.viewmodels.OnboardingViewModel
+import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel
+import com.rwmobi.kunigami.ui.viewmodels.UsageViewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

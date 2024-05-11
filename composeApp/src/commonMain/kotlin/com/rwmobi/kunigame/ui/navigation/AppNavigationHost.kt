@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.navigation
+package com.rwmobi.kunigami.ui.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -15,20 +15,20 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.rwmobi.kunigame.ui.destinations.account.AccountScreen
-import com.rwmobi.kunigame.ui.destinations.account.AccountUIEvent
-import com.rwmobi.kunigame.ui.destinations.onboarding.OnboardingScreen
-import com.rwmobi.kunigame.ui.destinations.onboarding.OnboardingUIEvent
-import com.rwmobi.kunigame.ui.destinations.tariffs.TariffsScreen
-import com.rwmobi.kunigame.ui.destinations.tariffs.TariffsUIEvent
-import com.rwmobi.kunigame.ui.destinations.usage.UsageScreen
-import com.rwmobi.kunigame.ui.destinations.usage.UsageUIEvent
-import com.rwmobi.kunigame.ui.destinations.usage.UsageUIState
-import com.rwmobi.kunigame.ui.utils.collectAsStateMultiplatform
-import com.rwmobi.kunigame.ui.viewmodels.AccountViewModel
-import com.rwmobi.kunigame.ui.viewmodels.OnboardingViewModel
-import com.rwmobi.kunigame.ui.viewmodels.TariffsViewModel
-import com.rwmobi.kunigame.ui.viewmodels.UsageViewModel
+import com.rwmobi.kunigami.ui.destinations.account.AccountScreen
+import com.rwmobi.kunigami.ui.destinations.account.AccountUIEvent
+import com.rwmobi.kunigami.ui.destinations.onboarding.OnboardingScreen
+import com.rwmobi.kunigami.ui.destinations.onboarding.OnboardingUIEvent
+import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsScreen
+import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIEvent
+import com.rwmobi.kunigami.ui.destinations.usage.UsageScreen
+import com.rwmobi.kunigami.ui.destinations.usage.UsageUIEvent
+import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
+import com.rwmobi.kunigami.ui.utils.collectAsStateMultiplatform
+import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
+import com.rwmobi.kunigami.ui.viewmodels.OnboardingViewModel
+import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel
+import com.rwmobi.kunigami.ui.viewmodels.UsageViewModel
 import org.koin.mp.KoinPlatform.getKoin
 
 @Composable

@@ -5,13 +5,13 @@
  *
  */
 
-package com.rwmobi.kunigame.data.source.network
+package com.rwmobi.kunigami.data.source.network
 
-import com.rwmobi.kunigame.data.source.network.samples.GetDayUnitRatesSampleData
-import com.rwmobi.kunigame.data.source.network.samples.GetNightUnitRatesSampleData
-import com.rwmobi.kunigame.data.source.network.samples.GetProductsSampleData
-import com.rwmobi.kunigame.data.source.network.samples.GetStandardUnitRatesSampleData
-import com.rwmobi.kunigame.data.source.network.samples.GetStandingChargesSampleData
+import com.rwmobi.kunigami.data.source.network.samples.GetDayUnitRatesSampleData
+import com.rwmobi.kunigami.data.source.network.samples.GetNightUnitRatesSampleData
+import com.rwmobi.kunigami.data.source.network.samples.GetProductsSampleData
+import com.rwmobi.kunigami.data.source.network.samples.GetStandardUnitRatesSampleData
+import com.rwmobi.kunigami.data.source.network.samples.GetStandingChargesSampleData
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient

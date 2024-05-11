@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.data.source.network.extensions
+package com.rwmobi.kunigami.data.source.network.extensions
 
 import io.ktor.utils.io.core.toByteArray
 import kotlin.io.encoding.Base64

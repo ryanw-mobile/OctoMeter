@@ -1,4 +1,4 @@
-package com.rwmobi.kunigame
+package com.rwmobi.kunigami
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

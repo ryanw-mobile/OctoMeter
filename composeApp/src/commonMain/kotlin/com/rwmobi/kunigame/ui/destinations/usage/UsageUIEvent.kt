@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.destinations.usage
+package com.rwmobi.kunigami.ui.destinations.usage
 
 data class UsageUIEvent(
     val onErrorShown: (errorId: Long) -> Unit,

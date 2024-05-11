@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.destinations.onboarding
+package com.rwmobi.kunigami.ui.destinations.onboarding
 
 data class OnboardingUIEvent(
     val onErrorShown: (errorId: Long) -> Unit,

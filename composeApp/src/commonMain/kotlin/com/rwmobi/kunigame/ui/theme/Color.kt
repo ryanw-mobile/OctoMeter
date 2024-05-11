@@ -1,4 +1,4 @@
-package com.rwmobi.kunigame.ui.theme
+package com.rwmobi.kunigami.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

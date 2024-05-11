@@ -5,11 +5,11 @@
  *
  */
 
-package com.rwmobi.kunigame.data.source.network
+package com.rwmobi.kunigami.data.source.network
 
-import com.rwmobi.kunigame.data.source.network.dto.PricesApiResponse
-import com.rwmobi.kunigame.data.source.network.dto.ProductsApiResponse
-import com.rwmobi.kunigame.domain.extensions.formatInstantWithoutSeconds
+import com.rwmobi.kunigami.data.source.network.dto.PricesApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.ProductsApiResponse
+import com.rwmobi.kunigami.domain.extensions.formatInstantWithoutSeconds
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

@@ -5,9 +5,9 @@
  *
  */
 
-package com.rwmobi.kunigame.data.source.network
+package com.rwmobi.kunigami.data.source.network
 
-import com.rwmobi.kunigame.data.source.network.samples.GetAccountSampleData
+import com.rwmobi.kunigami.data.source.network.samples.GetAccountSampleData
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient

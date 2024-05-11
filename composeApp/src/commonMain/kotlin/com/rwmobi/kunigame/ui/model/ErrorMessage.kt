@@ -3,6 +3,6 @@
  * https://github.com/ryanw-mobile
  */
 
-package com.rwmobi.kunigame.ui.model
+package com.rwmobi.kunigami.ui.model
 
 data class ErrorMessage(val id: Long, val message: String)

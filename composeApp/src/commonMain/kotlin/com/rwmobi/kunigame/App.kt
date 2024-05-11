@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame
+package com.rwmobi.kunigami
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeOut
@@ -41,11 +41,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
-import com.rwmobi.kunigame.ui.components.AppBottomNavigationBar
-import com.rwmobi.kunigame.ui.components.AppNavigationRail
-import com.rwmobi.kunigame.ui.navigation.AppNavigationHost
-import com.rwmobi.kunigame.ui.navigation.AppNavigationItem
-import com.rwmobi.kunigame.ui.theme.AppTheme
+import com.rwmobi.kunigami.ui.components.AppBottomNavigationBar
+import com.rwmobi.kunigami.ui.components.AppNavigationRail
+import com.rwmobi.kunigami.ui.navigation.AppNavigationHost
+import com.rwmobi.kunigami.ui.navigation.AppNavigationItem
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.ok
 import org.jetbrains.compose.resources.ExperimentalResourceApi

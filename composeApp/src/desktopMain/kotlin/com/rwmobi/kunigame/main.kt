@@ -5,17 +5,17 @@
  *
  */
 
-package com.rwmobi.kunigame
+package com.rwmobi.kunigami
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import com.rwmobi.kunigame.di.appModule
-import com.rwmobi.kunigame.di.dispatcherModule
-import com.rwmobi.kunigame.di.ktorModule
-import com.rwmobi.kunigame.di.repositoryModule
-import com.rwmobi.kunigame.di.viewModelModule
+import com.rwmobi.kunigami.di.appModule
+import com.rwmobi.kunigami.di.dispatcherModule
+import com.rwmobi.kunigami.di.ktorModule
+import com.rwmobi.kunigami.di.repositoryModule
+import com.rwmobi.kunigami.di.viewModelModule
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.app_name
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -28,7 +28,7 @@ import java.awt.Dimension
 fun main() {
     System.setProperty(
         "apple.awt.application.name",
-        "Project Kunigame",
+        "Project Kunigami",
     )
 
     application {

@@ -5,12 +5,12 @@
  *
  */
 
-package com.rwmobi.kunigame.domain.repository
+package com.rwmobi.kunigami.domain.repository
 
-import com.rwmobi.kunigame.domain.model.Account
-import com.rwmobi.kunigame.domain.model.Consumption
-import com.rwmobi.kunigame.domain.model.Product
-import com.rwmobi.kunigame.domain.model.Rate
+import com.rwmobi.kunigami.domain.model.Account
+import com.rwmobi.kunigami.domain.model.Consumption
+import com.rwmobi.kunigami.domain.model.Product
+import com.rwmobi.kunigami.domain.model.Rate
 
 interface OctopusRepository {
     suspend fun getProducts(): Result<List<Product>>

@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.components
+package com.rwmobi.kunigami.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.LocalScrollbarStyle
@@ -27,8 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigame.ui.theme.AppTheme
-import com.rwmobi.kunigame.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
+import com.rwmobi.kunigami.ui.theme.getDimension
 
 @Composable
 actual fun ScrollbarMultiplatform(

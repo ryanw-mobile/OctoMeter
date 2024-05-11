@@ -5,10 +5,10 @@
  *
  */
 
-package com.rwmobi.kunigame.data.repository.mapper
+package com.rwmobi.kunigami.data.repository.mapper
 
-import com.rwmobi.kunigame.data.source.network.dto.ConsumptionDto
-import com.rwmobi.kunigame.domain.model.Consumption
+import com.rwmobi.kunigami.data.source.network.dto.ConsumptionDto
+import com.rwmobi.kunigami.domain.model.Consumption
 
 fun ConsumptionDto.toConsumption() = Consumption(
     consumption = consumption,

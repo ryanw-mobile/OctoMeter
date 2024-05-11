@@ -5,10 +5,10 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.destinations.tariffs
+package com.rwmobi.kunigami.ui.destinations.tariffs
 
-import com.rwmobi.kunigame.domain.model.Product
-import com.rwmobi.kunigame.ui.model.ErrorMessage
+import com.rwmobi.kunigami.domain.model.Product
+import com.rwmobi.kunigami.ui.model.ErrorMessage
 
 data class TariffsUIState(
     val isLoading: Boolean = true,

@@ -4,7 +4,7 @@
  * Sponsored by RW MobiMedia UK Limited
  *
  */
-package com.rwmobi.kunigame.domain.extensions
+package com.rwmobi.kunigami.domain.extensions
 
 import kotlinx.datetime.Instant
 

@@ -7,7 +7,7 @@
 
 @file:OptIn(ExperimentalResourceApi::class)
 
-package com.rwmobi.kunigame.ui.components
+package com.rwmobi.kunigami.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.padding
@@ -29,9 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.rwmobi.kunigame.ui.navigation.AppNavigationItem
-import com.rwmobi.kunigame.ui.theme.AppTheme
-import com.rwmobi.kunigame.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.navigation.AppNavigationItem
+import com.rwmobi.kunigami.ui.theme.AppTheme
+import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.content_description_navigation_bar
 import org.jetbrains.compose.resources.ExperimentalResourceApi

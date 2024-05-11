@@ -5,10 +5,10 @@
  *
  */
 
-package com.rwmobi.kunigame.di
+package com.rwmobi.kunigami.di
 
-import com.rwmobi.kunigame.data.repository.OctopusRestApiRepository
-import com.rwmobi.kunigame.domain.repository.OctopusRepository
+import com.rwmobi.kunigami.data.repository.OctopusRestApiRepository
+import com.rwmobi.kunigami.domain.repository.OctopusRepository
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

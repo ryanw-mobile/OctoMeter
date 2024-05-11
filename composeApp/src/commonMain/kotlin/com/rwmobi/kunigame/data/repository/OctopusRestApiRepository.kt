@@ -5,23 +5,23 @@
  *
  */
 
-package com.rwmobi.kunigame.data.repository
+package com.rwmobi.kunigami.data.repository
 
-import com.rwmobi.kunigame.data.repository.mapper.toAccount
-import com.rwmobi.kunigame.data.repository.mapper.toConsumption
-import com.rwmobi.kunigame.data.repository.mapper.toProduct
-import com.rwmobi.kunigame.data.repository.mapper.toRate
-import com.rwmobi.kunigame.data.source.network.AccountEndpoint
-import com.rwmobi.kunigame.data.source.network.ElectricityMeterPointsEndpoint
-import com.rwmobi.kunigame.data.source.network.ProductsEndpoint
-import com.rwmobi.kunigame.data.source.network.model.ConsumptionGrouping
-import com.rwmobi.kunigame.data.source.network.model.ConsumptionOrdering
-import com.rwmobi.kunigame.domain.exceptions.except
-import com.rwmobi.kunigame.domain.model.Account
-import com.rwmobi.kunigame.domain.model.Consumption
-import com.rwmobi.kunigame.domain.model.Product
-import com.rwmobi.kunigame.domain.model.Rate
-import com.rwmobi.kunigame.domain.repository.OctopusRepository
+import com.rwmobi.kunigami.data.repository.mapper.toAccount
+import com.rwmobi.kunigami.data.repository.mapper.toConsumption
+import com.rwmobi.kunigami.data.repository.mapper.toProduct
+import com.rwmobi.kunigami.data.repository.mapper.toRate
+import com.rwmobi.kunigami.data.source.network.AccountEndpoint
+import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
+import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
+import com.rwmobi.kunigami.data.source.network.model.ConsumptionGrouping
+import com.rwmobi.kunigami.data.source.network.model.ConsumptionOrdering
+import com.rwmobi.kunigami.domain.exceptions.except
+import com.rwmobi.kunigami.domain.model.Account
+import com.rwmobi.kunigami.domain.model.Consumption
+import com.rwmobi.kunigami.domain.model.Product
+import com.rwmobi.kunigami.domain.model.Rate
+import com.rwmobi.kunigami.domain.repository.OctopusRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

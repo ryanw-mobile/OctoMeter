@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.utils
+package com.rwmobi.kunigami.ui.utils
 
 import java.util.UUID
 

@@ -122,13 +122,13 @@ android {
                 .forEach { output ->
                     val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
                     val outputFileName =
-                        "kunigame-${variant.versionName}-$timestamp-${variant.name}.apk"
+                        "kunigami-${variant.versionName}-$timestamp-${variant.name}.apk"
                     output.outputFileName = outputFileName
                 }
         }
     }
 
-    namespace = "com.rwmobi.kunigame"
+    namespace = "com.rwmobi.kunigami"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -167,7 +167,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.rwmobi.kunigame"
+        applicationId = "com.rwmobi.kunigami"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = libs.versions.versionCode.get().toInt()
@@ -175,14 +175,14 @@ android {
 
         resourceConfigurations += setOf("en")
 
-        testInstrumentationRunner = "com.rwmobi.kunigame.ui.test.CustomTestRunner"
+        testInstrumentationRunner = "com.rwmobi.kunigami.ui.test.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
 
         // Bundle output filename
         val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
-        setProperty("archivesBaseName", "kunigame-$versionName-$timestamp")
+        setProperty("archivesBaseName", "kunigami-$versionName-$timestamp")
     }
 
     buildTypes {
@@ -256,11 +256,11 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.rwmobi.kunigame.MainKt"
+        mainClass = "com.rwmobi.kunigami.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.rwmobi.kunigame"
+            packageName = "com.rwmobi.kunigami"
             packageVersion = libs.versions.versionName.get()
         }
     }
@@ -293,17 +293,17 @@ koverReport {
             // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
             classes(
                 listOf(
-                    "com.rwmobi.kunigame.KunigameApplication",
-                    "com.rwmobi.kunigame.*.*MembersInjector",
-                    "com.rwmobi.kunigame.*.*Factory",
-                    "com.rwmobi.kunigame.*.*HiltModules*",
-                    "com.rwmobi.kunigame.data.source.local.*_Impl*",
-                    "com.rwmobi.kunigame.data.source.local.*Impl_Factory",
-                    "com.rwmobi.kunigame.BR",
-                    "com.rwmobi.kunigame.BuildConfig",
-                    "com.rwmobi.kunigame.Hilt*",
-                    "com.rwmobi.kunigame.*.Hilt_*",
-                    "com.rwmobi.kunigame.ComposableSingletons*",
+                    "com.rwmobi.kunigami.KunigamiApplication",
+                    "com.rwmobi.kunigami.*.*MembersInjector",
+                    "com.rwmobi.kunigami.*.*Factory",
+                    "com.rwmobi.kunigami.*.*HiltModules*",
+                    "com.rwmobi.kunigami.data.source.local.*_Impl*",
+                    "com.rwmobi.kunigami.data.source.local.*Impl_Factory",
+                    "com.rwmobi.kunigami.BR",
+                    "com.rwmobi.kunigami.BuildConfig",
+                    "com.rwmobi.kunigami.Hilt*",
+                    "com.rwmobi.kunigami.*.Hilt_*",
+                    "com.rwmobi.kunigami.ComposableSingletons*",
                     "*Fragment",
                     "*Fragment\$*",
                     "*Activity",
@@ -315,13 +315,13 @@ koverReport {
             // excludes all classes located in specified package and it subpackages, wildcards '*' and '?' are available
             packages(
                 listOf(
-                    "com.rwmobi.kunigame.di",
-                    "com.rwmobi.kunigame.ui.components",
-                    "com.rwmobi.kunigame.ui.destinations",
-                    "com.rwmobi.kunigame.ui.navigation",
-                    "com.rwmobi.kunigame.ui.previewparameter",
-                    "com.rwmobi.kunigame.ui.theme",
-                    "com.rwmobi.kunigame.ui.utils",
+                    "com.rwmobi.kunigami.di",
+                    "com.rwmobi.kunigami.ui.components",
+                    "com.rwmobi.kunigami.ui.destinations",
+                    "com.rwmobi.kunigami.ui.navigation",
+                    "com.rwmobi.kunigami.ui.previewparameter",
+                    "com.rwmobi.kunigami.ui.theme",
+                    "com.rwmobi.kunigami.ui.utils",
                     "androidx",
                     "dagger.hilt.internal.aggregatedroot.codegen",
                     "hilt_aggregated_deps",

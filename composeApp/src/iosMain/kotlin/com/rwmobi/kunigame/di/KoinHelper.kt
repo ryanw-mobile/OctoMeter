@@ -4,7 +4,7 @@
  * Sponsored by RW MobiMedia UK Limited
  *
  */
-package com.rwmobi.kunigame.di
+package com.rwmobi.kunigami.di
 
 import org.koin.core.context.startKoin
 

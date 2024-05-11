@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigame.ui.navigation
+package com.rwmobi.kunigami.ui.navigation
 
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.bar_chart
