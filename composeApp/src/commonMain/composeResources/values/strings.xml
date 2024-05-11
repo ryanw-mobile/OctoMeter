@@ -15,4 +15,11 @@
     <string name="ok">OK</string>
     <string name="content_description_navigation_bar">Navigation Bar</string>
     <string name="content_description_navigation_rail">Navigation Rail</string>
+
+    <string name="product_feature_variable">Variable</string>
+    <string name="product_feature_green">Green</string>
+    <string name="product_feature_tracker">Tracker</string>
+    <string name="product_feature_prepay">Prepay</string>
+    <string name="product_feature_business">Business</string>
+    <string name="product_feature_restricted">Restricted</string>
 </resources>

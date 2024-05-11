@@ -34,6 +34,7 @@ class OctopusRestApiRepository(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : OctopusRepository {
 
+    // Don't forget that if it returns more than 100 records, you will have to look at page=2 for the subsequent entries.
     override suspend fun getProducts(): Result<List<Product>> {
         return withContext(dispatcher) {
             runCatching {

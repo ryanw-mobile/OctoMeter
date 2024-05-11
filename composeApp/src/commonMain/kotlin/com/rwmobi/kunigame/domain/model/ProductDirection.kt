@@ -14,7 +14,7 @@ enum class ProductDirection {
     ;
 
     companion object {
-        fun fromValue(value: String?): ProductDirection = try {
+        fun fromApiValue(value: String?): ProductDirection = try {
             value?.let {
                 valueOf(it.uppercase())
             } ?: UNKNOWN

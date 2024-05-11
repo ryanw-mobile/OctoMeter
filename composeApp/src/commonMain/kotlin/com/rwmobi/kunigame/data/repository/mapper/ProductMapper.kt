@@ -10,19 +10,22 @@ package com.rwmobi.kunigame.data.repository.mapper
 import com.rwmobi.kunigame.data.source.network.dto.ProductDetailsDto
 import com.rwmobi.kunigame.domain.model.Product
 import com.rwmobi.kunigame.domain.model.ProductDirection
+import com.rwmobi.kunigame.domain.model.ProductFeature
 
 fun ProductDetailsDto.toProduct() = Product(
     code = code,
-    direction = ProductDirection.fromValue(direction),
+    direction = ProductDirection.fromApiValue(direction),
     fullName = fullName,
     displayName = displayName,
     description = description,
-    isVariable = isVariable,
-    isGreen = isGreen,
-    isTracker = isTracker,
-    isPrepay = isPrepay,
-    isBusiness = isBusiness,
-    isRestricted = isRestricted,
+    features = mutableListOf<ProductFeature>().apply {
+        if (isVariable) add(ProductFeature.VARIABLE)
+        if (isGreen) add(ProductFeature.GREEN)
+        if (isTracker) add(ProductFeature.TRACKER)
+        if (isPrepay) add(ProductFeature.PREPAY)
+        if (isBusiness) add(ProductFeature.BUSINESS)
+        if (isRestricted) add(ProductFeature.RESTRICTED)
+    }.toList(),
     term = term,
     availableFrom = availableFrom,
     availableTo = availableTo,

@@ -5,10 +5,15 @@
  *
  */
 
+@file:OptIn(ExperimentalLayoutApi::class, ExperimentalResourceApi::class)
+
 package com.rwmobi.kunigame.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -23,6 +28,8 @@ import com.rwmobi.kunigame.domain.model.ProductDirection
 import com.rwmobi.kunigame.ui.theme.AppTheme
 import com.rwmobi.kunigame.ui.theme.getDimension
 import kotlinx.datetime.Instant
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ProductItem(
@@ -51,7 +58,39 @@ fun ProductItem(
             style = MaterialTheme.typography.bodyMedium,
             text = product.description,
         )
+
+        FlowRow(modifier = Modifier.padding(vertical = dimension.grid_1)) {
+            product.features.forEach {
+                featureChip(
+                    text = stringResource(resource = it.stringResource),
+                )
+            }
+        }
     }
+}
+
+@Composable
+private fun featureChip(
+    modifier: Modifier = Modifier,
+    text: String,
+) {
+    val dimension = LocalDensity.current.getDimension()
+
+    Text(
+        modifier = modifier
+            .padding(horizontal = dimension.grid_0_25)
+            .background(
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                shape = MaterialTheme.shapes.medium,
+            )
+            .padding(
+                horizontal = dimension.grid_1,
+                vertical = dimension.grid_0_5,
+            ),
+        color = MaterialTheme.colorScheme.onSecondaryContainer,
+        style = MaterialTheme.typography.labelMedium,
+        text = text.uppercase(),
+    )
 }
 
 @Preview
@@ -66,12 +105,7 @@ private fun ProductItemPreview() {
                 fullName = "Alfredo",
                 displayName = "Stephone",
                 description = "Tarryn",
-                isVariable = false,
-                isGreen = true,
-                isTracker = true,
-                isPrepay = true,
-                isBusiness = false,
-                isRestricted = true,
+                features = emptyList(),
                 term = null,
                 availableFrom = Instant.parse("2024-03-31T23:00:00Z"),
                 availableTo = null,
