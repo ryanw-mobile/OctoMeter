@@ -1,4 +1,4 @@
-rootProject.name = "Roctopus"
+rootProject.name = "Kunigami"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
