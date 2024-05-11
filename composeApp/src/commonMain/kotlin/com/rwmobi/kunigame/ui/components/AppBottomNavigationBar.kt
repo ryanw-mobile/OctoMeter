@@ -32,11 +32,11 @@ import androidx.navigation.compose.rememberNavController
 import com.rwmobi.kunigame.ui.navigation.AppNavigationItem
 import com.rwmobi.kunigame.ui.theme.AppTheme
 import com.rwmobi.kunigame.ui.theme.getDimension
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.content_description_navigation_bar
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import roctopus.composeapp.generated.resources.Res
-import roctopus.composeapp.generated.resources.content_description_navigation_bar
 
 @Composable
 fun AppBottomNavigationBar(

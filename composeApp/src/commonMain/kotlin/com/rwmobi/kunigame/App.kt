@@ -46,11 +46,11 @@ import com.rwmobi.kunigame.ui.components.AppNavigationRail
 import com.rwmobi.kunigame.ui.navigation.AppNavigationHost
 import com.rwmobi.kunigame.ui.navigation.AppNavigationItem
 import com.rwmobi.kunigame.ui.theme.AppTheme
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.ok
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import roctopus.composeapp.generated.resources.Res
-import roctopus.composeapp.generated.resources.ok
 
 private enum class NavigationLayoutType {
     BOTTOM_NAVIGATION,

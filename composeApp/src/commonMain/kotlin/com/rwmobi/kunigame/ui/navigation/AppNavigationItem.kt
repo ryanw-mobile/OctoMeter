@@ -7,18 +7,18 @@
 
 package com.rwmobi.kunigame.ui.navigation
 
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.bar_chart
+import kunigami.composeapp.generated.resources.coin
+import kunigami.composeapp.generated.resources.compose_multiplatform
+import kunigami.composeapp.generated.resources.navigation_account
+import kunigami.composeapp.generated.resources.navigation_onboarding
+import kunigami.composeapp.generated.resources.navigation_tariffs
+import kunigami.composeapp.generated.resources.navigation_usage
+import kunigami.composeapp.generated.resources.user
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
-import roctopus.composeapp.generated.resources.Res
-import roctopus.composeapp.generated.resources.bar_chart
-import roctopus.composeapp.generated.resources.coin
-import roctopus.composeapp.generated.resources.compose_multiplatform
-import roctopus.composeapp.generated.resources.navigation_account
-import roctopus.composeapp.generated.resources.navigation_onboarding
-import roctopus.composeapp.generated.resources.navigation_tariffs
-import roctopus.composeapp.generated.resources.navigation_usage
-import roctopus.composeapp.generated.resources.user
 
 @OptIn(ExperimentalResourceApi::class)
 enum class AppNavigationItem(val titleResId: StringResource, val iconResId: DrawableResource) {

@@ -3,11 +3,11 @@ package com.rwmobi.kunigame.ui.theme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.nunito_variablefont
+import kunigami.composeapp.generated.resources.pathwayextreme_variablefont
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
-import roctopus.composeapp.generated.resources.Res
-import roctopus.composeapp.generated.resources.nunito_variablefont
-import roctopus.composeapp.generated.resources.pathwayextreme_variablefont
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

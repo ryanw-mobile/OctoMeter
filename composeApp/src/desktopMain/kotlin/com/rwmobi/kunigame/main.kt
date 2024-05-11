@@ -16,12 +16,12 @@ import com.rwmobi.kunigame.di.dispatcherModule
 import com.rwmobi.kunigame.di.ktorModule
 import com.rwmobi.kunigame.di.repositoryModule
 import com.rwmobi.kunigame.di.viewModelModule
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.app_name
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.core.logger.Level
-import roctopus.composeapp.generated.resources.Res
-import roctopus.composeapp.generated.resources.app_name
 import java.awt.Dimension
 
 @OptIn(ExperimentalResourceApi::class)
