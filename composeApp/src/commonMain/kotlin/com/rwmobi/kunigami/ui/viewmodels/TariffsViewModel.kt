@@ -10,6 +10,8 @@ package com.rwmobi.kunigami.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import com.rwmobi.kunigami.domain.model.ProductDirection
+import com.rwmobi.kunigami.domain.model.ProductFeature
 import com.rwmobi.kunigami.domain.repository.OctopusRepository
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -42,7 +44,13 @@ class TariffsViewModel(
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
                         isLoading = false,
-                        products = products.getOrNull() ?: emptyList(),
+                        products = products.getOrNull()?.filter {
+                            // Present only the options relevant to the targeted residential users
+                            it.direction == ProductDirection.IMPORT &&
+                                it.brand == "OCTOPUS_ENERGY" &&
+                                !it.features.contains(ProductFeature.BUSINESS) &&
+                                !it.features.contains(ProductFeature.RESTRICTED)
+                        } ?: emptyList(),
                     )
                 }
             } else {
