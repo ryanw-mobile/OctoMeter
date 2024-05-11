@@ -10,7 +10,6 @@
 package com.rwmobi.kunigami.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -25,10 +24,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.model.Product
 import com.rwmobi.kunigami.domain.model.ProductDirection
+import com.rwmobi.kunigami.domain.model.ProductFeature
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Instant
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -59,38 +60,18 @@ fun ProductItem(
             text = product.description,
         )
 
-        FlowRow(modifier = Modifier.padding(vertical = dimension.grid_1)) {
-            product.features.forEach {
-                featureChip(
-                    text = stringResource(resource = it.stringResource),
-                )
+        if (product.features.isNotEmpty()) {
+            FlowRow(modifier = Modifier.padding(vertical = dimension.grid_1)) {
+                product.features.forEach {
+                    TagWithIcon(
+                        modifier = Modifier.padding(end = dimension.grid_0_5),
+                        icon = painterResource(resource = it.iconResource),
+                        text = stringResource(resource = it.stringResource),
+                    )
+                }
             }
         }
     }
-}
-
-@Composable
-private fun featureChip(
-    modifier: Modifier = Modifier,
-    text: String,
-) {
-    val dimension = LocalDensity.current.getDimension()
-
-    Text(
-        modifier = modifier
-            .padding(horizontal = dimension.grid_0_25)
-            .background(
-                color = MaterialTheme.colorScheme.secondaryContainer,
-                shape = MaterialTheme.shapes.medium,
-            )
-            .padding(
-                horizontal = dimension.grid_1,
-                vertical = dimension.grid_0_5,
-            ),
-        color = MaterialTheme.colorScheme.onSecondaryContainer,
-        style = MaterialTheme.typography.labelMedium,
-        text = text.uppercase(),
-    )
 }
 
 @Preview
@@ -105,7 +86,7 @@ private fun ProductItemPreview() {
                 fullName = "Alfredo",
                 displayName = "Stephone",
                 description = "Tarryn",
-                features = emptyList(),
+                features = listOf(ProductFeature.GREEN),
                 term = null,
                 availableFrom = Instant.parse("2024-03-31T23:00:00Z"),
                 availableTo = null,
