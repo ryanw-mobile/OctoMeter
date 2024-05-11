@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigame.ui.components.ProductItem
+import com.rwmobi.kunigame.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigame.ui.theme.getDimension
 
 @Composable
@@ -38,25 +40,33 @@ fun TariffsScreen(
     }
 
     val dimension = LocalDensity.current.getDimension()
+    val lazyListState = rememberLazyListState()
 
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
+    ScrollbarMultiplatform(
+        modifier = Modifier.fillMaxSize(),
+        enabled = uiState.products.isNotEmpty(),
+        lazyListState = lazyListState,
     ) {
-        itemsIndexed(
-            items = uiState.products,
-            key = { _, product -> product.code },
-        ) { index, product ->
-            ProductItem(
-                modifier = Modifier.fillMaxWidth(),
-                product = product,
-            )
-
-            if (index < uiState.products.lastIndex) {
-                HorizontalDivider(
-                    modifier = Modifier
-                        .padding(vertical = dimension.grid_1)
-                        .fillMaxWidth(),
+        LazyColumn(
+            modifier = modifier.fillMaxSize(),
+            state = lazyListState,
+        ) {
+            itemsIndexed(
+                items = uiState.products,
+                key = { _, product -> product.code },
+            ) { index, product ->
+                ProductItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    product = product,
                 )
+
+                if (index < uiState.products.lastIndex) {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .padding(vertical = dimension.grid_1)
+                            .fillMaxWidth(),
+                    )
+                }
             }
         }
     }
