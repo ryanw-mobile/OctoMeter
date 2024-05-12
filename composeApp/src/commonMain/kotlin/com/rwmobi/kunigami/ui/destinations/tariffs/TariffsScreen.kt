@@ -44,14 +44,12 @@ fun TariffsScreen(
     val lazyListState = rememberLazyListState()
 
     ScrollbarMultiplatform(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
         enabled = uiState.products.isNotEmpty(),
         lazyListState = lazyListState,
-    ) { scrollbarPadding ->
+    ) { contentModifier ->
         LazyColumn(
-            modifier = modifier
-                .fillMaxSize()
-                .then(scrollbarPadding),
+            modifier = contentModifier.fillMaxSize(),
             state = lazyListState,
         ) {
             itemsIndexed(

@@ -11,7 +11,7 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.LocalScrollbarStyle
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -23,7 +23,6 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -35,14 +34,14 @@ actual fun ScrollbarMultiplatform(
     modifier: Modifier,
     enabled: Boolean,
     lazyListState: LazyListState,
-    content: @Composable (scrollbarPadding: Modifier) -> Unit,
+    content: @Composable (contentModifier: Modifier) -> Unit,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
-    Box(
+    Row(
         modifier = modifier,
     ) {
-        content(Modifier.padding(end = dimension.grid_1))
+        content(Modifier.weight(weight = 1f))
 
         val scrollbarAdapter = rememberScrollbarAdapter(scrollState = lazyListState)
         if (enabled) {
@@ -56,8 +55,7 @@ actual fun ScrollbarMultiplatform(
                 modifier = Modifier
                     .fillMaxHeight()
                     .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    .padding(horizontal = dimension.grid_0_5)
-                    .align(alignment = Alignment.CenterEnd),
+                    .padding(horizontal = dimension.grid_0_5),
             )
         }
     }
