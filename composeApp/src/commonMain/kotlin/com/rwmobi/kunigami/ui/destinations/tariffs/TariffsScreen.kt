@@ -43,31 +43,33 @@ fun TariffsScreen(
     val dimension = LocalDensity.current.getDimension()
     val lazyListState = rememberLazyListState()
 
-    ScrollbarMultiplatform(
-        modifier = modifier,
-        enabled = uiState.products.isNotEmpty(),
-        lazyListState = lazyListState,
-    ) { contentModifier ->
-        LazyColumn(
-            modifier = contentModifier.fillMaxSize(),
-            state = lazyListState,
-        ) {
-            itemsIndexed(
-                items = uiState.products,
-                key = { _, product -> product.code },
-            ) { index, product ->
-                ProductItem(
-                    modifier = Modifier
-                        .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
-                        .fillMaxWidth()
-                        .padding(vertical = dimension.grid_1),
-                    product = product,
-                )
-
-                if (index < uiState.products.lastIndex) {
-                    HorizontalDivider(
-                        modifier = Modifier.fillMaxWidth(),
+    if (!uiState.isLoading) {
+        ScrollbarMultiplatform(
+            modifier = modifier,
+            enabled = uiState.products.isNotEmpty(),
+            lazyListState = lazyListState,
+        ) { contentModifier ->
+            LazyColumn(
+                modifier = contentModifier.fillMaxSize(),
+                state = lazyListState,
+            ) {
+                itemsIndexed(
+                    items = uiState.products,
+                    key = { _, product -> product.code },
+                ) { index, product ->
+                    ProductItem(
+                        modifier = Modifier
+                            .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
+                            .fillMaxWidth()
+                            .padding(vertical = dimension.grid_1),
+                        product = product,
                     )
+
+                    if (index < uiState.products.lastIndex) {
+                        HorizontalDivider(
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
                 }
             }
         }

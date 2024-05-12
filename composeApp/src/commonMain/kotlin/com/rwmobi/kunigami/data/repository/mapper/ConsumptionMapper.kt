@@ -8,10 +8,11 @@
 package com.rwmobi.kunigami.data.repository.mapper
 
 import com.rwmobi.kunigami.data.source.network.dto.ConsumptionDto
+import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.model.Consumption
 
 fun ConsumptionDto.toConsumption() = Consumption(
-    consumption = consumption,
+    consumption = consumption.roundToNearestEvenHundredth(),
     intervalStart = intervalStart,
     intervalEnd = intervalEnd,
 )

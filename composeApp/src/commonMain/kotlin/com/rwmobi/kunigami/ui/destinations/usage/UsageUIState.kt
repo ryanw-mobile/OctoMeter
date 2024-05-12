@@ -13,5 +13,6 @@ import com.rwmobi.kunigami.ui.model.ErrorMessage
 data class UsageUIState(
     val isLoading: Boolean = true,
     val consumptions: List<Consumption> = emptyList(),
+    val consumptionRange: ClosedFloatingPointRange<Double> = 0.0..0.0,
     val errorMessages: List<ErrorMessage> = emptyList(),
 )

@@ -85,6 +85,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             implementation(libs.koin.core)
+            implementation(libs.koalaplot.core)
         }
         desktopMain.dependencies {
             implementation("org.jetbrains.skiko:skiko-awt-runtime-$skikoTarget:$skikoVersion")
