@@ -11,6 +11,7 @@
     <string name="navigation_onboarding">Onboarding</string>
     <string name="navigation_usage">Usage</string>
     <string name="navigation_tariffs">Tariffs</string>
+    <string name="navigation_agile">Agile</string>
     <string name="navigation_account">Account</string>
     <string name="ok">OK</string>
     <string name="content_description_navigation_bar">Navigation Bar</string>

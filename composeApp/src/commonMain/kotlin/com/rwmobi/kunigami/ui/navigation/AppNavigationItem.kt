@@ -12,9 +12,11 @@ import kunigami.composeapp.generated.resources.bar_chart
 import kunigami.composeapp.generated.resources.coin
 import kunigami.composeapp.generated.resources.compose_multiplatform
 import kunigami.composeapp.generated.resources.navigation_account
+import kunigami.composeapp.generated.resources.navigation_agile
 import kunigami.composeapp.generated.resources.navigation_onboarding
 import kunigami.composeapp.generated.resources.navigation_tariffs
 import kunigami.composeapp.generated.resources.navigation_usage
+import kunigami.composeapp.generated.resources.pulse
 import kunigami.composeapp.generated.resources.user
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -24,11 +26,12 @@ import org.jetbrains.compose.resources.StringResource
 enum class AppNavigationItem(val titleResId: StringResource, val iconResId: DrawableResource) {
     Onboarding(titleResId = Res.string.navigation_onboarding, iconResId = Res.drawable.compose_multiplatform),
     Usage(titleResId = Res.string.navigation_usage, iconResId = Res.drawable.bar_chart),
+    Agile(titleResId = Res.string.navigation_agile, iconResId = Res.drawable.pulse),
     Tariffs(titleResId = Res.string.navigation_tariffs, iconResId = Res.drawable.coin),
     Account(titleResId = Res.string.navigation_account, iconResId = Res.drawable.user),
     ;
 
     companion object {
-        fun getNavBarItems(): List<AppNavigationItem> = listOf(Usage, Tariffs, Account)
+        fun getNavBarItems(): List<AppNavigationItem> = listOf(Usage, Agile, Tariffs, Account)
     }
 }

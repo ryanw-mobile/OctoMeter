@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.di
 
 import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
+import com.rwmobi.kunigami.ui.viewmodels.AgileViewModel
 import com.rwmobi.kunigami.ui.viewmodels.OnboardingViewModel
 import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel
 import com.rwmobi.kunigami.ui.viewmodels.UsageViewModel
@@ -26,6 +27,12 @@ val viewModelModule = module {
         UsageViewModel(
             octopusRepository = get(),
             getConsumptionUseCase = get(),
+            dispatcher = get(named("DefaultDispatcher")),
+        )
+    }
+
+    factory {
+        AgileViewModel(
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
