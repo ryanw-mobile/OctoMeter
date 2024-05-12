@@ -21,7 +21,7 @@ actual fun getScreenSizeInfo(): ScreenSizeInfo {
     val hDp = config.screenHeightDp.dp
     val wDp = config.screenWidthDp.dp
 
-    return remember(density, config) {
+    val screenSizeInfo = remember(density, config) {
         ScreenSizeInfo(
             heightPx = with(density) { hDp.roundToPx() },
             widthPx = with(density) { wDp.roundToPx() },
@@ -29,4 +29,5 @@ actual fun getScreenSizeInfo(): ScreenSizeInfo {
             widthDp = wDp,
         )
     }
+    return screenSizeInfo
 }
