@@ -7,10 +7,11 @@
 
 package com.rwmobi.kunigami.ui.theme
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import com.rwmobi.kunigami.ui.utils.getScreenSizeInfo
 
 /**
  * Source: https://proandroiddev.com/supporting-different-screen-sizes-on-android-with-jetpack-compose-f215c13081bd
@@ -71,9 +72,8 @@ val sw360Dimension = Dimension(
     grid_6 = 48.dp,
 )
 
-@OptIn(ExperimentalResourceApi::class)
+@Composable
 fun Density.getDimension(): Dimension {
-    // Temporarily attach to Density
-    // return if (screenWidthDp <= 360) smallDimension else sw360Dimension
-    return sw360Dimension
+    val screenSizeInfo = getScreenSizeInfo()
+    return if (screenSizeInfo.widthDp <= 360.dp) smallDimension else sw360Dimension
 }
