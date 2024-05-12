@@ -23,7 +23,6 @@ import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsScreen
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIEvent
 import com.rwmobi.kunigami.ui.destinations.usage.UsageScreen
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIEvent
-import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
 import com.rwmobi.kunigami.ui.utils.collectAsStateMultiplatform
 import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
 import com.rwmobi.kunigami.ui.viewmodels.OnboardingViewModel
@@ -42,7 +41,7 @@ fun AppNavigationHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = AppNavigationItem.Tariffs.name,
+        startDestination = AppNavigationItem.Usage.name,
     ) {
         composable(route = AppNavigationItem.Onboarding.name) {
             val viewModel: OnboardingViewModel = viewModel { getKoin().get() }
@@ -64,8 +63,9 @@ fun AppNavigationHost(
 
             UsageScreen(
                 modifier = Modifier.fillMaxSize(),
-                uiState = UsageUIState(isLoading = false, errorMessages = listOf()),
+                uiState = uiState,
                 uiEvent = UsageUIEvent(
+                    onRefresh = viewModel::refresh,
                     onErrorShown = viewModel::errorShown,
                     onShowSnackbar = onShowSnackbar,
                 ),
@@ -96,6 +96,7 @@ fun AppNavigationHost(
                 modifier = Modifier.fillMaxSize(),
                 uiState = uiState,
                 uiEvent = AccountUIEvent(
+                    onRefresh = viewModel::refresh,
                     onErrorShown = viewModel::errorShown,
                     onShowSnackbar = onShowSnackbar,
                 ),

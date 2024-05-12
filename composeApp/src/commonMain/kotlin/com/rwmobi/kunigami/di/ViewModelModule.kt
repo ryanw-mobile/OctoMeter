@@ -25,6 +25,7 @@ val viewModelModule = module {
     factory {
         UsageViewModel(
             octopusRepository = get(),
+            getConsumptionUseCase = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
@@ -39,6 +40,7 @@ val viewModelModule = module {
     factory {
         AccountViewModel(
             octopusRepository = get(),
+            getUserAccountUseCase = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }

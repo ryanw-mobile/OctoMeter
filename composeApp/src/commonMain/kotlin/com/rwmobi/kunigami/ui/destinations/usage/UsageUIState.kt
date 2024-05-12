@@ -7,9 +7,11 @@
 
 package com.rwmobi.kunigami.ui.destinations.usage
 
+import com.rwmobi.kunigami.domain.model.Consumption
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 
 data class UsageUIState(
     val isLoading: Boolean = true,
+    val consumptions: List<Consumption> = emptyList(),
     val errorMessages: List<ErrorMessage> = emptyList(),
 )

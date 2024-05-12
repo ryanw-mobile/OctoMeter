@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.ui.destinations.account
 
 data class AccountUIEvent(
+    val onRefresh: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,
 )

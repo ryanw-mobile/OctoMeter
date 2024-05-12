@@ -16,5 +16,5 @@ expect fun ScrollbarMultiplatform(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     lazyListState: LazyListState,
-    content: @Composable (scrollbarPadding: Modifier) -> Unit,
+    content: @Composable (contentModifier: Modifier) -> Unit,
 )

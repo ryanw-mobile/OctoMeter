@@ -133,7 +133,7 @@ class OctopusRestApiRepository(
                     apiKey = apiKey,
                     accountNumber = accountNumber,
                 )
-                apiResponse?.properties?.map { it.toAccount() } ?: emptyList()
+                apiResponse?.properties?.map { it.toAccount(accountNumber = accountNumber) } ?: emptyList()
             }.except<CancellationException, _>()
         }
     }
