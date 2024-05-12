@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.ceil
 
 class UsageViewModel(
     private val octopusRepository: OctopusRepository,
@@ -48,9 +49,16 @@ class UsageViewModel(
             getConsumptionUseCase().fold(
                 onSuccess = { consumptions ->
                     _uiState.update { currentUiState ->
+                        val consumptionRange = if (consumptions.isEmpty()) {
+                            0.0..0.0 // Return a default range if the list is empty
+                        } else {
+                            0.0..ceil(consumptions.maxOf { it.consumption } * 10) / 10.0
+                        }
+
                         currentUiState.copy(
                             isLoading = false,
                             consumptions = consumptions,
+                            consumptionRange = consumptionRange,
                         )
                     }
                 },
