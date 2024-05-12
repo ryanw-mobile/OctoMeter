@@ -9,7 +9,9 @@ package com.rwmobi.kunigami.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.OctopusRepository
+import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
@@ -22,6 +24,7 @@ import kotlinx.coroutines.launch
 
 class AccountViewModel(
     private val octopusRepository: OctopusRepository,
+    private val getUserAccountUseCase: GetUserAccountUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<AccountUIState> = MutableStateFlow(AccountUIState(isLoading = true))
@@ -36,7 +39,21 @@ class AccountViewModel(
 
     fun refresh() {
         viewModelScope.launch(dispatcher) {
-            // TODO
+            val userAccount = getUserAccountUseCase()
+            userAccount.fold(
+                onSuccess = { account ->
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            isLoading = false,
+                            account = account,
+                        )
+                    }
+                },
+                onFailure = { throwable ->
+                    updateUIForError(message = throwable.message ?: "Error when retrieving tariffs")
+                    Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                },
+            )
         }
     }
 

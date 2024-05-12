@@ -39,6 +39,7 @@ val viewModelModule = module {
     factory {
         AccountViewModel(
             octopusRepository = get(),
+            getUserAccountUseCase = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }

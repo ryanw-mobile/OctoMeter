@@ -8,13 +8,13 @@
 package com.rwmobi.kunigami.ui.destinations.account
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.rwmobi.kunigami.ui.theme.AppTheme
 
@@ -34,11 +34,20 @@ fun AccountScreen(
         }
     }
 
+    val scrollState = rememberScrollState()
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        modifier = modifier.verticalScroll(state = scrollState),
     ) {
         Text(text = "Account screen")
+        Text("${uiState.account?.fullAddress}")
+        Text("Moved in at: ${uiState.account?.movedInAt}")
+        uiState.account?.movedOutAt?.let {
+            Text("Moved out at: $it")
+        }
+    }
+
+    LaunchedEffect(true) {
+        uiEvent.onRefresh()
     }
 }
 
@@ -48,11 +57,13 @@ private fun AccountScreenPreview() {
     AppTheme {
         AccountScreen(
             uiState = AccountUIState(
+                account = null,
                 isLoading = false,
                 errorMessages = listOf(),
             ),
             uiEvent = AccountUIEvent(
-                onErrorShown = { },
+                onRefresh = {},
+                onErrorShown = {},
                 onShowSnackbar = {},
             ),
         )

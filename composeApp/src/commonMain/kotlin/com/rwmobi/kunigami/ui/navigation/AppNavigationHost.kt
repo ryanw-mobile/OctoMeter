@@ -96,6 +96,7 @@ fun AppNavigationHost(
                 modifier = Modifier.fillMaxSize(),
                 uiState = uiState,
                 uiEvent = AccountUIEvent(
+                    onRefresh = viewModel::refresh,
                     onErrorShown = viewModel::errorShown,
                     onShowSnackbar = onShowSnackbar,
                 ),
