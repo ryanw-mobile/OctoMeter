@@ -71,4 +71,9 @@ class TariffsViewModel(
             )
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        Logger.v("TariffsViewModel", message = { "onCleared" })
+    }
 }

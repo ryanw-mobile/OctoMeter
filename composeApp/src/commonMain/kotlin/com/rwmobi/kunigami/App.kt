@@ -40,7 +40,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.ui.components.AppBottomNavigationBar
 import com.rwmobi.kunigami.ui.components.AppNavigationRail
 import com.rwmobi.kunigami.ui.navigation.AppNavigationHost
@@ -89,8 +88,6 @@ fun App() {
     val navigationLayoutType = windowSizeClass.calculateNavigationLayout(
         currentRoute = currentRoute,
     )
-
-    Logger.d(tag = "tag", messageString = "This is how we log in this project.")
 
     AppTheme {
         Surface {

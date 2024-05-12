@@ -42,7 +42,7 @@ fun AppNavigationHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = AppNavigationItem.Tariffs.name,
+        startDestination = AppNavigationItem.Usage.name,
     ) {
         composable(route = AppNavigationItem.Onboarding.name) {
             val viewModel: OnboardingViewModel = viewModel { getKoin().get() }

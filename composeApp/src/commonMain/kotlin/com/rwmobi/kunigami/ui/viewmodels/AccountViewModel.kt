@@ -73,4 +73,9 @@ class AccountViewModel(
             )
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        Logger.v("AccountViewModel", message = { "onCleared" })
+    }
 }

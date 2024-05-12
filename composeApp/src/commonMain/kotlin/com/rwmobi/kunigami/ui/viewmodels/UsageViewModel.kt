@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.OctopusRepository
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -55,5 +56,10 @@ class UsageViewModel(
                 errorMessages = currentUiState.errorMessages + newErrorMessage,
             )
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Logger.v("UsageViewModel", message = { "onCleared" })
     }
 }
