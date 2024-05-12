@@ -7,13 +7,14 @@
 
 package com.rwmobi.kunigami.ui.destinations.usage
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -42,29 +44,39 @@ fun UsageScreen(
     }
 
     val dimension = LocalDensity.current.getDimension()
-    val scrollState = rememberScrollState()
+    val lazyListState = rememberLazyListState()
 
     if (!uiState.isLoading) {
-        Column(
-            modifier = modifier
-                .verticalScroll(state = scrollState)
-                .padding(horizontal = dimension.grid_2),
-        ) {
-            uiState.consumptions.forEach { consumption ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    val timeLabel = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault())
-                    Text(
-                        modifier = Modifier.weight(1.0f),
-                        text = "${timeLabel.date} ${timeLabel.time}",
-                    )
+        ScrollbarMultiplatform(
+            modifier = modifier,
+            enabled = uiState.consumptions.isNotEmpty(),
+            lazyListState = lazyListState,
+        ) { contentModifier ->
+            LazyColumn(
+                modifier = contentModifier.fillMaxSize(),
+                state = lazyListState,
+            ) {
+                itemsIndexed(
+                    items = uiState.consumptions,
+                    key = { _, consumption -> consumption.intervalStart },
+                ) { _, consumption ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = dimension.grid_2),
+                    ) {
+                        val timeLabel = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault())
+                        Text(
+                            modifier = Modifier.weight(1.0f),
+                            text = "${timeLabel.date} ${timeLabel.time}",
+                        )
 
-                    Text(
-                        modifier = Modifier.wrapContentWidth(),
-                        fontWeight = FontWeight.Bold,
-                        text = "${consumption.consumption}",
-                    )
+                        Text(
+                            modifier = Modifier.wrapContentWidth(),
+                            fontWeight = FontWeight.Bold,
+                            text = "${consumption.consumption}",
+                        )
+                    }
                 }
             }
         }
