@@ -42,18 +42,18 @@ class OnboardingViewModel(
     }
 
     private fun updateUIForError(message: String) {
-        if (_uiState.value.errorMessages.any { it.message == message }) {
-            return
-        }
-
-        val newErrorMessage = ErrorMessage(
-            id = generateRandomLong(),
-            message = message,
-        )
         _uiState.update { currentUiState ->
+            val newErrorMessages = if (_uiState.value.errorMessages.any { it.message == message }) {
+                currentUiState.errorMessages
+            } else {
+                currentUiState.errorMessages + ErrorMessage(
+                    id = generateRandomLong(),
+                    message = message,
+                )
+            }
             currentUiState.copy(
                 isLoading = false,
-                errorMessages = currentUiState.errorMessages + newErrorMessage,
+                errorMessages = newErrorMessages,
             )
         }
     }
