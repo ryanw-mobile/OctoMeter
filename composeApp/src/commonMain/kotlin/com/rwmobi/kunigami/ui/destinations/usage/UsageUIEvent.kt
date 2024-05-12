@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.ui.destinations.usage
 
 data class UsageUIEvent(
+    val onRefresh: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,
 )

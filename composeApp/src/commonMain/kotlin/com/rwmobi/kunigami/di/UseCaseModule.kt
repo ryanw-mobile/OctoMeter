@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.di
 
+import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
 import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
 import org.koin.core.qualifier.named
@@ -22,6 +23,14 @@ val userCaseModule = module {
 
     factory {
         GetUserAccountUseCase(
+            userPreferencesRepository = get(),
+            octopusRepository = get(),
+            dispatcher = get(named("DefaultDispatcher")),
+        )
+    }
+
+    factory {
+        GetConsumptionUseCase(
             userPreferencesRepository = get(),
             octopusRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
