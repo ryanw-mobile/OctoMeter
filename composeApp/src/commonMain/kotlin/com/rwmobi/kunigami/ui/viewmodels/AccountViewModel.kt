@@ -38,6 +38,12 @@ class AccountViewModel(
     }
 
     fun refresh() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = true,
+            )
+        }
+
         viewModelScope.launch(dispatcher) {
             val userAccount = getUserAccountUseCase()
             userAccount.fold(

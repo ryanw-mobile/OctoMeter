@@ -36,6 +36,12 @@ class TariffsViewModel(
     }
 
     fun refresh() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = true,
+            )
+        }
+
         viewModelScope.launch(dispatcher) {
             val filteredProducts = getFilteredProductsUseCase()
             filteredProducts.fold(

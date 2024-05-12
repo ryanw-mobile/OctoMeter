@@ -38,6 +38,12 @@ class UsageViewModel(
     }
 
     fun refresh() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = true,
+            )
+        }
+
         viewModelScope.launch(dispatcher) {
             getConsumptionUseCase().fold(
                 onSuccess = { consumptions ->
