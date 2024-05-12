@@ -18,16 +18,16 @@ import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 actual fun getScreenSizeInfo(): ScreenSizeInfo {
     val density = LocalDensity.current
     val config = LocalConfiguration.current
-    val hDp = config.screenHeightDp.dp
-    val wDp = config.screenWidthDp.dp
 
     val screenSizeInfo = remember(density, config) {
+        val heightDp = config.screenHeightDp.dp
+        val widthDp = config.screenWidthDp.dp
         ScreenSizeInfo(
-            heightPx = with(density) { hDp.roundToPx() },
-            widthPx = with(density) { wDp.roundToPx() },
-            heightDp = hDp,
-            widthDp = wDp,
-        )
+            heightPx = with(density) { heightDp.roundToPx() },
+            widthPx = with(density) { widthDp.roundToPx() },
+            heightDp = heightDp,
+            widthDp = widthDp,
+        ) as ScreenSizeInfo
     }
     return screenSizeInfo
 }
