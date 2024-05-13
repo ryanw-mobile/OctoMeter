@@ -21,10 +21,11 @@ import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Consumption
 import com.rwmobi.kunigami.domain.model.Product
 import com.rwmobi.kunigami.domain.model.Rate
-import com.rwmobi.kunigami.domain.repository.OctopusRepository
+import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Instant
 import kotlin.coroutines.cancellation.CancellationException
 
 class OctopusRestApiRepository(
@@ -32,7 +33,7 @@ class OctopusRestApiRepository(
     private val electricityMeterPointsEndpoint: ElectricityMeterPointsEndpoint,
     private val accountEndpoint: AccountEndpoint,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
-) : OctopusRepository {
+) : RestApiRepository {
 
     // Don't forget that if it returns more than 100 records, you will have to look at page=2 for the subsequent entries.
     override suspend fun getProducts(): Result<List<Product>> {
@@ -47,12 +48,16 @@ class OctopusRestApiRepository(
     override suspend fun getStandardUnitRates(
         productCode: String,
         tariffCode: String,
+        periodFrom: Instant?,
+        periodTo: Instant?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
             runCatching {
                 val apiResponse = productsEndpoint.getStandardUnitRates(
                     productCode = productCode,
                     tariffCode = tariffCode,
+                    periodFrom = periodFrom,
+                    periodTo = periodTo,
                 )
                 apiResponse?.results?.map { it.toRate() } ?: emptyList()
             }.except<CancellationException, _>()
@@ -108,12 +113,16 @@ class OctopusRestApiRepository(
         apiKey: String,
         mpan: String,
         meterSerialNumber: String,
+        periodFrom: Instant?,
+        periodTo: Instant?,
     ): Result<List<Consumption>> {
         return withContext(dispatcher) {
             runCatching {
                 val apiResponse = electricityMeterPointsEndpoint.getConsumption(
                     apiKey = apiKey,
                     mpan = mpan,
+                    periodFrom = periodFrom,
+                    periodTo = periodTo,
                     meterSerialNumber = meterSerialNumber,
                     orderBy = ConsumptionOrdering.PERIOD,
                     groupBy = ConsumptionGrouping.HALF_HOURLY,

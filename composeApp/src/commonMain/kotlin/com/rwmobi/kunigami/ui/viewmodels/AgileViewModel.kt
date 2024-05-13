@@ -10,8 +10,8 @@ package com.rwmobi.kunigami.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
-import com.rwmobi.kunigami.ui.destinations.onboarding.OnboardingUIState
+import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
+import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,12 +20,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.ceil
 
-class OnboardingViewModel(
-    private val octopusRepository: RestApiRepository,
+class AgileViewModel(
+    private val getStandardUnitRateUseCase: GetStandardUnitRateUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<OnboardingUIState> = MutableStateFlow(OnboardingUIState(isLoading = true))
+    private val _uiState: MutableStateFlow<AgileUIState> = MutableStateFlow(AgileUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
     fun errorShown(errorId: Long) {
@@ -36,8 +37,34 @@ class OnboardingViewModel(
     }
 
     fun refresh() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = true,
+            )
+        }
+
         viewModelScope.launch(dispatcher) {
-            // TODO
+            getStandardUnitRateUseCase().fold(
+                onSuccess = { rates ->
+                    _uiState.update { currentUiState ->
+                        val rateRange = if (rates.isEmpty()) {
+                            0.0..0.0 // Return a default range if the list is empty
+                        } else {
+                            0.0..ceil(rates.maxOf { it.vatInclusivePrice } * 10) / 10.0
+                        }
+
+                        currentUiState.copy(
+                            isLoading = false,
+                            rates = rates,
+                            rateRange = rateRange,
+                        )
+                    }
+                },
+                onFailure = { throwable ->
+                    updateUIForError(message = throwable.message ?: "Error when retrieving rates")
+                    Logger.e("AgileViewModel", throwable = throwable, message = { "Error when retrieving rates" })
+                },
+            )
         }
     }
 
@@ -60,6 +87,6 @@ class OnboardingViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        Logger.v("OnboardingViewModel", message = { "onCleared" })
+        Logger.v("AgileViewModel", message = { "onCleared" })
     }
 }

@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.destinations.usage
+package com.rwmobi.kunigami.ui.destinations.agile
 
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
@@ -37,10 +37,10 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 @Composable
-fun UsageScreen(
+fun AgileScreen(
     modifier: Modifier = Modifier,
-    uiState: UsageUIState,
-    uiEvent: UsageUIEvent,
+    uiState: AgileUIState,
+    uiEvent: AgileUIEvent,
 ) {
     if (uiState.errorMessages.isNotEmpty()) {
         val errorMessage = remember(uiState) { uiState.errorMessages[0] }
@@ -57,19 +57,19 @@ fun UsageScreen(
 
     if (!uiState.isLoading) {
         val screenSizeInfo = getScreenSizeInfo()
-        val entries: List<VerticalBarPlotEntry<Int, Double>> = remember(uiState.consumptions) {
+        val entries: List<VerticalBarPlotEntry<Int, Double>> = remember(uiState.rates) {
             buildList {
-                uiState.consumptions.forEachIndexed { index, consumption ->
-                    add(DefaultVerticalBarPlotEntry((index + 1), DefaultVerticalBarPosition(0.0, consumption.consumption)))
+                uiState.rates.forEachIndexed { index, rate ->
+                    add(DefaultVerticalBarPlotEntry((index + 1), DefaultVerticalBarPosition(0.0, rate.vatInclusivePrice)))
                 }
             }
         }
-        val labels: Map<Int, String> = remember(uiState.consumptions) {
+        val labels: Map<Int, String> = remember(uiState.rates) {
             buildMap {
                 var lastRateValue: String? = null
 
-                uiState.consumptions.forEachIndexed { index, consumption ->
-                    val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour.toString()
+                uiState.rates.forEachIndexed { index, rate ->
+                    val currentTime = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour.toString()
                     if (currentTime != lastRateValue) {
                         put(index + 1, currentTime)
                         lastRateValue = currentTime
@@ -80,7 +80,7 @@ fun UsageScreen(
 
         ScrollbarMultiplatform(
             modifier = modifier,
-            enabled = uiState.consumptions.isNotEmpty(),
+            enabled = uiState.rates.isNotEmpty(),
             lazyListState = lazyListState,
         ) { contentModifier ->
             LazyColumn(
@@ -102,7 +102,7 @@ fun UsageScreen(
                             modifier = constraintModifier.padding(all = dimension.grid_2),
                             entries = entries,
                             labels = labels,
-                            yAxisRange = uiState.consumptionRange,
+                            yAxisRange = uiState.rateRange,
                             yAxisTickPosition = TickPosition.Outside,
                             xAxisTickPosition = TickPosition.Outside,
                             yAxisTitle = "kWh",
@@ -112,15 +112,15 @@ fun UsageScreen(
                 }
 
                 itemsIndexed(
-                    items = uiState.consumptions,
-                    key = { _, consumption -> consumption.intervalStart.epochSeconds },
-                ) { _, consumption ->
+                    items = uiState.rates,
+                    key = { _, rate -> rate.validFrom.epochSeconds },
+                ) { _, rate ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = dimension.grid_2),
                     ) {
-                        val timeLabel = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault())
+                        val timeLabel = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault())
                         Text(
                             modifier = Modifier.weight(1.0f),
                             text = "${timeLabel.date} ${timeLabel.time}",
@@ -129,7 +129,7 @@ fun UsageScreen(
                         Text(
                             modifier = Modifier.wrapContentWidth(),
                             fontWeight = FontWeight.Bold,
-                            text = "${consumption.consumption}",
+                            text = "${rate.vatInclusivePrice}",
                         )
                     }
                 }

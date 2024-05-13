@@ -20,10 +20,10 @@ fun AxisLabel(
 ) {
     Text(
         modifier = modifier,
-        text = label,
         color = MaterialTheme.colorScheme.onBackground,
-        style = MaterialTheme.typography.bodySmall,
-        overflow = TextOverflow.Ellipsis,
+        style = MaterialTheme.typography.labelMedium,
+        overflow = TextOverflow.Clip,
         maxLines = 1,
+        text = label,
     )
 }
