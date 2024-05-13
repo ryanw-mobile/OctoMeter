@@ -11,10 +11,17 @@ import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Consumption
 import com.rwmobi.kunigami.domain.model.Product
 import com.rwmobi.kunigami.domain.model.Rate
+import kotlinx.datetime.Instant
 
-interface OctopusRepository {
+interface RestApiRepository {
     suspend fun getProducts(): Result<List<Product>>
-    suspend fun getStandardUnitRates(productCode: String, tariffCode: String): Result<List<Rate>>
+    suspend fun getStandardUnitRates(
+        productCode: String,
+        tariffCode: String,
+        periodFrom: Instant? = null,
+        periodTo: Instant? = null,
+    ): Result<List<Rate>>
+
     suspend fun getStandingCharges(productCode: String, tariffCode: String): Result<List<Rate>>
     suspend fun getDayUnitRates(productCode: String, tariffCode: String): Result<List<Rate>>
     suspend fun getNightUnitRates(productCode: String, tariffCode: String): Result<List<Rate>>

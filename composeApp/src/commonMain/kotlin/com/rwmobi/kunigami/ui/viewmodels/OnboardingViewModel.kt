@@ -10,7 +10,7 @@ package com.rwmobi.kunigami.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.rwmobi.kunigami.domain.repository.OctopusRepository
+import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.ui.destinations.onboarding.OnboardingUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
-    private val octopusRepository: OctopusRepository,
+    private val octopusRepository: RestApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<OnboardingUIState> = MutableStateFlow(OnboardingUIState(isLoading = true))

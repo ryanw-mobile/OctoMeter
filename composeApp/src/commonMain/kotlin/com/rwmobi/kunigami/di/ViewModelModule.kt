@@ -33,6 +33,7 @@ val viewModelModule = module {
 
     factory {
         AgileViewModel(
+            getStandardUnitRateUseCase = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }

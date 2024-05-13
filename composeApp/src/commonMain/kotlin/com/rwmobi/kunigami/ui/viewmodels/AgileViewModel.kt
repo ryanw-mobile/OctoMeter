@@ -10,6 +10,7 @@ package com.rwmobi.kunigami.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
@@ -19,8 +20,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.math.ceil
 
 class AgileViewModel(
+    private val getStandardUnitRateUseCase: GetStandardUnitRateUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<AgileUIState> = MutableStateFlow(AgileUIState(isLoading = true))
@@ -41,27 +44,27 @@ class AgileViewModel(
         }
 
         viewModelScope.launch(dispatcher) {
-//            getConsumptionUseCase().fold(
-//                onSuccess = { consumptions ->
-//                    _uiState.update { currentUiState ->
-//                        val consumptionRange = if (consumptions.isEmpty()) {
-//                            0.0..0.0 // Return a default range if the list is empty
-//                        } else {
-//                            0.0..ceil(consumptions.maxOf { it.consumption } * 10) / 10.0
-//                        }
-//
-//                        currentUiState.copy(
-//                            isLoading = false,
-//                            consumptions = consumptions,
-//                            consumptionRange = consumptionRange,
-//                        )
-//                    }
-//                },
-//                onFailure = { throwable ->
-//                    updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
-//                    Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
-//                },
-//            )
+            getStandardUnitRateUseCase().fold(
+                onSuccess = { rates ->
+                    _uiState.update { currentUiState ->
+                        val rateRange = if (rates.isEmpty()) {
+                            0.0..0.0 // Return a default range if the list is empty
+                        } else {
+                            0.0..ceil(rates.maxOf { it.vatInclusivePrice } * 10) / 10.0
+                        }
+
+                        currentUiState.copy(
+                            isLoading = false,
+                            rates = rates,
+                            rateRange = rateRange,
+                        )
+                    }
+                },
+                onFailure = { throwable ->
+                    updateUIForError(message = throwable.message ?: "Error when retrieving rates")
+                    Logger.e("AgileViewModel", throwable = throwable, message = { "Error when retrieving rates" })
+                },
+            )
         }
     }
 

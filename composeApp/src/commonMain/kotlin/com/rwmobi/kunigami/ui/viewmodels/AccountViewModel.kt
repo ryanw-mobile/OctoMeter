@@ -10,7 +10,7 @@ package com.rwmobi.kunigami.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.rwmobi.kunigami.domain.repository.OctopusRepository
+import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AccountViewModel(
-    private val octopusRepository: OctopusRepository,
+    private val octopusRepository: RestApiRepository,
     private val getUserAccountUseCase: GetUserAccountUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {

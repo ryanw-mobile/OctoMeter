@@ -10,7 +10,7 @@ package com.rwmobi.kunigami.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.rwmobi.kunigami.domain.repository.OctopusRepository
+import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.ceil
 
 class UsageViewModel(
-    private val octopusRepository: OctopusRepository,
+    private val octopusRepository: RestApiRepository,
     private val getConsumptionUseCase: GetConsumptionUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
