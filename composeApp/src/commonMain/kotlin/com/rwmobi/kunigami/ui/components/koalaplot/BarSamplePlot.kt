@@ -43,6 +43,7 @@ import io.github.koalaplot.core.xygraph.Point
 import io.github.koalaplot.core.xygraph.TickPosition
 import io.github.koalaplot.core.xygraph.XYGraph
 import io.github.koalaplot.core.xygraph.rememberAxisStyle
+import kotlin.math.min
 
 @OptIn(ExperimentalKoalaPlotApi::class)
 @Composable
@@ -216,7 +217,9 @@ fun BarSamplePlot(
     }
 }
 
-private fun getPercentageColorIndex(value: Double, maxValue: Double): Int = ((value / maxValue) * 100).toInt()
+private fun getPercentageColorIndex(value: Double, maxValue: Double): Int {
+    return min(((value / maxValue) * 100).toInt() - 1, 99)
+}
 
 private fun generateGYRHueColorPalette(
     saturation: Float = 0.5f,
