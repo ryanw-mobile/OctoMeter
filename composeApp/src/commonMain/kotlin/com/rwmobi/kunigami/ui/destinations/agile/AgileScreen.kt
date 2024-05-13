@@ -39,6 +39,8 @@ import io.github.koalaplot.core.line.LinePlot
 import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.xygraph.Point
 import io.github.koalaplot.core.xygraph.TickPosition
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -166,5 +168,10 @@ fun AgileScreen(
 
     LaunchedEffect(true) {
         uiEvent.onRefresh()
+
+        while (isActive) {
+            delay(timeMillis = 1_800_000) // 30 minutes
+            uiEvent.onRefresh()
+        }
     }
 }
