@@ -72,14 +72,16 @@ class AgileViewModel(
 
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo) {
         _uiState.update { currentUiState ->
+            val requestedLayout = if (screenSizeInfo.isPortrait()) {
+                AgileScreenLayout.Portrait
+            } else {
+                AgileScreenLayout.LandScape(
+                    requestedMaxHeight = screenSizeInfo.heightDp * 2 / 3,
+                )
+            }
+
             currentUiState.copy(
-                requestedLayout = if (screenSizeInfo.isPortrait()) {
-                    AgileScreenLayout.Portrait
-                } else {
-                    AgileScreenLayout.LandScape(
-                        requestedMaxHeight = screenSizeInfo.heightDp * 2 / 3,
-                    )
-                },
+                requestedLayout = requestedLayout,
             )
         }
     }

@@ -66,7 +66,7 @@ class UsageViewModel(
                 },
                 onFailure = { throwable ->
                     updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
-                    Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+                    Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
                 },
             )
         }
@@ -74,14 +74,16 @@ class UsageViewModel(
 
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo) {
         _uiState.update { currentUiState ->
+            val requestedLayout = if (screenSizeInfo.isPortrait()) {
+                UsageScreenLayout.Portrait
+            } else {
+                UsageScreenLayout.LandScape(
+                    requestedMaxHeight = screenSizeInfo.heightDp * 2 / 3,
+                )
+            }
+
             currentUiState.copy(
-                requestedLayout = if (screenSizeInfo.isPortrait()) {
-                    UsageScreenLayout.Portrait
-                } else {
-                    UsageScreenLayout.LandScape(
-                        requestedMaxHeight = screenSizeInfo.heightDp * 2 / 3,
-                    )
-                },
+                requestedLayout = requestedLayout,
             )
         }
     }
