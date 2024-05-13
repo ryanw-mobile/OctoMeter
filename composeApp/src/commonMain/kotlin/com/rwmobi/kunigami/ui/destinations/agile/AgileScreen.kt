@@ -28,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.BarSamplePlot
 import com.rwmobi.kunigami.ui.theme.getDimension
-import com.rwmobi.kunigami.ui.utils.getScreenSizeInfo
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
 import io.github.koalaplot.core.bar.VerticalBarPlotEntry
@@ -56,7 +55,6 @@ fun AgileScreen(
     val lazyListState = rememberLazyListState()
 
     if (!uiState.isLoading) {
-        val screenSizeInfo = getScreenSizeInfo()
         val entries: List<VerticalBarPlotEntry<Int, Double>> = remember(uiState.rates) {
             buildList {
                 uiState.rates.forEachIndexed { index, rate ->
@@ -89,13 +87,17 @@ fun AgileScreen(
             ) {
                 item {
                     BoxWithConstraints {
-                        val constraintModifier = if (screenSizeInfo.isPortrait()) {
-                            Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(4 / 3f)
-                        } else {
-                            Modifier.fillMaxSize()
-                                .height(screenSizeInfo.heightDp * 2 / 3)
+                        val constraintModifier = when (uiState.requestedLayout) {
+                            is AgileScreenLayout.Portrait -> {
+                                Modifier
+                                    .fillMaxWidth()
+                                    .aspectRatio(4 / 3f)
+                            }
+
+                            is AgileScreenLayout.LandScape -> {
+                                Modifier.fillMaxSize()
+                                    .height(uiState.requestedLayout.requestedMaxHeight)
+                            }
                         }
 
                         BarSamplePlot(

@@ -45,6 +45,7 @@ import com.rwmobi.kunigami.ui.components.AppNavigationRail
 import com.rwmobi.kunigami.ui.navigation.AppNavigationHost
 import com.rwmobi.kunigami.ui.navigation.AppNavigationItem
 import com.rwmobi.kunigami.ui.theme.AppTheme
+import com.rwmobi.kunigami.ui.utils.getScreenSizeInfo
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.ok
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -80,6 +81,7 @@ private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?): Na
 @Preview
 fun App() {
     val windowSizeClass = calculateWindowSizeClass()
+    val screenSizeInfo = getScreenSizeInfo()
     val lastDoubleTappedNavItem = remember { mutableStateOf<AppNavigationItem?>(null) }
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -150,6 +152,7 @@ fun App() {
                             .padding(paddingValues),
                         navController = navController,
                         lastDoubleTappedNavItem = lastDoubleTappedNavItem.value,
+                        screenSizeInfo = screenSizeInfo,
                         onShowSnackbar = { errorMessageText ->
                             snackbarHostState.showSnackbar(
                                 message = errorMessageText,

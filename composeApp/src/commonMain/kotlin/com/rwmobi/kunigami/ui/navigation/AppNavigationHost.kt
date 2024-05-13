@@ -25,6 +25,7 @@ import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsScreen
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIEvent
 import com.rwmobi.kunigami.ui.destinations.usage.UsageScreen
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIEvent
+import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.utils.collectAsStateMultiplatform
 import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
 import com.rwmobi.kunigami.ui.viewmodels.AgileViewModel
@@ -37,6 +38,7 @@ import org.koin.mp.KoinPlatform.getKoin
 fun AppNavigationHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    screenSizeInfo: ScreenSizeInfo,
     lastDoubleTappedNavItem: AppNavigationItem?,
     onShowSnackbar: suspend (String) -> Unit,
     onScrolledToTop: (AppNavigationItem) -> Unit,
@@ -78,6 +80,7 @@ fun AppNavigationHost(
         composable(route = AppNavigationItem.Agile.name) {
             val viewModel: AgileViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
+            viewModel.notifyScreenSizeChanged(screenSizeInfo = screenSizeInfo)
 
             AgileScreen(
                 modifier = Modifier.fillMaxSize(),
