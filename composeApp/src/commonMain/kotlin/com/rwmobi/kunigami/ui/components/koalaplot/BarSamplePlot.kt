@@ -10,6 +10,7 @@
 package com.rwmobi.kunigami.ui.components.koalaplot
 
 import androidx.compose.foundation.layout.absolutePadding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -106,7 +107,7 @@ fun BarSamplePlot(
             },
             xAxisTitle = {
                 xAxisTitle?.let {
-                    AxisTitle(
+                    XAxisTitle(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = dimension.grid_1),
@@ -125,10 +126,10 @@ fun BarSamplePlot(
             },
             yAxisTitle = {
                 yAxisTitle?.let {
-                    AxisTitle(
+                    YAxisTitle(
                         modifier = Modifier
-                            .rotateVertically(VerticalRotation.COUNTER_CLOCKWISE)
-                            .padding(bottom = dimension.grid_1),
+                            .fillMaxHeight()
+                            .padding(end = dimension.grid_1),
                         title = it,
                     )
                 }
