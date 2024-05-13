@@ -107,7 +107,7 @@ fun AgileScreen(
                             yAxisRange = uiState.rateRange,
                             yAxisTickPosition = TickPosition.Outside,
                             xAxisTickPosition = TickPosition.Outside,
-                            yAxisTitle = "kWh",
+                            yAxisTitle = "VAT Unit Rate (p/kWh)",
                             barWidth = 0.8f,
                         )
                     }
