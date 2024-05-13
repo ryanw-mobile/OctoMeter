@@ -64,6 +64,19 @@ fun UsageScreen(
                 }
             }
         }
+        val labels: Map<Int, String> = remember(uiState.consumptions) {
+            buildMap {
+                var lastRateValue: String? = null
+
+                uiState.consumptions.forEachIndexed { index, consumption ->
+                    val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour.toString()
+                    if (currentTime != lastRateValue) {
+                        put(index + 1, currentTime)
+                        lastRateValue = currentTime
+                    }
+                }
+            }
+        }
 
         ScrollbarMultiplatform(
             modifier = modifier,
@@ -88,6 +101,7 @@ fun UsageScreen(
                         BarSamplePlot(
                             modifier = constraintModifier.padding(all = dimension.grid_2),
                             entries = entries,
+                            labels = labels,
                             yAxisRange = uiState.consumptionRange,
                             yAxisTickPosition = TickPosition.Outside,
                             xAxisTickPosition = TickPosition.Outside,
