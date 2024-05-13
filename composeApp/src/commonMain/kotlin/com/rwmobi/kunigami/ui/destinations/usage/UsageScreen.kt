@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -62,16 +63,17 @@ fun UsageScreen(
                 }
             }
         }
-        val labels: Map<Int, String> = remember(uiState.consumptions) {
-            buildMap {
-                var lastRateValue: String? = null
 
+        val labelIndex: Map<Int, Int> = remember(uiState.consumptions, uiState.requestedLayout) {
+            buildMap {
+                // Generate all possible labels
+                var lastRateValue: Int? = null
                 uiState.consumptions.forEachIndexed { index, consumption ->
-                    val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour.toString()
-                    if (currentTime != lastRateValue) {
+                    val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
+                    if (currentTime != lastRateValue && currentTime % 2 == 0) {
                         put(index + 1, currentTime)
-                        lastRateValue = currentTime
                     }
+                    lastRateValue = currentTime
                 }
             }
         }
@@ -103,12 +105,19 @@ fun UsageScreen(
                         VerticalBarChart(
                             modifier = constraintModifier.padding(all = dimension.grid_2),
                             entries = entries,
-                            labels = labels,
                             yAxisRange = uiState.consumptionRange,
                             yAxisTickPosition = TickPosition.Outside,
                             xAxisTickPosition = TickPosition.Outside,
                             yAxisTitle = "kWh",
                             barWidth = 0.8f,
+                            labelGenerator = { index ->
+                                labelIndex[index]?.toString()?.padStart(2, '0')
+                            },
+                            tooltipGenerator = { index ->
+                                with(uiState.consumptions[index]) {
+                                    "${intervalStart.toLocalHourMinuteString()} - ${intervalEnd.toLocalHourMinuteString()}\n$consumption kWh"
+                                }
+                            },
                         )
                     }
                 }

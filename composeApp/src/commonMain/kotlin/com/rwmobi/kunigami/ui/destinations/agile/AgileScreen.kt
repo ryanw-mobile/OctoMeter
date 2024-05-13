@@ -24,20 +24,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.formatInstantWithoutSeconds
+import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
 import io.github.koalaplot.core.bar.VerticalBarPlotEntry
-import io.github.koalaplot.core.line.LinePlot
 import io.github.koalaplot.core.style.LineStyle
-import io.github.koalaplot.core.xygraph.Point
+import io.github.koalaplot.core.xygraph.HorizontalLineAnnotation
 import io.github.koalaplot.core.xygraph.TickPosition
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -71,12 +72,13 @@ fun AgileScreen(
                 }
             }
         }
-        val labels: Map<Int, String> = remember(uiState.rates) {
-            buildMap {
-                var lastRateValue: String? = null
 
+        val labelIndex: Map<Int, Int> = remember(uiState.rates, uiState.requestedLayout) {
+            buildMap {
+                // Generate all possible labels
+                var lastRateValue: Int? = null
                 uiState.rates.forEachIndexed { index, rate ->
-                    val currentTime = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour.toString()
+                    val currentTime = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
                     if (currentTime != lastRateValue) {
                         put(index + 1, currentTime)
                         lastRateValue = currentTime
@@ -112,24 +114,29 @@ fun AgileScreen(
                         VerticalBarChart(
                             modifier = constraintModifier.padding(all = dimension.grid_2),
                             entries = entries,
-                            labels = labels,
                             yAxisRange = uiState.rateRange,
                             yAxisTickPosition = TickPosition.Outside,
                             xAxisTickPosition = TickPosition.Outside,
                             yAxisTitle = "VAT Unit Rate (p/kWh)",
                             xAxisTitle = "${uiState.rates.first().validFrom.formatInstantWithoutSeconds()} - ${uiState.rates.last().validTo?.formatInstantWithoutSeconds()}",
                             barWidth = 0.8f,
+                            labelGenerator = { index ->
+                                labelIndex[index]?.toString()?.padStart(2, '0')
+                            },
+                            tooltipGenerator = { index ->
+                                with(uiState.rates[index]) {
+                                    val timeRange = validFrom.toLocalHourMinuteString() +
+                                        (validTo?.let { "- ${it.toLocalHourMinuteString()}" } ?: "")
+                                    "$timeRange\n${vatInclusivePrice}p"
+                                }
+                            },
                             backgroundPlot = { graphScope ->
-                                graphScope.LinePlot(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    data = listOf(
-                                        Point(0, 24.55),
-                                        Point(entries.last().x + 1, 24.55),
-                                    ),
+                                graphScope.HorizontalLineAnnotation(
+                                    location = 24.55,
                                     lineStyle = LineStyle(
-                                        brush = SolidColor(MaterialTheme.colorScheme.secondary),
+                                        brush = SolidColor(MaterialTheme.colorScheme.error),
                                         strokeWidth = dimension.grid_0_5,
-                                        pathEffect = null,
+                                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f),
                                         alpha = 0.5f,
                                         colorFilter = null, // No color filter
                                         blendMode = DrawScope.DefaultBlendMode,
