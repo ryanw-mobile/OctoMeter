@@ -65,6 +65,7 @@ fun AppNavigationHost(
         composable(route = AppNavigationItem.Usage.name) {
             val viewModel: UsageViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
+            viewModel.notifyScreenSizeChanged(screenSizeInfo = screenSizeInfo)
 
             UsageScreen(
                 modifier = Modifier.fillMaxSize(),

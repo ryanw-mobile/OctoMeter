@@ -12,8 +12,10 @@ import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
+import com.rwmobi.kunigami.ui.destinations.usage.UsageScreenLayout
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
+import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -65,6 +67,20 @@ class UsageViewModel(
                 onFailure = { throwable ->
                     updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
                     Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+                },
+            )
+        }
+    }
+
+    fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                requestedLayout = if (screenSizeInfo.isPortrait()) {
+                    UsageScreenLayout.Portrait
+                } else {
+                    UsageScreenLayout.LandScape(
+                        requestedMaxHeight = screenSizeInfo.heightDp * 2 / 3,
+                    )
                 },
             )
         }
