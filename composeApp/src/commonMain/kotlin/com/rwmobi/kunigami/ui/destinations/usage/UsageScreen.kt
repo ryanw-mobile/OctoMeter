@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
-import com.rwmobi.kunigami.ui.components.koalaplot.BarSamplePlot
+import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
@@ -100,7 +100,7 @@ fun UsageScreen(
                             }
                         }
 
-                        BarSamplePlot(
+                        VerticalBarChart(
                             modifier = constraintModifier.padding(all = dimension.grid_2),
                             entries = entries,
                             labels = labels,

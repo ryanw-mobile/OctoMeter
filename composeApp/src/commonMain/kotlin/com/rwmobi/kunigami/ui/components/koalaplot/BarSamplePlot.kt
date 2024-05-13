@@ -45,7 +45,7 @@ import kotlin.math.min
 
 @OptIn(ExperimentalKoalaPlotApi::class)
 @Composable
-fun BarSamplePlot(
+fun VerticalBarChart(
     modifier: Modifier,
     entries: List<VerticalBarPlotEntry<Int, Double>>,
     labels: Map<Int, String>,
