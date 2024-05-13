@@ -45,3 +45,13 @@ fun Instant.roundDownToDay(): Instant {
         nanosecond = 0,
     ).toInstant(timeZone = currentZone)
 }
+
+fun Instant.toLocalHourMinuteString(): String {
+    val currentLocalDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
+    return "${currentLocalDateTime.hour.toString().padStart(2, '0')}:${currentLocalDateTime.minute.toString().padStart(2, '0')}"
+}
+
+fun Instant.toLocalHourString(): String {
+    val currentLocalDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
+    return currentLocalDateTime.hour.toString().padStart(2, '0')
+}
