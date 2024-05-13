@@ -25,10 +25,8 @@ import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.coroutines.cancellation.CancellationException
-import kotlin.time.Duration
 
 class OctopusRestApiRepository(
     private val productsEndpoint: ProductsEndpoint,
@@ -115,12 +113,16 @@ class OctopusRestApiRepository(
         apiKey: String,
         mpan: String,
         meterSerialNumber: String,
+        periodFrom: Instant?,
+        periodTo: Instant?,
     ): Result<List<Consumption>> {
         return withContext(dispatcher) {
             runCatching {
                 val apiResponse = electricityMeterPointsEndpoint.getConsumption(
                     apiKey = apiKey,
                     mpan = mpan,
+                    periodFrom = periodFrom,
+                    periodTo = periodTo,
                     meterSerialNumber = meterSerialNumber,
                     orderBy = ConsumptionOrdering.PERIOD,
                     groupBy = ConsumptionGrouping.HALF_HOURLY,
