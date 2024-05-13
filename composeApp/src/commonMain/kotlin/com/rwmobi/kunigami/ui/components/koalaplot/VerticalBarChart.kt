@@ -47,15 +47,16 @@ import kotlin.math.min
 @Composable
 fun VerticalBarChart(
     modifier: Modifier,
-    entries: List<VerticalBarPlotEntry<Int, Double>>,
-    labels: Map<Int, String>,
-    yAxisRange: ClosedFloatingPointRange<Double>,
-    yAxisTickPosition: TickPosition,
-    xAxisTickPosition: TickPosition,
     title: String? = null,
     xAxisTitle: String? = null,
     yAxisTitle: String? = null,
+    yAxisTickPosition: TickPosition,
+    xAxisTickPosition: TickPosition,
     barWidth: Float,
+    entries: List<VerticalBarPlotEntry<Int, Double>>,
+    yAxisRange: ClosedFloatingPointRange<Double>,
+    labelGenerator: (index: Int) -> String?,
+    tooltipGenerator: (index: Int) -> String,
     backgroundPlot: @Composable ((scope: XYGraphScope<Int, Double>) -> Unit)? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -94,11 +95,10 @@ fun VerticalBarChart(
             xAxisStyle = rememberAxisStyle(
                 tickPosition = xAxisTickPosition,
             ),
-            xAxisLabels = {
-                labels[it]?.let { label ->
+            xAxisLabels = { index ->
+                labelGenerator(index)?.let { label ->
                     AxisLabel(
-                        modifier = Modifier
-                            .padding(top = 2.dp),
+                        modifier = Modifier.padding(top = dimension.grid_0_25),
                         label = label,
                     )
                 }
@@ -118,7 +118,7 @@ fun VerticalBarChart(
             ),
             yAxisLabels = {
                 AxisLabel(
-                    modifier = Modifier.absolutePadding(right = 2.dp),
+                    modifier = Modifier.absolutePadding(right = dimension.grid_0_25),
                     label = it.toString(1),
                 )
             },
@@ -134,20 +134,20 @@ fun VerticalBarChart(
             },
             verticalMajorGridLineStyle = null,
             horizontalMajorGridLineStyle = LineStyle(
-                brush = SolidColor(MaterialTheme.colorScheme.onBackground), // Set the color of the line
-                strokeWidth = 1.dp, // Set the thickness of the line
+                brush = SolidColor(MaterialTheme.colorScheme.onBackground),
+                strokeWidth = 1.dp,
                 pathEffect = null,
-                alpha = 0.5f, // Opacity of the line
-                colorFilter = null, // No color filter
-                blendMode = DrawScope.DefaultBlendMode, // Default blending mode
+                alpha = 0.5f,
+                colorFilter = null,
+                blendMode = DrawScope.DefaultBlendMode,
             ),
             horizontalMinorGridLineStyle = LineStyle(
-                brush = SolidColor(MaterialTheme.colorScheme.onBackground), // Set the color of the line
-                strokeWidth = 1.dp, // Set the thickness of the line
+                brush = SolidColor(MaterialTheme.colorScheme.onBackground),
+                strokeWidth = 1.dp,
                 pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f), // Configure dashed pattern
-                alpha = 0.25f, // Opacity of the line
-                colorFilter = null, // No color filter
-                blendMode = DrawScope.DefaultBlendMode, // Default blending mode
+                alpha = 0.25f,
+                colorFilter = null,
+                blendMode = DrawScope.DefaultBlendMode,
             ),
         ) {
             backgroundPlot?.let { it(this) }
@@ -175,7 +175,7 @@ fun VerticalBarChart(
                                 //   HoverSurface(padding = dimension.grid_1) {
                                 RichTooltip {
                                     Text(
-                                        text = "${labels[index]}\n${barChartEntries[index].y.yMax}",
+                                        text = tooltipGenerator(index),// "${labels[index]}\n${barChartEntries[index].y.yMax}
                                     )
                                 }
                                 //   }
