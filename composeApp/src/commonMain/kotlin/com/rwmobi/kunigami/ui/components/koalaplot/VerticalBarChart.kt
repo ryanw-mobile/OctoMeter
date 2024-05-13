@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.ChartLayout
@@ -85,13 +86,6 @@ fun VerticalBarChart(
                 allowPanning = false,
                 allowZooming = false,
             ),
-            yAxisModel = DoubleLinearAxisModel(
-                range = yAxisRange,
-                minimumMajorTickIncrement = 0.1,
-                minorTickCount = 4,
-                allowZooming = false,
-                allowPanning = false,
-            ),
             xAxisStyle = rememberAxisStyle(
                 tickPosition = xAxisTickPosition,
             ),
@@ -113,13 +107,20 @@ fun VerticalBarChart(
                     )
                 }
             },
+            yAxisModel = DoubleLinearAxisModel(
+                range = yAxisRange,
+                minimumMajorTickIncrement = 0.1,
+                minorTickCount = 4,
+                allowZooming = false,
+                allowPanning = false,
+            ),
             yAxisStyle = rememberAxisStyle(
                 tickPosition = yAxisTickPosition,
             ),
             yAxisLabels = {
                 AxisLabel(
                     modifier = Modifier.absolutePadding(right = dimension.grid_0_25),
-                    label = it.toString(1),
+                    label = it.toString(precision = 1),
                 )
             },
             yAxisTitle = {
@@ -156,30 +157,7 @@ fun VerticalBarChart(
                 data = barChartEntries,
                 bar = { index ->
                     DefaultVerticalBar(
-                        modifier = Modifier.fillMaxWidth()
-//                            .pointerInput(Unit) {
-//                                detectTapGestures(
-//                                    onPress = { /* Called when the press is detected */ },
-//                                    onDoubleTap = { /* Called on double tap */ },
-//                                    onLongPress = { /* Called on long press */ },
-//                                    onTap = {
-//
-//                                        // Handle the tap
-//                                        if (!thumbnail) {
-//                                            HoverSurface { Text(barChartEntries[index].y.yMax.toString()) }
-//                                        }
-//                                    },
-//                                )
-//                            }
-                            .hoverableElement {
-                                //   HoverSurface(padding = dimension.grid_1) {
-                                RichTooltip {
-                                    Text(
-                                        text = tooltipGenerator(index),// "${labels[index]}\n${barChartEntries[index].y.yMax}
-                                    )
-                                }
-                                //   }
-                            },
+                        modifier = Modifier.fillMaxWidth(),
                         brush = SolidColor(
                             colorPalette[
                                 getPercentageColorIndex(
@@ -194,6 +172,16 @@ fun VerticalBarChart(
                             bottomEnd = 0.dp,
                             bottomStart = 0.dp,
                         ),
+                        hoverElement = {
+                            RichTooltip {
+                                Text(
+                                    modifier = Modifier.padding(all = dimension.grid_0_25),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    textAlign = TextAlign.Center,
+                                    text = tooltipGenerator(index),
+                                )
+                            }
+                        },
                     )
                 },
                 barWidth = barWidth,
