@@ -32,17 +32,14 @@ import io.github.koalaplot.core.ChartLayout
 import io.github.koalaplot.core.bar.DefaultVerticalBar
 import io.github.koalaplot.core.bar.VerticalBarPlot
 import io.github.koalaplot.core.bar.VerticalBarPlotEntry
-import io.github.koalaplot.core.line.LinePlot
 import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.util.ExperimentalKoalaPlotApi
-import io.github.koalaplot.core.util.VerticalRotation
-import io.github.koalaplot.core.util.rotateVertically
 import io.github.koalaplot.core.util.toString
 import io.github.koalaplot.core.xygraph.DoubleLinearAxisModel
 import io.github.koalaplot.core.xygraph.IntLinearAxisModel
-import io.github.koalaplot.core.xygraph.Point
 import io.github.koalaplot.core.xygraph.TickPosition
 import io.github.koalaplot.core.xygraph.XYGraph
+import io.github.koalaplot.core.xygraph.XYGraphScope
 import io.github.koalaplot.core.xygraph.rememberAxisStyle
 import kotlin.math.min
 
@@ -59,6 +56,7 @@ fun BarSamplePlot(
     xAxisTitle: String? = null,
     yAxisTitle: String? = null,
     barWidth: Float,
+    backgroundPlot: @Composable ((scope: XYGraphScope<Int, Double>) -> Unit)? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
     val barChartEntries = remember { entries }
@@ -152,21 +150,7 @@ fun BarSamplePlot(
                 blendMode = DrawScope.DefaultBlendMode, // Default blending mode
             ),
         ) {
-            LinePlot(
-                modifier = Modifier.fillMaxWidth(),
-                data = listOf(
-                    Point(0, 24.55),
-                    Point(entries.last().x+1, 24.55),
-                ),
-                lineStyle = LineStyle(
-                    brush = SolidColor(MaterialTheme.colorScheme.secondary), // Set the color of the line
-                    strokeWidth = 4.dp, // Set the thickness of the line
-                    pathEffect = null,
-                    alpha = 0.5f, // Opacity of the line
-                    colorFilter = null, // No color filter
-                    blendMode = DrawScope.DefaultBlendMode, // Default blending mode
-                ),
-            )
+            backgroundPlot?.let { it(this) }
 
             VerticalBarPlot(
                 data = barChartEntries,

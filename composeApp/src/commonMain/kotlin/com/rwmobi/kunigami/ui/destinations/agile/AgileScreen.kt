@@ -18,19 +18,26 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import com.rwmobi.kunigami.domain.extensions.formatInstantWithoutSeconds
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.BarSamplePlot
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
 import io.github.koalaplot.core.bar.VerticalBarPlotEntry
+import io.github.koalaplot.core.line.LinePlot
+import io.github.koalaplot.core.style.LineStyle
+import io.github.koalaplot.core.xygraph.Point
 import io.github.koalaplot.core.xygraph.TickPosition
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -108,7 +115,25 @@ fun AgileScreen(
                             yAxisTickPosition = TickPosition.Outside,
                             xAxisTickPosition = TickPosition.Outside,
                             yAxisTitle = "VAT Unit Rate (p/kWh)",
+                            xAxisTitle = "${uiState.rates.first().validFrom.formatInstantWithoutSeconds()} - ${uiState.rates.last().validTo?.formatInstantWithoutSeconds()}",
                             barWidth = 0.8f,
+                            backgroundPlot = { graphScope ->
+                                graphScope.LinePlot(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    data = listOf(
+                                        Point(0, 24.55),
+                                        Point(entries.last().x + 1, 24.55),
+                                    ),
+                                    lineStyle = LineStyle(
+                                        brush = SolidColor(MaterialTheme.colorScheme.secondary),
+                                        strokeWidth = dimension.grid_0_5,
+                                        pathEffect = null,
+                                        alpha = 0.5f,
+                                        colorFilter = null, // No color filter
+                                        blendMode = DrawScope.DefaultBlendMode,
+                                    ),
+                                )
+                            },
                         )
                     }
                 }
