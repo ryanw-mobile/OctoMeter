@@ -11,9 +11,15 @@ import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Consumption
 import com.rwmobi.kunigami.domain.model.Product
 import com.rwmobi.kunigami.domain.model.Rate
+import com.rwmobi.kunigami.domain.model.Tariff
 import kotlinx.datetime.Instant
 
 interface RestApiRepository {
+    suspend fun getSimpleProductTariff(
+        productCode: String,
+        tariffCode: String,
+    ): Result<Tariff>
+
     suspend fun getProducts(): Result<List<Product>>
     suspend fun getStandardUnitRates(
         productCode: String,
