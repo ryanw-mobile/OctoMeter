@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.ui.destinations.account.components
 
+import Kunigami.composeApp.BuildConfig
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,7 +48,7 @@ internal fun AppInfoFooter(
             modifier = modifier.padding(vertical = dimension.grid_2),
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
-            text = stringResource(resource = Res.string.account_version_api_disclaimer, "1.0.0", 1),
+            text = stringResource(resource = Res.string.account_version_api_disclaimer, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
         )
     }
 }
