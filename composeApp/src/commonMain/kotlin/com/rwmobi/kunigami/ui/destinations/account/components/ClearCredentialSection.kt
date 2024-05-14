@@ -43,36 +43,40 @@ internal fun ClearCredentialSection(
 ) {
     val dimension = LocalDensity.current.getDimension()
 
-    Row(
+    Column(
         modifier = modifier
             .padding(all = dimension.grid_2)
             .clip(shape = MaterialTheme.shapes.medium)
             .background(color = MaterialTheme.colorScheme.surfaceContainer)
             .padding(all = dimension.grid_3),
-        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column(
-            Modifier.weight(1f),
+        Text(
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.Bold,
+            text = stringResource(resource = Res.string.account_clear_credential_title),
+        )
+
+        Row(
+            modifier = modifier.fillMaxWidth()
+                .padding(top = dimension.grid_1),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                text = stringResource(resource = Res.string.account_clear_credential_title),
-            )
-
-            Text(
+                modifier = Modifier.weight(1f),
+                color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyMedium,
                 text = stringResource(resource = Res.string.account_clear_credential_description),
             )
+
+            Spacer(modifier = Modifier.size(size = dimension.grid_4))
+
+            IconTextButton(
+                icon = painterResource(resource = Res.drawable.eraser),
+                text = stringResource(resource = Res.string.account_clear_credential_button_cta),
+                onClick = onClearCredentialButtonClicked,
+            )
         }
-
-        Spacer(modifier = Modifier.size(size = dimension.grid_4))
-
-        IconTextButton(
-            icon = painterResource(resource = Res.drawable.eraser),
-            text = stringResource(resource = Res.string.account_clear_credential_button_cta),
-            onClick = onClearCredentialButtonClicked,
-        )
     }
 }
 
