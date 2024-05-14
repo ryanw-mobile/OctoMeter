@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.data.source.network
 
 import com.rwmobi.kunigami.data.source.network.dto.PricesApiResponse
 import com.rwmobi.kunigami.data.source.network.dto.ProductsApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.SingleProductApiResponse
 import com.rwmobi.kunigami.domain.extensions.formatInstantWithoutSeconds
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -44,6 +45,14 @@ class ProductsEndpoint(
                 parameter("is_green", isGreen)
                 parameter("is_prepay", isPrepay)
             }.body()
+        }
+    }
+
+    suspend fun getProduct(
+        productCode: String,
+    ): SingleProductApiResponse? {
+        return withContext(dispatcher) {
+            httpClient.get("$endpointUrl/$productCode/").body()
         }
     }
 
