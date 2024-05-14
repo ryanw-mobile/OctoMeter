@@ -27,6 +27,7 @@
     <string name="account_clear_credential_title">Clear Credentials and Switch to Demo Mode</string>
     <string name="account_clear_credential_description">Removing your API token and any account-specific data from local storage. Under demo mode, the application will utilise simulated local data to replicate authenticated access. Additionally, it will default to retail region A when retrieving tariffs.</string>
     <string name="account_clear_credential_button_cta">Clear</string>
+    <string name="account_version_api_disclaimer">Version %1$s (Build %2$d)\nThe APIs are provided by Octopus Energy Ltd. Usage subject to their terms of service.</string>
 
     <!-- Content Descriptions -->
     <string name="content_description_navigation_bar">Navigation Bar</string>

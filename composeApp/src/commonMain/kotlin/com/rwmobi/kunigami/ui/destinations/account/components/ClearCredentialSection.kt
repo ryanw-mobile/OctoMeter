@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.destinations.account
+package com.rwmobi.kunigami.ui.destinations.account.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
