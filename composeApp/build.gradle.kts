@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.kotlinxKover)
     alias(libs.plugins.gradleKtlint)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.buildConfig)
 }
 
 kotlin {
@@ -284,6 +285,11 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
 
 tasks.named("preBuild") {
     dependsOn(tasks.named("ktlintFormat"))
+}
+
+buildConfig {
+    buildConfigField("VERSION_NAME", provider { libs.versions.versionName.get() })
+    buildConfigField("VERSION_CODE", provider { libs.versions.versionCode.get() })
 }
 
 koverReport {
