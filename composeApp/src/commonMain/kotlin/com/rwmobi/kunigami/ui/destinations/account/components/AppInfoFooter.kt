@@ -45,7 +45,10 @@ internal fun AppInfoFooter(
         )
 
         Text(
-            modifier = modifier.padding(vertical = dimension.grid_2),
+            modifier = modifier.padding(
+                vertical = dimension.grid_2,
+                horizontal = dimension.grid_4,
+            ),
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
             text = stringResource(resource = Res.string.account_version_api_disclaimer, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
