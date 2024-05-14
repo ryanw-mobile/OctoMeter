@@ -134,6 +134,7 @@ fun VerticalBarChart(
                 }
             },
             verticalMajorGridLineStyle = null,
+            verticalMinorGridLineStyle = null,
             horizontalMajorGridLineStyle = LineStyle(
                 brush = SolidColor(MaterialTheme.colorScheme.onBackground),
                 strokeWidth = 1.dp,
