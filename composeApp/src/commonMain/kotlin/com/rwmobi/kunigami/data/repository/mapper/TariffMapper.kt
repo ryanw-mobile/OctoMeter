@@ -8,7 +8,7 @@
 package com.rwmobi.kunigami.data.repository.mapper
 
 import com.rwmobi.kunigami.data.source.network.dto.SingleProductApiResponse
-import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
+import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.Tariff
 
 fun SingleProductApiResponse.toTariff(tariffCode: String): Tariff {
@@ -36,7 +36,7 @@ fun SingleProductApiResponse.toTariff(tariffCode: String): Tariff {
         code = code,
         fullName = fullName,
         displayName = displayName,
-        vatInclusiveUnitRate = rates.standardUnitRateIncVat?.roundToNearestEvenHundredth() ?: throw IllegalArgumentException("unit rate not found for tariff $tariffCode"),
-        vatInclusiveStandingCharge = rates.standingChargeIncVat.roundToNearestEvenHundredth(),
+        vatInclusiveUnitRate = rates.standardUnitRateIncVat?.roundToTwoDecimalPlaces() ?: throw IllegalArgumentException("unit rate not found for tariff $tariffCode"),
+        vatInclusiveStandingCharge = rates.standingChargeIncVat.roundToTwoDecimalPlaces(),
     )
 }
