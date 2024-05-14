@@ -19,8 +19,6 @@ import com.rwmobi.kunigami.ui.destinations.account.AccountScreen
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIEvent
 import com.rwmobi.kunigami.ui.destinations.agile.AgileScreen
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIEvent
-import com.rwmobi.kunigami.ui.destinations.onboarding.OnboardingScreen
-import com.rwmobi.kunigami.ui.destinations.onboarding.OnboardingUIEvent
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsScreen
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIEvent
 import com.rwmobi.kunigami.ui.destinations.usage.UsageScreen
@@ -29,7 +27,6 @@ import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.utils.collectAsStateMultiplatform
 import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
 import com.rwmobi.kunigami.ui.viewmodels.AgileViewModel
-import com.rwmobi.kunigami.ui.viewmodels.OnboardingViewModel
 import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel
 import com.rwmobi.kunigami.ui.viewmodels.UsageViewModel
 import org.koin.mp.KoinPlatform.getKoin
@@ -48,20 +45,6 @@ fun AppNavigationHost(
         navController = navController,
         startDestination = AppNavigationItem.Usage.name,
     ) {
-        composable(route = AppNavigationItem.Onboarding.name) {
-            val viewModel: OnboardingViewModel = viewModel { getKoin().get() }
-            val uiState by viewModel.uiState.collectAsStateMultiplatform()
-
-            OnboardingScreen(
-                modifier = Modifier.fillMaxSize(),
-                uiState = uiState,
-                uiEvent = OnboardingUIEvent(
-                    onErrorShown = viewModel::errorShown,
-                    onShowSnackbar = onShowSnackbar,
-                ),
-            )
-        }
-
         composable(route = AppNavigationItem.Usage.name) {
             val viewModel: UsageViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()

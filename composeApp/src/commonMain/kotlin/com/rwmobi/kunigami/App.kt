@@ -59,9 +59,9 @@ private enum class NavigationLayoutType {
 }
 
 private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?): NavigationLayoutType {
-    if (currentRoute != null && currentRoute == AppNavigationItem.Onboarding.name) {
-        return NavigationLayoutType.FULL_SCREEN
-    }
+//    if (currentRoute != null && currentRoute == AppNavigationItem.Onboarding.name) {
+//        return NavigationLayoutType.FULL_SCREEN
+//    }
 
     return when (widthSizeClass) {
         WindowWidthSizeClass.Compact -> {
