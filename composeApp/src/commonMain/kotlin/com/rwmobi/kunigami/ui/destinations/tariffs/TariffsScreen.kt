@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.ui.destinations.tariffs
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,11 +16,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ProductItem
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -43,35 +46,45 @@ fun TariffsScreen(
     val dimension = LocalDensity.current.getDimension()
     val lazyListState = rememberLazyListState()
 
-    if (!uiState.isLoading) {
-        ScrollbarMultiplatform(
-            modifier = modifier,
-            enabled = uiState.products.isNotEmpty(),
-            lazyListState = lazyListState,
-        ) { contentModifier ->
-            LazyColumn(
-                modifier = contentModifier.fillMaxSize(),
-                state = lazyListState,
-            ) {
-                itemsIndexed(
-                    items = uiState.products,
-                    key = { _, product -> product.code },
-                ) { index, product ->
-                    ProductItem(
-                        modifier = Modifier
-                            .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
-                            .fillMaxWidth()
-                            .padding(vertical = dimension.grid_1),
-                        product = product,
-                    )
-
-                    if (index < uiState.products.lastIndex) {
-                        HorizontalDivider(
-                            modifier = Modifier.fillMaxWidth(),
+    Box(modifier = modifier) {
+        if (uiState.products.isNotEmpty()) {
+            ScrollbarMultiplatform(
+                modifier = Modifier.fillMaxSize(),
+                lazyListState = lazyListState,
+            ) { contentModifier ->
+                LazyColumn(
+                    modifier = contentModifier.fillMaxSize(),
+                    state = lazyListState,
+                ) {
+                    itemsIndexed(
+                        items = uiState.products,
+                        key = { _, product -> product.code },
+                    ) { index, product ->
+                        ProductItem(
+                            modifier = Modifier
+                                .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
+                                .fillMaxWidth()
+                                .padding(vertical = dimension.grid_1),
+                            product = product,
                         )
+
+                        if (index < uiState.products.lastIndex) {
+                            HorizontalDivider(
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
                     }
                 }
             }
+        } else if (!uiState.isLoading) {
+            // no data
+            Text("Placeholder for no data")
+        }
+
+        if (uiState.isLoading) {
+            LoadingScreen(
+                modifier = Modifier.fillMaxSize(),
+            )
         }
     }
 
