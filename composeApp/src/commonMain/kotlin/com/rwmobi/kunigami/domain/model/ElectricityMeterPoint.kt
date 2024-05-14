@@ -10,5 +10,5 @@ package com.rwmobi.kunigami.domain.model
 data class ElectricityMeterPoint(
     val mpan: String,
     val meterSerialNumbers: List<String>,
-    val agreements: List<Agreement>,
+    val currentAgreement: Agreement,
 )

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 class AccountViewModel(
     private val octopusRepository: RestApiRepository,
     private val getUserAccountUseCase: GetUserAccountUseCase,
+    private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<AccountUIState> = MutableStateFlow(AccountUIState(isLoading = true))
@@ -50,14 +52,34 @@ class AccountViewModel(
                 onSuccess = { account ->
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
-                            isLoading = false,
                             account = account,
                         )
                     }
                 },
                 onFailure = { throwable ->
                     updateUIForError(message = throwable.message ?: "Error when retrieving tariffs")
-                    Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                    Logger.e("AccountViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                },
+            )
+
+            val tariffCode = _uiState.value.account?.electricityMeterPoints?.get(0)?.currentAgreement?.tariffCode ?: return@launch
+
+            val tariffRates = getTariffRatesUseCase(
+                productCode = extractSegment(tariffCode) ?: "",
+                tariffCode = tariffCode,
+            )
+            tariffRates.fold(
+                onSuccess = { tariff ->
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            tariff = tariff,
+                            isLoading = false,
+                        )
+                    }
+                },
+                onFailure = { throwable ->
+                    updateUIForError(message = throwable.message ?: "Error when retrieving tariffs")
+                    Logger.e("AccountViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
                 },
             )
         }
@@ -83,5 +105,16 @@ class AccountViewModel(
     override fun onCleared() {
         super.onCleared()
         Logger.v("AccountViewModel", message = { "onCleared" })
+    }
+
+    private fun extractSegment(input: String): String? {
+        val parts = input.split("-")
+        // Check if there are enough parts to remove
+        if (parts.size > 3) {
+            // Exclude the first two and the last segments
+            val relevantParts = parts.drop(2).dropLast(1)
+            return relevantParts.joinToString("-")
+        }
+        return null
     }
 }

@@ -13,6 +13,7 @@ import com.rwmobi.kunigami.data.source.network.dto.PropertyDto
 import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Agreement
 import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
+import kotlinx.datetime.Clock
 
 fun PropertyDto.toAccount(accountNumber: String) = Account(
     id = id,
@@ -30,11 +31,20 @@ fun PropertyDto.toAccount(accountNumber: String) = Account(
     electricityMeterPoints = electricityMeterPoints.map { it.toElectricityMeterPoint() },
 )
 
-fun ElectricityMeterPointDto.toElectricityMeterPoint() = ElectricityMeterPoint(
-    mpan = mpan,
-    meterSerialNumbers = meters.map { it.serialNumber },
-    agreements = agreements.map { it.toAgreement() },
-)
+fun ElectricityMeterPointDto.toElectricityMeterPoint(): ElectricityMeterPoint {
+    // In this App we only deal with one current agreement (tariff)
+    val activeAgreement = agreements.filter { it.validTo == null || it.validTo.epochSeconds > Clock.System.now().epochSeconds }
+
+    return ElectricityMeterPoint(
+        mpan = mpan,
+        meterSerialNumbers = meters.map { it.serialNumber },
+        currentAgreement = if (activeAgreement.isNotEmpty()) {
+            activeAgreement.first()
+        } else {
+            agreements.sortedByDescending { it.validTo }.first()
+        }.toAgreement(),
+    )
+}
 
 fun AgreementDto.toAgreement() = Agreement(
     tariffCode = tariffCode,

@@ -70,7 +70,7 @@ fun AccountScreen(
                     Spacer(modifier = Modifier.size(size = dimension.grid_1))
 
                     Text(
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         text = "Meter information",
                     )
@@ -81,20 +81,41 @@ fun AccountScreen(
                         meterPoint.meterSerialNumbers.forEach {
                             Text(text = it)
                         }
+
+                        Spacer(modifier = Modifier.size(size = dimension.grid_1))
+
                         Text(
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             text = "Tariff",
                         )
-                        meterPoint.agreements.forEach { agreement ->
-                            Text(
-                                style = MaterialTheme.typography.titleMedium,
-                                text = agreement.tariffCode,
-                            )
-                            Text(
-                                text = "From ${agreement.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).date} to ${agreement.validTo?.toLocalDateTime(TimeZone.currentSystemDefault())?.date}",
-                            )
-                        }
+                        Text(
+                            style = MaterialTheme.typography.titleMedium,
+                            text = meterPoint.currentAgreement.tariffCode,
+                        )
+                        Text(
+                            text = "From ${meterPoint.currentAgreement.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).date} to ${meterPoint.currentAgreement.validTo?.toLocalDateTime(TimeZone.currentSystemDefault())?.date}",
+                        )
+                        Text(
+                            style = MaterialTheme.typography.bodyMedium,
+                            text = uiState.tariff?.fullName ?: "",
+                        )
+                        Text(
+                            style = MaterialTheme.typography.bodyMedium,
+                            text = uiState.tariff?.displayName ?: "",
+                        )
+                        Text(
+                            style = MaterialTheme.typography.bodyMedium,
+                            text = uiState.tariff?.code ?: "",
+                        )
+                        Text(
+                            style = MaterialTheme.typography.bodyMedium,
+                            text = "Unit Rate: ${uiState.tariff?.vatInclusiveUnitRate ?: ""}",
+                        )
+                        Text(
+                            style = MaterialTheme.typography.bodyMedium,
+                            text = "Standing charge: £${uiState.tariff?.vatInclusiveStandingCharge ?: ""}",
+                        )
                     }
                 }
 

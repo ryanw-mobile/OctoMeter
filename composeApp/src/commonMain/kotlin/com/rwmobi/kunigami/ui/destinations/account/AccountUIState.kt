@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.ui.destinations.account
 
 import com.rwmobi.kunigami.domain.model.Account
+import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 
 data class AccountUIState(
@@ -15,6 +16,7 @@ data class AccountUIState(
     val selectedMpan: String? = null,
     val selectedMeterSerialNumber: String? = null,
     val account: Account? = null,
+    val tariff: Tariff? = null,
     val isLoading: Boolean = true,
     val errorMessages: List<ErrorMessage> = emptyList(),
 )
