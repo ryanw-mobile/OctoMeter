@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.LocalScrollbarStyle
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -18,8 +19,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
+import androidx.compose.foundation.v2.ScrollbarAdapter
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -33,7 +36,52 @@ import com.rwmobi.kunigami.ui.theme.getDimension
 actual fun ScrollbarMultiplatform(
     modifier: Modifier,
     enabled: Boolean,
+    scrollState: ScrollState,
+    content: @Composable (contentModifier: Modifier) -> Unit,
+) {
+    ScrollbarMultiplatform(
+        modifier = modifier,
+        enabled = enabled,
+        scrollbarAdapter = rememberScrollbarAdapter(scrollState = scrollState),
+        content = content,
+    )
+}
+
+@Composable
+actual fun ScrollbarMultiplatform(
+    modifier: Modifier,
+    enabled: Boolean,
     lazyListState: LazyListState,
+    content: @Composable (contentModifier: Modifier) -> Unit,
+) {
+    ScrollbarMultiplatform(
+        modifier = modifier,
+        enabled = enabled,
+        scrollbarAdapter = rememberScrollbarAdapter(scrollState = lazyListState),
+        content = content,
+    )
+}
+
+@Composable
+actual fun ScrollbarMultiplatform(
+    modifier: Modifier,
+    enabled: Boolean,
+    lazyGridState: LazyGridState,
+    content: @Composable (contentModifier: Modifier) -> Unit,
+) {
+    ScrollbarMultiplatform(
+        modifier = modifier,
+        enabled = enabled,
+        scrollbarAdapter = rememberScrollbarAdapter(scrollState = lazyGridState),
+        content = content,
+    )
+}
+
+@Composable
+private fun ScrollbarMultiplatform(
+    modifier: Modifier,
+    enabled: Boolean,
+    scrollbarAdapter: ScrollbarAdapter,
     content: @Composable (contentModifier: Modifier) -> Unit,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -43,7 +91,6 @@ actual fun ScrollbarMultiplatform(
     ) {
         content(Modifier.weight(weight = 1f))
 
-        val scrollbarAdapter = rememberScrollbarAdapter(scrollState = lazyListState)
         if (enabled) {
             VerticalScrollbar(
                 adapter = scrollbarAdapter,
