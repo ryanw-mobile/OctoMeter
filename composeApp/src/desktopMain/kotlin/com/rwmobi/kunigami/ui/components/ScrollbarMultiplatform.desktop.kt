@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.v2.ScrollbarAdapter
+import androidx.compose.foundation.v2.maxScrollOffset
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -91,7 +92,7 @@ private fun ScrollbarMultiplatform(
     ) {
         content(Modifier.weight(weight = 1f))
 
-        if (enabled) {
+        if (enabled && scrollbarAdapter.maxScrollOffset > 0) {
             VerticalScrollbar(
                 adapter = scrollbarAdapter,
                 style = LocalScrollbarStyle.current.copy(
