@@ -72,6 +72,7 @@ class AccountViewModel(
                 onSuccess = { tariff ->
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
+                            isDemoMode = false,
                             tariff = tariff,
                             isLoading = false,
                         )
@@ -83,6 +84,10 @@ class AccountViewModel(
                 },
             )
         }
+    }
+
+    fun clearCredential() {
+        // TODO: call use-case
     }
 
     private fun updateUIForError(message: String) {

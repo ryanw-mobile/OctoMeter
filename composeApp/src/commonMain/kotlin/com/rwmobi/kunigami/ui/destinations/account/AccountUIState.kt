@@ -12,11 +12,11 @@ import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 
 data class AccountUIState(
-    val hasApiKey: Boolean = false,
+    val isLoading: Boolean = true,
+    val isDemoMode: Boolean = true,
     val selectedMpan: String? = null,
     val selectedMeterSerialNumber: String? = null,
     val account: Account? = null,
     val tariff: Tariff? = null,
-    val isLoading: Boolean = true,
     val errorMessages: List<ErrorMessage> = emptyList(),
 )
