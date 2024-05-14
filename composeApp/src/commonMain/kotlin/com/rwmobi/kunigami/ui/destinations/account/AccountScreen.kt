@@ -8,28 +8,27 @@
 package com.rwmobi.kunigami.ui.destinations.account
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import com.rwmobi.kunigami.domain.model.Account
+import com.rwmobi.kunigami.ui.components.LoadingScreen
+import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
+import com.rwmobi.kunigami.ui.destinations.account.components.AccountInformation
+import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
+import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSection
+import com.rwmobi.kunigami.ui.destinations.account.components.Onboarding
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.Clock
 
 @Composable
 fun AccountScreen(
@@ -48,105 +47,57 @@ fun AccountScreen(
     }
 
     val dimension = LocalDensity.current.getDimension()
-    val scrollState = rememberScrollState()
+    val lazyListState = rememberLazyListState()
 
-    if (!uiState.isLoading) {
-        if (uiState.account != null) {
-            Column(
-                modifier = modifier
-                    .verticalScroll(state = scrollState)
-                    .padding(horizontal = dimension.grid_2),
+    Box(modifier = modifier) {
+        ScrollbarMultiplatform(
+            modifier = Modifier.fillMaxWidth(),
+            lazyListState = lazyListState,
+        ) { contentModifier ->
+
+            LazyColumn(
+                modifier = contentModifier.fillMaxWidth(),
+                state = lazyListState,
             ) {
-                with(uiState.account) {
-                    Text(text = "Account number: $accountNumber")
-                    Text("$fullAddress")
-                    movedInAt?.let {
-                        Text("Moved in at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}")
-                    }
-                    movedOutAt?.let {
-                        Text("Moved out at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}")
-                    }
-
-                    Spacer(modifier = Modifier.size(size = dimension.grid_1))
-
-                    Text(
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        text = "Meter information",
-                    )
-
-                    electricityMeterPoints.forEach { meterPoint ->
-                        Text("MPAN: ${meterPoint.mpan}")
-                        Text("Meter serial numbers:")
-                        meterPoint.meterSerialNumbers.forEach {
-                            Text(text = it)
-                        }
-
-                        Spacer(modifier = Modifier.size(size = dimension.grid_1))
-
-                        Text(
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            text = "Tariff",
-                        )
-                        Text(
-                            style = MaterialTheme.typography.titleMedium,
-                            text = meterPoint.currentAgreement.tariffCode,
-                        )
-                        Text(
-                            text = "From ${meterPoint.currentAgreement.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).date} to ${meterPoint.currentAgreement.validTo?.toLocalDateTime(TimeZone.currentSystemDefault())?.date}",
-                        )
-                        Text(
-                            style = MaterialTheme.typography.bodyMedium,
-                            text = uiState.tariff?.fullName ?: "",
-                        )
-                        Text(
-                            style = MaterialTheme.typography.bodyMedium,
-                            text = uiState.tariff?.displayName ?: "",
-                        )
-                        Text(
-                            style = MaterialTheme.typography.bodyMedium,
-                            text = uiState.tariff?.code ?: "",
-                        )
-                        Text(
-                            style = MaterialTheme.typography.bodyMedium,
-                            text = "Unit Rate: ${uiState.tariff?.vatInclusiveUnitRate ?: ""}",
-                        )
-                        Text(
-                            style = MaterialTheme.typography.bodyMedium,
-                            text = "Standing charge: £${uiState.tariff?.vatInclusiveStandingCharge ?: ""}",
+                if (!uiState.isLoading && uiState.isDemoMode) {
+                    item(key = "onboarding") {
+                        Onboarding(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(all = dimension.grid_4),
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.size(size = dimension.grid_3))
-
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {},
-                ) {
-                    Text("Log Out")
+                if (!uiState.isDemoMode && uiState.account != null) {
+                    item(key = "account") {
+                        AccountInformation(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = dimension.grid_4),
+                            account = uiState.account,
+                            tariff = uiState.tariff,
+                        )
+                    }
                 }
 
-                HorizontalDivider(
-                    modifier = Modifier
-                        .padding(vertical = dimension.grid_1)
-                        .fillMaxWidth(),
-                )
+                if (!uiState.isDemoMode && uiState.account != null) {
+                    item(key = "toDemoMode") {
+                        ClearCredentialSection(
+                            modifier = modifier.fillMaxWidth(),
+                            onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
+                        )
+                    }
+                }
 
-                Text(
-                    modifier = modifier.padding(vertical = dimension.grid_2),
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.Center,
-                    text = "Version 1.0.0\nAPI provided by Octopus Energy subject to their terms of service.",
-                )
+                if (uiState.isDemoMode || !uiState.isLoading || uiState.account != null) {
+                    item(key = "footer") { AppInfoFooter(modifier = Modifier.fillMaxWidth()) }
+                }
             }
-        } else {
-            Column(
-                modifier = modifier.verticalScroll(state = scrollState),
-            ) {
-                Text(text = "Account details not found or you don't have an account yet.")
-            }
+        }
+
+        if (uiState.isLoading) {
+            LoadingScreen(modifier = Modifier.fillMaxSize())
         }
     }
 
@@ -161,11 +112,20 @@ private fun AccountScreenPreview() {
     AppTheme {
         AccountScreen(
             uiState = AccountUIState(
-                account = null,
+                account = Account(
+                    id = 8638,
+                    accountNumber = "Marquitta",
+                    fullAddress = "Address line 1\nAddress line 2\nAddress line 3\nAddress line 4",
+                    movedInAt = Clock.System.now(),
+                    movedOutAt = null,
+                    electricityMeterPoints = listOf(),
+                ),
                 isLoading = false,
+                isDemoMode = false,
                 errorMessages = listOf(),
             ),
             uiEvent = AccountUIEvent(
+                onClearCredentialButtonClicked = {},
                 onRefresh = {},
                 onErrorShown = {},
                 onShowSnackbar = {},
