@@ -10,6 +10,7 @@ package com.rwmobi.kunigami.data.repository.mapper
 import com.rwmobi.kunigami.data.source.network.dto.AgreementDto
 import com.rwmobi.kunigami.data.source.network.dto.ElectricityMeterPointDto
 import com.rwmobi.kunigami.data.source.network.dto.PropertyDto
+import com.rwmobi.kunigami.data.source.network.extensions.capitalizeWords
 import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Agreement
 import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
@@ -21,12 +22,12 @@ fun PropertyDto.toAccount(accountNumber: String) = Account(
     movedInAt = movedInAt,
     movedOutAt = movedOutAt,
     fullAddress = mergeAddress(
-        addressLine1,
-        addressLine2,
-        addressLine3,
-        town,
-        county,
-        postcode,
+        addressLine1.capitalizeWords(),
+        addressLine2.capitalizeWords(),
+        addressLine3.capitalizeWords(),
+        town.capitalizeWords(),
+        county.capitalizeWords(),
+        postcode.uppercase(),
     ),
     electricityMeterPoints = electricityMeterPoints.map { it.toElectricityMeterPoint() },
 )

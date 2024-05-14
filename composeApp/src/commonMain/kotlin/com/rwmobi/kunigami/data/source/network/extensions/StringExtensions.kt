@@ -15,3 +15,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 internal fun encodeApiKey(apiKey: String): String {
     return Base64.encode("$apiKey:".toByteArray())
 }
+
+internal fun String.capitalizeWords(): String {
+    return lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+}
