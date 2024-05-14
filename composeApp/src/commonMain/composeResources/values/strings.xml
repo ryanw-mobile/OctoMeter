@@ -14,13 +14,22 @@
     <string name="navigation_agile">Agile</string>
     <string name="navigation_account">Account</string>
     <string name="ok">OK</string>
-    <string name="content_description_navigation_bar">Navigation Bar</string>
-    <string name="content_description_navigation_rail">Navigation Rail</string>
 
+    <!-- Product Features -->
     <string name="product_feature_variable">Variable</string>
     <string name="product_feature_green">Green</string>
     <string name="product_feature_tracker">Tracker</string>
     <string name="product_feature_prepay">Prepay</string>
     <string name="product_feature_business">Business</string>
     <string name="product_feature_restricted">Restricted</string>
+
+    <!-- Account Screen -->
+    <string name="account_clear_credential_title">Clear Credentials and Switch to Demo Mode</string>
+    <string name="account_clear_credential_description">Removing your API token and any account-specific data from local storage. Under demo mode, the application will utilise simulated local data to replicate authenticated access. Additionally, it will default to retail region A when retrieving tariffs.</string>
+    <string name="account_clear_credential_button_cta">Clear</string>
+
+    <!-- Content Descriptions -->
+    <string name="content_description_navigation_bar">Navigation Bar</string>
+    <string name="content_description_navigation_rail">Navigation Rail</string>
+
 </resources>
