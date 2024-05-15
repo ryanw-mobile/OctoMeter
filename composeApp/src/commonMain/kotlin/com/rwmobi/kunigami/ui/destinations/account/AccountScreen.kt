@@ -12,11 +12,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.model.Account
@@ -63,25 +65,43 @@ fun AccountScreen(
             ) {
                 if (!uiState.isLoading && uiState.isDemoMode) {
                     item(key = "onboarding") {
-                        Onboarding(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(all = dimension.grid_4),
-                            uiState = uiState,
-                            uiEvent = uiEvent,
-                        )
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            val widthConstraintModifier = when (uiState.requestedLayout) {
+                                is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
+                                is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
+                                else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                            }
+
+                            Onboarding(
+                                modifier = widthConstraintModifier.padding(all = dimension.grid_4),
+                                uiState = uiState,
+                                uiEvent = uiEvent,
+                            )
+                        }
                     }
                 }
 
                 if (!uiState.isDemoMode && uiState.account != null) {
                     item(key = "account") {
-                        AccountInformation(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = dimension.grid_4),
-                            uiState = uiState,
-                            uiEvent = uiEvent,
-                        )
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            val widthConstraintModifier = when (uiState.requestedLayout) {
+                                is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
+                                is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
+                                else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                            }
+
+                            AccountInformation(
+                                modifier = widthConstraintModifier.padding(horizontal = dimension.grid_4),
+                                uiState = uiState,
+                                uiEvent = uiEvent,
+                            )
+                        }
                     }
                 }
             }
