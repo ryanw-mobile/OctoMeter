@@ -45,7 +45,6 @@ internal fun ClearCredentialSection(
 
     Column(
         modifier = modifier
-            .padding(all = dimension.grid_2)
             .clip(shape = MaterialTheme.shapes.medium)
             .background(color = MaterialTheme.colorScheme.surfaceContainer)
             .padding(all = dimension.grid_3),
@@ -58,7 +57,7 @@ internal fun ClearCredentialSection(
         )
 
         Row(
-            modifier = modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
                 .padding(top = dimension.grid_1),
             verticalAlignment = Alignment.CenterVertically,
         ) {

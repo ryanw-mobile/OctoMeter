@@ -85,7 +85,9 @@ fun AccountScreen(
                 if (!uiState.isDemoMode && uiState.account != null) {
                     item(key = "toDemoMode") {
                         ClearCredentialSection(
-                            modifier = modifier.fillMaxWidth(),
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(all = dimension.grid_4),
                             onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
                         )
                     }
