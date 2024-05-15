@@ -10,5 +10,5 @@ package com.rwmobi.kunigami.ui.destinations.account
 sealed interface AccountScreenLayout {
     data object Compact : AccountScreenLayout
     data object Wide : AccountScreenLayout
-    data object WideWithPadding : AccountScreenLayout
+    data object ConstraintedWide : AccountScreenLayout
 }

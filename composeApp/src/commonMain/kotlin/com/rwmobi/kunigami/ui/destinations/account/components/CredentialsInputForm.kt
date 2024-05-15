@@ -9,6 +9,7 @@
 
 package com.rwmobi.kunigami.ui.destinations.account.components
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -34,6 +36,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.onboarding_button_connect
@@ -121,6 +124,19 @@ internal fun CredentialsInputForm(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(text = stringResource(resource = Res.string.onboarding_button_connect))
+        }
+    }
+}
+
+
+@Preview
+@Composable
+private fun Preview() {
+    AppTheme {
+        Surface {
+            CredentialsInputForm(
+                onSubmitCredentials = { -> },
+            )
         }
     }
 }
