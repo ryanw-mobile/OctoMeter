@@ -12,13 +12,12 @@ package com.rwmobi.kunigami.ui.destinations.account.components
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -80,20 +79,17 @@ internal fun Onboarding(
                     },
                 )
             },
+        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
     ) {
         Text(
             style = MaterialTheme.typography.displaySmall,
             text = stringResource(resource = Res.string.onboarding_welcome_aboard),
         )
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_2))
-
         Text(
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.bodyMedium,
             text = stringResource(resource = Res.string.onboarding_introduction_1),
         )
-
-        Spacer(modifier = Modifier.size(size = dimension.grid_2))
 
         Text(
             style = MaterialTheme.typography.titleMedium,
@@ -102,47 +98,54 @@ internal fun Onboarding(
         )
 
         Text(
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.bodyMedium,
             text = stringResource(resource = Res.string.onboarding_introduction_2),
         )
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_3))
+        CredentialsInputForm(
+            modifier = Modifier.fillMaxWidth()
+                .padding(vertical = dimension.grid_2),
+            onSubmitCredentials = onSubmitCredentials,
+        )
 
-        Column(
-            modifier = Modifier
-                .clip(shape = MaterialTheme.shapes.medium)
-                .background(color = MaterialTheme.colorScheme.surfaceContainer)
-                .padding(all = dimension.grid_3),
-        ) {
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                text = stringResource(resource = Res.string.onboarding_reminder_1),
-            )
+        Text(
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            text = stringResource(resource = Res.string.onboarding_reminder_1),
+        )
 
-            Spacer(modifier = Modifier.size(size = dimension.grid_2))
+        Text(
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            text = stringResource(resource = Res.string.onboarding_reminder_2),
+        )
+    }
+}
 
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                text = stringResource(resource = Res.string.onboarding_reminder_2),
-            )
-        }
+@Composable
+private fun CredentialsInputForm(
+    modifier: Modifier = Modifier,
+    onSubmitCredentials: () -> Unit,
+) {
+    val dimension = LocalDensity.current.getDimension()
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_3))
+    Column(
+        modifier = modifier
+            .clip(shape = MaterialTheme.shapes.medium)
+            .background(color = MaterialTheme.colorScheme.surfaceContainer)
+            .padding(all = dimension.grid_3),
+        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+    ) {
+        val keyboardController = LocalSoftwareKeyboardController.current
+        val accountFocusRequester = FocusRequester()
+        var apiKey by remember { mutableStateOf("") }
+        var account by remember { mutableStateOf("") }
 
         Text(
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             text = stringResource(resource = Res.string.onboarding_getting_started),
         )
-
-        Spacer(modifier = Modifier.size(size = dimension.grid_2))
-
-        val keyboardController = LocalSoftwareKeyboardController.current
-        val accountFocusRequester = FocusRequester()
-        var apiKey by remember { mutableStateOf("") }
-        var account by remember { mutableStateOf("") }
 
         TextField(
             value = apiKey,
@@ -163,6 +166,7 @@ internal fun Onboarding(
                 .padding(bottom = 8.dp)
                 .focusRequester(focusRequester = FocusRequester()),
         )
+
         TextField(
             value = account,
             onValueChange = { account = it },
@@ -185,6 +189,7 @@ internal fun Onboarding(
                 .padding(bottom = 16.dp)
                 .focusRequester(focusRequester = accountFocusRequester),
         )
+
         Button(
             onClick = {
                 keyboardController?.hide()
