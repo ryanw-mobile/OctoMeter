@@ -152,7 +152,7 @@ fun App() {
                             .padding(paddingValues),
                         navController = navController,
                         lastDoubleTappedNavItem = lastDoubleTappedNavItem.value,
-                        windowsSizeClass = windowSizeClass,
+                        windowSizeClass = windowSizeClass,
                         screenSizeInfo = screenSizeInfo,
                         onShowSnackbar = { errorMessageText ->
                             snackbarHostState.showSnackbar(

@@ -22,9 +22,11 @@ import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
+import com.rwmobi.kunigami.ui.components.WidthAdaptiveLayout
 import com.rwmobi.kunigami.ui.destinations.account.components.AccountInformation
 import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
-import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSection
+import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionCompact
+import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionWide
 import com.rwmobi.kunigami.ui.destinations.account.components.Onboarding
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -84,11 +86,24 @@ fun AccountScreen(
 
                 if (!uiState.isDemoMode && uiState.account != null) {
                     item(key = "toDemoMode") {
-                        ClearCredentialSection(
-                            modifier = modifier
-                                .fillMaxWidth()
-                                .padding(all = dimension.grid_4),
-                            onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
+                        WidthAdaptiveLayout(
+                            useCompact = uiState.requestedLayout == AccountScreenLayout.Compact,
+                            compactLayout = {
+                                ClearCredentialSectionCompact(
+                                    modifier = modifier
+                                        .fillMaxWidth()
+                                        .padding(all = dimension.grid_4),
+                                    onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
+                                )
+                            },
+                            wideLayout = {
+                                ClearCredentialSectionWide(
+                                    modifier = modifier
+                                        .fillMaxWidth()
+                                        .padding(all = dimension.grid_4),
+                                    onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
+                                )
+                            },
                         )
                     }
                 }

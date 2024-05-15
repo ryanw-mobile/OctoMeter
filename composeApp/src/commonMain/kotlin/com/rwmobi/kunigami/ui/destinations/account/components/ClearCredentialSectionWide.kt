@@ -37,7 +37,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-internal fun ClearCredentialSection(
+internal fun ClearCredentialSectionWide(
     modifier: Modifier = Modifier,
     onClearCredentialButtonClicked: () -> Unit,
 ) {
@@ -83,7 +83,7 @@ internal fun ClearCredentialSection(
 @Composable
 private fun ClearCredentialSectionPreview() {
     AppTheme {
-        ClearCredentialSection(
+        ClearCredentialSectionWide(
             modifier = Modifier.fillMaxWidth(),
             onClearCredentialButtonClicked = {},
         )
