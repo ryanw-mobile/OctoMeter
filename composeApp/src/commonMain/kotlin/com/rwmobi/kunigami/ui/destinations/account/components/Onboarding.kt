@@ -5,77 +5,73 @@
  *
  */
 
-@file:OptIn(ExperimentalResourceApi::class)
+@file:OptIn(ExperimentalResourceApi::class, ExperimentalResourceApi::class)
 
 package com.rwmobi.kunigami.ui.destinations.account.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.domain.model.Account
+import com.rwmobi.kunigami.domain.model.Agreement
+import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
+import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.ui.destinations.account.AccountScreen
+import com.rwmobi.kunigami.ui.destinations.account.AccountUIEvent
+import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
+import kotlinx.datetime.Clock
 import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.onboarding_button_connect
-import kunigami.composeapp.generated.resources.onboarding_getting_started
+import kunigami.composeapp.generated.resources.bulb
 import kunigami.composeapp.generated.resources.onboarding_introduction_1
 import kunigami.composeapp.generated.resources.onboarding_introduction_2
-import kunigami.composeapp.generated.resources.onboarding_label_account
-import kunigami.composeapp.generated.resources.onboarding_label_your_api_key
-import kunigami.composeapp.generated.resources.onboarding_placeholder_account
-import kunigami.composeapp.generated.resources.onboarding_placeholder_api_key
 import kunigami.composeapp.generated.resources.onboarding_question_1
 import kunigami.composeapp.generated.resources.onboarding_reminder_1
 import kunigami.composeapp.generated.resources.onboarding_reminder_2
 import kunigami.composeapp.generated.resources.onboarding_welcome_aboard
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Duration
 
 @Composable
 internal fun Onboarding(
     modifier: Modifier = Modifier,
-    onSubmitCredentials: () -> Unit,
+    uiState: AccountUIState,
+    uiEvent: AccountUIEvent,
 ) {
     val dimension = LocalDensity.current.getDimension()
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = modifier.pointerInput(Unit) {
-            detectTapGestures(
-                onTap = {
-                    focusManager.clearFocus()
+        modifier = modifier
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        focusManager.clearFocus()
 //                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 //                    imm.hideSoftInputFromWindow(this@pointerInput.windowToken, 0)
-                },
-            )
-        },
+                    },
+                )
+            },
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
     ) {
         Text(
@@ -86,6 +82,15 @@ internal fun Onboarding(
         Text(
             style = MaterialTheme.typography.bodyMedium,
             text = stringResource(resource = Res.string.onboarding_introduction_1),
+        )
+
+        Image(
+            modifier = Modifier
+                .size(size = dimension.grid_6)
+                .align(alignment = Alignment.CenterHorizontally),
+            painter = painterResource(Res.drawable.bulb),
+            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.secondary),
+            contentDescription = null,
         )
 
         Text(
@@ -102,7 +107,7 @@ internal fun Onboarding(
         CredentialsInputForm(
             modifier = Modifier.fillMaxWidth()
                 .padding(vertical = dimension.grid_2),
-            onSubmitCredentials = onSubmitCredentials,
+            onSubmitCredentials = uiEvent.onSubmitCredentials,
         )
 
         Text(
@@ -116,86 +121,8 @@ internal fun Onboarding(
             color = MaterialTheme.colorScheme.onSurface,
             text = stringResource(resource = Res.string.onboarding_reminder_2),
         )
-    }
-}
 
-@Composable
-private fun CredentialsInputForm(
-    modifier: Modifier = Modifier,
-    onSubmitCredentials: () -> Unit,
-) {
-    val dimension = LocalDensity.current.getDimension()
-
-    Column(
-        modifier = modifier
-            .clip(shape = MaterialTheme.shapes.medium)
-            .background(color = MaterialTheme.colorScheme.surfaceContainer)
-            .padding(all = dimension.grid_3),
-        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
-    ) {
-        val keyboardController = LocalSoftwareKeyboardController.current
-        val accountFocusRequester = FocusRequester()
-        var apiKey by remember { mutableStateOf("") }
-        var account by remember { mutableStateOf("") }
-
-        Text(
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            text = stringResource(resource = Res.string.onboarding_getting_started),
-        )
-
-        TextField(
-            value = apiKey,
-            onValueChange = { apiKey = it },
-            label = {
-                Text(text = stringResource(resource = Res.string.onboarding_label_your_api_key))
-            },
-            placeholder = {
-                Text(text = stringResource(resource = Res.string.onboarding_placeholder_api_key))
-            },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
-            keyboardActions = KeyboardActions(
-                onNext = { accountFocusRequester.requestFocus() },
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp)
-                .focusRequester(focusRequester = FocusRequester()),
-        )
-
-        TextField(
-            value = account,
-            onValueChange = { account = it },
-            label = {
-                Text(text = stringResource(resource = Res.string.onboarding_label_account))
-            },
-            placeholder = {
-                Text(text = stringResource(Res.string.onboarding_placeholder_account))
-            },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    keyboardController?.hide()
-                    onSubmitCredentials()
-                },
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-                .focusRequester(focusRequester = accountFocusRequester),
-        )
-
-        Button(
-            onClick = {
-                keyboardController?.hide()
-                onSubmitCredentials()
-            },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(text = stringResource(resource = Res.string.onboarding_button_connect))
-        }
+        AppInfoFooter(modifier = Modifier.fillMaxWidth())
     }
 }
 
@@ -204,9 +131,44 @@ private fun CredentialsInputForm(
 private fun OnboardingPreview() {
     AppTheme {
         Surface {
-            Onboarding(
-                modifier = Modifier.fillMaxSize().padding(all = 24.dp),
-                onSubmitCredentials = {},
+            AccountScreen(
+                uiState = AccountUIState(
+                    isLoading = false,
+                    isDemoMode = true,
+                    account = Account(
+                        id = 8638,
+                        accountNumber = "A-1234A1B1",
+                        fullAddress = "Address line 1\nAddress line 2\nAddress line 3\nAddress line 4",
+                        movedInAt = Clock.System.now(),
+                        movedOutAt = null,
+                        electricityMeterPoints = listOf(
+                            ElectricityMeterPoint(
+                                mpan = "1200000345678",
+                                meterSerialNumbers = listOf("11A1234567"),
+                                currentAgreement = Agreement(
+                                    tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
+                                    validFrom = Clock.System.now(),
+                                    validTo = Clock.System.now().plus(Duration.parse("365d")),
+                                ),
+                            ),
+                        ),
+                    ),
+                    tariff = Tariff(
+                        code = "E-1R-AGILE-FLEX-22-11-25-A",
+                        fullName = "Octopus 12M Fixed April 2024 v1",
+                        displayName = "Octopus 12M Fixed",
+                        vatInclusiveUnitRate = 99.257,
+                        vatInclusiveStandingCharge = 94.682,
+                    ),
+                    errorMessages = listOf(),
+                ),
+                uiEvent = AccountUIEvent(
+                    onClearCredentialButtonClicked = {},
+                    onSubmitCredentials = {},
+                    onRefresh = {},
+                    onErrorShown = {},
+                    onShowSnackbar = {},
+                ),
             )
         }
     }
