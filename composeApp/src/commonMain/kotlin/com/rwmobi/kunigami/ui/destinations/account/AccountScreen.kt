@@ -90,7 +90,7 @@ fun AccountScreen(
                     }
                 }
 
-                if (uiState.isDemoMode || !uiState.isLoading || uiState.account != null) {
+                if (!uiState.isLoading) {
                     item(key = "footer") { AppInfoFooter(modifier = Modifier.fillMaxWidth()) }
                 }
             }
