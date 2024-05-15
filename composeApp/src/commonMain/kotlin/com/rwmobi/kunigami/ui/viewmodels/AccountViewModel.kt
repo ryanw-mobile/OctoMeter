@@ -86,8 +86,22 @@ class AccountViewModel(
         }
     }
 
-    fun clearCredential() {
-        // TODO: call use-case
+    fun clearCredentials() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = false,
+                isDemoMode = true,
+            )
+        }
+    }
+
+    fun submitCredentials() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = false,
+                isDemoMode = false,
+            )
+        }
     }
 
     private fun updateUIForError(message: String) {

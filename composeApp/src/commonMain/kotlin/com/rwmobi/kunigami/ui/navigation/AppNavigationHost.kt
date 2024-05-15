@@ -102,7 +102,8 @@ fun AppNavigationHost(
                 uiState = uiState,
                 uiEvent = AccountUIEvent(
                     onRefresh = viewModel::refresh,
-                    onClearCredentialButtonClicked = viewModel::clearCredential,
+                    onClearCredentialButtonClicked = viewModel::clearCredentials,
+                    onSubmitCredentials = viewModel::submitCredentials,
                     onErrorShown = viewModel::errorShown,
                     onShowSnackbar = onShowSnackbar,
                 ),

@@ -65,6 +65,7 @@ fun AccountScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(all = dimension.grid_4),
+                            onSubmitCredentials = uiEvent.onSubmitCredentials,
                         )
                     }
                 }
@@ -126,6 +127,7 @@ private fun AccountScreenPreview() {
             ),
             uiEvent = AccountUIEvent(
                 onClearCredentialButtonClicked = {},
+                onSubmitCredentials = {},
                 onRefresh = {},
                 onErrorShown = {},
                 onShowSnackbar = {},
