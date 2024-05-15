@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -68,17 +67,15 @@ internal fun Onboarding(
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = modifier
-            .imePadding()
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = {
-                        focusManager.clearFocus()
+        modifier = modifier.pointerInput(Unit) {
+            detectTapGestures(
+                onTap = {
+                    focusManager.clearFocus()
 //                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 //                    imm.hideSoftInputFromWindow(this@pointerInput.windowToken, 0)
-                    },
-                )
-            },
+                },
+            )
+        },
         verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
     ) {
         Text(
