@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.ui.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -35,6 +36,7 @@ import org.koin.mp.KoinPlatform.getKoin
 fun AppNavigationHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    windowSizeClass: WindowSizeClass,
     screenSizeInfo: ScreenSizeInfo,
     lastDoubleTappedNavItem: AppNavigationItem?,
     onShowSnackbar: suspend (String) -> Unit,
@@ -96,6 +98,7 @@ fun AppNavigationHost(
         composable(route = AppNavigationItem.Account.name) {
             val viewModel: AccountViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
+            viewModel.notifyWindowSizeClassChanged(windowSizeClass = windowSizeClass)
 
             AccountScreen(
                 modifier = Modifier.fillMaxSize(),

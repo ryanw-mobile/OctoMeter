@@ -7,12 +7,15 @@
 
 package com.rwmobi.kunigami.ui.viewmodels
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
+import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
@@ -36,6 +39,20 @@ class AccountViewModel(
         _uiState.update { currentUiState ->
             val errorMessages = currentUiState.errorMessages.filterNot { it.id == errorId }
             currentUiState.copy(errorMessages = errorMessages)
+        }
+    }
+
+    fun notifyWindowSizeClassChanged(windowSizeClass: WindowSizeClass) {
+        val requestedLayout = when (windowSizeClass.widthSizeClass) {
+            WindowWidthSizeClass.Expanded -> AccountScreenLayout.WideWithPadding
+            WindowWidthSizeClass.Medium -> AccountScreenLayout.Wide
+            else -> AccountScreenLayout.Compact
+        }
+
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                requestedLayout = requestedLayout,
+            )
         }
     }
 
