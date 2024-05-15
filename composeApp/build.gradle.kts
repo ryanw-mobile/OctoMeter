@@ -288,6 +288,7 @@ tasks.named("preBuild") {
 }
 
 buildConfig {
+    packageName("composeapp.kunigami")
     buildConfigField("VERSION_NAME", provider { libs.versions.versionName.get() })
     buildConfigField("VERSION_CODE", provider { libs.versions.versionCode.get() })
 }

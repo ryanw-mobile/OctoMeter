@@ -7,7 +7,6 @@
 
 package com.rwmobi.kunigami.ui.destinations.account.components
 
-import Kunigami.composeApp.BuildConfig
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
+import composeapp.kunigami.BuildConfig
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_version_api_disclaimer
 import org.jetbrains.compose.resources.ExperimentalResourceApi
