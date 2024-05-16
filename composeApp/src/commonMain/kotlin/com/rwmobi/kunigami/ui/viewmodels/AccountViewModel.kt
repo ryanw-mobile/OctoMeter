@@ -44,7 +44,7 @@ class AccountViewModel(
 
     fun notifyWindowSizeClassChanged(windowSizeClass: WindowSizeClass) {
         val requestedLayout = when (windowSizeClass.widthSizeClass) {
-            WindowWidthSizeClass.Expanded -> AccountScreenLayout.ConstraintedWide
+            WindowWidthSizeClass.Expanded -> AccountScreenLayout.WideWrapped
             WindowWidthSizeClass.Medium -> AccountScreenLayout.Wide
             else -> AccountScreenLayout.Compact
         }

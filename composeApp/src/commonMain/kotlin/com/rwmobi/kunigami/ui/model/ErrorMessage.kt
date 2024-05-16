@@ -5,4 +5,7 @@
 
 package com.rwmobi.kunigami.ui.model
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class ErrorMessage(val id: Long, val message: String)

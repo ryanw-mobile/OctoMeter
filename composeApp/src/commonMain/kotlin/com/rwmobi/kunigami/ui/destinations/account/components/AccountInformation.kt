@@ -341,7 +341,7 @@ private fun AccountInformationPreview() {
                 uiState = AccountUIState(
                     isLoading = false,
                     isDemoMode = false,
-                    requestedLayout = AccountScreenLayout.ConstraintedWide,
+                    requestedLayout = AccountScreenLayout.WideWrapped,
                     account = Account(
                         id = 8638,
                         accountNumber = "A-1234A1B1",

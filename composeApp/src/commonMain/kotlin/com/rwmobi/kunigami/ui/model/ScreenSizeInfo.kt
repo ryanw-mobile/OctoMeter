@@ -7,8 +7,10 @@
 
 package com.rwmobi.kunigami.ui.model
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.Dp
 
+@Immutable
 data class ScreenSizeInfo(
     val heightPx: Int,
     val widthPx: Int,

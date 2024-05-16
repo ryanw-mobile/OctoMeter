@@ -7,8 +7,11 @@
 
 package com.rwmobi.kunigami.ui.destinations.account
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 sealed interface AccountScreenLayout {
     data object Compact : AccountScreenLayout
     data object Wide : AccountScreenLayout
-    data object ConstraintedWide : AccountScreenLayout
+    data object WideWrapped : AccountScreenLayout
 }
