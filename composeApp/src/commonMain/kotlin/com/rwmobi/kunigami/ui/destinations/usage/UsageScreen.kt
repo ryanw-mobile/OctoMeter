@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.ui.destinations.usage
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -25,10 +26,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
+import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
-import com.rwmobi.kunigami.ui.components.koalaplot.BarSamplePlot
+import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.theme.getDimension
-import com.rwmobi.kunigami.ui.utils.getScreenSizeInfo
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
 import io.github.koalaplot.core.bar.VerticalBarPlotEntry
@@ -55,85 +57,107 @@ fun UsageScreen(
     val dimension = LocalDensity.current.getDimension()
     val lazyListState = rememberLazyListState()
 
-    if (!uiState.isLoading) {
-        val screenSizeInfo = getScreenSizeInfo()
-        val entries: List<VerticalBarPlotEntry<Int, Double>> = remember(uiState.consumptions) {
-            buildList {
-                uiState.consumptions.forEachIndexed { index, consumption ->
-                    add(DefaultVerticalBarPlotEntry((index + 1), DefaultVerticalBarPosition(0.0, consumption.consumption)))
+    Box(modifier = modifier) {
+        if (uiState.consumptions.isNotEmpty()) {
+            val entries: List<VerticalBarPlotEntry<Int, Double>> = remember(uiState.consumptions) {
+                buildList {
+                    uiState.consumptions.forEachIndexed { index, consumption ->
+                        add(DefaultVerticalBarPlotEntry((index + 1), DefaultVerticalBarPosition(0.0, consumption.consumption)))
+                    }
                 }
             }
-        }
-        val labels: Map<Int, String> = remember(uiState.consumptions) {
-            buildMap {
-                var lastRateValue: String? = null
 
-                uiState.consumptions.forEachIndexed { index, consumption ->
-                    val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour.toString()
-                    if (currentTime != lastRateValue) {
-                        put(index + 1, currentTime)
+            val labelIndex: Map<Int, Int> = remember(uiState.consumptions, uiState.requestedLayout) {
+                buildMap {
+                    // Generate all possible labels
+                    var lastRateValue: Int? = null
+                    uiState.consumptions.forEachIndexed { index, consumption ->
+                        val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
+                        if (currentTime != lastRateValue && currentTime % 2 == 0) {
+                            put(index + 1, currentTime)
+                        }
                         lastRateValue = currentTime
                     }
                 }
             }
-        }
 
-        ScrollbarMultiplatform(
-            modifier = modifier,
-            enabled = uiState.consumptions.isNotEmpty(),
-            lazyListState = lazyListState,
-        ) { contentModifier ->
-            LazyColumn(
-                modifier = contentModifier.fillMaxSize(),
-                state = lazyListState,
-            ) {
-                item {
-                    BoxWithConstraints {
-                        val constraintModifier = if (screenSizeInfo.isPortrait()) {
-                            Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(4 / 3f)
-                        } else {
-                            Modifier.fillMaxSize()
-                                .height(screenSizeInfo.heightDp * 2 / 3)
+            ScrollbarMultiplatform(
+                modifier = Modifier.fillMaxSize(),
+                enabled = uiState.consumptions.isNotEmpty(),
+                lazyListState = lazyListState,
+            ) { contentModifier ->
+                LazyColumn(
+                    modifier = contentModifier.fillMaxSize(),
+                    state = lazyListState,
+                ) {
+                    item {
+                        BoxWithConstraints {
+                            val constraintModifier = when (uiState.requestedLayout) {
+                                is UsageScreenLayout.Portrait -> {
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .aspectRatio(4 / 3f)
+                                }
+
+                                is UsageScreenLayout.LandScape -> {
+                                    Modifier.fillMaxSize()
+                                        .height(uiState.requestedLayout.requestedMaxHeight)
+                                }
+                            }
+
+                            VerticalBarChart(
+                                modifier = constraintModifier.padding(all = dimension.grid_2),
+                                entries = entries,
+                                yAxisRange = uiState.consumptionRange,
+                                yAxisTickPosition = TickPosition.Outside,
+                                xAxisTickPosition = TickPosition.Outside,
+                                yAxisTitle = "kWh",
+                                barWidth = 0.8f,
+                                labelGenerator = { index ->
+                                    labelIndex[index]?.toString()?.padStart(2, '0')
+                                },
+                                tooltipGenerator = { index ->
+                                    with(uiState.consumptions[index]) {
+                                        "${intervalStart.toLocalHourMinuteString()} - ${intervalEnd.toLocalHourMinuteString()}\n$consumption kWh"
+                                    }
+                                },
+                            )
                         }
-
-                        BarSamplePlot(
-                            modifier = constraintModifier.padding(all = dimension.grid_2),
-                            entries = entries,
-                            labels = labels,
-                            yAxisRange = uiState.consumptionRange,
-                            yAxisTickPosition = TickPosition.Outside,
-                            xAxisTickPosition = TickPosition.Outside,
-                            yAxisTitle = "kWh",
-                            barWidth = 0.8f,
-                        )
                     }
-                }
 
-                itemsIndexed(
-                    items = uiState.consumptions,
-                    key = { _, consumption -> consumption.intervalStart.epochSeconds },
-                ) { _, consumption ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = dimension.grid_2),
-                    ) {
-                        val timeLabel = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault())
-                        Text(
-                            modifier = Modifier.weight(1.0f),
-                            text = "${timeLabel.date} ${timeLabel.time}",
-                        )
+                    itemsIndexed(
+                        items = uiState.consumptions,
+                        key = { _, consumption -> consumption.intervalStart.epochSeconds },
+                    ) { _, consumption ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = dimension.grid_2),
+                        ) {
+                            val timeLabel = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault())
+                            Text(
+                                modifier = Modifier.weight(1.0f),
+                                text = "${timeLabel.date} ${timeLabel.time}",
+                            )
 
-                        Text(
-                            modifier = Modifier.wrapContentWidth(),
-                            fontWeight = FontWeight.Bold,
-                            text = "${consumption.consumption}",
-                        )
+                            Text(
+                                modifier = Modifier.wrapContentWidth(),
+                                fontWeight = FontWeight.Bold,
+                                text = "${consumption.consumption}",
+                            )
+                        }
                     }
                 }
             }
+        } else if (!uiState.isLoading) {
+            // no data
+            Text("Placeholder for no data")
+        }
+
+        if (uiState.isLoading) {
+            LoadingScreen(
+                modifier = Modifier.fillMaxSize(),
+            )
         }
     }
 

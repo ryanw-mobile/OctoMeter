@@ -9,20 +9,12 @@ package com.rwmobi.kunigami.di
 
 import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
 import com.rwmobi.kunigami.ui.viewmodels.AgileViewModel
-import com.rwmobi.kunigami.ui.viewmodels.OnboardingViewModel
 import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel
 import com.rwmobi.kunigami.ui.viewmodels.UsageViewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    factory {
-        OnboardingViewModel(
-            octopusRepository = get(),
-            dispatcher = get(named("DefaultDispatcher")),
-        )
-    }
-
     factory {
         UsageViewModel(
             octopusRepository = get(),
@@ -49,6 +41,7 @@ val viewModelModule = module {
         AccountViewModel(
             octopusRepository = get(),
             getUserAccountUseCase = get(),
+            getTariffRatesUseCase = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }

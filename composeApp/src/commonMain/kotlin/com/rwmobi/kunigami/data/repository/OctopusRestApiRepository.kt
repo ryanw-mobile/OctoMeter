@@ -11,6 +11,7 @@ import com.rwmobi.kunigami.data.repository.mapper.toAccount
 import com.rwmobi.kunigami.data.repository.mapper.toConsumption
 import com.rwmobi.kunigami.data.repository.mapper.toProduct
 import com.rwmobi.kunigami.data.repository.mapper.toRate
+import com.rwmobi.kunigami.data.repository.mapper.toTariff
 import com.rwmobi.kunigami.data.source.network.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
@@ -21,6 +22,7 @@ import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Consumption
 import com.rwmobi.kunigami.domain.model.Product
 import com.rwmobi.kunigami.domain.model.Rate
+import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +36,20 @@ class OctopusRestApiRepository(
     private val accountEndpoint: AccountEndpoint,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : RestApiRepository {
+    override suspend fun getSimpleProductTariff(
+        productCode: String,
+        tariffCode: String,
+    ): Result<Tariff> {
+        return withContext(dispatcher) {
+            runCatching {
+                val apiResponse = productsEndpoint.getProduct(
+                    productCode = productCode,
+                )
+
+                apiResponse?.toTariff(tariffCode = tariffCode) ?: throw IllegalArgumentException("Cannot parse tariff")
+            }.except<CancellationException, _>()
+        }
+    }
 
     // Don't forget that if it returns more than 100 records, you will have to look at page=2 for the subsequent entries.
     override suspend fun getProducts(): Result<List<Product>> {

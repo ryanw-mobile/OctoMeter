@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.ui.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -19,16 +20,14 @@ import com.rwmobi.kunigami.ui.destinations.account.AccountScreen
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIEvent
 import com.rwmobi.kunigami.ui.destinations.agile.AgileScreen
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIEvent
-import com.rwmobi.kunigami.ui.destinations.onboarding.OnboardingScreen
-import com.rwmobi.kunigami.ui.destinations.onboarding.OnboardingUIEvent
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsScreen
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIEvent
 import com.rwmobi.kunigami.ui.destinations.usage.UsageScreen
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIEvent
+import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.utils.collectAsStateMultiplatform
 import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
 import com.rwmobi.kunigami.ui.viewmodels.AgileViewModel
-import com.rwmobi.kunigami.ui.viewmodels.OnboardingViewModel
 import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel
 import com.rwmobi.kunigami.ui.viewmodels.UsageViewModel
 import org.koin.mp.KoinPlatform.getKoin
@@ -37,6 +36,8 @@ import org.koin.mp.KoinPlatform.getKoin
 fun AppNavigationHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    windowSizeClass: WindowSizeClass,
+    screenSizeInfo: ScreenSizeInfo,
     lastDoubleTappedNavItem: AppNavigationItem?,
     onShowSnackbar: suspend (String) -> Unit,
     onScrolledToTop: (AppNavigationItem) -> Unit,
@@ -46,23 +47,10 @@ fun AppNavigationHost(
         navController = navController,
         startDestination = AppNavigationItem.Usage.name,
     ) {
-        composable(route = AppNavigationItem.Onboarding.name) {
-            val viewModel: OnboardingViewModel = viewModel { getKoin().get() }
-            val uiState by viewModel.uiState.collectAsStateMultiplatform()
-
-            OnboardingScreen(
-                modifier = Modifier.fillMaxSize(),
-                uiState = uiState,
-                uiEvent = OnboardingUIEvent(
-                    onErrorShown = viewModel::errorShown,
-                    onShowSnackbar = onShowSnackbar,
-                ),
-            )
-        }
-
         composable(route = AppNavigationItem.Usage.name) {
             val viewModel: UsageViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
+            viewModel.notifyScreenSizeChanged(screenSizeInfo = screenSizeInfo)
 
             UsageScreen(
                 modifier = Modifier.fillMaxSize(),
@@ -78,6 +66,7 @@ fun AppNavigationHost(
         composable(route = AppNavigationItem.Agile.name) {
             val viewModel: AgileViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
+            viewModel.notifyScreenSizeChanged(screenSizeInfo = screenSizeInfo)
 
             AgileScreen(
                 modifier = Modifier.fillMaxSize(),
@@ -109,12 +98,15 @@ fun AppNavigationHost(
         composable(route = AppNavigationItem.Account.name) {
             val viewModel: AccountViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
+            viewModel.notifyWindowSizeClassChanged(windowSizeClass = windowSizeClass)
 
             AccountScreen(
                 modifier = Modifier.fillMaxSize(),
                 uiState = uiState,
                 uiEvent = AccountUIEvent(
                     onRefresh = viewModel::refresh,
+                    onClearCredentialButtonClicked = viewModel::clearCredentials,
+                    onSubmitCredentials = viewModel::submitCredentials,
                     onErrorShown = viewModel::errorShown,
                     onShowSnackbar = onShowSnackbar,
                 ),

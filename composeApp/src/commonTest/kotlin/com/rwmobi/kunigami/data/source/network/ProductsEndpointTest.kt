@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.data.source.network
 
 import com.rwmobi.kunigami.data.source.network.samples.GetDayUnitRatesSampleData
 import com.rwmobi.kunigami.data.source.network.samples.GetNightUnitRatesSampleData
+import com.rwmobi.kunigami.data.source.network.samples.GetProductSampleData
 import com.rwmobi.kunigami.data.source.network.samples.GetProductsSampleData
 import com.rwmobi.kunigami.data.source.network.samples.GetStandardUnitRatesSampleData
 import com.rwmobi.kunigami.data.source.network.samples.GetStandingChargesSampleData
@@ -85,6 +86,68 @@ class ProductsEndpointTest {
 
         shouldThrowExactly<NoTransformationFoundException> {
             productsEndpoint.getProducts()
+        }
+    }
+
+    // 🗂 getProduct
+    @Test
+    fun getProductWithSampleA_ShouldReturnExpectedDto_WhenHttpStatusIsOK() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.OK,
+                contentType = "application/json",
+                payload = GetProductSampleData.json_var_22_11_01,
+            ),
+        )
+
+        val result = productsEndpoint.getProduct(productCode = "sample-product-code")
+        result shouldBe GetProductSampleData.dto_var_22_11_01
+    }
+
+    @Test
+    fun getProductWithSampleB_ShouldReturnExpectedDto_WhenHttpStatusIsOK() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.OK,
+                contentType = "application/json",
+                payload = GetProductSampleData.json_agile_flex_22_11_25,
+            ),
+        )
+
+        val result = productsEndpoint.getProduct(productCode = "sample-product-code")
+        result shouldBe GetProductSampleData.dto_agile_flex_22_11_25
+    }
+
+    @Test
+    fun getProductWithSampleC_ShouldReturnExpectedDto_WhenHttpStatusIsOK() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.OK,
+                contentType = "application/json",
+                payload = GetProductSampleData.json_oe_fix_12m_24_04_11,
+            ),
+        )
+
+        val result = productsEndpoint.getProduct(productCode = "sample-product-code")
+        result shouldBe GetProductSampleData.dto_oe_fix_12m_24_04_11
+    }
+
+    @Test
+    fun getProduct_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.InternalServerError,
+                contentType = "text/html",
+                payload = "Internal Server Error",
+            ),
+        )
+
+        shouldThrowExactly<NoTransformationFoundException> {
+            productsEndpoint.getProduct(productCode = "sample-product-code")
         }
     }
 

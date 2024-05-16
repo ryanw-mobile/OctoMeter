@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -45,6 +46,7 @@ import com.rwmobi.kunigami.ui.components.AppNavigationRail
 import com.rwmobi.kunigami.ui.navigation.AppNavigationHost
 import com.rwmobi.kunigami.ui.navigation.AppNavigationItem
 import com.rwmobi.kunigami.ui.theme.AppTheme
+import com.rwmobi.kunigami.ui.utils.getScreenSizeInfo
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.ok
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -58,9 +60,9 @@ private enum class NavigationLayoutType {
 }
 
 private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?): NavigationLayoutType {
-    if (currentRoute != null && currentRoute == AppNavigationItem.Onboarding.name) {
-        return NavigationLayoutType.FULL_SCREEN
-    }
+//    if (currentRoute != null && currentRoute == AppNavigationItem.Onboarding.name) {
+//        return NavigationLayoutType.FULL_SCREEN
+//    }
 
     return when (widthSizeClass) {
         WindowWidthSizeClass.Compact -> {
@@ -80,6 +82,7 @@ private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?): Na
 @Preview
 fun App() {
     val windowSizeClass = calculateWindowSizeClass()
+    val screenSizeInfo = getScreenSizeInfo()
     val lastDoubleTappedNavItem = remember { mutableStateOf<AppNavigationItem?>(null) }
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -91,7 +94,11 @@ fun App() {
 
     AppTheme {
         Surface {
-            Row(modifier = Modifier.fillMaxSize()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .imePadding(),
+            ) {
                 AnimatedVisibility(
                     visible = (navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL),
                     enter = slideInHorizontally(initialOffsetX = { -it }),
@@ -150,6 +157,8 @@ fun App() {
                             .padding(paddingValues),
                         navController = navController,
                         lastDoubleTappedNavItem = lastDoubleTappedNavItem.value,
+                        windowSizeClass = windowSizeClass,
+                        screenSizeInfo = screenSizeInfo,
                         onShowSnackbar = { errorMessageText ->
                             snackbarHostState.showSnackbar(
                                 message = errorMessageText,

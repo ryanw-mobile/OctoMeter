@@ -20,3 +20,6 @@ and hoping to have something to show in June 2024.
 
 Learn more
 about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+
+## Switch to Octopus!
+Switch to Octopus Energy using [this link](https://share.octopus.energy/best-shell-168), both of us will get £50 (or £100 for business).

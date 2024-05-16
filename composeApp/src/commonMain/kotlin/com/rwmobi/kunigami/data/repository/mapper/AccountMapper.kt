@@ -10,9 +10,11 @@ package com.rwmobi.kunigami.data.repository.mapper
 import com.rwmobi.kunigami.data.source.network.dto.AgreementDto
 import com.rwmobi.kunigami.data.source.network.dto.ElectricityMeterPointDto
 import com.rwmobi.kunigami.data.source.network.dto.PropertyDto
+import com.rwmobi.kunigami.data.source.network.extensions.capitalizeWords
 import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Agreement
 import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
+import kotlinx.datetime.Clock
 
 fun PropertyDto.toAccount(accountNumber: String) = Account(
     id = id,
@@ -20,21 +22,30 @@ fun PropertyDto.toAccount(accountNumber: String) = Account(
     movedInAt = movedInAt,
     movedOutAt = movedOutAt,
     fullAddress = mergeAddress(
-        addressLine1,
-        addressLine2,
-        addressLine3,
-        town,
-        county,
-        postcode,
+        addressLine1.capitalizeWords(),
+        addressLine2.capitalizeWords(),
+        addressLine3.capitalizeWords(),
+        town.capitalizeWords(),
+        county.capitalizeWords(),
+        postcode.uppercase(),
     ),
     electricityMeterPoints = electricityMeterPoints.map { it.toElectricityMeterPoint() },
 )
 
-fun ElectricityMeterPointDto.toElectricityMeterPoint() = ElectricityMeterPoint(
-    mpan = mpan,
-    meterSerialNumbers = meters.map { it.serialNumber },
-    agreements = agreements.map { it.toAgreement() },
-)
+fun ElectricityMeterPointDto.toElectricityMeterPoint(): ElectricityMeterPoint {
+    // In this App we only deal with one current agreement (tariff)
+    val activeAgreement = agreements.filter { it.validTo == null || it.validTo.epochSeconds > Clock.System.now().epochSeconds }
+
+    return ElectricityMeterPoint(
+        mpan = mpan,
+        meterSerialNumbers = meters.map { it.serialNumber },
+        currentAgreement = if (activeAgreement.isNotEmpty()) {
+            activeAgreement.first()
+        } else {
+            agreements.sortedByDescending { it.validTo }.first()
+        }.toAgreement(),
+    )
+}
 
 fun AgreementDto.toAgreement() = Agreement(
     tariffCode = tariffCode,

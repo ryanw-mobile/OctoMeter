@@ -11,8 +11,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
+import com.rwmobi.kunigami.ui.destinations.agile.AgileScreenLayout
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
+import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -64,6 +66,22 @@ class AgileViewModel(
                     updateUIForError(message = throwable.message ?: "Error when retrieving rates")
                     Logger.e("AgileViewModel", throwable = throwable, message = { "Error when retrieving rates" })
                 },
+            )
+        }
+    }
+
+    fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo) {
+        _uiState.update { currentUiState ->
+            val requestedLayout = if (screenSizeInfo.isPortrait()) {
+                AgileScreenLayout.Portrait
+            } else {
+                AgileScreenLayout.LandScape(
+                    requestedMaxHeight = screenSizeInfo.heightDp * 2 / 3,
+                )
+            }
+
+            currentUiState.copy(
+                requestedLayout = requestedLayout,
             )
         }
     }

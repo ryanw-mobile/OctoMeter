@@ -8,28 +8,31 @@
 package com.rwmobi.kunigami.ui.destinations.account
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import com.rwmobi.kunigami.domain.model.Account
+import com.rwmobi.kunigami.domain.model.Agreement
+import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
+import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.ui.components.LoadingScreen
+import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
+import com.rwmobi.kunigami.ui.destinations.account.components.AccountInformation
+import com.rwmobi.kunigami.ui.destinations.account.components.Onboarding
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.Clock
+import kotlin.time.Duration
 
 @Composable
 fun AccountScreen(
@@ -48,84 +51,64 @@ fun AccountScreen(
     }
 
     val dimension = LocalDensity.current.getDimension()
-    val scrollState = rememberScrollState()
+    val lazyListState = rememberLazyListState()
 
-    if (!uiState.isLoading) {
-        if (uiState.account != null) {
-            Column(
-                modifier = modifier
-                    .verticalScroll(state = scrollState)
-                    .padding(horizontal = dimension.grid_2),
+    Box(modifier = modifier) {
+        ScrollbarMultiplatform(
+            modifier = Modifier.fillMaxWidth(),
+            lazyListState = lazyListState,
+        ) { contentModifier ->
+
+            LazyColumn(
+                modifier = contentModifier.fillMaxWidth(),
+                state = lazyListState,
             ) {
-                with(uiState.account) {
-                    Text(text = "Account number: $accountNumber")
-                    Text("$fullAddress")
-                    movedInAt?.let {
-                        Text("Moved in at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}")
-                    }
-                    movedOutAt?.let {
-                        Text("Moved out at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}")
-                    }
+                if (!uiState.isLoading && uiState.isDemoMode) {
+                    item(key = "onboarding") {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            val widthConstraintModifier = when (uiState.requestedLayout) {
+                                is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
+                                is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
+                                else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                            }
 
-                    Spacer(modifier = Modifier.size(size = dimension.grid_1))
-
-                    Text(
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        text = "Meter information",
-                    )
-
-                    electricityMeterPoints.forEach { meterPoint ->
-                        Text("MPAN: ${meterPoint.mpan}")
-                        Text("Meter serial numbers:")
-                        meterPoint.meterSerialNumbers.forEach {
-                            Text(text = it)
-                        }
-                        Text(
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            text = "Tariff",
-                        )
-                        meterPoint.agreements.forEach { agreement ->
-                            Text(
-                                style = MaterialTheme.typography.titleMedium,
-                                text = agreement.tariffCode,
-                            )
-                            Text(
-                                text = "From ${agreement.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).date} to ${agreement.validTo?.toLocalDateTime(TimeZone.currentSystemDefault())?.date}",
+                            Onboarding(
+                                modifier = widthConstraintModifier.padding(all = dimension.grid_4),
+                                uiState = uiState,
+                                uiEvent = uiEvent,
                             )
                         }
                     }
                 }
 
-                Spacer(modifier = Modifier.size(size = dimension.grid_3))
+                if (!uiState.isDemoMode && uiState.account != null) {
+                    item(key = "account") {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            val widthConstraintModifier = when (uiState.requestedLayout) {
+                                is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
+                                is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
+                                else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                            }
 
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {},
-                ) {
-                    Text("Log Out")
+                            AccountInformation(
+                                modifier = widthConstraintModifier.padding(horizontal = dimension.grid_4),
+                                uiState = uiState,
+                                uiEvent = uiEvent,
+                            )
+                        }
+                    }
                 }
-
-                HorizontalDivider(
-                    modifier = Modifier
-                        .padding(vertical = dimension.grid_1)
-                        .fillMaxWidth(),
-                )
-
-                Text(
-                    modifier = modifier.padding(vertical = dimension.grid_2),
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.Center,
-                    text = "Version 1.0.0\nAPI provided by Octopus Energy subject to their terms of service.",
-                )
             }
-        } else {
-            Column(
-                modifier = modifier.verticalScroll(state = scrollState),
-            ) {
-                Text(text = "Account details not found or you don't have an account yet.")
-            }
+        }
+
+        if (uiState.isLoading) {
+            LoadingScreen(modifier = Modifier.fillMaxSize())
         }
     }
 
@@ -140,11 +123,38 @@ private fun AccountScreenPreview() {
     AppTheme {
         AccountScreen(
             uiState = AccountUIState(
-                account = null,
                 isLoading = false,
+                isDemoMode = false,
+                account = Account(
+                    id = 8638,
+                    accountNumber = "A-1234A1B1",
+                    fullAddress = "Address line 1\nAddress line 2\nAddress line 3\nAddress line 4",
+                    movedInAt = Clock.System.now(),
+                    movedOutAt = null,
+                    electricityMeterPoints = listOf(
+                        ElectricityMeterPoint(
+                            mpan = "1200000345678",
+                            meterSerialNumbers = listOf("11A1234567"),
+                            currentAgreement = Agreement(
+                                tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
+                                validFrom = Clock.System.now(),
+                                validTo = Clock.System.now().plus(Duration.parse("365d")),
+                            ),
+                        ),
+                    ),
+                ),
+                tariff = Tariff(
+                    code = "E-1R-AGILE-FLEX-22-11-25-A",
+                    fullName = "Octopus 12M Fixed April 2024 v1",
+                    displayName = "Octopus 12M Fixed",
+                    vatInclusiveUnitRate = 99.257,
+                    vatInclusiveStandingCharge = 94.682,
+                ),
                 errorMessages = listOf(),
             ),
             uiEvent = AccountUIEvent(
+                onClearCredentialButtonClicked = {},
+                onSubmitCredentials = {},
                 onRefresh = {},
                 onErrorShown = {},
                 onShowSnackbar = {},

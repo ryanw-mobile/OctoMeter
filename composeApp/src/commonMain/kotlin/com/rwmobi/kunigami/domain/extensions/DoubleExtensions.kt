@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.domain.extensions
 
+import kotlin.math.round
 import kotlin.math.roundToLong
 
 /**
@@ -19,4 +20,8 @@ fun Double.roundToNearestEvenHundredth(): Double {
     val scaled = this * 100
     val rounded = scaled.roundToLong()
     return rounded / 100.0
+}
+
+fun Double.roundToTwoDecimalPlaces(): Double {
+    return round(this * 100) / 100
 }

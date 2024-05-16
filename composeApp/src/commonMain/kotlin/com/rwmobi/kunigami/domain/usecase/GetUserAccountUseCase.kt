@@ -27,8 +27,8 @@ class GetUserAccountUseCase(
                 val apiKey = userPreferencesRepository.getApiKey()
                 val accountNumber = userPreferencesRepository.getAccountNumber()
 
-                requireNotNull(value = apiKey, lazyMessage = { "API Key is null" })
-                requireNotNull(value = accountNumber, lazyMessage = { "Account Number is null" })
+                checkNotNull(value = apiKey, lazyMessage = { "API Key is null" })
+                checkNotNull(value = accountNumber, lazyMessage = { "Account Number is null" })
 
                 octopusRepository.getAccount(
                     apiKey = apiKey,

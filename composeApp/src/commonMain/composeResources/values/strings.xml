@@ -14,13 +14,37 @@
     <string name="navigation_agile">Agile</string>
     <string name="navigation_account">Account</string>
     <string name="ok">OK</string>
-    <string name="content_description_navigation_bar">Navigation Bar</string>
-    <string name="content_description_navigation_rail">Navigation Rail</string>
 
+    <!-- Product Features -->
     <string name="product_feature_variable">Variable</string>
     <string name="product_feature_green">Green</string>
     <string name="product_feature_tracker">Tracker</string>
     <string name="product_feature_prepay">Prepay</string>
     <string name="product_feature_business">Business</string>
     <string name="product_feature_restricted">Restricted</string>
+
+    <!-- Account Screen -->
+    <string name="account_clear_credential_title">Clear Credentials and Switch to Demo Mode</string>
+    <string name="account_clear_credential_description">Removing your API token and any account-specific data from local storage. Under demo mode, the application will utilise simulated local data to replicate authenticated access. Additionally, it will default to retail region A when retrieving tariffs.</string>
+    <string name="account_clear_credential_button_cta">Clear</string>
+    <string name="account_version_api_disclaimer">Version %1$s (Build %2$d)\nThe APIs are provided by Octopus Energy Ltd. Usage subject to their terms of service.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_aboard">Welcome Aboard!</string>
+    <string name="onboarding_introduction_1">This app is currently running in demo mode, using simulated local data to replicate authenticated access. This means the electricity usage data displayed is not real. Additionally, the app will default to retail region A when retrieving tariffs.</string>
+    <string name="onboarding_question_1">Are you an Octopus Energy customer with a smart meter installed?</string>
+    <string name="onboarding_introduction_2">If you are a current Octopus Energy customer with a smart meter and have access to your web account, you can generate an API key for this app to pull your smart meter data. Visit: https://octopus.energy/dashboard/new/accounts/personal-details/api-access</string>
+    <string name="onboarding_reminder_1">Your API key is confidential, so don't share it with anyone. If you have concerns, regenerating a new key will invalidate all previously issued keys.</string>
+    <string name="onboarding_reminder_2">This app can have read-only access to your electricity consumption date through the public APIs managed by Octopus Energy.</string>
+    <string name="onboarding_getting_started">Getting started</string>
+    <string name="onboarding_label_your_api_key">Your API Key</string>
+    <string name="onboarding_placeholder_api_key">sk_live_something</string>
+    <string name="onboarding_label_account">Account</string>
+    <string name="onboarding_placeholder_account">A-12345678</string>
+    <string name="onboarding_button_connect">Connect</string>
+
+    <!-- Content Descriptions -->
+    <string name="content_description_navigation_bar">Navigation Bar</string>
+    <string name="content_description_navigation_rail">Navigation Rail</string>
+
 </resources>

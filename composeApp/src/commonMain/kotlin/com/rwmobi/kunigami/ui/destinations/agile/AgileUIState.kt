@@ -12,6 +12,7 @@ import com.rwmobi.kunigami.ui.model.ErrorMessage
 
 data class AgileUIState(
     val isLoading: Boolean = true,
+    val requestedLayout: AgileScreenLayout = AgileScreenLayout.Portrait,
     val rates: List<Rate> = emptyList(),
     val rateRange: ClosedFloatingPointRange<Double> = 0.0..0.0,
     val errorMessages: List<ErrorMessage> = emptyList(),
