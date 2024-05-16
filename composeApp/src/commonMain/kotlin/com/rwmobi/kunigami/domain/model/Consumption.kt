@@ -7,8 +7,10 @@
 
 package com.rwmobi.kunigami.domain.model
 
+import androidx.compose.runtime.Immutable
 import kotlinx.datetime.Instant
 
+@Immutable
 data class Consumption(
     val consumption: Double,
     val intervalStart: Instant,

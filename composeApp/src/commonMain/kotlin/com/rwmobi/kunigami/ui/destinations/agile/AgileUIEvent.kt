@@ -7,6 +7,9 @@
 
 package com.rwmobi.kunigami.ui.destinations.agile
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class AgileUIEvent(
     val onRefresh: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,

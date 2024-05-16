@@ -7,6 +7,9 @@
 
 package com.rwmobi.kunigami.ui.destinations.usage
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class UsageUIEvent(
     val onRefresh: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,

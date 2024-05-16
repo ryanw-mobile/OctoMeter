@@ -7,8 +7,10 @@
 
 package com.rwmobi.kunigami.ui.destinations.agile
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.Dp
 
+@Immutable
 sealed interface AgileScreenLayout {
     data object Portrait : AgileScreenLayout
     data class LandScape(val requestedMaxHeight: Dp) : AgileScreenLayout

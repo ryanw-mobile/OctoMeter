@@ -7,6 +7,9 @@
 
 package com.rwmobi.kunigami.domain.model
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class Tariff(
     val code: String,
     val fullName: String,

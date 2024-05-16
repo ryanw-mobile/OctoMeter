@@ -7,6 +7,9 @@
 
 package com.rwmobi.kunigami.ui.destinations.tariffs
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class TariffsUIEvent(
     val onRefresh: () -> Unit,
     val onProductItemClick: (productCode: String) -> Unit,

@@ -7,6 +7,9 @@
 
 package com.rwmobi.kunigami.ui.destinations.account
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class AccountUIEvent(
     val onRefresh: () -> Unit,
     val onClearCredentialButtonClicked: () -> Unit,

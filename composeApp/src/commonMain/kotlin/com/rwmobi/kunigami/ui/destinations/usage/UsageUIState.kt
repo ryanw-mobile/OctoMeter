@@ -7,9 +7,11 @@
 
 package com.rwmobi.kunigami.ui.destinations.usage
 
+import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.model.Consumption
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 
+@Immutable
 data class UsageUIState(
     val isLoading: Boolean = true,
     val requestedLayout: UsageScreenLayout = UsageScreenLayout.Portrait,
