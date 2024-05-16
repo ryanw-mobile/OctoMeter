@@ -18,10 +18,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.Card
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -75,96 +71,30 @@ internal fun AccountInformation(
         } else {
             Spacer(modifier = Modifier.height(height = dimension.grid_2))
 
-            with(uiState.account) {
-                Text(
-                    style = MaterialTheme.typography.displaySmall,
-                    fontWeight = FontWeight.Bold,
-                    text = "Account $accountNumber",
+            Text(
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Bold,
+                text = "Account ${uiState.account.accountNumber}",
+            )
+
+            Text("$uiState.account.fullAddress")
+
+            uiState.account.movedInAt?.let {
+                Text("Moved in at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}")
+            }
+
+            uiState.account.movedOutAt?.let {
+                Text("Moved out at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}")
+            }
+
+            uiState.account.electricityMeterPoints.forEach { meterPoint ->
+                ElectricityMeterPointCard(
+                    selectedMpan = uiState.selectedMpan,
+                    selectedMeterSerialNumber = uiState.selectedMeterSerialNumber,
+                    meterPoint = meterPoint,
+                    tariff = uiState.tariff,
+                    requestedLayout = uiState.requestedLayout,
                 )
-
-                Text("$fullAddress")
-
-                movedInAt?.let {
-                    Text("Moved in at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}")
-                }
-
-                movedOutAt?.let {
-                    Text("Moved out at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}")
-                }
-
-                electricityMeterPoints.forEach { meterPoint ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = dimension.grid_2),
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(all = dimension.grid_2),
-                            verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
-                        ) {
-                            Text(
-                                style = MaterialTheme.typography.titleLarge,
-                                text = "MPAN: ${meterPoint.mpan}",
-                            )
-
-                            HorizontalDivider(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = dimension.grid_1),
-                                color = MaterialTheme.colorScheme.inverseSurface,
-                            )
-
-                            val tariff = uiState.tariff
-                            if (tariff == null) {
-                                Text("Could not retrieve your traiff. retry?")
-                            } else {
-                                BoxWithConstraints(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(bottom = dimension.grid_2),
-                                ) {
-                                    if (uiState.requestedLayout is AccountScreenLayout.Compact) {
-                                        TariffLayoutCompact(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .wrapContentHeight(),
-                                            tariff = tariff,
-                                            currentAgreement = meterPoint.currentAgreement,
-                                        )
-                                    } else {
-                                        TariffLayoutWide(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .wrapContentHeight(),
-                                            tariff = tariff,
-                                            currentAgreement = meterPoint.currentAgreement,
-                                        )
-                                    }
-                                }
-                            }
-
-                            val meterSerialNumberTextStyle = if (uiState.requestedLayout is AccountScreenLayout.Compact) {
-                                MaterialTheme.typography.labelMedium
-                            } else {
-                                MaterialTheme.typography.titleMedium
-                            }
-
-                            meterPoint.meterSerialNumbers.forEach { meterSerialNumber ->
-                                MeterSerialNumberEntry(
-                                    selectedMpan = uiState.selectedMpan,
-                                    selectedMeterSerialNumber = uiState.selectedMeterSerialNumber,
-                                    meterSerialNumber = meterSerialNumber,
-                                    meterPoint = meterPoint,
-                                    meterSerialNumberTextStyle = meterSerialNumberTextStyle,
-                                )
-
-                                Spacer(modifier = Modifier.size(size = dimension.grid_1))
-                            }
-                        }
-                    }
-                }
             }
         }
 
