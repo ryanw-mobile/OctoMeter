@@ -10,16 +10,21 @@
 package com.rwmobi.kunigami.ui.destinations.account.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -28,8 +33,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.Account
@@ -47,10 +54,12 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.coin
+import kunigami.composeapp.generated.resources.dashboard
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import kotlin.time.Duration
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun AccountInformation(
     modifier: Modifier = Modifier,
@@ -61,6 +70,7 @@ internal fun AccountInformation(
 
     Column(
         modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_3),
     ) {
         if (uiState.account == null) {
             DefaultFailureRetryScreen(
@@ -73,135 +83,245 @@ internal fun AccountInformation(
                 onSecondaryButtonClicked = uiEvent.onClearCredentialButtonClicked,
             )
         } else {
+            Spacer(modifier = Modifier.height(height = dimension.grid_2))
+
             with(uiState.account) {
-                Spacer(modifier = Modifier.size(size = dimension.grid_2))
+                Text(
+                    style = MaterialTheme.typography.displaySmall,
+                    fontWeight = FontWeight.Bold,
+                    text = "Account $accountNumber",
+                )
 
                 Text("$fullAddress")
-
-                Spacer(modifier = Modifier.size(size = dimension.grid_2))
 
                 movedInAt?.let {
                     Text("Moved in at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}")
                 }
+
                 movedOutAt?.let {
                     Text("Moved out at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}")
                 }
 
-                Spacer(modifier = Modifier.size(size = dimension.grid_3))
-
-                HorizontalDivider(modifier = Modifier.fillMaxWidth())
-
-                Spacer(modifier = Modifier.size(size = dimension.grid_3))
-
-                Text(
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    text = "Account $accountNumber with ${electricityMeterPoints.size} electricity meter point(s):",
-                )
-
                 electricityMeterPoints.forEach { meterPoint ->
-
-                    Spacer(modifier = Modifier.size(size = dimension.grid_3))
-
-                    Text(
-                        style = MaterialTheme.typography.titleLarge,
-                        text = "MPAN ${meterPoint.mpan} with ${meterPoint.meterSerialNumbers.size} meter(s)",
-                    )
-
-                    Spacer(modifier = Modifier.size(size = dimension.grid_1))
-
-                    meterPoint.meterSerialNumbers.forEach {
-                        Row(
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = dimension.grid_2),
+                    ) {
+                        Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(shape = MaterialTheme.shapes.small)
-                                .background(color = MaterialTheme.colorScheme.surfaceContainer)
-                                .requiredHeight(height = dimension.minTouchTarget),
-                            verticalAlignment = Alignment.CenterVertically,
+                                .padding(all = dimension.grid_2),
+                            verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
                         ) {
                             Text(
+                                style = MaterialTheme.typography.titleLarge,
+                                text = "MPAN: ${meterPoint.mpan}",
+                            )
+
+                            HorizontalDivider(
                                 modifier = Modifier
-                                    .weight(1f)
-                                    .padding(horizontal = dimension.grid_2),
-                                overflow = TextOverflow.Ellipsis,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 1,
-                                text = it,
+                                    .fillMaxWidth()
+                                    .padding(vertical = dimension.grid_1),
+                                color = MaterialTheme.colorScheme.inverseSurface,
                             )
-                            Text(
-                                modifier = Modifier.padding(horizontal = dimension.grid_2)
-                                    .clip(shape = MaterialTheme.shapes.large)
-                                    .background(color = MaterialTheme.colorScheme.tertiaryContainer)
-                                    .padding(
-                                        horizontal = dimension.grid_2,
-                                        vertical = dimension.grid_1,
-                                    ),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                text = "SELECTED",
-                            )
+
+                            val tariff = uiState.tariff
+                            if (tariff == null) {
+                                Text("Could not retrieve your traiff. retry?")
+                            } else {
+                                BoxWithConstraints(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = dimension.grid_2),
+                                ) {
+                                    if (uiState.requestedLayout is AccountScreenLayout.Compact) {
+                                        Column(modifier = Modifier.fillMaxSize()) {
+                                            Text(
+                                                style = MaterialTheme.typography.titleMedium,
+                                                fontWeight = FontWeight.Bold,
+                                                text = tariff.displayName,
+                                            )
+                                            Text(
+                                                style = MaterialTheme.typography.titleSmall,
+                                                text = tariff.fullName,
+                                            )
+
+                                            Text(
+                                                style = MaterialTheme.typography.bodySmall,
+                                                text = tariff.code,
+                                            )
+
+                                            Spacer(modifier = Modifier.height(height = dimension.grid_2))
+
+                                            Row(
+                                                modifier = Modifier.fillMaxWidth(),
+                                            ) {
+                                                Column(
+                                                    modifier = Modifier.weight(1f).fillMaxHeight(),
+                                                    verticalArrangement = Arrangement.Center,
+                                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                                ) {
+                                                    Text(
+                                                        style = MaterialTheme.typography.displaySmall,
+                                                        text = tariff.vatInclusiveUnitRate.toString(),
+                                                    )
+
+                                                    Text(
+                                                        style = MaterialTheme.typography.bodyMedium,
+                                                        textAlign = TextAlign.Center,
+                                                        text = "Unit Rate\n(p/kWh)",
+                                                    )
+                                                }
+
+                                                Column(
+                                                    modifier = Modifier.weight(1f).fillMaxHeight(),
+                                                    verticalArrangement = Arrangement.Center,
+                                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                                ) {
+                                                    Text(
+                                                        style = MaterialTheme.typography.displaySmall,
+                                                        text = tariff.vatInclusiveStandingCharge.toString(),
+                                                    )
+
+                                                    Text(
+                                                        style = MaterialTheme.typography.bodyMedium,
+                                                        textAlign = TextAlign.Center,
+                                                        text = "Standing charge\n(p/day)",
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                        ) {
+                                            Column(
+                                                modifier = Modifier.weight(2f),
+                                            ) {
+                                                Text(
+                                                    style = MaterialTheme.typography.titleMedium,
+                                                    fontWeight = FontWeight.Bold,
+                                                    text = tariff.displayName,
+                                                )
+                                                Text(
+                                                    style = MaterialTheme.typography.titleSmall,
+                                                    text = tariff.fullName,
+                                                )
+
+                                                Text(
+                                                    style = MaterialTheme.typography.bodySmall,
+                                                    text = tariff.code,
+                                                )
+
+                                                Spacer(modifier = Modifier.height(height = dimension.grid_2))
+
+                                                Text(
+                                                    text = "From ${meterPoint.currentAgreement.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).date} to ${meterPoint.currentAgreement.validTo?.toLocalDateTime(TimeZone.currentSystemDefault())?.date}",
+                                                )
+                                            }
+
+                                            Column(
+                                                modifier = Modifier.weight(1f).fillMaxHeight(),
+                                                verticalArrangement = Arrangement.Center,
+                                                horizontalAlignment = Alignment.CenterHorizontally,
+                                            ) {
+                                                Text(
+                                                    style = MaterialTheme.typography.displaySmall,
+                                                    text = tariff.vatInclusiveUnitRate.toString(),
+                                                )
+
+                                                Text(
+                                                    style = MaterialTheme.typography.bodyMedium,
+                                                    textAlign = TextAlign.Center,
+                                                    text = "Unit Rate\n(p/kWh)",
+                                                )
+                                            }
+
+                                            Column(
+                                                modifier = Modifier.weight(1f).fillMaxHeight(),
+                                                verticalArrangement = Arrangement.Center,
+                                                horizontalAlignment = Alignment.CenterHorizontally,
+                                            ) {
+                                                Text(
+                                                    style = MaterialTheme.typography.displaySmall,
+                                                    text = tariff.vatInclusiveStandingCharge.toString(),
+                                                )
+
+                                                Text(
+                                                    style = MaterialTheme.typography.bodyMedium,
+                                                    textAlign = TextAlign.Center,
+                                                    text = "Standing charge\n(p/day)",
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            val meterSerialNumberFontStyle = if (uiState.requestedLayout is AccountScreenLayout.Compact) {
+                                MaterialTheme.typography.labelMedium
+                            } else {
+                                MaterialTheme.typography.titleMedium
+                            }
+                            meterPoint.meterSerialNumbers.forEach {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clip(shape = MaterialTheme.shapes.small)
+                                        .background(color = MaterialTheme.colorScheme.surfaceContainer)
+                                        .requiredHeight(height = dimension.minTouchTarget),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Image(
+                                        modifier = Modifier
+                                            .padding(horizontal = dimension.grid_2)
+                                            .size(size = dimension.grid_3),
+                                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurfaceVariant),
+                                        painter = painterResource(resource = Res.drawable.dashboard),
+                                        contentDescription = null,
+                                    )
+
+                                    Text(
+                                        modifier = Modifier.weight(1f),
+                                        overflow = TextOverflow.Ellipsis,
+                                        style = meterSerialNumberFontStyle,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        maxLines = 1,
+                                        text = "Serial: $it",
+                                    )
+
+                                    Text(
+                                        modifier = Modifier.padding(horizontal = dimension.grid_2)
+                                            .clip(shape = MaterialTheme.shapes.large)
+                                            .background(color = MaterialTheme.colorScheme.tertiaryContainer)
+                                            .padding(
+                                                horizontal = dimension.grid_2,
+                                                vertical = dimension.grid_1,
+                                            ),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                        text = "SELECTED",
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.size(size = dimension.grid_1))
+                            }
                         }
-
-                        Spacer(modifier = Modifier.size(size = dimension.grid_1))
-                    }
-
-                    Spacer(modifier = Modifier.size(size = dimension.grid_1))
-
-                    val tariff = uiState.tariff
-                    if (tariff != null) {
-                        Text(
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            text = "Your tariff:",
-                        )
-                        Text(
-                            style = MaterialTheme.typography.titleLarge,
-                            text = tariff?.displayName ?: "",
-                        )
-                        Text(
-                            style = MaterialTheme.typography.titleMedium,
-                            text = tariff?.fullName ?: "",
-                        )
-
-                        Text(
-                            style = MaterialTheme.typography.bodyMedium,
-                            text = "(${tariff?.code})",
-                        )
-
-                        Spacer(modifier = Modifier.size(size = dimension.grid_2))
-
-                        Text(
-                            text = "From ${meterPoint.currentAgreement.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).date} to ${meterPoint.currentAgreement.validTo?.toLocalDateTime(TimeZone.currentSystemDefault())?.date}",
-                        )
-                        Text(
-                            style = MaterialTheme.typography.bodyMedium,
-                            text = "Unit Rate: ${tariff?.vatInclusiveUnitRate ?: ""} p/kWh ",
-                        )
-                        Text(
-                            style = MaterialTheme.typography.bodyMedium,
-                            text = "Standing charge: £${tariff?.vatInclusiveStandingCharge ?: ""} p/day",
-                        )
                     }
                 }
             }
         }
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_3))
-
         BoxWithConstraints {
             if (uiState.requestedLayout == AccountScreenLayout.Compact) {
                 ClearCredentialSectionCompact(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(all = dimension.grid_4),
+                    modifier = Modifier.fillMaxWidth(),
                     onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
                 )
             } else {
                 ClearCredentialSectionWide(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(all = dimension.grid_4),
+                    modifier = Modifier.fillMaxWidth(),
                     onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
                 )
             }
@@ -221,6 +341,7 @@ private fun AccountInformationPreview() {
                 uiState = AccountUIState(
                     isLoading = false,
                     isDemoMode = false,
+                    requestedLayout = AccountScreenLayout.ConstraintedWide,
                     account = Account(
                         id = 8638,
                         accountNumber = "A-1234A1B1",

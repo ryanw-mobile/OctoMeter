@@ -128,7 +128,6 @@ internal fun CredentialsInputForm(
     }
 }
 
-
 @Preview
 @Composable
 private fun Preview() {
