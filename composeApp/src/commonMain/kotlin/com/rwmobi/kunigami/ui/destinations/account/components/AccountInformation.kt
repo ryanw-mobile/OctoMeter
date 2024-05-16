@@ -10,33 +10,25 @@
 package com.rwmobi.kunigami.ui.destinations.account.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Agreement
@@ -53,7 +45,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.coin
-import kunigami.composeapp.generated.resources.dashboard
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import kotlin.time.Duration
@@ -154,51 +145,20 @@ internal fun AccountInformation(
                                 }
                             }
 
-                            val meterSerialNumberFontStyle = if (uiState.requestedLayout is AccountScreenLayout.Compact) {
+                            val meterSerialNumberTextStyle = if (uiState.requestedLayout is AccountScreenLayout.Compact) {
                                 MaterialTheme.typography.labelMedium
                             } else {
                                 MaterialTheme.typography.titleMedium
                             }
-                            meterPoint.meterSerialNumbers.forEach {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clip(shape = MaterialTheme.shapes.small)
-                                        .background(color = MaterialTheme.colorScheme.surfaceContainer)
-                                        .requiredHeight(height = dimension.minTouchTarget),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Image(
-                                        modifier = Modifier
-                                            .padding(horizontal = dimension.grid_2)
-                                            .size(size = dimension.grid_3),
-                                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurfaceVariant),
-                                        painter = painterResource(resource = Res.drawable.dashboard),
-                                        contentDescription = null,
-                                    )
 
-                                    Text(
-                                        modifier = Modifier.weight(1f),
-                                        overflow = TextOverflow.Ellipsis,
-                                        style = meterSerialNumberFontStyle,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        maxLines = 1,
-                                        text = "Serial: $it",
-                                    )
-
-                                    Text(
-                                        modifier = Modifier.padding(horizontal = dimension.grid_2)
-                                            .clip(shape = MaterialTheme.shapes.large)
-                                            .background(color = MaterialTheme.colorScheme.tertiaryContainer)
-                                            .padding(
-                                                horizontal = dimension.grid_2,
-                                                vertical = dimension.grid_1,
-                                            ),
-                                        style = MaterialTheme.typography.labelMedium,
-                                        color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                        text = "SELECTED",
-                                    )
-                                }
+                            meterPoint.meterSerialNumbers.forEach { meterSerialNumber ->
+                                MeterSerialNumberEntry(
+                                    selectedMpan = uiState.selectedMpan,
+                                    selectedMeterSerialNumber = uiState.selectedMeterSerialNumber,
+                                    meterSerialNumber = meterSerialNumber,
+                                    meterPoint = meterPoint,
+                                    meterSerialNumberTextStyle = meterSerialNumberTextStyle,
+                                )
 
                                 Spacer(modifier = Modifier.size(size = dimension.grid_1))
                             }
@@ -236,7 +196,9 @@ private fun AccountInformationPreview() {
                 uiState = AccountUIState(
                     isLoading = false,
                     isDemoMode = false,
-                    requestedLayout = AccountScreenLayout.WideWrapped,
+                    requestedLayout = AccountScreenLayout.Wide,
+                    selectedMpan = "1200000345678",
+                    selectedMeterSerialNumber = "11A1234567",
                     account = Account(
                         id = 8638,
                         accountNumber = "A-1234A1B1",
@@ -246,7 +208,16 @@ private fun AccountInformationPreview() {
                         electricityMeterPoints = listOf(
                             ElectricityMeterPoint(
                                 mpan = "1200000345678",
-                                meterSerialNumbers = listOf("11A1234567"),
+                                meterSerialNumbers = listOf("11A1234567", "11A12345A7"),
+                                currentAgreement = Agreement(
+                                    tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
+                                    validFrom = Clock.System.now(),
+                                    validTo = Clock.System.now().plus(Duration.parse("365d")),
+                                ),
+                            ),
+                            ElectricityMeterPoint(
+                                mpan = "1200000345670",
+                                meterSerialNumbers = listOf("11A1234560"),
                                 currentAgreement = Agreement(
                                     tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
                                     validFrom = Clock.System.now(),
