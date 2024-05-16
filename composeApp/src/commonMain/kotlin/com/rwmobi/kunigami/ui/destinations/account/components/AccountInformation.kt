@@ -36,7 +36,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.Account
@@ -136,125 +135,21 @@ internal fun AccountInformation(
                                         .padding(bottom = dimension.grid_2),
                                 ) {
                                     if (uiState.requestedLayout is AccountScreenLayout.Compact) {
-                                        Column(modifier = Modifier.fillMaxSize()) {
-                                            Text(
-                                                style = MaterialTheme.typography.titleMedium,
-                                                fontWeight = FontWeight.Bold,
-                                                text = tariff.displayName,
-                                            )
-                                            Text(
-                                                style = MaterialTheme.typography.titleSmall,
-                                                text = tariff.fullName,
-                                            )
-
-                                            Text(
-                                                style = MaterialTheme.typography.bodySmall,
-                                                text = tariff.code,
-                                            )
-
-                                            Spacer(modifier = Modifier.height(height = dimension.grid_2))
-
-                                            Row(
-                                                modifier = Modifier.fillMaxWidth(),
-                                            ) {
-                                                Column(
-                                                    modifier = Modifier.weight(1f).fillMaxHeight(),
-                                                    verticalArrangement = Arrangement.Center,
-                                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                                ) {
-                                                    Text(
-                                                        style = MaterialTheme.typography.displaySmall,
-                                                        text = tariff.vatInclusiveUnitRate.toString(),
-                                                    )
-
-                                                    Text(
-                                                        style = MaterialTheme.typography.bodyMedium,
-                                                        textAlign = TextAlign.Center,
-                                                        text = "Unit Rate\n(p/kWh)",
-                                                    )
-                                                }
-
-                                                Column(
-                                                    modifier = Modifier.weight(1f).fillMaxHeight(),
-                                                    verticalArrangement = Arrangement.Center,
-                                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                                ) {
-                                                    Text(
-                                                        style = MaterialTheme.typography.displaySmall,
-                                                        text = tariff.vatInclusiveStandingCharge.toString(),
-                                                    )
-
-                                                    Text(
-                                                        style = MaterialTheme.typography.bodyMedium,
-                                                        textAlign = TextAlign.Center,
-                                                        text = "Standing charge\n(p/day)",
-                                                    )
-                                                }
-                                            }
-                                        }
+                                        TariffLayoutCompact(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .wrapContentHeight(),
+                                            tariff = tariff,
+                                            currentAgreement = meterPoint.currentAgreement,
+                                        )
                                     } else {
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                        ) {
-                                            Column(
-                                                modifier = Modifier.weight(2f),
-                                            ) {
-                                                Text(
-                                                    style = MaterialTheme.typography.titleMedium,
-                                                    fontWeight = FontWeight.Bold,
-                                                    text = tariff.displayName,
-                                                )
-                                                Text(
-                                                    style = MaterialTheme.typography.titleSmall,
-                                                    text = tariff.fullName,
-                                                )
-
-                                                Text(
-                                                    style = MaterialTheme.typography.bodySmall,
-                                                    text = tariff.code,
-                                                )
-
-                                                Spacer(modifier = Modifier.height(height = dimension.grid_2))
-
-                                                Text(
-                                                    text = "From ${meterPoint.currentAgreement.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).date} to ${meterPoint.currentAgreement.validTo?.toLocalDateTime(TimeZone.currentSystemDefault())?.date}",
-                                                )
-                                            }
-
-                                            Column(
-                                                modifier = Modifier.weight(1f).fillMaxHeight(),
-                                                verticalArrangement = Arrangement.Center,
-                                                horizontalAlignment = Alignment.CenterHorizontally,
-                                            ) {
-                                                Text(
-                                                    style = MaterialTheme.typography.displaySmall,
-                                                    text = tariff.vatInclusiveUnitRate.toString(),
-                                                )
-
-                                                Text(
-                                                    style = MaterialTheme.typography.bodyMedium,
-                                                    textAlign = TextAlign.Center,
-                                                    text = "Unit Rate\n(p/kWh)",
-                                                )
-                                            }
-
-                                            Column(
-                                                modifier = Modifier.weight(1f).fillMaxHeight(),
-                                                verticalArrangement = Arrangement.Center,
-                                                horizontalAlignment = Alignment.CenterHorizontally,
-                                            ) {
-                                                Text(
-                                                    style = MaterialTheme.typography.displaySmall,
-                                                    text = tariff.vatInclusiveStandingCharge.toString(),
-                                                )
-
-                                                Text(
-                                                    style = MaterialTheme.typography.bodyMedium,
-                                                    textAlign = TextAlign.Center,
-                                                    text = "Standing charge\n(p/day)",
-                                                )
-                                            }
-                                        }
+                                        TariffLayoutWide(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .wrapContentHeight(),
+                                            tariff = tariff,
+                                            currentAgreement = meterPoint.currentAgreement,
+                                        )
                                     }
                                 }
                             }
