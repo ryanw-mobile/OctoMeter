@@ -23,8 +23,10 @@ ktlint = "12.1.1"
 lifecycleRuntimeCompose = "2.8.0"
 material3WindowSizeClassMultiplatform = "0.5.0"
 mockk = "1.13.11"
+multiplatformSettings = "1.1.1"
 navigationCompose = "2.7.0-alpha06"
 buildconfig = "5.3.5"
+securityCrypto = "1.1.0-alpha03"
 
 # App configurations, not dependencies
 versionCode = "1"
@@ -45,6 +47,7 @@ androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-espresso-core" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
@@ -68,6 +71,7 @@ koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = 
 koin-jvm = { group = "io.insert-koin", name = "koin-core-jvm", version.ref = "koin" }
 koin-iosx64 = { group = "io.insert-koin", name = "koin-core-iosx64", version.ref = "koin" }
 koin-iosarm64 = { group = "io.insert-koin", name = "koin-core-iosarm64", version.ref = "koin" }
+multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 themedetector = { group = "com.github.Dansoftowner", name = "jSystemThemeDetector", version.ref = "jSystemThemeDetector" }
