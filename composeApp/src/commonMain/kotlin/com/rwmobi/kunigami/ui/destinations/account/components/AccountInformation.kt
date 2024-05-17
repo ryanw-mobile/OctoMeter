@@ -114,6 +114,11 @@ internal fun AccountInformation(
             }
         }
 
+        UpdateAPIKeyCard(
+            modifier = Modifier.fillMaxWidth(),
+            onUpdateAPIKeyClicked = uiEvent.onUpdateApiKeyClicked,
+        )
+
         BoxWithConstraints {
             if (uiState.requestedLayout == AccountScreenLayout.Compact) {
                 ClearCredentialSectionCompact(
@@ -183,6 +188,7 @@ private fun AccountInformationPreview() {
                 ),
                 uiEvent = AccountUIEvent(
                     onClearCredentialButtonClicked = {},
+                    onUpdateApiKeyClicked = {},
                     onSubmitCredentials = {},
                     onRefresh = {},
                     onErrorShown = {},

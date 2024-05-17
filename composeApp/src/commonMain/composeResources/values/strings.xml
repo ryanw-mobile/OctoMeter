@@ -15,6 +15,7 @@
     <string name="navigation_account">Account</string>
     <string name="ok">OK</string>
     <string name="retry">RETRY</string>
+    <string name="update">UPDATE</string>
 
     <!-- Product Features -->
     <string name="product_feature_variable">Variable</string>
@@ -29,6 +30,8 @@
     <string name="account_clear_credential_description">Removing your API token and any account-specific data from local storage. Under demo mode, the application will utilise simulated local data to replicate authenticated access. Additionally, it will default to retail region A when retrieving tariffs.</string>
     <string name="account_clear_credential_button_cta">Clear</string>
     <string name="account_version_api_disclaimer">Version %1$s (Build %2$d)\nThe APIs are provided by Octopus Energy Ltd. Usage subject to their terms of service.</string>
+
+    <string name="account_update_api_key">Update API Key</string>
 
     <string name="account_mpan">MPAN: %1$s</string>
     <string name="account_error_no_tariff">Unable to retrieve your tariff.</string>
