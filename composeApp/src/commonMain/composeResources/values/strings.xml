@@ -63,6 +63,9 @@
     <string name="onboarding_placeholder_account">A-12345678</string>
     <string name="onboarding_button_connect">Connect</string>
 
+    <!-- Desktop About dialog -->
+    <string name="about_app_title">About OctoMeter</string>
+    <string name="about_app_description">OctoMeter version %1$s (Build %2$s)\nMake the smartest use of your electricity\n\n%3$s</string>
     <!-- Content Descriptions -->
     <string name="content_description_navigation_bar">Navigation Bar</string>
     <string name="content_description_navigation_rail">Navigation Rail</string>
