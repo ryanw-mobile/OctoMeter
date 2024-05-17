@@ -13,15 +13,21 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -29,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Agreement
 import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
+import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.components.DefaultFailureRetryScreen
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIEvent
@@ -39,9 +46,15 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.account_moved_in
+import kunigami.composeapp.generated.resources.account_moved_out
+import kunigami.composeapp.generated.resources.account_number
+import kunigami.composeapp.generated.resources.account_unknown_installation_address
+import kunigami.composeapp.generated.resources.bulb
 import kunigami.composeapp.generated.resources.coin
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration
 
 @OptIn(ExperimentalResourceApi::class)
@@ -70,11 +83,26 @@ internal fun AccountInformation(
         } else {
             Spacer(modifier = Modifier.height(height = dimension.grid_2))
 
-            Text(
-                style = MaterialTheme.typography.displaySmall,
-                fontWeight = FontWeight.Bold,
-                text = "Account ${uiState.account.accountNumber}",
-            )
+            Row(
+                modifier = Modifier.height(IntrinsicSize.Min),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .aspectRatio(1f)
+                        .padding(end = dimension.grid_2),
+                    tint = MaterialTheme.colorScheme.secondary,
+                    painter = painterResource(resource = Res.drawable.bulb),
+                    contentDescription = null,
+                )
+
+                Text(
+                    style = MaterialTheme.typography.displaySmall,
+                    fontWeight = FontWeight.Bold,
+                    text = stringResource(resource = Res.string.account_number, uiState.account.accountNumber),
+                )
+            }
 
             uiState.account.fullAddress?.let {
                 Text(
@@ -84,21 +112,21 @@ internal fun AccountInformation(
             } ?: run {
                 Text(
                     style = MaterialTheme.typography.bodyLarge,
-                    text = "Unknown installation address",
+                    text = stringResource(resource = Res.string.account_unknown_installation_address),
                 )
             }
 
             uiState.account.movedInAt?.let {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = "Moved in at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}",
+                    text = stringResource(resource = Res.string.account_moved_in, it.toLocalDateTime(TimeZone.currentSystemDefault()).date),
                 )
             }
 
             uiState.account.movedOutAt?.let {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = "Moved out at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}",
+                    text = stringResource(resource = Res.string.account_moved_out, it.toLocalDateTime(TimeZone.currentSystemDefault()).date),
                 )
             }
 
@@ -139,7 +167,7 @@ internal fun AccountInformation(
 
 @Preview
 @Composable
-private fun AccountInformationPreview() {
+private fun Preview() {
     AppTheme {
         Surface {
             AccountInformation(
@@ -147,10 +175,11 @@ private fun AccountInformationPreview() {
                 uiState = AccountUIState(
                     isLoading = false,
                     isDemoMode = false,
-                    requestedLayout = AccountScreenLayout.Wide,
+                    requestedLayout = AccountScreenLayout.WideWrapped,
                     selectedMpan = "1200000345678",
                     selectedMeterSerialNumber = "11A1234567",
-                    account = Account(
+                    account = // null,
+                    Account(
                         id = 8638,
                         accountNumber = "A-1234A1B1",
                         fullAddress = "Address line 1\nAddress line 2\nAddress line 3\nAddress line 4",

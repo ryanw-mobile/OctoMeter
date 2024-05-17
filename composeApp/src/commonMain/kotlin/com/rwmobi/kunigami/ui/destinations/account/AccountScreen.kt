@@ -154,6 +154,7 @@ private fun AccountScreenPreview() {
             ),
             uiEvent = AccountUIEvent(
                 onClearCredentialButtonClicked = {},
+                onUpdateApiKeyClicked = {},
                 onSubmitCredentials = {},
                 onRefresh = {},
                 onErrorShown = {},

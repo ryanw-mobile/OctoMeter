@@ -31,6 +31,10 @@
     <string name="account_clear_credential_button_cta">Clear</string>
     <string name="account_version_api_disclaimer">Version %1$s (Build %2$d)\nThe APIs are provided by Octopus Energy Ltd. Usage subject to their terms of service.</string>
 
+    <string name="account_number">Account %1$s</string>
+    <string name="account_unknown_installation_address">Unknown installation address</string>
+    <string name="account_moved_in">Moved in: %1$s</string>
+    <string name="account_moved_out">Moved out: %1$s</string>
     <string name="account_update_api_key">Update API Key</string>
 
     <string name="account_mpan">MPAN: %1$s</string>
