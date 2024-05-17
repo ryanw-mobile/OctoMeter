@@ -27,7 +27,7 @@ val repositoryModule = module {
     factory<UserPreferencesRepository> {
         OctopusUserPreferencesRepository(
             preferencesStore = get(),
-            dispatcher = get(named("DefaultDispatcher")),
+            dispatcher = get(named("IoDispatcher")),
         )
     }
 }

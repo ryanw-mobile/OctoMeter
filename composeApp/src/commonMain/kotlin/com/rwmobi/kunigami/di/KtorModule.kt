@@ -41,7 +41,7 @@ val ktorModule = module {
         ProductsEndpoint(
             baseUrl = BASE_URL,
             httpClient = get(),
-            dispatcher = get(named("IODispatcher")),
+            dispatcher = get(named("IoDispatcher")),
         )
     }
 
@@ -49,7 +49,7 @@ val ktorModule = module {
         ElectricityMeterPointsEndpoint(
             baseUrl = BASE_URL,
             httpClient = get(),
-            dispatcher = get(named("IODispatcher")),
+            dispatcher = get(named("IoDispatcher")),
         )
     }
 
@@ -57,7 +57,7 @@ val ktorModule = module {
         AccountEndpoint(
             baseUrl = BASE_URL,
             httpClient = get(),
-            dispatcher = get(named("IODispatcher")),
+            dispatcher = get(named("IoDispatcher")),
         )
     }
 }

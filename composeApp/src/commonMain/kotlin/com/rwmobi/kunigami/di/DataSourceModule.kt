@@ -16,7 +16,7 @@ val dataSourceModule = module {
     factory<PreferencesStore> {
         MultiplatformPreferencesStore(
             settings = get(),
-            dispatcher = get(named("IODispatcher")),
+            dispatcher = get(named("IoDispatcher")),
         )
     }
 }
