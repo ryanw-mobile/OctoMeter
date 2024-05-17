@@ -21,5 +21,12 @@ and hoping to have something to show in June 2024.
 Learn more
 about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
 
+## Data Security and Privacy
+First thing first: This app can run under the demo mode without requiring any credentials. 
+
+To pull real smart meter data from your Octopus Energy account, you need to generate an API key for your account at [https://octopus.energy/dashboard/new/accounts/personal-details/api-access](https://octopus.energy/dashboard/new/accounts/personal-details/api-access). This app never asks for your Octopus customer account password, and you can always generate a new API key to invalidate the old keys. 
+
+This app stores your API key, account number, MPAN and meter serial number using `EncryptedSharedPreferences` on Android, or the Keychain on iOS. On desktop, these credentials are currently unencrypted, but expected to do so when the library we use supports it.
+
 ## Switch to Octopus!
 Switch to Octopus Energy using [this link](https://share.octopus.energy/best-shell-168), both of us will get £50 (or £100 for business).

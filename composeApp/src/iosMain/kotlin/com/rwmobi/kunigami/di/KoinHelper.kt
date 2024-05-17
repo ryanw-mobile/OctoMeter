@@ -20,6 +20,7 @@ fun initKoin() {
                 userCaseModule,
                 ktorModule,
                 repositoryModule,
+                dataSourceModule,
             )
         }
     }.inWholeMilliseconds

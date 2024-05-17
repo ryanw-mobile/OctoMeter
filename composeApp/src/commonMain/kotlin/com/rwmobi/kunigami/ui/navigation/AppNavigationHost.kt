@@ -45,9 +45,9 @@ fun AppNavigationHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = AppNavigationItem.Usage.name,
+        startDestination = AppNavigationItem.USAGE.name,
     ) {
-        composable(route = AppNavigationItem.Usage.name) {
+        composable(route = AppNavigationItem.USAGE.name) {
             val viewModel: UsageViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
             viewModel.notifyScreenSizeChanged(screenSizeInfo = screenSizeInfo)
@@ -63,7 +63,7 @@ fun AppNavigationHost(
             )
         }
 
-        composable(route = AppNavigationItem.Agile.name) {
+        composable(route = AppNavigationItem.AGILE.name) {
             val viewModel: AgileViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
             viewModel.notifyScreenSizeChanged(screenSizeInfo = screenSizeInfo)
@@ -79,7 +79,7 @@ fun AppNavigationHost(
             )
         }
 
-        composable(route = AppNavigationItem.Tariffs.name) {
+        composable(route = AppNavigationItem.TARIFFS.name) {
             val viewModel: TariffsViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
 
@@ -95,7 +95,7 @@ fun AppNavigationHost(
             )
         }
 
-        composable(route = AppNavigationItem.Account.name) {
+        composable(route = AppNavigationItem.ACCOUNT.name) {
             val viewModel: AccountViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
             viewModel.notifyWindowSizeClassChanged(windowSizeClass = windowSizeClass)

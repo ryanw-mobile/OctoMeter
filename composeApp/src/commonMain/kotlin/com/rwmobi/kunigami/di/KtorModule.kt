@@ -22,7 +22,6 @@ const val BASE_URL = "https://api.octopus.energy"
 
 @OptIn(ExperimentalSerializationApi::class)
 val ktorModule = module {
-    single { getKtorEngine() }
     single {
         HttpClient(engine = get()) {
             install(ContentNegotiation) {
@@ -42,7 +41,7 @@ val ktorModule = module {
         ProductsEndpoint(
             baseUrl = BASE_URL,
             httpClient = get(),
-            dispatcher = get(named("IODispatcher")),
+            dispatcher = get(named("IoDispatcher")),
         )
     }
 
@@ -50,7 +49,7 @@ val ktorModule = module {
         ElectricityMeterPointsEndpoint(
             baseUrl = BASE_URL,
             httpClient = get(),
-            dispatcher = get(named("IODispatcher")),
+            dispatcher = get(named("IoDispatcher")),
         )
     }
 
@@ -58,7 +57,7 @@ val ktorModule = module {
         AccountEndpoint(
             baseUrl = BASE_URL,
             httpClient = get(),
-            dispatcher = get(named("IODispatcher")),
+            dispatcher = get(named("IoDispatcher")),
         )
     }
 }

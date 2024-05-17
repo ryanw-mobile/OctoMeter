@@ -65,6 +65,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.core.splashscreen)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.androidx.security.crypto)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.koin.android)
         }
@@ -87,6 +88,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.koin.core)
             implementation(libs.koalaplot.core)
+            implementation(libs.multiplatform.settings)
         }
         desktopMain.dependencies {
             implementation("org.jetbrains.skiko:skiko-awt-runtime-$skikoTarget:$skikoVersion")
@@ -293,6 +295,7 @@ tasks.named("preBuild") {
 
 buildConfig {
     packageName("composeapp.kunigami")
+    buildConfigField("PACKAGE_NAME", provider { "com.rwmobi.kunigami" })
     buildConfigField("VERSION_NAME", provider { libs.versions.versionName.get() })
     buildConfigField("VERSION_CODE", provider { libs.versions.versionCode.get() })
     buildConfigField("GITHUB_LINK", provider { "https://github.com/ryanw-mobile/OctoMeter" })
@@ -306,7 +309,8 @@ koverReport {
             // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
             classes(
                 listOf(
-                    "com.rwmobi.kunigami.KunigamiApplication",
+                    "com.rwmobi.kunigami.KunigamiApplication*",
+                    "com.rwmobi.kunigami.MainActivity*",
                     "com.rwmobi.kunigami.*.*MembersInjector",
                     "com.rwmobi.kunigami.*.*Factory",
                     "com.rwmobi.kunigami.*.*HiltModules*",
@@ -317,6 +321,7 @@ koverReport {
                     "com.rwmobi.kunigami.Hilt*",
                     "com.rwmobi.kunigami.*.Hilt_*",
                     "com.rwmobi.kunigami.ComposableSingletons*",
+                    "com.rwmobi.kunigami.App*",
                     "*Fragment",
                     "*Fragment\$*",
                     "*Activity",
@@ -338,6 +343,7 @@ koverReport {
                     "androidx",
                     "dagger.hilt.internal.aggregatedroot.codegen",
                     "hilt_aggregated_deps",
+                    "kunigami.composeapp.generated.resources",
                 ),
             )
         }

@@ -12,6 +12,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.rwmobi.kunigami.di.appModule
+import com.rwmobi.kunigami.di.dataSourceModule
 import com.rwmobi.kunigami.di.dispatcherModule
 import com.rwmobi.kunigami.di.ktorModule
 import com.rwmobi.kunigami.di.repositoryModule
@@ -44,6 +45,7 @@ fun main() {
                 userCaseModule,
                 ktorModule,
                 repositoryModule,
+                dataSourceModule,
             )
         }
 

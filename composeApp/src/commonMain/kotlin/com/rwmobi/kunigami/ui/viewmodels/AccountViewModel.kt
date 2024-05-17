@@ -12,7 +12,8 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
+import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
@@ -27,7 +28,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AccountViewModel(
-    private val octopusRepository: RestApiRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
     private val getUserAccountUseCase: GetUserAccountUseCase,
     private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
@@ -76,8 +77,18 @@ class AccountViewModel(
                     }
                 },
                 onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: "Error when retrieving tariffs")
-                    Logger.e("AccountViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                    if (throwable is IncompleteCredentialsException) {
+                        _uiState.update { currentUiState ->
+                            currentUiState.copy(
+                                isDemoMode = true,
+                                isLoading = false,
+                            )
+                        }
+                    } else {
+                        updateUIForError(message = throwable.message ?: "Error when retrieving tariffs")
+                        Logger.e("AccountViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                    }
+                    return@launch
                 },
             )
 
@@ -106,20 +117,15 @@ class AccountViewModel(
     }
 
     fun clearCredentials() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isLoading = false,
-                isDemoMode = true,
-            )
+        viewModelScope.launch {
+            userPreferencesRepository.clearCredentials()
+            refresh()
         }
     }
 
     fun submitCredentials() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isLoading = false,
-                isDemoMode = false,
-            )
+        viewModelScope.launch {
+            refresh()
         }
     }
 
