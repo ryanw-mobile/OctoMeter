@@ -55,3 +55,5 @@ fun Instant.toLocalHourString(): String {
     val currentLocalDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
     return currentLocalDateTime.hour.toString().padStart(2, '0')
 }
+
+expect fun Instant.formatDate(): String

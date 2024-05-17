@@ -164,6 +164,7 @@ private fun OnboardingPreview() {
                 ),
                 uiEvent = AccountUIEvent(
                     onClearCredentialButtonClicked = {},
+                    onUpdateApiKeyClicked = {},
                     onSubmitCredentials = {},
                     onRefresh = {},
                     onErrorShown = {},

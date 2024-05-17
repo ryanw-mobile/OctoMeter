@@ -105,6 +105,7 @@ fun AppNavigationHost(
                 uiState = uiState,
                 uiEvent = AccountUIEvent(
                     onRefresh = viewModel::refresh,
+                    onUpdateApiKeyClicked = {}, // TODO: Dialog
                     onClearCredentialButtonClicked = viewModel::clearCredentials,
                     onSubmitCredentials = viewModel::submitCredentials,
                     onErrorShown = viewModel::errorShown,
