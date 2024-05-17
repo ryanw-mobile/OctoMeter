@@ -12,10 +12,8 @@ package com.rwmobi.kunigami.ui.destinations.account.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
@@ -41,6 +39,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun ElectricityMeterPointCard(
+    modifier: Modifier = Modifier,
     selectedMpan: String?,
     selectedMeterSerialNumber: String?,
     meterPoint: ElectricityMeterPoint,
@@ -50,11 +49,7 @@ internal fun ElectricityMeterPointCard(
 ) {
     val dimension = LocalDensity.current.getDimension()
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = dimension.grid_2),
-    ) {
+    Card(modifier = modifier) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -122,17 +117,20 @@ internal fun ElectricityMeterPointCard(
                 MaterialTheme.typography.titleMedium
             }
 
-            meterPoint.meterSerialNumbers.forEach { meterSerialNumber ->
-                MeterSerialNumberEntry(
-                    selectedMpan = selectedMpan,
-                    selectedMeterSerialNumber = selectedMeterSerialNumber,
-                    mpan = meterPoint.mpan,
-                    meterSerialNumber = meterSerialNumber,
-                    meterSerialNumberTextStyle = meterSerialNumberTextStyle,
-                    onSelectMeterSerialNumber = {},
-                )
-
-                Spacer(modifier = Modifier.size(size = dimension.grid_1))
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+            ) {
+                meterPoint.meterSerialNumbers.forEach { meterSerialNumber ->
+                    MeterSerialNumberEntry(
+                        selectedMpan = selectedMpan,
+                        selectedMeterSerialNumber = selectedMeterSerialNumber,
+                        mpan = meterPoint.mpan,
+                        meterSerialNumber = meterSerialNumber,
+                        meterSerialNumberTextStyle = meterSerialNumberTextStyle,
+                        onMeterSerialNumberSelected = {},
+                    )
+                }
             }
         }
     }

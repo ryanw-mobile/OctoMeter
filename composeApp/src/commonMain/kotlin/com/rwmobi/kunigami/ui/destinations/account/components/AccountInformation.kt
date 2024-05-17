@@ -134,6 +134,7 @@ internal fun AccountInformation(
 
             uiState.account.electricityMeterPoints.forEach { meterPoint ->
                 ElectricityMeterPointCard(
+                    modifier = Modifier.fillMaxWidth(),
                     selectedMpan = uiState.selectedMpan,
                     selectedMeterSerialNumber = uiState.selectedMeterSerialNumber,
                     meterPoint = meterPoint,

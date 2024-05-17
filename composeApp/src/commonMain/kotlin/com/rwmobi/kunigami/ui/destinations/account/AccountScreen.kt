@@ -76,7 +76,7 @@ fun AccountScreen(
                             }
 
                             Onboarding(
-                                modifier = widthConstraintModifier.padding(all = dimension.grid_4),
+                                modifier = widthConstraintModifier.padding(all = dimension.grid_2),
                                 uiState = uiState,
                                 uiEvent = uiEvent,
                             )
@@ -97,7 +97,7 @@ fun AccountScreen(
                             }
 
                             AccountInformation(
-                                modifier = widthConstraintModifier.padding(horizontal = dimension.grid_4),
+                                modifier = widthConstraintModifier.padding(horizontal = dimension.grid_2),
                                 uiState = uiState,
                                 uiEvent = uiEvent,
                             )
@@ -119,7 +119,7 @@ fun AccountScreen(
 
 @Composable
 @Preview
-private fun AccountScreenPreview() {
+private fun Preview() {
     AppTheme {
         AccountScreen(
             uiState = AccountUIState(

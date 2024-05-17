@@ -14,8 +14,8 @@
     <string name="navigation_agile">Agile</string>
     <string name="navigation_account">Account</string>
     <string name="ok">OK</string>
-    <string name="retry">RETRY</string>
-    <string name="update">UPDATE</string>
+    <string name="retry">Retry</string>
+    <string name="update">Update</string>
 
     <!-- Product Features -->
     <string name="product_feature_variable">Variable</string>
