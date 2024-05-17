@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Agreement
 import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
-import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.components.DefaultFailureRetryScreen
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIEvent
@@ -77,14 +76,30 @@ internal fun AccountInformation(
                 text = "Account ${uiState.account.accountNumber}",
             )
 
-            Text("$uiState.account.fullAddress")
+            uiState.account.fullAddress?.let {
+                Text(
+                    style = MaterialTheme.typography.bodyLarge,
+                    text = it,
+                )
+            } ?: run {
+                Text(
+                    style = MaterialTheme.typography.bodyLarge,
+                    text = "Unknown installation address",
+                )
+            }
 
             uiState.account.movedInAt?.let {
-                Text("Moved in at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}")
+                Text(
+                    style = MaterialTheme.typography.bodyMedium,
+                    text = "Moved in at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}",
+                )
             }
 
             uiState.account.movedOutAt?.let {
-                Text("Moved out at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}")
+                Text(
+                    style = MaterialTheme.typography.bodyMedium,
+                    text = "Moved out at: ${it.toLocalDateTime(TimeZone.currentSystemDefault()).date}",
+                )
             }
 
             uiState.account.electricityMeterPoints.forEach { meterPoint ->
@@ -94,6 +109,7 @@ internal fun AccountInformation(
                     meterPoint = meterPoint,
                     tariff = uiState.tariff,
                     requestedLayout = uiState.requestedLayout,
+                    onReloadTariff = uiEvent.onRefresh,
                 )
             }
         }

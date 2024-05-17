@@ -5,6 +5,8 @@
  *
  */
 
+@file:OptIn(ExperimentalResourceApi::class)
+
 package com.rwmobi.kunigami.ui.destinations.account.components
 
 import androidx.compose.foundation.layout.Arrangement
@@ -20,12 +22,22 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.ui.components.IconTextButton
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.account_error_no_tariff
+import kunigami.composeapp.generated.resources.account_mpan
+import kunigami.composeapp.generated.resources.reload
+import kunigami.composeapp.generated.resources.retry
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun ElectricityMeterPointCard(
@@ -34,6 +46,7 @@ internal fun ElectricityMeterPointCard(
     meterPoint: ElectricityMeterPoint,
     tariff: Tariff?,
     requestedLayout: AccountScreenLayout,
+    onReloadTariff: () -> Unit,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -50,7 +63,7 @@ internal fun ElectricityMeterPointCard(
         ) {
             Text(
                 style = MaterialTheme.typography.titleLarge,
-                text = "MPAN: ${meterPoint.mpan}",
+                text = stringResource(resource = Res.string.account_mpan, meterPoint.mpan),
             )
 
             HorizontalDivider(
@@ -61,7 +74,22 @@ internal fun ElectricityMeterPointCard(
             )
 
             if (tariff == null) {
-                Text("Could not retrieve your traiff. retry?")
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = dimension.grid_2),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+                ) {
+                    Text(text = stringResource(resource = Res.string.account_error_no_tariff))
+
+                    IconTextButton(
+                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                        icon = painterResource(resource = Res.drawable.reload),
+                        text = stringResource(resource = Res.string.retry),
+                        onClick = onReloadTariff,
+                    )
+                }
             } else {
                 BoxWithConstraints(
                     modifier = Modifier
