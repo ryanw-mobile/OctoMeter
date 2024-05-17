@@ -98,9 +98,10 @@ internal fun ElectricityMeterPointCard(
                 MeterSerialNumberEntry(
                     selectedMpan = selectedMpan,
                     selectedMeterSerialNumber = selectedMeterSerialNumber,
+                    mpan = meterPoint.mpan,
                     meterSerialNumber = meterSerialNumber,
-                    meterPoint = meterPoint,
                     meterSerialNumberTextStyle = meterSerialNumberTextStyle,
+                    onSelectMeterSerialNumber = {},
                 )
 
                 Spacer(modifier = Modifier.size(size = dimension.grid_1))

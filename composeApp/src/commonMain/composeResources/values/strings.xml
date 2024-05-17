@@ -29,6 +29,10 @@
     <string name="account_clear_credential_button_cta">Clear</string>
     <string name="account_version_api_disclaimer">Version %1$s (Build %2$d)\nThe APIs are provided by Octopus Energy Ltd. Usage subject to their terms of service.</string>
 
+    <string name="account_meter_serial">Serial: %1$s</string>
+    <string name="account_meter_selected">SELECTED</string>
+    <string name="account_meter_select">SELECT</string>
+
     <!-- Onboarding -->
     <string name="onboarding_welcome_aboard">Welcome Aboard!</string>
     <string name="onboarding_introduction_1">This app is currently running in demo mode, using simulated local data to replicate authenticated access. This means the electricity usage data displayed is not real. Additionally, the app will default to retail region A when retrieving tariffs.</string>
