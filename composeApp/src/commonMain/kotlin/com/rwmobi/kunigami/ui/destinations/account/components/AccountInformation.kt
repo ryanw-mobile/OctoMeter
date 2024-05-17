@@ -46,12 +46,15 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.account_clear_credential_title
+import kunigami.composeapp.generated.resources.account_error_account_empty
 import kunigami.composeapp.generated.resources.account_moved_in
 import kunigami.composeapp.generated.resources.account_moved_out
 import kunigami.composeapp.generated.resources.account_number
 import kunigami.composeapp.generated.resources.account_unknown_installation_address
 import kunigami.composeapp.generated.resources.bulb
-import kunigami.composeapp.generated.resources.coin
+import kunigami.composeapp.generated.resources.retry
+import kunigami.composeapp.generated.resources.unlink
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -73,11 +76,11 @@ internal fun AccountInformation(
         if (uiState.account == null) {
             DefaultFailureRetryScreen(
                 modifier = modifier.fillMaxSize(),
-                text = "Cannot retrieve your account details, try again?",
-                icon = painterResource(resource = Res.drawable.coin),
-                primaryButtonLabel = "retry",
+                text = stringResource(resource = Res.string.account_error_account_empty),
+                icon = painterResource(resource = Res.drawable.unlink),
+                primaryButtonLabel = stringResource(resource = Res.string.retry),
                 onPrimaryButtonClicked = uiEvent.onRefresh,
-                secondaryButtonLabel = "Clear credentials and launch demo mode",
+                secondaryButtonLabel = stringResource(resource = Res.string.account_clear_credential_title),
                 onSecondaryButtonClicked = uiEvent.onClearCredentialButtonClicked,
             )
         } else {
@@ -206,6 +209,42 @@ private fun Preview() {
                             ),
                         ),
                     ),
+                    tariff = Tariff(
+                        code = "E-1R-AGILE-FLEX-22-11-25-A",
+                        fullName = "Octopus 12M Fixed April 2024 v1",
+                        displayName = "Octopus 12M Fixed",
+                        vatInclusiveUnitRate = 99.257,
+                        vatInclusiveStandingCharge = 94.682,
+                    ),
+                    errorMessages = listOf(),
+                ),
+                uiEvent = AccountUIEvent(
+                    onClearCredentialButtonClicked = {},
+                    onUpdateApiKeyClicked = {},
+                    onSubmitCredentials = {},
+                    onRefresh = {},
+                    onErrorShown = {},
+                    onShowSnackbar = {},
+                ),
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun ErrorPreview() {
+    AppTheme {
+        Surface {
+            AccountInformation(
+                modifier = Modifier.padding(all = 32.dp),
+                uiState = AccountUIState(
+                    isLoading = false,
+                    isDemoMode = false,
+                    requestedLayout = AccountScreenLayout.WideWrapped,
+                    selectedMpan = "1200000345678",
+                    selectedMeterSerialNumber = "11A1234567",
+                    account = null,
                     tariff = Tariff(
                         code = "E-1R-AGILE-FLEX-22-11-25-A",
                         fullName = "Octopus 12M Fixed April 2024 v1",

@@ -91,6 +91,8 @@ fun DefaultFailureRetryScreen(
         }
 
         if (secondaryButtonLabel != null && onSecondaryButtonClicked != null) {
+            Spacer(modifier = Modifier.height(height = dimension.grid_2))
+
             TextButton(
                 onClick = onPrimaryButtonClicked,
             ) {
