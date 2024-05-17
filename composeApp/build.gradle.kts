@@ -269,7 +269,17 @@ compose.desktop {
             description = "OctoMeter: Empowering Smart Electricity Usage"
             copyright = "© 2024 Ryan Wong and open source contributors. All rights reserved."
             vendor = "RW MobiMedia UK Limited"
-            licenseFile.set(project.file("LICENSE"))
+            licenseFile.set(project.file("../LICENSE"))
+
+            macOS {
+                iconFile.set(project.file("icons/ic_launcher_macos.icns"))
+            }
+            windows {
+                iconFile.set(project.file("icons/ic_launcher_windows.ico"))
+            }
+            linux {
+                iconFile.set(project.file("icons/ic_launcher_linux.png"))
+            }
         }
     }
 }
