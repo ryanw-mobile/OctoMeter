@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.domain.usecase
 
+import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
@@ -24,6 +25,10 @@ class GetUserAccountUseCase(
     suspend operator fun invoke(): Result<Account> {
         return withContext(dispatcher) {
             runCatching {
+                if (userPreferencesRepository.isDemoMode()) {
+                    throw IncompleteCredentialsException()
+                }
+
                 val apiKey = userPreferencesRepository.getApiKey()
                 val accountNumber = userPreferencesRepository.getAccountNumber()
 
