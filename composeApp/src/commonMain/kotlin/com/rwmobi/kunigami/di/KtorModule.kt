@@ -22,7 +22,6 @@ const val BASE_URL = "https://api.octopus.energy"
 
 @OptIn(ExperimentalSerializationApi::class)
 val ktorModule = module {
-    single { getKtorEngine() }
     single {
         HttpClient(engine = get()) {
             install(ContentNegotiation) {

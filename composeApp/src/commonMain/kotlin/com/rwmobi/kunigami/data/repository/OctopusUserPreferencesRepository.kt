@@ -7,11 +7,13 @@
 
 package com.rwmobi.kunigami.data.repository
 
+import com.rwmobi.kunigami.data.source.local.preferences.interfaces.PreferencesStore
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 class OctopusUserPreferencesRepository(
+    private val preferencesStore: PreferencesStore,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : UserPreferencesRepository {
     override suspend fun isOnboardingShown(): Boolean {

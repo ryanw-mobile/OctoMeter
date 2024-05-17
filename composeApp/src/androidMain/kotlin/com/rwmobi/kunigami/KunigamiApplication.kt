@@ -9,6 +9,7 @@ package com.rwmobi.kunigami
 
 import android.app.Application
 import com.rwmobi.kunigami.di.appModule
+import com.rwmobi.kunigami.di.dataSourceModule
 import com.rwmobi.kunigami.di.dispatcherModule
 import com.rwmobi.kunigami.di.ktorModule
 import com.rwmobi.kunigami.di.repositoryModule
@@ -29,6 +30,7 @@ class KunigamiApplication : Application() {
                 appModule,
                 dispatcherModule,
                 viewModelModule,
+                dataSourceModule,
                 userCaseModule,
                 ktorModule,
                 repositoryModule,
