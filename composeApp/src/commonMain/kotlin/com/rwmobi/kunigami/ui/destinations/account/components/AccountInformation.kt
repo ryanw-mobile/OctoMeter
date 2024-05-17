@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.domain.extensions.formatDate
 import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Agreement
 import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
@@ -43,8 +44,6 @@ import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_clear_credential_title
 import kunigami.composeapp.generated.resources.account_error_account_empty
@@ -122,14 +121,14 @@ internal fun AccountInformation(
             uiState.account.movedInAt?.let {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = stringResource(resource = Res.string.account_moved_in, it.toLocalDateTime(TimeZone.currentSystemDefault()).date),
+                    text = stringResource(resource = Res.string.account_moved_in, it.formatDate()),
                 )
             }
 
             uiState.account.movedOutAt?.let {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = stringResource(resource = Res.string.account_moved_out, it.toLocalDateTime(TimeZone.currentSystemDefault()).date),
+                    text = stringResource(resource = Res.string.account_moved_out, it.formatDate()),
                 )
             }
 
