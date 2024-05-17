@@ -51,7 +51,7 @@ internal fun AppInfoFooter(
             ),
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
-            text = stringResource(resource = Res.string.account_version_api_disclaimer, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
+            text = stringResource(resource = Res.string.account_version_api_disclaimer, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, BuildConfig.GITHUB_LINK),
         )
     }
 }

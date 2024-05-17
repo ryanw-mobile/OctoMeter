@@ -264,6 +264,10 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.rwmobi.kunigami"
             packageVersion = libs.versions.versionName.get()
+            description = "OctoMeter: Empowering Smart Electricity Usage"
+            copyright = "© 2024 Ryan Wong and open source contributors. All rights reserved."
+            vendor = "RW MobiMedia UK Limited"
+            licenseFile.set(project.file("LICENSE"))
         }
     }
 }
@@ -291,6 +295,7 @@ buildConfig {
     packageName("composeapp.kunigami")
     buildConfigField("VERSION_NAME", provider { libs.versions.versionName.get() })
     buildConfigField("VERSION_CODE", provider { libs.versions.versionCode.get() })
+    buildConfigField("GITHUB_LINK", provider { "https://github.com/ryanw-mobile/OctoMeter" })
 }
 
 koverReport {
