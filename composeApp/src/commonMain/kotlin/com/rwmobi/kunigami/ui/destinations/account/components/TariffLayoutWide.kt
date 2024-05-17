@@ -5,6 +5,8 @@
  *
  */
 
+@file:OptIn(ExperimentalResourceApi::class)
+
 package com.rwmobi.kunigami.ui.destinations.account.components
 
 import androidx.compose.foundation.layout.Arrangement
@@ -26,12 +28,19 @@ import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.account_tariff_period
+import kunigami.composeapp.generated.resources.account_tariff_period_no_end_date
+import kunigami.composeapp.generated.resources.account_tariff_standing_charge
+import kunigami.composeapp.generated.resources.account_tariff_unit_rate
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun TariffLayoutWide(
     modifier: Modifier = Modifier,
     tariff: Tariff,
-    currentAgreement: Agreement,
+    agreement: Agreement,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -39,7 +48,8 @@ internal fun TariffLayoutWide(
         modifier = modifier,
     ) {
         Column(
-            modifier = Modifier.weight(2f)
+            modifier = Modifier
+                .weight(2f)
                 .height(intrinsicSize = IntrinsicSize.Max),
         ) {
             Text(
@@ -48,7 +58,7 @@ internal fun TariffLayoutWide(
                 text = tariff.displayName,
             )
             Text(
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.bodySmall,
                 text = tariff.fullName,
             )
 
@@ -59,12 +69,20 @@ internal fun TariffLayoutWide(
 
             Spacer(modifier = Modifier.height(height = dimension.grid_2))
 
+            val tariffPeriod = agreement.validTo?.let {
+                stringResource(
+                    resource = Res.string.account_tariff_period,
+                    agreement.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).date,
+                    it.toLocalDateTime(TimeZone.currentSystemDefault()).date,
+                )
+            } ?: stringResource(
+                resource = Res.string.account_tariff_period_no_end_date,
+                agreement.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).date,
+            )
+
             Text(
-                text = "From ${currentAgreement.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).date} to ${
-                    currentAgreement.validTo?.toLocalDateTime(
-                        TimeZone.currentSystemDefault(),
-                    )?.date
-                }",
+                style = MaterialTheme.typography.bodyMedium,
+                text = tariffPeriod,
             )
         }
 
@@ -83,12 +101,13 @@ internal fun TariffLayoutWide(
             Text(
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
-                text = "Unit Rate\n(p/kWh)",
+                text = stringResource(resource = Res.string.account_tariff_unit_rate),
             )
         }
 
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .height(intrinsicSize = IntrinsicSize.Max),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -101,7 +120,7 @@ internal fun TariffLayoutWide(
             Text(
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
-                text = "Standing Charge\n(p/day)",
+                text = stringResource(resource = Res.string.account_tariff_standing_charge),
             )
         }
     }

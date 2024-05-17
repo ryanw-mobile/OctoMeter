@@ -74,7 +74,7 @@ internal fun ElectricityMeterPointCard(
                                 .fillMaxWidth()
                                 .wrapContentHeight(),
                             tariff = tariff,
-                            currentAgreement = meterPoint.currentAgreement,
+                            agreement = meterPoint.currentAgreement,
                         )
                     } else {
                         TariffLayoutWide(
@@ -82,7 +82,7 @@ internal fun ElectricityMeterPointCard(
                                 .fillMaxWidth()
                                 .wrapContentHeight(),
                             tariff = tariff,
-                            currentAgreement = meterPoint.currentAgreement,
+                            agreement = meterPoint.currentAgreement,
                         )
                     }
                 }

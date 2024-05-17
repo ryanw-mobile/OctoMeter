@@ -29,6 +29,10 @@
     <string name="account_clear_credential_button_cta">Clear</string>
     <string name="account_version_api_disclaimer">Version %1$s (Build %2$d)\nThe APIs are provided by Octopus Energy Ltd. Usage subject to their terms of service.</string>
 
+    <string name="account_tariff_period">From %1$s to %2$s</string>
+    <string name="account_tariff_period_no_end_date">From %1$s</string>
+    <string name="account_tariff_unit_rate">Unit Rate\n(p/kWh)</string>
+    <string name="account_tariff_standing_charge">Standing Charge\n(p/day)</string>
     <string name="account_meter_serial">Serial: %1$s</string>
     <string name="account_meter_selected">SELECTED</string>
     <string name="account_meter_select">SELECT</string>
