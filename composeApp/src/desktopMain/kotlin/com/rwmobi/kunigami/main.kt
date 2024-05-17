@@ -17,6 +17,7 @@ import com.rwmobi.kunigami.di.ktorModule
 import com.rwmobi.kunigami.di.repositoryModule
 import com.rwmobi.kunigami.di.userCaseModule
 import com.rwmobi.kunigami.di.viewModelModule
+import com.rwmobi.kunigami.ui.utils.customizeMacOsAboutMenu
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.app_name
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -29,10 +30,11 @@ import java.awt.Dimension
 fun main() {
     System.setProperty(
         "apple.awt.application.name",
-        "Project Kunigami",
+        "OctoMeter",
     )
 
     application {
+        customizeMacOsAboutMenu()
         startKoin {
             printLogger(Level.ERROR)
             modules(
