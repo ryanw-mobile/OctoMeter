@@ -31,4 +31,16 @@ class MultiplatformPreferencesStore(
             settings[key]
         }
     }
+
+    override suspend fun removeData(key: String) {
+        return withContext(dispatcher) {
+            settings.remove(key)
+        }
+    }
+
+    override suspend fun clearAll() {
+        return withContext(dispatcher) {
+            settings.clear()
+        }
+    }
 }
