@@ -306,7 +306,8 @@ koverReport {
             // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
             classes(
                 listOf(
-                    "com.rwmobi.kunigami.KunigamiApplication",
+                    "com.rwmobi.kunigami.KunigamiApplication*",
+                    "com.rwmobi.kunigami.MainActivity*",
                     "com.rwmobi.kunigami.*.*MembersInjector",
                     "com.rwmobi.kunigami.*.*Factory",
                     "com.rwmobi.kunigami.*.*HiltModules*",
@@ -317,6 +318,7 @@ koverReport {
                     "com.rwmobi.kunigami.Hilt*",
                     "com.rwmobi.kunigami.*.Hilt_*",
                     "com.rwmobi.kunigami.ComposableSingletons*",
+                    "com.rwmobi.kunigami.App*",
                     "*Fragment",
                     "*Fragment\$*",
                     "*Activity",
@@ -338,6 +340,7 @@ koverReport {
                     "androidx",
                     "dagger.hilt.internal.aggregatedroot.codegen",
                     "hilt_aggregated_deps",
+                    "kunigami.composeapp.generated.resources",
                 ),
             )
         }
