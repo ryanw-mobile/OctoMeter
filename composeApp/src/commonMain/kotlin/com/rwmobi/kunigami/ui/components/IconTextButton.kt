@@ -8,10 +8,12 @@
 package com.rwmobi.kunigami.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -53,14 +55,17 @@ fun IconTextButton(
             Row(
                 modifier = Modifier.wrapContentSize(),
                 verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
             ) {
                 Icon(
-                    modifier = Modifier.size(size = dimension.grid_3),
+                    modifier = Modifier
+                        .size(size = dimension.grid_3)
+                        .padding(all = dimension.grid_0_5),
                     painter = icon,
                     contentDescription = null,
                 )
 
-                Spacer(modifier = Modifier.size(size = dimension.grid_2))
+                Spacer(modifier = Modifier.width(width = dimension.grid_1))
 
                 Text(
                     style = MaterialTheme.typography.labelMedium,

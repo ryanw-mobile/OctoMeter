@@ -46,7 +46,7 @@ internal fun ClearCredentialSectionCompact(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.medium)
             .background(color = MaterialTheme.colorScheme.surfaceContainer)
-            .padding(all = dimension.grid_3),
+            .padding(all = dimension.grid_2),
     ) {
         Text(
             style = MaterialTheme.typography.titleMedium,

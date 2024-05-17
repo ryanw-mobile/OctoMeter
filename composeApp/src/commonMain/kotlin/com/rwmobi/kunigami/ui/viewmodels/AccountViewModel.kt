@@ -70,6 +70,8 @@ class AccountViewModel(
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             account = account,
+                            selectedMpan = account.electricityMeterPoints[0].mpan,
+                            selectedMeterSerialNumber = account.electricityMeterPoints[0].meterSerialNumbers[0],
                         )
                     }
                 },

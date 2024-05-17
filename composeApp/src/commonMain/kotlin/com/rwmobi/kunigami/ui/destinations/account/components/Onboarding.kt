@@ -28,6 +28,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Agreement
 import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
@@ -94,6 +95,8 @@ internal fun Onboarding(
         )
 
         Text(
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             text = stringResource(resource = Res.string.onboarding_question_1),
