@@ -26,7 +26,7 @@ val userCaseModule = module {
     factory {
         GetUserAccountUseCase(
             userPreferencesRepository = get(),
-            octopusRepository = get(),
+            restApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }

@@ -19,7 +19,7 @@ import kotlin.coroutines.cancellation.CancellationException
 
 class GetUserAccountUseCase(
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val octopusRepository: RestApiRepository,
+    private val restApiRepository: RestApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(): Result<Account> {
@@ -36,7 +36,7 @@ class GetUserAccountUseCase(
                 checkNotNull(value = apiKey, lazyMessage = { "Expect API Key but null" })
                 checkNotNull(value = accountNumber, lazyMessage = { "Expect Account Number but null" })
 
-                octopusRepository.getAccount(
+                restApiRepository.getAccount(
                     apiKey = apiKey,
                     accountNumber = accountNumber,
                 ).fold(
