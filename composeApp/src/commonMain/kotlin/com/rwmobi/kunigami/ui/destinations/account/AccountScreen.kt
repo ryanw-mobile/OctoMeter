@@ -27,8 +27,6 @@ import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
-import com.rwmobi.kunigami.ui.destinations.account.components.AccountInformation
-import com.rwmobi.kunigami.ui.destinations.account.components.Onboarding
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Clock
@@ -75,7 +73,7 @@ fun AccountScreen(
                                 else -> Modifier.widthIn(max = dimension.windowWidthMedium)
                             }
 
-                            Onboarding(
+                            OnboardingScreen(
                                 modifier = widthConstraintModifier.padding(all = dimension.grid_2),
                                 uiState = uiState,
                                 uiEvent = uiEvent,
@@ -96,7 +94,7 @@ fun AccountScreen(
                                 else -> Modifier.widthIn(max = dimension.windowWidthMedium)
                             }
 
-                            AccountInformation(
+                            AccountInformationScreen(
                                 modifier = widthConstraintModifier.padding(horizontal = dimension.grid_2),
                                 uiState = uiState,
                                 uiEvent = uiEvent,
