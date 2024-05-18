@@ -21,7 +21,7 @@ import kotlin.time.Duration
 
 class GetConsumptionUseCase(
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val octopusRepository: RestApiRepository,
+    private val restApiRepository: RestApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(): Result<List<Consumption>> {
@@ -37,7 +37,7 @@ class GetConsumptionUseCase(
 
                 val currentTime = Clock.System.now().roundDownToDay()
 
-                octopusRepository.getConsumption(
+                restApiRepository.getConsumption(
                     apiKey = apiKey,
                     mpan = mpan,
                     meterSerialNumber = meterSerialNumber,

@@ -16,12 +16,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class GetFilteredProductsUseCase(
-    private val octopusRepository: RestApiRepository,
+    private val restApiRepository: RestApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(): Result<List<Product>> {
         return withContext(dispatcher) {
-            val getProductsResult = octopusRepository.getProducts()
+            val getProductsResult = restApiRepository.getProducts()
 
             if (getProductsResult.isFailure) {
                 getProductsResult

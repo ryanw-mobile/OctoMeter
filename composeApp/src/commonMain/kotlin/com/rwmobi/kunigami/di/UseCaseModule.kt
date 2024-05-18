@@ -18,7 +18,7 @@ import org.koin.dsl.module
 val userCaseModule = module {
     factory {
         GetFilteredProductsUseCase(
-            octopusRepository = get(),
+            restApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
@@ -33,7 +33,7 @@ val userCaseModule = module {
 
     factory {
         GetStandardUnitRateUseCase(
-            octopusRepository = get(),
+            restApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
@@ -41,14 +41,14 @@ val userCaseModule = module {
     factory {
         GetConsumptionUseCase(
             userPreferencesRepository = get(),
-            octopusRepository = get(),
+            restApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
 
     factory {
         GetTariffRatesUseCase(
-            octopusRepository = get(),
+            restApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
