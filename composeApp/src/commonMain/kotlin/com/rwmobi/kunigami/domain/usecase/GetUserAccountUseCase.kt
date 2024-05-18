@@ -32,14 +32,17 @@ class GetUserAccountUseCase(
                 val apiKey = userPreferencesRepository.getApiKey()
                 val accountNumber = userPreferencesRepository.getAccountNumber()
 
-                checkNotNull(value = apiKey, lazyMessage = { "API Key is null" })
-                checkNotNull(value = accountNumber, lazyMessage = { "Account Number is null" })
+                // This is to avoid using !! below
+                checkNotNull(value = apiKey, lazyMessage = { "Expect API Key but null" })
+                checkNotNull(value = accountNumber, lazyMessage = { "Expect Account Number but null" })
 
                 octopusRepository.getAccount(
                     apiKey = apiKey,
                     accountNumber = accountNumber,
                 ).fold(
                     onSuccess = { account ->
+                        // Each account number should map to one Account,
+                        // We can't control the API, so we set to take only the first result
                         account.first()
                     },
                     onFailure = { throwable ->
