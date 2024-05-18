@@ -19,9 +19,14 @@ import com.rwmobi.kunigami.di.repositoryModule
 import com.rwmobi.kunigami.di.userCaseModule
 import com.rwmobi.kunigami.di.viewModelModule
 import com.rwmobi.kunigami.ui.utils.customizeMacOsAboutMenu
+import composeapp.kunigami.BuildConfig
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.about_app_description
+import kunigami.composeapp.generated.resources.about_app_title
 import kunigami.composeapp.generated.resources.app_name
+import kunigami.composeapp.generated.resources.ic_launcher
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.core.logger.Level
@@ -35,7 +40,11 @@ fun main() {
     )
 
     application {
-        customizeMacOsAboutMenu()
+        customizeMacOsAboutMenu(
+            title = stringResource(resource = Res.string.about_app_title),
+            message = stringResource(resource = Res.string.about_app_description, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, BuildConfig.GITHUB_LINK),
+        )
+
         startKoin {
             printLogger(Level.ERROR)
             modules(
@@ -54,6 +63,7 @@ fun main() {
         Window(
             onCloseRequest = ::exitApplication,
             title = stringResource(resource = Res.string.app_name),
+            icon = painterResource(resource = Res.drawable.ic_launcher),
             state = windowState,
         ) {
             window.minimumSize = Dimension(480, 480)
