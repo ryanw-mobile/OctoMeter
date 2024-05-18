@@ -5,16 +5,19 @@
 <p><img src="app_banner_240518.webp" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 <br />
 
-**This is not a sample app or a demo app**. This is a real app I developed for myself, and I use it every day. While you might find other Kotlin Multiplatform sample apps omitting everything non-essential, this app, however, aims to follow the commercial software development flow and quality. You could expect this app to meet the standards as if you _were_ a project client of RW MobiMedia Hong Kong some years ago. I am not taking new projects until I become a British Citizen a few years from now (_hopefully_).
+This app is for Octopus Energy customers in the UK who have a smart meter installed. You can still try out the app if you don't, because the App will run under the demo mode by default by showing fake user data when authentication is required.
 
-I believe moving the same set of code from Android to Kotlin Multiplatform should not give anyone any excuses to deliver subpar code—such as hardcoding string values, not following Clean Architecture/SOLID principles, not writing any tests, or sometimes not even doing manual dependency injection. That is why I do not consider this a demo/sample app, because I do not want to rush to create an empty UI shell just to catch your attention. I use this app to save money, so I will keep improving this codebase as I gain experience in Kotlin Multiplatform development.
+### It works for me
+**This is not a sample app or a demo app**. This is a real app I developed for myself, and I use it every day to monitor energy consumption and save money. Technically it should work for other Octopus Energy customers. However, I am unable to imagine other scenarios such as the tariffs I do not use, or multiple meter installations which may return data that the App cannot process. Therefore, it is not guaranteed that it works for you when it should work for me.
 
-This app is still in rapid development. The first release is not ready yet but is expected around June 2024, as I will need to secure my next full-time job in the UK soon.
+This app is still in rapid development. The first release is not ready yet but is expected around June 2024, as I will need to secure my next full-time job in the UK soon. For the same reason, this app was intentionally built to reach production-level quality as possible, such that you can have a better idea where I am at technically.
 
 This README will be updated with more technical details when the app is close to release. Stay tuned!
 <br /><br />
 <hr/>
 <br /><br />
+## Some draft technical details
+
 * `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
   It contains several subfolders:
     - `commonMain` is for code that’s common for all targets.
@@ -27,8 +30,13 @@ This README will be updated with more technical details when the app is close to
   you need this entry point for your iOS app. This is also where you should add SwiftUI code for
   your project.
 
-Learn more
-about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+To run the desktop app, execute `./gradlew runReleaseDistrubutable` or just `./gradlew run`
+To export the app into MacOS distributable, execute `./gradlew packageDmg`
+(I don't use Windows, so I can't say for sure how good it works on Windows)
+To export the Jar for desktop, execute `./gradlew desktopJar` (jar in /composeApp/build/libs)
+Jar doesn't comes with the native skiko library so it won't run
+To run the Android App, execute `./gradlew `
+
 <br /><br />
 ## Data Security and Privacy
 First thing first: This app can run under the demo mode without requiring any credentials. 
@@ -39,3 +47,22 @@ This app stores your API key, account number, MPAN and meter serial number using
 <br /><br />
 ## Switch to Octopus!
 Switch to Octopus Energy using [this link](https://share.octopus.energy/best-shell-168), both of us will get £50 (or £100 for business).
+
+### License
+
+```
+   Copyright 2024 Ryan Wong, RW MobiMedia UK Limited, and open-source contributors
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+```

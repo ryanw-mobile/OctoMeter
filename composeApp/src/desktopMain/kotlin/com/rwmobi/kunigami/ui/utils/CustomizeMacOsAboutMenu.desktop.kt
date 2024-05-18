@@ -7,7 +7,6 @@
 
 package com.rwmobi.kunigami.ui.utils
 
-import composeapp.kunigami.BuildConfig
 import java.awt.Desktop
 import java.awt.Menu
 import java.awt.MenuItem
@@ -20,17 +19,17 @@ import javax.swing.JOptionPane
 internal fun customizeMacOsAboutMenu(
     title: String,
     message: String,
+    iconPath: String = "icons/ic_launcher_macos_64x64.png",
 ) {
     val desktop = Desktop.getDesktop()
     val aboutHandler = {
-        val iconPath = "icons/ic_launcher_macos_64x64.png"
         val iconImage = loadImage(iconPath)
         val icon = if (iconImage != null) ImageIcon(iconImage) else null
 
         JOptionPane.showMessageDialog(
             null,
-            "OctoMeter version ${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE})\nMake the smartest use of your electricity\n\n${BuildConfig.GITHUB_LINK}",
-            "About OctoMeter",
+            message,
+            title,
             JOptionPane.INFORMATION_MESSAGE,
             icon,
         )
@@ -42,7 +41,7 @@ internal fun customizeMacOsAboutMenu(
 
     val menuBar = java.awt.MenuBar()
     val appMenu = Menu("Application")
-    val aboutMenuItem = MenuItem("About OctoMeter")
+    val aboutMenuItem = MenuItem(title)
     aboutMenuItem.addActionListener { aboutHandler() }
     appMenu.add(aboutMenuItem)
     menuBar.add(appMenu)
