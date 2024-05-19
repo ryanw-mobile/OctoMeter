@@ -106,11 +106,11 @@ class AccountViewModel(
                 productCode = extractSegment(tariffCode) ?: "",
                 tariffCode = tariffCode,
             )
+            val selectedMpan = userPreferencesRepository.getMpan()
+            val selectedMeterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
+
             tariffRates.fold(
                 onSuccess = { tariff ->
-                    val selectedMpan = userPreferencesRepository.getMpan()
-                    val selectedMeterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
-
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             isDemoMode = false,
@@ -122,8 +122,17 @@ class AccountViewModel(
                     }
                 },
                 onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_tariff))
                     Logger.e(getString(resource = Res.string.account_error_load_tariff), throwable = throwable, tag = "AccountViewModel")
+
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            isDemoMode = false,
+                            tariff = null,
+                            selectedMpan = selectedMpan,
+                            selectedMeterSerialNumber = selectedMeterSerialNumber,
+                            isLoading = false,
+                        )
+                    }
                 },
             )
         }

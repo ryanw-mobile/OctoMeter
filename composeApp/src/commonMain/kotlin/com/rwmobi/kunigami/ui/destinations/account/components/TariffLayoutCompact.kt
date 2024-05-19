@@ -30,9 +30,9 @@ import com.rwmobi.kunigami.domain.model.Agreement
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.account_tariff_period
-import kunigami.composeapp.generated.resources.account_tariff_period_no_end_date
+import kunigami.composeapp.generated.resources.account_tariff_end_date
 import kunigami.composeapp.generated.resources.account_tariff_standing_charge
+import kunigami.composeapp.generated.resources.account_tariff_start_date
 import kunigami.composeapp.generated.resources.account_tariff_unit_rate
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -67,12 +67,11 @@ internal fun TariffLayoutCompact(
 
         val tariffPeriod = agreement.validTo?.let {
             stringResource(
-                resource = Res.string.account_tariff_period,
-                agreement.validFrom.formatDate(),
+                resource = Res.string.account_tariff_end_date,
                 it.formatDate(),
             )
         } ?: stringResource(
-            resource = Res.string.account_tariff_period_no_end_date,
+            resource = Res.string.account_tariff_start_date,
             agreement.validFrom.formatDate(),
         )
 
