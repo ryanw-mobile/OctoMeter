@@ -11,7 +11,6 @@ import com.rwmobi.kunigami.data.source.network.samples.GetConsumptionSampleData
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
-import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -76,7 +75,26 @@ class ElectricityMeterPointsEndpointTest {
     }
 
     @Test
-    fun getConsumption_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getConsumption_ShouldReturnNull_WhenHttpStatusIsNotFound() = runTest {
+        val electricityMeterPointsEndpoint = ElectricityMeterPointsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.NotFound,
+                contentType = "text/json",
+                payload = """{content:"not found"}""",
+            ),
+        )
+
+        val result = electricityMeterPointsEndpoint.getConsumption(
+            apiKey = fakeApiKey,
+            mpan = fakeMpan,
+            meterSerialNumber = fakeMeterSerialNumber,
+        )
+        result shouldBe null
+    }
+
+    @Test
+    fun getConsumption_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
         val electricityMeterPointsEndpoint = ElectricityMeterPointsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -86,7 +104,7 @@ class ElectricityMeterPointsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<NoTransformationFoundException> {
+        shouldThrowExactly<Exception> {
             electricityMeterPointsEndpoint.getConsumption(
                 apiKey = fakeApiKey,
                 mpan = fakeMpan,

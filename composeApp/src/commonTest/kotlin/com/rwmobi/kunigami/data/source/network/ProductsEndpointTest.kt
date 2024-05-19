@@ -16,7 +16,6 @@ import com.rwmobi.kunigami.data.source.network.samples.GetStandingChargesSampleD
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
-import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -74,7 +73,22 @@ class ProductsEndpointTest {
     }
 
     @Test
-    fun getProducts_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getProducts_ShouldReturnNull_WhenHttpStatusIsNotFound() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.NotFound,
+                contentType = "text/json",
+                payload = """{content:"not found"}""",
+            ),
+        )
+
+        val result = productsEndpoint.getProducts()
+        result shouldBe null
+    }
+
+    @Test
+    fun getProducts_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
         val productsEndpoint = ProductsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -84,7 +98,7 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<NoTransformationFoundException> {
+        shouldThrowExactly<Exception> {
             productsEndpoint.getProducts()
         }
     }
@@ -103,6 +117,21 @@ class ProductsEndpointTest {
 
         val result = productsEndpoint.getProduct(productCode = "sample-product-code")
         result shouldBe GetProductSampleData.dto_var_22_11_01
+    }
+
+    @Test
+    fun getProductWithSampleA_ShouldReturnNull_WhenHttpStatusIsNotFound() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.NotFound,
+                contentType = "text/json",
+                payload = """{content:"not found"}""",
+            ),
+        )
+
+        val result = productsEndpoint.getProduct(productCode = "sample-product-code")
+        result shouldBe null
     }
 
     @Test
@@ -136,7 +165,7 @@ class ProductsEndpointTest {
     }
 
     @Test
-    fun getProduct_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getProduct_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
         val productsEndpoint = ProductsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -146,7 +175,7 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<NoTransformationFoundException> {
+        shouldThrowExactly<Exception> {
             productsEndpoint.getProduct(productCode = "sample-product-code")
         }
     }
@@ -171,7 +200,25 @@ class ProductsEndpointTest {
     }
 
     @Test
-    fun getStandardUnitRates_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getStandardUnitRates_ShouldReturnNull_WhenHttpStatusIsNotFound() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.NotFound,
+                contentType = "text/json",
+                payload = """{content:"not found"}""",
+            ),
+        )
+
+        val result = productsEndpoint.getStandardUnitRates(
+            productCode = "fake-product-code",
+            tariffCode = "fake-tariff-code",
+        )
+        result shouldBe null
+    }
+
+    @Test
+    fun getStandardUnitRates_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
         val productsEndpoint = ProductsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -181,7 +228,7 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<NoTransformationFoundException> {
+        shouldThrowExactly<Exception> {
             productsEndpoint.getStandardUnitRates(
                 productCode = "fake-product-code",
                 tariffCode = "fake-tariff-code",
@@ -209,7 +256,25 @@ class ProductsEndpointTest {
     }
 
     @Test
-    fun getStandingCharges_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getStandingCharges_ShouldReturnNull_WhenHttpStatusIsNotFound() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.NotFound,
+                contentType = "text/json",
+                payload = """{content:"not found"}""",
+            ),
+        )
+
+        val result = productsEndpoint.getStandingCharges(
+            productCode = "fake-product-code",
+            tariffCode = "fake-tariff-code",
+        )
+        result shouldBe null
+    }
+
+    @Test
+    fun getStandingCharges_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
         val productsEndpoint = ProductsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -219,7 +284,7 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<NoTransformationFoundException> {
+        shouldThrowExactly<Exception> {
             productsEndpoint.getStandingCharges(
                 productCode = "fake-product-code",
                 tariffCode = "fake-tariff-code",
@@ -247,7 +312,25 @@ class ProductsEndpointTest {
     }
 
     @Test
-    fun getDayUnitRates_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getDayUnitRates_ShouldReturnNull_WhenHttpStatusIsNotFound() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.NotFound,
+                contentType = "text/json",
+                payload = """{content:"not found"}""",
+            ),
+        )
+
+        val result = productsEndpoint.getDayUnitRates(
+            productCode = "fake-product-code",
+            tariffCode = "fake-tariff-code",
+        )
+        result shouldBe null
+    }
+
+    @Test
+    fun getDayUnitRates_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
         val productsEndpoint = ProductsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -257,7 +340,7 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<NoTransformationFoundException> {
+        shouldThrowExactly<Exception> {
             productsEndpoint.getDayUnitRates(
                 productCode = "fake-product-code",
                 tariffCode = "fake-tariff-code",
@@ -285,7 +368,25 @@ class ProductsEndpointTest {
     }
 
     @Test
-    fun getNightUnitRates_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getNightUnitRates_ShouldReturnNull_WhenHttpStatusIsNotFound() = runTest {
+        val productsEndpoint = ProductsEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.NotFound,
+                contentType = "text/json",
+                payload = """{content:"not found"}""",
+            ),
+        )
+
+        val result = productsEndpoint.getNightUnitRates(
+            productCode = "fake-product-code",
+            tariffCode = "fake-tariff-code",
+        )
+        result shouldBe null
+    }
+
+    @Test
+    fun getNightUnitRates_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
         val productsEndpoint = ProductsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -295,7 +396,7 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<NoTransformationFoundException> {
+        shouldThrowExactly<Exception> {
             productsEndpoint.getNightUnitRates(
                 productCode = "fake-product-code",
                 tariffCode = "fake-tariff-code",
