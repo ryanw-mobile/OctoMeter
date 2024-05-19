@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import co.touchlab.kermit.Logger
+import co.touchlab.kermit.koin.KermitKoinLogger
 import com.rwmobi.kunigami.di.appModule
 import com.rwmobi.kunigami.di.dataSourceModule
 import com.rwmobi.kunigami.di.dispatcherModule
@@ -47,6 +49,9 @@ fun main() {
 
         startKoin {
             printLogger(Level.ERROR)
+            logger(
+                KermitKoinLogger(Logger.withTag("koin")),
+            )
             modules(
                 appModule,
                 dispatcherModule,

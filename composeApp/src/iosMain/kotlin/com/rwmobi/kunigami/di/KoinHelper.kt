@@ -7,12 +7,17 @@
 package com.rwmobi.kunigami.di
 
 import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Logger.Companion.withTag
+import co.touchlab.kermit.koin.KermitKoinLogger
 import org.koin.core.context.startKoin
 import kotlin.time.measureTime
 
 fun initKoin() {
     val timeTaken = measureTime {
         startKoin {
+            logger(
+                KermitKoinLogger(withTag("koin")),
+            )
             modules(
                 appModule,
                 dispatcherModule,

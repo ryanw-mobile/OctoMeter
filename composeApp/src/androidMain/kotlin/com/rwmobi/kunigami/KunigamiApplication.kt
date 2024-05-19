@@ -8,6 +8,8 @@
 package com.rwmobi.kunigami
 
 import android.app.Application
+import co.touchlab.kermit.Logger
+import co.touchlab.kermit.koin.KermitKoinLogger
 import com.rwmobi.kunigami.di.appModule
 import com.rwmobi.kunigami.di.dataSourceModule
 import com.rwmobi.kunigami.di.dispatcherModule
@@ -26,6 +28,9 @@ class KunigamiApplication : Application() {
         startKoin {
             androidLogger(Level.ERROR)
             androidContext(this@KunigamiApplication)
+            logger(
+                KermitKoinLogger(Logger.withTag("koin")),
+            )
             modules(
                 appModule,
                 dispatcherModule,
