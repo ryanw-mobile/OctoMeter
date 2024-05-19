@@ -29,10 +29,16 @@
 	</dict>
 	<key>UILaunchScreen</key>
 	<dict/>
+	<key>UILaunchStoryboardName</key>
+	<string>Launch Screen.storyboard</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarHidden</key>
+	<true/>
+	<key>UIStatusBarStyle</key>
+	<string></string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
