@@ -16,6 +16,7 @@ import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
+import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -31,6 +32,7 @@ class AccountViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val getUserAccountUseCase: GetUserAccountUseCase,
     private val getTariffRatesUseCase: GetTariffRatesUseCase,
+    private val initialiseAccountUseCase: InitialiseAccountUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<AccountUIState> = MutableStateFlow(AccountUIState(isLoading = true))
@@ -123,9 +125,22 @@ class AccountViewModel(
         }
     }
 
-    fun submitCredentials() {
+    fun submitCredentials(
+        apiKey: String,
+        accountNumber: String,
+    ) {
         viewModelScope.launch {
-            refresh()
+            val result = initialiseAccountUseCase(apiKey = apiKey, accountNumber = accountNumber)
+
+            result.fold(
+                onSuccess = {
+                    refresh()
+                },
+                onFailure = { throwable ->
+                    updateUIForError(message = throwable.message ?: "Error when retrieving tariffs")
+                    Logger.e("AccountViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                },
+            )
         }
     }
 

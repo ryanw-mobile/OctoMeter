@@ -17,6 +17,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -44,14 +45,28 @@ class ElectricityMeterPointsEndpoint(
         groupBy: ConsumptionGrouping = ConsumptionGrouping.HALF_HOURLY,
     ): ConsumptionApiResponse? {
         return withContext(dispatcher) {
-            httpClient.get("$endpointUrl/$mpan/meters/$meterSerialNumber/consumption") {
+            val response = httpClient.get("$endpointUrl/$mpan/meters/$meterSerialNumber/consumption") {
                 header("Authorization", "Basic ${encodeApiKey(apiKey)}")
                 parameter("page_size", pageSize)
                 parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
                 parameter("period_to", periodTo?.formatInstantWithoutSeconds())
                 parameter("order_by", orderBy.apiValue)
                 parameter("group_by", groupBy.apiValue)
-            }.body()
+            }
+
+            when (response.status) {
+                HttpStatusCode.OK -> {
+                    response.body() as ConsumptionApiResponse?
+                }
+
+                HttpStatusCode.NotFound -> {
+                    null
+                }
+
+                else -> {
+                    throw Exception("Error: HTTP ${response.status}")
+                }
+            }
         }
     }
 }

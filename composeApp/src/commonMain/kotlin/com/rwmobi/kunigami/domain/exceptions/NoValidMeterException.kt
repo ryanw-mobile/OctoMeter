@@ -7,4 +7,4 @@
 
 package com.rwmobi.kunigami.domain.exceptions
 
-class NoLinkedAccountException(message: String = "No account associated with this API key") : Throwable(message)
+class NoValidMeterException(message: String = "No valid meter is associated with this API key") : Throwable(message)

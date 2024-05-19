@@ -25,7 +25,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,7 +51,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 internal fun CredentialsInputForm(
     modifier: Modifier = Modifier,
-    onSubmitCredentials: () -> Unit,
+    onSubmitCredentials: (apiKey: String, accountNumber: String) -> Unit,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -64,8 +64,8 @@ internal fun CredentialsInputForm(
     ) {
         val keyboardController = LocalSoftwareKeyboardController.current
         val accountFocusRequester = FocusRequester()
-        var apiKey by remember { mutableStateOf("") }
-        var account by remember { mutableStateOf("") }
+        var apiKey by rememberSaveable { mutableStateOf("") }
+        var account by rememberSaveable { mutableStateOf("") }
 
         Text(
             style = MaterialTheme.typography.titleLarge,
@@ -107,7 +107,7 @@ internal fun CredentialsInputForm(
             keyboardActions = KeyboardActions(
                 onDone = {
                     keyboardController?.hide()
-                    onSubmitCredentials()
+                    onSubmitCredentials(apiKey.trim(), account.trim())
                 },
             ),
             modifier = Modifier
@@ -119,7 +119,7 @@ internal fun CredentialsInputForm(
         Button(
             onClick = {
                 keyboardController?.hide()
-                onSubmitCredentials()
+                onSubmitCredentials(apiKey.trim(), account.trim())
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -134,7 +134,7 @@ private fun Preview() {
     AppTheme {
         Surface {
             CredentialsInputForm(
-                onSubmitCredentials = { -> },
+                onSubmitCredentials = { _, _ -> },
             )
         }
     }

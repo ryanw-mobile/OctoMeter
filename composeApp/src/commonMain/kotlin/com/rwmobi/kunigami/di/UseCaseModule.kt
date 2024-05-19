@@ -12,6 +12,7 @@ import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
+import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -48,6 +49,14 @@ val userCaseModule = module {
 
     factory {
         GetTariffRatesUseCase(
+            restApiRepository = get(),
+            dispatcher = get(named("DefaultDispatcher")),
+        )
+    }
+
+    factory {
+        InitialiseAccountUseCase(
+            userPreferencesRepository = get(),
             restApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )

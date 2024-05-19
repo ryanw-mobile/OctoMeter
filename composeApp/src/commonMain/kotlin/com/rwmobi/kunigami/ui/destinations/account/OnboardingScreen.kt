@@ -167,7 +167,7 @@ private fun Preview() {
                 uiEvent = AccountUIEvent(
                     onClearCredentialButtonClicked = {},
                     onUpdateApiKeyClicked = {},
-                    onSubmitCredentials = {},
+                    onSubmitCredentials = { _, _ -> },
                     onRefresh = {},
                     onErrorShown = {},
                     onShowSnackbar = {},

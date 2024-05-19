@@ -42,6 +42,7 @@ val viewModelModule = module {
             userPreferencesRepository = get(),
             getUserAccountUseCase = get(),
             getTariffRatesUseCase = get(),
+            initialiseAccountUseCase = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }

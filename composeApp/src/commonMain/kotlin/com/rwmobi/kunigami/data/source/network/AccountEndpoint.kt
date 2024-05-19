@@ -13,6 +13,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -33,9 +34,23 @@ class AccountEndpoint(
         accountNumber: String,
     ): AccountApiResponse? {
         return withContext(dispatcher) {
-            httpClient.get("$endpointUrl/$accountNumber") {
+            val response = httpClient.get("$endpointUrl/$accountNumber") {
                 header("Authorization", "Basic ${encodeApiKey(apiKey)}")
-            }.body()
+            }
+
+            when (response.status) {
+                HttpStatusCode.OK -> {
+                    response.body() as AccountApiResponse?
+                }
+
+                HttpStatusCode.NotFound -> {
+                    null
+                }
+
+                else -> {
+                    throw Exception("Error: HTTP ${response.status}")
+                }
+            }
         }
     }
 }
