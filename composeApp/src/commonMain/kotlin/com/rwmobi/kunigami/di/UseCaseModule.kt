@@ -12,13 +12,15 @@ import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
+import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
+import com.rwmobi.kunigami.domain.usecase.UpdateMeterPreferenceUseCase
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val userCaseModule = module {
     factory {
         GetFilteredProductsUseCase(
-            octopusRepository = get(),
+            restApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
@@ -26,14 +28,14 @@ val userCaseModule = module {
     factory {
         GetUserAccountUseCase(
             userPreferencesRepository = get(),
-            octopusRepository = get(),
+            restApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
 
     factory {
         GetStandardUnitRateUseCase(
-            octopusRepository = get(),
+            restApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
@@ -41,14 +43,29 @@ val userCaseModule = module {
     factory {
         GetConsumptionUseCase(
             userPreferencesRepository = get(),
-            octopusRepository = get(),
+            restApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
 
     factory {
         GetTariffRatesUseCase(
-            octopusRepository = get(),
+            restApiRepository = get(),
+            dispatcher = get(named("DefaultDispatcher")),
+        )
+    }
+
+    factory {
+        InitialiseAccountUseCase(
+            userPreferencesRepository = get(),
+            restApiRepository = get(),
+            dispatcher = get(named("DefaultDispatcher")),
+        )
+    }
+
+    factory {
+        UpdateMeterPreferenceUseCase(
+            userPreferencesRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }

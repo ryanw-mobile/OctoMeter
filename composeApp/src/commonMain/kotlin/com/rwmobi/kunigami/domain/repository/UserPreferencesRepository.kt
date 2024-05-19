@@ -18,5 +18,5 @@ interface UserPreferencesRepository {
     suspend fun getMeterSerialNumber(): String?
     suspend fun setMeterSerialNumber(meterSerialNumber: String)
     suspend fun clearCredentials()
-    suspend fun clearStorge()
+    suspend fun clearStorage()
 }

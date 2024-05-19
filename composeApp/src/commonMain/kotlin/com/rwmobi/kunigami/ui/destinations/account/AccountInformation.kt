@@ -7,7 +7,7 @@
 
 @file:OptIn(ExperimentalResourceApi::class)
 
-package com.rwmobi.kunigami.ui.destinations.account.components
+package com.rwmobi.kunigami.ui.destinations.account
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
@@ -38,9 +38,11 @@ import com.rwmobi.kunigami.domain.model.Agreement
 import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.components.DefaultFailureRetryScreen
-import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
-import com.rwmobi.kunigami.ui.destinations.account.AccountUIEvent
-import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
+import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
+import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionCompact
+import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionWide
+import com.rwmobi.kunigami.ui.destinations.account.components.ElectricityMeterPointCard
+import com.rwmobi.kunigami.ui.destinations.account.components.UpdateAPIKeyCard
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Clock
@@ -61,7 +63,7 @@ import kotlin.time.Duration
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-internal fun AccountInformation(
+internal fun AccountInformationScreen(
     modifier: Modifier = Modifier,
     uiState: AccountUIState,
     uiEvent: AccountUIEvent,
@@ -140,6 +142,7 @@ internal fun AccountInformation(
                     meterPoint = meterPoint,
                     tariff = uiState.tariff,
                     requestedLayout = uiState.requestedLayout,
+                    onMeterSerialNumberSelected = uiEvent.onMeterSerialNumberSelected,
                     onReloadTariff = uiEvent.onRefresh,
                 )
             }
@@ -173,7 +176,7 @@ internal fun AccountInformation(
 private fun Preview() {
     AppTheme {
         Surface {
-            AccountInformation(
+            AccountInformationScreen(
                 modifier = Modifier.padding(all = 32.dp),
                 uiState = AccountUIState(
                     isLoading = false,
@@ -221,8 +224,9 @@ private fun Preview() {
                 uiEvent = AccountUIEvent(
                     onClearCredentialButtonClicked = {},
                     onUpdateApiKeyClicked = {},
-                    onSubmitCredentials = {},
+                    onSubmitCredentials = { _, _ -> },
                     onRefresh = {},
+                    onMeterSerialNumberSelected = { _, _ -> },
                     onErrorShown = {},
                     onShowSnackbar = {},
                 ),
@@ -236,7 +240,7 @@ private fun Preview() {
 private fun ErrorPreview() {
     AppTheme {
         Surface {
-            AccountInformation(
+            AccountInformationScreen(
                 modifier = Modifier.padding(all = 32.dp),
                 uiState = AccountUIState(
                     isLoading = false,
@@ -257,8 +261,9 @@ private fun ErrorPreview() {
                 uiEvent = AccountUIEvent(
                     onClearCredentialButtonClicked = {},
                     onUpdateApiKeyClicked = {},
-                    onSubmitCredentials = {},
+                    onSubmitCredentials = { _, _ -> },
                     onRefresh = {},
+                    onMeterSerialNumberSelected = { _, _ -> },
                     onErrorShown = {},
                     onShowSnackbar = {},
                 ),

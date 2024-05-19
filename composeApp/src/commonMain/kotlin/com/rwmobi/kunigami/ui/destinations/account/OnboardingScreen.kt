@@ -7,7 +7,7 @@
 
 @file:OptIn(ExperimentalResourceApi::class, ExperimentalResourceApi::class)
 
-package com.rwmobi.kunigami.ui.destinations.account.components
+package com.rwmobi.kunigami.ui.destinations.account
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
@@ -33,9 +33,8 @@ import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Agreement
 import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.Tariff
-import com.rwmobi.kunigami.ui.destinations.account.AccountScreen
-import com.rwmobi.kunigami.ui.destinations.account.AccountUIEvent
-import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
+import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
+import com.rwmobi.kunigami.ui.destinations.account.components.CredentialsInputForm
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Clock
@@ -53,7 +52,7 @@ import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration
 
 @Composable
-internal fun Onboarding(
+internal fun OnboardingScreen(
     modifier: Modifier = Modifier,
     uiState: AccountUIState,
     uiEvent: AccountUIEvent,
@@ -110,6 +109,7 @@ internal fun Onboarding(
         CredentialsInputForm(
             modifier = Modifier.fillMaxWidth()
                 .padding(vertical = dimension.grid_2),
+            isSubmitButtonEnabled = !uiState.isLoading,
             onSubmitCredentials = uiEvent.onSubmitCredentials,
         )
 
@@ -131,7 +131,7 @@ internal fun Onboarding(
 
 @Composable
 @Preview
-private fun OnboardingPreview() {
+private fun Preview() {
     AppTheme {
         Surface {
             AccountScreen(
@@ -168,7 +168,8 @@ private fun OnboardingPreview() {
                 uiEvent = AccountUIEvent(
                     onClearCredentialButtonClicked = {},
                     onUpdateApiKeyClicked = {},
-                    onSubmitCredentials = {},
+                    onSubmitCredentials = { _, _ -> },
+                    onMeterSerialNumberSelected = { _, _ -> },
                     onRefresh = {},
                     onErrorShown = {},
                     onShowSnackbar = {},

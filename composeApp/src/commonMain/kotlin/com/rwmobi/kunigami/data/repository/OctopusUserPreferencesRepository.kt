@@ -91,7 +91,7 @@ class OctopusUserPreferencesRepository(
         }
     }
 
-    override suspend fun clearStorge() {
+    override suspend fun clearStorage() {
         withContext(dispatcher) {
             preferencesStore.clearAll()
         }

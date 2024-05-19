@@ -19,7 +19,7 @@ import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Duration
 
 class GetStandardUnitRateUseCase(
-    private val octopusRepository: RestApiRepository,
+    private val restApiRepository: RestApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(): Result<List<Rate>> {
@@ -27,7 +27,7 @@ class GetStandardUnitRateUseCase(
             runCatching {
                 val currentTime = Clock.System.now().roundDownToHour()
 
-                octopusRepository.getStandardUnitRates(
+                restApiRepository.getStandardUnitRates(
                     productCode = "AGILE-FLEX-22-11-25",
                     tariffCode = "E-1R-AGILE-FLEX-22-11-25-J",
                     periodFrom = currentTime,

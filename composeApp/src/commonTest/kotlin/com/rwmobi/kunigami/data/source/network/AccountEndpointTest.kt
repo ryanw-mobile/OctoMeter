@@ -11,7 +11,6 @@ import com.rwmobi.kunigami.data.source.network.samples.GetAccountSampleData
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
-import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -74,7 +73,25 @@ class AccountEndpointTest {
     }
 
     @Test
-    fun getAccount_ShouldThrowNoTransformationFoundException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getAccount_ShouldReturnNull_WhenHttpStatusIsNotFound() = runTest {
+        val accountEndpoint = AccountEndpoint(
+            baseUrl = fakeBaseUrl,
+            httpClient = setupEngine(
+                status = HttpStatusCode.NotFound,
+                contentType = "text/json",
+                payload = """{content:"not found"}""",
+            ),
+        )
+
+        val result = accountEndpoint.getAccount(
+            apiKey = fakeApiKey,
+            accountNumber = fakeAccountNumber,
+        )
+        result shouldBe null
+    }
+
+    @Test
+    fun getAccount_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
         val accountEndpoint = AccountEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -84,7 +101,7 @@ class AccountEndpointTest {
             ),
         )
 
-        shouldThrowExactly<NoTransformationFoundException> {
+        shouldThrowExactly<Exception> {
             accountEndpoint.getAccount(
                 apiKey = fakeApiKey,
                 accountNumber = fakeAccountNumber,

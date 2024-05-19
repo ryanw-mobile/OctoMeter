@@ -15,6 +15,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -37,14 +38,28 @@ class ProductsEndpoint(
         isPrepay: Boolean? = null,
     ): ProductsApiResponse? {
         return withContext(dispatcher) {
-            httpClient.get("$endpointUrl/") {
+            val response = httpClient.get("$endpointUrl/") {
                 parameter("brand", brand)
                 parameter("is_variable", isVariable)
                 parameter("is_business", isBusiness)
                 parameter("available_at", availableAt)
                 parameter("is_green", isGreen)
                 parameter("is_prepay", isPrepay)
-            }.body()
+            }
+
+            when (response.status) {
+                HttpStatusCode.OK -> {
+                    response.body() as ProductsApiResponse?
+                }
+
+                HttpStatusCode.NotFound -> {
+                    null
+                }
+
+                else -> {
+                    throw Exception("Error: HTTP ${response.status}")
+                }
+            }
         }
     }
 
@@ -52,7 +67,21 @@ class ProductsEndpoint(
         productCode: String,
     ): SingleProductApiResponse? {
         return withContext(dispatcher) {
-            httpClient.get("$endpointUrl/$productCode/").body()
+            val response = httpClient.get("$endpointUrl/$productCode/")
+
+            when (response.status) {
+                HttpStatusCode.OK -> {
+                    response.body() as SingleProductApiResponse?
+                }
+
+                HttpStatusCode.NotFound -> {
+                    null
+                }
+
+                else -> {
+                    throw Exception("Error: HTTP ${response.status}")
+                }
+            }
         }
     }
 
@@ -64,10 +93,24 @@ class ProductsEndpoint(
         periodTo: Instant? = null,
     ): PricesApiResponse? {
         return withContext(dispatcher) {
-            httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/standard-unit-rates") {
+            val response = httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/standard-unit-rates") {
                 parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
                 parameter("period_to", periodTo?.formatInstantWithoutSeconds())
-            }.body()
+            }
+
+            when (response.status) {
+                HttpStatusCode.OK -> {
+                    response.body() as PricesApiResponse?
+                }
+
+                HttpStatusCode.NotFound -> {
+                    null
+                }
+
+                else -> {
+                    throw Exception("Error: HTTP ${response.status}")
+                }
+            }
         }
     }
 
@@ -79,10 +122,24 @@ class ProductsEndpoint(
         periodTo: Instant? = null,
     ): PricesApiResponse? {
         return withContext(dispatcher) {
-            httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/standing-charges") {
+            val response = httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/standing-charges") {
                 parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
                 parameter("period_to", periodTo?.formatInstantWithoutSeconds())
-            }.body()
+            }
+
+            when (response.status) {
+                HttpStatusCode.OK -> {
+                    response.body() as PricesApiResponse?
+                }
+
+                HttpStatusCode.NotFound -> {
+                    null
+                }
+
+                else -> {
+                    throw Exception("Error: HTTP ${response.status}")
+                }
+            }
         }
     }
 
@@ -93,10 +150,24 @@ class ProductsEndpoint(
         periodTo: Instant? = null,
     ): PricesApiResponse? {
         return withContext(dispatcher) {
-            httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/day-unit-rates") {
+            val response = httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/day-unit-rates") {
                 parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
                 parameter("period_to", periodTo?.formatInstantWithoutSeconds())
-            }.body()
+            }
+
+            when (response.status) {
+                HttpStatusCode.OK -> {
+                    response.body() as PricesApiResponse?
+                }
+
+                HttpStatusCode.NotFound -> {
+                    null
+                }
+
+                else -> {
+                    throw Exception("Error: HTTP ${response.status}")
+                }
+            }
         }
     }
 
@@ -107,10 +178,24 @@ class ProductsEndpoint(
         periodTo: Instant? = null,
     ): PricesApiResponse? {
         return withContext(dispatcher) {
-            httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/night-unit-rates") {
+            val response = httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/night-unit-rates") {
                 parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
                 parameter("period_to", periodTo?.formatInstantWithoutSeconds())
-            }.body()
+            }
+
+            when (response.status) {
+                HttpStatusCode.OK -> {
+                    response.body() as PricesApiResponse?
+                }
+
+                HttpStatusCode.NotFound -> {
+                    null
+                }
+
+                else -> {
+                    throw Exception("Error: HTTP ${response.status}")
+                }
+            }
         }
     }
 }

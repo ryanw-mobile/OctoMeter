@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 import kotlin.coroutines.cancellation.CancellationException
 
 class GetTariffRatesUseCase(
-    private val octopusRepository: RestApiRepository,
+    private val restApiRepository: RestApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(
@@ -25,7 +25,7 @@ class GetTariffRatesUseCase(
     ): Result<Tariff> {
         return withContext(dispatcher) {
             runCatching {
-                octopusRepository.getSimpleProductTariff(
+                restApiRepository.getSimpleProductTariff(
                     productCode = productCode,
                     tariffCode = tariffCode,
                 ).fold(

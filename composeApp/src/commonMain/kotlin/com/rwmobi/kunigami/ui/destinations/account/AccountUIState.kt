@@ -15,7 +15,7 @@ import com.rwmobi.kunigami.ui.model.ErrorMessage
 @Immutable
 data class AccountUIState(
     val isLoading: Boolean = true,
-    val isDemoMode: Boolean = true,
+    val isDemoMode: Boolean? = null,
     val requestedLayout: AccountScreenLayout = AccountScreenLayout.Compact,
     val selectedMpan: String? = null,
     val selectedMeterSerialNumber: String? = null,

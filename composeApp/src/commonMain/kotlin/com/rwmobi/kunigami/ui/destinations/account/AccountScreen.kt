@@ -27,8 +27,6 @@ import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
-import com.rwmobi.kunigami.ui.destinations.account.components.AccountInformation
-import com.rwmobi.kunigami.ui.destinations.account.components.Onboarding
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Clock
@@ -63,7 +61,7 @@ fun AccountScreen(
                 modifier = contentModifier.fillMaxWidth(),
                 state = lazyListState,
             ) {
-                if (!uiState.isLoading && uiState.isDemoMode) {
+                if (uiState.isDemoMode == true) {
                     item(key = "onboarding") {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -75,7 +73,7 @@ fun AccountScreen(
                                 else -> Modifier.widthIn(max = dimension.windowWidthMedium)
                             }
 
-                            Onboarding(
+                            OnboardingScreen(
                                 modifier = widthConstraintModifier.padding(all = dimension.grid_2),
                                 uiState = uiState,
                                 uiEvent = uiEvent,
@@ -84,7 +82,7 @@ fun AccountScreen(
                     }
                 }
 
-                if (!uiState.isDemoMode && uiState.account != null) {
+                if (uiState.isDemoMode == false && uiState.account != null) {
                     item(key = "account") {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -96,7 +94,7 @@ fun AccountScreen(
                                 else -> Modifier.widthIn(max = dimension.windowWidthMedium)
                             }
 
-                            AccountInformation(
+                            AccountInformationScreen(
                                 modifier = widthConstraintModifier.padding(horizontal = dimension.grid_2),
                                 uiState = uiState,
                                 uiEvent = uiEvent,
@@ -155,7 +153,8 @@ private fun Preview() {
             uiEvent = AccountUIEvent(
                 onClearCredentialButtonClicked = {},
                 onUpdateApiKeyClicked = {},
-                onSubmitCredentials = {},
+                onSubmitCredentials = { _, _ -> },
+                onMeterSerialNumberSelected = { _, _ -> },
                 onRefresh = {},
                 onErrorShown = {},
                 onShowSnackbar = {},
