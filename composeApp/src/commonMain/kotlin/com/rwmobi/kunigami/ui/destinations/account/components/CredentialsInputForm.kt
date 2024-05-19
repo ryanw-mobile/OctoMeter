@@ -51,6 +51,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 internal fun CredentialsInputForm(
     modifier: Modifier = Modifier,
+    isSubmitButtonEnabled: Boolean,
     onSubmitCredentials: (apiKey: String, accountNumber: String) -> Unit,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -117,11 +118,12 @@ internal fun CredentialsInputForm(
         )
 
         Button(
+            modifier = Modifier.fillMaxWidth(),
             onClick = {
                 keyboardController?.hide()
                 onSubmitCredentials(apiKey.trim(), account.trim())
             },
-            modifier = Modifier.fillMaxWidth(),
+            enabled = isSubmitButtonEnabled && apiKey.isNotBlank() && account.isNotBlank(),
         ) {
             Text(text = stringResource(resource = Res.string.onboarding_button_connect))
         }
@@ -134,6 +136,7 @@ private fun Preview() {
     AppTheme {
         Surface {
             CredentialsInputForm(
+                isSubmitButtonEnabled = true,
                 onSubmitCredentials = { _, _ -> },
             )
         }

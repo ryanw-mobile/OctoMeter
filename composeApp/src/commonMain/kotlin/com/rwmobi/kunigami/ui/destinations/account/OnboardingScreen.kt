@@ -109,6 +109,7 @@ internal fun OnboardingScreen(
         CredentialsInputForm(
             modifier = Modifier.fillMaxWidth()
                 .padding(vertical = dimension.grid_2),
+            isSubmitButtonEnabled = !uiState.isLoading,
             onSubmitCredentials = uiEvent.onSubmitCredentials,
         )
 

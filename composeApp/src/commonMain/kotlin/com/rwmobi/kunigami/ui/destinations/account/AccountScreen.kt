@@ -61,7 +61,7 @@ fun AccountScreen(
                 modifier = contentModifier.fillMaxWidth(),
                 state = lazyListState,
             ) {
-                if (!uiState.isLoading && uiState.isDemoMode) {
+                if (uiState.isDemoMode == true) {
                     item(key = "onboarding") {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -82,7 +82,7 @@ fun AccountScreen(
                     }
                 }
 
-                if (!uiState.isDemoMode && uiState.account != null) {
+                if (uiState.isDemoMode == false && uiState.account != null) {
                     item(key = "account") {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -154,6 +154,7 @@ private fun Preview() {
                 onClearCredentialButtonClicked = {},
                 onUpdateApiKeyClicked = {},
                 onSubmitCredentials = { _, _ -> },
+                onMeterSerialNumberSelected = { _, _ -> },
                 onRefresh = {},
                 onErrorShown = {},
                 onShowSnackbar = {},
