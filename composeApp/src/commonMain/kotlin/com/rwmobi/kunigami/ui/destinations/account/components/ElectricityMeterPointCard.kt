@@ -46,6 +46,7 @@ internal fun ElectricityMeterPointCard(
     tariff: Tariff?,
     requestedLayout: AccountScreenLayout,
     onReloadTariff: () -> Unit,
+    onMeterSerialNumberSelected: (mpan: String, meterSerialNumber: String) -> Unit,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -128,7 +129,7 @@ internal fun ElectricityMeterPointCard(
                         mpan = meterPoint.mpan,
                         meterSerialNumber = meterSerialNumber,
                         meterSerialNumberTextStyle = meterSerialNumberTextStyle,
-                        onMeterSerialNumberSelected = {},
+                        onMeterSerialNumberSelected = { onMeterSerialNumberSelected(meterPoint.mpan, meterSerialNumber) },
                     )
                 }
             }

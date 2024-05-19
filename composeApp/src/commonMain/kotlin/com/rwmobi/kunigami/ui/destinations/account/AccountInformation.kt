@@ -142,6 +142,7 @@ internal fun AccountInformationScreen(
                     meterPoint = meterPoint,
                     tariff = uiState.tariff,
                     requestedLayout = uiState.requestedLayout,
+                    onMeterSerialNumberSelected = uiEvent.onMeterSerialNumberSelected,
                     onReloadTariff = uiEvent.onRefresh,
                 )
             }
@@ -225,6 +226,7 @@ private fun Preview() {
                     onUpdateApiKeyClicked = {},
                     onSubmitCredentials = { _, _ -> },
                     onRefresh = {},
+                    onMeterSerialNumberSelected = { _, _ -> },
                     onErrorShown = {},
                     onShowSnackbar = {},
                 ),
@@ -261,6 +263,7 @@ private fun ErrorPreview() {
                     onUpdateApiKeyClicked = {},
                     onSubmitCredentials = { _, _ -> },
                     onRefresh = {},
+                    onMeterSerialNumberSelected = { _, _ -> },
                     onErrorShown = {},
                     onShowSnackbar = {},
                 ),

@@ -108,6 +108,7 @@ fun AppNavigationHost(
                     onUpdateApiKeyClicked = {}, // TODO: Dialog
                     onClearCredentialButtonClicked = viewModel::clearCredentials,
                     onSubmitCredentials = viewModel::submitCredentials,
+                    onMeterSerialNumberSelected = viewModel::updateMeterSerialNumber,
                     onErrorShown = viewModel::errorShown,
                     onShowSnackbar = onShowSnackbar,
                 ),

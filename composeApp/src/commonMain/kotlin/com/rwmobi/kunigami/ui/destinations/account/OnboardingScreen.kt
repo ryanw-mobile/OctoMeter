@@ -169,6 +169,7 @@ private fun Preview() {
                     onClearCredentialButtonClicked = {},
                     onUpdateApiKeyClicked = {},
                     onSubmitCredentials = { _, _ -> },
+                    onMeterSerialNumberSelected = { _, _ -> },
                     onRefresh = {},
                     onErrorShown = {},
                     onShowSnackbar = {},

@@ -17,6 +17,7 @@ import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
 import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
+import com.rwmobi.kunigami.domain.usecase.UpdateMeterPreferenceUseCase
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -37,6 +38,7 @@ class AccountViewModel(
     private val getUserAccountUseCase: GetUserAccountUseCase,
     private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val initialiseAccountUseCase: InitialiseAccountUseCase,
+    private val updateMeterPreferenceUseCase: UpdateMeterPreferenceUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<AccountUIState> = MutableStateFlow(AccountUIState(isLoading = true))
@@ -106,10 +108,15 @@ class AccountViewModel(
             )
             tariffRates.fold(
                 onSuccess = { tariff ->
+                    val selectedMpan = userPreferencesRepository.getMpan()
+                    val selectedMeterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
+
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             isDemoMode = false,
                             tariff = tariff,
+                            selectedMpan = selectedMpan,
+                            selectedMeterSerialNumber = selectedMeterSerialNumber,
                             isLoading = false,
                         )
                     }
@@ -133,8 +140,33 @@ class AccountViewModel(
         apiKey: String,
         accountNumber: String,
     ) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = true,
+            )
+        }
+
         viewModelScope.launch {
             val result = initialiseAccountUseCase(apiKey = apiKey, accountNumber = accountNumber)
+
+            result.fold(
+                onSuccess = {
+                    refresh()
+                },
+                onFailure = { throwable ->
+                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
+                    Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                },
+            )
+        }
+    }
+
+    fun updateMeterSerialNumber(
+        mpan: String,
+        meterSerialNumber: String,
+    ) {
+        viewModelScope.launch {
+            val result = updateMeterPreferenceUseCase(mpan = mpan, meterSerialNumber = meterSerialNumber)
 
             result.fold(
                 onSuccess = {

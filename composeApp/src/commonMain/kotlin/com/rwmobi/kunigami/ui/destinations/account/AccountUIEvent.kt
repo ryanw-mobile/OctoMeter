@@ -15,6 +15,7 @@ data class AccountUIEvent(
     val onUpdateApiKeyClicked: () -> Unit,
     val onClearCredentialButtonClicked: () -> Unit,
     val onSubmitCredentials: (apiKey: String, accountNumber: String) -> Unit,
+    val onMeterSerialNumberSelected: (mpan: String, meterSerialNumber: String) -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,
 )
