@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
             App(
                 androidStatusBarModifier = { isDarkTheme ->
                     val view = LocalView.current
-                    val primaryColorArgb = colorScheme.primary.toArgb()
+                    val primaryColorArgb = colorScheme.tertiary.toArgb()
 
                     if (!view.isInEditMode) {
                         SideEffect {
