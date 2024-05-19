@@ -43,9 +43,9 @@
 
     <string name="account_mpan">MPAN: %1$s</string>
     <string name="account_error_null_tariff">Unable to retrieve the details for your tariff %1$s.</string>
-    <string name="account_tariff_period">From %1$s to %2$s</string>
-    <string name="account_tariff_period_no_end_date">From %1$s</string>
-    <string name="account_tariff_unit_rate">Unit Rate\n(p/kWh)</string>
+    <string name="account_tariff_start_date">Tariff starts on %1$s</string>
+    <string name="account_tariff_end_date">Tariff ends on %1$s</string>
+    <string name="account_tariff_unit_rate">Standard Unit Rate\n(p/kWh)</string>
     <string name="account_tariff_standing_charge">Standing Charge\n(p/day)</string>
     <string name="account_meter_serial">Serial: %1$s</string>
     <string name="account_meter_selected">SELECTED</string>

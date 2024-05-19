@@ -16,6 +16,14 @@ This README will be updated with more technical details when the app is close to
 <br /><br />
 <hr/>
 <br /><br />
+
+#### Current limitations
+
+As explained above, these are the know issues to be sorted out in the future, since they are not affecting me:
+
+* Display tariff with dual rates (day unit rate and night unit rates)
+* 
+
 ## Some draft technical details
 
 * `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
