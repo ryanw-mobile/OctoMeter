@@ -50,7 +50,6 @@ import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.utils.getScreenSizeInfo
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.ok
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -79,10 +78,12 @@ private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?): Na
     }
 }
 
-@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 @Preview
-fun App() {
+fun App(
+    androidStatusBarModifier: @Composable ((isDarkTheme: Boolean) -> Unit)? = null,
+) {
     val windowSizeClass = calculateWindowSizeClass()
     val screenSizeInfo = getScreenSizeInfo()
     val lastDoubleTappedNavItem = remember { mutableStateOf<AppNavigationItem?>(null) }
@@ -94,7 +95,9 @@ fun App() {
         currentRoute = currentRoute,
     )
 
-    AppTheme {
+    AppTheme(
+        androidStatusBarModifier = androidStatusBarModifier,
+    ) {
         Surface {
             Row(
                 modifier = Modifier
@@ -117,7 +120,7 @@ fun App() {
 
                         VerticalDivider(
                             modifier = Modifier.fillMaxHeight(),
-                            color = MaterialTheme.colorScheme.secondaryContainer,
+                            color = MaterialTheme.colorScheme.surfaceContainerHighest,
                         )
                     }
                 }
@@ -138,7 +141,7 @@ fun App() {
                             Column {
                                 HorizontalDivider(
                                     modifier = Modifier.fillMaxWidth(),
-                                    color = MaterialTheme.colorScheme.secondaryContainer,
+                                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
                                 )
 
                                 AppBottomNavigationBar(
