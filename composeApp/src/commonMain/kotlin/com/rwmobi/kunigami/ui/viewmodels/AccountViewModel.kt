@@ -27,6 +27,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.account_error_load_account
+import kunigami.composeapp.generated.resources.account_error_load_tariff
+import org.jetbrains.compose.resources.getString
 
 class AccountViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
@@ -87,8 +91,8 @@ class AccountViewModel(
                             )
                         }
                     } else {
-                        updateUIForError(message = throwable.message ?: "Error when retrieving tariffs")
-                        Logger.e("AccountViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                        updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
+                        Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
                     }
                     return@launch
                 },
@@ -111,8 +115,8 @@ class AccountViewModel(
                     }
                 },
                 onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: "Error when retrieving tariffs")
-                    Logger.e("AccountViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_tariff))
+                    Logger.e(getString(resource = Res.string.account_error_load_tariff), throwable = throwable, tag = "AccountViewModel")
                 },
             )
         }
@@ -137,8 +141,8 @@ class AccountViewModel(
                     refresh()
                 },
                 onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: "Error when retrieving tariffs")
-                    Logger.e("AccountViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
+                    Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
                 },
             )
         }

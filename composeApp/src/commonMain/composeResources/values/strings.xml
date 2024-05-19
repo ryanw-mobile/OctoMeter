@@ -31,6 +31,8 @@
     <string name="account_clear_credential_button_cta">Clear</string>
     <string name="account_version_api_disclaimer">OctoMeter Version %1$s (Build %2$d)\n%3$s\n\nThe APIs are provided by Octopus Energy Ltd. Usage subject to their terms of service.</string>
 
+    <string name="account_error_load_account">Unable to retrieve your account details.</string>
+    <string name="account_error_load_tariff">Unable to retrieve the tariff details.</string>
     <string name="account_error_account_empty">Unable to retrieve your account details. Try again?</string>
 
     <string name="account_number">Account %1$s</string>
