@@ -79,6 +79,7 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(libs.material3.windowsizeclass.multiplatform)
             implementation(libs.kermit)
+            implementation(libs.kermit.koin)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.cio)
             implementation(libs.ktor.serialization.kotlinx.json)
