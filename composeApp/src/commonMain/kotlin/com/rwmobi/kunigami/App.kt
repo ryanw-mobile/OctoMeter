@@ -120,7 +120,7 @@ fun App(
 
                         VerticalDivider(
                             modifier = Modifier.fillMaxHeight(),
-                            color = MaterialTheme.colorScheme.secondaryContainer,
+                            color = MaterialTheme.colorScheme.surfaceContainerHighest,
                         )
                     }
                 }
@@ -141,7 +141,7 @@ fun App(
                             Column {
                                 HorizontalDivider(
                                     modifier = Modifier.fillMaxWidth(),
-                                    color = MaterialTheme.colorScheme.secondaryContainer,
+                                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
                                 )
 
                                 AppBottomNavigationBar(
