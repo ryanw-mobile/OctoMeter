@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.data.repository.mapper
 
 import com.rwmobi.kunigami.data.source.network.dto.SingleProductApiResponse
+import com.rwmobi.kunigami.domain.exceptions.TariffNotFoundException
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.Tariff
 
@@ -30,7 +31,7 @@ fun SingleProductApiResponse.toTariff(tariffCode: String): Tariff {
         throw IllegalArgumentException("$tariffCode not found in product $code")
     }
 
-    val rates = tariffDetails.varying ?: tariffDetails.directDebitMonthly ?: throw IllegalArgumentException("rate not found for tariff $tariffCode")
+    val rates = tariffDetails.varying ?: tariffDetails.directDebitMonthly ?: throw TariffNotFoundException(tariffCode)
 
     return Tariff(
         code = code,

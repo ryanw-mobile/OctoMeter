@@ -29,7 +29,7 @@ import com.rwmobi.kunigami.ui.components.IconTextButton
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.account_error_no_tariff
+import kunigami.composeapp.generated.resources.account_error_null_tariff
 import kunigami.composeapp.generated.resources.account_mpan
 import kunigami.composeapp.generated.resources.reload
 import kunigami.composeapp.generated.resources.retry
@@ -77,7 +77,7 @@ internal fun ElectricityMeterPointCard(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
                 ) {
-                    Text(text = stringResource(resource = Res.string.account_error_no_tariff))
+                    Text(text = stringResource(resource = Res.string.account_error_null_tariff, meterPoint.currentAgreement.tariffCode))
 
                     IconTextButton(
                         modifier = Modifier.align(alignment = Alignment.CenterHorizontally),

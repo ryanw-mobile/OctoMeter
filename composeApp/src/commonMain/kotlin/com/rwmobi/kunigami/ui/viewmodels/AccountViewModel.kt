@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
+import com.rwmobi.kunigami.domain.exceptions.TariffNotFoundException
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
@@ -106,10 +107,11 @@ class AccountViewModel(
                 productCode = extractSegment(tariffCode) ?: "",
                 tariffCode = tariffCode,
             )
+            val selectedMpan = userPreferencesRepository.getMpan()
+            val selectedMeterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
+
             tariffRates.fold(
                 onSuccess = { tariff ->
-                    val selectedMpan = userPreferencesRepository.getMpan()
-                    val selectedMeterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
 
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
@@ -122,8 +124,21 @@ class AccountViewModel(
                     }
                 },
                 onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_tariff))
                     Logger.e(getString(resource = Res.string.account_error_load_tariff), throwable = throwable, tag = "AccountViewModel")
+
+                    if (throwable is TariffNotFoundException) {
+                        _uiState.update { currentUiState ->
+                            currentUiState.copy(
+                                isDemoMode = false,
+                                tariff = null,
+                                selectedMpan = selectedMpan,
+                                selectedMeterSerialNumber = selectedMeterSerialNumber,
+                                isLoading = false,
+                            )
+                        }
+                    } else {
+                        updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_tariff))
+                    }
                 },
             )
         }

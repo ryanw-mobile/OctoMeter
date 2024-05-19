@@ -32,7 +32,7 @@
     <string name="account_version_api_disclaimer">OctoMeter Version %1$s (Build %2$d)\n%3$s\n\nThe APIs are provided by Octopus Energy Ltd. Usage subject to their terms of service.</string>
 
     <string name="account_error_load_account">Unable to retrieve your account details.</string>
-    <string name="account_error_load_tariff">Unable to retrieve the tariff details.</string>
+    <string name="account_error_load_tariff">Unable to retrieve your tariff.</string>
     <string name="account_error_account_empty">Unable to retrieve your account details. Try again?</string>
 
     <string name="account_number">Account %1$s</string>
@@ -42,7 +42,7 @@
     <string name="account_update_api_key">Update API Key</string>
 
     <string name="account_mpan">MPAN: %1$s</string>
-    <string name="account_error_no_tariff">Unable to retrieve your tariff.</string>
+    <string name="account_error_null_tariff">Unable to retrieve the details for your tariff %1$s.</string>
     <string name="account_tariff_period">From %1$s to %2$s</string>
     <string name="account_tariff_period_no_end_date">From %1$s</string>
     <string name="account_tariff_unit_rate">Unit Rate\n(p/kWh)</string>
