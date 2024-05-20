@@ -7,7 +7,6 @@
 
 package com.rwmobi.kunigami.ui.destinations.usage
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
@@ -28,12 +26,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
-import com.rwmobi.kunigami.domain.model.Consumption
+import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
@@ -139,13 +136,16 @@ fun UsageScreen(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = dimension.grid_2),
-                                horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+                                    .padding(
+                                        horizontal = dimension.grid_2,
+                                        vertical = dimension.grid_0_25,
+                                    ),
+                                horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_3),
                             ) {
                                 for (columnIndex in partitionedItems.indices) {
                                     val item = partitionedItems.getOrNull(columnIndex)?.getOrNull(rowIndex)
                                     if (item != null) {
-                                        GridItem(
+                                        IndicatorTextValueGridItem(
                                             modifier = Modifier.weight(1f),
                                             indicatorColor = colorPalette[
                                                 getPercentageColorIndex(
@@ -153,7 +153,8 @@ fun UsageScreen(
                                                     maxValue = uiState.consumptionRange.endInclusive,
                                                 ),
                                             ],
-                                            consumption = item,
+                                            label = item.intervalStart.toLocalHourMinuteString(),
+                                            value = item.consumption.toString(precision = 2),
                                         )
                                     } else {
                                         Spacer(modifier = Modifier.weight(1f))
@@ -183,29 +184,4 @@ fun UsageScreen(
 
 private fun getPercentageColorIndex(value: Double, maxValue: Double): Int {
     return min(((value / maxValue) * 100).toInt() - 1, 99)
-}
-
-@Composable
-private fun GridItem(
-    modifier: Modifier = Modifier,
-    indicatorColor: Color,
-    consumption: Consumption,
-) {
-    val dimension = LocalDensity.current.getDimension()
-    Row(
-        modifier = modifier.fillMaxWidth()
-            .background(color = indicatorColor),
-        horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
-    ) {
-        Text(
-            modifier = Modifier.weight(1.0f),
-            text = consumption.intervalStart.toLocalHourMinuteString(),
-        )
-
-        Text(
-            modifier = Modifier.wrapContentWidth(),
-            fontWeight = FontWeight.Bold,
-            text = consumption.consumption.toString(precision = 2),
-        )
-    }
 }
