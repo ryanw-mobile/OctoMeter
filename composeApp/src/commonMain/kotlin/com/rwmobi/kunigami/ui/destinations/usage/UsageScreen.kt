@@ -135,7 +135,7 @@ fun UsageScreen(
                     }
 
                     uiState.consumptions.forEach { consumptionGroup ->
-                        item(key = "${consumptionGroup}Title") {
+                        item(key = "${consumptionGroup.title}Title") {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()

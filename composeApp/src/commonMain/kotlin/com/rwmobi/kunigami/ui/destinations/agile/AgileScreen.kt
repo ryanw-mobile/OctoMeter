@@ -7,17 +7,18 @@
 
 package com.rwmobi.kunigami.ui.destinations.agile
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,24 +31,25 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
+import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
 import com.rwmobi.kunigami.ui.utils.generateGYRHueColorPalette
-import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
-import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
-import io.github.koalaplot.core.bar.VerticalBarPlotEntry
+import com.rwmobi.kunigami.ui.utils.getPercentageColorIndex
+import com.rwmobi.kunigami.ui.utils.partitionList
 import io.github.koalaplot.core.style.LineStyle
+import io.github.koalaplot.core.util.toString
 import io.github.koalaplot.core.xygraph.HorizontalLineAnnotation
 import io.github.koalaplot.core.xygraph.TickPosition
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.agile_unit_rate_details
 import kunigami.composeapp.generated.resources.agile_vat_unit_rate
 import org.jetbrains.compose.resources.stringResource
 
@@ -78,28 +80,6 @@ fun AgileScreen(
 
     Box(modifier = modifier) {
         if (uiState.rates.isNotEmpty()) {
-            val entries: List<VerticalBarPlotEntry<Int, Double>> = remember(uiState.rates) {
-                buildList {
-                    uiState.rates.forEachIndexed { index, rate ->
-                        add(DefaultVerticalBarPlotEntry((index + 1), DefaultVerticalBarPosition(0.0, rate.vatInclusivePrice)))
-                    }
-                }
-            }
-
-            val labelIndex: Map<Int, Int> = remember(uiState.rates, uiState.requestedChartLayout) {
-                buildMap {
-                    // Generate all possible labels
-                    var lastRateValue: Int? = null
-                    uiState.rates.forEachIndexed { index, rate ->
-                        val currentTime = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
-                        if (currentTime != lastRateValue) {
-                            put(index + 1, currentTime)
-                            lastRateValue = currentTime
-                        }
-                    }
-                }
-            }
-
             ScrollbarMultiplatform(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = uiState.rates.isNotEmpty(),
@@ -107,80 +87,114 @@ fun AgileScreen(
             ) { contentModifier ->
                 LazyColumn(
                     modifier = contentModifier.fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = dimension.grid_4),
                     state = lazyListState,
                 ) {
-                    item {
-                        BoxWithConstraints {
-                            val constraintModifier = when (uiState.requestedChartLayout) {
-                                is RequestedChartLayout.Portrait -> {
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .aspectRatio(4 / 3f)
-                                }
-
-                                is RequestedChartLayout.LandScape -> {
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .height(uiState.requestedChartLayout.requestedMaxHeight)
-                                }
-                            }
-
-                            VerticalBarChart(
-                                modifier = constraintModifier.padding(all = dimension.grid_2),
-                                entries = entries,
-                                yAxisRange = uiState.rateRange,
-                                yAxisTickPosition = TickPosition.Outside,
-                                xAxisTickPosition = TickPosition.Outside,
-                                yAxisTitle = stringResource(resource = Res.string.agile_vat_unit_rate),
-                                barWidth = 0.8f,
-                                labelGenerator = { index ->
-                                    labelIndex[index]?.toString()?.padStart(2, '0')
-                                },
-                                tooltipGenerator = { index ->
-                                    with(uiState.rates[index]) {
-                                        val timeRange = validFrom.toLocalHourMinuteString() +
-                                            (validTo?.let { "- ${it.toLocalHourMinuteString()}" } ?: "")
-                                        "$timeRange\n${vatInclusivePrice}p"
+                    uiState.barChartData?.let { barChartData ->
+                        item {
+                            BoxWithConstraints {
+                                val constraintModifier = when (uiState.requestedChartLayout) {
+                                    is RequestedChartLayout.Portrait -> {
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .aspectRatio(4 / 3f)
                                     }
-                                },
-                                colorPalette = colorPalette,
-                                backgroundPlot = { graphScope ->
-                                    graphScope.HorizontalLineAnnotation(
-                                        location = 24.55,
-                                        lineStyle = LineStyle(
-                                            brush = SolidColor(MaterialTheme.colorScheme.error),
-                                            strokeWidth = dimension.grid_0_5,
-                                            pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f),
-                                            alpha = 0.5f,
-                                            colorFilter = null, // No color filter
-                                            blendMode = DrawScope.DefaultBlendMode,
-                                        ),
-                                    )
-                                },
+
+                                    is RequestedChartLayout.LandScape -> {
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .height(uiState.requestedChartLayout.requestedMaxHeight)
+                                    }
+                                }
+
+                                VerticalBarChart(
+                                    modifier = constraintModifier.padding(all = dimension.grid_2),
+                                    entries = barChartData.verticalBarPlotEntries,
+                                    yAxisRange = uiState.rateRange,
+                                    yAxisTickPosition = TickPosition.Outside,
+                                    xAxisTickPosition = TickPosition.Outside,
+                                    yAxisTitle = stringResource(resource = Res.string.agile_vat_unit_rate),
+                                    barWidth = 0.8f,
+                                    labelGenerator = { index ->
+                                        barChartData.labels[index]?.toString()?.padStart(2, '0')
+                                    },
+                                    tooltipGenerator = { index ->
+                                        barChartData.tooltips[index]
+                                    },
+                                    colorPalette = colorPalette,
+                                    backgroundPlot = { graphScope ->
+                                        graphScope.HorizontalLineAnnotation(
+                                            location = 24.55,
+                                            lineStyle = LineStyle(
+                                                brush = SolidColor(MaterialTheme.colorScheme.error),
+                                                strokeWidth = dimension.grid_0_5,
+                                                pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f),
+                                                alpha = 0.5f,
+                                                colorFilter = null, // No color filter
+                                                blendMode = DrawScope.DefaultBlendMode,
+                                            ),
+                                        )
+                                    },
+                                )
+                            }
+                        }
+                    }
+
+                    if (uiState.rates.isNotEmpty()) {
+                        item(key = "headingUnitRateDetails") {
+                            Text(
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(all = dimension.grid_2),
+                                style = MaterialTheme.typography.titleLarge,
+                                text = stringResource(resource = Res.string.agile_unit_rate_details),
                             )
                         }
                     }
 
-                    itemsIndexed(
-                        items = uiState.rates,
-                        key = { _, rate -> rate.validFrom.epochSeconds },
-                    ) { _, rate ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = dimension.grid_2),
-                        ) {
-                            val timeLabel = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault())
+                    uiState.rates.forEach { rateGroup ->
+                        item(key = "${rateGroup.title}Title") {
                             Text(
-                                modifier = Modifier.weight(1.0f),
-                                text = "${timeLabel.date} ${timeLabel.time}",
-                            )
-
-                            Text(
-                                modifier = Modifier.wrapContentWidth(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(all = dimension.grid_2),
+                                style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                text = "${rate.vatInclusivePrice}",
+                                text = rateGroup.title,
                             )
+                        }
+
+                        // We can do fancier grouping, but for now evenly-distributed is ok
+                        val partitionedItems = rateGroup.rates.partitionList(columns = uiState.requestedRateColumns)
+                        val maxRows = partitionedItems.maxOf { it.size }
+
+                        items(maxRows) { rowIndex ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        horizontal = dimension.grid_2,
+                                        vertical = dimension.grid_0_25,
+                                    ),
+                                horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_3),
+                            ) {
+                                for (columnIndex in partitionedItems.indices) {
+                                    val item = partitionedItems.getOrNull(columnIndex)?.getOrNull(rowIndex)
+                                    if (item != null) {
+                                        IndicatorTextValueGridItem(
+                                            modifier = Modifier.weight(1f),
+                                            indicatorColor = colorPalette[
+                                                item.vatInclusivePrice.getPercentageColorIndex(
+                                                    maxValue = uiState.rateRange.endInclusive,
+                                                ),
+                                            ],
+                                            label = item.validFrom.toLocalHourMinuteString(),
+                                            value = item.vatInclusivePrice.roundToTwoDecimalPlaces().toString(precision = 2),
+                                        )
+                                    } else {
+                                        Spacer(modifier = Modifier.weight(1f))
+                                    }
+                                }
+                            }
                         }
                     }
                 }
