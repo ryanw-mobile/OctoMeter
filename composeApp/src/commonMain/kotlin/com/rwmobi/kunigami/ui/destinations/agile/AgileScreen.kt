@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import com.rwmobi.kunigami.domain.extensions.formatInstantWithoutSeconds
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
@@ -48,6 +47,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.agile_vat_unit_rate
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun AgileScreen(
@@ -129,8 +131,7 @@ fun AgileScreen(
                                 yAxisRange = uiState.rateRange,
                                 yAxisTickPosition = TickPosition.Outside,
                                 xAxisTickPosition = TickPosition.Outside,
-                                yAxisTitle = "VAT Unit Rate (p/kWh)",
-                                xAxisTitle = "${uiState.rates.first().validFrom.formatInstantWithoutSeconds()} - ${uiState.rates.last().validTo?.formatInstantWithoutSeconds()}",
+                                yAxisTitle = stringResource(resource = Res.string.agile_vat_unit_rate),
                                 barWidth = 0.8f,
                                 labelGenerator = { index ->
                                     labelIndex[index]?.toString()?.padStart(2, '0')

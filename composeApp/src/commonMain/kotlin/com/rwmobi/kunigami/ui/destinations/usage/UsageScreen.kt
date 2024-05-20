@@ -44,6 +44,7 @@ import com.rwmobi.kunigami.ui.utils.partitionList
 import io.github.koalaplot.core.util.toString
 import io.github.koalaplot.core.xygraph.TickPosition
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.kwh
 import kunigami.composeapp.generated.resources.unit_kwh
 import kunigami.composeapp.generated.resources.usage_energy_consumption_breakdown
 import org.jetbrains.compose.resources.stringResource
@@ -108,7 +109,7 @@ fun UsageScreen(
                                     yAxisRange = uiState.consumptionRange,
                                     yAxisTickPosition = TickPosition.Outside,
                                     xAxisTickPosition = TickPosition.Outside,
-                                    yAxisTitle = "kWh",
+                                    yAxisTitle = stringResource(resource = Res.string.kwh),
                                     barWidth = 0.8f,
                                     colorPalette = colorPalette,
                                     labelGenerator = { index ->
