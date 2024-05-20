@@ -24,8 +24,8 @@ import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsScreen
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIEvent
 import com.rwmobi.kunigami.ui.destinations.usage.UsageScreen
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIEvent
-import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.utils.collectAsStateMultiplatform
+import com.rwmobi.kunigami.ui.utils.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
 import com.rwmobi.kunigami.ui.viewmodels.AgileViewModel
 import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel
@@ -37,7 +37,6 @@ fun AppNavigationHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     windowSizeClass: WindowSizeClass,
-    screenSizeInfo: ScreenSizeInfo,
     lastDoubleTappedNavItem: AppNavigationItem?,
     onShowSnackbar: suspend (String) -> Unit,
     onScrolledToTop: (AppNavigationItem) -> Unit,
@@ -50,6 +49,9 @@ fun AppNavigationHost(
         composable(route = AppNavigationItem.USAGE.name) {
             val viewModel: UsageViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
+
+            // workaround: Issue with iOS we have to do it here
+            val screenSizeInfo = getScreenSizeInfo()
             viewModel.notifyScreenSizeChanged(screenSizeInfo = screenSizeInfo)
 
             UsageScreen(
@@ -66,6 +68,9 @@ fun AppNavigationHost(
         composable(route = AppNavigationItem.AGILE.name) {
             val viewModel: AgileViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
+
+            // workaround: Issue with iOS we have to do it here
+            val screenSizeInfo = getScreenSizeInfo()
             viewModel.notifyScreenSizeChanged(screenSizeInfo = screenSizeInfo)
 
             AgileScreen(
