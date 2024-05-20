@@ -19,7 +19,8 @@ fun <T> List<T>.partitionList(columns: Int): List<List<T>> {
     }
 
     // Sometimes we can perfectly distribute the items using one less column
-    if (partitioned.last().isEmpty()) {
+    // However if columns = 2, we don't do this
+    if (partitioned.last().isEmpty() && columns > 2) {
         partitioned.removeLast()
     }
 
