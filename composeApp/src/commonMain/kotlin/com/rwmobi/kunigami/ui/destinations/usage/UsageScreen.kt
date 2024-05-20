@@ -45,6 +45,7 @@ import io.github.koalaplot.core.util.toString
 import io.github.koalaplot.core.xygraph.TickPosition
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.unit_kwh
+import kunigami.composeapp.generated.resources.usage_energy_consumption_breakdown
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -121,16 +122,42 @@ fun UsageScreen(
                         }
                     }
 
+                    if (uiState.consumptions.isNotEmpty()) {
+                        item(key = "headingConsumptionBreakdowns") {
+                            Text(
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(all = dimension.grid_2),
+                                style = MaterialTheme.typography.titleLarge,
+                                text = stringResource(resource = Res.string.usage_energy_consumption_breakdown),
+                            )
+                        }
+                    }
+
                     uiState.consumptions.forEach { consumptionGroup ->
                         item(key = "${consumptionGroup}Title") {
-                            Text(
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(all = dimension.grid_2),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                text = "${consumptionGroup.title}: ${consumptionGroup.consumptions.sumOf { it.consumption }.roundToTwoDecimalPlaces()} kWh",
-                            )
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    modifier = Modifier.weight(1f),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    text = consumptionGroup.title,
+                                )
+
+                                Text(
+                                    modifier = Modifier.wrapContentSize(),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    text = stringResource(
+                                        resource = Res.string.unit_kwh,
+                                        consumptionGroup.consumptions.sumOf { it.consumption }.roundToTwoDecimalPlaces(),
+                                    ),
+                                )
+                            }
                         }
 
                         // We can do fancier grouping, but for now evenly-distributed is ok

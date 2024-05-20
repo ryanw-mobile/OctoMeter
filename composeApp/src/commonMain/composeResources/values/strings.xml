@@ -16,6 +16,10 @@
     <string name="ok">OK</string>
     <string name="retry">Retry</string>
     <string name="update">Update</string>
+    <string name="unit_kwh">%1$s kWh</string>
+
+    <!-- Usage -->
+    <string name="usage_energy_consumption_breakdown">Energy Consumption Breakdown</string>
 
     <!-- Product Features -->
     <string name="product_feature_variable">Variable</string>
