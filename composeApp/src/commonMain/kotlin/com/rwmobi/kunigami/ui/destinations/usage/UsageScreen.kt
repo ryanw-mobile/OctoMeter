@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -37,10 +39,13 @@ import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
 import com.rwmobi.kunigami.ui.utils.generateGYRHueColorPalette
+import com.rwmobi.kunigami.ui.utils.getPercentageColorIndex
 import com.rwmobi.kunigami.ui.utils.partitionList
 import io.github.koalaplot.core.util.toString
 import io.github.koalaplot.core.xygraph.TickPosition
-import kotlin.math.min
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.unit_kwh
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun UsageScreen(
@@ -148,8 +153,7 @@ fun UsageScreen(
                                         IndicatorTextValueGridItem(
                                             modifier = Modifier.weight(1f),
                                             indicatorColor = colorPalette[
-                                                getPercentageColorIndex(
-                                                    value = item.consumption,
+                                                item.consumption.getPercentageColorIndex(
                                                     maxValue = uiState.consumptionRange.endInclusive,
                                                 ),
                                             ],
@@ -180,8 +184,4 @@ fun UsageScreen(
     LaunchedEffect(true) {
         uiEvent.onRefresh()
     }
-}
-
-private fun getPercentageColorIndex(value: Double, maxValue: Double): Int {
-    return min(((value / maxValue) * 100).toInt() - 1, 99)
 }

@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.utils.getPercentageColorIndex
 import io.github.koalaplot.core.ChartLayout
 import io.github.koalaplot.core.bar.DefaultVerticalBar
 import io.github.koalaplot.core.bar.VerticalBarPlot
@@ -42,7 +43,6 @@ import io.github.koalaplot.core.xygraph.TickPosition
 import io.github.koalaplot.core.xygraph.XYGraph
 import io.github.koalaplot.core.xygraph.XYGraphScope
 import io.github.koalaplot.core.xygraph.rememberAxisStyle
-import kotlin.math.min
 
 @OptIn(ExperimentalKoalaPlotApi::class)
 @Composable
@@ -156,8 +156,7 @@ fun VerticalBarChart(
                         modifier = Modifier.fillMaxWidth(),
                         brush = SolidColor(
                             colorPalette[
-                                getPercentageColorIndex(
-                                    value = barChartEntries[index].y.yMax,
+                                barChartEntries[index].y.yMax.getPercentageColorIndex(
                                     maxValue = yAxisRange.endInclusive,
                                 ),
                             ],
@@ -184,8 +183,4 @@ fun VerticalBarChart(
             )
         }
     }
-}
-
-private fun getPercentageColorIndex(value: Double, maxValue: Double): Int {
-    return min(((value / maxValue) * 100).toInt() - 1, 99)
 }
