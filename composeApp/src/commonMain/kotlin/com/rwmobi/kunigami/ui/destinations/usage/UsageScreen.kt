@@ -7,36 +7,47 @@
 
 package com.rwmobi.kunigami.ui.destinations.usage
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
+import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
+import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
-import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
-import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
-import io.github.koalaplot.core.bar.VerticalBarPlotEntry
+import com.rwmobi.kunigami.ui.utils.generateGYRHueColorPalette
+import com.rwmobi.kunigami.ui.utils.getPercentageColorIndex
+import com.rwmobi.kunigami.ui.utils.partitionList
+import io.github.koalaplot.core.util.toString
 import io.github.koalaplot.core.xygraph.TickPosition
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.kwh
+import kunigami.composeapp.generated.resources.unit_kwh
+import kunigami.composeapp.generated.resources.usage_energy_consumption_breakdown
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun UsageScreen(
@@ -56,31 +67,15 @@ fun UsageScreen(
 
     val dimension = LocalDensity.current.getDimension()
     val lazyListState = rememberLazyListState()
+    val colorPalette = remember {
+        generateGYRHueColorPalette(
+            saturation = 0.6f,
+            lightness = 0.6f,
+        )
+    }
 
     Box(modifier = modifier) {
         if (uiState.consumptions.isNotEmpty()) {
-            val entries: List<VerticalBarPlotEntry<Int, Double>> = remember(uiState.consumptions) {
-                buildList {
-                    uiState.consumptions.forEachIndexed { index, consumption ->
-                        add(DefaultVerticalBarPlotEntry((index + 1), DefaultVerticalBarPosition(0.0, consumption.consumption)))
-                    }
-                }
-            }
-
-            val labelIndex: Map<Int, Int> = remember(uiState.consumptions, uiState.requestedLayout) {
-                buildMap {
-                    // Generate all possible labels
-                    var lastRateValue: Int? = null
-                    uiState.consumptions.forEachIndexed { index, consumption ->
-                        val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
-                        if (currentTime != lastRateValue && currentTime % 2 == 0) {
-                            put(index + 1, currentTime)
-                        }
-                        lastRateValue = currentTime
-                    }
-                }
-            }
-
             ScrollbarMultiplatform(
                 modifier = Modifier.fillMaxSize(),
                 enabled = uiState.consumptions.isNotEmpty(),
@@ -88,63 +83,116 @@ fun UsageScreen(
             ) { contentModifier ->
                 LazyColumn(
                     modifier = contentModifier.fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = dimension.grid_4),
                     state = lazyListState,
                 ) {
-                    item {
-                        BoxWithConstraints {
-                            val constraintModifier = when (uiState.requestedLayout) {
-                                is UsageScreenLayout.Portrait -> {
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .aspectRatio(4 / 3f)
-                                }
-
-                                is UsageScreenLayout.LandScape -> {
-                                    Modifier.fillMaxSize()
-                                        .height(uiState.requestedLayout.requestedMaxHeight)
-                                }
-                            }
-
-                            VerticalBarChart(
-                                modifier = constraintModifier.padding(all = dimension.grid_2),
-                                entries = entries,
-                                yAxisRange = uiState.consumptionRange,
-                                yAxisTickPosition = TickPosition.Outside,
-                                xAxisTickPosition = TickPosition.Outside,
-                                yAxisTitle = "kWh",
-                                barWidth = 0.8f,
-                                labelGenerator = { index ->
-                                    labelIndex[index]?.toString()?.padStart(2, '0')
-                                },
-                                tooltipGenerator = { index ->
-                                    with(uiState.consumptions[index]) {
-                                        "${intervalStart.toLocalHourMinuteString()} - ${intervalEnd.toLocalHourMinuteString()}\n$consumption kWh"
+                    uiState.barChartData?.let { barChartData ->
+                        item {
+                            BoxWithConstraints {
+                                val constraintModifier = when (uiState.requestedChartLayout) {
+                                    is RequestedChartLayout.Portrait -> {
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .aspectRatio(4 / 3f)
                                     }
-                                },
+
+                                    is RequestedChartLayout.LandScape -> {
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .height(uiState.requestedChartLayout.requestedMaxHeight)
+                                    }
+                                }
+
+                                VerticalBarChart(
+                                    modifier = constraintModifier.padding(all = dimension.grid_2),
+                                    entries = barChartData.verticalBarPlotEntries,
+                                    yAxisRange = uiState.consumptionRange,
+                                    yAxisTickPosition = TickPosition.Outside,
+                                    xAxisTickPosition = TickPosition.Outside,
+                                    yAxisTitle = stringResource(resource = Res.string.kwh),
+                                    barWidth = 0.8f,
+                                    colorPalette = colorPalette,
+                                    labelGenerator = { index ->
+                                        barChartData.labels[index]?.toString()?.padStart(2, '0')
+                                    },
+                                    tooltipGenerator = { index ->
+                                        barChartData.tooltips[index]
+                                    },
+                                )
+                            }
+                        }
+                    }
+
+                    if (uiState.consumptions.isNotEmpty()) {
+                        item(key = "headingConsumptionBreakdowns") {
+                            Text(
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(all = dimension.grid_2),
+                                style = MaterialTheme.typography.titleLarge,
+                                text = stringResource(resource = Res.string.usage_energy_consumption_breakdown),
                             )
                         }
                     }
 
-                    itemsIndexed(
-                        items = uiState.consumptions,
-                        key = { _, consumption -> consumption.intervalStart.epochSeconds },
-                    ) { _, consumption ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = dimension.grid_2),
-                        ) {
-                            val timeLabel = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault())
-                            Text(
-                                modifier = Modifier.weight(1.0f),
-                                text = "${timeLabel.date} ${timeLabel.time}",
-                            )
+                    uiState.consumptions.forEach { consumptionGroup ->
+                        item(key = "${consumptionGroup.title}Title") {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(all = dimension.grid_2),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    modifier = Modifier.weight(1f),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    text = consumptionGroup.title,
+                                )
 
-                            Text(
-                                modifier = Modifier.wrapContentWidth(),
-                                fontWeight = FontWeight.Bold,
-                                text = "${consumption.consumption}",
-                            )
+                                Text(
+                                    modifier = Modifier.wrapContentSize(),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    text = stringResource(
+                                        resource = Res.string.unit_kwh,
+                                        consumptionGroup.consumptions.sumOf { it.consumption }.roundToTwoDecimalPlaces(),
+                                    ),
+                                )
+                            }
+                        }
+
+                        // We can do fancier grouping, but for now evenly-distributed is ok
+                        val partitionedItems = consumptionGroup.consumptions.partitionList(columns = uiState.requestedUsageColumns)
+                        val maxRows = partitionedItems.maxOf { it.size }
+
+                        items(maxRows) { rowIndex ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        horizontal = dimension.grid_2,
+                                        vertical = dimension.grid_0_25,
+                                    ),
+                                horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_3),
+                            ) {
+                                for (columnIndex in partitionedItems.indices) {
+                                    val item = partitionedItems.getOrNull(columnIndex)?.getOrNull(rowIndex)
+                                    if (item != null) {
+                                        IndicatorTextValueGridItem(
+                                            modifier = Modifier.weight(1f),
+                                            indicatorColor = colorPalette[
+                                                item.consumption.getPercentageColorIndex(
+                                                    maxValue = uiState.consumptionRange.endInclusive,
+                                                ),
+                                            ],
+                                            label = item.intervalStart.toLocalHourMinuteString(),
+                                            value = item.consumption.toString(precision = 2),
+                                        )
+                                    } else {
+                                        Spacer(modifier = Modifier.weight(1f))
+                                    }
+                                }
+                            }
                         }
                     }
                 }

@@ -7,21 +7,31 @@
 
 package com.rwmobi.kunigami.ui.viewmodels
 
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import com.rwmobi.kunigami.domain.extensions.formatDate
+import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
-import com.rwmobi.kunigami.ui.destinations.agile.AgileScreenLayout
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
+import com.rwmobi.kunigami.ui.model.BarChartData
 import com.rwmobi.kunigami.ui.model.ErrorMessage
+import com.rwmobi.kunigami.ui.model.RateGroup
+import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
+import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
+import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
+import io.github.koalaplot.core.bar.VerticalBarPlotEntry
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlin.math.ceil
 
 class AgileViewModel(
@@ -30,6 +40,8 @@ class AgileViewModel(
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<AgileUIState> = MutableStateFlow(AgileUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
+
+    private val rateColumnWidth = 150.dp
 
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
@@ -55,10 +67,43 @@ class AgileViewModel(
                             0.0..ceil(rates.maxOf { it.vatInclusivePrice } * 10) / 10.0
                         }
 
+                        val rateGroup = rates
+                            .groupBy { it.validFrom.formatDate() }
+                            .map { (date, items) -> RateGroup(title = date, rates = items) }
+
+                        val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
+                            rates.forEachIndexed { index, rate ->
+                                add(DefaultVerticalBarPlotEntry((index + 1), DefaultVerticalBarPosition(0.0, rate.vatInclusivePrice)))
+                            }
+                        }
+
+                        val labels: Map<Int, Int> = buildMap {
+                            // Generate all possible labels
+                            var lastRateValue: Int? = null
+                            rates.forEachIndexed { index, rate ->
+                                val currentTime = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
+                                if (currentTime != lastRateValue) {
+                                    put(index + 1, currentTime)
+                                    lastRateValue = currentTime
+                                }
+                            }
+                        }
+
+                        val toolTips = rates.map { rate ->
+                            val timeRange = rate.validFrom.toLocalHourMinuteString() +
+                                (rate.validTo?.let { "- ${it.toLocalHourMinuteString()}" } ?: "")
+                            "$timeRange\n${rate.vatInclusivePrice}p"
+                        }
+
                         currentUiState.copy(
                             isLoading = false,
-                            rates = rates,
+                            rates = rateGroup,
                             rateRange = rateRange,
+                            barChartData = BarChartData(
+                                verticalBarPlotEntries = verticalBarPlotEntries,
+                                labels = labels,
+                                tooltips = toolTips,
+                            ),
                         )
                     }
                 },
@@ -72,16 +117,20 @@ class AgileViewModel(
 
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo) {
         _uiState.update { currentUiState ->
+            Logger.v("AgileViewModel: ${screenSizeInfo.heightDp}h x ${screenSizeInfo.widthDp}w, isPortrait = ${screenSizeInfo.isPortrait()}")
             val requestedLayout = if (screenSizeInfo.isPortrait()) {
-                AgileScreenLayout.Portrait
+                RequestedChartLayout.Portrait
             } else {
-                AgileScreenLayout.LandScape(
+                RequestedChartLayout.LandScape(
                     requestedMaxHeight = screenSizeInfo.heightDp * 2 / 3,
                 )
             }
 
+            val usageColumns = (screenSizeInfo.widthDp / rateColumnWidth).toInt()
+
             currentUiState.copy(
-                requestedLayout = requestedLayout,
+                requestedChartLayout = requestedLayout,
+                requestedRateColumns = usageColumns,
             )
         }
     }

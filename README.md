@@ -17,12 +17,16 @@ This README will be updated with more technical details when the app is close to
 <hr/>
 <br /><br />
 
+## To-do lists
+
+Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/OctoMeter/issues).
+
 #### Current limitations
 
-As explained above, these are the know issues to be sorted out in the future, since they are not affecting me:
+There are the known issues to be sorted, since they are not affecting me, it will be queued to be improved later:
 
-* Display tariff with dual rates (day unit rate and night unit rates)
-* 
+* Properly handle dual-rate tariffs (day unit rate and night unit rates)
+
 
 ## Some draft technical details
 
@@ -38,12 +42,17 @@ As explained above, these are the know issues to be sorted out in the future, si
   you need this entry point for your iOS app. This is also where you should add SwiftUI code for
   your project.
 
+### Running the app
+
+I use Android Studio Koala for Android and Deskop apps. For iOS, I use Xcode 15.4.
+
 To run the desktop app, execute `./gradlew runReleaseDistrubutable` or just `./gradlew run`
+
 To export the app into MacOS distributable, execute `./gradlew packageDmg`
 (I don't use Windows, so I can't say for sure how good it works on Windows)
+
 To export the Jar for desktop, execute `./gradlew desktopJar` (jar in /composeApp/build/libs)
 Jar doesn't comes with the native skiko library so it won't run
-To run the Android App, execute `./gradlew `
 
 <br /><br />
 ## Data Security and Privacy

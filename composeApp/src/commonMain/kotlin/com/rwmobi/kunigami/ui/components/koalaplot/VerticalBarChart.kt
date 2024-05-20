@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.utils.getPercentageColorIndex
 import io.github.koalaplot.core.ChartLayout
 import io.github.koalaplot.core.bar.DefaultVerticalBar
 import io.github.koalaplot.core.bar.VerticalBarPlot
@@ -42,7 +43,6 @@ import io.github.koalaplot.core.xygraph.TickPosition
 import io.github.koalaplot.core.xygraph.XYGraph
 import io.github.koalaplot.core.xygraph.XYGraphScope
 import io.github.koalaplot.core.xygraph.rememberAxisStyle
-import kotlin.math.min
 
 @OptIn(ExperimentalKoalaPlotApi::class)
 @Composable
@@ -58,16 +58,11 @@ fun VerticalBarChart(
     yAxisRange: ClosedFloatingPointRange<Double>,
     labelGenerator: (index: Int) -> String?,
     tooltipGenerator: (index: Int) -> String,
+    colorPalette: List<Color>,
     backgroundPlot: @Composable ((scope: XYGraphScope<Int, Double>) -> Unit)? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
     val barChartEntries = remember { entries }
-    val colorPalette = remember {
-        generateGYRHueColorPalette(
-            saturation = 0.6f,
-            lightness = 0.6f,
-        )
-    }
 
     ChartLayout(
         modifier = modifier,
@@ -161,8 +156,7 @@ fun VerticalBarChart(
                         modifier = Modifier.fillMaxWidth(),
                         brush = SolidColor(
                             colorPalette[
-                                getPercentageColorIndex(
-                                    value = barChartEntries[index].y.yMax,
+                                barChartEntries[index].y.yMax.getPercentageColorIndex(
                                     maxValue = yAxisRange.endInclusive,
                                 ),
                             ],
@@ -188,24 +182,5 @@ fun VerticalBarChart(
                 barWidth = barWidth,
             )
         }
-    }
-}
-
-private fun getPercentageColorIndex(value: Double, maxValue: Double): Int {
-    return min(((value / maxValue) * 100).toInt() - 1, 99)
-}
-
-private fun generateGYRHueColorPalette(
-    saturation: Float = 0.5f,
-    lightness: Float = 0.5f,
-): List<Color> {
-    val count = 100
-    val startHue = 120f // Starting at green
-    val endHue = 0f // Ending at red
-    val delta = (endHue - startHue) / (count - 1) // Calculate delta for exactly 100 steps
-
-    return List(count) { i ->
-        val hue = startHue + delta * i // Compute the hue for this index
-        Color.hsl(hue, saturation, lightness)
     }
 }
