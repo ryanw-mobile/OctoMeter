@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
-import com.rwmobi.kunigami.ui.destinations.agile.AgileScreenLayout
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
+import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
 import kotlinx.coroutines.CoroutineDispatcher
@@ -73,15 +73,15 @@ class AgileViewModel(
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo) {
         _uiState.update { currentUiState ->
             val requestedLayout = if (screenSizeInfo.isPortrait()) {
-                AgileScreenLayout.Portrait
+                RequestedChartLayout.Portrait
             } else {
-                AgileScreenLayout.LandScape(
+                RequestedChartLayout.LandScape(
                     requestedMaxHeight = screenSizeInfo.heightDp * 2 / 3,
                 )
             }
 
             currentUiState.copy(
-                requestedLayout = requestedLayout,
+                requestedChartLayout = requestedLayout,
             )
         }
     }

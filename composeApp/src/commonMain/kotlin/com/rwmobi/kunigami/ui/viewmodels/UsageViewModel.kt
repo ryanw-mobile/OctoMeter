@@ -12,9 +12,9 @@ import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
-import com.rwmobi.kunigami.ui.destinations.usage.UsageScreenLayout
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
+import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
 import kotlinx.coroutines.CoroutineDispatcher
@@ -75,15 +75,15 @@ class UsageViewModel(
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo) {
         _uiState.update { currentUiState ->
             val requestedLayout = if (screenSizeInfo.isPortrait()) {
-                UsageScreenLayout.Portrait
+                RequestedChartLayout.Portrait
             } else {
-                UsageScreenLayout.LandScape(
+                RequestedChartLayout.LandScape(
                     requestedMaxHeight = screenSizeInfo.heightDp * 2 / 3,
                 )
             }
 
             currentUiState.copy(
-                requestedLayout = requestedLayout,
+                requestedChartLayout = requestedLayout,
             )
         }
     }

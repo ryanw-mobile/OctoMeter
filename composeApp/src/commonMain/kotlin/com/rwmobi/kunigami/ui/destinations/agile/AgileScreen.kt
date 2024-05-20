@@ -35,6 +35,7 @@ import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
+import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
 import com.rwmobi.kunigami.ui.utils.generateGYRHueColorPalette
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
@@ -83,7 +84,7 @@ fun AgileScreen(
                 }
             }
 
-            val labelIndex: Map<Int, Int> = remember(uiState.rates, uiState.requestedLayout) {
+            val labelIndex: Map<Int, Int> = remember(uiState.rates, uiState.requestedChartLayout) {
                 buildMap {
                     // Generate all possible labels
                     var lastRateValue: Int? = null
@@ -108,16 +109,17 @@ fun AgileScreen(
                 ) {
                     item {
                         BoxWithConstraints {
-                            val constraintModifier = when (uiState.requestedLayout) {
-                                is AgileScreenLayout.Portrait -> {
+                            val constraintModifier = when (uiState.requestedChartLayout) {
+                                is RequestedChartLayout.Portrait -> {
                                     Modifier
                                         .fillMaxWidth()
                                         .aspectRatio(4 / 3f)
                                 }
 
-                                is AgileScreenLayout.LandScape -> {
-                                    Modifier.fillMaxSize()
-                                        .height(uiState.requestedLayout.requestedMaxHeight)
+                                is RequestedChartLayout.LandScape -> {
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .height(uiState.requestedChartLayout.requestedMaxHeight)
                                 }
                             }
 
