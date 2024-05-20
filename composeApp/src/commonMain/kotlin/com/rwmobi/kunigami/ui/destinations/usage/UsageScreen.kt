@@ -31,6 +31,7 @@ import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.utils.generateGYRHueColorPalette
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
 import io.github.koalaplot.core.bar.VerticalBarPlotEntry
@@ -56,6 +57,12 @@ fun UsageScreen(
 
     val dimension = LocalDensity.current.getDimension()
     val lazyListState = rememberLazyListState()
+    val colorPalette = remember {
+        generateGYRHueColorPalette(
+            saturation = 0.6f,
+            lightness = 0.6f,
+        )
+    }
 
     Box(modifier = modifier) {
         if (uiState.consumptions.isNotEmpty()) {
@@ -113,6 +120,7 @@ fun UsageScreen(
                                 xAxisTickPosition = TickPosition.Outside,
                                 yAxisTitle = "kWh",
                                 barWidth = 0.8f,
+                                colorPalette = colorPalette,
                                 labelGenerator = { index ->
                                     labelIndex[index]?.toString()?.padStart(2, '0')
                                 },

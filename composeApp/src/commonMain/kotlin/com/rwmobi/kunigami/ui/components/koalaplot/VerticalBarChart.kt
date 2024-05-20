@@ -58,16 +58,11 @@ fun VerticalBarChart(
     yAxisRange: ClosedFloatingPointRange<Double>,
     labelGenerator: (index: Int) -> String?,
     tooltipGenerator: (index: Int) -> String,
+    colorPalette: List<Color>,
     backgroundPlot: @Composable ((scope: XYGraphScope<Int, Double>) -> Unit)? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
     val barChartEntries = remember { entries }
-    val colorPalette = remember {
-        generateGYRHueColorPalette(
-            saturation = 0.6f,
-            lightness = 0.6f,
-        )
-    }
 
     ChartLayout(
         modifier = modifier,
@@ -193,19 +188,4 @@ fun VerticalBarChart(
 
 private fun getPercentageColorIndex(value: Double, maxValue: Double): Int {
     return min(((value / maxValue) * 100).toInt() - 1, 99)
-}
-
-private fun generateGYRHueColorPalette(
-    saturation: Float = 0.5f,
-    lightness: Float = 0.5f,
-): List<Color> {
-    val count = 100
-    val startHue = 120f // Starting at green
-    val endHue = 0f // Ending at red
-    val delta = (endHue - startHue) / (count - 1) // Calculate delta for exactly 100 steps
-
-    return List(count) { i ->
-        val hue = startHue + delta * i // Compute the hue for this index
-        Color.hsl(hue, saturation, lightness)
-    }
 }
