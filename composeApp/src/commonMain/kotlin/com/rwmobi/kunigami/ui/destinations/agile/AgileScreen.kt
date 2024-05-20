@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.SolidColor
@@ -153,14 +155,26 @@ fun AgileScreen(
 
                     uiState.rates.forEach { rateGroup ->
                         item(key = "${rateGroup.title}Title") {
-                            Text(
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(all = dimension.grid_2),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                text = rateGroup.title,
-                            )
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    modifier = Modifier.weight(1f),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    text = rateGroup.title,
+                                )
+
+                                Text(
+                                    modifier = Modifier.wrapContentSize(),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    text = stringResource(resource = Res.string.agile_vat_unit_rate),
+                                )
+                            }
                         }
 
                         // We can do fancier grouping, but for now evenly-distributed is ok
