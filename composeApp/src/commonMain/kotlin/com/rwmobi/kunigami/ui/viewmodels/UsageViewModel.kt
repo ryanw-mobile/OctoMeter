@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.ui.viewmodels
 
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
@@ -32,6 +33,8 @@ class UsageViewModel(
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UsageUIState> = MutableStateFlow(UsageUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
+
+    private val usageColumnWidth = 300.dp
 
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
@@ -74,6 +77,7 @@ class UsageViewModel(
 
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo) {
         _uiState.update { currentUiState ->
+            Logger.v("UsageViewModel: ${screenSizeInfo.heightDp}h x ${screenSizeInfo.widthDp}w, isPortrait = ${screenSizeInfo.isPortrait()}")
             val requestedLayout = if (screenSizeInfo.isPortrait()) {
                 RequestedChartLayout.Portrait
             } else {
@@ -82,8 +86,11 @@ class UsageViewModel(
                 )
             }
 
+            val usageColumns = (screenSizeInfo.widthDp / usageColumnWidth).toInt()
+
             currentUiState.copy(
                 requestedChartLayout = requestedLayout,
+                requestedUsageColumns = usageColumns,
             )
         }
     }

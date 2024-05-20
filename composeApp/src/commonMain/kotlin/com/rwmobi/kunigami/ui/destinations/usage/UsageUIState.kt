@@ -16,6 +16,7 @@ import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 data class UsageUIState(
     val isLoading: Boolean = true,
     val requestedChartLayout: RequestedChartLayout = RequestedChartLayout.Portrait,
+    val requestedUsageColumns: Int = 1,
     val consumptions: List<Consumption> = emptyList(),
     val consumptionRange: ClosedFloatingPointRange<Double> = 0.0..0.0,
     val errorMessages: List<ErrorMessage> = emptyList(),
