@@ -73,17 +73,22 @@ class AgileViewModel(
 
                         val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
                             rates.forEachIndexed { index, rate ->
-                                add(DefaultVerticalBarPlotEntry((index + 1), DefaultVerticalBarPosition(0.0, rate.vatInclusivePrice)))
+                                add(
+                                    element = DefaultVerticalBarPlotEntry(
+                                        x = index,
+                                        y = DefaultVerticalBarPosition(yMin = 0.0, yMax = rate.vatInclusivePrice),
+                                    ),
+                                )
                             }
                         }
 
-                        val labels: Map<Int, Int> = buildMap {
+                        val labels: Map<Int, String> = buildMap {
                             // Generate all possible labels
                             var lastRateValue: Int? = null
                             rates.forEachIndexed { index, rate ->
                                 val currentTime = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
                                 if (currentTime != lastRateValue) {
-                                    put(index + 1, currentTime)
+                                    put(key = index, value = currentTime.toString().padStart(2, '0'))
                                     lastRateValue = currentTime
                                 }
                             }

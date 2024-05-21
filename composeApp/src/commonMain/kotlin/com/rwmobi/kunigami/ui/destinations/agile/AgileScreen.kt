@@ -117,11 +117,10 @@ fun AgileScreen(
                                     entries = barChartData.verticalBarPlotEntries,
                                     yAxisRange = uiState.rateRange,
                                     yAxisTickPosition = TickPosition.Outside,
-                                    xAxisTickPosition = TickPosition.Outside,
                                     yAxisTitle = stringResource(resource = Res.string.agile_vat_unit_rate),
                                     barWidth = 0.8f,
                                     labelGenerator = { index ->
-                                        barChartData.labels[index]?.toString()?.padStart(2, '0')
+                                        barChartData.labels[index]
                                     },
                                     tooltipGenerator = { index ->
                                         barChartData.tooltips[index]

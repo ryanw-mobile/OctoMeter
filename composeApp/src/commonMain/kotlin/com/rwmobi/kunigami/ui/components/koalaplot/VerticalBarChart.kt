@@ -37,8 +37,8 @@ import io.github.koalaplot.core.bar.VerticalBarPlotEntry
 import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.util.ExperimentalKoalaPlotApi
 import io.github.koalaplot.core.util.toString
+import io.github.koalaplot.core.xygraph.CategoryAxisModel
 import io.github.koalaplot.core.xygraph.DoubleLinearAxisModel
-import io.github.koalaplot.core.xygraph.IntLinearAxisModel
 import io.github.koalaplot.core.xygraph.TickPosition
 import io.github.koalaplot.core.xygraph.XYGraph
 import io.github.koalaplot.core.xygraph.XYGraphScope
@@ -52,7 +52,6 @@ fun VerticalBarChart(
     xAxisTitle: String? = null,
     yAxisTitle: String? = null,
     yAxisTickPosition: TickPosition,
-    xAxisTickPosition: TickPosition,
     barWidth: Float,
     entries: List<VerticalBarPlotEntry<Int, Double>>,
     yAxisRange: ClosedFloatingPointRange<Double>,
@@ -73,16 +72,9 @@ fun VerticalBarChart(
         },
     ) {
         XYGraph(
-            xAxisModel = IntLinearAxisModel(
-                range = 0..entries.count() + 1,
-                minimumMajorTickIncrement = 1,
-                minimumMajorTickSpacing = dimension.grid_1,
-                minorTickCount = 0,
-                allowPanning = false,
-                allowZooming = false,
-            ),
-            xAxisStyle = rememberAxisStyle(
-                tickPosition = xAxisTickPosition,
+            xAxisModel = CategoryAxisModel(
+                categories = entries.indices.toList(),
+                firstCategoryIsZero = false, // true means first column cut into half
             ),
             xAxisLabels = { index ->
                 labelGenerator(index)?.let { label ->
@@ -102,6 +94,9 @@ fun VerticalBarChart(
                     )
                 }
             },
+            verticalMajorGridLineStyle = null,
+            verticalMinorGridLineStyle = null,
+
             yAxisModel = DoubleLinearAxisModel(
                 range = yAxisRange,
                 minimumMajorTickIncrement = 0.1,
@@ -128,8 +123,6 @@ fun VerticalBarChart(
                     )
                 }
             },
-            verticalMajorGridLineStyle = null,
-            verticalMinorGridLineStyle = null,
             horizontalMajorGridLineStyle = LineStyle(
                 brush = SolidColor(MaterialTheme.colorScheme.onBackground),
                 strokeWidth = 1.dp,

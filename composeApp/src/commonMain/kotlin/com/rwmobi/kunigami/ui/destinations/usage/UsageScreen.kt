@@ -111,12 +111,11 @@ fun UsageScreen(
                                     entries = barChartData.verticalBarPlotEntries,
                                     yAxisRange = uiState.consumptionRange,
                                     yAxisTickPosition = TickPosition.Outside,
-                                    xAxisTickPosition = TickPosition.Outside,
                                     yAxisTitle = stringResource(resource = Res.string.kwh),
                                     barWidth = 0.8f,
                                     colorPalette = colorPalette,
                                     labelGenerator = { index ->
-                                        barChartData.labels[index]?.toString()?.padStart(2, '0')
+                                        barChartData.labels[index]
                                     },
                                     tooltipGenerator = { index ->
                                         barChartData.tooltips[index]
