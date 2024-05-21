@@ -13,5 +13,6 @@ import androidx.compose.runtime.Immutable
 data class AgileUIEvent(
     val onRefresh: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
+    val onScrolledToTop: () -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,
 )

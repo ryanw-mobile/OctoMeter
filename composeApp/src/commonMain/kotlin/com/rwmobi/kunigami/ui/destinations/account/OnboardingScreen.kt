@@ -172,6 +172,7 @@ private fun Preview() {
                     onMeterSerialNumberSelected = { _, _ -> },
                     onRefresh = {},
                     onErrorShown = {},
+                    onScrolledToTop = {},
                     onShowSnackbar = {},
                 ),
             )

@@ -228,6 +228,7 @@ private fun Preview() {
                     onRefresh = {},
                     onMeterSerialNumberSelected = { _, _ -> },
                     onErrorShown = {},
+                    onScrolledToTop = {},
                     onShowSnackbar = {},
                 ),
             )
@@ -265,6 +266,7 @@ private fun ErrorPreview() {
                     onRefresh = {},
                     onMeterSerialNumberSelected = { _, _ -> },
                     onErrorShown = {},
+                    onScrolledToTop = {},
                     onShowSnackbar = {},
                 ),
             )

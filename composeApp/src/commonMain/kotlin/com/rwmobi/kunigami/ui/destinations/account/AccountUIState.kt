@@ -21,5 +21,6 @@ data class AccountUIState(
     val selectedMeterSerialNumber: String? = null,
     val account: Account? = null,
     val tariff: Tariff? = null,
+    val requestScrollToTop: Boolean = false,
     val errorMessages: List<ErrorMessage> = emptyList(),
 )

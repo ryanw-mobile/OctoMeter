@@ -21,5 +21,6 @@ data class UsageUIState(
     val consumptions: List<ConsumptionGroup> = emptyList(),
     val consumptionRange: ClosedFloatingPointRange<Double> = 0.0..0.0,
     val barChartData: BarChartData? = null,
+    val requestScrollToTop: Boolean = false,
     val errorMessages: List<ErrorMessage> = emptyList(),
 )
