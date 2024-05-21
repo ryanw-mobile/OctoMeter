@@ -9,7 +9,9 @@ package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.extensions.roundDownToDay
-import com.rwmobi.kunigami.domain.model.Consumption
+import com.rwmobi.kunigami.domain.model.consumption.Consumption
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionGrouping
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionOrdering
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -43,6 +45,8 @@ class GetConsumptionUseCase(
                     meterSerialNumber = meterSerialNumber,
                     periodFrom = currentTime.minus(duration = Duration.parse("2d")),
                     periodTo = currentTime,
+                    orderBy = ConsumptionOrdering.PERIOD,
+                    groupBy = ConsumptionGrouping.HALF_HOURLY,
                 ).fold(
                     onSuccess = { consumption ->
                         consumption.sortedBy {

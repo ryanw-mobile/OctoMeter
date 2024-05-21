@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.data.source.network.model
+package com.rwmobi.kunigami.domain.model.consumption
 
 enum class ConsumptionOrdering(val apiValue: String?) {
     PERIOD(apiValue = "period"),

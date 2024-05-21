@@ -8,10 +8,10 @@
 package com.rwmobi.kunigami.domain.repository
 
 import com.rwmobi.kunigami.domain.model.Account
-import com.rwmobi.kunigami.domain.model.Consumption
 import com.rwmobi.kunigami.domain.model.Product
 import com.rwmobi.kunigami.domain.model.Rate
 import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import kotlinx.datetime.Instant
 
 class FakeRestApiRepository : RestApiRepository {

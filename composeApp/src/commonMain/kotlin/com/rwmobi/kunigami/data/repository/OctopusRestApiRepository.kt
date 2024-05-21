@@ -15,14 +15,14 @@ import com.rwmobi.kunigami.data.repository.mapper.toTariff
 import com.rwmobi.kunigami.data.source.network.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
-import com.rwmobi.kunigami.data.source.network.model.ConsumptionGrouping
-import com.rwmobi.kunigami.data.source.network.model.ConsumptionOrdering
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.model.Account
-import com.rwmobi.kunigami.domain.model.Consumption
 import com.rwmobi.kunigami.domain.model.Product
 import com.rwmobi.kunigami.domain.model.Rate
 import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.consumption.Consumption
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionGrouping
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionOrdering
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -131,6 +131,8 @@ class OctopusRestApiRepository(
         meterSerialNumber: String,
         periodFrom: Instant?,
         periodTo: Instant?,
+        orderBy: ConsumptionOrdering,
+        groupBy: ConsumptionGrouping,
     ): Result<List<Consumption>> {
         return withContext(dispatcher) {
             runCatching {
@@ -140,8 +142,8 @@ class OctopusRestApiRepository(
                     periodFrom = periodFrom,
                     periodTo = periodTo,
                     meterSerialNumber = meterSerialNumber,
-                    orderBy = ConsumptionOrdering.PERIOD,
-                    groupBy = ConsumptionGrouping.HALF_HOURLY,
+                    orderBy = orderBy.apiValue,
+                    groupBy = groupBy.apiValue,
                 )
                 apiResponse?.results?.map { it.toConsumption() } ?: emptyList()
             }.except<CancellationException, _>()

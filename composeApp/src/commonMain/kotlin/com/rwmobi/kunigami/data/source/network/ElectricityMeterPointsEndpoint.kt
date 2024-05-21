@@ -9,8 +9,6 @@ package com.rwmobi.kunigami.data.source.network
 
 import com.rwmobi.kunigami.data.source.network.dto.ConsumptionApiResponse
 import com.rwmobi.kunigami.data.source.network.extensions.encodeApiKey
-import com.rwmobi.kunigami.data.source.network.model.ConsumptionGrouping
-import com.rwmobi.kunigami.data.source.network.model.ConsumptionOrdering
 import com.rwmobi.kunigami.domain.extensions.formatInstantWithoutSeconds
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -41,8 +39,8 @@ class ElectricityMeterPointsEndpoint(
         pageSize: Int? = null,
         periodFrom: Instant? = null,
         periodTo: Instant? = null,
-        orderBy: ConsumptionOrdering = ConsumptionOrdering.LATEST_FIRST,
-        groupBy: ConsumptionGrouping = ConsumptionGrouping.HALF_HOURLY,
+        orderBy: String? = null,
+        groupBy: String? = null,
     ): ConsumptionApiResponse? {
         return withContext(dispatcher) {
             val response = httpClient.get("$endpointUrl/$mpan/meters/$meterSerialNumber/consumption") {
@@ -50,8 +48,8 @@ class ElectricityMeterPointsEndpoint(
                 parameter("page_size", pageSize)
                 parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
                 parameter("period_to", periodTo?.formatInstantWithoutSeconds())
-                parameter("order_by", orderBy.apiValue)
-                parameter("group_by", groupBy.apiValue)
+                parameter("order_by", orderBy)
+                parameter("group_by", groupBy)
             }
 
             when (response.status) {
