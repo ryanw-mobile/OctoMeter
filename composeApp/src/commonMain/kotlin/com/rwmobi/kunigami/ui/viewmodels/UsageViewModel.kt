@@ -43,7 +43,7 @@ class UsageViewModel(
     private val _uiState: MutableStateFlow<UsageUIState> = MutableStateFlow(UsageUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
-    private val usageColumnWidth = 150.dp
+    private val usageColumnWidth = 175.dp
 
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->

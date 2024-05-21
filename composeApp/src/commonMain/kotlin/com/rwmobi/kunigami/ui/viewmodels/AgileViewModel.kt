@@ -41,7 +41,7 @@ class AgileViewModel(
     private val _uiState: MutableStateFlow<AgileUIState> = MutableStateFlow(AgileUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
-    private val rateColumnWidth = 150.dp
+    private val rateColumnWidth = 175.dp
 
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
