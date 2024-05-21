@@ -43,7 +43,7 @@ class UsageViewModel(
     private val _uiState: MutableStateFlow<UsageUIState> = MutableStateFlow(UsageUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
-    private val usageColumnWidth = 150.dp
+    private val usageColumnWidth = 175.dp
 
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
@@ -75,17 +75,22 @@ class UsageViewModel(
 
                         val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
                             consumptions.forEachIndexed { index, consumption ->
-                                add(element = DefaultVerticalBarPlotEntry((index + 1), y = DefaultVerticalBarPosition(0.0, consumption.consumption)))
+                                add(
+                                    element = DefaultVerticalBarPlotEntry(
+                                        x = index,
+                                        y = DefaultVerticalBarPosition(yMin = 0.0, yMax = consumption.consumption),
+                                    ),
+                                )
                             }
                         }
 
-                        val labels: Map<Int, Int> = buildMap {
+                        val labels: Map<Int, String> = buildMap {
                             // Generate all possible labels
                             var lastRateValue: Int? = null
                             consumptions.forEachIndexed { index, consumption ->
                                 val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
                                 if (currentTime != lastRateValue && currentTime % 2 == 0) {
-                                    put(index + 1, currentTime)
+                                    put(key = index, value = currentTime.toString().padStart(2, '0'))
                                 }
                                 lastRateValue = currentTime
                             }

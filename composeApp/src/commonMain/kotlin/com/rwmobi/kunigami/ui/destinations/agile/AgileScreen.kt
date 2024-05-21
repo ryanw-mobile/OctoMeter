@@ -117,11 +117,10 @@ fun AgileScreen(
                                     entries = barChartData.verticalBarPlotEntries,
                                     yAxisRange = uiState.rateRange,
                                     yAxisTickPosition = TickPosition.Outside,
-                                    xAxisTickPosition = TickPosition.Outside,
                                     yAxisTitle = stringResource(resource = Res.string.agile_vat_unit_rate),
                                     barWidth = 0.8f,
                                     labelGenerator = { index ->
-                                        barChartData.labels[index]?.toString()?.padStart(2, '0')
+                                        barChartData.labels[index]
                                     },
                                     tooltipGenerator = { index ->
                                         barChartData.tooltips[index]
@@ -162,7 +161,10 @@ fun AgileScreen(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(all = dimension.grid_2),
+                                    .padding(
+                                        vertical = dimension.grid_2,
+                                        horizontal = dimension.grid_4,
+                                    ),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(
@@ -190,7 +192,7 @@ fun AgileScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(
-                                        horizontal = dimension.grid_2,
+                                        horizontal = dimension.grid_4,
                                         vertical = dimension.grid_0_25,
                                     ),
                                 horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_3),

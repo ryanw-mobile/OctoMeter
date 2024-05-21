@@ -13,6 +13,6 @@ import io.github.koalaplot.core.bar.VerticalBarPlotEntry
 @Immutable
 data class BarChartData(
     val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>>,
-    val labels: Map<Int, Int>,
+    val labels: Map<Int, String>,
     val tooltips: List<String>,
 )
