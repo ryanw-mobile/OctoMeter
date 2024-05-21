@@ -3,6 +3,7 @@
 build/
 **/build/
 !src/**/build/
+.kotlin/metadata/kotlinTransformedMetadataLibraries
 
 # Local configuration file (sdk path, etc)
 local.properties
