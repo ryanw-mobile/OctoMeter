@@ -14,10 +14,8 @@ import androidx.compose.ui.text.font.FontWeight
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.pathwayextreme_italic_variablefont
 import kunigami.composeapp.generated.resources.pathwayextreme_variablefont
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 actual fun provideBodyFontFamily(fontFamily: FontFamily): FontFamily {
     return FontFamily(
