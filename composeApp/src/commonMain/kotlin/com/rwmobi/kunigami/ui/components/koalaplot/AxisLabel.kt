@@ -22,7 +22,7 @@ fun AxisLabel(
         modifier = modifier,
         color = MaterialTheme.colorScheme.onBackground,
         style = MaterialTheme.typography.labelMedium,
-        overflow = TextOverflow.Clip,
+        overflow = TextOverflow.Visible,
         maxLines = 1,
         text = label,
     )
