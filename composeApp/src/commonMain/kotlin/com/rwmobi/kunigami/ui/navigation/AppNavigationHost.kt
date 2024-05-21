@@ -10,6 +10,7 @@ package com.rwmobi.kunigami.ui.navigation
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -54,12 +55,18 @@ fun AppNavigationHost(
             val screenSizeInfo = getScreenSizeInfo()
             viewModel.notifyScreenSizeChanged(screenSizeInfo = screenSizeInfo)
 
+            LaunchedEffect(lastDoubleTappedNavItem) {
+                val enabled = lastDoubleTappedNavItem?.equals(AppNavigationItem.USAGE) ?: false
+                viewModel.requestScrollToTop(enabled = enabled)
+            }
+
             UsageScreen(
                 modifier = Modifier.fillMaxSize(),
                 uiState = uiState,
                 uiEvent = UsageUIEvent(
                     onRefresh = viewModel::refresh,
                     onErrorShown = viewModel::errorShown,
+                    onScrolledToTop = { onScrolledToTop(AppNavigationItem.USAGE) },
                     onShowSnackbar = onShowSnackbar,
                 ),
             )
@@ -73,12 +80,18 @@ fun AppNavigationHost(
             val screenSizeInfo = getScreenSizeInfo()
             viewModel.notifyScreenSizeChanged(screenSizeInfo = screenSizeInfo)
 
+            LaunchedEffect(lastDoubleTappedNavItem) {
+                val enabled = lastDoubleTappedNavItem?.equals(AppNavigationItem.AGILE) ?: false
+                viewModel.requestScrollToTop(enabled = enabled)
+            }
+
             AgileScreen(
                 modifier = Modifier.fillMaxSize(),
                 uiState = uiState,
                 uiEvent = AgileUIEvent(
                     onRefresh = viewModel::refresh,
                     onErrorShown = viewModel::errorShown,
+                    onScrolledToTop = { onScrolledToTop(AppNavigationItem.AGILE) },
                     onShowSnackbar = onShowSnackbar,
                 ),
             )
@@ -88,6 +101,11 @@ fun AppNavigationHost(
             val viewModel: TariffsViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
 
+            LaunchedEffect(lastDoubleTappedNavItem) {
+                val enabled = lastDoubleTappedNavItem?.equals(AppNavigationItem.TARIFFS) ?: false
+                viewModel.requestScrollToTop(enabled = enabled)
+            }
+
             TariffsScreen(
                 modifier = Modifier.fillMaxSize(),
                 uiState = uiState,
@@ -95,6 +113,7 @@ fun AppNavigationHost(
                     onRefresh = viewModel::refresh,
                     onProductItemClick = {}, // TODO: Not sure where to go
                     onErrorShown = viewModel::errorShown,
+                    onScrolledToTop = { onScrolledToTop(AppNavigationItem.TARIFFS) },
                     onShowSnackbar = onShowSnackbar,
                 ),
             )
@@ -104,6 +123,11 @@ fun AppNavigationHost(
             val viewModel: AccountViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
             viewModel.notifyWindowSizeClassChanged(windowSizeClass = windowSizeClass)
+
+            LaunchedEffect(lastDoubleTappedNavItem) {
+                val enabled = lastDoubleTappedNavItem?.equals(AppNavigationItem.ACCOUNT) ?: false
+                viewModel.requestScrollToTop(enabled = enabled)
+            }
 
             AccountScreen(
                 modifier = Modifier.fillMaxSize(),
@@ -115,6 +139,7 @@ fun AppNavigationHost(
                     onSubmitCredentials = viewModel::submitCredentials,
                     onMeterSerialNumberSelected = viewModel::updateMeterSerialNumber,
                     onErrorShown = viewModel::errorShown,
+                    onScrolledToTop = { onScrolledToTop(AppNavigationItem.ACCOUNT) },
                     onShowSnackbar = onShowSnackbar,
                 ),
             )

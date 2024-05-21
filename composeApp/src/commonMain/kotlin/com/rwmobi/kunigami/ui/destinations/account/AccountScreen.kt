@@ -113,6 +113,13 @@ fun AccountScreen(
     LaunchedEffect(true) {
         uiEvent.onRefresh()
     }
+
+    LaunchedEffect(uiState.requestScrollToTop) {
+        if (uiState.requestScrollToTop) {
+            lazyListState.scrollToItem(index = 0)
+            uiEvent.onScrolledToTop()
+        }
+    }
 }
 
 @Composable
@@ -157,6 +164,7 @@ private fun Preview() {
                 onMeterSerialNumberSelected = { _, _ -> },
                 onRefresh = {},
                 onErrorShown = {},
+                onScrolledToTop = {},
                 onShowSnackbar = {},
             ),
         )

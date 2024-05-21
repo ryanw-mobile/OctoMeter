@@ -216,4 +216,11 @@ fun UsageScreen(
     LaunchedEffect(true) {
         uiEvent.onRefresh()
     }
+
+    LaunchedEffect(uiState.requestScrollToTop) {
+        if (uiState.requestScrollToTop) {
+            lazyListState.scrollToItem(index = 0)
+            uiEvent.onScrolledToTop()
+        }
+    }
 }

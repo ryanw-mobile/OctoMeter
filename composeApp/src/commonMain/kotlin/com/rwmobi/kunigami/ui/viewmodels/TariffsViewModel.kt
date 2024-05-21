@@ -61,6 +61,14 @@ class TariffsViewModel(
         }
     }
 
+    fun requestScrollToTop(enabled: Boolean) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                requestScrollToTop = enabled,
+            )
+        }
+    }
+
     private fun updateUIForError(message: String) {
         _uiState.update { currentUiState ->
             val newErrorMessages = if (_uiState.value.errorMessages.any { it.message == message }) {

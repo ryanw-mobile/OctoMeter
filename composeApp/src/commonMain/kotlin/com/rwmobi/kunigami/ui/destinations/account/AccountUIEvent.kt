@@ -17,5 +17,6 @@ data class AccountUIEvent(
     val onSubmitCredentials: (apiKey: String, accountNumber: String) -> Unit,
     val onMeterSerialNumberSelected: (mpan: String, meterSerialNumber: String) -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
+    val onScrolledToTop: () -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,
 )
