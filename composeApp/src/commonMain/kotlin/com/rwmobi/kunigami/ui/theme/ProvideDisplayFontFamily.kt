@@ -28,10 +28,8 @@ import kunigami.composeapp.generated.resources.nunito_mediumitalic
 import kunigami.composeapp.generated.resources.nunito_regular
 import kunigami.composeapp.generated.resources.nunito_semibold
 import kunigami.composeapp.generated.resources.nunito_semibolditalic
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 expect fun provideDisplayFontFamily(
     fontFamily: FontFamily = FontFamily(
@@ -43,6 +41,7 @@ expect fun provideDisplayFontFamily(
         Font(resource = Res.font.nunito_medium, weight = FontWeight.Medium, style = FontStyle.Normal),
         Font(resource = Res.font.nunito_regular, weight = FontWeight.Normal, style = FontStyle.Normal),
         Font(resource = Res.font.nunito_semibold, weight = FontWeight.SemiBold, style = FontStyle.Normal),
+
         Font(resource = Res.font.nunito_blackitalic, weight = FontWeight.Black, style = FontStyle.Italic),
         Font(resource = Res.font.nunito_bolditalic, weight = FontWeight.Bold, style = FontStyle.Italic),
         Font(resource = Res.font.nunito_extrabolditalic, weight = FontWeight.ExtraBold, style = FontStyle.Italic),

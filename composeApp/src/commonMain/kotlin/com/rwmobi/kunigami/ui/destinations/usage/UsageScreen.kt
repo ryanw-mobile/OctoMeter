@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
+import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
@@ -44,9 +45,11 @@ import com.rwmobi.kunigami.ui.utils.partitionList
 import io.github.koalaplot.core.util.toString
 import io.github.koalaplot.core.xygraph.TickPosition
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.bolt
 import kunigami.composeapp.generated.resources.kwh
 import kunigami.composeapp.generated.resources.unit_kwh
 import kunigami.composeapp.generated.resources.usage_energy_consumption_breakdown
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -125,11 +128,12 @@ fun UsageScreen(
 
                     if (uiState.consumptions.isNotEmpty()) {
                         item(key = "headingConsumptionBreakdowns") {
-                            Text(
-                                modifier = Modifier.fillMaxWidth()
+                            LargeTitleWithIcon(
+                                modifier = Modifier
+                                    .fillMaxWidth()
                                     .padding(all = dimension.grid_2),
-                                style = MaterialTheme.typography.titleLarge,
-                                text = stringResource(resource = Res.string.usage_energy_consumption_breakdown),
+                                icon = painterResource(resource = Res.drawable.bolt),
+                                label = stringResource(resource = Res.string.usage_energy_consumption_breakdown),
                             )
                         }
                     }

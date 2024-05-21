@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
+import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
@@ -53,6 +54,8 @@ import kotlinx.coroutines.isActive
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_unit_rate_details
 import kunigami.composeapp.generated.resources.agile_vat_unit_rate
+import kunigami.composeapp.generated.resources.revenue
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -144,11 +147,12 @@ fun AgileScreen(
 
                     if (uiState.rates.isNotEmpty()) {
                         item(key = "headingUnitRateDetails") {
-                            Text(
-                                modifier = Modifier.fillMaxWidth()
+                            LargeTitleWithIcon(
+                                modifier = Modifier
+                                    .fillMaxWidth()
                                     .padding(all = dimension.grid_2),
-                                style = MaterialTheme.typography.titleLarge,
-                                text = stringResource(resource = Res.string.agile_unit_rate_details),
+                                icon = painterResource(resource = Res.drawable.revenue),
+                                label = stringResource(resource = Res.string.agile_unit_rate_details),
                             )
                         }
                     }
