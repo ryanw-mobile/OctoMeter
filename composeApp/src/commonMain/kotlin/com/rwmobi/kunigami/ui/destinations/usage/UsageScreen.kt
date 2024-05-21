@@ -143,7 +143,10 @@ fun UsageScreen(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(all = dimension.grid_2),
+                                    .padding(
+                                        vertical = dimension.grid_2,
+                                        horizontal = dimension.grid_4,
+                                    ),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(
@@ -174,7 +177,7 @@ fun UsageScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(
-                                        horizontal = dimension.grid_2,
+                                        horizontal = dimension.grid_4,
                                         vertical = dimension.grid_0_25,
                                     ),
                                 horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_3),
