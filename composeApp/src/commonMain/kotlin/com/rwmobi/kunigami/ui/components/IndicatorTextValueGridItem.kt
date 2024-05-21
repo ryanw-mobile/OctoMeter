@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.theme.AppTheme
@@ -53,12 +54,14 @@ fun IndicatorTextValueGridItem(
 
         Text(
             modifier = Modifier.weight(1.0f),
+            fontFamily = FontFamily.Monospace,
             style = MaterialTheme.typography.bodyMedium,
             text = label,
         )
 
         Text(
             modifier = Modifier.wrapContentWidth(),
+            fontFamily = FontFamily.Monospace,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             text = value,
