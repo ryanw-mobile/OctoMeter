@@ -52,8 +52,6 @@ fun VerticalBarChart(
     title: String? = null,
     xAxisTitle: String? = null,
     yAxisTitle: String? = null,
-    yAxisTickPosition: TickPosition,
-    barWidth: Float,
     entries: List<VerticalBarPlotEntry<Int, Double>>,
     yAxisRange: ClosedFloatingPointRange<Double>,
     labelGenerator: (index: Int) -> String?,
@@ -86,6 +84,11 @@ fun VerticalBarChart(
                 }
             },
             xAxisStyle = AxisStyle(
+                color = MaterialTheme.colorScheme.onBackground.copy(
+                    alpha = 0.25f,
+                ),
+                majorTickSize = 4.dp,
+                tickPosition = TickPosition.Outside,
                 labelRotation = 90,
             ),
             xAxisTitle = {
@@ -109,7 +112,7 @@ fun VerticalBarChart(
                 allowPanning = false,
             ),
             yAxisStyle = rememberAxisStyle(
-                tickPosition = yAxisTickPosition,
+                tickPosition = TickPosition.Outside,
             ),
             yAxisLabels = {
                 AxisLabel(
@@ -148,6 +151,7 @@ fun VerticalBarChart(
 
             VerticalBarPlot(
                 data = barChartEntries,
+                barWidth = 0.8f,
                 bar = { index ->
                     DefaultVerticalBar(
                         modifier = Modifier.fillMaxWidth(),
@@ -176,7 +180,6 @@ fun VerticalBarChart(
                         },
                     )
                 },
-                barWidth = barWidth,
             )
         }
     }

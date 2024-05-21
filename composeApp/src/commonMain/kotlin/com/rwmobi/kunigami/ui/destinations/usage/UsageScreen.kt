@@ -43,7 +43,6 @@ import com.rwmobi.kunigami.ui.utils.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.utils.getPercentageColorIndex
 import com.rwmobi.kunigami.ui.utils.partitionList
 import io.github.koalaplot.core.util.toString
-import io.github.koalaplot.core.xygraph.TickPosition
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.bolt
 import kunigami.composeapp.generated.resources.kwh
@@ -110,9 +109,7 @@ fun UsageScreen(
                                     modifier = constraintModifier.padding(all = dimension.grid_2),
                                     entries = barChartData.verticalBarPlotEntries,
                                     yAxisRange = uiState.consumptionRange,
-                                    yAxisTickPosition = TickPosition.Outside,
                                     yAxisTitle = stringResource(resource = Res.string.kwh),
-                                    barWidth = 0.8f,
                                     colorPalette = colorPalette,
                                     labelGenerator = { index ->
                                         barChartData.labels[index]
