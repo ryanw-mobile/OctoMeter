@@ -32,6 +32,9 @@ fun Instant.roundDownToHour(): Instant {
     ).toInstant(timeZone = currentZone)
 }
 
+/***
+ * Return the Instant with the time portion set to all 0
+ */
 fun Instant.roundDownToDay(): Instant {
     val currentZone = TimeZone.currentSystemDefault()
     val currentLocalDateTime = toLocalDateTime(timeZone = currentZone)
@@ -43,6 +46,20 @@ fun Instant.roundDownToDay(): Instant {
         minute = 0,
         second = 0,
         nanosecond = 0,
+    ).toInstant(timeZone = currentZone)
+}
+
+fun Instant.roundUpToDayEnd(): Instant {
+    val currentZone = TimeZone.currentSystemDefault()
+    val currentLocalDateTime = toLocalDateTime(timeZone = currentZone)
+    return LocalDateTime(
+        year = currentLocalDateTime.year,
+        month = currentLocalDateTime.month,
+        dayOfMonth = currentLocalDateTime.dayOfMonth,
+        hour = 23,
+        minute = 59,
+        second = 59,
+        nanosecond = 999_999_999,
     ).toInstant(timeZone = currentZone)
 }
 
@@ -58,7 +75,7 @@ fun Instant.toLocalHourString(): String {
 
 fun Instant.toLocalDateTimeString(): String {
     val currentLocalDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
-    return "${formatDate()} ${currentLocalDateTime.hour.toString().padStart(2, '0')}:${currentLocalDateTime.minute.toString().padStart(2, '0')}"
+    return "${toLocalDateString()} ${currentLocalDateTime.hour.toString().padStart(2, '0')}:${currentLocalDateTime.minute.toString().padStart(2, '0')}"
 }
 
-expect fun Instant.formatDate(): String
+expect fun Instant.toLocalDateString(): String

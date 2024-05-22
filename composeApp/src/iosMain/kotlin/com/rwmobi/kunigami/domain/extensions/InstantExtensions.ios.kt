@@ -19,7 +19,7 @@ import platform.Foundation.NSDateFormatterNoStyle
 import platform.Foundation.NSLocale
 import platform.Foundation.currentLocale
 
-actual fun Instant.formatDate(): String {
+actual fun Instant.toLocalDateString(): String {
     val dateFormatter = NSDateFormatter().apply {
         dateStyle = NSDateFormatterMediumStyle
         timeStyle = NSDateFormatterNoStyle
