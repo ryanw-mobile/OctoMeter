@@ -77,8 +77,10 @@
     <!-- Desktop About dialog -->
     <string name="about_app_title">About OctoMeter</string>
     <string name="about_app_description">OctoMeter version %1$s (Build %2$s)\nMake the smartest use of your electricity\n\n%3$s</string>
+
     <!-- Content Descriptions -->
     <string name="content_description_navigation_bar">Navigation Bar</string>
     <string name="content_description_navigation_rail">Navigation Rail</string>
-
+    <string name="content_description_previous_period">Navigate to the previous period</string>
+    <string name="content_description_next_period">Navigate to the next period</string>
 </resources>
