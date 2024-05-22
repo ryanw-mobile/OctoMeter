@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
@@ -60,7 +59,6 @@ fun VerticalBarChart(
     backgroundPlot: @Composable ((scope: XYGraphScope<Int, Double>) -> Unit)? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
-    val barChartEntries = remember { entries }
 
     ChartLayout(
         modifier = modifier,
@@ -150,14 +148,14 @@ fun VerticalBarChart(
             backgroundPlot?.let { it(this) }
 
             VerticalBarPlot(
-                data = barChartEntries,
+                data = entries,
                 barWidth = 0.8f,
                 bar = { index ->
                     DefaultVerticalBar(
                         modifier = Modifier.fillMaxWidth(),
                         brush = SolidColor(
                             colorPalette[
-                                barChartEntries[index].y.yMax.getPercentageColorIndex(
+                                entries[index].y.yMax.getPercentageColorIndex(
                                     maxValue = yAxisRange.endInclusive,
                                 ),
                             ],
