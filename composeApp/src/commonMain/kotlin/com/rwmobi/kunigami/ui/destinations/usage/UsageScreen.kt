@@ -27,10 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -42,7 +39,6 @@ import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
-import com.rwmobi.kunigami.ui.destinations.usage.components.PresentationStyleDropdownMenu
 import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
 import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -86,8 +82,6 @@ fun UsageScreen(
     }
 
     Box(modifier = modifier) {
-        var presentationStyleDropdownMenuExpanded by remember { mutableStateOf(false) }
-
         if (uiState.consumptionGroupedCells.isNotEmpty() || !uiState.isLoading) {
             ScrollbarMultiplatform(
                 modifier = Modifier.fillMaxSize(),
@@ -106,12 +100,13 @@ fun UsageScreen(
                                     .background(color = MaterialTheme.colorScheme.secondary)
                                     .fillMaxWidth()
                                     .height(height = dimension.minListItemHeight),
+                                currentPresentationStyle = uiState.consumptionQueryFilter.presentationStyle,
                                 title = getConsumptionPeriodString(),
-                                onSelectPresentationStyle = { presentationStyleDropdownMenuExpanded = true },
                                 canNavigateBack = uiState.consumptionQueryFilter.canNavigateBackward(accountMoveInDate = uiState.account?.movedInAt ?: Instant.DISTANT_PAST),
                                 canNavigateForward = uiState.consumptionQueryFilter.canNavigateForward(),
                                 onNavigateBack = uiEvent.onPreviousTimeFrame,
                                 onNavigateForward = uiEvent.onNextTimeFrame,
+                                onSwitchPresentationStyle = { uiEvent.onSwitchPresentationStyle(it) },
                             )
                         }
                     }
@@ -232,18 +227,6 @@ fun UsageScreen(
                     }
                 }
             }
-        }
-
-        if (presentationStyleDropdownMenuExpanded) {
-            PresentationStyleDropdownMenu(
-                modifier = Modifier.fillMaxSize(),
-                expanded = presentationStyleDropdownMenuExpanded,
-                onDismiss = { presentationStyleDropdownMenuExpanded = false },
-                onSwitchPresentationStyle = { consumptionPresentationStyle ->
-                    presentationStyleDropdownMenuExpanded = false
-                    uiEvent.onSwitchPresentationStyle(consumptionPresentationStyle)
-                },
-            )
         }
 
         if (uiState.isLoading) {

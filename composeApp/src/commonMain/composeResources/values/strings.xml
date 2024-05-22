@@ -18,6 +18,7 @@
     <string name="update">Update</string>
     <string name="kwh">kWh</string>
     <string name="unit_kwh">%1$s kWh</string>
+    <string name="selected">Selected</string>
     <string name="loading">Loading...</string>
 
     <!-- Usage -->
