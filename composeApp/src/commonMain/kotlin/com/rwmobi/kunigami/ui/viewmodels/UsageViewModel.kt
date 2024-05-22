@@ -160,7 +160,10 @@ class UsageViewModel(
                 requestedEnd = requestedEnd,
                 consumptionGroupedCells = consumptionGroupedCells,
                 consumptionRange = consumptionRange,
-                canNavigateForward = true,
+                canNavigateForward = canNavigateForward(
+                    pointOfReference = pointOfReference,
+                    consumptionGrouping = grouping,
+                ),
                 canNavigateBack = true,
                 barChartData = BarChartData(
                     verticalBarPlotEntries = verticalBarPlotEntries,
@@ -340,6 +343,39 @@ class UsageViewModel(
                 requestScrollToTop = enabled,
             )
         }
+    }
+
+    private fun canNavigateForward(
+        pointOfReference: Instant,
+        consumptionGrouping: ConsumptionGrouping,
+    ): Boolean {
+        val now = Clock.System.now()
+
+        // Tentative as obviously ConsumptionGrouping Needs Revising
+        val newPointOfReference = when (consumptionGrouping) {
+            ConsumptionGrouping.HALF_HOURLY -> {
+                // next day
+                pointOfReference.plus(duration = Duration.parse("1d"))
+            }
+
+            ConsumptionGrouping.DAY -> {
+                pointOfReference.plus(duration = Duration.parse("1d"))
+            }
+
+            ConsumptionGrouping.WEEK -> {
+                pointOfReference.plus(duration = Duration.parse("1w"))
+            }
+
+            ConsumptionGrouping.MONTH -> {
+                pointOfReference.plus(duration = Duration.parse("30d"))
+            }
+
+            ConsumptionGrouping.QUARTER -> {
+                pointOfReference.plus(duration = Duration.parse("90d"))
+            }
+        }
+
+        return newPointOfReference < now
     }
 
     private fun updateUIForError(message: String) {

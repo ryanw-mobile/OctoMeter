@@ -78,7 +78,7 @@ fun UsageScreen(
     }
 
     Box(modifier = modifier) {
-        if (uiState.consumptionGroupedCells.isNotEmpty()) {
+        if (uiState.consumptionGroupedCells.isNotEmpty() || !uiState.isLoading) {
             ScrollbarMultiplatform(
                 modifier = Modifier.fillMaxSize(),
                 enabled = uiState.consumptionGroupedCells.isNotEmpty(),
@@ -99,41 +99,45 @@ fun UsageScreen(
                         )
                     }
 
-                    uiState.barChartData?.let { barChartData ->
+                    if (uiState.consumptionGroupedCells.isEmpty()) {
                         item {
-                            BoxWithConstraints {
-                                val constraintModifier = when (uiState.requestedChartLayout) {
-                                    is RequestedChartLayout.Portrait -> {
-                                        Modifier
-                                            .fillMaxWidth()
-                                            .aspectRatio(4 / 3f)
+                            Text("no data")
+                        }
+                    } else {
+                        uiState.barChartData?.let { barChartData ->
+                            item {
+                                BoxWithConstraints {
+                                    val constraintModifier = when (uiState.requestedChartLayout) {
+                                        is RequestedChartLayout.Portrait -> {
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .aspectRatio(4 / 3f)
+                                        }
+
+                                        is RequestedChartLayout.LandScape -> {
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .height(uiState.requestedChartLayout.requestedMaxHeight)
+                                        }
                                     }
 
-                                    is RequestedChartLayout.LandScape -> {
-                                        Modifier
-                                            .fillMaxWidth()
-                                            .height(uiState.requestedChartLayout.requestedMaxHeight)
-                                    }
+                                    VerticalBarChart(
+                                        modifier = constraintModifier.padding(all = dimension.grid_2),
+                                        entries = barChartData.verticalBarPlotEntries,
+                                        yAxisRange = uiState.consumptionRange,
+                                        yAxisTitle = stringResource(resource = Res.string.kwh),
+                                        colorPalette = colorPalette,
+                                        labelGenerator = { index ->
+                                            barChartData.labels[index]
+                                        },
+                                        tooltipGenerator = { index ->
+                                            barChartData.tooltips[index]
+                                        },
+                                    )
                                 }
-
-                                VerticalBarChart(
-                                    modifier = constraintModifier.padding(all = dimension.grid_2),
-                                    entries = barChartData.verticalBarPlotEntries,
-                                    yAxisRange = uiState.consumptionRange,
-                                    yAxisTitle = stringResource(resource = Res.string.kwh),
-                                    colorPalette = colorPalette,
-                                    labelGenerator = { index ->
-                                        barChartData.labels[index]
-                                    },
-                                    tooltipGenerator = { index ->
-                                        barChartData.tooltips[index]
-                                    },
-                                )
                             }
                         }
-                    }
 
-                    if (uiState.consumptionGroupedCells.isNotEmpty()) {
                         item(key = "headingConsumptionBreakdowns") {
                             LargeTitleWithIcon(
                                 modifier = Modifier
@@ -143,67 +147,67 @@ fun UsageScreen(
                                 label = stringResource(resource = Res.string.usage_energy_consumption_breakdown),
                             )
                         }
-                    }
 
-                    uiState.consumptionGroupedCells.forEach { consumptionGroup ->
-                        item(key = "${consumptionGroup.title}Title") {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        vertical = dimension.grid_2,
-                                        horizontal = dimension.grid_4,
-                                    ),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    modifier = Modifier.weight(1f),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    text = consumptionGroup.title,
-                                )
+                        uiState.consumptionGroupedCells.forEach { consumptionGroup ->
+                            item(key = "${consumptionGroup.title}Title") {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            vertical = dimension.grid_2,
+                                            horizontal = dimension.grid_4,
+                                        ),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(
+                                        modifier = Modifier.weight(1f),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        text = consumptionGroup.title,
+                                    )
 
-                                Text(
-                                    modifier = Modifier.wrapContentSize(),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    text = stringResource(
-                                        resource = Res.string.unit_kwh,
-                                        consumptionGroup.consumptions.sumOf { it.consumption }.roundToTwoDecimalPlaces(),
-                                    ),
-                                )
+                                    Text(
+                                        modifier = Modifier.wrapContentSize(),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        text = stringResource(
+                                            resource = Res.string.unit_kwh,
+                                            consumptionGroup.consumptions.sumOf { it.consumption }.roundToTwoDecimalPlaces(),
+                                        ),
+                                    )
+                                }
                             }
-                        }
 
-                        // We can do fancier grouping, but for now evenly-distributed is ok
-                        val partitionedItems = consumptionGroup.consumptions.partitionList(columns = uiState.requestedUsageColumns)
-                        val maxRows = partitionedItems.maxOf { it.size }
+                            // We can do fancier grouping, but for now evenly-distributed is ok
+                            val partitionedItems = consumptionGroup.consumptions.partitionList(columns = uiState.requestedUsageColumns)
+                            val maxRows = partitionedItems.maxOf { it.size }
 
-                        items(maxRows) { rowIndex ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        horizontal = dimension.grid_4,
-                                        vertical = dimension.grid_0_25,
-                                    ),
-                                horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_3),
-                            ) {
-                                for (columnIndex in partitionedItems.indices) {
-                                    val item = partitionedItems.getOrNull(columnIndex)?.getOrNull(rowIndex)
-                                    if (item != null) {
-                                        IndicatorTextValueGridItem(
-                                            modifier = Modifier.weight(1f),
-                                            indicatorColor = colorPalette[
-                                                item.consumption.getPercentageColorIndex(
-                                                    maxValue = uiState.consumptionRange.endInclusive,
-                                                ),
-                                            ],
-                                            label = item.intervalStart.toLocalHourMinuteString(),
-                                            value = item.consumption.toString(precision = 2),
-                                        )
-                                    } else {
-                                        Spacer(modifier = Modifier.weight(1f))
+                            items(maxRows) { rowIndex ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            horizontal = dimension.grid_4,
+                                            vertical = dimension.grid_0_25,
+                                        ),
+                                    horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_3),
+                                ) {
+                                    for (columnIndex in partitionedItems.indices) {
+                                        val item = partitionedItems.getOrNull(columnIndex)?.getOrNull(rowIndex)
+                                        if (item != null) {
+                                            IndicatorTextValueGridItem(
+                                                modifier = Modifier.weight(1f),
+                                                indicatorColor = colorPalette[
+                                                    item.consumption.getPercentageColorIndex(
+                                                        maxValue = uiState.consumptionRange.endInclusive,
+                                                    ),
+                                                ],
+                                                label = item.intervalStart.toLocalHourMinuteString(),
+                                                value = item.consumption.toString(precision = 2),
+                                            )
+                                        } else {
+                                            Spacer(modifier = Modifier.weight(1f))
+                                        }
                                     }
                                 }
                             }
@@ -211,9 +215,6 @@ fun UsageScreen(
                     }
                 }
             }
-        } else if (!uiState.isLoading) {
-            // no data
-            Text("Placeholder for no data")
         }
 
         if (uiState.isLoading) {
