@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.ui.destinations.usage
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -93,6 +94,10 @@ fun UsageScreen(
                     item {
                         with(uiState.consumptionQueryFilter) {
                             TitleNavigationBar(
+                                modifier = Modifier
+                                    .background(color = MaterialTheme.colorScheme.secondary)
+                                    .fillMaxWidth()
+                                    .height(height = dimension.minTouchTarget),
                                 title = getConsumptionPeriodString(),
                                 canNavigateBack = uiState.consumptionQueryFilter.canNavigateBackward(accountMoveInDate = uiState.account?.movedInAt ?: Instant.DISTANT_PAST),
                                 canNavigateForward = uiState.consumptionQueryFilter.canNavigateForward(),

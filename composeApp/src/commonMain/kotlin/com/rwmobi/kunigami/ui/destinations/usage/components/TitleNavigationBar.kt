@@ -8,12 +8,9 @@
 package com.rwmobi.kunigami.ui.destinations.usage.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -35,6 +32,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun TitleNavigationBar(
+    modifier: Modifier = Modifier,
     title: String,
     canNavigateBack: Boolean,
     onNavigateBack: () -> Unit,
@@ -44,10 +42,7 @@ internal fun TitleNavigationBar(
     val dimension = LocalDensity.current.getDimension()
 
     Row(
-        modifier = Modifier
-            .background(color = MaterialTheme.colorScheme.secondary)
-            .fillMaxWidth()
-            .height(height = dimension.minTouchTarget),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
