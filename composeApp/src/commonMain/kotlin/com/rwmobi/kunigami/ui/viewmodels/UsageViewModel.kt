@@ -21,6 +21,7 @@ import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
 import com.rwmobi.kunigami.ui.model.BarChartData
 import com.rwmobi.kunigami.ui.model.ConsumptionGroupedCells
+import com.rwmobi.kunigami.ui.model.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.model.ConsumptionQueryFilter
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.model.RequestedChartLayout
@@ -133,6 +134,21 @@ class UsageViewModel(
         }
     }
 
+    fun onSwitchPresentationStyle(presentationStyle: ConsumptionPresentationStyle) {
+        viewModelScope.launch(dispatcher) {
+            with(_uiState.value.consumptionQueryFilter) {
+                val newConsumptionQueryFilter = ConsumptionQueryFilter(
+                    presentationStyle = presentationStyle,
+                    pointOfReference = pointOfReference,
+                    requestedStart = ConsumptionQueryFilter.calculateStartDate(pointOfReference = pointOfReference, presentationStyle = presentationStyle),
+                    requestedEnd = ConsumptionQueryFilter.calculateEndDate(pointOfReference = pointOfReference, presentationStyle = presentationStyle),
+                )
+
+                refresh(consumptionQueryFilter = newConsumptionQueryFilter)
+            }
+        }
+    }
+
     fun onPreviousTimeFrame() {
         viewModelScope.launch(dispatcher) {
             val accountMoveInDate = _uiState.value.account?.movedInAt ?: Instant.DISTANT_PAST
@@ -156,31 +172,6 @@ class UsageViewModel(
                 refresh(consumptionQueryFilter = consumptionQueryFilter)
             }
         }
-    }
-
-    suspend fun refresh(consumptionQueryFilter: ConsumptionQueryFilter) {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isLoading = true,
-            )
-        }
-
-        getConsumptionUseCase(
-            periodFrom = consumptionQueryFilter.requestedStart,
-            periodTo = consumptionQueryFilter.requestedEnd,
-            groupBy = consumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
-        ).fold(
-            onSuccess = { consumptions ->
-                processConsumptions(
-                    consumptionQueryFilter = consumptionQueryFilter,
-                    consumptions = consumptions,
-                )
-            },
-            onFailure = { throwable ->
-                updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
-                Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
-            },
-        )
     }
 
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo) {
@@ -209,6 +200,31 @@ class UsageViewModel(
                 requestScrollToTop = enabled,
             )
         }
+    }
+
+    private suspend fun refresh(consumptionQueryFilter: ConsumptionQueryFilter) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = true,
+            )
+        }
+
+        getConsumptionUseCase(
+            periodFrom = consumptionQueryFilter.requestedStart,
+            periodTo = consumptionQueryFilter.requestedEnd,
+            groupBy = consumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
+        ).fold(
+            onSuccess = { consumptions ->
+                processConsumptions(
+                    consumptionQueryFilter = consumptionQueryFilter,
+                    consumptions = consumptions,
+                )
+            },
+            onFailure = { throwable ->
+                updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
+                Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+            },
+        )
     }
 
     private fun processConsumptions(

@@ -65,6 +65,7 @@ fun AppNavigationHost(
                 uiState = uiState,
                 uiEvent = UsageUIEvent(
                     onInitialLoad = viewModel::initialLoad,
+                    onSwitchPresentationStyle = viewModel::onSwitchPresentationStyle,
                     onPreviousTimeFrame = viewModel::onPreviousTimeFrame,
                     onNextTimeFrame = viewModel::onNextTimeFrame,
                     onErrorShown = viewModel::errorShown,
