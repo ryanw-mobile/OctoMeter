@@ -12,8 +12,8 @@ import com.rwmobi.kunigami.domain.model.Product
 import com.rwmobi.kunigami.domain.model.Rate
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionGrouping
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionOrdering
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import kotlinx.datetime.Instant
 
 interface RestApiRepository {
@@ -39,8 +39,8 @@ interface RestApiRepository {
         meterSerialNumber: String,
         periodFrom: Instant? = null,
         periodTo: Instant? = null,
-        orderBy: ConsumptionOrdering = ConsumptionOrdering.LATEST_FIRST,
-        groupBy: ConsumptionGrouping = ConsumptionGrouping.HALF_HOURLY,
+        orderBy: ConsumptionDataOrder = ConsumptionDataOrder.LATEST_FIRST,
+        groupBy: ConsumptionDataGroup = ConsumptionDataGroup.HALF_HOURLY,
     ): Result<List<Consumption>>
 
     suspend fun getAccount(apiKey: String, accountNumber: String): Result<List<Account>>

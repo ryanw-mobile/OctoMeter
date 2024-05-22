@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.domain.model.consumption
 
-enum class ConsumptionOrdering(val apiValue: String?) {
+enum class ConsumptionDataOrder(val apiValue: String?) {
     PERIOD(apiValue = "period"),
     LATEST_FIRST(apiValue = null),
 }

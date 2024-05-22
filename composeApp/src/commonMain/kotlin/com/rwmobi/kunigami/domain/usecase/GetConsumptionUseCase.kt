@@ -9,16 +9,14 @@ package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionGrouping
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionOrdering
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Instant
-import kotlinx.datetime.minus
-import kotlinx.datetime.plus
 import kotlin.coroutines.cancellation.CancellationException
 
 class GetConsumptionUseCase(
@@ -32,7 +30,7 @@ class GetConsumptionUseCase(
     suspend operator fun invoke(
         periodFrom: Instant,
         periodTo: Instant,
-        groupBy: ConsumptionGrouping,
+        groupBy: ConsumptionDataGroup,
     ): Result<List<Consumption>> {
         return withContext(dispatcher) {
             runCatching {
@@ -50,7 +48,7 @@ class GetConsumptionUseCase(
                     meterSerialNumber = meterSerialNumber,
                     periodFrom = periodFrom, // calculateStartDate(periodFrom = periodReference, groupBy = groupBy), // currentTime.minus(duration = Duration.parse("2d")),
                     periodTo = periodTo, // calculateEndDate(periodFrom = periodReference, groupBy = groupBy),
-                    orderBy = ConsumptionOrdering.PERIOD,
+                    orderBy = ConsumptionDataOrder.PERIOD,
                     groupBy = groupBy, // ConsumptionGrouping.HALF_HOURLY,
                 ).fold(
                     onSuccess = { consumption ->

@@ -65,9 +65,8 @@ fun AppNavigationHost(
                 uiState = uiState,
                 uiEvent = UsageUIEvent(
                     onInitialLoad = viewModel::initialLoad,
-                    onRefresh = viewModel::refresh,
-                    onNavigateBack = viewModel::onNavigateBack,
-                    onNavigateForward = viewModel::onNavigateForward,
+                    onPreviousTimeFrame = viewModel::onPreviousTimeFrame,
+                    onNextTimeFrame = viewModel::onNextTimeFrame,
                     onErrorShown = viewModel::errorShown,
                     onScrolledToTop = { onScrolledToTop(AppNavigationItem.USAGE) },
                     onShowSnackbar = onShowSnackbar,

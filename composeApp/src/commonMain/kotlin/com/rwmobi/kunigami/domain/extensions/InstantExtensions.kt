@@ -78,4 +78,10 @@ fun Instant.toLocalDateTimeString(): String {
     return "${toLocalDateString()} ${currentLocalDateTime.hour.toString().padStart(2, '0')}:${currentLocalDateTime.minute.toString().padStart(2, '0')}"
 }
 
+fun Instant.toLocalYear(): String {
+    val currentLocalDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
+    return currentLocalDateTime.year.toString()
+}
+
+expect fun Instant.toLocalMonthYear(): String
 expect fun Instant.toLocalDateString(): String

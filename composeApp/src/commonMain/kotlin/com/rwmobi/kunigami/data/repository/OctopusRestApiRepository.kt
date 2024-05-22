@@ -21,8 +21,8 @@ import com.rwmobi.kunigami.domain.model.Product
 import com.rwmobi.kunigami.domain.model.Rate
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionGrouping
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionOrdering
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -131,8 +131,8 @@ class OctopusRestApiRepository(
         meterSerialNumber: String,
         periodFrom: Instant?,
         periodTo: Instant?,
-        orderBy: ConsumptionOrdering,
-        groupBy: ConsumptionGrouping,
+        orderBy: ConsumptionDataOrder,
+        groupBy: ConsumptionDataGroup,
     ): Result<List<Consumption>> {
         return withContext(dispatcher) {
             runCatching {

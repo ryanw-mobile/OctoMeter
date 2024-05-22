@@ -44,6 +44,7 @@ import com.rwmobi.kunigami.ui.utils.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.utils.getPercentageColorIndex
 import com.rwmobi.kunigami.ui.utils.partitionList
 import io.github.koalaplot.core.util.toString
+import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.bolt
 import kunigami.composeapp.generated.resources.kwh
@@ -90,13 +91,15 @@ fun UsageScreen(
                     state = lazyListState,
                 ) {
                     item {
-                        TitleNavigationBar(
-                            title = uiState.getConsumptionPeriodString(),
-                            canNavigateBack = uiState.canNavigateBack,
-                            onNavigateBack = uiEvent.onNavigateBack,
-                            canNavigateForward = uiState.canNavigateForward,
-                            onNavigateForward = uiEvent.onNavigateForward,
-                        )
+                        with(uiState.consumptionQueryFilter) {
+                            TitleNavigationBar(
+                                title = getConsumptionPeriodString(),
+                                canNavigateBack = uiState.consumptionQueryFilter.canNavigateBackward(accountMoveInDate = uiState.account?.movedInAt ?: Instant.DISTANT_PAST),
+                                canNavigateForward = uiState.consumptionQueryFilter.canNavigateForward(),
+                                onNavigateBack = uiEvent.onPreviousTimeFrame,
+                                onNavigateForward = uiEvent.onNextTimeFrame,
+                            )
+                        }
                     }
 
                     if (uiState.consumptionGroupedCells.isEmpty()) {
