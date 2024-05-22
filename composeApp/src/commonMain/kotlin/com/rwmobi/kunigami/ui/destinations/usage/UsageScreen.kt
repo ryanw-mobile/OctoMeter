@@ -22,11 +22,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -38,6 +42,7 @@ import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
+import com.rwmobi.kunigami.ui.destinations.usage.components.PresentationStyleDropdownMenu
 import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
 import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -54,6 +59,7 @@ import kunigami.composeapp.generated.resources.usage_energy_consumption_breakdow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UsageScreen(
     modifier: Modifier = Modifier,
@@ -80,6 +86,8 @@ fun UsageScreen(
     }
 
     Box(modifier = modifier) {
+        var presentationStyleDropdownMenuExpanded by remember { mutableStateOf(false) }
+
         if (uiState.consumptionGroupedCells.isNotEmpty() || !uiState.isLoading) {
             ScrollbarMultiplatform(
                 modifier = Modifier.fillMaxSize(),
@@ -97,8 +105,9 @@ fun UsageScreen(
                                 modifier = Modifier
                                     .background(color = MaterialTheme.colorScheme.secondary)
                                     .fillMaxWidth()
-                                    .height(height = dimension.minTouchTarget),
+                                    .height(height = dimension.minListItemHeight),
                                 title = getConsumptionPeriodString(),
+                                onSelectPresentationStyle = { presentationStyleDropdownMenuExpanded = true },
                                 canNavigateBack = uiState.consumptionQueryFilter.canNavigateBackward(accountMoveInDate = uiState.account?.movedInAt ?: Instant.DISTANT_PAST),
                                 canNavigateForward = uiState.consumptionQueryFilter.canNavigateForward(),
                                 onNavigateBack = uiEvent.onPreviousTimeFrame,
@@ -223,6 +232,18 @@ fun UsageScreen(
                     }
                 }
             }
+        }
+
+        if (presentationStyleDropdownMenuExpanded) {
+            PresentationStyleDropdownMenu(
+                modifier = Modifier.fillMaxSize(),
+                expanded = presentationStyleDropdownMenuExpanded,
+                onDismiss = { presentationStyleDropdownMenuExpanded = false },
+                onSwitchPresentationStyle = { consumptionPresentationStyle ->
+                    presentationStyleDropdownMenuExpanded = false
+                    uiEvent.onSwitchPresentationStyle(consumptionPresentationStyle)
+                },
+            )
         }
 
         if (uiState.isLoading) {
