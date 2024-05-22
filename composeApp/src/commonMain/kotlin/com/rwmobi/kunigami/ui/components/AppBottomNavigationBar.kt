@@ -67,7 +67,11 @@ fun AppBottomNavigationBar(
                 onClick = {
                     if (!selected) {
                         navController.navigate(item.name) {
-                            navController.graph.startDestinationRoute?.let { popUpTo(it) }
+                            navController.graph.startDestinationRoute?.let {
+                                popUpTo(it) {
+                                    inclusive = true
+                                }
+                            }
                             launchSingleTop = true
                         }
                     } else {
