@@ -20,7 +20,7 @@
     <string name="unit_kwh">%1$s kWh</string>
 
     <!-- Usage -->
-    <string name="usage_energy_consumption_breakdown">Energy Consumption Breakdown</string>
+    <string name="usage_energy_consumption_breakdown">Consumption Breakdown</string>
 
     <!-- Agile -->
     <string name="agile_unit_rate_details">Unit Rate Details</string>
