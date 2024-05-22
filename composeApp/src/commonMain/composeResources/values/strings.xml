@@ -18,6 +18,7 @@
     <string name="update">Update</string>
     <string name="kwh">kWh</string>
     <string name="unit_kwh">%1$s kWh</string>
+    <string name="loading">Loading...</string>
 
     <!-- Usage -->
     <string name="usage_energy_consumption_breakdown">Consumption Breakdown</string>
