@@ -78,10 +78,10 @@ fun UsageScreen(
     }
 
     Box(modifier = modifier) {
-        if (uiState.consumptions.isNotEmpty()) {
+        if (uiState.consumptionGroupedCells.isNotEmpty()) {
             ScrollbarMultiplatform(
                 modifier = Modifier.fillMaxSize(),
-                enabled = uiState.consumptions.isNotEmpty(),
+                enabled = uiState.consumptionGroupedCells.isNotEmpty(),
                 lazyListState = lazyListState,
             ) { contentModifier ->
                 LazyColumn(
@@ -133,7 +133,7 @@ fun UsageScreen(
                         }
                     }
 
-                    if (uiState.consumptions.isNotEmpty()) {
+                    if (uiState.consumptionGroupedCells.isNotEmpty()) {
                         item(key = "headingConsumptionBreakdowns") {
                             LargeTitleWithIcon(
                                 modifier = Modifier
@@ -145,7 +145,7 @@ fun UsageScreen(
                         }
                     }
 
-                    uiState.consumptions.forEach { consumptionGroup ->
+                    uiState.consumptionGroupedCells.forEach { consumptionGroup ->
                         item(key = "${consumptionGroup.title}Title") {
                             Row(
                                 modifier = Modifier

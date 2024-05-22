@@ -11,7 +11,7 @@ import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionGrouping
 import com.rwmobi.kunigami.ui.model.BarChartData
-import com.rwmobi.kunigami.ui.model.ConsumptionGroup
+import com.rwmobi.kunigami.ui.model.ConsumptionGroupedCells
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import kotlinx.datetime.Clock
@@ -28,7 +28,7 @@ data class UsageUIState(
     val requestedEnd: Instant = Clock.System.now(),
     val canNavigateBack: Boolean = false,
     val canNavigateForward: Boolean = false,
-    val consumptions: List<ConsumptionGroup> = emptyList(),
+    val consumptionGroupedCells: List<ConsumptionGroupedCells> = emptyList(),
     val consumptionRange: ClosedFloatingPointRange<Double> = 0.0..0.0,
     val barChartData: BarChartData? = null,
     val requestScrollToTop: Boolean = false,

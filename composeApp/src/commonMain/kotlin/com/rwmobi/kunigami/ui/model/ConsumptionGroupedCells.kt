@@ -11,7 +11,7 @@ import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 
 @Immutable
-data class ConsumptionGroup(
+data class ConsumptionGroupedCells(
     val title: String,
     val consumptions: List<Consumption>,
 )

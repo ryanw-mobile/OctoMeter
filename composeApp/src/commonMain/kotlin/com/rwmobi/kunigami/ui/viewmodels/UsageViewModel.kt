@@ -21,7 +21,7 @@ import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
 import com.rwmobi.kunigami.ui.model.BarChartData
-import com.rwmobi.kunigami.ui.model.ConsumptionGroup
+import com.rwmobi.kunigami.ui.model.ConsumptionGroupedCells
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
@@ -121,9 +121,9 @@ class UsageViewModel(
                 0.0..ceil(consumptions.maxOf { it.consumption } * 10) / 10.0
             }
 
-            val consumptionGroup = consumptions
+            val consumptionGroupedCells = consumptions
                 .groupBy { it.intervalStart.toLocalDateString() }
-                .map { (date, items) -> ConsumptionGroup(title = date, consumptions = items) }
+                .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
 
             val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
                 consumptions.forEachIndexed { index, consumption ->
@@ -158,7 +158,7 @@ class UsageViewModel(
                 pointOfReference = pointOfReference,
                 requestedStart = requestedStart,
                 requestedEnd = requestedEnd,
-                consumptions = consumptionGroup,
+                consumptionGroupedCells = consumptionGroupedCells,
                 consumptionRange = consumptionRange,
                 canNavigateForward = true,
                 canNavigateBack = true,
