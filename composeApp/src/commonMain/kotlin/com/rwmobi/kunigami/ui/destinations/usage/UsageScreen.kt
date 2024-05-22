@@ -37,6 +37,7 @@ import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
+import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
 import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
 import com.rwmobi.kunigami.ui.utils.generateGYRHueColorPalette
@@ -88,6 +89,16 @@ fun UsageScreen(
                     contentPadding = PaddingValues(bottom = dimension.grid_4),
                     state = lazyListState,
                 ) {
+                    item {
+                        TitleNavigationBar(
+                            title = uiState.getConsumptionPeriodString(),
+                            canNavigateBack = uiState.canNavigateBack,
+                            onNavigateBack = uiEvent.onNavigateBack,
+                            canNavigateForward = uiState.canNavigateForward,
+                            onNavigateForward = uiEvent.onNavigateForward,
+                        )
+                    }
+
                     uiState.barChartData?.let { barChartData ->
                         item {
                             BoxWithConstraints {
@@ -213,7 +224,7 @@ fun UsageScreen(
     }
 
     LaunchedEffect(true) {
-        uiEvent.onRefresh()
+        uiEvent.onInitialLoad()
     }
 
     LaunchedEffect(uiState.requestScrollToTop) {

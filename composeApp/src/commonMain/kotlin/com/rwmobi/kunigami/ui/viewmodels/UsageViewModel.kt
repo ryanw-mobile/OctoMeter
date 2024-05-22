@@ -11,8 +11,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.rwmobi.kunigami.domain.extensions.formatDate
+import com.rwmobi.kunigami.domain.extensions.roundDownToDay
+import com.rwmobi.kunigami.domain.extensions.roundUpToDayEnd
+import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
+import com.rwmobi.kunigami.domain.model.consumption.Consumption
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionGrouping
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
@@ -31,9 +35,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.math.ceil
+import kotlin.time.Duration
 
 class UsageViewModel(
     private val octopusRepository: RestApiRepository,
@@ -52,72 +59,139 @@ class UsageViewModel(
         }
     }
 
-    fun refresh() {
+    fun initialLoad() {
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 isLoading = true,
             )
         }
 
+        // Currently we don't get real time meter readings, best would be yesterday or the day before
+        // We try to loop for 5 days
         viewModelScope.launch(dispatcher) {
-            getConsumptionUseCase().fold(
-                onSuccess = { consumptions ->
-                    _uiState.update { currentUiState ->
-                        val consumptionRange = if (consumptions.isEmpty()) {
-                            0.0..0.0 // Return a default range if the list is empty
+            var pointOfReference = Clock.System.now()
+            val grouping = ConsumptionGrouping.HALF_HOURLY
+            var remainingIteration = 5
+
+            do {
+                pointOfReference = pointOfReference.minus(duration = Duration.parse(value = "1d"))
+                val periodFrom = pointOfReference.roundDownToDay()
+                val periodTo = pointOfReference.roundUpToDayEnd()
+
+                getConsumptionUseCase(
+                    periodFrom = periodFrom,
+                    periodTo = periodTo,
+                    groupBy = grouping,
+                ).fold(
+                    onSuccess = { consumptions ->
+                        if (consumptions.size < 12) {
+                            remainingIteration = remainingIteration--
                         } else {
-                            0.0..ceil(consumptions.maxOf { it.consumption } * 10) / 10.0
+                            processConsumptions(
+                                grouping = grouping,
+                                pointOfReference = pointOfReference,
+                                requestedStart = periodFrom,
+                                requestedEnd = periodTo,
+                                consumptions = consumptions,
+                            )
+                            remainingIteration = 0
                         }
+                    },
+                    onFailure = { throwable ->
+                        updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
+                        Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+                        remainingIteration = 0
+                    },
+                )
+            } while (remainingIteration > 0)
+        }
+    }
 
-                        val consumptionGroup = consumptions
-                            .groupBy { it.intervalStart.formatDate() }
-                            .map { (date, items) -> ConsumptionGroup(title = date, consumptions = items) }
+    private fun processConsumptions(
+        grouping: ConsumptionGrouping,
+        pointOfReference: Instant,
+        requestedStart: Instant,
+        requestedEnd: Instant,
+        consumptions: List<Consumption>,
+    ) {
+        _uiState.update { currentUiState ->
+            val consumptionRange = if (consumptions.isEmpty()) {
+                0.0..0.0 // Return a default range if the list is empty
+            } else {
+                0.0..ceil(consumptions.maxOf { it.consumption } * 10) / 10.0
+            }
 
-                        val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
-                            consumptions.forEachIndexed { index, consumption ->
-                                add(
-                                    element = DefaultVerticalBarPlotEntry(
-                                        x = index,
-                                        y = DefaultVerticalBarPosition(yMin = 0.0, yMax = consumption.consumption),
-                                    ),
-                                )
-                            }
-                        }
+            val consumptionGroup = consumptions
+                .groupBy { it.intervalStart.toLocalDateString() }
+                .map { (date, items) -> ConsumptionGroup(title = date, consumptions = items) }
 
-                        val labels: Map<Int, String> = buildMap {
-                            // Generate all possible labels
-                            var lastRateValue: Int? = null
-                            consumptions.forEachIndexed { index, consumption ->
-                                val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
-                                if (currentTime != lastRateValue && currentTime % 2 == 0) {
-                                    put(key = index, value = currentTime.toString().padStart(2, '0'))
-                                }
-                                lastRateValue = currentTime
-                            }
-                        }
+            val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
+                consumptions.forEachIndexed { index, consumption ->
+                    add(
+                        element = DefaultVerticalBarPlotEntry(
+                            x = index,
+                            y = DefaultVerticalBarPosition(yMin = 0.0, yMax = consumption.consumption),
+                        ),
+                    )
+                }
+            }
 
-                        val toolTips = consumptions.map { consumption ->
-                            "${consumption.intervalStart.toLocalHourMinuteString()} - ${consumption.intervalEnd.toLocalHourMinuteString()}\n${consumption.consumption} kWh"
-                        }
-
-                        currentUiState.copy(
-                            isLoading = false,
-                            consumptions = consumptionGroup,
-                            consumptionRange = consumptionRange,
-                            barChartData = BarChartData(
-                                verticalBarPlotEntries = verticalBarPlotEntries,
-                                labels = labels,
-                                tooltips = toolTips,
-                            ),
-                        )
+            val labels: Map<Int, String> = buildMap {
+                // Generate all possible labels
+                var lastRateValue: Int? = null
+                consumptions.forEachIndexed { index, consumption ->
+                    val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
+                    if (currentTime != lastRateValue && currentTime % 2 == 0) {
+                        put(key = index, value = currentTime.toString().padStart(2, '0'))
                     }
-                },
-                onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
-                    Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
-                },
+                    lastRateValue = currentTime
+                }
+            }
+
+            val toolTips = consumptions.map { consumption ->
+                "${consumption.intervalStart.toLocalHourMinuteString()} - ${consumption.intervalEnd.toLocalHourMinuteString()}\n${consumption.consumption} kWh"
+            }
+
+            currentUiState.copy(
+                isLoading = false,
+                grouping = grouping,
+                pointOfReference = pointOfReference,
+                requestedStart = requestedStart,
+                requestedEnd = requestedEnd,
+                consumptions = consumptionGroup,
+                consumptionRange = consumptionRange,
+                canNavigateForward = true,
+                canNavigateBack = true,
+                barChartData = BarChartData(
+                    verticalBarPlotEntries = verticalBarPlotEntries,
+                    labels = labels,
+                    tooltips = toolTips,
+                ),
             )
         }
+    }
+
+    fun refresh() {
+//        _uiState.update { currentUiState ->
+//            currentUiState.copy(
+//                isLoading = true,
+//            )
+//        }
+//
+//        viewModelScope.launch(dispatcher) {
+//            getConsumptionUseCase(
+//                periodReference = Clock.System.now().minus(duration = Duration.parse("7d")).roundDownToDay(),
+//                groupBy = ConsumptionGrouping.WEEK,
+//            ).fold(
+//                onSuccess = { consumptions ->
+//                    processConsumptions(consumptions = consumptions)
+//                },
+//                onFailure = { throwable ->
+//                    updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
+//                    Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+//                },
+//            )
+//        }
     }
 
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo) {
@@ -127,7 +201,7 @@ class UsageViewModel(
                 RequestedChartLayout.Portrait
             } else {
                 RequestedChartLayout.LandScape(
-                    requestedMaxHeight = screenSizeInfo.heightDp * 2 / 3,
+                    requestedMaxHeight = screenSizeInfo.heightDp / 2,
                 )
             }
 
@@ -136,6 +210,126 @@ class UsageViewModel(
             currentUiState.copy(
                 requestedChartLayout = requestedLayout,
                 requestedUsageColumns = usageColumns,
+            )
+        }
+    }
+
+    fun onNavigateBack() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = true,
+            )
+        }
+
+        // Currently we don't get real time meter readings, best would be yesterday or the day before
+        // We try to loop for 5 days
+        viewModelScope.launch(dispatcher) {
+            var pointOfReference = _uiState.value.pointOfReference
+            var periodFrom = pointOfReference.roundDownToDay()
+            var periodTo = pointOfReference.roundUpToDayEnd()
+            val grouping = _uiState.value.grouping
+
+            when (grouping) {
+                ConsumptionGrouping.HALF_HOURLY -> {
+                    // minus 1 day
+                    pointOfReference = pointOfReference.minus(duration = Duration.parse("1d"))
+                    periodFrom = pointOfReference.roundDownToDay()
+                    periodTo = pointOfReference.roundUpToDayEnd()
+                }
+
+                ConsumptionGrouping.DAY -> {
+                    // minus 1 month?
+                }
+
+                ConsumptionGrouping.WEEK -> {
+                    // minus 1 week?
+                }
+
+                ConsumptionGrouping.MONTH -> {
+                }
+
+                ConsumptionGrouping.QUARTER -> {
+                }
+            }
+
+            getConsumptionUseCase(
+                periodFrom = periodFrom,
+                periodTo = periodTo,
+                groupBy = _uiState.value.grouping,
+            ).fold(
+                onSuccess = { consumptions ->
+                    processConsumptions(
+                        grouping = grouping,
+                        pointOfReference = pointOfReference,
+                        requestedStart = periodFrom,
+                        requestedEnd = periodTo,
+                        consumptions = consumptions,
+                    )
+                },
+                onFailure = { throwable ->
+                    updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
+                    Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+                },
+            )
+        }
+    }
+
+    fun onNavigateForward() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = true,
+            )
+        }
+
+        // Currently we don't get real time meter readings, best would be yesterday or the day before
+        // We try to loop for 5 days
+        viewModelScope.launch(dispatcher) {
+            var pointOfReference = _uiState.value.pointOfReference
+            var periodFrom = pointOfReference.roundDownToDay()
+            var periodTo = pointOfReference.roundUpToDayEnd()
+            val grouping = _uiState.value.grouping
+
+            when (grouping) {
+                ConsumptionGrouping.HALF_HOURLY -> {
+                    // minus 1 day
+                    pointOfReference = pointOfReference.plus(duration = Duration.parse("1d"))
+                    periodFrom = pointOfReference.roundDownToDay()
+                    periodTo = pointOfReference.roundUpToDayEnd()
+                }
+
+                ConsumptionGrouping.DAY -> {
+                    // minus 1 month?
+                }
+
+                ConsumptionGrouping.WEEK -> {
+                    // minus 1 week?
+                }
+
+                ConsumptionGrouping.MONTH -> {
+                }
+
+                ConsumptionGrouping.QUARTER -> {
+                }
+            }
+
+            getConsumptionUseCase(
+                periodFrom = periodFrom,
+                periodTo = periodTo,
+                groupBy = _uiState.value.grouping,
+            ).fold(
+                onSuccess = { consumptions ->
+                    processConsumptions(
+                        grouping = grouping,
+                        pointOfReference = pointOfReference,
+                        requestedStart = periodFrom,
+                        requestedEnd = periodTo,
+                        consumptions = consumptions,
+                    )
+                },
+                onFailure = { throwable ->
+                    updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
+                    Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+                },
             )
         }
     }

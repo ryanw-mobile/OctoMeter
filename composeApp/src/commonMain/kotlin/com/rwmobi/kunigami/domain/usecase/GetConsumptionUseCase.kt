@@ -8,7 +8,6 @@
 package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.except
-import com.rwmobi.kunigami.domain.extensions.roundDownToDay
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionGrouping
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionOrdering
@@ -17,16 +16,24 @@ import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlin.coroutines.cancellation.CancellationException
-import kotlin.time.Duration
 
 class GetConsumptionUseCase(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val restApiRepository: RestApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
-    suspend operator fun invoke(): Result<List<Consumption>> {
+    /***
+     * Specify grouping, and start date, then use case will determine the right end date.
+     */
+    suspend operator fun invoke(
+        periodFrom: Instant,
+        periodTo: Instant,
+        groupBy: ConsumptionGrouping,
+    ): Result<List<Consumption>> {
         return withContext(dispatcher) {
             runCatching {
                 val apiKey = userPreferencesRepository.getApiKey()
@@ -37,16 +44,14 @@ class GetConsumptionUseCase(
                 requireNotNull(value = mpan, lazyMessage = { "MPAN is null" })
                 requireNotNull(value = meterSerialNumber, lazyMessage = { "Meter Serial Number is null" })
 
-                val currentTime = Clock.System.now().roundDownToDay()
-
                 restApiRepository.getConsumption(
                     apiKey = apiKey,
                     mpan = mpan,
                     meterSerialNumber = meterSerialNumber,
-                    periodFrom = currentTime.minus(duration = Duration.parse("2d")),
-                    periodTo = currentTime,
+                    periodFrom = periodFrom, // calculateStartDate(periodFrom = periodReference, groupBy = groupBy), // currentTime.minus(duration = Duration.parse("2d")),
+                    periodTo = periodTo, // calculateEndDate(periodFrom = periodReference, groupBy = groupBy),
                     orderBy = ConsumptionOrdering.PERIOD,
-                    groupBy = ConsumptionGrouping.HALF_HOURLY,
+                    groupBy = groupBy, // ConsumptionGrouping.HALF_HOURLY,
                 ).fold(
                     onSuccess = { consumption ->
                         consumption.sortedBy {

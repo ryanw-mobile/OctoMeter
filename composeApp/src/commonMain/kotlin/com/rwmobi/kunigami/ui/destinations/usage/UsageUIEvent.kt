@@ -11,7 +11,10 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class UsageUIEvent(
+    val onInitialLoad: () -> Unit,
     val onRefresh: () -> Unit,
+    val onNavigateBack: () -> Unit,
+    val onNavigateForward: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
     val onScrolledToTop: () -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,

@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.rwmobi.kunigami.domain.extensions.formatDate
+import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.model.Agreement
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -68,11 +68,11 @@ internal fun TariffLayoutCompact(
         val tariffPeriod = agreement.validTo?.let {
             stringResource(
                 resource = Res.string.account_tariff_end_date,
-                it.formatDate(),
+                it.toLocalDateString(),
             )
         } ?: stringResource(
             resource = Res.string.account_tariff_start_date,
-            agreement.validFrom.formatDate(),
+            agreement.validFrom.toLocalDateString(),
         )
 
         Text(
