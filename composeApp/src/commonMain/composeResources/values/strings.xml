@@ -23,6 +23,11 @@
 
     <!-- Usage -->
     <string name="usage_energy_consumption_breakdown">Consumption Breakdown</string>
+    <string name="presentation_style_day_half_hourly">Half-Hourly in a Day</string>
+    <string name="presentation_style_week_seven_days">Daily in a Week</string>
+    <string name="presentation_style_month_weeks">Weekly in a Month</string>
+    <string name="presentation_style_month_thirty_days">Daily in a Month</string>
+    <string name="presentation_style_year_twelve_months">Monthly in a Year</string>
 
     <!-- Agile -->
     <string name="agile_unit_rate_details">Unit Rate Details</string>

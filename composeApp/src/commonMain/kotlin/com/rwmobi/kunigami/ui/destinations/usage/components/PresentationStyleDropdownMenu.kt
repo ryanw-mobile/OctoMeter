@@ -71,7 +71,7 @@ internal fun PresentationStyleDropdownMenu(
                 text = {
                     Text(
                         style = MaterialTheme.typography.bodyLarge,
-                        text = presentationStyle.name,
+                        text = stringResource(resource = presentationStyle.stringResource),
                     )
                 },
             )
