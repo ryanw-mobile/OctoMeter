@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.domain.model
+package com.rwmobi.kunigami.domain.model.consumption
 
 import androidx.compose.runtime.Immutable
 import kotlinx.datetime.Instant

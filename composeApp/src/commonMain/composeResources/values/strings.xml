@@ -18,9 +18,19 @@
     <string name="update">Update</string>
     <string name="kwh">kWh</string>
     <string name="unit_kwh">%1$s kWh</string>
+    <string name="selected">Selected</string>
+    <string name="loading">Loading...</string>
 
     <!-- Usage -->
-    <string name="usage_energy_consumption_breakdown">Energy Consumption Breakdown</string>
+    <string name="usage_energy_consumption_breakdown">Consumption Breakdown</string>
+    <string name="presentation_style_day_half_hourly">Half-Hourly in a Day</string>
+    <string name="presentation_style_week_seven_days">Daily in a Week</string>
+    <string name="presentation_style_month_weeks">Weekly in a Month</string>
+    <string name="presentation_style_month_thirty_days">Daily in a Month</string>
+    <string name="presentation_style_year_twelve_months">Monthly in a Year</string>
+    <string name="grouping_label_month_weeks">Week Starting On</string>
+    <string name="usage_chart_tooltip_spot_kwh">%1$s\n%2$s kWh</string>
+    <string name="usage_chart_tooltip_range_kwh">%1$s - %2$s\n%3$s kWh</string>
 
     <!-- Agile -->
     <string name="agile_unit_rate_details">Unit Rate Details</string>
@@ -56,7 +66,7 @@
     <string name="account_tariff_end_date">Tariff ends on %1$s</string>
     <string name="account_tariff_unit_rate">Standard Unit Rate\n(p/kWh)</string>
     <string name="account_tariff_standing_charge">Standing Charge\n(p/day)</string>
-    <string name="account_meter_serial">Serial: %1$s</string>
+    <string name="account_meter_serial">Meter: %1$s</string>
     <string name="account_meter_selected">SELECTED</string>
     <string name="account_meter_select">SELECT</string>
 
@@ -77,8 +87,10 @@
     <!-- Desktop About dialog -->
     <string name="about_app_title">About OctoMeter</string>
     <string name="about_app_description">OctoMeter version %1$s (Build %2$s)\nMake the smartest use of your electricity\n\n%3$s</string>
+
     <!-- Content Descriptions -->
     <string name="content_description_navigation_bar">Navigation Bar</string>
     <string name="content_description_navigation_rail">Navigation Rail</string>
-
+    <string name="content_description_previous_period">Navigate to the previous period</string>
+    <string name="content_description_next_period">Navigate to the next period</string>
 </resources>

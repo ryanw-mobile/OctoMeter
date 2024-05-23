@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.rwmobi.kunigami.domain.extensions.formatDate
+import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
@@ -68,7 +68,7 @@ class AgileViewModel(
                         }
 
                         val rateGroup = rates
-                            .groupBy { it.validFrom.formatDate() }
+                            .groupBy { it.validFrom.toLocalDateString() }
                             .map { (date, items) -> RateGroup(title = date, rates = items) }
 
                         val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {

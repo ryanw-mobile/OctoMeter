@@ -64,7 +64,10 @@ fun AppNavigationHost(
                 modifier = Modifier.fillMaxSize(),
                 uiState = uiState,
                 uiEvent = UsageUIEvent(
-                    onRefresh = viewModel::refresh,
+                    onInitialLoad = viewModel::initialLoad,
+                    onSwitchPresentationStyle = viewModel::onSwitchPresentationStyle,
+                    onPreviousTimeFrame = viewModel::onPreviousTimeFrame,
+                    onNextTimeFrame = viewModel::onNextTimeFrame,
                     onErrorShown = viewModel::errorShown,
                     onScrolledToTop = { onScrolledToTop(AppNavigationItem.USAGE) },
                     onShowSnackbar = onShowSnackbar,

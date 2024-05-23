@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
@@ -52,8 +51,6 @@ fun VerticalBarChart(
     title: String? = null,
     xAxisTitle: String? = null,
     yAxisTitle: String? = null,
-    yAxisTickPosition: TickPosition,
-    barWidth: Float,
     entries: List<VerticalBarPlotEntry<Int, Double>>,
     yAxisRange: ClosedFloatingPointRange<Double>,
     labelGenerator: (index: Int) -> String?,
@@ -62,7 +59,6 @@ fun VerticalBarChart(
     backgroundPlot: @Composable ((scope: XYGraphScope<Int, Double>) -> Unit)? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
-    val barChartEntries = remember { entries }
 
     ChartLayout(
         modifier = modifier,
@@ -86,6 +82,11 @@ fun VerticalBarChart(
                 }
             },
             xAxisStyle = AxisStyle(
+                color = MaterialTheme.colorScheme.onBackground.copy(
+                    alpha = 0.25f,
+                ),
+                majorTickSize = 4.dp,
+                tickPosition = TickPosition.Outside,
                 labelRotation = 90,
             ),
             xAxisTitle = {
@@ -109,7 +110,7 @@ fun VerticalBarChart(
                 allowPanning = false,
             ),
             yAxisStyle = rememberAxisStyle(
-                tickPosition = yAxisTickPosition,
+                tickPosition = TickPosition.Outside,
             ),
             yAxisLabels = {
                 AxisLabel(
@@ -147,13 +148,14 @@ fun VerticalBarChart(
             backgroundPlot?.let { it(this) }
 
             VerticalBarPlot(
-                data = barChartEntries,
+                data = entries,
+                barWidth = 0.8f,
                 bar = { index ->
                     DefaultVerticalBar(
                         modifier = Modifier.fillMaxWidth(),
                         brush = SolidColor(
                             colorPalette[
-                                barChartEntries[index].y.yMax.getPercentageColorIndex(
+                                entries[index].y.yMax.getPercentageColorIndex(
                                     maxValue = yAxisRange.endInclusive,
                                 ),
                             ],
@@ -176,7 +178,6 @@ fun VerticalBarChart(
                         },
                     )
                 },
-                barWidth = barWidth,
             )
         }
     }

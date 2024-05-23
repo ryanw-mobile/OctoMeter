@@ -48,7 +48,6 @@ import com.rwmobi.kunigami.ui.utils.partitionList
 import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.util.toString
 import io.github.koalaplot.core.xygraph.HorizontalLineAnnotation
-import io.github.koalaplot.core.xygraph.TickPosition
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kunigami.composeapp.generated.resources.Res
@@ -116,9 +115,7 @@ fun AgileScreen(
                                     modifier = constraintModifier.padding(all = dimension.grid_2),
                                     entries = barChartData.verticalBarPlotEntries,
                                     yAxisRange = uiState.rateRange,
-                                    yAxisTickPosition = TickPosition.Outside,
                                     yAxisTitle = stringResource(resource = Res.string.agile_vat_unit_rate),
-                                    barWidth = 0.8f,
                                     labelGenerator = { index ->
                                         barChartData.labels[index]
                                     },

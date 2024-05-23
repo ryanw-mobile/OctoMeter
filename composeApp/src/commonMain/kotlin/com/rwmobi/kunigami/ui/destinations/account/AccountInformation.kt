@@ -32,7 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.domain.extensions.formatDate
+import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Agreement
 import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
@@ -123,14 +123,14 @@ internal fun AccountInformationScreen(
             uiState.account.movedInAt?.let {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = stringResource(resource = Res.string.account_moved_in, it.formatDate()),
+                    text = stringResource(resource = Res.string.account_moved_in, it.toLocalDateString()),
                 )
             }
 
             uiState.account.movedOutAt?.let {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = stringResource(resource = Res.string.account_moved_out, it.formatDate()),
+                    text = stringResource(resource = Res.string.account_moved_out, it.toLocalDateString()),
                 )
             }
 

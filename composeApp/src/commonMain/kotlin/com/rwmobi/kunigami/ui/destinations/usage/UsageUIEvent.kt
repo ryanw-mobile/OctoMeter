@@ -8,10 +8,14 @@
 package com.rwmobi.kunigami.ui.destinations.usage
 
 import androidx.compose.runtime.Immutable
+import com.rwmobi.kunigami.ui.model.ConsumptionPresentationStyle
 
 @Immutable
 data class UsageUIEvent(
-    val onRefresh: () -> Unit,
+    val onInitialLoad: () -> Unit,
+    val onPreviousTimeFrame: () -> Unit,
+    val onNextTimeFrame: () -> Unit,
+    val onSwitchPresentationStyle: (presentationStyle: ConsumptionPresentationStyle) -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
     val onScrolledToTop: () -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,

@@ -7,14 +7,14 @@
 
 package com.rwmobi.kunigami.domain.extensions
 
+import android.icu.util.Calendar
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import java.text.DateFormat
-import java.util.Calendar
 import java.util.Locale
 
-actual fun Instant.formatDate(): String {
+actual fun Instant.toLocalDateString(): String {
     val localDate = toLocalDateTime(TimeZone.currentSystemDefault()).date
     val calendar = Calendar.getInstance().apply {
         set(localDate.year, localDate.monthNumber - 1, localDate.dayOfMonth)
