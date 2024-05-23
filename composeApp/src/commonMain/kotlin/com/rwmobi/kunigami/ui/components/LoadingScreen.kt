@@ -18,6 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.loading
+import org.jetbrains.compose.resources.stringResource
 
 @Preview
 @Composable
@@ -33,7 +36,7 @@ fun LoadingScreen(
             modifier = Modifier.wrapContentSize(),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            text = "Loading...",
+            text = stringResource(resource = Res.string.loading),
         )
     }
 }

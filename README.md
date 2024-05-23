@@ -1,7 +1,4 @@
-## _Project
-
-Kunigami_ / OctoMeter: Empowering Smart Electricity
-Usage<br/>![Gradle Build](https://github.com/ryanw-mobile/OctoMeter/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/OctoMeter/graph/badge.svg?token=fGinpoyVUp)](https://codecov.io/gh/ryanw-mobile/OctoMeter)
+## _Project Kunigami_ / OctoMeter: Empowering Smart Electricity Usage<br/>![Gradle Build](https://github.com/ryanw-mobile/OctoMeter/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/OctoMeter/graph/badge.svg?token=fGinpoyVUp)](https://codecov.io/gh/ryanw-mobile/OctoMeter)
 
 ### Production-grade Kotlin Multiplatform App targeting Android, iOS, Desktop
 
@@ -29,6 +26,11 @@ better idea where I am at technically.
 This README will be updated with more technical details when the app is close to release. Stay
 tuned!
 <br /><br />
+
+## Switch to Octopus!
+
+Switch to Octopus Energy using [this link](https://share.octopus.energy/best-shell-168), both of us will get £50 (or £100 for business).
+
 <br /><br />
 
 ## To-do lists
@@ -41,22 +43,6 @@ There are the known issues to be sorted, since they are not affecting me, it wil
 improved later:
 
 * Properly handle dual-rate tariffs (day unit rate and night unit rates)
-
-<br /><br />
-
-## Some draft technical details
-
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-    - `commonMain` is for code that’s common for all targets.
-    - Other folders are for Kotlin code that will be compiled for only the platform indicated in the
-      folder name.
-      For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-      `iosMain` would be the right folder for such calls.
-
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for
-  your project.
 
 <br /><br />
 
@@ -74,6 +60,64 @@ I use Android Studio Koala for Android and Deskop apps. For iOS, I use Xcode 15.
 
 <br /><br />
 
+## Some draft technical details
+
+* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
+  It contains several subfolders:
+    - `commonMain` is for code that’s common for all targets.
+    - Other folders are for Kotlin code that will be compiled for only the platform indicated in the
+      folder name.
+      For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
+      `iosMain` would be the right folder for such calls.
+
+* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
+  you need this entry point for your iOS app. This is also where you should add SwiftUI code for
+  your project.
+
+### Dependencies
+
+* [Kermit](https://github.com/touchlab/Kermit) - Apache 2.0 - A Kotlin Multiplatform logging library
+* [KoalaPlot](https://github.com/koalaplot/koalaplot-core) - MIT - A plotting library for Kotlin
+  Multiplatform
+* [Kotlin](https://kotlinlang.org/) - Apache 2.0 - Kotlin programming language
+* [Jetpack Compose](https://developer.android.com/jetpack/androidx/releases/compose) - Apache 2.0 -
+  Modern toolkit for building native UI
+* [AndroidX](https://developer.android.com/jetpack/androidx) - Apache 2.0 - AndroidX libraries
+* [Kotlinx](https://github.com/Kotlin) - Apache 2.0 - Kotlin extensions and libraries
+* [Ktor](https://ktor.io/) - Apache 2.0 - Framework for building asynchronous servers and clients in
+  connected systems
+* [Kotest](https://kotest.io/) - Apache 2.0 - Kotlin test framework
+* [Material3](https://github.com/material-components/material-components-android) - Apache 2.0 -
+  Material Design components
+* [Koin](https://insert-koin.io/) - Apache 2.0 - Dependency Injection framework for Kotlin
+* [Multiplatform Settings](https://github.com/russhwolf/multiplatform-settings) - Apache 2.0 -
+  Multiplatform settings library for Kotlin
+* [Theme Detector](https://github.com/Dansoftowner/jSystemThemeDetector) - MIT - Detect system
+  theme (light/dark mode)
+
+### Plugins
+
+* [Android Application Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) -
+  Google - Plugin for building Android applications
+* [Android Library Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) -
+  Google - Plugin for building Android libraries
+* [Jetbrains Compose Plugin](https://github.com/JetBrains/compose-jb) - JetBrains - Plugin for
+  Jetpack Compose
+* [Kotlin Multiplatform Plugin](https://kotlinlang.org/docs/multiplatform.html) - JetBrains - Plugin
+  for Kotlin Multiplatform projects
+* [Kover Plugin](https://github.com/Kotlin/kotlinx-kover) - JetBrains - Code coverage tool for
+  Kotlin
+* [Ktlint Plugin](https://github.com/JLLeitschuh/ktlint-gradle) - JLLeitschuh - Plugin for Kotlin
+  linter
+* [Serialization Plugin](https://github.com/Kotlin/kotlinx.serialization) - JetBrains - Plugin for
+  Kotlin serialization
+* [Kotlin JVM Plugin](https://kotlinlang.org/docs/gradle.html) - JetBrains - Plugin for Kotlin JVM
+  projects
+* [BuildConfig Plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) - gmazzo - Plugin for
+  generating BuildConfig classes
+
+<br /><br />
+
 ## Data Security and Privacy
 
 First thing first: This app can run under the demo mode without requiring any credentials.
@@ -87,12 +131,6 @@ API key to invalidate the old keys.
 This app stores your API key, account number, MPAN and meter serial number
 using `EncryptedSharedPreferences` on Android, or the Keychain on iOS. On desktop, these credentials
 are currently unencrypted, but expected to do so when the library we use supports it.
-<br /><br />
-
-## Switch to Octopus!
-
-Switch to Octopus Energy using [this link](https://share.octopus.energy/best-shell-168), both of us
-will get £50 (or £100 for business).
 
 <br /><br />
 
@@ -101,16 +139,25 @@ will get £50 (or £100 for business).
 ```
    Copyright 2024 Ryan Wong, RW MobiMedia UK Limited, and open-source contributors
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
 
-       http://www.apache.org/licenses/LICENSE-2.0
+   The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+   Additional License Terms:
+   - Distributing the binary of this App on App Stores is prohibited.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
 
 ```

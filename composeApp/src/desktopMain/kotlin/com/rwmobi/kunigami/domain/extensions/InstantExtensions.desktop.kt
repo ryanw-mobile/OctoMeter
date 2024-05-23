@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 
-actual fun Instant.formatDate(): String {
+actual fun Instant.toLocalDateString(): String {
     val localDate = toLocalDateTime(TimeZone.currentSystemDefault()).date
     val javaDate = java.time.LocalDate.of(localDate.year, localDate.monthNumber, localDate.dayOfMonth)
     val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
