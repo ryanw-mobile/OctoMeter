@@ -11,13 +11,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import com.rwmobi.kunigami.domain.extensions.roundDownToHour
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
+import com.rwmobi.kunigami.domain.model.Rate
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
 import com.rwmobi.kunigami.ui.model.BarChartData
 import com.rwmobi.kunigami.ui.model.ErrorMessage
-import com.rwmobi.kunigami.ui.model.RateGroup
+import com.rwmobi.kunigami.ui.model.RateGroupedCells
 import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
@@ -31,9 +33,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.math.ceil
+import kotlin.time.Duration
 
 class AgileViewModel(
     private val getStandardUnitRateUseCase: GetStandardUnitRateUseCase,
@@ -59,7 +63,18 @@ class AgileViewModel(
         }
 
         viewModelScope.launch(dispatcher) {
-            getStandardUnitRateUseCase().fold(
+            val currentTime = Clock.System.now().roundDownToHour()
+            val productCode = "AGILE-FLEX-22-11-25"
+            val tariffCode = "E-1R-AGILE-FLEX-22-11-25-J"
+            val periodFrom = currentTime
+            val periodTo = currentTime.plus(duration = Duration.parse("1d"))
+
+            getStandardUnitRateUseCase(
+                productCode = productCode,
+                tariffCode = tariffCode,
+                periodFrom = periodFrom,
+                periodTo = periodTo,
+            ).fold(
                 onSuccess = { rates ->
                     _uiState.update { currentUiState ->
                         val rateRange = if (rates.isEmpty()) {
@@ -67,10 +82,6 @@ class AgileViewModel(
                         } else {
                             0.0..ceil(rates.maxOf { it.vatInclusivePrice } * 10) / 10.0
                         }
-
-                        val rateGroup = rates
-                            .groupBy { it.validFrom.toLocalDateString() }
-                            .map { (date, items) -> RateGroup(title = date, rates = items) }
 
                         val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
                             rates.forEachIndexed { index, rate ->
@@ -83,26 +94,13 @@ class AgileViewModel(
                             }
                         }
 
-                        val labels: Map<Int, String> = buildMap {
-                            var lastRateValue: Int? = null
-                            rates.forEachIndexed { index, rate ->
-                                val currentTime = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
-                                if (currentTime != lastRateValue) {
-                                    put(key = index, value = currentTime.toString().padStart(2, '0'))
-                                    lastRateValue = currentTime
-                                }
-                            }
-                        }
-
-                        val toolTips = rates.map { rate ->
-                            val timeRange = rate.validFrom.toLocalHourMinuteString() +
-                                (rate.validTo?.let { "- ${it.toLocalHourMinuteString()}" } ?: "")
-                            "$timeRange\n${rate.vatInclusivePrice.toString(precision = 2)}p"
-                        }
+                        val labels = generateChartLabels(rates = rates)
+                        val rateGroupedCells = groupChartCells(rates = rates)
+                        val toolTips = generateChartToolTips(rates = rates)
 
                         currentUiState.copy(
                             isLoading = false,
-                            rates = rateGroup,
+                            rateGroupedCells = rateGroupedCells,
                             rateRange = rateRange,
                             barChartData = BarChartData(
                                 verticalBarPlotEntries = verticalBarPlotEntries,
@@ -117,6 +115,33 @@ class AgileViewModel(
                     Logger.e("AgileViewModel", throwable = throwable, message = { "Error when retrieving rates" })
                 },
             )
+        }
+    }
+
+    private fun generateChartLabels(rates: List<Rate>): Map<Int, String> {
+        return buildMap {
+            var lastRateValue: Int? = null
+            rates.forEachIndexed { index, rate ->
+                val currentTime = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
+                if (currentTime != lastRateValue) {
+                    put(key = index, value = currentTime.toString().padStart(2, '0'))
+                    lastRateValue = currentTime
+                }
+            }
+        }
+    }
+
+    private fun groupChartCells(rates: List<Rate>): List<RateGroupedCells> {
+        return rates
+            .groupBy { it.validFrom.toLocalDateString() }
+            .map { (date, items) -> RateGroupedCells(title = date, rates = items) }
+    }
+
+    private fun generateChartToolTips(rates: List<Rate>): List<String> {
+        return rates.map { rate ->
+            val timeRange = rate.validFrom.toLocalHourMinuteString() +
+                (rate.validTo?.let { "- ${it.toLocalHourMinuteString()}" } ?: "")
+            "$timeRange\n${rate.vatInclusivePrice.toString(precision = 2)}p"
         }
     }
 

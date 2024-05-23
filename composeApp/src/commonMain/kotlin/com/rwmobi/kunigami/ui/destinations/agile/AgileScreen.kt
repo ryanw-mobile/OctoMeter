@@ -83,10 +83,10 @@ fun AgileScreen(
     }
 
     Box(modifier = modifier) {
-        if (uiState.rates.isNotEmpty()) {
+        if (uiState.rateGroupedCells.isNotEmpty()) {
             ScrollbarMultiplatform(
                 modifier = Modifier.fillMaxWidth(),
-                enabled = uiState.rates.isNotEmpty(),
+                enabled = uiState.rateGroupedCells.isNotEmpty(),
                 lazyListState = lazyListState,
             ) { contentModifier ->
                 LazyColumn(
@@ -141,7 +141,7 @@ fun AgileScreen(
                         }
                     }
 
-                    if (uiState.rates.isNotEmpty()) {
+                    if (uiState.rateGroupedCells.isNotEmpty()) {
                         item(key = "headingUnitRateDetails") {
                             LargeTitleWithIcon(
                                 modifier = Modifier
@@ -153,7 +153,7 @@ fun AgileScreen(
                         }
                     }
 
-                    uiState.rates.forEach { rateGroup ->
+                    uiState.rateGroupedCells.forEach { rateGroup ->
                         item(key = "${rateGroup.title}Title") {
                             Row(
                                 modifier = Modifier

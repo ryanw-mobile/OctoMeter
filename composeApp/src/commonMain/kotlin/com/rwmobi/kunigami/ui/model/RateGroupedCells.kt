@@ -11,7 +11,7 @@ import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.model.Rate
 
 @Immutable
-data class RateGroup(
+data class RateGroupedCells(
     val title: String,
     val rates: List<Rate>,
 )
