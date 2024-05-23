@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
+import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
@@ -73,68 +74,10 @@ class AccountViewModel(
         }
 
         viewModelScope.launch(dispatcher) {
-            val userAccount = getUserAccountUseCase()
-            userAccount.fold(
-                onSuccess = { account ->
-                    _uiState.update { currentUiState ->
-                        currentUiState.copy(
-                            account = account,
-                            selectedMpan = account.electricityMeterPoints[0].mpan,
-                            selectedMeterSerialNumber = account.electricityMeterPoints[0].meterSerialNumbers[0],
-                        )
-                    }
-                },
-                onFailure = { throwable ->
-                    if (throwable is IncompleteCredentialsException) {
-                        _uiState.update { currentUiState ->
-                            currentUiState.copy(
-                                isDemoMode = true,
-                                isLoading = false,
-                            )
-                        }
-                    } else {
-                        updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
-                        Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
-                    }
-                    return@launch
-                },
-            )
-
-            val tariffCode = _uiState.value.account?.electricityMeterPoints?.get(0)?.currentAgreement?.tariffCode ?: return@launch
-
-            val tariffRates = getTariffRatesUseCase(
-                productCode = extractSegment(tariffCode) ?: "",
-                tariffCode = tariffCode,
-            )
-            val selectedMpan = userPreferencesRepository.getMpan()
-            val selectedMeterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
-
-            tariffRates.fold(
-                onSuccess = { tariff ->
-                    _uiState.update { currentUiState ->
-                        currentUiState.copy(
-                            isDemoMode = false,
-                            tariff = tariff,
-                            selectedMpan = selectedMpan,
-                            selectedMeterSerialNumber = selectedMeterSerialNumber,
-                            isLoading = false,
-                        )
-                    }
-                },
-                onFailure = { throwable ->
-                    Logger.e(getString(resource = Res.string.account_error_load_tariff), throwable = throwable, tag = "AccountViewModel")
-
-                    _uiState.update { currentUiState ->
-                        currentUiState.copy(
-                            isDemoMode = false,
-                            tariff = null,
-                            selectedMpan = selectedMpan,
-                            selectedMeterSerialNumber = selectedMeterSerialNumber,
-                            isLoading = false,
-                        )
-                    }
-                },
-            )
+            if (syncAccountWithUserPreferences().isFailure) {
+                return@launch
+            }
+            getTariff()
         }
     }
 
@@ -197,6 +140,88 @@ class AccountViewModel(
         }
     }
 
+    private suspend fun syncAccountWithUserPreferences(): Result<Unit> {
+        // Always retrieve preferences. Fill in defaults if empty or invalid.
+        var selectedMpan = userPreferencesRepository.getMpan()
+        var selectedMeterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
+
+        val userAccount = getUserAccountUseCase()
+        userAccount.fold(
+            onSuccess = { account ->
+                _uiState.update { currentUiState ->
+                    with(selectedMpan) {
+                        if (this == null || !account.containsMpan(mpan = this)) {
+                            selectedMpan = account.getDefaultMpan()?.also {
+                                userPreferencesRepository.setMpan(mpan = it)
+                            }
+                        }
+                    }
+
+                    with(selectedMeterSerialNumber) {
+                        if (this == null || !account.containsMeterSerialNumber(mpan = selectedMpan, serial = this)) {
+                            selectedMeterSerialNumber = account.getDefaultMeterSerialNumber()?.also {
+                                userPreferencesRepository.setMeterSerialNumber(meterSerialNumber = it)
+                            }
+                        }
+                    }
+
+                    currentUiState.copy(
+                        account = account,
+                        selectedMpan = selectedMpan,
+                        selectedMeterSerialNumber = selectedMeterSerialNumber,
+                    )
+                }
+            },
+            onFailure = { throwable ->
+                if (throwable is IncompleteCredentialsException) {
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            isDemoMode = true,
+                            isLoading = false,
+                        )
+                    }
+                } else {
+                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
+                    Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                }
+                return Result.failure(throwable)
+            },
+        )
+        return Result.success(Unit)
+    }
+
+    private suspend fun getTariff() {
+        with(_uiState.value) {
+            val tariffCode = account?.getTariffCode(selectedMpan) ?: return
+            val tariffRates = getTariffRatesUseCase(
+                productCode = Tariff.extractProductCode(tariffCode = tariffCode) ?: "",
+                tariffCode = tariffCode,
+            )
+
+            tariffRates.fold(
+                onSuccess = { tariff ->
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            isDemoMode = false,
+                            tariff = tariff,
+                            isLoading = false,
+                        )
+                    }
+                },
+                onFailure = { throwable ->
+                    Logger.e(getString(resource = Res.string.account_error_load_tariff), throwable = throwable, tag = "AccountViewModel")
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            isDemoMode = false,
+                            tariff = null,
+                            isLoading = false,
+                        )
+                    }
+                },
+            )
+        }
+    }
+
     private fun updateUIForError(message: String) {
         _uiState.update { currentUiState ->
             val newErrorMessages = if (_uiState.value.errorMessages.any { it.message == message }) {
@@ -217,16 +242,5 @@ class AccountViewModel(
     override fun onCleared() {
         super.onCleared()
         Logger.v("AccountViewModel", message = { "onCleared" })
-    }
-
-    private fun extractSegment(input: String): String? {
-        val parts = input.split("-")
-        // Check if there are enough parts to remove
-        if (parts.size > 3) {
-            // Exclude the first two and the last segments
-            val relevantParts = parts.drop(2).dropLast(1)
-            return relevantParts.joinToString("-")
-        }
-        return null
     }
 }

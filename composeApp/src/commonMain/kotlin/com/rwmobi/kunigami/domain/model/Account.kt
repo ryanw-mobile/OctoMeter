@@ -18,4 +18,43 @@ data class Account(
     val movedInAt: Instant?,
     val movedOutAt: Instant?,
     val electricityMeterPoints: List<ElectricityMeterPoint>,
-)
+) {
+    /**
+     * Pick the first tariff we can find from the data we keep.
+     */
+    fun getDefaultTariffCode(): String? {
+        return electricityMeterPoints.getOrNull(0)?.currentAgreement?.tariffCode
+    }
+
+    fun getTariffCode(mpan: String?): String? {
+        if (mpan == null) return null
+
+        return electricityMeterPoints.find {
+            it.mpan == mpan
+        }?.currentAgreement?.tariffCode
+    }
+
+    fun getDefaultMpan(): String? {
+        return electricityMeterPoints.getOrNull(0)?.mpan
+    }
+
+    fun containsMpan(mpan: String?): Boolean {
+        return electricityMeterPoints.any {
+            it.mpan == mpan
+        }
+    }
+
+    fun getDefaultMeterSerialNumber(): String? {
+        return electricityMeterPoints.getOrNull(0)?.meterSerialNumbers?.getOrNull(0)
+    }
+
+    fun containsMeterSerialNumber(mpan: String?, serial: String?): Boolean {
+        if (mpan == null || serial == null) {
+            return false
+        }
+
+        return electricityMeterPoints.firstOrNull {
+            it.mpan == mpan
+        }?.meterSerialNumbers?.contains(serial) == true
+    }
+}
