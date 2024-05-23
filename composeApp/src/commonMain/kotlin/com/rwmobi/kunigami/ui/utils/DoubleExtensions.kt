@@ -7,8 +7,6 @@
 
 package com.rwmobi.kunigami.ui.utils
 
-import kotlin.math.min
-
 internal fun Double.getPercentageColorIndex(maxValue: Double): Int {
-    return min(((this / maxValue) * 100).toInt() - 1, 99)
+    return ((this / maxValue) * 100).toInt().coerceIn(0, 99)
 }

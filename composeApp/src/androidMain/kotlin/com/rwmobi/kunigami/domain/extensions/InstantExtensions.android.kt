@@ -7,18 +7,17 @@
 
 package com.rwmobi.kunigami.domain.extensions
 
-import android.icu.util.Calendar
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import java.text.DateFormat
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.Locale
 
 actual fun Instant.toLocalDateString(): String {
     val localDate = toLocalDateTime(TimeZone.currentSystemDefault()).date
-    val calendar = Calendar.getInstance().apply {
-        set(localDate.year, localDate.monthNumber - 1, localDate.dayOfMonth)
-    }
-    val dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault())
-    return dateFormat.format(calendar.time)
+    val javaDate = java.time.LocalDate.of(localDate.year, localDate.monthNumber, localDate.dayOfMonth)
+    val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+        .withLocale(Locale.getDefault())
+    return javaDate.format(formatter)
 }
