@@ -24,6 +24,7 @@ import com.rwmobi.kunigami.ui.utils.generateRandomLong
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
 import io.github.koalaplot.core.bar.VerticalBarPlotEntry
+import io.github.koalaplot.core.util.toString
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -83,7 +84,6 @@ class AgileViewModel(
                         }
 
                         val labels: Map<Int, String> = buildMap {
-                            // Generate all possible labels
                             var lastRateValue: Int? = null
                             rates.forEachIndexed { index, rate ->
                                 val currentTime = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
@@ -97,7 +97,7 @@ class AgileViewModel(
                         val toolTips = rates.map { rate ->
                             val timeRange = rate.validFrom.toLocalHourMinuteString() +
                                 (rate.validTo?.let { "- ${it.toLocalHourMinuteString()}" } ?: "")
-                            "$timeRange\n${rate.vatInclusivePrice}p"
+                            "$timeRange\n${rate.vatInclusivePrice.toString(precision = 2)}p"
                         }
 
                         currentUiState.copy(
@@ -127,7 +127,7 @@ class AgileViewModel(
                 RequestedChartLayout.Portrait
             } else {
                 RequestedChartLayout.LandScape(
-                    requestedMaxHeight = screenSizeInfo.heightDp * 2 / 3,
+                    requestedMaxHeight = screenSizeInfo.heightDp / 2,
                 )
             }
 
