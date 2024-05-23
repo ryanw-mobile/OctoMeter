@@ -17,4 +17,10 @@ data class Rate(
     val validFrom: Instant,
     val validTo: Instant?,
     val paymentMethod: PaymentMethod,
-)
+) {
+    fun isActive(pointOfReference: Instant): Boolean {
+        val isValidFrom = pointOfReference >= validFrom
+        val isValidTo = validTo?.let { pointOfReference <= it } ?: true
+        return isValidFrom && isValidTo
+    }
+}
