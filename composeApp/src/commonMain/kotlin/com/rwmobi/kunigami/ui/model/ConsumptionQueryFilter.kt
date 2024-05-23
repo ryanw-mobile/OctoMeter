@@ -236,9 +236,12 @@ data class ConsumptionQueryFilter(
     /**
      * We assume no smart meter logs before the account move-in date.
      * Although for accurate billing, we should take the tariff start date.
+     * We consider the end date for eligibility to make sure we show all available data.
      */
     fun canNavigateBackward(accountMoveInDate: Instant): Boolean {
-        return getBackwardPointOfReference() >= accountMoveInDate
+        val newPointOfReference = getBackwardPointOfReference()
+        val newRequestedEnd = calculateEndDate(pointOfReference = newPointOfReference, presentationStyle = presentationStyle)
+        return newRequestedEnd >= accountMoveInDate
     }
 
     /**
