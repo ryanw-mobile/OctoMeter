@@ -9,10 +9,12 @@ package com.rwmobi.kunigami.ui.model
 
 import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.extensions.roundDownToDay
+import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.extensions.roundUpToDayEnd
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.extensions.toLocalDay
 import com.rwmobi.kunigami.domain.extensions.toLocalDayMonth
+import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.domain.extensions.toLocalMonth
 import com.rwmobi.kunigami.domain.extensions.toLocalMonthYear
 import com.rwmobi.kunigami.domain.extensions.toLocalWeekday
@@ -35,6 +37,8 @@ import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.grouping_label_month_weeks
 import kunigami.composeapp.generated.resources.presentation_style_week_seven_days
+import kunigami.composeapp.generated.resources.usage_chart_tooltip_range_kwh
+import kunigami.composeapp.generated.resources.usage_chart_tooltip_spot_kwh
 import org.jetbrains.compose.resources.getString
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.nanoseconds
@@ -228,6 +232,64 @@ data class ConsumptionQueryFilter(
                 consumptions
                     .groupBy { it.intervalStart.toLocalYear() }
                     .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+            }
+        }
+    }
+
+    suspend fun generateChartToolTips(
+        consumptions: List<Consumption>,
+    ): List<String> {
+        return when (presentationStyle) {
+            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
+                consumptions.map { consumption ->
+                    getString(
+                        resource = Res.string.usage_chart_tooltip_range_kwh,
+                        consumption.intervalStart.toLocalHourMinuteString(),
+                        consumption.intervalEnd.toLocalHourMinuteString(),
+                        consumption.consumption.roundToNearestEvenHundredth(),
+                    )
+                }
+            }
+
+            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
+                consumptions.map { consumption ->
+                    getString(
+                        resource = Res.string.usage_chart_tooltip_spot_kwh,
+                        consumption.intervalStart.toLocalDateString(),
+                        consumption.consumption.roundToNearestEvenHundredth(),
+                    )
+                }
+            }
+
+            ConsumptionPresentationStyle.MONTH_WEEKS -> {
+                consumptions.map { consumption ->
+                    getString(
+                        resource = Res.string.usage_chart_tooltip_range_kwh,
+                        consumption.intervalStart.toLocalDayMonth(),
+                        consumption.intervalEnd.toLocalDayMonth(),
+                        consumption.consumption.roundToNearestEvenHundredth(),
+                    )
+                }
+            }
+
+            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
+                consumptions.map { consumption ->
+                    getString(
+                        resource = Res.string.usage_chart_tooltip_spot_kwh,
+                        consumption.intervalStart.toLocalDayMonth(),
+                        consumption.consumption.roundToNearestEvenHundredth(),
+                    )
+                }
+            }
+
+            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
+                consumptions.map { consumption ->
+                    getString(
+                        resource = Res.string.usage_chart_tooltip_spot_kwh,
+                        consumption.intervalStart.toLocalMonthYear(),
+                        consumption.consumption.roundToNearestEvenHundredth(),
+                    )
+                }
             }
         }
     }

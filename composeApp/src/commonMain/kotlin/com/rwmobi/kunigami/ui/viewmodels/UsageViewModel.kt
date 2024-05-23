@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
-import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
@@ -247,10 +246,7 @@ class UsageViewModel(
 
             val labels = consumptionQueryFilter.generateChartLabels(consumptions = consumptions)
             val consumptionGroupedCells = consumptionQueryFilter.groupChartCells(consumptions = consumptions)
-
-            val toolTips = consumptions.map { consumption ->
-                "${consumption.intervalStart.toLocalHourMinuteString()} - ${consumption.intervalEnd.toLocalHourMinuteString()}\n${consumption.consumption} kWh"
-            }
+            val toolTips = consumptionQueryFilter.generateChartToolTips(consumptions = consumptions)
 
             currentUiState.copy(
                 isLoading = false,
