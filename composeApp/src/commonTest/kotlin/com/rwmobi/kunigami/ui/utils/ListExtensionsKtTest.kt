@@ -11,7 +11,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import kotlin.test.Test
 
-class PartitionListTest {
+class ListExtensionKtTest {
 
     @Test
     fun `partitionList should return original list wrapped in a list when columns is zero`() {
