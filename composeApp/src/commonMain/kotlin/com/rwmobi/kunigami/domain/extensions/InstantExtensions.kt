@@ -141,7 +141,7 @@ fun Instant.toLocalMonthYear(): String {
 }
 
 /***
- * This is for recurrent background tasks that we want to trigger at 00 and 30 moinutes.
+ * This is for recurrent background tasks that we want to trigger at 00 and 30 minutes.
  */
 fun Instant.getNextHalfHourCountdownMillis(): Long {
     val currentLocalDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
