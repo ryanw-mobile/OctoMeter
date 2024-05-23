@@ -32,7 +32,6 @@ import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.coin
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -76,7 +75,6 @@ fun IconTextButton(
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Preview
 @Composable
 private fun IconTextButtonPreview() {
