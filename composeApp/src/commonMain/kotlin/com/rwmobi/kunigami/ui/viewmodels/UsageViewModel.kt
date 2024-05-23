@@ -12,19 +12,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
-import com.rwmobi.kunigami.domain.extensions.toLocalDateString
-import com.rwmobi.kunigami.domain.extensions.toLocalDay
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
-import com.rwmobi.kunigami.domain.extensions.toLocalMonth
-import com.rwmobi.kunigami.domain.extensions.toLocalMonthYear
-import com.rwmobi.kunigami.domain.extensions.toLocalYear
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
 import com.rwmobi.kunigami.ui.model.BarChartData
-import com.rwmobi.kunigami.ui.model.ConsumptionGroupedCells
 import com.rwmobi.kunigami.ui.model.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.model.ConsumptionQueryFilter
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -41,8 +35,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_load_account
 import org.jetbrains.compose.resources.getString
@@ -231,7 +223,7 @@ class UsageViewModel(
         )
     }
 
-    private fun processConsumptions(
+    private suspend fun processConsumptions(
         consumptionQueryFilter: ConsumptionQueryFilter,
         consumptions: List<Consumption>,
     ) {
@@ -240,38 +232,6 @@ class UsageViewModel(
                 0.0..0.0 // Return a default range if the list is empty
             } else {
                 0.0..ceil(consumptions.maxOf { it.consumption } * 10) / 10.0
-            }
-
-            val consumptionGroupedCells = when (consumptionQueryFilter.presentationStyle) {
-                ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
-                    consumptions
-                        .groupBy { it.intervalStart.toLocalDateString() }
-                        .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
-                }
-
-                ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
-                    consumptions
-                        .groupBy { it.intervalStart.toLocalYear() }
-                        .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
-                }
-
-                ConsumptionPresentationStyle.MONTH_WEEKS -> {
-                    consumptions
-                        .groupBy { it.intervalStart.toLocalYear() }
-                        .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
-                }
-
-                ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
-                    consumptions
-                        .groupBy { it.intervalStart.toLocalMonthYear() }
-                        .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
-                }
-
-                ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
-                    consumptions
-                        .groupBy { it.intervalStart.toLocalYear() }
-                        .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
-                }
             }
 
             val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
@@ -285,44 +245,8 @@ class UsageViewModel(
                 }
             }
 
-            val labels: Map<Int, String> = buildMap {
-                when (consumptionQueryFilter.presentationStyle) {
-                    ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
-                        var lastRateValue: Int? = null
-                        consumptions.forEachIndexed { index, consumption ->
-                            val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
-                            if (currentTime != lastRateValue && currentTime % 2 == 0) {
-                                put(key = index, value = currentTime.toString().padStart(2, '0'))
-                            }
-                            lastRateValue = currentTime
-                        }
-                    }
-
-                    ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
-                        consumptions.forEachIndexed { index, consumption ->
-                            put(key = index, value = consumption.intervalStart.toLocalDateString())
-                        }
-                    }
-
-                    ConsumptionPresentationStyle.MONTH_WEEKS -> {
-                        consumptions.forEachIndexed { index, consumption ->
-                            put(key = index, value = consumption.intervalStart.toLocalDateString())
-                        }
-                    }
-
-                    ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
-                        consumptions.forEachIndexed { index, consumption ->
-                            put(key = index, value = consumption.intervalStart.toLocalDay())
-                        }
-                    }
-
-                    ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
-                        consumptions.forEachIndexed { index, consumption ->
-                            put(key = index, value = consumption.intervalStart.toLocalMonth())
-                        }
-                    }
-                }
-            }
+            val labels = consumptionQueryFilter.generateChartLabels(consumptions = consumptions)
+            val consumptionGroupedCells = consumptionQueryFilter.groupChartCells(consumptions = consumptions)
 
             val toolTips = consumptions.map { consumption ->
                 "${consumption.intervalStart.toLocalHourMinuteString()} - ${consumption.intervalEnd.toLocalHourMinuteString()}\n${consumption.consumption} kWh"

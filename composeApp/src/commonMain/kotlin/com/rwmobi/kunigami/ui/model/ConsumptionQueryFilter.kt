@@ -11,8 +11,13 @@ import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.extensions.roundDownToDay
 import com.rwmobi.kunigami.domain.extensions.roundUpToDayEnd
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
+import com.rwmobi.kunigami.domain.extensions.toLocalDay
+import com.rwmobi.kunigami.domain.extensions.toLocalDayMonth
+import com.rwmobi.kunigami.domain.extensions.toLocalMonth
 import com.rwmobi.kunigami.domain.extensions.toLocalMonthYear
+import com.rwmobi.kunigami.domain.extensions.toLocalWeekday
 import com.rwmobi.kunigami.domain.extensions.toLocalYear
+import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimePeriod
 import kotlinx.datetime.DateTimeUnit
@@ -27,6 +32,9 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.presentation_style_week_seven_days
+import org.jetbrains.compose.resources.getString
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.nanoseconds
 
@@ -131,10 +139,92 @@ data class ConsumptionQueryFilter(
     fun getConsumptionPeriodString(): String {
         return when (presentationStyle) {
             ConsumptionPresentationStyle.DAY_HALF_HOURLY -> pointOfReference.toLocalDateString()
-            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> "${requestedStart.toLocalDateString()} - ${requestedEnd.toLocalDateString()}"
+            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> "${requestedStart.toLocalDateString().substringBefore(delimiter = ",")} - ${requestedEnd.toLocalDateString()}"
             ConsumptionPresentationStyle.MONTH_WEEKS -> pointOfReference.toLocalMonthYear()
             ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> pointOfReference.toLocalMonthYear()
             ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> pointOfReference.toLocalYear()
+        }
+    }
+
+    fun generateChartLabels(
+        consumptions: List<Consumption>,
+    ): Map<Int, String> {
+        return buildMap {
+            when (presentationStyle) {
+                ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
+                    var lastRateValue: Int? = null
+                    consumptions.forEachIndexed { index, consumption ->
+                        val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
+                        if (currentTime != lastRateValue && currentTime % 2 == 0) {
+                            put(key = index, value = currentTime.toString().padStart(2, '0'))
+                        }
+                        lastRateValue = currentTime
+                    }
+                }
+
+                ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
+                    consumptions.forEachIndexed { index, consumption ->
+                        put(key = index, value = consumption.intervalStart.toLocalWeekday())
+                    }
+                }
+
+                ConsumptionPresentationStyle.MONTH_WEEKS -> {
+                    consumptions.forEachIndexed { index, consumption ->
+                        put(key = index, value = consumption.intervalStart.toLocalDayMonth())
+                    }
+                }
+
+                ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
+                    consumptions.forEachIndexed { index, consumption ->
+                        put(key = index, value = consumption.intervalStart.toLocalDay())
+                    }
+                }
+
+                ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
+                    consumptions.forEachIndexed { index, consumption ->
+                        put(key = index, value = consumption.intervalStart.toLocalMonth())
+                    }
+                }
+            }
+        }
+    }
+
+    suspend fun groupChartCells(
+        consumptions: List<Consumption>,
+    ): List<ConsumptionGroupedCells> {
+        return when (presentationStyle) {
+            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
+                consumptions
+                    .groupBy { it.intervalStart.toLocalDateString() }
+                    .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+            }
+
+            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
+                listOf(
+                    ConsumptionGroupedCells(
+                        title = getString(resource = Res.string.presentation_style_week_seven_days),
+                        consumptions = consumptions,
+                    ),
+                )
+            }
+
+            ConsumptionPresentationStyle.MONTH_WEEKS -> {
+                consumptions
+                    .groupBy { it.intervalStart.toLocalYear() }
+                    .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+            }
+
+            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
+                consumptions
+                    .groupBy { it.intervalStart.toLocalMonthYear() }
+                    .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+            }
+
+            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
+                consumptions
+                    .groupBy { it.intervalStart.toLocalYear() }
+                    .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+            }
         }
     }
 

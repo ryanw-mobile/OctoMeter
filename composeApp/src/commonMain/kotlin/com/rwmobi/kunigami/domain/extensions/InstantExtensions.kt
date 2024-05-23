@@ -11,7 +11,9 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
+import kotlinx.datetime.format.DayOfWeekNames
 import kotlinx.datetime.format.MonthNames
+import kotlinx.datetime.format.Padding
 import kotlinx.datetime.format.char
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -92,6 +94,34 @@ fun Instant.toLocalDay(): String {
     return currentLocalDateTime.dayOfMonth.toString()
 }
 
+fun Instant.toLocalWeekday(): String {
+    val localDate = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val customFormat = LocalDate.Format {
+        dayOfWeek(DayOfWeekNames.ENGLISH_ABBREVIATED)
+    }
+    return localDate.format(customFormat)
+}
+
+fun Instant.toLocalWeekdayDay(): String {
+    val localDate = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val customFormat = LocalDate.Format {
+        dayOfWeek(DayOfWeekNames.ENGLISH_ABBREVIATED)
+        char(' ')
+        dayOfMonth(padding = Padding.ZERO)
+    }
+    return localDate.format(customFormat)
+}
+
+fun Instant.toLocalDayMonth(): String {
+    val localDate = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val customFormat = LocalDate.Format {
+        dayOfMonth(padding = Padding.ZERO)
+        char(' ')
+        monthName(MonthNames.ENGLISH_ABBREVIATED)
+    }
+    return localDate.format(customFormat)
+}
+
 fun Instant.toLocalMonth(): String {
     val localDate = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
     val customFormat = LocalDate.Format {
@@ -104,7 +134,7 @@ fun Instant.toLocalMonthYear(): String {
     val localDate = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
     val customFormat = LocalDate.Format {
         monthName(MonthNames.ENGLISH_ABBREVIATED) // Full month name
-        char(' ') // Space separator
+        char(' ')
         year()
     }
     return localDate.format(customFormat)

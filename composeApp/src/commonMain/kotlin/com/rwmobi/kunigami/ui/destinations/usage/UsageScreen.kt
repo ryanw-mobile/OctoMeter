@@ -36,6 +36,7 @@ import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalDay
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.domain.extensions.toLocalMonth
+import com.rwmobi.kunigami.domain.extensions.toLocalWeekdayDay
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
@@ -212,7 +213,7 @@ fun UsageScreen(
                                         if (item != null) {
                                             val label = when (uiState.consumptionQueryFilter.presentationStyle) {
                                                 ConsumptionPresentationStyle.DAY_HALF_HOURLY -> item.intervalStart.toLocalHourMinuteString()
-                                                ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> item.intervalStart.toLocalDay()
+                                                ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> item.intervalStart.toLocalWeekdayDay()
                                                 ConsumptionPresentationStyle.MONTH_WEEKS -> item.intervalStart.toLocalDay()
                                                 ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> item.intervalStart.toLocalDay()
                                                 ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> item.intervalStart.toLocalMonth()
