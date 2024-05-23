@@ -33,6 +33,7 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.grouping_label_month_weeks
 import kunigami.composeapp.generated.resources.presentation_style_week_seven_days
 import org.jetbrains.compose.resources.getString
 import kotlin.time.Duration
@@ -209,9 +210,12 @@ data class ConsumptionQueryFilter(
             }
 
             ConsumptionPresentationStyle.MONTH_WEEKS -> {
-                consumptions
-                    .groupBy { it.intervalStart.toLocalYear() }
-                    .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+                listOf(
+                    ConsumptionGroupedCells(
+                        title = getString(resource = Res.string.grouping_label_month_weeks),
+                        consumptions = consumptions,
+                    ),
+                )
             }
 
             ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {

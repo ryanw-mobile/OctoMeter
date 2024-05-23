@@ -28,6 +28,7 @@
     <string name="presentation_style_month_weeks">Weekly in a Month</string>
     <string name="presentation_style_month_thirty_days">Daily in a Month</string>
     <string name="presentation_style_year_twelve_months">Monthly in a Year</string>
+    <string name="grouping_label_month_weeks">Week Starting On</string>
 
     <!-- Agile -->
     <string name="agile_unit_rate_details">Unit Rate Details</string>
