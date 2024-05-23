@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import io.kotest.matchers.shouldBe
@@ -21,6 +22,9 @@ import kotlin.test.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GetConsumptionUseCaseTest {
+    private val fakePeriodFrom = Instant.DISTANT_PAST
+    private val fakePeriodTo = Instant.DISTANT_FUTURE
+    private val groupBy = ConsumptionDataGroup.HALF_HOURLY
 
     private lateinit var getConsumptionUseCase: GetConsumptionUseCase
     private lateinit var fakeUserPreferenceRepository: FakeUserPreferencesRepository
@@ -66,7 +70,11 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
         fakeRestApiRepository.setConsumptionResponse = Result.success(expectedConsumption)
 
-        val result = getConsumptionUseCase()
+        val result = getConsumptionUseCase(
+            periodFrom = fakePeriodFrom,
+            periodTo = fakePeriodTo,
+            groupBy = groupBy,
+        )
 
         result.isSuccess shouldBe true
         result.getOrNull() shouldBe expectedConsumption.sortedBy { it.intervalStart }
@@ -82,7 +90,11 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository.mpan = mpan
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
 
-        val result = getConsumptionUseCase()
+        val result = getConsumptionUseCase(
+            periodFrom = fakePeriodFrom,
+            periodTo = fakePeriodTo,
+            groupBy = groupBy,
+        )
 
         result.isFailure shouldBe true
         result.exceptionOrNull().shouldBeInstanceOf<IllegalArgumentException>()
@@ -99,7 +111,11 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository.mpan = mpan
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
 
-        val result = getConsumptionUseCase()
+        val result = getConsumptionUseCase(
+            periodFrom = fakePeriodFrom,
+            periodTo = fakePeriodTo,
+            groupBy = groupBy,
+        )
 
         result.isFailure shouldBe true
         result.exceptionOrNull().shouldBeInstanceOf<IllegalArgumentException>()
@@ -116,7 +132,11 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository.mpan = mpan
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
 
-        val result = getConsumptionUseCase()
+        val result = getConsumptionUseCase(
+            periodFrom = fakePeriodFrom,
+            periodTo = fakePeriodTo,
+            groupBy = groupBy,
+        )
 
         result.isFailure shouldBe true
         result.exceptionOrNull().shouldBeInstanceOf<IllegalArgumentException>()
@@ -135,7 +155,11 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
         fakeRestApiRepository.setConsumptionResponse = Result.failure(RuntimeException(errorMessage))
 
-        val result = getConsumptionUseCase()
+        val result = getConsumptionUseCase(
+            periodFrom = fakePeriodFrom,
+            periodTo = fakePeriodTo,
+            groupBy = groupBy,
+        )
 
         result.isFailure shouldBe true
         result.exceptionOrNull().shouldBeInstanceOf<RuntimeException>()
