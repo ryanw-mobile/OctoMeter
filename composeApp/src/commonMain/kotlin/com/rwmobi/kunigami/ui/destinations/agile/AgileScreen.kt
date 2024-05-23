@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
@@ -50,6 +51,7 @@ import io.github.koalaplot.core.util.toString
 import io.github.koalaplot.core.xygraph.HorizontalLineAnnotation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import kotlinx.datetime.Clock
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_unit_rate_details
 import kunigami.composeapp.generated.resources.agile_vat_unit_rate
@@ -232,7 +234,8 @@ fun AgileScreen(
         uiEvent.onRefresh()
 
         while (isActive) {
-            delay(timeMillis = 1_800_000) // 30 minutes
+            val delayMillis = Clock.System.now().getNextHalfHourCountdownMillis()
+            delay(timeMillis = delayMillis)
             uiEvent.onRefresh()
         }
     }
