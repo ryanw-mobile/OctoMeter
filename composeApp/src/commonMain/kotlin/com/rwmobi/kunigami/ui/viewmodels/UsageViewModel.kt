@@ -13,7 +13,11 @@ import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
+import com.rwmobi.kunigami.domain.extensions.toLocalDay
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
+import com.rwmobi.kunigami.domain.extensions.toLocalMonth
+import com.rwmobi.kunigami.domain.extensions.toLocalMonthYear
+import com.rwmobi.kunigami.domain.extensions.toLocalYear
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
@@ -238,9 +242,37 @@ class UsageViewModel(
                 0.0..ceil(consumptions.maxOf { it.consumption } * 10) / 10.0
             }
 
-            val consumptionGroupedCells = consumptions
-                .groupBy { it.intervalStart.toLocalDateString() }
-                .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+            val consumptionGroupedCells = when (consumptionQueryFilter.presentationStyle) {
+                ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
+                    consumptions
+                        .groupBy { it.intervalStart.toLocalDateString() }
+                        .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+                }
+
+                ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
+                    consumptions
+                        .groupBy { it.intervalStart.toLocalYear() }
+                        .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+                }
+
+                ConsumptionPresentationStyle.MONTH_WEEKS -> {
+                    consumptions
+                        .groupBy { it.intervalStart.toLocalYear() }
+                        .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+                }
+
+                ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
+                    consumptions
+                        .groupBy { it.intervalStart.toLocalMonthYear() }
+                        .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+                }
+
+                ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
+                    consumptions
+                        .groupBy { it.intervalStart.toLocalYear() }
+                        .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+                }
+            }
 
             val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
                 consumptions.forEachIndexed { index, consumption ->
@@ -254,14 +286,41 @@ class UsageViewModel(
             }
 
             val labels: Map<Int, String> = buildMap {
-                // Generate all possible labels
-                var lastRateValue: Int? = null
-                consumptions.forEachIndexed { index, consumption ->
-                    val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
-                    if (currentTime != lastRateValue && currentTime % 2 == 0) {
-                        put(key = index, value = currentTime.toString().padStart(2, '0'))
+                when (consumptionQueryFilter.presentationStyle) {
+                    ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
+                        var lastRateValue: Int? = null
+                        consumptions.forEachIndexed { index, consumption ->
+                            val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
+                            if (currentTime != lastRateValue && currentTime % 2 == 0) {
+                                put(key = index, value = currentTime.toString().padStart(2, '0'))
+                            }
+                            lastRateValue = currentTime
+                        }
                     }
-                    lastRateValue = currentTime
+
+                    ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
+                        consumptions.forEachIndexed { index, consumption ->
+                            put(key = index, value = consumption.intervalStart.toLocalDateString())
+                        }
+                    }
+
+                    ConsumptionPresentationStyle.MONTH_WEEKS -> {
+                        consumptions.forEachIndexed { index, consumption ->
+                            put(key = index, value = consumption.intervalStart.toLocalDateString())
+                        }
+                    }
+
+                    ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
+                        consumptions.forEachIndexed { index, consumption ->
+                            put(key = index, value = consumption.intervalStart.toLocalDay())
+                        }
+                    }
+
+                    ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
+                        consumptions.forEachIndexed { index, consumption ->
+                            put(key = index, value = consumption.intervalStart.toLocalMonth())
+                        }
+                    }
                 }
             }
 

@@ -33,13 +33,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
+import com.rwmobi.kunigami.domain.extensions.toLocalDay
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
+import com.rwmobi.kunigami.domain.extensions.toLocalMonth
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
+import com.rwmobi.kunigami.ui.model.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
 import com.rwmobi.kunigami.ui.utils.generateGYRHueColorPalette
@@ -207,6 +210,13 @@ fun UsageScreen(
                                     for (columnIndex in partitionedItems.indices) {
                                         val item = partitionedItems.getOrNull(columnIndex)?.getOrNull(rowIndex)
                                         if (item != null) {
+                                            val label = when (uiState.consumptionQueryFilter.presentationStyle) {
+                                                ConsumptionPresentationStyle.DAY_HALF_HOURLY -> item.intervalStart.toLocalHourMinuteString()
+                                                ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> item.intervalStart.toLocalDay()
+                                                ConsumptionPresentationStyle.MONTH_WEEKS -> item.intervalStart.toLocalDay()
+                                                ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> item.intervalStart.toLocalDay()
+                                                ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> item.intervalStart.toLocalMonth()
+                                            }
                                             IndicatorTextValueGridItem(
                                                 modifier = Modifier.weight(1f),
                                                 indicatorColor = colorPalette[
@@ -214,7 +224,7 @@ fun UsageScreen(
                                                         maxValue = uiState.consumptionRange.endInclusive,
                                                     ),
                                                 ],
-                                                label = item.intervalStart.toLocalHourMinuteString(),
+                                                label = label,
                                                 value = item.consumption.toString(precision = 2),
                                             )
                                         } else {
