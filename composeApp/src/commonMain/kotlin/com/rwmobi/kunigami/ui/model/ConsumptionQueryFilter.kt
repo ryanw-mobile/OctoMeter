@@ -9,7 +9,6 @@ package com.rwmobi.kunigami.ui.model
 
 import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.extensions.roundDownToDay
-import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.extensions.roundUpToDayEnd
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.extensions.toLocalDay
@@ -20,6 +19,7 @@ import com.rwmobi.kunigami.domain.extensions.toLocalMonthYear
 import com.rwmobi.kunigami.domain.extensions.toLocalWeekday
 import com.rwmobi.kunigami.domain.extensions.toLocalYear
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
+import io.github.koalaplot.core.util.toString
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimePeriod
 import kotlinx.datetime.DateTimeUnit
@@ -246,7 +246,7 @@ data class ConsumptionQueryFilter(
                         resource = Res.string.usage_chart_tooltip_range_kwh,
                         consumption.intervalStart.toLocalHourMinuteString(),
                         consumption.intervalEnd.toLocalHourMinuteString(),
-                        consumption.consumption.roundToNearestEvenHundredth(),
+                        consumption.consumption.toString(precision = 2),
                     )
                 }
             }
@@ -256,7 +256,7 @@ data class ConsumptionQueryFilter(
                     getString(
                         resource = Res.string.usage_chart_tooltip_spot_kwh,
                         consumption.intervalStart.toLocalDateString(),
-                        consumption.consumption.roundToNearestEvenHundredth(),
+                        consumption.consumption.toString(precision = 2),
                     )
                 }
             }
@@ -266,8 +266,8 @@ data class ConsumptionQueryFilter(
                     getString(
                         resource = Res.string.usage_chart_tooltip_range_kwh,
                         consumption.intervalStart.toLocalDayMonth(),
-                        consumption.intervalEnd.toLocalDayMonth(),
-                        consumption.consumption.roundToNearestEvenHundredth(),
+                        (consumption.intervalEnd - 1.nanoseconds).toLocalDayMonth(),
+                        consumption.consumption.toString(precision = 2),
                     )
                 }
             }
@@ -277,7 +277,7 @@ data class ConsumptionQueryFilter(
                     getString(
                         resource = Res.string.usage_chart_tooltip_spot_kwh,
                         consumption.intervalStart.toLocalDayMonth(),
-                        consumption.consumption.roundToNearestEvenHundredth(),
+                        consumption.consumption.toString(precision = 2),
                     )
                 }
             }
@@ -287,7 +287,7 @@ data class ConsumptionQueryFilter(
                     getString(
                         resource = Res.string.usage_chart_tooltip_spot_kwh,
                         consumption.intervalStart.toLocalMonthYear(),
-                        consumption.consumption.roundToNearestEvenHundredth(),
+                        consumption.consumption.toString(precision = 2),
                     )
                 }
             }
