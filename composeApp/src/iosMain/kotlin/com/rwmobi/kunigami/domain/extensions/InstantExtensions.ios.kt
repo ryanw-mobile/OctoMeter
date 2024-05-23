@@ -36,20 +36,3 @@ actual fun Instant.toLocalDateString(): String {
     val date = calendar.dateFromComponents(components) ?: NSDate()
     return dateFormatter.stringFromDate(date)
 }
-
-actual fun Instant.toLocalMonthYear(): String {
-    val dateFormatter = NSDateFormatter().apply {
-        dateStyle = NSDateFormatterMediumStyle
-        timeStyle = NSDateFormatterNoStyle
-        locale = NSLocale.currentLocale
-    }
-
-    val localDate = toLocalDateTime(TimeZone.currentSystemDefault()).date
-    val components = NSDateComponents().apply {
-        year = localDate.year.toLong()
-        month = localDate.monthNumber.toLong()
-    }
-    val calendar = NSCalendar.currentCalendar
-    val date = calendar.dateFromComponents(components) ?: NSDate()
-    return dateFormatter.stringFromDate(date)
-}

@@ -7,8 +7,12 @@
 package com.rwmobi.kunigami.domain.extensions
 
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.format.MonthNames
+import kotlinx.datetime.format.char
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
@@ -83,5 +87,27 @@ fun Instant.toLocalYear(): String {
     return currentLocalDateTime.year.toString()
 }
 
-expect fun Instant.toLocalMonthYear(): String
+fun Instant.toLocalDay(): String {
+    val currentLocalDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
+    return currentLocalDateTime.dayOfMonth.toString()
+}
+
+fun Instant.toLocalMonth(): String {
+    val localDate = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val customFormat = LocalDate.Format {
+        monthName(MonthNames.ENGLISH_ABBREVIATED)
+    }
+    return localDate.format(customFormat)
+}
+
+fun Instant.toLocalMonthYear(): String {
+    val localDate = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val customFormat = LocalDate.Format {
+        monthName(MonthNames.ENGLISH_ABBREVIATED) // Full month name
+        char(' ') // Space separator
+        year()
+    }
+    return localDate.format(customFormat)
+}
+
 expect fun Instant.toLocalDateString(): String
