@@ -33,7 +33,7 @@
     <string name="usage_chart_tooltip_range_kwh">%1$s - %2$s\n%3$s kWh</string>
 
     <!-- Agile -->
-    <string name="agile_unit_rate_details">Unit Rate Details</string>
+    <string name="agile_unit_rate_details">Published Unit Rates</string>
     <string name="agile_vat_unit_rate">VAT Unit Rate (p/kWh)</string>
 
     <!-- Product Features -->
