@@ -14,7 +14,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlin.test.Test
 
-class InstantExtensionsTest {
+class InstantExtensionsKtTest {
 
     private val timeZone = TimeZone.currentSystemDefault()
 
