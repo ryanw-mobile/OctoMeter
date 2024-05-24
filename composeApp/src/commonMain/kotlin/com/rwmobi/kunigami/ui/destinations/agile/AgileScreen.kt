@@ -238,15 +238,13 @@ fun AgileScreen(
                     }
                 }
             }
-        } else if (!uiState.isLoading) {
-            // no data
-            Text("Placeholder for no data")
-        }
-
-        if (uiState.isLoading) {
+        } else if (uiState.isLoading) {
             LoadingScreen(
                 modifier = Modifier.fillMaxSize(),
             )
+        } else {
+            // no data
+            Text("Placeholder for no data")
         }
     }
 
