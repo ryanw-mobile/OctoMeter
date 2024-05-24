@@ -26,6 +26,9 @@ val viewModelModule = module {
 
     factory {
         AgileViewModel(
+            userPreferencesRepository = get(),
+            getUserAccountUseCase = get(),
+            getTariffRatesUseCase = get(),
             getStandardUnitRateUseCase = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )

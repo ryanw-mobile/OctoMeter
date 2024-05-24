@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.model
+package com.rwmobi.kunigami.ui.model.rate
 
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.swap_fill
@@ -13,8 +13,8 @@ import kunigami.composeapp.generated.resources.trending_down_fill
 import kunigami.composeapp.generated.resources.trending_up_fill
 import org.jetbrains.compose.resources.DrawableResource
 
-enum class RateTrend(drawableResource: DrawableResource) {
+enum class RateTrend(val drawableResource: DrawableResource) {
     UP(drawableResource = Res.drawable.trending_up_fill),
-    DOWN(drawableResource = Res.drawable.swap_fill),
-    STEADY(drawableResource = Res.drawable.trending_down_fill),
+    DOWN(drawableResource = Res.drawable.trending_down_fill),
+    STEADY(drawableResource = Res.drawable.swap_fill),
 }

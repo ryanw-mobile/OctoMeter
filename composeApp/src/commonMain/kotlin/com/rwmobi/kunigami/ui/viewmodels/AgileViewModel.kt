@@ -14,14 +14,18 @@ import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.extensions.roundDownToHour
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
-import com.rwmobi.kunigami.domain.model.Rate
+import com.rwmobi.kunigami.domain.model.account.Account
+import com.rwmobi.kunigami.domain.model.rate.Rate
+import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
+import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
+import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
 import com.rwmobi.kunigami.ui.model.BarChartData
 import com.rwmobi.kunigami.ui.model.ErrorMessage
-import com.rwmobi.kunigami.ui.model.RateGroupedCells
 import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
+import com.rwmobi.kunigami.ui.model.rate.RateGroupedCells
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
@@ -40,6 +44,9 @@ import kotlin.math.ceil
 import kotlin.time.Duration
 
 class AgileViewModel(
+    private val userPreferencesRepository: UserPreferencesRepository,
+    private val getUserAccountUseCase: GetUserAccountUseCase,
+    private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val getStandardUnitRateUseCase: GetStandardUnitRateUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
@@ -47,6 +54,7 @@ class AgileViewModel(
     val uiState = _uiState.asStateFlow()
 
     private val rateColumnWidth = 175.dp
+    private val agileProductCode = "AGILE-24-04-03"
 
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
@@ -63,16 +71,22 @@ class AgileViewModel(
         }
 
         viewModelScope.launch(dispatcher) {
+            var account: Account? = null
+            getUserAccountUseCase().fold(
+                onSuccess = { act ->
+                    account = act
+                },
+                onFailure = {},
+            )
+
+            val region = "J"
             val currentTime = Clock.System.now().roundDownToHour()
-            val productCode = "AGILE-FLEX-22-11-25"
-            val tariffCode = "E-1R-AGILE-FLEX-22-11-25-J"
-            val periodFrom = currentTime
             val periodTo = currentTime.plus(duration = Duration.parse("1d"))
 
             getStandardUnitRateUseCase(
-                productCode = productCode,
-                tariffCode = tariffCode,
-                periodFrom = periodFrom,
+                productCode = agileProductCode,
+                tariffCode = "E-1R-$agileProductCode-$region",
+                periodFrom = currentTime,
                 periodTo = periodTo,
             ).fold(
                 onSuccess = { rates ->

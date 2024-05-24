@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.ui.utils
 
-fun <T> List<T>.partitionList(columns: Int): List<List<T>> {
+internal fun <T> List<T>.partitionList(columns: Int): List<List<T>> {
     if (columns <= 0) return listOf(this)
 
     val partitioned = MutableList(columns) { mutableListOf<T>() }
