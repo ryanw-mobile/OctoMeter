@@ -11,15 +11,16 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.extensions.roundDownToHour
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
-import com.rwmobi.kunigami.domain.model.account.Account
+import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.rate.Rate
-import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
+import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
@@ -40,14 +41,17 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.account_error_load_account
+import org.jetbrains.compose.resources.getString
 import kotlin.math.ceil
 import kotlin.time.Duration
 
 class AgileViewModel(
-    private val userPreferencesRepository: UserPreferencesRepository,
     private val getUserAccountUseCase: GetUserAccountUseCase,
     private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val getStandardUnitRateUseCase: GetStandardUnitRateUseCase,
+    private val syncUserProfileUseCase: SyncUserProfileUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<AgileUIState> = MutableStateFlow(AgileUIState(isLoading = true))
@@ -71,91 +75,9 @@ class AgileViewModel(
         }
 
         viewModelScope.launch(dispatcher) {
-            var account: Account? = null
-            getUserAccountUseCase().fold(
-                onSuccess = { act ->
-                    account = act
-                },
-                onFailure = {},
-            )
-
-            val region = "J"
-            val currentTime = Clock.System.now().roundDownToHour()
-            val periodTo = currentTime.plus(duration = Duration.parse("1d"))
-
-            getStandardUnitRateUseCase(
-                productCode = agileProductCode,
-                tariffCode = "E-1R-$agileProductCode-$region",
-                periodFrom = currentTime,
-                periodTo = periodTo,
-            ).fold(
-                onSuccess = { rates ->
-                    _uiState.update { currentUiState ->
-                        val rateRange = if (rates.isEmpty()) {
-                            0.0..0.0 // Return a default range if the list is empty
-                        } else {
-                            0.0..ceil(rates.maxOf { it.vatInclusivePrice } * 10) / 10.0
-                        }
-
-                        val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
-                            rates.forEachIndexed { index, rate ->
-                                add(
-                                    element = DefaultVerticalBarPlotEntry(
-                                        x = index,
-                                        y = DefaultVerticalBarPosition(yMin = 0.0, yMax = rate.vatInclusivePrice),
-                                    ),
-                                )
-                            }
-                        }
-
-                        val labels = generateChartLabels(rates = rates)
-                        val rateGroupedCells = groupChartCells(rates = rates)
-                        val toolTips = generateChartToolTips(rates = rates)
-
-                        currentUiState.copy(
-                            isLoading = false,
-                            rateGroupedCells = rateGroupedCells,
-                            rateRange = rateRange,
-                            barChartData = BarChartData(
-                                verticalBarPlotEntries = verticalBarPlotEntries,
-                                labels = labels,
-                                tooltips = toolTips,
-                            ),
-                        )
-                    }
-                },
-                onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: "Error when retrieving rates")
-                    Logger.e("AgileViewModel", throwable = throwable, message = { "Error when retrieving rates" })
-                },
-            )
-        }
-    }
-
-    private fun generateChartLabels(rates: List<Rate>): Map<Int, String> {
-        return buildMap {
-            var lastRateValue: Int? = null
-            rates.forEachIndexed { index, rate ->
-                val currentTime = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
-                if (currentTime != lastRateValue) {
-                    put(key = index, value = currentTime.toString().padStart(2, '0'))
-                    lastRateValue = currentTime
-                }
-            }
-        }
-    }
-
-    private fun groupChartCells(rates: List<Rate>): List<RateGroupedCells> {
-        return rates
-            .groupBy { it.validFrom.toLocalDateString() }
-            .map { (date, items) -> RateGroupedCells(title = date, rates = items) }
-    }
-
-    private fun generateChartToolTips(rates: List<Rate>): List<String> {
-        return rates.map { rate ->
-            val timeRange = rate.validFrom.toLocalHourMinuteString() +
-                (rate.validTo?.let { "- ${it.toLocalHourMinuteString()}" } ?: "")
-            "$timeRange\n${rate.vatInclusivePrice.toString(precision = 2)}p"
+            val currentUserProfile = getUserProfile()
+            val region = currentUserProfile?.tariff?.getRetailRegion() ?: "A"
+            getAgileRates(region = region)
         }
     }
 
@@ -184,6 +106,113 @@ class AgileViewModel(
             currentUiState.copy(
                 requestScrollToTop = enabled,
             )
+        }
+    }
+
+    private suspend fun getUserProfile(): UserProfile? {
+        syncUserProfileUseCase().fold(
+            onSuccess = { userProfile ->
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        userProfile = userProfile,
+                    )
+                }
+                return userProfile
+            },
+            onFailure = { throwable ->
+                if (throwable is IncompleteCredentialsException) {
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            isDemoMode = true,
+                        )
+                    }
+                } else {
+                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
+                    Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                }
+            },
+        )
+        return null
+    }
+
+    private suspend fun getAgileRates(
+        region: String,
+    ) {
+        val currentTime = Clock.System.now().roundDownToHour()
+        val periodTo = currentTime.plus(duration = Duration.parse("1d"))
+
+        getStandardUnitRateUseCase(
+            productCode = agileProductCode,
+            tariffCode = "E-1R-$agileProductCode-$region",
+            periodFrom = currentTime,
+            periodTo = periodTo,
+        ).fold(
+            onSuccess = { rates ->
+                _uiState.update { currentUiState ->
+                    val rateRange = if (rates.isEmpty()) {
+                        0.0..0.0 // Return a default range if the list is empty
+                    } else {
+                        0.0..ceil(rates.maxOf { it.vatInclusivePrice } * 10) / 10.0
+                    }
+
+                    val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
+                        rates.forEachIndexed { index, rate ->
+                            add(
+                                element = DefaultVerticalBarPlotEntry(
+                                    x = index,
+                                    y = DefaultVerticalBarPosition(yMin = 0.0, yMax = rate.vatInclusivePrice),
+                                ),
+                            )
+                        }
+                    }
+
+                    val labels = generateChartLabels(rates = rates)
+                    val rateGroupedCells = groupChartCells(rates = rates)
+                    val toolTips = generateChartToolTips(rates = rates)
+
+                    currentUiState.copy(
+                        isLoading = false,
+                        rateGroupedCells = rateGroupedCells,
+                        rateRange = rateRange,
+                        barChartData = BarChartData(
+                            verticalBarPlotEntries = verticalBarPlotEntries,
+                            labels = labels,
+                            tooltips = toolTips,
+                        ),
+                    )
+                }
+            },
+            onFailure = { throwable ->
+                updateUIForError(message = throwable.message ?: "Error when retrieving rates")
+                Logger.e("AgileViewModel", throwable = throwable, message = { "Error when retrieving rates" })
+            },
+        )
+    }
+
+    private fun generateChartLabels(rates: List<Rate>): Map<Int, String> {
+        return buildMap {
+            var lastRateValue: Int? = null
+            rates.forEachIndexed { index, rate ->
+                val currentTime = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
+                if (currentTime != lastRateValue) {
+                    put(key = index, value = currentTime.toString().padStart(2, '0'))
+                    lastRateValue = currentTime
+                }
+            }
+        }
+    }
+
+    private fun groupChartCells(rates: List<Rate>): List<RateGroupedCells> {
+        return rates
+            .groupBy { it.validFrom.toLocalDateString() }
+            .map { (date, items) -> RateGroupedCells(title = date, rates = items) }
+    }
+
+    private fun generateChartToolTips(rates: List<Rate>): List<String> {
+        return rates.map { rate ->
+            val timeRange = rate.validFrom.toLocalHourMinuteString() +
+                (rate.validTo?.let { "- ${it.toLocalHourMinuteString()}" } ?: "")
+            "$timeRange\n${rate.vatInclusivePrice.toString(precision = 2)}p"
         }
     }
 
