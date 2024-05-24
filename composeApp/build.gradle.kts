@@ -107,11 +107,7 @@ kotlin {
             implementation(kotlin("test"))
             implementation(kotlin("test-common"))
             implementation(kotlin("test-annotations-common"))
-
-            implementation(libs.kotlin.test)
-            implementation(libs.kotlin.test.junit)
             implementation(libs.kotlinx.coroutines.test)
-            // implementation(libs.mockk)
             implementation(libs.ktor.client.mock)
             implementation(libs.kotest.assertions.core)
             implementation(libs.koin.test)
