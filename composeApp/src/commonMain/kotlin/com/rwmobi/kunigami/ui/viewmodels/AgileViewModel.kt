@@ -21,10 +21,10 @@ import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
-import com.rwmobi.kunigami.ui.model.BarChartData
 import com.rwmobi.kunigami.ui.model.ErrorMessage
-import com.rwmobi.kunigami.ui.model.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
+import com.rwmobi.kunigami.ui.model.chart.BarChartData
+import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.rate.RateGroupedCells
 import com.rwmobi.kunigami.ui.utils.generateRandomLong
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry

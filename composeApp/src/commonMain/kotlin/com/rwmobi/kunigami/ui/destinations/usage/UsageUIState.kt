@@ -9,11 +9,11 @@ package com.rwmobi.kunigami.ui.destinations.usage
 
 import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.model.account.Account
-import com.rwmobi.kunigami.ui.model.BarChartData
-import com.rwmobi.kunigami.ui.model.ConsumptionGroupedCells
-import com.rwmobi.kunigami.ui.model.ConsumptionQueryFilter
 import com.rwmobi.kunigami.ui.model.ErrorMessage
-import com.rwmobi.kunigami.ui.model.RequestedChartLayout
+import com.rwmobi.kunigami.ui.model.chart.BarChartData
+import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
+import com.rwmobi.kunigami.ui.model.consumption.ConsumptionGroupedCells
+import com.rwmobi.kunigami.ui.model.consumption.ConsumptionQueryFilter
 
 @Immutable
 data class UsageUIState(

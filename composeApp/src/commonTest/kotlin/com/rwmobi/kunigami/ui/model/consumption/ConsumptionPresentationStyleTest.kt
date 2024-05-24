@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.model
+package com.rwmobi.kunigami.ui.model.consumption
 
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import io.kotest.matchers.shouldBe

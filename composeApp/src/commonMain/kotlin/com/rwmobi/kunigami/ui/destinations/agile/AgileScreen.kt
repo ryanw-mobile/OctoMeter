@@ -44,7 +44,7 @@ import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.destinations.agile.components.CountDownWidget
-import com.rwmobi.kunigami.ui.model.RequestedChartLayout
+import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
 import com.rwmobi.kunigami.ui.utils.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.utils.getPercentageColorIndex

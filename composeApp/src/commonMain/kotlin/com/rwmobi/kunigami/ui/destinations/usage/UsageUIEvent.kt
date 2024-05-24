@@ -8,7 +8,7 @@
 package com.rwmobi.kunigami.ui.destinations.usage
 
 import androidx.compose.runtime.Immutable
-import com.rwmobi.kunigami.ui.model.ConsumptionPresentationStyle
+import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 
 @Immutable
 data class UsageUIEvent(

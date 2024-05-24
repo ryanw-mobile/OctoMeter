@@ -8,9 +8,9 @@
 package com.rwmobi.kunigami.ui.destinations.agile
 
 import androidx.compose.runtime.Immutable
-import com.rwmobi.kunigami.ui.model.BarChartData
 import com.rwmobi.kunigami.ui.model.ErrorMessage
-import com.rwmobi.kunigami.ui.model.RequestedChartLayout
+import com.rwmobi.kunigami.ui.model.chart.BarChartData
+import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.rate.RateGroupedCells
 
 @Immutable

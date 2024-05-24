@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.model
+package com.rwmobi.kunigami.ui.model.chart
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.Dp

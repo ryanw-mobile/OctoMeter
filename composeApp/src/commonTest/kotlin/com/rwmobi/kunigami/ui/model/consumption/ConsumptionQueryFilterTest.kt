@@ -4,7 +4,7 @@
  * Sponsored by RW MobiMedia UK Limited
  *
  */
-package com.rwmobi.kunigami.ui.model
+package com.rwmobi.kunigami.ui.model.consumption
 
 import com.rwmobi.kunigami.domain.extensions.roundDownToDay
 import com.rwmobi.kunigami.domain.extensions.roundUpToDayEnd
