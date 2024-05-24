@@ -126,6 +126,7 @@ class AgileViewModel(
             onSuccess = { userProfile ->
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
+                        isDemoMode = false,
                         userProfile = userProfile,
                     )
                 }

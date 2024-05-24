@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
@@ -48,6 +49,7 @@ import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.destinations.agile.components.CountDownWidget
+import com.rwmobi.kunigami.ui.destinations.agile.components.MyCurrentTariffCard
 import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
 import com.rwmobi.kunigami.ui.extensions.partitionList
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
@@ -208,13 +210,14 @@ fun AgileScreen(
                     }
 
                     if (uiState.isCurrentlyOnDifferentTariff() && uiState.userProfile?.tariff != null) {
-                        item(key = "myTariff") {
-                            Column(modifier = Modifier.fillMaxWidth()) {
-                                Text(text = "You are on a different tariff:")
-                                Text(text = "tariff name: ${uiState.userProfile.tariff.displayName}")
-                                Text(text = "product code: ${uiState.userProfile.tariff.productCode} (Retail Region ${uiState.userProfile.tariff.getRetailRegion()}")
-                                Text(text = "standing charge: ${uiState.userProfile.tariff.vatInclusiveStandingCharge}")
-                            }
+                        item(key = "myDifferentTariff") {
+                            MyCurrentTariffCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = dimension.grid_2, vertical = dimension.grid_0_5),
+                                tariff = uiState.userProfile.tariff,
+                                useWideLayout = uiState.requestedWideLayout,
+                            )
                         }
                     }
 
