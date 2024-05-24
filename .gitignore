@@ -48,4 +48,5 @@ captures
 !*.xcodeproj/project.xcworkspace/
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
+.kotlin/metadata/kotlinTransformedCInteropMetadataLibraries
 .kotlin/metadata
