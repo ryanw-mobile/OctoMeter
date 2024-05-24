@@ -23,8 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.ui.components.IconTextButton
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.theme.getDimension

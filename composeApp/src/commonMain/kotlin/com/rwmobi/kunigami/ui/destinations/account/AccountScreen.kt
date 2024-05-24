@@ -21,10 +21,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import com.rwmobi.kunigami.domain.model.Account
-import com.rwmobi.kunigami.domain.model.Agreement
-import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.account.Account
+import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.theme.AppTheme

@@ -8,7 +8,7 @@
 package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.except
-import com.rwmobi.kunigami.domain.model.Rate
+import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

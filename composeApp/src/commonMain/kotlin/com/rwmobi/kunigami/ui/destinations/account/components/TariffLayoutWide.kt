@@ -24,8 +24,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
-import com.rwmobi.kunigami.domain.model.Agreement
 import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_tariff_end_date

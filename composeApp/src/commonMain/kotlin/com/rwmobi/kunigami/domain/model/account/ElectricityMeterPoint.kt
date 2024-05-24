@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.domain.model
+package com.rwmobi.kunigami.domain.model.account
 
 import androidx.compose.runtime.Immutable
 

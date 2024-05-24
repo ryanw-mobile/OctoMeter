@@ -8,8 +8,8 @@
 package com.rwmobi.kunigami.ui.destinations.account
 
 import androidx.compose.runtime.Immutable
-import com.rwmobi.kunigami.domain.model.Account
 import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 
 @Immutable

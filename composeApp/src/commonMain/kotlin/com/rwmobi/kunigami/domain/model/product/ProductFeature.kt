@@ -7,7 +7,7 @@
 
 @file:OptIn(ExperimentalResourceApi::class)
 
-package com.rwmobi.kunigami.domain.model
+package com.rwmobi.kunigami.domain.model.product
 
 import androidx.compose.runtime.Immutable
 import co.touchlab.kermit.Logger

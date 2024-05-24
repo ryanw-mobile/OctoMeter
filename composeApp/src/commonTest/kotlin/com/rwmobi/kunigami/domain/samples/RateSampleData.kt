@@ -7,8 +7,8 @@
 
 package com.rwmobi.kunigami.domain.samples
 
-import com.rwmobi.kunigami.domain.model.PaymentMethod
-import com.rwmobi.kunigami.domain.model.Rate
+import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
+import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant

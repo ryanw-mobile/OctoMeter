@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.domain.model.ProductFeature
+import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import org.jetbrains.compose.resources.ExperimentalResourceApi

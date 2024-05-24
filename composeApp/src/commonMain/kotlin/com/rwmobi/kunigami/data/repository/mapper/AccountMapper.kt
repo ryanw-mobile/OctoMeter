@@ -11,9 +11,9 @@ import com.rwmobi.kunigami.data.source.network.dto.AgreementDto
 import com.rwmobi.kunigami.data.source.network.dto.ElectricityMeterPointDto
 import com.rwmobi.kunigami.data.source.network.dto.PropertyDto
 import com.rwmobi.kunigami.data.source.network.extensions.capitalizeWords
-import com.rwmobi.kunigami.domain.model.Account
-import com.rwmobi.kunigami.domain.model.Agreement
-import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
+import com.rwmobi.kunigami.domain.model.account.Account
+import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import kotlinx.datetime.Clock
 
 fun PropertyDto.toAccount(accountNumber: String) = Account(

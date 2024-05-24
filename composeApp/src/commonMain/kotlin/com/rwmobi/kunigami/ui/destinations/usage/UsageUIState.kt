@@ -8,7 +8,7 @@
 package com.rwmobi.kunigami.ui.destinations.usage
 
 import androidx.compose.runtime.Immutable
-import com.rwmobi.kunigami.domain.model.Account
+import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.ui.model.BarChartData
 import com.rwmobi.kunigami.ui.model.ConsumptionGroupedCells
 import com.rwmobi.kunigami.ui.model.ConsumptionQueryFilter

@@ -33,10 +33,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
-import com.rwmobi.kunigami.domain.model.Account
-import com.rwmobi.kunigami.domain.model.Agreement
-import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.account.Account
+import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.ui.components.DefaultFailureRetryScreen
 import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
 import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionCompact
