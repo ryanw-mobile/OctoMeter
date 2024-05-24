@@ -30,11 +30,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.ui.composehelper.drawArcSegment
+import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.model.rate.RateTrend
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
-import com.rwmobi.kunigami.ui.composehelper.drawArcSegment
-import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_expires_in
 import kunigami.composeapp.generated.resources.agile_unit_rate

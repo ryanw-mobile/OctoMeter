@@ -7,12 +7,11 @@
 
 package com.rwmobi.kunigami.ui.extensions
 
-import com.rwmobi.kunigami.ui.extensions.partitionList
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import kotlin.test.Test
 
-class ListExtensionKtTest {
+class ListExtensionsKtTest {
 
     @Test
     fun `partitionList should return original list wrapped in a list when columns is zero`() {

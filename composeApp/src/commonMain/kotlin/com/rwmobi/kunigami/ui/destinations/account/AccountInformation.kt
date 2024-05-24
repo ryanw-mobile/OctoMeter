@@ -62,7 +62,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun AccountInformationScreen(
     modifier: Modifier = Modifier,

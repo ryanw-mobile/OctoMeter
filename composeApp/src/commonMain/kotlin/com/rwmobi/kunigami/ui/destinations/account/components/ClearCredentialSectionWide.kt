@@ -31,11 +31,9 @@ import kunigami.composeapp.generated.resources.account_clear_credential_button_c
 import kunigami.composeapp.generated.resources.account_clear_credential_description
 import kunigami.composeapp.generated.resources.account_clear_credential_title
 import kunigami.composeapp.generated.resources.eraser
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun ClearCredentialSectionWide(
     modifier: Modifier = Modifier,

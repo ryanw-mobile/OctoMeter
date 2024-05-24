@@ -50,3 +50,4 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 .kotlin/metadata/kotlinTransformedCInteropMetadataLibraries
 .kotlin/metadata
+.kotlin/sessions

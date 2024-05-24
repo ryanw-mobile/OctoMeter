@@ -29,11 +29,9 @@ import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_update_api_key
 import kunigami.composeapp.generated.resources.key
 import kunigami.composeapp.generated.resources.update
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun UpdateAPIKeyCard(
     modifier: Modifier = Modifier,

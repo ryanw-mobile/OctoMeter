@@ -17,6 +17,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.rwmobi.kunigami.ui.composehelper.collectAsStateMultiplatform
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreen
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIEvent
 import com.rwmobi.kunigami.ui.destinations.agile.AgileScreen
@@ -25,8 +27,6 @@ import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsScreen
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIEvent
 import com.rwmobi.kunigami.ui.destinations.usage.UsageScreen
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIEvent
-import com.rwmobi.kunigami.ui.composehelper.collectAsStateMultiplatform
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
 import com.rwmobi.kunigami.ui.viewmodels.AgileViewModel
 import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel

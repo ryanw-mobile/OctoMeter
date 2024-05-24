@@ -106,7 +106,6 @@ fun DefaultFailureRetryScreen(
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Preview
 @Composable
 private fun Preview() {

@@ -19,8 +19,8 @@ import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.domain.usecase.UpdateMeterPreferenceUseCase
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
-import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
+import com.rwmobi.kunigami.ui.model.ErrorMessage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

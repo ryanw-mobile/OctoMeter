@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.domain.model
 
 import io.kotest.matchers.shouldBe
+import kotlinx.datetime.Clock
 import kotlin.test.Test
 
 class TariffTest {
@@ -57,11 +58,15 @@ class TariffTest {
     @Test
     fun `extractProductCode instance method should return correct product code`() {
         val tariff = Tariff(
-            productCode = "E-1R-AGILE-FLEX-22-11-25-A",
+            productCode = "AGILE-FLEX-22-11-25",
+            tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
             fullName = "Agile Flex",
             displayName = "Agile Flex Tariff",
+            description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
             vatInclusiveUnitRate = 15.5,
             vatInclusiveStandingCharge = 20.0,
+            availableFrom = Clock.System.now(),
+            availableTo = null,
         )
         tariff.extractProductCode() shouldBe "AGILE-FLEX-22-11-25"
     }
@@ -69,11 +74,15 @@ class TariffTest {
     @Test
     fun `getRetailRegion instance method should return correct retail region`() {
         val tariff = Tariff(
-            productCode = "E-1R-AGILE-FLEX-22-11-25-A",
+            productCode = "AGILE-FLEX-22-11-25",
+            tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
             fullName = "Agile Flex",
             displayName = "Agile Flex Tariff",
+            description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
             vatInclusiveUnitRate = 15.5,
             vatInclusiveStandingCharge = 20.0,
+            availableFrom = Clock.System.now(),
+            availableTo = null,
         )
         tariff.getRetailRegion() shouldBe "A"
     }
@@ -81,11 +90,15 @@ class TariffTest {
     @Test
     fun `isSingleRate instance method should return true for single rate tariff code`() {
         val tariff = Tariff(
-            productCode = "E-1R-AGILE-FLEX-22-11-25-A",
+            productCode = "AGILE-FLEX-22-11-25",
+            tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
             fullName = "Agile Flex",
             displayName = "Agile Flex Tariff",
+            description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
             vatInclusiveUnitRate = 15.5,
             vatInclusiveStandingCharge = 20.0,
+            availableFrom = Clock.System.now(),
+            availableTo = null,
         )
         tariff.isSingleRate() shouldBe true
     }

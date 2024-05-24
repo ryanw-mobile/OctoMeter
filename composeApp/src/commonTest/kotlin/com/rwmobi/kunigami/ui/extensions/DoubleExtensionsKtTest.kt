@@ -7,7 +7,6 @@
 
 package com.rwmobi.kunigami.ui.extensions
 
-import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
 import io.kotest.matchers.shouldBe
 import kotlin.test.Test
 
