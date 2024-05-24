@@ -13,6 +13,7 @@ import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
 import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
+import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.domain.usecase.UpdateMeterPreferenceUseCase
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -66,6 +67,14 @@ val userCaseModule = module {
     factory {
         UpdateMeterPreferenceUseCase(
             userPreferencesRepository = get(),
+            dispatcher = get(named("DefaultDispatcher")),
+        )
+    }
+
+    factory {
+        SyncUserProfileUseCase(
+            userPreferencesRepository = get(),
+            restApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }

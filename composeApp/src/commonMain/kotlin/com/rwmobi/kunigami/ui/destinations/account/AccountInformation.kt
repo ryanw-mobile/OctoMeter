@@ -37,6 +37,7 @@ import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
+import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.components.DefaultFailureRetryScreen
 import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
 import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionCompact
@@ -74,7 +75,7 @@ internal fun AccountInformationScreen(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(space = dimension.grid_3),
     ) {
-        if (uiState.account == null) {
+        if (uiState.userProfile?.account == null) {
             DefaultFailureRetryScreen(
                 modifier = modifier.fillMaxSize(),
                 text = stringResource(resource = Res.string.account_error_account_empty),
@@ -104,11 +105,11 @@ internal fun AccountInformationScreen(
                 Text(
                     style = MaterialTheme.typography.displaySmall,
                     fontWeight = FontWeight.Bold,
-                    text = stringResource(resource = Res.string.account_number, uiState.account.accountNumber),
+                    text = stringResource(resource = Res.string.account_number, uiState.userProfile.account.accountNumber),
                 )
             }
 
-            uiState.account.fullAddress?.let {
+            uiState.userProfile.account.fullAddress?.let {
                 Text(
                     style = MaterialTheme.typography.bodyLarge,
                     text = it,
@@ -120,27 +121,27 @@ internal fun AccountInformationScreen(
                 )
             }
 
-            uiState.account.movedInAt?.let {
+            uiState.userProfile.account.movedInAt?.let {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
                     text = stringResource(resource = Res.string.account_moved_in, it.toLocalDateString()),
                 )
             }
 
-            uiState.account.movedOutAt?.let {
+            uiState.userProfile.account.movedOutAt?.let {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
                     text = stringResource(resource = Res.string.account_moved_out, it.toLocalDateString()),
                 )
             }
 
-            uiState.account.electricityMeterPoints.forEach { meterPoint ->
+            uiState.userProfile.account.electricityMeterPoints.forEach { meterPoint ->
                 ElectricityMeterPointCard(
                     modifier = Modifier.fillMaxWidth(),
-                    selectedMpan = uiState.selectedMpan,
-                    selectedMeterSerialNumber = uiState.selectedMeterSerialNumber,
+                    selectedMpan = uiState.userProfile.selectedMpan,
+                    selectedMeterSerialNumber = uiState.userProfile.selectedMeterSerialNumber,
                     meterPoint = meterPoint,
-                    tariff = uiState.tariff,
+                    tariff = uiState.userProfile.tariff,
                     requestedLayout = uiState.requestedLayout,
                     onMeterSerialNumberSelected = uiEvent.onMeterSerialNumberSelected,
                     onReloadTariff = uiEvent.onRefresh,
@@ -182,42 +183,44 @@ private fun Preview() {
                     isLoading = false,
                     isDemoMode = false,
                     requestedLayout = AccountScreenLayout.WideWrapped,
-                    selectedMpan = "1200000345678",
-                    selectedMeterSerialNumber = "11A1234567",
-                    account = // null,
-                    Account(
-                        id = 8638,
-                        accountNumber = "A-1234A1B1",
-                        fullAddress = "Address line 1\nAddress line 2\nAddress line 3\nAddress line 4",
-                        movedInAt = Clock.System.now(),
-                        movedOutAt = null,
-                        electricityMeterPoints = listOf(
-                            ElectricityMeterPoint(
-                                mpan = "1200000345678",
-                                meterSerialNumbers = listOf("11A1234567", "11A12345A7"),
-                                currentAgreement = Agreement(
-                                    tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
-                                    validFrom = Clock.System.now(),
-                                    validTo = Clock.System.now().plus(Duration.parse("365d")),
+                    userProfile = UserProfile(
+                        selectedMpan = "1200000345678",
+                        selectedMeterSerialNumber = "11A1234567",
+                        account = // null,
+                        Account(
+                            id = 8638,
+                            accountNumber = "A-1234A1B1",
+                            fullAddress = "Address line 1\nAddress line 2\nAddress line 3\nAddress line 4",
+                            movedInAt = Clock.System.now(),
+                            movedOutAt = null,
+                            electricityMeterPoints = listOf(
+                                ElectricityMeterPoint(
+                                    mpan = "1200000345678",
+                                    meterSerialNumbers = listOf("11A1234567", "11A12345A7"),
+                                    currentAgreement = Agreement(
+                                        tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
+                                        validFrom = Clock.System.now(),
+                                        validTo = Clock.System.now().plus(Duration.parse("365d")),
+                                    ),
                                 ),
-                            ),
-                            ElectricityMeterPoint(
-                                mpan = "1200000345670",
-                                meterSerialNumbers = listOf("11A1234560"),
-                                currentAgreement = Agreement(
-                                    tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
-                                    validFrom = Clock.System.now(),
-                                    validTo = Clock.System.now().plus(Duration.parse("365d")),
+                                ElectricityMeterPoint(
+                                    mpan = "1200000345670",
+                                    meterSerialNumbers = listOf("11A1234560"),
+                                    currentAgreement = Agreement(
+                                        tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
+                                        validFrom = Clock.System.now(),
+                                        validTo = Clock.System.now().plus(Duration.parse("365d")),
+                                    ),
                                 ),
                             ),
                         ),
-                    ),
-                    tariff = Tariff(
-                        code = "E-1R-AGILE-FLEX-22-11-25-A",
-                        fullName = "Octopus 12M Fixed April 2024 v1",
-                        displayName = "Octopus 12M Fixed",
-                        vatInclusiveUnitRate = 99.257,
-                        vatInclusiveStandingCharge = 94.682,
+                        tariff = Tariff(
+                            code = "E-1R-AGILE-FLEX-22-11-25-A",
+                            fullName = "Octopus 12M Fixed April 2024 v1",
+                            displayName = "Octopus 12M Fixed",
+                            vatInclusiveUnitRate = 99.257,
+                            vatInclusiveStandingCharge = 94.682,
+                        ),
                     ),
                     errorMessages = listOf(),
                 ),
@@ -247,15 +250,17 @@ private fun ErrorPreview() {
                     isLoading = false,
                     isDemoMode = false,
                     requestedLayout = AccountScreenLayout.WideWrapped,
-                    selectedMpan = "1200000345678",
-                    selectedMeterSerialNumber = "11A1234567",
-                    account = null,
-                    tariff = Tariff(
-                        code = "E-1R-AGILE-FLEX-22-11-25-A",
-                        fullName = "Octopus 12M Fixed April 2024 v1",
-                        displayName = "Octopus 12M Fixed",
-                        vatInclusiveUnitRate = 99.257,
-                        vatInclusiveStandingCharge = 94.682,
+                    userProfile = UserProfile(
+                        selectedMpan = "1200000345678",
+                        selectedMeterSerialNumber = "11A1234567",
+                        account = null,
+                        tariff = Tariff(
+                            code = "E-1R-AGILE-FLEX-22-11-25-A",
+                            fullName = "Octopus 12M Fixed April 2024 v1",
+                            displayName = "Octopus 12M Fixed",
+                            vatInclusiveUnitRate = 99.257,
+                            vatInclusiveStandingCharge = 94.682,
+                        ),
                     ),
                     errorMessages = listOf(),
                 ),
