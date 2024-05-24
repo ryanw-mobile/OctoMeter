@@ -36,12 +36,10 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
-import com.rwmobi.kunigami.ui.components.DemoModeCTACompact
-import com.rwmobi.kunigami.ui.components.DemoModeCTAWide
+import com.rwmobi.kunigami.ui.components.DemoModeCtaAdaptive
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
@@ -49,7 +47,7 @@ import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.destinations.agile.components.CountDownWidget
-import com.rwmobi.kunigami.ui.destinations.agile.components.MyCurrentTariffCard
+import com.rwmobi.kunigami.ui.destinations.agile.components.MyCurrentTariffCardAdaptive
 import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
 import com.rwmobi.kunigami.ui.extensions.partitionList
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
@@ -108,25 +106,15 @@ fun AgileScreen(
                 ) {
                     if (uiState.isDemoMode == true) {
                         item {
-                            if (uiState.requestedWideLayout) {
-                                DemoModeCTAWide(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(all = dimension.grid_2),
-                                    description = stringResource(resource = Res.string.agile_demo_introduction),
-                                    ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
-                                    onCtaButtonClicked = uiEvent.onNavigateToAccountTab,
-                                )
-                            } else {
-                                DemoModeCTACompact(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(all = dimension.grid_2),
-                                    description = stringResource(resource = Res.string.agile_demo_introduction),
-                                    ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
-                                    onCtaButtonClicked = uiEvent.onNavigateToAccountTab,
-                                )
-                            }
+                            DemoModeCtaAdaptive(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(all = dimension.grid_2),
+                                description = stringResource(resource = Res.string.agile_demo_introduction),
+                                ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
+                                onCtaButtonClicked = uiEvent.onNavigateToAccountTab,
+                                useWideLayout = uiState.requestedWideLayout,
+                            )
                         }
                     }
 
@@ -211,7 +199,7 @@ fun AgileScreen(
 
                     if (uiState.isCurrentlyOnDifferentTariff() && uiState.userProfile?.tariff != null) {
                         item(key = "myDifferentTariff") {
-                            MyCurrentTariffCard(
+                            MyCurrentTariffCardAdaptive(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = dimension.grid_2, vertical = dimension.grid_0_5),

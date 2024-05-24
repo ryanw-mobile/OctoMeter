@@ -33,17 +33,16 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
-import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.components.DefaultFailureRetryScreen
 import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
-import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionCompact
-import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionWide
+import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionAdaptive
 import com.rwmobi.kunigami.ui.destinations.account.components.ElectricityMeterPointCard
 import com.rwmobi.kunigami.ui.destinations.account.components.UpdateAPIKeyCard
+import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Clock
@@ -154,17 +153,11 @@ internal fun AccountInformationScreen(
         )
 
         BoxWithConstraints {
-            if (uiState.requestedLayout == AccountScreenLayout.Compact) {
-                ClearCredentialSectionCompact(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
-                )
-            } else {
-                ClearCredentialSectionWide(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
-                )
-            }
+            ClearCredentialSectionAdaptive(
+                modifier = Modifier.fillMaxWidth(),
+                onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
+                useWideLayout = uiState.requestedLayout != AccountScreenLayout.Compact,
+            )
         }
 
         AppInfoFooter(modifier = Modifier.fillMaxWidth())
@@ -213,17 +206,7 @@ private fun Preview() {
                                 ),
                             ),
                         ),
-                        tariff = Tariff(
-                            productCode = "AGILE-FLEX-22-11-25",
-                            tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
-                            fullName = "Octopus 12M Fixed April 2024 v1",
-                            displayName = "Octopus 12M Fixed",
-                            vatInclusiveUnitRate = 99.257,
-                            vatInclusiveStandingCharge = 94.682,
-                            description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
-                            availableFrom = Clock.System.now(),
-                            availableTo = null,
-                        ),
+                        tariff = TariffSamples.agileFlex221125,
                     ),
                     errorMessages = listOf(),
                 ),
@@ -257,17 +240,7 @@ private fun ErrorPreview() {
                         selectedMpan = "1200000345678",
                         selectedMeterSerialNumber = "11A1234567",
                         account = null,
-                        tariff = Tariff(
-                            productCode = "AGILE-FLEX-22-11-25",
-                            tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
-                            fullName = "Octopus 12M Fixed April 2024 v1",
-                            displayName = "Octopus 12M Fixed",
-                            vatInclusiveUnitRate = 99.257,
-                            vatInclusiveStandingCharge = 94.682,
-                            description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
-                            availableFrom = Clock.System.now(),
-                            availableTo = null,
-                        ),
+                        tariff = TariffSamples.agileFlex221125,
                     ),
                     errorMessages = listOf(),
                 ),

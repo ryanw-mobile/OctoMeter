@@ -40,7 +40,7 @@ import kunigami.composeapp.generated.resources.unknown
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun MyCurrentTariffCard(
+internal fun MyCurrentTariffCardAdaptive(
     modifier: Modifier = Modifier,
     tariff: Tariff,
     useWideLayout: Boolean = false,
@@ -194,13 +194,13 @@ private fun Preview() {
             Column(
                 verticalArrangement = Arrangement.spacedBy(space = 16.dp),
             ) {
-                MyCurrentTariffCard(
+                MyCurrentTariffCardAdaptive(
                     modifier = Modifier.fillMaxWidth(),
                     tariff = TariffSamples.agileFlex221125,
                     useWideLayout = false,
                 )
 
-                MyCurrentTariffCard(
+                MyCurrentTariffCardAdaptive(
                     modifier = Modifier.fillMaxWidth(),
                     tariff = TariffSamples.agileFlex221125,
                     useWideLayout = true,

@@ -92,23 +92,14 @@ internal fun ElectricityMeterPointCard(
                         .fillMaxWidth()
                         .padding(bottom = dimension.grid_2),
                 ) {
-                    if (requestedLayout is AccountScreenLayout.Compact) {
-                        TariffLayoutCompact(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight(),
-                            tariff = tariff,
-                            agreement = meterPoint.currentAgreement,
-                        )
-                    } else {
-                        TariffLayoutWide(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight(),
-                            tariff = tariff,
-                            agreement = meterPoint.currentAgreement,
-                        )
-                    }
+                    TariffLayoutAdaptive(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(),
+                        tariff = tariff,
+                        agreement = meterPoint.currentAgreement,
+                        useWideLayout = requestedLayout !is AccountScreenLayout.Compact,
+                    )
                 }
             }
 

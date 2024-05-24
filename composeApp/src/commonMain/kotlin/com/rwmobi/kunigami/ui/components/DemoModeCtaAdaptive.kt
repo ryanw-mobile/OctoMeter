@@ -36,7 +36,77 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun DemoModeCTAWide(
+internal fun DemoModeCtaAdaptive(
+    modifier: Modifier,
+    description: String,
+    ctaButtonLabel: String,
+    onCtaButtonClicked: () -> Unit,
+    useWideLayout: Boolean = false,
+) {
+    if (useWideLayout) {
+        DemoModeCTAWide(
+            modifier = modifier,
+            description = description,
+            ctaButtonLabel = ctaButtonLabel,
+            onCtaButtonClicked = onCtaButtonClicked,
+        )
+    } else {
+        DemoModeCTACompact(
+            modifier = modifier,
+            description = description,
+            ctaButtonLabel = ctaButtonLabel,
+            onCtaButtonClicked = onCtaButtonClicked,
+        )
+    }
+}
+
+@Composable
+private fun DemoModeCTACompact(
+    modifier: Modifier,
+    description: String,
+    ctaButtonLabel: String,
+    onCtaButtonClicked: () -> Unit,
+) {
+    val dimension = LocalDensity.current.getDimension()
+
+    Column(
+        modifier = modifier
+            .clip(shape = MaterialTheme.shapes.medium)
+            .background(color = MaterialTheme.colorScheme.surfaceContainer)
+            .padding(all = dimension.grid_2),
+        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+        ) {
+            Icon(
+                modifier = Modifier.size(size = dimension.grid_4),
+                painter = painterResource(resource = Res.drawable.blackboard),
+                tint = MaterialTheme.colorScheme.onSurface,
+                contentDescription = null,
+            )
+
+            Text(
+                modifier = Modifier.weight(weight = 1f),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                text = description,
+            )
+        }
+
+        IconTextButton(
+            modifier = Modifier.align(alignment = Alignment.End),
+            icon = painterResource(resource = Res.drawable.key),
+            text = ctaButtonLabel,
+            onClick = onCtaButtonClicked,
+        )
+    }
+}
+
+@Composable
+private fun DemoModeCTAWide(
     modifier: Modifier,
     description: String,
     ctaButtonLabel: String,
@@ -87,12 +157,25 @@ fun DemoModeCTAWide(
 private fun Preview() {
     AppTheme {
         Surface(modifier = Modifier.padding(all = 16.dp)) {
-            DemoModeCTAWide(
-                modifier = Modifier.fillMaxWidth(),
-                description = stringResource(resource = Res.string.agile_demo_introduction),
-                ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
-                onCtaButtonClicked = {},
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(space = 16.dp),
+            ) {
+                DemoModeCtaAdaptive(
+                    modifier = Modifier.fillMaxWidth(),
+                    description = stringResource(resource = Res.string.agile_demo_introduction),
+                    ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
+                    onCtaButtonClicked = {},
+                    useWideLayout = false,
+                )
+
+                DemoModeCtaAdaptive(
+                    modifier = Modifier.fillMaxWidth(),
+                    description = stringResource(resource = Res.string.agile_demo_introduction),
+                    ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
+                    onCtaButtonClicked = {},
+                    useWideLayout = true,
+                )
+            }
         }
     }
 }

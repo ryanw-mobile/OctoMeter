@@ -38,7 +38,29 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun TariffLayoutCompact(
+internal fun TariffLayoutAdaptive(
+    modifier: Modifier = Modifier,
+    agreement: Agreement,
+    tariff: Tariff,
+    useWideLayout: Boolean = false,
+) {
+    if (useWideLayout) {
+        TariffLayoutWide(
+            modifier = modifier,
+            agreement = agreement,
+            tariff = tariff,
+        )
+    } else {
+        TariffLayoutCompact(
+            modifier = modifier,
+            agreement = agreement,
+            tariff = tariff,
+        )
+    }
+}
+
+@Composable
+private fun TariffLayoutCompact(
     modifier: Modifier = Modifier,
     agreement: Agreement,
     tariff: Tariff,
@@ -124,6 +146,95 @@ internal fun TariffLayoutCompact(
                     text = stringResource(resource = Res.string.account_tariff_standing_charge),
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun TariffLayoutWide(
+    modifier: Modifier = Modifier,
+    tariff: Tariff,
+    agreement: Agreement,
+) {
+    val dimension = LocalDensity.current.getDimension()
+
+    Row(
+        modifier = modifier,
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(2f)
+                .height(intrinsicSize = IntrinsicSize.Max),
+        ) {
+            Text(
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                text = tariff.displayName,
+            )
+            Text(
+                style = MaterialTheme.typography.bodySmall,
+                text = tariff.fullName,
+            )
+
+            Text(
+                style = MaterialTheme.typography.bodySmall,
+                text = tariff.productCode,
+            )
+
+            Spacer(modifier = Modifier.height(height = dimension.grid_2))
+
+            val tariffPeriod = agreement.validTo?.let {
+                stringResource(
+                    resource = Res.string.account_tariff_end_date,
+                    it.toLocalDateString(),
+                )
+            } ?: stringResource(
+                resource = Res.string.account_tariff_start_date,
+                agreement.validFrom.toLocalDateString(),
+            )
+
+            Text(
+                style = MaterialTheme.typography.bodySmall,
+                text = tariffPeriod,
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .height(intrinsicSize = IntrinsicSize.Max),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                style = MaterialTheme.typography.displaySmall,
+                text = tariff.vatInclusiveUnitRate.toString(),
+            )
+
+            Text(
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                text = stringResource(resource = Res.string.account_tariff_unit_rate),
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .height(intrinsicSize = IntrinsicSize.Max),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                style = MaterialTheme.typography.displaySmall,
+                text = tariff.vatInclusiveStandingCharge.toString(),
+            )
+
+            Text(
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                text = stringResource(resource = Res.string.account_tariff_standing_charge),
+            )
         }
     }
 }
