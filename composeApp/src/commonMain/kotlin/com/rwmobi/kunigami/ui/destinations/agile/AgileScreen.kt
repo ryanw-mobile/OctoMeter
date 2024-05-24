@@ -10,6 +10,7 @@ package com.rwmobi.kunigami.ui.destinations.agile
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -160,6 +161,15 @@ fun AgileScreen(
                                     rateGroupedCells = uiState.rateGroupedCells,
                                 )
                             }
+                        }
+                    }
+
+                    item(key = "testing") {
+                        Column(modifier = Modifier.fillMaxWidth()) {
+                            Text(text = "tariff name: ${uiState.userProfile?.tariff?.displayName}")
+                            Text(text = "product code: ${uiState.userProfile?.tariff?.productCode}")
+                            Text(text = "tariff code: ${uiState.userProfile?.tariff?.tariffCode}")
+                            Text(text = "standing charge: ${uiState.userProfile?.tariff?.vatInclusiveStandingCharge}")
                         }
                     }
 

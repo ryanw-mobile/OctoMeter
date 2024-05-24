@@ -37,7 +37,7 @@ class GetTariffRatesUseCaseTest {
         val productCode = "product_123"
         val tariffCode = "E-1R-AGILE-FLEX-22-11-25-A"
         val expectedTariff = Tariff(
-            code = "E-1R-AGILE-FLEX-22-11-25-A",
+            productCode = "E-1R-AGILE-FLEX-22-11-25-A",
             fullName = "Octopus 12M Fixed April 2024 v1",
             displayName = "Octopus 12M Fixed",
             vatInclusiveUnitRate = 99.257,

@@ -63,7 +63,7 @@ internal fun TariffLayoutWide(
 
             Text(
                 style = MaterialTheme.typography.bodySmall,
-                text = tariff.code,
+                text = tariff.productCode,
             )
 
             Spacer(modifier = Modifier.height(height = dimension.grid_2))

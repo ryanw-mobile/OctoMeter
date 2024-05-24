@@ -57,7 +57,7 @@ class TariffTest {
     @Test
     fun `extractProductCode instance method should return correct product code`() {
         val tariff = Tariff(
-            code = "E-1R-AGILE-FLEX-22-11-25-A",
+            productCode = "E-1R-AGILE-FLEX-22-11-25-A",
             fullName = "Agile Flex",
             displayName = "Agile Flex Tariff",
             vatInclusiveUnitRate = 15.5,
@@ -69,7 +69,7 @@ class TariffTest {
     @Test
     fun `getRetailRegion instance method should return correct retail region`() {
         val tariff = Tariff(
-            code = "E-1R-AGILE-FLEX-22-11-25-A",
+            productCode = "E-1R-AGILE-FLEX-22-11-25-A",
             fullName = "Agile Flex",
             displayName = "Agile Flex Tariff",
             vatInclusiveUnitRate = 15.5,
@@ -81,7 +81,7 @@ class TariffTest {
     @Test
     fun `isSingleRate instance method should return true for single rate tariff code`() {
         val tariff = Tariff(
-            code = "E-1R-AGILE-FLEX-22-11-25-A",
+            productCode = "E-1R-AGILE-FLEX-22-11-25-A",
             fullName = "Agile Flex",
             displayName = "Agile Flex Tariff",
             vatInclusiveUnitRate = 15.5,

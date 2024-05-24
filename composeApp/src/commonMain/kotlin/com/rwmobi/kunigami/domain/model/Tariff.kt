@@ -8,12 +8,17 @@
 package com.rwmobi.kunigami.domain.model
 
 import androidx.compose.runtime.Immutable
+import kotlinx.datetime.Instant
 
 @Immutable
 data class Tariff(
-    val code: String,
+    val productCode: String,
     val fullName: String,
     val displayName: String,
+    val description: String,
+    val tariffCode: String,
+    val availableFrom: Instant,
+    val availableTo: Instant?,
     val vatInclusiveUnitRate: Double,
     val vatInclusiveStandingCharge: Double,
 ) {
@@ -44,7 +49,7 @@ data class Tariff(
         }
     }
 
-    fun extractProductCode(): String? = Companion.extractProductCode(tariffCode = code)
-    fun getRetailRegion(): String? = Companion.getRetailRegion(tariffCode = code)
-    fun isSingleRate(): Boolean = Companion.isSingleRate(tariffCode = code)
+    fun extractProductCode(): String? = Companion.extractProductCode(tariffCode = tariffCode)
+    fun getRetailRegion(): String? = Companion.getRetailRegion(tariffCode = tariffCode)
+    fun isSingleRate(): Boolean = Companion.isSingleRate(tariffCode = tariffCode)
 }
