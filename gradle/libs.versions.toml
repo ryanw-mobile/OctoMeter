@@ -12,7 +12,7 @@ kermit = "2.0.3"
 koalaplotCore = "0.6.0"
 koin = "3.5.6"
 kotest = "5.9.0"
-kotlin = "1.9.24"
+kotlin = "2.0.0"
 kotlinxDatetime = "0.6.0"
 kotlinxSerialization = "1.6.3"
 ktor = "2.3.11"
@@ -84,6 +84,7 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinxKover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 gradleKtlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
