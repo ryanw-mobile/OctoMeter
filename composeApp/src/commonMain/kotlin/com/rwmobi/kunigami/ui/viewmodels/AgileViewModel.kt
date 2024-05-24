@@ -7,6 +7,8 @@
 
 package com.rwmobi.kunigami.ui.viewmodels
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -90,7 +92,7 @@ class AgileViewModel(
         }
     }
 
-    fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo) {
+    fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo, windowSizeClass: WindowSizeClass) {
         _uiState.update { currentUiState ->
             Logger.v("AgileViewModel: ${screenSizeInfo.heightDp}h x ${screenSizeInfo.widthDp}w, isPortrait = ${screenSizeInfo.isPortrait()}")
             val requestedLayout = if (screenSizeInfo.isPortrait()) {
@@ -106,6 +108,7 @@ class AgileViewModel(
             currentUiState.copy(
                 requestedChartLayout = requestedLayout,
                 requestedRateColumns = usageColumns,
+                requestedWideLayout = windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact,
             )
         }
     }

@@ -39,6 +39,8 @@ import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
+import com.rwmobi.kunigami.ui.components.DemoModeCTACompact
+import com.rwmobi.kunigami.ui.components.DemoModeCTAWide
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
@@ -57,8 +59,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.datetime.Clock
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.agile_demo_introduction
 import kunigami.composeapp.generated.resources.agile_unit_rate_details
 import kunigami.composeapp.generated.resources.agile_vat_unit_rate
+import kunigami.composeapp.generated.resources.provide_api_key
 import kunigami.composeapp.generated.resources.revenue
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -100,6 +104,30 @@ fun AgileScreen(
                     contentPadding = PaddingValues(bottom = dimension.grid_4),
                     state = lazyListState,
                 ) {
+                    if (uiState.isDemoMode == true) {
+                        item {
+                            if (uiState.requestedWideLayout) {
+                                DemoModeCTAWide(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(all = dimension.grid_2),
+                                    description = stringResource(resource = Res.string.agile_demo_introduction),
+                                    ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
+                                    onCtaButtonClicked = uiEvent.onNavigateToAccountTab,
+                                )
+                            } else {
+                                DemoModeCTACompact(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(all = dimension.grid_2),
+                                    description = stringResource(resource = Res.string.agile_demo_introduction),
+                                    ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
+                                    onCtaButtonClicked = uiEvent.onNavigateToAccountTab,
+                                )
+                            }
+                        }
+                    }
+
                     uiState.barChartData?.let { barChartData ->
                         item {
                             BoxWithConstraints {

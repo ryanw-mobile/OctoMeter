@@ -17,6 +17,7 @@ data class UsageUIEvent(
     val onNextTimeFrame: () -> Unit,
     val onSwitchPresentationStyle: (presentationStyle: ConsumptionPresentationStyle) -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
+    val onNavigateToAccountTab: () -> Unit,
     val onScrolledToTop: () -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,
 )

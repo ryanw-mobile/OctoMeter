@@ -21,6 +21,7 @@ data class AgileUIState(
     val isDemoMode: Boolean? = null,
     val requestedChartLayout: RequestedChartLayout = RequestedChartLayout.Portrait,
     val requestedRateColumns: Int = 1,
+    val requestedWideLayout: Boolean = false,
     val userProfile: UserProfile? = null,
     val agileTariff: Tariff? = null,
     val rateGroupedCells: List<RateGroupedCells> = emptyList(),

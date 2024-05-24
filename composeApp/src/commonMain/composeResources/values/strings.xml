@@ -20,6 +20,7 @@
     <string name="unit_kwh">%1$s kWh</string>
     <string name="selected">Selected</string>
     <string name="loading">Loading...</string>
+    <string name="provide_api_key">Provide API Key</string>
 
     <!-- Usage -->
     <string name="usage_energy_consumption_breakdown">Consumption Breakdown</string>
@@ -33,6 +34,7 @@
     <string name="usage_chart_tooltip_range_kwh">%1$s - %2$s\n%3$s kWh</string>
 
     <!-- Agile -->
+    <string name="agile_demo_introduction">This app is currently running in demo mode. The Agile Tariff displayed for retail region A may not be available to you.</string>
     <string name="agile_unit_rate_details">Published Unit Rates</string>
     <string name="agile_vat_unit_rate">VAT Unit Rate (p/kWh)</string>
     <string name="agile_unit_rate">p/kWh</string>

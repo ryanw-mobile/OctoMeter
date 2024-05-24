@@ -42,6 +42,17 @@ fun AppNavigationHost(
     onShowSnackbar: suspend (String) -> Unit,
     onScrolledToTop: (AppNavigationItem) -> Unit,
 ) {
+    val navigateToAccountTab = {
+        navController.navigate(AppNavigationItem.ACCOUNT.name) {
+            navController.graph.startDestinationRoute?.let {
+                popUpTo(it) {
+                    inclusive = true
+                }
+            }
+            launchSingleTop = true
+        }
+    }
+
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -71,6 +82,7 @@ fun AppNavigationHost(
                     onErrorShown = viewModel::errorShown,
                     onScrolledToTop = { onScrolledToTop(AppNavigationItem.USAGE) },
                     onShowSnackbar = onShowSnackbar,
+                    onNavigateToAccountTab = navigateToAccountTab,
                 ),
             )
         }
@@ -81,7 +93,10 @@ fun AppNavigationHost(
 
             // workaround: Issue with iOS we have to do it here
             val screenSizeInfo = getScreenSizeInfo()
-            viewModel.notifyScreenSizeChanged(screenSizeInfo = screenSizeInfo)
+            viewModel.notifyScreenSizeChanged(
+                screenSizeInfo = screenSizeInfo,
+                windowSizeClass = windowSizeClass,
+            )
 
             LaunchedEffect(lastDoubleTappedNavItem) {
                 val enabled = lastDoubleTappedNavItem?.equals(AppNavigationItem.AGILE) ?: false
@@ -96,6 +111,7 @@ fun AppNavigationHost(
                     onErrorShown = viewModel::errorShown,
                     onScrolledToTop = { onScrolledToTop(AppNavigationItem.AGILE) },
                     onShowSnackbar = onShowSnackbar,
+                    onNavigateToAccountTab = navigateToAccountTab,
                 ),
             )
         }
