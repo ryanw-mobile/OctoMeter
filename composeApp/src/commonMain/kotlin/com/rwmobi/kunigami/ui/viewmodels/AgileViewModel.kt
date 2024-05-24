@@ -58,7 +58,10 @@ class AgileViewModel(
     val uiState = _uiState.asStateFlow()
 
     private val rateColumnWidth = 175.dp
+
+    // TODO: Low priority - not my business. Get Agile product code from user preferences.
     private val agileProductCode = "AGILE-24-04-03"
+    private val demoRetailRegion = "A"
 
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
@@ -76,8 +79,14 @@ class AgileViewModel(
 
         viewModelScope.launch(dispatcher) {
             val currentUserProfile = getUserProfile()
-            val region = currentUserProfile?.tariff?.getRetailRegion() ?: "A"
+            val region = currentUserProfile?.tariff?.getRetailRegion() ?: demoRetailRegion
             getAgileRates(region = region)
+            getAgileTariff(region = region)
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    isLoading = false,
+                )
+            }
         }
     }
 
@@ -171,7 +180,6 @@ class AgileViewModel(
                     val toolTips = generateChartToolTips(rates = rates)
 
                     currentUiState.copy(
-                        isLoading = false,
                         rateGroupedCells = rateGroupedCells,
                         rateRange = rateRange,
                         barChartData = BarChartData(
@@ -185,6 +193,31 @@ class AgileViewModel(
             onFailure = { throwable ->
                 updateUIForError(message = throwable.message ?: "Error when retrieving rates")
                 Logger.e("AgileViewModel", throwable = throwable, message = { "Error when retrieving rates" })
+            },
+        )
+    }
+
+    private suspend fun getAgileTariff(
+        region: String,
+    ) {
+        getTariffRatesUseCase(
+            productCode = agileProductCode,
+            tariffCode = "E-1R-$agileProductCode-$region",
+        ).fold(
+            onSuccess = { agileTariff ->
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        agileTariff = agileTariff,
+                    )
+                }
+            },
+            onFailure = { throwable ->
+                Logger.e("AgileViewModel", throwable = throwable, message = { "Error when retrieving Agile tariff details" })
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        agileTariff = null,
+                    )
+                }
             },
         )
     }

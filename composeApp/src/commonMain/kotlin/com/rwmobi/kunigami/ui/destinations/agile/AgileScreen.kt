@@ -130,17 +130,21 @@ fun AgileScreen(
                                     },
                                     colorPalette = colorPalette,
                                     backgroundPlot = { graphScope ->
-                                        graphScope.HorizontalLineAnnotation(
-                                            location = 24.55,
-                                            lineStyle = LineStyle(
-                                                brush = SolidColor(MaterialTheme.colorScheme.error),
-                                                strokeWidth = dimension.grid_0_5,
-                                                pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f),
-                                                alpha = 0.5f,
-                                                colorFilter = null, // No color filter
-                                                blendMode = DrawScope.DefaultBlendMode,
-                                            ),
-                                        )
+                                        if (uiState.isCurrentlyOnDifferentTariff() &&
+                                            uiState.userProfile?.tariff != null
+                                        ) {
+                                            graphScope.HorizontalLineAnnotation(
+                                                location = uiState.userProfile.tariff.vatInclusiveUnitRate,
+                                                lineStyle = LineStyle(
+                                                    brush = SolidColor(MaterialTheme.colorScheme.error),
+                                                    strokeWidth = dimension.grid_0_5,
+                                                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f),
+                                                    alpha = 0.5f,
+                                                    colorFilter = null, // No color filter
+                                                    blendMode = DrawScope.DefaultBlendMode,
+                                                ),
+                                            )
+                                        }
                                     },
                                 )
                             }
@@ -164,12 +168,25 @@ fun AgileScreen(
                         }
                     }
 
-                    item(key = "testing") {
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            Text(text = "tariff name: ${uiState.userProfile?.tariff?.displayName}")
-                            Text(text = "product code: ${uiState.userProfile?.tariff?.productCode}")
-                            Text(text = "tariff code: ${uiState.userProfile?.tariff?.tariffCode}")
-                            Text(text = "standing charge: ${uiState.userProfile?.tariff?.vatInclusiveStandingCharge}")
+                    if (uiState.agileTariff != null) {
+                        item(key = "agileTariff") {
+                            Column(modifier = Modifier.fillMaxWidth()) {
+                                Text(text = "Agile tariff details")
+                                Text(text = "tariff name: ${uiState.agileTariff.displayName}")
+                                Text(text = "product code: ${uiState.agileTariff.productCode}  (Retail Region ${uiState.agileTariff.getRetailRegion()}")
+                                Text(text = "standing charge: ${uiState.agileTariff.vatInclusiveStandingCharge}")
+                            }
+                        }
+                    }
+
+                    if (uiState.isCurrentlyOnDifferentTariff() && uiState.userProfile?.tariff != null) {
+                        item(key = "myTariff") {
+                            Column(modifier = Modifier.fillMaxWidth()) {
+                                Text(text = "You are on a different tariff:")
+                                Text(text = "tariff name: ${uiState.userProfile.tariff.displayName}")
+                                Text(text = "product code: ${uiState.userProfile.tariff.productCode} (Retail Region ${uiState.userProfile.tariff.getRetailRegion()}")
+                                Text(text = "standing charge: ${uiState.userProfile.tariff.vatInclusiveStandingCharge}")
+                            }
                         }
                     }
 
