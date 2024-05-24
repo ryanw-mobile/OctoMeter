@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.utils
+package com.rwmobi.kunigami.ui.extensions
 
 internal fun <T> List<T>.partitionList(columns: Int): List<List<T>> {
     if (columns <= 0) return listOf(this)

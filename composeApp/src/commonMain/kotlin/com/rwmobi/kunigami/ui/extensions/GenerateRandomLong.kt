@@ -5,6 +5,6 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.utils
+package com.rwmobi.kunigami.ui.extensions
 
 expect fun generateRandomLong(): Long

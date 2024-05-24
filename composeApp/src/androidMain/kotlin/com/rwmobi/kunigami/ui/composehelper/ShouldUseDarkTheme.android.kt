@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.utils
+package com.rwmobi.kunigami.ui.composehelper
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable

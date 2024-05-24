@@ -5,8 +5,9 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.utils
+package com.rwmobi.kunigami.ui.extensions
 
+import com.rwmobi.kunigami.ui.extensions.partitionList
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import kotlin.test.Test

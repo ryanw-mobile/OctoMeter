@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.utils
+package com.rwmobi.kunigami.ui.composehelper
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color

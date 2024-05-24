@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.utils
+package com.rwmobi.kunigami.ui.extensions
 
 internal fun Double.getPercentageColorIndex(maxValue: Double): Int {
     return ((this / maxValue) * 100).toInt().coerceIn(0, 99)

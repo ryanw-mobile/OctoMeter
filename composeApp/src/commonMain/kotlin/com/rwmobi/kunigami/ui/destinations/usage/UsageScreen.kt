@@ -47,9 +47,9 @@ import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.theme.getDimension
-import com.rwmobi.kunigami.ui.utils.generateGYRHueColorPalette
-import com.rwmobi.kunigami.ui.utils.getPercentageColorIndex
-import com.rwmobi.kunigami.ui.utils.partitionList
+import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
+import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
+import com.rwmobi.kunigami.ui.extensions.partitionList
 import io.github.koalaplot.core.util.toString
 import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res

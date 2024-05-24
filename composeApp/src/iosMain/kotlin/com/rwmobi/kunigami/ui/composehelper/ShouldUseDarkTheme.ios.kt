@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.utils
+package com.rwmobi.kunigami.ui.composehelper
 
 import androidx.compose.runtime.Composable
 import platform.UIKit.UIScreen
