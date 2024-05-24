@@ -7,6 +7,8 @@
 
 package com.rwmobi.kunigami.ui.destinations.agile
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -35,6 +37,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
@@ -67,6 +70,7 @@ import kunigami.composeapp.generated.resources.revenue
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AgileScreen(
     modifier: Modifier = Modifier,
@@ -104,6 +108,26 @@ fun AgileScreen(
                     contentPadding = PaddingValues(bottom = dimension.grid_4),
                     state = lazyListState,
                 ) {
+                    if (uiState.agileTariff != null) {
+                        stickyHeader {
+                            Row(
+                                modifier = Modifier
+                                    .background(color = MaterialTheme.colorScheme.secondary)
+                                    .fillMaxWidth()
+                                    .height(height = dimension.minListItemHeight),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    text = uiState.agileTariff.displayName,
+                                )
+                            }
+                        }
+                    }
+
                     if (uiState.isDemoMode == true) {
                         item {
                             DemoModeCtaAdaptive(
@@ -120,7 +144,9 @@ fun AgileScreen(
 
                     uiState.barChartData?.let { barChartData ->
                         item {
-                            BoxWithConstraints {
+                            BoxWithConstraints(
+                                modifier = Modifier.padding(top = dimension.grid_1),
+                            ) {
                                 val constraintModifier = when (uiState.requestedChartLayout) {
                                     is RequestedChartLayout.Portrait -> {
                                         Modifier
@@ -189,8 +215,6 @@ fun AgileScreen(
                     if (uiState.agileTariff != null) {
                         item(key = "agileTariff") {
                             Column(modifier = Modifier.fillMaxWidth()) {
-                                Text(text = "Agile tariff details")
-                                Text(text = "tariff name: ${uiState.agileTariff.displayName}")
                                 Text(text = "product code: ${uiState.agileTariff.productCode}  (Retail Region ${uiState.agileTariff.getRetailRegion()}")
                                 Text(text = "standing charge: ${uiState.agileTariff.vatInclusiveStandingCharge}")
                             }

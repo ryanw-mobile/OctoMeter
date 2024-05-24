@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.ui.destinations.usage
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -60,7 +61,7 @@ import kunigami.composeapp.generated.resources.usage_energy_consumption_breakdow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun UsageScreen(
     modifier: Modifier = Modifier,
@@ -98,7 +99,7 @@ fun UsageScreen(
                     contentPadding = PaddingValues(bottom = dimension.grid_4),
                     state = lazyListState,
                 ) {
-                    item {
+                    stickyHeader {
                         with(uiState.consumptionQueryFilter) {
                             TitleNavigationBar(
                                 modifier = Modifier
