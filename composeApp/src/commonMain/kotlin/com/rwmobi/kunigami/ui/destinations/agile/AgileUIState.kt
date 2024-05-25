@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.ui.destinations.agile
 
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.account.UserProfile
@@ -21,7 +22,7 @@ data class AgileUIState(
     val isDemoMode: Boolean? = null,
     val requestedChartLayout: RequestedChartLayout = RequestedChartLayout.Portrait,
     val requestedRateColumns: Int = 1,
-    val requestedWideLayout: Boolean = false,
+    val requestedAdaptiveLayout: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     val userProfile: UserProfile? = null,
     val agileTariff: Tariff? = null,
     val rateGroupedCells: List<RateGroupedCells> = emptyList(),

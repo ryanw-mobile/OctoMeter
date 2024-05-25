@@ -35,13 +35,16 @@
     <string name="usage_chart_tooltip_range_kwh">%1$s - %2$s\n%3$s kWh</string>
 
     <!-- Agile -->
-    <string name="agile_demo_introduction">Demo Mode: The Agile Tariff shown for retail region A may not be available to you.</string>
+    <string name="agile_demo_introduction">Demo Mode: The Agile Tariff shown for Retail Region A may not be available to you.</string>
+    <string name="agile_about_tariff">About this tariff</string>
     <string name="agile_unit_rate_details">Published Unit Rates</string>
     <string name="agile_vat_unit_rate">VAT Unit Rate (p/kWh)</string>
     <string name="agile_unit_rate">p/kWh</string>
     <string name="agile_expires_in">Expires in %1$s:%2$s</string>
     <string name="agile_different_tariff">You are on a different tariff</string>
-    <string name="agile_product_code_retail_region">%1$s (Retail region %2$s)</string>
+    <string name="agile_product_code_retail_region">%1$s (Region %2$s)</string>
+    <string name="agile_tariff_standard_unit_rate_two_lines">Standard Unit Rate:\n%1$d p/kWh</string>
+    <string name="agile_tariff_standing_charge_two_lines">Standing Charge:\n%1$d p/day</string>
     <string name="agile_tariff_standard_unit_rate">Standard Unit Rate: %1$d p/kWh</string>
     <string name="agile_tariff_standing_charge">Standing Charge: %1$d p/day</string>
 

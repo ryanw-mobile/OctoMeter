@@ -20,12 +20,14 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
@@ -35,32 +37,42 @@ import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_different_tariff
 import kunigami.composeapp.generated.resources.agile_product_code_retail_region
 import kunigami.composeapp.generated.resources.agile_tariff_standard_unit_rate
+import kunigami.composeapp.generated.resources.agile_tariff_standard_unit_rate_two_lines
 import kunigami.composeapp.generated.resources.agile_tariff_standing_charge
+import kunigami.composeapp.generated.resources.agile_tariff_standing_charge_two_lines
 import kunigami.composeapp.generated.resources.unknown
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun MyCurrentTariffCardAdaptive(
+internal fun TariffCardAdaptive(
     modifier: Modifier = Modifier,
+    layoutType: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
+    heading: String,
     tariff: Tariff,
-    useWideLayout: Boolean = false,
 ) {
-    if (useWideLayout) {
-        MyCurrentTariffCardWide(
-            modifier = modifier,
-            tariff = tariff,
-        )
-    } else {
-        MyCurrentTariffCardCompact(
-            modifier = modifier,
-            tariff = tariff,
-        )
+    when (layoutType) {
+        WindowWidthSizeClass.Medium -> {
+            TariffCardLinear(
+                modifier = modifier,
+                heading = heading,
+                tariff = tariff,
+            )
+        }
+
+        else -> {
+            TariffCardTwoColumns(
+                modifier = modifier,
+                heading = heading,
+                tariff = tariff,
+            )
+        }
     }
 }
 
 @Composable
-private fun MyCurrentTariffCardCompact(
+private fun TariffCardLinear(
     modifier: Modifier = Modifier,
+    heading: String,
     tariff: Tariff,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -75,7 +87,7 @@ private fun MyCurrentTariffCardCompact(
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            text = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+            text = heading,
         )
 
         Spacer(modifier = Modifier.size(size = dimension.grid_1))
@@ -117,8 +129,9 @@ private fun MyCurrentTariffCardCompact(
 }
 
 @Composable
-private fun MyCurrentTariffCardWide(
+private fun TariffCardTwoColumns(
     modifier: Modifier = Modifier,
+    heading: String,
     tariff: Tariff,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -133,7 +146,7 @@ private fun MyCurrentTariffCardWide(
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            text = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+            text = heading,
         )
 
         Spacer(modifier = Modifier.size(size = dimension.grid_1))
@@ -141,10 +154,10 @@ private fun MyCurrentTariffCardWide(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+            horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
         ) {
             Column(
-                modifier = Modifier.wrapContentWidth(),
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     modifier = Modifier.wrapContentWidth(),
@@ -170,16 +183,18 @@ private fun MyCurrentTariffCardWide(
                     modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
-                    text = stringResource(resource = Res.string.agile_tariff_standing_charge, tariff.vatInclusiveStandingCharge),
+                    textAlign = TextAlign.End,
+                    text = stringResource(resource = Res.string.agile_tariff_standing_charge_two_lines, tariff.vatInclusiveStandingCharge),
                 )
 
-                Spacer(modifier = Modifier.size(size = dimension.grid_0_5))
+                Spacer(modifier = Modifier.size(size = dimension.grid_1))
 
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
-                    text = stringResource(resource = Res.string.agile_tariff_standard_unit_rate, tariff.vatInclusiveUnitRate),
+                    textAlign = TextAlign.End,
+                    text = stringResource(resource = Res.string.agile_tariff_standard_unit_rate_two_lines, tariff.vatInclusiveUnitRate),
                 )
             }
         }
@@ -194,16 +209,25 @@ private fun Preview() {
             Column(
                 verticalArrangement = Arrangement.spacedBy(space = 16.dp),
             ) {
-                MyCurrentTariffCardAdaptive(
+                TariffCardAdaptive(
                     modifier = Modifier.fillMaxWidth(),
+                    heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
                     tariff = TariffSamples.agileFlex221125,
-                    useWideLayout = false,
+                    layoutType = WindowWidthSizeClass.Compact,
                 )
 
-                MyCurrentTariffCardAdaptive(
+                TariffCardAdaptive(
                     modifier = Modifier.fillMaxWidth(),
+                    heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
                     tariff = TariffSamples.agileFlex221125,
-                    useWideLayout = true,
+                    layoutType = WindowWidthSizeClass.Medium,
+                )
+
+                TariffCardAdaptive(
+                    modifier = Modifier.fillMaxWidth(),
+                    heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+                    tariff = TariffSamples.agileFlex221125,
+                    layoutType = WindowWidthSizeClass.Expanded,
                 )
             }
         }

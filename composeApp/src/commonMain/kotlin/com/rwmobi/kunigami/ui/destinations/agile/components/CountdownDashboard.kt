@@ -36,6 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.composehelper.drawArcSegment
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
@@ -66,7 +68,7 @@ internal fun CountdownDashboard(
     // Calculate font scale based on column width
     val fontScale = if (columnWidth > 0) {
         // Experimental: reduce font scale when the column width is small
-        (columnWidth / 420f).coerceAtLeast(0.2f)
+        (columnWidth / 390f).coerceAtLeast(0.2f)
     } else {
         1f
     }
@@ -76,7 +78,7 @@ internal fun CountdownDashboard(
     ) {
         Box(
             modifier = modifier
-                .padding(all = dimension.grid_2)
+                .padding(all = dimension.grid_1)
                 .onSizeChanged { size ->
                     columnWidth = size.width
                 }
@@ -101,9 +103,9 @@ internal fun CountdownDashboard(
                         textAlign = TextAlign.Center,
                         maxLines = 1,
                         overflow = TextOverflow.Clip,
+                        letterSpacing = TextUnit(value = -1.5f, type = TextUnitType.Sp),
                         style = MaterialTheme.typography.headlineLarge,
                         fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.Monospace,
                         text = vatInclusivePrice,
                     )
 
@@ -122,8 +124,9 @@ internal fun CountdownDashboard(
                             textAlign = TextAlign.Center,
                             maxLines = 1,
                             overflow = TextOverflow.Clip,
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelLarge,
                             fontFamily = FontFamily.Monospace,
+                            letterSpacing = TextUnit(value = -1f, type = TextUnitType.Sp),
                             text = stringResource(
                                 resource = Res.string.agile_expires_in,
                                 expireMinutes,

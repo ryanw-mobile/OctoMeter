@@ -8,7 +8,6 @@
 package com.rwmobi.kunigami.ui.viewmodels
 
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -108,7 +107,7 @@ class AgileViewModel(
             currentUiState.copy(
                 requestedChartLayout = requestedLayout,
                 requestedRateColumns = usageColumns,
-                requestedWideLayout = windowSizeClass.widthSizeClass != WindowWidthSizeClass.Compact,
+                requestedAdaptiveLayout = windowSizeClass.widthSizeClass,
             )
         }
     }
