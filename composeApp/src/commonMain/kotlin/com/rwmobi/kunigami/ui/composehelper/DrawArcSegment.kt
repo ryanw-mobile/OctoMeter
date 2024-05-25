@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -35,7 +36,6 @@ internal fun DrawScope.drawArcSegment(
     darkenFactor: Float = 0.28f,
     colorPalette: List<Color>,
 ) {
-    val radius = size.minDimension / 2
     val segmentAngle = 270f / colorPalette.size
 
     for (i in colorPalette.indices.reversed()) {
@@ -53,10 +53,10 @@ internal fun DrawScope.drawArcSegment(
             sweepAngle = min(segmentAngle, sweepAngle - (angle - startAngle)),
             useCenter = false,
             style = Stroke(width = strokeWidth, cap = StrokeCap.Round),
-            size = size,
+            size = Size(width = size.width - strokeWidth, height = size.height - strokeWidth),
             topLeft = Offset(
-                x = (size.width - 2 * radius) / 2,
-                y = (size.height - 2 * radius) / 2,
+                x = strokeWidth / 2,
+                y = strokeWidth - (strokeWidth / 2),
             ),
         )
     }
