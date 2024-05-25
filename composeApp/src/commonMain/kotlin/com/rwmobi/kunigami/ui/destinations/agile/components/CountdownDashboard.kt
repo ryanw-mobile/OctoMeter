@@ -20,15 +20,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.composehelper.drawArcSegment
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
@@ -53,70 +60,88 @@ internal fun CountdownDashboard(
     rateTrend: RateTrend?,
 ) {
     val dimension = LocalDensity.current.getDimension()
+    var columnWidth by remember { mutableStateOf(0) }
+    val currentDensity = LocalDensity.current
 
-    Box(
-        modifier = modifier.padding(all = dimension.grid_2)
-            .drawBehind {
-                drawArcSegment(
-                    colorPalette = colorPalette,
-                    percentage = animatedPercentage,
-                    strokeWidth = dimension.grid_1.toPx(),
-                )
-            },
-        propagateMinConstraints = true,
-        contentAlignment = Alignment.Center,
+    // Calculate font scale based on column width
+    val fontScale = if (columnWidth > 0) {
+        // Experimental: reduce font scale when the column width is small
+        (columnWidth / 420f).coerceAtLeast(0.2f)
+    } else {
+        1f
+    }
+
+    CompositionLocalProvider(
+        LocalDensity provides Density(currentDensity.density, fontScale = fontScale),
     ) {
-        Column(
-            modifier = Modifier.aspectRatio(ratio = 1f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+        Box(
+            modifier = modifier
+                .padding(all = dimension.grid_2)
+                .onSizeChanged { size ->
+                    columnWidth = size.width
+                }
+                .drawBehind {
+                    drawArcSegment(
+                        colorPalette = colorPalette,
+                        percentage = animatedPercentage,
+                        strokeWidth = dimension.grid_1.toPx(),
+                    )
+                },
+            propagateMinConstraints = true,
+            contentAlignment = Alignment.Center,
         ) {
-            if (vatInclusivePrice != null) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    overflow = TextOverflow.Clip,
-                    style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Monospace,
-                    text = vatInclusivePrice,
-                )
+            Column(
+                modifier = Modifier.aspectRatio(ratio = 1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                if (vatInclusivePrice != null) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        maxLines = 1,
+                        overflow = TextOverflow.Clip,
+                        style = MaterialTheme.typography.headlineLarge,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.Monospace,
+                        text = vatInclusivePrice,
+                    )
 
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    overflow = TextOverflow.Clip,
-                    style = MaterialTheme.typography.labelSmall,
-                    text = stringResource(resource = Res.string.agile_unit_rate),
-                )
-
-                if (showCountdown) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
                         maxLines = 1,
                         overflow = TextOverflow.Clip,
                         style = MaterialTheme.typography.labelSmall,
-                        fontFamily = FontFamily.Monospace,
-                        text = stringResource(
-                            resource = Res.string.agile_expires_in,
-                            expireMinutes,
-                            expireSeconds.toString().padStart(length = 2, padChar = '0'),
-                        ),
+                        text = stringResource(resource = Res.string.agile_unit_rate),
                     )
-                }
 
-                rateTrend?.let {
-                    Icon(
-                        modifier = Modifier
-                            .padding(top = dimension.grid_0_5)
-                            .size(size = dimension.grid_4),
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        painter = painterResource(resource = it.drawableResource),
-                        contentDescription = it.name,
-                    )
+                    if (showCountdown) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            maxLines = 1,
+                            overflow = TextOverflow.Clip,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontFamily = FontFamily.Monospace,
+                            text = stringResource(
+                                resource = Res.string.agile_expires_in,
+                                expireMinutes,
+                                expireSeconds.toString().padStart(length = 2, padChar = '0'),
+                            ),
+                        )
+                    }
+
+                    rateTrend?.let {
+                        Icon(
+                            modifier = Modifier
+                                .padding(top = dimension.grid_0_5)
+                                .size(size = dimension.grid_4),
+                            tint = MaterialTheme.colorScheme.onBackground,
+                            painter = painterResource(resource = it.drawableResource),
+                            contentDescription = it.name,
+                        )
+                    }
                 }
             }
         }
