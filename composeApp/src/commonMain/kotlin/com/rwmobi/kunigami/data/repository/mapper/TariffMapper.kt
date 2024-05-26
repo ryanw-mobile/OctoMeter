@@ -34,9 +34,13 @@ fun SingleProductApiResponse.toTariff(tariffCode: String): Tariff {
     val rates = tariffDetails.varying ?: tariffDetails.directDebitMonthly ?: throw TariffNotFoundException(tariffCode)
 
     return Tariff(
-        code = code,
+        productCode = code,
         fullName = fullName,
         displayName = displayName,
+        description = description,
+        availableFrom = availableFrom,
+        availableTo = availableTo,
+        tariffCode = rates.code,
         vatInclusiveUnitRate = rates.standardUnitRateIncVat?.roundToTwoDecimalPlaces() ?: throw IllegalArgumentException("unit rate not found for tariff $tariffCode"),
         vatInclusiveStandingCharge = rates.standingChargeIncVat.roundToTwoDecimalPlaces(),
     )

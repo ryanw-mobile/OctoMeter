@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.ui.destinations.agile
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -23,6 +24,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -33,30 +35,39 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
+import com.rwmobi.kunigami.ui.components.DemoModeCtaAdaptive
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
-import com.rwmobi.kunigami.ui.model.RequestedChartLayout
+import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
+import com.rwmobi.kunigami.ui.destinations.agile.components.AgileTariffCardAdaptive
+import com.rwmobi.kunigami.ui.destinations.agile.components.TariffSummaryCardAdaptive
+import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
+import com.rwmobi.kunigami.ui.extensions.partitionList
+import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
-import com.rwmobi.kunigami.ui.utils.generateGYRHueColorPalette
-import com.rwmobi.kunigami.ui.utils.getPercentageColorIndex
-import com.rwmobi.kunigami.ui.utils.partitionList
 import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.util.toString
 import io.github.koalaplot.core.xygraph.HorizontalLineAnnotation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import kotlinx.datetime.Clock
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.agile_demo_introduction
+import kunigami.composeapp.generated.resources.agile_different_tariff
 import kunigami.composeapp.generated.resources.agile_unit_rate_details
 import kunigami.composeapp.generated.resources.agile_vat_unit_rate
+import kunigami.composeapp.generated.resources.provide_api_key
 import kunigami.composeapp.generated.resources.revenue
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AgileScreen(
     modifier: Modifier = Modifier,
@@ -83,10 +94,10 @@ fun AgileScreen(
     }
 
     Box(modifier = modifier) {
-        if (uiState.rates.isNotEmpty()) {
+        if (uiState.rateGroupedCells.isNotEmpty()) {
             ScrollbarMultiplatform(
                 modifier = Modifier.fillMaxWidth(),
-                enabled = uiState.rates.isNotEmpty(),
+                enabled = uiState.rateGroupedCells.isNotEmpty(),
                 lazyListState = lazyListState,
             ) { contentModifier ->
                 LazyColumn(
@@ -94,9 +105,25 @@ fun AgileScreen(
                     contentPadding = PaddingValues(bottom = dimension.grid_4),
                     state = lazyListState,
                 ) {
+                    if (uiState.isDemoMode == true) {
+                        item {
+                            DemoModeCtaAdaptive(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(all = dimension.grid_2),
+                                description = stringResource(resource = Res.string.agile_demo_introduction),
+                                ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
+                                onCtaButtonClicked = uiEvent.onNavigateToAccountTab,
+                                useWideLayout = uiState.requestedAdaptiveLayout != WindowWidthSizeClass.Compact,
+                            )
+                        }
+                    }
+
                     uiState.barChartData?.let { barChartData ->
                         item {
-                            BoxWithConstraints {
+                            BoxWithConstraints(
+                                modifier = Modifier.padding(top = dimension.grid_1),
+                            ) {
                                 val constraintModifier = when (uiState.requestedChartLayout) {
                                     is RequestedChartLayout.Portrait -> {
                                         Modifier
@@ -124,24 +151,62 @@ fun AgileScreen(
                                     },
                                     colorPalette = colorPalette,
                                     backgroundPlot = { graphScope ->
-                                        graphScope.HorizontalLineAnnotation(
-                                            location = 24.55,
-                                            lineStyle = LineStyle(
-                                                brush = SolidColor(MaterialTheme.colorScheme.error),
-                                                strokeWidth = dimension.grid_0_5,
-                                                pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f),
-                                                alpha = 0.5f,
-                                                colorFilter = null, // No color filter
-                                                blendMode = DrawScope.DefaultBlendMode,
-                                            ),
-                                        )
+                                        if (uiState.isCurrentlyOnDifferentTariff() &&
+                                            uiState.userProfile?.tariff != null
+                                        ) {
+                                            graphScope.HorizontalLineAnnotation(
+                                                location = uiState.userProfile.tariff.vatInclusiveUnitRate,
+                                                lineStyle = LineStyle(
+                                                    brush = SolidColor(MaterialTheme.colorScheme.error),
+                                                    strokeWidth = dimension.grid_0_5,
+                                                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f),
+                                                    alpha = 0.5f,
+                                                    colorFilter = null, // No color filter
+                                                    blendMode = DrawScope.DefaultBlendMode,
+                                                ),
+                                            )
+                                        }
                                     },
                                 )
                             }
                         }
                     }
 
-                    if (uiState.rates.isNotEmpty()) {
+                    item(key = "tariffDetails") {
+                        AgileTariffCardAdaptive(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    start = dimension.grid_3,
+                                    end = dimension.grid_3,
+                                    top = dimension.grid_1,
+                                ),
+                            agileTariff = uiState.agileTariff,
+                            colorPalette = colorPalette,
+                            rateRange = uiState.rateRange,
+                            rateGroupedCells = uiState.rateGroupedCells,
+                            requestedAdaptiveLayout = uiState.requestedAdaptiveLayout,
+                        )
+                    }
+
+                    if (uiState.isCurrentlyOnDifferentTariff() && uiState.userProfile?.tariff != null) {
+                        item(key = "currentDifferentTariff") {
+                            TariffSummaryCardAdaptive(
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        start = dimension.grid_3,
+                                        end = dimension.grid_3,
+                                        top = dimension.grid_1,
+                                    ),
+                                heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+                                tariff = uiState.userProfile.tariff,
+                                layoutType = uiState.requestedAdaptiveLayout,
+                            )
+                        }
+                    }
+
+                    if (uiState.rateGroupedCells.isNotEmpty()) {
                         item(key = "headingUnitRateDetails") {
                             LargeTitleWithIcon(
                                 modifier = Modifier
@@ -153,7 +218,7 @@ fun AgileScreen(
                         }
                     }
 
-                    uiState.rates.forEach { rateGroup ->
+                    uiState.rateGroupedCells.forEach { rateGroup ->
                         item(key = "${rateGroup.title}Title") {
                             Row(
                                 modifier = Modifier
@@ -216,15 +281,13 @@ fun AgileScreen(
                     }
                 }
             }
-        } else if (!uiState.isLoading) {
-            // no data
-            Text("Placeholder for no data")
-        }
-
-        if (uiState.isLoading) {
+        } else if (uiState.isLoading) {
             LoadingScreen(
                 modifier = Modifier.fillMaxSize(),
             )
+        } else {
+            // no data
+            Text("Placeholder for no data")
         }
     }
 
@@ -232,7 +295,8 @@ fun AgileScreen(
         uiEvent.onRefresh()
 
         while (isActive) {
-            delay(timeMillis = 1_800_000) // 30 minutes
+            val delayMillis = Clock.System.now().getNextHalfHourCountdownMillis()
+            delay(timeMillis = delayMillis)
             uiEvent.onRefresh()
         }
     }

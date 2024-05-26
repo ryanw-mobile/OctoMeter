@@ -7,9 +7,9 @@
 
 package com.rwmobi.kunigami.domain.usecase
 
-import com.rwmobi.kunigami.domain.model.Product
-import com.rwmobi.kunigami.domain.model.ProductDirection
-import com.rwmobi.kunigami.domain.model.ProductFeature
+import com.rwmobi.kunigami.domain.model.product.Product
+import com.rwmobi.kunigami.domain.model.product.ProductDirection
+import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe

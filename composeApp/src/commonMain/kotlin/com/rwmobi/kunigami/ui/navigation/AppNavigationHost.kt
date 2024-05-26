@@ -17,6 +17,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.rwmobi.kunigami.ui.composehelper.collectAsStateMultiplatform
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreen
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIEvent
 import com.rwmobi.kunigami.ui.destinations.agile.AgileScreen
@@ -25,8 +27,6 @@ import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsScreen
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIEvent
 import com.rwmobi.kunigami.ui.destinations.usage.UsageScreen
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIEvent
-import com.rwmobi.kunigami.ui.utils.collectAsStateMultiplatform
-import com.rwmobi.kunigami.ui.utils.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
 import com.rwmobi.kunigami.ui.viewmodels.AgileViewModel
 import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel
@@ -42,6 +42,17 @@ fun AppNavigationHost(
     onShowSnackbar: suspend (String) -> Unit,
     onScrolledToTop: (AppNavigationItem) -> Unit,
 ) {
+    val navigateToAccountTab = {
+        navController.navigate(AppNavigationItem.ACCOUNT.name) {
+            navController.graph.startDestinationRoute?.let {
+                popUpTo(it) {
+                    inclusive = true
+                }
+            }
+            launchSingleTop = true
+        }
+    }
+
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -71,6 +82,7 @@ fun AppNavigationHost(
                     onErrorShown = viewModel::errorShown,
                     onScrolledToTop = { onScrolledToTop(AppNavigationItem.USAGE) },
                     onShowSnackbar = onShowSnackbar,
+                    onNavigateToAccountTab = navigateToAccountTab,
                 ),
             )
         }
@@ -81,7 +93,10 @@ fun AppNavigationHost(
 
             // workaround: Issue with iOS we have to do it here
             val screenSizeInfo = getScreenSizeInfo()
-            viewModel.notifyScreenSizeChanged(screenSizeInfo = screenSizeInfo)
+            viewModel.notifyScreenSizeChanged(
+                screenSizeInfo = screenSizeInfo,
+                windowSizeClass = windowSizeClass,
+            )
 
             LaunchedEffect(lastDoubleTappedNavItem) {
                 val enabled = lastDoubleTappedNavItem?.equals(AppNavigationItem.AGILE) ?: false
@@ -96,6 +111,7 @@ fun AppNavigationHost(
                     onErrorShown = viewModel::errorShown,
                     onScrolledToTop = { onScrolledToTop(AppNavigationItem.AGILE) },
                     onShowSnackbar = onShowSnackbar,
+                    onNavigateToAccountTab = navigateToAccountTab,
                 ),
             )
         }

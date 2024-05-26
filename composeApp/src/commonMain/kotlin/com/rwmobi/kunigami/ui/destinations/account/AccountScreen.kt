@@ -21,12 +21,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import com.rwmobi.kunigami.domain.model.Account
-import com.rwmobi.kunigami.domain.model.Agreement
-import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
-import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.account.Account
+import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
+import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
+import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Clock
@@ -82,7 +83,7 @@ fun AccountScreen(
                     }
                 }
 
-                if (uiState.isDemoMode == false && uiState.account != null) {
+                if (uiState.isDemoMode == false && uiState.userProfile?.account != null) {
                     item(key = "account") {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -130,30 +131,26 @@ private fun Preview() {
             uiState = AccountUIState(
                 isLoading = false,
                 isDemoMode = false,
-                account = Account(
-                    id = 8638,
-                    accountNumber = "A-1234A1B1",
-                    fullAddress = "Address line 1\nAddress line 2\nAddress line 3\nAddress line 4",
-                    movedInAt = Clock.System.now(),
-                    movedOutAt = null,
-                    electricityMeterPoints = listOf(
-                        ElectricityMeterPoint(
-                            mpan = "1200000345678",
-                            meterSerialNumbers = listOf("11A1234567"),
-                            currentAgreement = Agreement(
-                                tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
-                                validFrom = Clock.System.now(),
-                                validTo = Clock.System.now().plus(Duration.parse("365d")),
+                userProfile = UserProfile(
+                    account = Account(
+                        id = 8638,
+                        accountNumber = "A-1234A1B1",
+                        fullAddress = "Address line 1\nAddress line 2\nAddress line 3\nAddress line 4",
+                        movedInAt = Clock.System.now(),
+                        movedOutAt = null,
+                        electricityMeterPoints = listOf(
+                            ElectricityMeterPoint(
+                                mpan = "1200000345678",
+                                meterSerialNumbers = listOf("11A1234567"),
+                                currentAgreement = Agreement(
+                                    tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
+                                    validFrom = Clock.System.now(),
+                                    validTo = Clock.System.now().plus(Duration.parse("365d")),
+                                ),
                             ),
                         ),
                     ),
-                ),
-                tariff = Tariff(
-                    code = "E-1R-AGILE-FLEX-22-11-25-A",
-                    fullName = "Octopus 12M Fixed April 2024 v1",
-                    displayName = "Octopus 12M Fixed",
-                    vatInclusiveUnitRate = 99.257,
-                    vatInclusiveStandingCharge = 94.682,
+                    tariff = TariffSamples.agileFlex221125,
                 ),
                 errorMessages = listOf(),
             ),

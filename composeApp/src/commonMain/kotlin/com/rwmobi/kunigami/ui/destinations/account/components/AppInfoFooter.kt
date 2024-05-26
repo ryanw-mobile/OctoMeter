@@ -26,10 +26,8 @@ import com.rwmobi.kunigami.ui.theme.getDimension
 import composeapp.kunigami.BuildConfig
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_version_api_disclaimer
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun AppInfoFooter(
     modifier: Modifier = Modifier,

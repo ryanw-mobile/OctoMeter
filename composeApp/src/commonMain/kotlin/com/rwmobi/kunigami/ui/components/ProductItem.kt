@@ -27,9 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
-import com.rwmobi.kunigami.domain.model.Product
-import com.rwmobi.kunigami.domain.model.ProductDirection
-import com.rwmobi.kunigami.domain.model.ProductFeature
+import com.rwmobi.kunigami.domain.model.product.Product
+import com.rwmobi.kunigami.domain.model.product.ProductDirection
+import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Instant

@@ -18,11 +18,9 @@ import kunigami.composeapp.generated.resources.navigation_usage
 import kunigami.composeapp.generated.resources.pulse
 import kunigami.composeapp.generated.resources.user
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 
 @Immutable
-@OptIn(ExperimentalResourceApi::class)
 enum class AppNavigationItem(val titleResId: StringResource, val iconResId: DrawableResource) {
     USAGE(titleResId = Res.string.navigation_usage, iconResId = Res.drawable.bar_chart),
     AGILE(titleResId = Res.string.navigation_agile, iconResId = Res.drawable.pulse),

@@ -26,6 +26,9 @@ val viewModelModule = module {
 
     factory {
         AgileViewModel(
+            syncUserProfileUseCase = get(),
+            getUserAccountUseCase = get(),
+            getTariffRatesUseCase = get(),
             getStandardUnitRateUseCase = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
@@ -41,10 +44,9 @@ val viewModelModule = module {
     factory {
         AccountViewModel(
             userPreferencesRepository = get(),
-            getUserAccountUseCase = get(),
-            getTariffRatesUseCase = get(),
             initialiseAccountUseCase = get(),
             updateMeterPreferenceUseCase = get(),
+            syncUserProfileUseCase = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }

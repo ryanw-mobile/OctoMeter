@@ -8,8 +8,8 @@
 package com.rwmobi.kunigami.data.repository.mapper
 
 import com.rwmobi.kunigami.data.source.network.dto.RateDto
-import com.rwmobi.kunigami.domain.model.PaymentMethod
-import com.rwmobi.kunigami.domain.model.Rate
+import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
+import com.rwmobi.kunigami.domain.model.rate.Rate
 
 fun RateDto.toRate() = Rate(
     vatExclusivePrice = vatExclusivePrice,

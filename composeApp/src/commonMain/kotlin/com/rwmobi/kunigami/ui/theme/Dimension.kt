@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.utils.getScreenSizeInfo
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 
 /**
  * Source: https://proandroiddev.com/supporting-different-screen-sizes-on-android-with-jetpack-compose-f215c13081bd

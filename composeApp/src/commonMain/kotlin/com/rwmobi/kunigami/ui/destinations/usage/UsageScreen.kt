@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.ui.destinations.usage
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,13 +44,13 @@ import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
+import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
-import com.rwmobi.kunigami.ui.model.ConsumptionPresentationStyle
-import com.rwmobi.kunigami.ui.model.RequestedChartLayout
+import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
+import com.rwmobi.kunigami.ui.extensions.partitionList
+import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
+import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.theme.getDimension
-import com.rwmobi.kunigami.ui.utils.generateGYRHueColorPalette
-import com.rwmobi.kunigami.ui.utils.getPercentageColorIndex
-import com.rwmobi.kunigami.ui.utils.partitionList
 import io.github.koalaplot.core.util.toString
 import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
@@ -60,7 +61,7 @@ import kunigami.composeapp.generated.resources.usage_energy_consumption_breakdow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun UsageScreen(
     modifier: Modifier = Modifier,
@@ -98,7 +99,7 @@ fun UsageScreen(
                     contentPadding = PaddingValues(bottom = dimension.grid_4),
                     state = lazyListState,
                 ) {
-                    item {
+                    stickyHeader {
                         with(uiState.consumptionQueryFilter) {
                             TitleNavigationBar(
                                 modifier = Modifier

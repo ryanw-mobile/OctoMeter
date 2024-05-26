@@ -2,9 +2,7 @@ package com.rwmobi.kunigami.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun AppTypography(): Typography {
     val bodyFontFamily = provideBodyFontFamily()

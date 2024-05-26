@@ -38,12 +38,10 @@ import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_meter_serial
 import kunigami.composeapp.generated.resources.dashboard
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-@OptIn(ExperimentalResourceApi::class)
 internal fun MeterSerialNumberEntry(
     selectedMpan: String?,
     selectedMeterSerialNumber: String?,

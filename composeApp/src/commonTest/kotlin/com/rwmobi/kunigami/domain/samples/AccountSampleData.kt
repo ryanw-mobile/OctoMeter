@@ -7,9 +7,9 @@
 
 package com.rwmobi.kunigami.domain.samples
 
-import com.rwmobi.kunigami.domain.model.Account
-import com.rwmobi.kunigami.domain.model.Agreement
-import com.rwmobi.kunigami.domain.model.ElectricityMeterPoint
+import com.rwmobi.kunigami.domain.model.account.Account
+import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import kotlinx.datetime.Clock
 import kotlin.time.Duration
 

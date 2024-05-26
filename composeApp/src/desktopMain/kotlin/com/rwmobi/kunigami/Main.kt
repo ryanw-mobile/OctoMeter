@@ -20,21 +20,19 @@ import com.rwmobi.kunigami.di.ktorModule
 import com.rwmobi.kunigami.di.repositoryModule
 import com.rwmobi.kunigami.di.userCaseModule
 import com.rwmobi.kunigami.di.viewModelModule
-import com.rwmobi.kunigami.ui.utils.customizeMacOsAboutMenu
+import com.rwmobi.kunigami.ui.composehelper.customizeMacOsAboutMenu
 import composeapp.kunigami.BuildConfig
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.about_app_description
 import kunigami.composeapp.generated.resources.about_app_title
 import kunigami.composeapp.generated.resources.app_name
 import kunigami.composeapp.generated.resources.ic_launcher
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.core.context.GlobalContext.startKoin
 import org.koin.core.logger.Level
 import java.awt.Dimension
 
-@OptIn(ExperimentalResourceApi::class)
 fun main() {
     System.setProperty(
         "apple.awt.application.name",
