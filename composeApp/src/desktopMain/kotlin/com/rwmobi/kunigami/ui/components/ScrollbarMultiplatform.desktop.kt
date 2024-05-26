@@ -27,6 +27,7 @@ import androidx.compose.foundation.v2.ScrollbarAdapter
 import androidx.compose.foundation.v2.maxScrollOffset
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -117,18 +118,30 @@ private fun ScrollbarMultiplatform(
         content(Modifier.weight(weight = 1f))
 
         AnimatedVisibility(visible = enabled && isScrollbarVisible) {
-            VerticalScrollbar(
-                adapter = scrollbarAdapter,
-                style = LocalScrollbarStyle.current.copy(
-                    thickness = dimension.grid_1,
-                    unhoverColor = MaterialTheme.colorScheme.secondaryContainer,
-                    hoverColor = MaterialTheme.colorScheme.primaryContainer,
-                ),
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .background(color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    .padding(horizontal = dimension.grid_0_5),
-            )
+            Row {
+                VerticalDivider(
+                    modifier = Modifier.fillMaxHeight(),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                )
+
+                VerticalScrollbar(
+                    adapter = scrollbarAdapter,
+                    style = LocalScrollbarStyle.current.copy(
+                        thickness = dimension.grid_1,
+                        unhoverColor = MaterialTheme.colorScheme.outlineVariant.copy(
+                            alpha = 0.5f,
+                        ),
+                        hoverColor = MaterialTheme.colorScheme.outline.copy(
+                            alpha = 0.5f,
+                        ),
+                    ),
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .background(color = MaterialTheme.colorScheme.surface)
+                        .padding(horizontal = dimension.grid_0_5),
+                )
+            }
         }
     }
 }
