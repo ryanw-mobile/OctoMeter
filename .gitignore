@@ -51,3 +51,4 @@ captures
 .kotlin/metadata/kotlinTransformedCInteropMetadataLibraries
 .kotlin/metadata
 .kotlin/sessions
+iosApp/Pods
