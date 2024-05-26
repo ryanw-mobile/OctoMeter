@@ -197,7 +197,7 @@ fun AgileScreen(
                                     .padding(
                                         start = dimension.grid_3,
                                         end = dimension.grid_3,
-                                        top = dimension.grid_1,
+                                        top = dimension.grid_2,
                                     ),
                                 heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
                                 tariff = uiState.userProfile.tariff,
@@ -208,6 +208,8 @@ fun AgileScreen(
 
                     if (uiState.rateGroupedCells.isNotEmpty()) {
                         item(key = "headingUnitRateDetails") {
+                            Spacer(modifier = Modifier.height(height = dimension.grid_1))
+
                             LargeTitleWithIcon(
                                 modifier = Modifier
                                     .fillMaxWidth()
