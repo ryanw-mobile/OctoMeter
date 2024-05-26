@@ -70,9 +70,7 @@ I use Android Studio Koala for Android and Deskop apps. For iOS, I use Xcode 15.
       For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
       `iosMain` would be the right folder for such calls.
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for
-  your project.
+* `/iosApp` contains iOS applications. Open `OctoMeter.xcworkspace` to build the App. We are setting up the Apple Developer account, but subject to Apple's approval.
 
 ### Dependencies
 
