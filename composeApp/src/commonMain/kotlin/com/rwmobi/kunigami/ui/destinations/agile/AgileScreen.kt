@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,7 +35,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
@@ -47,8 +45,7 @@ import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
-import com.rwmobi.kunigami.ui.destinations.agile.components.CountDownWidget
-import com.rwmobi.kunigami.ui.destinations.agile.components.TariffDetailsAdaptive
+import com.rwmobi.kunigami.ui.destinations.agile.components.AgileTariffCardAdaptive
 import com.rwmobi.kunigami.ui.destinations.agile.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
 import com.rwmobi.kunigami.ui.extensions.partitionList
@@ -61,7 +58,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.datetime.Clock
 import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.agile_about_tariff
 import kunigami.composeapp.generated.resources.agile_demo_introduction
 import kunigami.composeapp.generated.resources.agile_different_tariff
 import kunigami.composeapp.generated.resources.agile_unit_rate_details
@@ -177,54 +173,32 @@ fun AgileScreen(
                     }
 
                     item(key = "tariffDetails") {
-                        TariffDetailsAdaptive(
+                        AgileTariffCardAdaptive(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = dimension.grid_2),
-                            windowWidthSizeClass = uiState.requestedAdaptiveLayout,
-                            agileTariffBlock = if (uiState.agileTariff != null) {
-                                { modifier ->
-                                    TariffSummaryCardAdaptive(
-                                        modifier = modifier.padding(vertical = dimension.grid_0_5),
-                                        heading = stringResource(resource = Res.string.agile_about_tariff).uppercase(),
-                                        tariff = uiState.agileTariff,
-                                        layoutType = uiState.requestedAdaptiveLayout,
-                                    )
-                                }
-                            } else {
-                                null
-                            },
-                            countDownWidget = if (uiState.rateGroupedCells.isNotEmpty()) {
-                                { modifier ->
-                                    Row(
-                                        modifier = modifier,
-                                        horizontalArrangement = Arrangement.Center,
-                                    ) {
-                                        CountDownWidget(
-                                            modifier = Modifier
-                                                .wrapContentSize()
-                                                .heightIn(max = 216.dp)
-                                                .aspectRatio(1f),
-                                            colorPalette = colorPalette,
-                                            rateRange = uiState.rateRange,
-                                            rateGroupedCells = uiState.rateGroupedCells,
-                                        )
-                                    }
-                                }
-                            } else {
-                                null
-                            },
-                            currentTariffBlock = null,
+                                .padding(
+                                    start = dimension.grid_3,
+                                    end = dimension.grid_3,
+                                    top = dimension.grid_1,
+                                ),
+                            agileTariff = uiState.agileTariff,
+                            colorPalette = colorPalette,
+                            rateRange = uiState.rateRange,
+                            rateGroupedCells = uiState.rateGroupedCells,
+                            requestedAdaptiveLayout = uiState.requestedAdaptiveLayout,
                         )
                     }
 
                     if (uiState.isCurrentlyOnDifferentTariff() && uiState.userProfile?.tariff != null) {
                         item(key = "currentDifferentTariff") {
                             TariffSummaryCardAdaptive(
-                                modifier = modifier.padding(
-                                    horizontal = dimension.grid_3,
-                                    vertical = dimension.grid_0_5,
-                                ),
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        start = dimension.grid_3,
+                                        end = dimension.grid_3,
+                                        top = dimension.grid_1,
+                                    ),
                                 heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
                                 tariff = uiState.userProfile.tariff,
                                 layoutType = uiState.requestedAdaptiveLayout,
