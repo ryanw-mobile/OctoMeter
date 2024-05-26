@@ -253,6 +253,10 @@ fun UsageScreen(
         uiEvent.onInitialLoad()
     }
 
+    LaunchedEffect(uiState.consumptionGroupedCells) {
+        lazyListState.scrollToItem(index = 0)
+    }
+
     LaunchedEffect(uiState.requestScrollToTop) {
         if (uiState.requestScrollToTop) {
             lazyListState.scrollToItem(index = 0)

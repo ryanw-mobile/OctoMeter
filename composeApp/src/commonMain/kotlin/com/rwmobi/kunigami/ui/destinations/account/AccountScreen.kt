@@ -115,6 +115,10 @@ fun AccountScreen(
         uiEvent.onRefresh()
     }
 
+    LaunchedEffect(uiState.isDemoMode) {
+        lazyListState.scrollToItem(index = 0)
+    }
+
     LaunchedEffect(uiState.requestScrollToTop) {
         if (uiState.requestScrollToTop) {
             lazyListState.scrollToItem(index = 0)
