@@ -45,7 +45,7 @@ internal fun CountDownWidget(
         animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing),
     )
 
-    CountdownDashboard(
+    CountdownDashboardHalfCircle(
         modifier = modifier,
         colorPalette = colorPalette,
         animatedPercentage = animatedPercentage,

@@ -214,19 +214,22 @@ fun AgileScreen(
                             } else {
                                 null
                             },
-                            currentTariffBlock = if (uiState.isCurrentlyOnDifferentTariff() && uiState.userProfile?.tariff != null) {
-                                { modifier ->
-                                    TariffCardAdaptive(
-                                        modifier = modifier.padding(vertical = dimension.grid_0_5),
-                                        heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
-                                        tariff = uiState.userProfile.tariff,
-                                        layoutType = uiState.requestedAdaptiveLayout,
-                                    )
-                                }
-                            } else {
-                                null
-                            },
+                            currentTariffBlock = null,
                         )
+                    }
+
+                    if (uiState.isCurrentlyOnDifferentTariff() && uiState.userProfile?.tariff != null) {
+                        item(key = "currentDifferentTariff") {
+                            TariffCardAdaptive(
+                                modifier = modifier.padding(
+                                    horizontal = dimension.grid_2,
+                                    vertical = dimension.grid_0_5,
+                                ),
+                                heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+                                tariff = uiState.userProfile.tariff,
+                                layoutType = uiState.requestedAdaptiveLayout,
+                            )
+                        }
                     }
 
                     if (uiState.rateGroupedCells.isNotEmpty()) {

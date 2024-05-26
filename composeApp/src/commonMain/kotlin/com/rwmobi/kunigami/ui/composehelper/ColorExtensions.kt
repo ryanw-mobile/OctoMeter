@@ -17,3 +17,15 @@ internal fun Color.darken(factor: Float): Color {
         alpha = this.alpha,
     )
 }
+
+internal fun Color.luminance(): Float {
+    return 0.299f * red + 0.587f * green + 0.114f * blue
+}
+
+internal fun Color.getContrastColor(
+    colorDark: Color = Color.Black,
+    colorLight: Color = Color.White,
+): Color {
+    val luminance = luminance()
+    return if (luminance > 0.5) colorDark else colorLight
+}

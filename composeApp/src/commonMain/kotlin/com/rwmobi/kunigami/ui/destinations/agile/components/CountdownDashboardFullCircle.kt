@@ -51,7 +51,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun CountdownDashboard(
+internal fun CountdownDashboardFullCircle(
     modifier: Modifier,
     colorPalette: List<Color>,
     animatedPercentage: Float,
@@ -156,7 +156,7 @@ internal fun CountdownDashboard(
 private fun Preview() {
     AppTheme {
         Surface(modifier = Modifier.padding(all = 24.dp)) {
-            CountdownDashboard(
+            CountdownDashboardFullCircle(
                 modifier = Modifier.aspectRatio(ratio = 1f),
                 colorPalette = generateGYRHueColorPalette(
                     saturation = 0.6f,

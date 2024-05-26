@@ -51,7 +51,7 @@ internal fun TariffCardAdaptive(
     tariff: Tariff,
 ) {
     when (layoutType) {
-        WindowWidthSizeClass.Medium -> {
+        WindowWidthSizeClass.Compact -> {
             TariffCardLinear(
                 modifier = modifier,
                 heading = heading,
@@ -59,8 +59,16 @@ internal fun TariffCardAdaptive(
             )
         }
 
-        else -> {
+        WindowWidthSizeClass.Medium -> {
             TariffCardTwoColumns(
+                modifier = modifier,
+                heading = heading,
+                tariff = tariff,
+            )
+        }
+
+        else -> {
+            TariffCardThreeColumns(
                 modifier = modifier,
                 heading = heading,
                 tariff = tariff,
@@ -104,11 +112,13 @@ private fun TariffCardLinear(
         Text(
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.onSurface.copy(
+                alpha = 0.68f,
+            ),
             text = stringResource(resource = Res.string.agile_product_code_retail_region, tariff.productCode, regionCode),
         )
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_1))
+        Spacer(modifier = Modifier.size(size = dimension.grid_2))
 
         Text(
             modifier = Modifier.fillMaxWidth(),
@@ -171,7 +181,9 @@ private fun TariffCardTwoColumns(
                 Text(
                     modifier = Modifier.wrapContentWidth(),
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurface.copy(
+                        alpha = 0.68f,
+                    ),
                     text = stringResource(resource = Res.string.agile_product_code_retail_region, tariff.productCode, regionCode),
                 )
             }
@@ -194,6 +206,81 @@ private fun TariffCardTwoColumns(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.End,
+                    text = stringResource(resource = Res.string.agile_tariff_standard_unit_rate_two_lines, tariff.vatInclusiveUnitRate),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun TariffCardThreeColumns(
+    modifier: Modifier = Modifier,
+    heading: String,
+    tariff: Tariff,
+) {
+    val dimension = LocalDensity.current.getDimension()
+
+    Column(
+        modifier = modifier
+            .clip(shape = MaterialTheme.shapes.medium)
+            .background(color = MaterialTheme.colorScheme.surfaceContainer)
+            .padding(all = dimension.grid_2),
+    ) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            text = heading,
+        )
+
+        Spacer(modifier = Modifier.size(size = dimension.grid_1))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+        ) {
+            Column(
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(
+                    modifier = Modifier.wrapContentWidth(),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold,
+                    text = tariff.displayName,
+                )
+
+                val regionCode = tariff.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
+                Text(
+                    modifier = Modifier.wrapContentWidth(),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(
+                        alpha = 0.68f,
+                    ),
+                    text = stringResource(resource = Res.string.agile_product_code_retail_region, tariff.productCode, regionCode),
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    text = stringResource(resource = Res.string.agile_tariff_standing_charge_two_lines, tariff.vatInclusiveStandingCharge),
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
                     text = stringResource(resource = Res.string.agile_tariff_standard_unit_rate_two_lines, tariff.vatInclusiveUnitRate),
                 )
             }
