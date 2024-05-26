@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.ui.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.LocalScrollbarStyle
 import androidx.compose.foundation.ScrollState
@@ -27,11 +28,17 @@ import androidx.compose.foundation.v2.maxScrollOffset
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
+import kotlinx.coroutines.delay
 
 @Composable
 actual fun ScrollbarMultiplatform(
@@ -86,13 +93,30 @@ private fun ScrollbarMultiplatform(
     content: @Composable (contentModifier: Modifier) -> Unit,
 ) {
     val dimension = LocalDensity.current.getDimension()
+    val density = LocalDensity.current
+
+    var isScrollbarVisible by remember { mutableStateOf(false) }
+
+    // Debounce mechanism to stabilize the scrollbar visibility state
+    LaunchedEffect(scrollbarAdapter.maxScrollOffset) {
+        with(density) {
+            if (scrollbarAdapter.maxScrollOffset > dimension.grid_3.roundToPx()) {
+                isScrollbarVisible = true
+            } else {
+                delay(1000) // Adjust the delay as needed
+                if (scrollbarAdapter.maxScrollOffset == 0.0) {
+                    isScrollbarVisible = false
+                }
+            }
+        }
+    }
 
     Row(
         modifier = modifier,
     ) {
         content(Modifier.weight(weight = 1f))
 
-        if (enabled && scrollbarAdapter.maxScrollOffset > 0) {
+        AnimatedVisibility(visible = enabled && isScrollbarVisible) {
             VerticalScrollbar(
                 adapter = scrollbarAdapter,
                 style = LocalScrollbarStyle.current.copy(
