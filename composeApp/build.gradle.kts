@@ -1,4 +1,6 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import java.io.FileInputStream
 import java.io.InputStreamReader
@@ -19,10 +21,9 @@ plugins {
 
 kotlin {
     androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
         }
     }
 
@@ -310,52 +311,53 @@ buildConfig {
     buildConfigField("GITHUB_LINK", provider { "https://github.com/ryanw-mobile/OctoMeter" })
 }
 
-koverReport {
-    // common filters for all reports of all variants
-    filters {
-        // exclusions for reports
-        excludes {
-            // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
-            classes(
-                listOf(
-                    "com.rwmobi.kunigami.KunigamiApplication*",
-                    "com.rwmobi.kunigami.MainActivity*",
-                    "com.rwmobi.kunigami.*.*MembersInjector",
-                    "com.rwmobi.kunigami.*.*Factory",
-                    "com.rwmobi.kunigami.*.*HiltModules*",
-                    "com.rwmobi.kunigami.data.source.local.*_Impl*",
-                    "com.rwmobi.kunigami.data.source.local.*Impl_Factory",
-                    "com.rwmobi.kunigami.BR",
-                    "com.rwmobi.kunigami.BuildConfig",
-                    "com.rwmobi.kunigami.Hilt*",
-                    "com.rwmobi.kunigami.*.Hilt_*",
-                    "com.rwmobi.kunigami.ComposableSingletons*",
-                    "com.rwmobi.kunigami.App*",
-                    "com.rwmobi.kunigami.MainKt*",
-                    "*Fragment",
-                    "*Fragment\$*",
-                    "*Activity",
-                    "*Activity\$*",
-                    "*.BuildConfig",
-                    "*.DebugUtil",
-                ),
-            )
-            // excludes all classes located in specified package and it subpackages, wildcards '*' and '?' are available
-            packages(
-                listOf(
-                    "com.rwmobi.kunigami.di",
-                    "com.rwmobi.kunigami.ui.components",
-                    "com.rwmobi.kunigami.ui.composehelper",
-                    "com.rwmobi.kunigami.ui.destinations",
-                    "com.rwmobi.kunigami.ui.navigation",
-                    "com.rwmobi.kunigami.ui.previewparameter",
-                    "com.rwmobi.kunigami.ui.theme",
-                    "androidx",
-                    "dagger.hilt.internal.aggregatedroot.codegen",
-                    "hilt_aggregated_deps",
-                    "kunigami.composeapp.generated.resources",
-                ),
-            )
+kover {
+    reports {
+        // common filters for all reports of all variants
+        filters {
+            // exclusions for reports
+            excludes {
+                // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
+                classes(
+                    listOf(
+                        "com.rwmobi.kunigami.KunigamiApplication*",
+                        "com.rwmobi.kunigami.MainActivity*",
+                        "com.rwmobi.kunigami.*.*MembersInjector",
+                        "com.rwmobi.kunigami.*.*Factory",
+                        "com.rwmobi.kunigami.data.source.local.*_Impl*",
+                        "com.rwmobi.kunigami.data.source.local.*Impl_Factory",
+                        "com.rwmobi.kunigami.BR",
+                        "com.rwmobi.kunigami.BuildConfig",
+                        "com.rwmobi.kunigami.ComposableSingletons*",
+                        "com.rwmobi.kunigami.App*",
+                        "com.rwmobi.kunigami.MainKt*",
+                        "com.rwmobi.kunigami.NavigationLayoutType",
+                        "*Fragment",
+                        "*Fragment\$*",
+                        "*Activity",
+                        "*Activity\$*",
+                        "*.BuildConfig",
+                        "*.DebugUtil",
+                    ),
+                )
+                // excludes all classes located in specified package and it subpackages, wildcards '*' and '?' are available
+                packages(
+                    listOf(
+                        "com.rwmobi.kunigami.di",
+                        "com.rwmobi.kunigami.ui.components",
+                        "com.rwmobi.kunigami.ui.composehelper",
+                        "com.rwmobi.kunigami.ui.destinations",
+                        "com.rwmobi.kunigami.ui.navigation",
+                        "com.rwmobi.kunigami.ui.previewparameter",
+                        "com.rwmobi.kunigami.ui.theme",
+                        "com.rwmobi.kunigami.ui.previewsampledata",
+                        "androidx",
+                        "dagger.hilt.internal.aggregatedroot.codegen",
+                        "hilt_aggregated_deps",
+                        "kunigami.composeapp.generated.resources",
+                    ),
+                )
+            }
         }
     }
 }
