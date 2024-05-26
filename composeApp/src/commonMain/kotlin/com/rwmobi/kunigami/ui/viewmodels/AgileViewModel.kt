@@ -20,7 +20,6 @@ import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
-import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
@@ -49,7 +48,6 @@ import kotlin.math.ceil
 import kotlin.time.Duration
 
 class AgileViewModel(
-    private val getUserAccountUseCase: GetUserAccountUseCase,
     private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val getStandardUnitRateUseCase: GetStandardUnitRateUseCase,
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
