@@ -89,7 +89,10 @@ private fun TariffSummaryCardLinear(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.medium)
             .background(color = MaterialTheme.colorScheme.surfaceContainer)
-            .padding(all = dimension.grid_2),
+            .padding(
+                vertical = dimension.grid_2,
+                horizontal = dimension.grid_2,
+            ),
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
@@ -150,7 +153,10 @@ private fun TariffSummaryCardTwoColumns(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.medium)
             .background(color = MaterialTheme.colorScheme.surfaceContainer)
-            .padding(all = dimension.grid_2),
+            .padding(
+                vertical = dimension.grid_2,
+                horizontal = dimension.grid_2,
+            ),
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
@@ -225,7 +231,10 @@ private fun TariffSummaryCardThreeColumns(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.medium)
             .background(color = MaterialTheme.colorScheme.surfaceContainer)
-            .padding(all = dimension.grid_2),
+            .padding(
+                vertical = dimension.grid_2,
+                horizontal = dimension.grid_2,
+            ),
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
