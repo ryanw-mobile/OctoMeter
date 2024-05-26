@@ -57,10 +57,12 @@ class InstantExtensionsKtTest {
         instant.toLocalHourString() shouldBe "10"
     }
 
+    // This is not a very good test because it depends on platform AND local settings
     @Test
     fun `toLocalDateTimeString should format correctly`() {
         val instant = LocalDateTime(2023, 5, 1, 10, 45, 15).toInstant(timeZone)
-        instant.toLocalDateTimeString() shouldBe "1 May 2023 10:45"
+        val localDateString = instant.toLocalDateString()
+        instant.toLocalDateTimeString() shouldBe "$localDateString 10:45"
     }
 
     @Test
