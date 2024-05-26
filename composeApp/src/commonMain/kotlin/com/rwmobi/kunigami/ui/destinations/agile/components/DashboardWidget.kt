@@ -37,7 +37,10 @@ internal fun DashboardWidget(
     )
     Box(
         modifier = modifier
-            .aspectRatio(2f) // Ensure the aspect ratio is 2:1
+            .aspectRatio(
+                ratio = 2f,
+                matchHeightConstraintsFirst = true,
+            ) // Ensure the aspect ratio is 2:1
             .drawBehind {
                 drawHalfCircleArcSegment(
                     percentage = animatedPercentage,

@@ -7,17 +7,21 @@
 
 package com.rwmobi.kunigami.ui.destinations.agile.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -33,12 +37,16 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.model.rate.RateGroupedCells
 import com.rwmobi.kunigami.ui.model.rate.RateTrend
 import com.rwmobi.kunigami.ui.model.rate.findActiveRate
 import com.rwmobi.kunigami.ui.model.rate.getRateTrend
+import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
 import kotlinx.coroutines.delay
@@ -78,7 +86,7 @@ internal fun AgileTariffCardAdaptive(
                 expireMinutes = expireMinutes,
                 expireSeconds = expireSeconds,
                 showCountdown = activeRate?.validTo != null,
-                vatInclusivePrice = activeRate?.vatInclusivePrice?.toString(precision = 2),
+                vatInclusivePrice = activeRate?.vatInclusivePrice,
                 rateTrend = rateTrend,
             )
         }
@@ -92,13 +100,13 @@ internal fun AgileTariffCardAdaptive(
                 expireMinutes = expireMinutes,
                 expireSeconds = expireSeconds,
                 showCountdown = activeRate?.validTo != null,
-                vatInclusivePrice = activeRate?.vatInclusivePrice?.toString(precision = 2),
+                vatInclusivePrice = activeRate?.vatInclusivePrice,
                 rateTrend = rateTrend,
             )
         }
 
         else -> {
-            AgileTariffCardCompact(
+            AgileTariffCardExpanded(
                 modifier = modifier,
                 tariff = agileTariff,
                 colorPalette = colorPalette,
@@ -106,7 +114,7 @@ internal fun AgileTariffCardAdaptive(
                 expireMinutes = expireMinutes,
                 expireSeconds = expireSeconds,
                 showCountdown = activeRate?.validTo != null,
-                vatInclusivePrice = activeRate?.vatInclusivePrice?.toString(precision = 2),
+                vatInclusivePrice = activeRate?.vatInclusivePrice,
                 rateTrend = rateTrend,
             )
         }
@@ -147,7 +155,7 @@ private fun AgileTariffCardCompact(
     expireSeconds: Long,
     colorPalette: List<Color>,
     tariff: Tariff?,
-    vatInclusivePrice: String?,
+    vatInclusivePrice: Double?,
     rateTrend: RateTrend?,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -194,6 +202,7 @@ private fun AgileTariffCardCompact(
                     Spacer(modifier = Modifier.size(size = dimension.grid_1))
                 }
 
+                val animatedVatInclusivePrice by animateFloatAsState(targetValue = vatInclusivePrice?.toFloat() ?: 0f)
                 if (vatInclusivePrice != null) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -215,7 +224,7 @@ private fun AgileTariffCardCompact(
                             overflow = TextOverflow.Clip,
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
-                            text = vatInclusivePrice,
+                            text = animatedVatInclusivePrice.toString(precision = 2),
                         )
 
                         Text(
@@ -259,25 +268,156 @@ private fun AgileTariffCardCompact(
     }
 }
 
-// @Preview
-// @Composable
-// private fun Preview() {
-//    val dimension = LocalDensity.current.getDimension()
-//    AppTheme {
-//        Surface {
-//            AgileTariffCardCompact(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(
-//                        start = dimension.grid_3,
-//                        end = dimension.grid_3,
-//                        top = dimension.grid_1,
-//                    ),
-//                tariff = TariffSamples.agileFlex221125,
-//                colorPalette = generateGYRHueColorPalette(),
-//                rateRange = 0.0..0.0,
-//                rateGroupedCells = emptyList(),
-//            )
-//        }
-//    }
-// }
+@Composable
+private fun AgileTariffCardExpanded(
+    modifier: Modifier = Modifier,
+    targetPercentage: Float,
+    showCountdown: Boolean,
+    expireMinutes: Long,
+    expireSeconds: Long,
+    colorPalette: List<Color>,
+    tariff: Tariff?,
+    vatInclusivePrice: Double?,
+    rateTrend: RateTrend?,
+) {
+    val dimension = LocalDensity.current.getDimension()
+
+    Card(
+        modifier = modifier,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = dimension.grid_2),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(
+                modifier = Modifier.weight(weight = 1f),
+            ) {
+                if (tariff != null) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Bold,
+                        text = tariff.displayName,
+                    )
+
+                    val regionCode = tariff.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurface.copy(
+                            alpha = 0.68f,
+                        ),
+                        text = stringResource(resource = Res.string.agile_product_code_retail_region, tariff.productCode, regionCode),
+                    )
+
+                    Spacer(modifier = Modifier.size(size = dimension.grid_1))
+
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = stringResource(resource = Res.string.agile_tariff_standing_charge, tariff.vatInclusiveStandingCharge),
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.weight(weight = 1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
+            ) {
+                val animatedVatInclusivePrice by animateFloatAsState(targetValue = vatInclusivePrice?.toFloat() ?: 0f)
+                if (vatInclusivePrice != null) {
+                    Row(
+                        modifier = Modifier.wrapContentSize(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
+                    ) {
+                        rateTrend?.let {
+                            Icon(
+                                modifier = Modifier.size(size = dimension.grid_4),
+                                tint = colorPalette[targetPercentage.toInt()],
+                                painter = painterResource(resource = it.drawableResource),
+                                contentDescription = it.name,
+                            )
+                        }
+
+                        Text(
+                            modifier = Modifier.wrapContentSize(),
+                            maxLines = 1,
+                            overflow = TextOverflow.Clip,
+                            style = MaterialTheme.typography.headlineLarge,
+                            fontWeight = FontWeight.Bold,
+                            text = animatedVatInclusivePrice.toString(precision = 2),
+                        )
+
+                        Text(
+                            modifier = Modifier.wrapContentSize(),
+                            maxLines = 1,
+                            overflow = TextOverflow.Clip,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold,
+                            text = stringResource(resource = Res.string.agile_unit_rate),
+                        )
+                    }
+                }
+
+                if (showCountdown) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        maxLines = 1,
+                        overflow = TextOverflow.Clip,
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.Center,
+                        text = stringResource(
+                            resource = Res.string.agile_expires_in,
+                            expireMinutes,
+                            expireSeconds.toString().padStart(length = 2, padChar = '0'),
+                        ),
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier.weight(weight = 1f),
+            ) {
+                Spacer(modifier = Modifier.weight(0.25f))
+                DashboardWidget(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .heightIn(max = 120.dp),
+                    colorPalette = colorPalette,
+                    percentage = targetPercentage,
+                )
+                Spacer(modifier = Modifier.weight(0.25f))
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    val dimension = LocalDensity.current.getDimension()
+    AppTheme {
+        Surface {
+            AgileTariffCardAdaptive(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = dimension.grid_3,
+                        end = dimension.grid_3,
+                        top = dimension.grid_1,
+                    ),
+                agileTariff = TariffSamples.agileFlex221125,
+                colorPalette = generateGYRHueColorPalette(),
+                rateRange = 0.0..0.0,
+                rateGroupedCells = emptyList(),
+                requestedAdaptiveLayout = WindowWidthSizeClass.Expanded,
+            )
+        }
+    }
+}

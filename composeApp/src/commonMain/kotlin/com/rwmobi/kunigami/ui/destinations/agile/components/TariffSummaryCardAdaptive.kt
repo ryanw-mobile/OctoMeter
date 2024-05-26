@@ -279,6 +279,7 @@ private fun TariffSummaryCardThreeColumns(
                     modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
                     text = stringResource(resource = Res.string.agile_tariff_standing_charge_two_lines, tariff.vatInclusiveStandingCharge),
                 )
             }
@@ -290,6 +291,7 @@ private fun TariffSummaryCardThreeColumns(
                     modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
                     text = stringResource(resource = Res.string.agile_tariff_standard_unit_rate_two_lines, tariff.vatInclusiveUnitRate),
                 )
             }
