@@ -17,6 +17,7 @@ plugins {
     alias(libs.plugins.gradleKtlint)
     alias(libs.plugins.serialization)
     alias(libs.plugins.buildConfig)
+    alias(libs.plugins.kotlinCocoapods)
 }
 
 kotlin {
@@ -24,6 +25,18 @@ kotlin {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
+        }
+    }
+
+    cocoapods {
+        version = libs.versions.versionName.get()
+        summary = "OctoMeter Kotlin/Native module"
+        homepage = "https://github.com/ryanw-mobile/OctoMeter/"
+        podfile = project.file("../iosApp/Podfile")
+
+        framework {
+            baseName = "composeApp"
+            isStatic = true
         }
     }
 
@@ -223,10 +236,6 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
     }
 
     packaging {
