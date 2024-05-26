@@ -48,8 +48,8 @@ import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.destinations.agile.components.CountDownWidget
-import com.rwmobi.kunigami.ui.destinations.agile.components.TariffCardAdaptive
 import com.rwmobi.kunigami.ui.destinations.agile.components.TariffDetailsAdaptive
+import com.rwmobi.kunigami.ui.destinations.agile.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
 import com.rwmobi.kunigami.ui.extensions.partitionList
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
@@ -184,7 +184,7 @@ fun AgileScreen(
                             windowWidthSizeClass = uiState.requestedAdaptiveLayout,
                             agileTariffBlock = if (uiState.agileTariff != null) {
                                 { modifier ->
-                                    TariffCardAdaptive(
+                                    TariffSummaryCardAdaptive(
                                         modifier = modifier.padding(vertical = dimension.grid_0_5),
                                         heading = stringResource(resource = Res.string.agile_about_tariff).uppercase(),
                                         tariff = uiState.agileTariff,
@@ -220,9 +220,9 @@ fun AgileScreen(
 
                     if (uiState.isCurrentlyOnDifferentTariff() && uiState.userProfile?.tariff != null) {
                         item(key = "currentDifferentTariff") {
-                            TariffCardAdaptive(
+                            TariffSummaryCardAdaptive(
                                 modifier = modifier.padding(
-                                    horizontal = dimension.grid_2,
+                                    horizontal = dimension.grid_3,
                                     vertical = dimension.grid_0_5,
                                 ),
                                 heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),

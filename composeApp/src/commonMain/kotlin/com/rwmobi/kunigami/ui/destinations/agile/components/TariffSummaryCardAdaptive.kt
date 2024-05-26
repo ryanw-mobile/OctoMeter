@@ -44,7 +44,7 @@ import kunigami.composeapp.generated.resources.unknown
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun TariffCardAdaptive(
+internal fun TariffSummaryCardAdaptive(
     modifier: Modifier = Modifier,
     layoutType: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     heading: String,
@@ -52,7 +52,7 @@ internal fun TariffCardAdaptive(
 ) {
     when (layoutType) {
         WindowWidthSizeClass.Compact -> {
-            TariffCardLinear(
+            TariffSummaryCardLinear(
                 modifier = modifier,
                 heading = heading,
                 tariff = tariff,
@@ -60,7 +60,7 @@ internal fun TariffCardAdaptive(
         }
 
         WindowWidthSizeClass.Medium -> {
-            TariffCardTwoColumns(
+            TariffSummaryCardTwoColumns(
                 modifier = modifier,
                 heading = heading,
                 tariff = tariff,
@@ -68,7 +68,7 @@ internal fun TariffCardAdaptive(
         }
 
         else -> {
-            TariffCardThreeColumns(
+            TariffSummaryCardThreeColumns(
                 modifier = modifier,
                 heading = heading,
                 tariff = tariff,
@@ -78,7 +78,7 @@ internal fun TariffCardAdaptive(
 }
 
 @Composable
-private fun TariffCardLinear(
+private fun TariffSummaryCardLinear(
     modifier: Modifier = Modifier,
     heading: String,
     tariff: Tariff,
@@ -139,7 +139,7 @@ private fun TariffCardLinear(
 }
 
 @Composable
-private fun TariffCardTwoColumns(
+private fun TariffSummaryCardTwoColumns(
     modifier: Modifier = Modifier,
     heading: String,
     tariff: Tariff,
@@ -214,7 +214,7 @@ private fun TariffCardTwoColumns(
 }
 
 @Composable
-private fun TariffCardThreeColumns(
+private fun TariffSummaryCardThreeColumns(
     modifier: Modifier = Modifier,
     heading: String,
     tariff: Tariff,
@@ -296,21 +296,21 @@ private fun Preview() {
             Column(
                 verticalArrangement = Arrangement.spacedBy(space = 16.dp),
             ) {
-                TariffCardAdaptive(
+                TariffSummaryCardAdaptive(
                     modifier = Modifier.fillMaxWidth(),
                     heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
                     tariff = TariffSamples.agileFlex221125,
                     layoutType = WindowWidthSizeClass.Compact,
                 )
 
-                TariffCardAdaptive(
+                TariffSummaryCardAdaptive(
                     modifier = Modifier.fillMaxWidth(),
                     heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
                     tariff = TariffSamples.agileFlex221125,
                     layoutType = WindowWidthSizeClass.Medium,
                 )
 
-                TariffCardAdaptive(
+                TariffSummaryCardAdaptive(
                     modifier = Modifier.fillMaxWidth(),
                     heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
                     tariff = TariffSamples.agileFlex221125,
