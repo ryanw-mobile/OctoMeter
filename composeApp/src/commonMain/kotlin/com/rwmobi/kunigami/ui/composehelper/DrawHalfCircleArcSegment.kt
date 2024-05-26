@@ -94,7 +94,7 @@ internal fun DrawScope.drawHalfCircleArcSegment(
                 color = backgroundColor.getContrastColor().copy(alpha = 0.5f),
                 start = Offset(startX, startY),
                 end = Offset(endX, endY),
-                strokeWidth = 0.5f,
+                strokeWidth = 1f,
             )
         }
     }
