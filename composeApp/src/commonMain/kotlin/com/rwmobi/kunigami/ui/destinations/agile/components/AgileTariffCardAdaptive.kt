@@ -212,7 +212,7 @@ private fun AgileTariffCardCompact(
                         rateTrend?.let {
                             Icon(
                                 modifier = Modifier.size(size = dimension.grid_4),
-                                tint = colorPalette[targetPercentage.toInt()],
+                                tint = colorPalette[(targetPercentage * colorPalette.lastIndex).toInt()],
                                 painter = painterResource(resource = it.drawableResource),
                                 contentDescription = it.name,
                             )
@@ -339,7 +339,7 @@ private fun AgileTariffCardExpanded(
                         rateTrend?.let {
                             Icon(
                                 modifier = Modifier.size(size = dimension.grid_4),
-                                tint = colorPalette[targetPercentage.toInt()],
+                                tint = colorPalette[(targetPercentage * colorPalette.lastIndex).toInt()],
                                 painter = painterResource(resource = it.drawableResource),
                                 contentDescription = it.name,
                             )
