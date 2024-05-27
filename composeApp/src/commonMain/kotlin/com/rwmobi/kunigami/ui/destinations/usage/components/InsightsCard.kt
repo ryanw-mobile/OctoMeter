@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.ui.model.consumption.Insights
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
@@ -48,6 +49,7 @@ internal fun InsightsCard(
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
                 text = stringResource(resource = Res.string.usage_insights).uppercase(),
             )
 
@@ -55,6 +57,7 @@ internal fun InsightsCard(
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
                 text = pluralStringResource(
                     resource = Res.plurals.usage_insights_consumption,
                     quantity = insights.consumptionTimeSpan,
@@ -67,6 +70,7 @@ internal fun InsightsCard(
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
                 text = stringResource(
                     resource = Res.string.usage_estimated_cost,
                     insights.roughCost.toString(precision = 2),
@@ -78,6 +82,7 @@ internal fun InsightsCard(
                     modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
                     text = stringResource(
                         resource = Res.string.usage_estimated_daily,
                         insights.consumptionDailyAverage,

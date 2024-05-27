@@ -37,8 +37,8 @@
     <string name="usage_current_tariff">Your active tariff</string>
     <string name="usage_insights">Insights</string>
     <plurals name="usage_insights_consumption">
-        <item quantity="one">You consumed %1$s kWh in one day.</item>
-        <item quantity="other">You consumed %1$s kWh over %2$s days.</item>
+        <item quantity="one">Consumed %1$s kWh in one day</item>
+        <item quantity="other">Consumed %1$s kWh over %2$s days</item>
     </plurals>
     <string name="usage_estimated_cost">Estimated cost: £%1$s</string>
     <string name="usage_estimated_daily">Daily average: %1$s kWh (£%2$s/day)</string>

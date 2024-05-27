@@ -98,7 +98,7 @@ private fun TariffProjectionsCardLinear(
             AnnualProjectionCardAdaptive(
                 modifier = Modifier.fillMaxWidth(),
                 insights = insights,
-                layoutType = WindowWidthSizeClass.Compact,
+                layoutType = WindowWidthSizeClass.Expanded,
             )
         }
     }

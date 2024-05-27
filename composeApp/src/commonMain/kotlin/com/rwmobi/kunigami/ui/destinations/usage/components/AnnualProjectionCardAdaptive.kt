@@ -10,20 +10,28 @@ package com.rwmobi.kunigami.ui.destinations.usage.components
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.model.consumption.Insights
 import com.rwmobi.kunigami.ui.theme.AppTheme
@@ -69,22 +77,25 @@ private fun AnnualProjectionCardLinear(
     Card(modifier = modifier) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(all = dimension.grid_2),
-            verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
                 text = stringResource(resource = Res.string.usage_annual_projection).uppercase(),
             )
+
+            Spacer(modifier = Modifier.height(height = dimension.grid_1))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+                horizontalArrangement = Arrangement.Center,
             ) {
                 Text(
                     modifier = Modifier.wrapContentWidth(),
@@ -92,18 +103,22 @@ private fun AnnualProjectionCardLinear(
                     color = MaterialTheme.colorScheme.onSurface,
                     text = insights.consumptionAnnualProjection.toString(),
                 )
+                Spacer(modifier = Modifier.width(width = dimension.grid_0_5))
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.wrapContentWidth(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     text = stringResource(resource = Res.string.kwh),
                 )
             }
 
+            Spacer(modifier = Modifier.height(height = dimension.grid_1))
+
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
                 text = stringResource(
                     resource = Res.string.unit_pound,
                     insights.costAnnualProjection.toString(precision = 2),
@@ -131,18 +146,19 @@ private fun AnnualProjectionCardTwoColumns(
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
                 text = stringResource(resource = Res.string.usage_annual_projection).uppercase(),
             )
 
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.height(intrinsicSize = IntrinsicSize.Min),
                 horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(
                     modifier = Modifier.weight(weight = 1f),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Text(
                         modifier = Modifier.wrapContentWidth(),
@@ -150,18 +166,22 @@ private fun AnnualProjectionCardTwoColumns(
                         color = MaterialTheme.colorScheme.onSurface,
                         text = insights.consumptionAnnualProjection.toString(),
                     )
+                    Spacer(modifier = Modifier.width(width = dimension.grid_0_5))
                     Text(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.wrapContentWidth(),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface,
                         text = stringResource(resource = Res.string.kwh),
                     )
                 }
-
+                VerticalDivider(
+                    modifier = Modifier.fillMaxHeight(),
+                )
                 Text(
                     modifier = Modifier.weight(weight = 1f),
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
                     text = stringResource(
                         resource = Res.string.unit_pound,
                         insights.costAnnualProjection.toString(precision = 2),
