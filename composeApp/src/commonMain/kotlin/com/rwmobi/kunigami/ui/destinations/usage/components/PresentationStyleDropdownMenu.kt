@@ -28,7 +28,7 @@ import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.bolt
+import kunigami.composeapp.generated.resources.circle_check
 import kunigami.composeapp.generated.resources.selected
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -62,7 +62,7 @@ internal fun PresentationStyleDropdownMenu(
                     if (currentPresentationStyle == presentationStyle) {
                         Icon(
                             modifier = Modifier.size(size = dimension.grid_3),
-                            painter = painterResource(resource = Res.drawable.bolt),
+                            painter = painterResource(resource = Res.drawable.circle_check),
                             contentDescription = stringResource(resource = Res.string.selected),
                         )
                     }
