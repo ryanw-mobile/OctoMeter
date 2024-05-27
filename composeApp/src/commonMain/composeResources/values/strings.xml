@@ -17,6 +17,7 @@
     <string name="retry">Retry</string>
     <string name="update">Update</string>
     <string name="kwh">kWh</string>
+    <string name="p_kwh">p/kWh</string>
     <string name="unit_kwh">%1$s kWh</string>
     <string name="unit_pound">£%1$s</string>
     <string name="standing_charge">Standing Charge</string>
