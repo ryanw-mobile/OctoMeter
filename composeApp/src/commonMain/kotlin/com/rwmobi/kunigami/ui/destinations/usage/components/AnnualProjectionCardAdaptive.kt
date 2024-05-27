@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -29,7 +30,7 @@ import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
 import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.unit_kwh
+import kunigami.composeapp.generated.resources.kwh
 import kunigami.composeapp.generated.resources.unit_pound
 import kunigami.composeapp.generated.resources.usage_annual_projection
 import org.jetbrains.compose.resources.stringResource
@@ -44,14 +45,14 @@ internal fun AnnualProjectionCardAdaptive(
         WindowWidthSizeClass.Compact,
         WindowWidthSizeClass.Medium,
         -> {
-            AnnualProjectionCardCompact(
+            AnnualProjectionCardLinear(
                 modifier = modifier,
                 insights = insights,
             )
         }
 
         else -> {
-            AnnualProjectionCardExpanded(
+            AnnualProjectionCardTwoColumns(
                 modifier = modifier,
                 insights = insights,
             )
@@ -60,7 +61,7 @@ internal fun AnnualProjectionCardAdaptive(
 }
 
 @Composable
-internal fun AnnualProjectionCardCompact(
+private fun AnnualProjectionCardLinear(
     modifier: Modifier = Modifier,
     insights: Insights,
 ) {
@@ -80,15 +81,24 @@ internal fun AnnualProjectionCardCompact(
                 text = stringResource(resource = Res.string.usage_annual_projection).uppercase(),
             )
 
-            Text(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                text = stringResource(
-                    resource = Res.string.unit_kwh,
-                    insights.consumptionAnnualProjection,
-                ),
-            )
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+            ) {
+                Text(
+                    modifier = Modifier.wrapContentWidth(),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    text = insights.consumptionAnnualProjection.toString(),
+                )
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    text = stringResource(resource = Res.string.kwh),
+                )
+            }
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -104,7 +114,7 @@ internal fun AnnualProjectionCardCompact(
 }
 
 @Composable
-internal fun AnnualProjectionCardExpanded(
+private fun AnnualProjectionCardTwoColumns(
     modifier: Modifier = Modifier,
     insights: Insights,
 ) {
@@ -129,15 +139,24 @@ internal fun AnnualProjectionCardExpanded(
                 horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
+                Row(
                     modifier = Modifier.weight(weight = 1f),
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    text = stringResource(
-                        resource = Res.string.unit_kwh,
-                        insights.consumptionAnnualProjection,
-                    ),
-                )
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+                ) {
+                    Text(
+                        modifier = Modifier.wrapContentWidth(),
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = insights.consumptionAnnualProjection.toString(),
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = stringResource(resource = Res.string.kwh),
+                    )
+                }
 
                 Text(
                     modifier = Modifier.weight(weight = 1f),
