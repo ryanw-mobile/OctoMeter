@@ -77,44 +77,31 @@ I use Android Studio Koala to build the Android and Deskop apps. Xcode 15.4 for 
 ### Dependencies
 
 * [Kermit](https://github.com/touchlab/Kermit) - Apache 2.0 - A Kotlin Multiplatform logging library
-* [KoalaPlot](https://github.com/koalaplot/koalaplot-core) - MIT - A plotting library for Kotlin
-  Multiplatform
-* [Kotlin](https://kotlinlang.org/) - Apache 2.0 - Kotlin programming language
-* [Jetpack Compose](https://developer.android.com/jetpack/androidx/releases/compose) - Apache 2.0 -
-  Modern toolkit for building native UI
+* [KoalaPlot](https://github.com/koalaplot/koalaplot-core) - MIT - A plotting library for Kotlin Multiplatform
+* [Jetpack Compose](https://developer.android.com/jetpack/androidx/releases/compose) - Apache 2.0 - Modern toolkit for building native UI
 * [AndroidX](https://developer.android.com/jetpack/androidx) - Apache 2.0 - AndroidX libraries
 * [Kotlinx](https://github.com/Kotlin) - Apache 2.0 - Kotlin extensions and libraries
-* [Ktor](https://ktor.io/) - Apache 2.0 - Framework for building asynchronous servers and clients in
-  connected systems
+* [Ktor](https://ktor.io/) - Apache 2.0 - Framework for building asynchronous servers and clients in connected systems
 * [Kotest](https://kotest.io/) - Apache 2.0 - Kotlin test framework
-* [Material3](https://github.com/material-components/material-components-android) - Apache 2.0 -
-  Material Design components
+* [Material3](https://github.com/material-components/material-components-android) - Apache 2.0 - Material Design components
 * [Koin](https://insert-koin.io/) - Apache 2.0 - Dependency Injection framework for Kotlin
-* [Multiplatform Settings](https://github.com/russhwolf/multiplatform-settings) - Apache 2.0 -
-  Multiplatform settings library for Kotlin
-* [Theme Detector](https://github.com/Dansoftowner/jSystemThemeDetector) - MIT - Detect system
-  theme (light/dark mode)
+* [LeakCanary](https://square.github.io/leakcanary/) - Apache 2.0 - A memory leak detection library for Android
+* [Multiplatform Settings](https://github.com/russhwolf/multiplatform-settings) - Apache 2.0 - Multiplatform settings library for Kotlin
+* [Theme Detector](https://github.com/Dansoftowner/jSystemThemeDetector) - MIT - Detect system theme (light/dark mode)
 
 ### Plugins
 
-* [Android Application Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) -
-  Google - Plugin for building Android applications
-* [Android Library Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) -
-  Google - Plugin for building Android libraries
-* [Jetbrains Compose Plugin](https://github.com/JetBrains/compose-jb) - JetBrains - Plugin for
-  Jetpack Compose
-* [Kotlin Multiplatform Plugin](https://kotlinlang.org/docs/multiplatform.html) - JetBrains - Plugin
-  for Kotlin Multiplatform projects
-* [Kover Plugin](https://github.com/Kotlin/kotlinx-kover) - JetBrains - Code coverage tool for
-  Kotlin
-* [Ktlint Plugin](https://github.com/JLLeitschuh/ktlint-gradle) - JLLeitschuh - Plugin for Kotlin
-  linter
-* [Serialization Plugin](https://github.com/Kotlin/kotlinx.serialization) - JetBrains - Plugin for
-  Kotlin serialization
-* [Kotlin JVM Plugin](https://kotlinlang.org/docs/gradle.html) - JetBrains - Plugin for Kotlin JVM
-  projects
-* [BuildConfig Plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) - gmazzo - Plugin for
-  generating BuildConfig classes
+* [Android Application Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) - Google - Plugin for building Android applications
+* [Android Library Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) - Google - Plugin for building Android libraries
+* [Jetbrains Compose Plugin](https://github.com/JetBrains/compose-jb) - JetBrains - Plugin for Jetpack Compose
+* [Kotlin Multiplatform Plugin](https://kotlinlang.org/docs/multiplatform.html) - JetBrains - Plugin for Kotlin Multiplatform projects
+* [Kover Plugin](https://github.com/Kotlin/kotlinx-kover) - JetBrains - Code coverage tool for Kotlin
+* [Ktlint Plugin](https://github.com/JLLeitschuh/ktlint-gradle) - JLLeitschuh - Plugin for Kotlin linter
+* [Serialization Plugin](https://github.com/Kotlin/kotlinx.serialization) - JetBrains - Plugin for Kotlin serialization
+* [Kotlin JVM Plugin](https://kotlinlang.org/docs/gradle.html) - JetBrains - Plugin for Kotlin JVM projects
+* [BuildConfig Plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) - gmazzo - Plugin for generating BuildConfig classes
+* [Android Test Plugin](https://developer.android.com/studio/test) - Google - Plugin for Android testing
+* [Baseline Profile Plugin](https://developer.android.com/studio/profile/baselineprofile) - AndroidX - Plugin for generating baseline profiles
 
 <br /><br />
 

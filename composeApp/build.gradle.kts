@@ -18,6 +18,7 @@ plugins {
     alias(libs.plugins.serialization)
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.kotlinCocoapods)
+    alias(libs.plugins.baselineprofile)
 }
 
 kotlin {
@@ -310,6 +311,10 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
 
 tasks.named("preBuild") {
     dependsOn(tasks.named("ktlintFormat"))
+}
+dependencies {
+    implementation(libs.androidx.profileinstaller)
+    "baselineProfile"(project(":baselineprofile"))
 }
 
 buildConfig {
