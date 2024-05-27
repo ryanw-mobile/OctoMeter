@@ -29,6 +29,6 @@ enum class AppNavigationItem(val titleResId: StringResource, val iconResId: Draw
     ;
 
     companion object {
-        fun getNavBarItems(): List<AppNavigationItem> = listOf(USAGE, AGILE, TARIFFS, ACCOUNT)
+        fun getNavBarItems(): List<AppNavigationItem> = listOf(AGILE, USAGE, TARIFFS, ACCOUNT)
     }
 }
