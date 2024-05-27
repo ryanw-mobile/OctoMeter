@@ -79,7 +79,7 @@ private fun AnnualProjectionCardLinear(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(all = dimension.grid_2),
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -90,7 +90,7 @@ private fun AnnualProjectionCardLinear(
                 text = stringResource(resource = Res.string.usage_annual_projection).uppercase(),
             )
 
-            Spacer(modifier = Modifier.height(height = dimension.grid_1))
+            Spacer(modifier = Modifier.weight(weight = 1f))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -112,8 +112,6 @@ private fun AnnualProjectionCardLinear(
                 )
             }
 
-            Spacer(modifier = Modifier.height(height = dimension.grid_1))
-
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.headlineMedium,
@@ -124,6 +122,8 @@ private fun AnnualProjectionCardLinear(
                     insights.costAnnualProjection.toString(precision = 2),
                 ),
             )
+
+            Spacer(modifier = Modifier.weight(weight = 1f))
         }
     }
 }
