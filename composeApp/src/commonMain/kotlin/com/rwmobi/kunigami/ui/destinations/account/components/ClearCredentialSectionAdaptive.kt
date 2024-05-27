@@ -66,7 +66,7 @@ private fun ClearCredentialSectionCompact(
     Column(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.medium)
-            .background(color = MaterialTheme.colorScheme.surfaceContainer)
+            .background(color = MaterialTheme.colorScheme.surfaceContainerHighest)
             .padding(all = dimension.grid_2),
     ) {
         Text(
@@ -105,7 +105,7 @@ private fun ClearCredentialSectionWide(
     Column(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.medium)
-            .background(color = MaterialTheme.colorScheme.surfaceContainer)
+            .background(color = MaterialTheme.colorScheme.surfaceContainerHighest)
             .padding(all = dimension.grid_2),
     ) {
         Text(

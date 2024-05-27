@@ -18,6 +18,7 @@
     <string name="update">Update</string>
     <string name="kwh">kWh</string>
     <string name="unit_kwh">%1$s kWh</string>
+    <string name="unit_pound">£%1$s</string>
     <string name="selected">Selected</string>
     <string name="loading">Loading...</string>
     <string name="provide_api_key">Provide API Key</string>
@@ -33,6 +34,15 @@
     <string name="grouping_label_month_weeks">Week Starting On</string>
     <string name="usage_chart_tooltip_spot_kwh">%1$s\n%2$s kWh</string>
     <string name="usage_chart_tooltip_range_kwh">%1$s - %2$s\n%3$s kWh</string>
+    <string name="usage_current_tariff">Your active tariff</string>
+    <string name="usage_insights">Insights</string>
+    <plurals name="usage_insights_consumption">
+        <item quantity="one">Consumed %1$s kWh in one day</item>
+        <item quantity="other">Consumed %1$s kWh over %2$s days</item>
+    </plurals>
+    <string name="usage_estimated_cost">Estimated cost: £%1$s</string>
+    <string name="usage_estimated_daily">Daily average: %1$s kWh (£%2$s/day)</string>
+    <string name="usage_annual_projection">Projected annual consumption</string>
 
     <!-- Agile -->
     <string name="agile_demo_introduction">Demo Mode: The Agile Tariff shown for Retail Region A may not be available to you.</string>

@@ -45,6 +45,7 @@ import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
+import com.rwmobi.kunigami.ui.destinations.usage.components.TariffProjectionsCardAdaptive
 import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
 import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
 import com.rwmobi.kunigami.ui.extensions.partitionList
@@ -108,7 +109,7 @@ fun UsageScreen(
                                     .height(height = dimension.minListItemHeight),
                                 currentPresentationStyle = uiState.consumptionQueryFilter.presentationStyle,
                                 title = getConsumptionPeriodString(),
-                                canNavigateBack = uiState.consumptionQueryFilter.canNavigateBackward(accountMoveInDate = uiState.account?.movedInAt ?: Instant.DISTANT_PAST),
+                                canNavigateBack = uiState.consumptionQueryFilter.canNavigateBackward(accountMoveInDate = uiState.userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST),
                                 canNavigateForward = uiState.consumptionQueryFilter.canNavigateForward(),
                                 onNavigateBack = uiEvent.onPreviousTimeFrame,
                                 onNavigateForward = uiEvent.onNextTimeFrame,
@@ -154,6 +155,20 @@ fun UsageScreen(
                                     )
                                 }
                             }
+                        }
+
+                        item(key = "tariffAndProjections") {
+                            TariffProjectionsCardAdaptive(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        horizontal = dimension.grid_3,
+                                        vertical = dimension.grid_1,
+                                    ),
+                                layoutType = uiState.requestedAdaptiveLayout,
+                                tariff = uiState.userProfile?.tariff,
+                                insights = uiState.insights,
+                            )
                         }
 
                         item(key = "headingConsumptionBreakdowns") {

@@ -64,7 +64,10 @@ fun AppNavigationHost(
 
             // workaround: Issue with iOS we have to do it here
             val screenSizeInfo = getScreenSizeInfo()
-            viewModel.notifyScreenSizeChanged(screenSizeInfo = screenSizeInfo)
+            viewModel.notifyScreenSizeChanged(
+                screenSizeInfo = screenSizeInfo,
+                windowSizeClass = windowSizeClass,
+            )
 
             LaunchedEffect(lastDoubleTappedNavItem) {
                 val enabled = lastDoubleTappedNavItem?.equals(AppNavigationItem.USAGE) ?: false

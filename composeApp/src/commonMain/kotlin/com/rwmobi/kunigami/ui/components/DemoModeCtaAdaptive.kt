@@ -72,7 +72,7 @@ private fun DemoModeCTACompact(
     Column(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.medium)
-            .background(color = MaterialTheme.colorScheme.surfaceContainer)
+            .background(color = MaterialTheme.colorScheme.surfaceContainerHighest)
             .padding(all = dimension.grid_2),
         verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
     ) {
@@ -117,7 +117,7 @@ private fun DemoModeCTAWide(
     Column(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.medium)
-            .background(color = MaterialTheme.colorScheme.surfaceContainer)
+            .background(color = MaterialTheme.colorScheme.surfaceContainerHighest)
             .padding(
                 vertical = dimension.grid_1,
                 horizontal = dimension.grid_2,
