@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.cancellation.CancellationException
 
+@Deprecated("Use SyncUserProfileUseCase")
 class GetUserAccountUseCase(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val restApiRepository: RestApiRepository,

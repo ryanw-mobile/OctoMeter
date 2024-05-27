@@ -43,7 +43,6 @@ import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_load_account
 import org.jetbrains.compose.resources.getString
-import kotlin.math.ceil
 
 class UsageViewModel(
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
@@ -63,74 +62,59 @@ class UsageViewModel(
     }
 
     fun initialLoad() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isLoading = true,
-            )
-        }
+        startLoading()
 
-        // Default style is set in the UIState. We try to go backward 5 times hoping for some valid results
         viewModelScope.launch(dispatcher) {
-            getUserAccountUseCase().fold(
-                onSuccess = { account ->
-                    _uiState.update { currentUiState ->
-                        currentUiState.copy(
-                            isDemoMode = false,
-                            account = account,
-                        )
-                    }
-                },
-                onFailure = { throwable ->
-                    if (throwable is IncompleteCredentialsException) {
-                        _uiState.update { currentUiState ->
-                            currentUiState.copy(
-                                isDemoMode = true,
-                                // TODO: supply a demo account instance
-                            )
-                        }
-                    } else {
-                        updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
-                        Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
-                        return@launch
-                    }
-                },
-            )
+            val userProfile = getUserProfile()
 
-            val accountMoveInDate = _uiState.value.account?.movedInAt ?: Instant.DISTANT_PAST
-            var newConsumptionQueryFilter = _uiState.value.consumptionQueryFilter.copy()
-            (5 downTo 1).forEach { _ ->
-                getConsumptionUseCase(
-                    periodFrom = newConsumptionQueryFilter.requestedStart,
-                    periodTo = newConsumptionQueryFilter.requestedEnd,
-                    groupBy = newConsumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
-                ).fold(
-                    onSuccess = { consumptions ->
-                        if (consumptions.size > 4) {
-                            processConsumptions(
-                                consumptionQueryFilter = newConsumptionQueryFilter,
-                                consumptions = consumptions,
-                            )
-                            return@launch
-                        } else {
-                            newConsumptionQueryFilter.navigateBackward(accountMoveInDate = accountMoveInDate)?.let {
-                                newConsumptionQueryFilter = it
-                            } ?: run {
-                                _uiState.update { currentUiState ->
-                                    currentUiState.copy(
-                                        isLoading = false,
-                                    )
+            if (_uiState.value.isDemoMode == true) {
+                // Call isolated fake data generator
+            } else if (userProfile != null) {
+                val accountMoveInDate = userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST
+                var newConsumptionQueryFilter = _uiState.value.consumptionQueryFilter.copy()
+
+                // UIState comes with a default presentationStyle. We try to go backward 5 times hoping for some valid results
+                (5 downTo 1).forEach { _ ->
+                    getConsumptionUseCase(
+                        periodFrom = newConsumptionQueryFilter.requestedStart,
+                        periodTo = newConsumptionQueryFilter.requestedEnd,
+                        groupBy = newConsumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
+                    ).fold(
+                        onSuccess = { consumptions ->
+                            // During BST we expect 2 half-hour records returned for the last day
+                            if (consumptions.size > 2) {
+                                propagateInsights(
+                                    tariff = userProfile.tariff,
+                                    consumptions = consumptions,
+                                )
+                                propagateConsumptions(
+                                    consumptionQueryFilter = newConsumptionQueryFilter,
+                                    consumptions = consumptions,
+                                )
+                                return@forEach
+                            } else {
+                                newConsumptionQueryFilter.navigateBackward(accountMoveInDate = accountMoveInDate)?.let {
+                                    newConsumptionQueryFilter = it
+                                } ?: run {
+                                    // No data
+                                    clearDataFields()
+                                    return@forEach
                                 }
-                                return@launch // No data
                             }
-                        }
-                    },
-                    onFailure = { throwable ->
-                        updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
-                        Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
-                        return@launch
-                    },
-                )
+                        },
+                        onFailure = { throwable ->
+                            updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
+                            Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+                            return@forEach
+                        },
+                    )
+                }
+            } else {
+                // Not demo mode but couldn't get the user profile. We won't show anything
+                clearDataFields()
             }
+
+            stopLoading()
         }
     }
 
@@ -151,11 +135,12 @@ class UsageViewModel(
 
     fun onPreviousTimeFrame() {
         viewModelScope.launch(dispatcher) {
-            val accountMoveInDate = _uiState.value.account?.movedInAt ?: Instant.DISTANT_PAST
+            val accountMoveInDate = _uiState.value.userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST
             val consumptionQueryFilter = _uiState.value.consumptionQueryFilter.navigateBackward(accountMoveInDate = accountMoveInDate)
             if (consumptionQueryFilter == null) {
-                updateUIForError(message = "Requested date is outside of the allowed range.")
                 Logger.e("UsageViewModel", message = { "onNavigateForward request declined." })
+                updateUIForError(message = "Requested date is outside of the allowed range.")
+                stopLoading()
             } else {
                 refresh(consumptionQueryFilter = consumptionQueryFilter)
             }
@@ -166,8 +151,9 @@ class UsageViewModel(
         viewModelScope.launch(dispatcher) {
             val consumptionQueryFilter = _uiState.value.consumptionQueryFilter.navigateForward()
             if (consumptionQueryFilter == null) {
-                updateUIForError(message = "Requested date is outside of the allowed range.")
                 Logger.e("UsageViewModel", message = { "onNavigateForward request declined." })
+                updateUIForError(message = "Requested date is outside of the allowed range.")
+                stopLoading()
             } else {
                 refresh(consumptionQueryFilter = consumptionQueryFilter)
             }
@@ -203,42 +189,128 @@ class UsageViewModel(
         }
     }
 
-    private suspend fun refresh(consumptionQueryFilter: ConsumptionQueryFilter) {
+    private fun startLoading() {
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 isLoading = true,
             )
         }
+    }
 
+    private fun stopLoading() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = false,
+            )
+        }
+    }
+
+    private suspend fun refresh(consumptionQueryFilter: ConsumptionQueryFilter) {
+        startLoading()
+        val userProfile = getUserProfile()
         getConsumptionUseCase(
             periodFrom = consumptionQueryFilter.requestedStart,
             periodTo = consumptionQueryFilter.requestedEnd,
             groupBy = consumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
         ).fold(
             onSuccess = { consumptions ->
-                processConsumptions(
+                propagateInsights(
+                    consumptions = consumptions,
+                    tariff = userProfile?.tariff,
+                )
+                propagateConsumptions(
                     consumptionQueryFilter = consumptionQueryFilter,
                     consumptions = consumptions,
                 )
             },
             onFailure = { throwable ->
-                updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
                 Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+                updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
             },
         )
+        stopLoading()
     }
 
-    private suspend fun processConsumptions(
+    private fun clearDataFields() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                userProfile = null,
+                consumptionGroupedCells = listOf(),
+                consumptionRange = 0.0..0.0,
+                barChartData = null,
+                insights = null,
+            )
+        }
+    }
+
+    private suspend fun getUserProfile(): UserProfile? {
+        syncUserProfileUseCase().fold(
+            onSuccess = { userProfile ->
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        isDemoMode = false,
+                        userProfile = userProfile,
+                    )
+                }
+                return userProfile
+            },
+            onFailure = { throwable ->
+                if (throwable is IncompleteCredentialsException) {
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            isDemoMode = true,
+                        )
+                    }
+                } else {
+                    Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
+                    stopLoading()
+                }
+            },
+        )
+        return null
+    }
+
+    private fun propagateInsights(
+        tariff: Tariff?,
+        consumptions: List<Consumption>?,
+    ): Insights? {
+        val insights = if (tariff == null || consumptions.isNullOrEmpty()) {
+            null
+        } else {
+            val consumptionAggregateRounded = consumptions.sumOf { it.consumption }.roundToNearestEvenHundredth()
+            val consumptionTimeSpan = consumptions.getConsumptionTimeSpan()
+            val roughCost = (consumptionTimeSpan * tariff.vatInclusiveStandingCharge) + (consumptionAggregateRounded * tariff.vatInclusiveUnitRate) / 100.0
+            val consumptionAnnualProjection = (consumptions.sumOf { it.consumption } / consumptionTimeSpan * 365.25).roundToNearestEvenHundredth()
+            val costAnnualProjection = (tariff.vatInclusiveStandingCharge * 365.25 + consumptionAnnualProjection * tariff.vatInclusiveUnitRate) / 100.0
+
+            Insights(
+                consumptionAggregateRounded = consumptionAggregateRounded,
+                consumptionTimeSpan = consumptionTimeSpan,
+                roughCost = roughCost,
+                consumptionAnnualProjection = consumptionAnnualProjection,
+                costAnnualProjection = costAnnualProjection,
+            )
+        }
+
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                insights = insights,
+            )
+        }
+
+        return insights
+    }
+
+    private suspend fun propagateConsumptions(
         consumptionQueryFilter: ConsumptionQueryFilter,
         consumptions: List<Consumption>,
     ) {
         _uiState.update { currentUiState ->
-            val consumptionRange = if (consumptions.isEmpty()) {
-                0.0..0.0 // Return a default range if the list is empty
-            } else {
-                0.0..ceil(consumptions.maxOf { it.consumption } * 10) / 10.0
-            }
-
+            val consumptionRange = consumptions.getRange()
+            val labels = consumptionQueryFilter.generateChartLabels(consumptions = consumptions)
+            val consumptionGroupedCells = consumptionQueryFilter.groupChartCells(consumptions = consumptions)
+            val toolTips = consumptionQueryFilter.generateChartToolTips(consumptions = consumptions)
             val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
                 consumptions.forEachIndexed { index, consumption ->
                     add(
@@ -250,12 +322,7 @@ class UsageViewModel(
                 }
             }
 
-            val labels = consumptionQueryFilter.generateChartLabels(consumptions = consumptions)
-            val consumptionGroupedCells = consumptionQueryFilter.groupChartCells(consumptions = consumptions)
-            val toolTips = consumptionQueryFilter.generateChartToolTips(consumptions = consumptions)
-
             currentUiState.copy(
-                isLoading = false,
                 consumptionQueryFilter = consumptionQueryFilter,
                 consumptionGroupedCells = consumptionGroupedCells,
                 consumptionRange = consumptionRange,
@@ -279,7 +346,6 @@ class UsageViewModel(
                 )
             }
             currentUiState.copy(
-                isLoading = false,
                 errorMessages = newErrorMessages,
             )
         }
