@@ -55,7 +55,7 @@ import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_expires_in
 import kunigami.composeapp.generated.resources.agile_product_code_retail_region
 import kunigami.composeapp.generated.resources.agile_tariff_standing_charge
-import kunigami.composeapp.generated.resources.agile_unit_rate
+import kunigami.composeapp.generated.resources.p_kwh
 import kunigami.composeapp.generated.resources.unknown
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -233,7 +233,7 @@ private fun AgileTariffCardCompact(
                             overflow = TextOverflow.Clip,
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Bold,
-                            text = stringResource(resource = Res.string.agile_unit_rate),
+                            text = stringResource(resource = Res.string.p_kwh),
                         )
                     }
                 }
@@ -360,7 +360,7 @@ private fun AgileTariffCardExpanded(
                             overflow = TextOverflow.Clip,
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold,
-                            text = stringResource(resource = Res.string.agile_unit_rate),
+                            text = stringResource(resource = Res.string.p_kwh),
                         )
                     }
                 }
