@@ -9,12 +9,16 @@ package com.rwmobi.kunigami.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -52,14 +56,16 @@ fun IconTextButton(
             onClick = onClick,
         ) {
             Row(
-                modifier = Modifier.wrapContentSize(),
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .height(intrinsicSize = IntrinsicSize.Min),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
             ) {
                 Icon(
                     modifier = Modifier
-                        .size(size = dimension.grid_3)
-                        .padding(all = dimension.grid_0_5),
+                        .fillMaxHeight()
+                        .aspectRatio(ratio = 1f),
                     painter = icon,
                     contentDescription = null,
                 )
@@ -67,6 +73,7 @@ fun IconTextButton(
                 Spacer(modifier = Modifier.width(width = dimension.grid_1))
 
                 Text(
+                    modifier = Modifier.wrapContentHeight(),
                     style = MaterialTheme.typography.labelMedium,
                     text = text,
                 )

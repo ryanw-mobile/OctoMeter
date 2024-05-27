@@ -8,7 +8,8 @@
 package com.rwmobi.kunigami.ui.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,11 +34,11 @@ import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel
 import com.rwmobi.kunigami.ui.viewmodels.UsageViewModel
 import org.koin.mp.KoinPlatform.getKoin
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun AppNavigationHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    windowSizeClass: WindowSizeClass,
     lastDoubleTappedNavItem: AppNavigationItem?,
     onShowSnackbar: suspend (String) -> Unit,
     onScrolledToTop: (AppNavigationItem) -> Unit,
@@ -59,11 +60,12 @@ fun AppNavigationHost(
         startDestination = AppNavigationItem.AGILE.name,
     ) {
         composable(route = AppNavigationItem.USAGE.name) {
+            // Workaround: passing through parameters not working on iOS, so we do it here
+            val screenSizeInfo = getScreenSizeInfo()
+            val windowSizeClass = calculateWindowSizeClass()
             val viewModel: UsageViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
 
-            // workaround: Issue with iOS we have to do it here
-            val screenSizeInfo = getScreenSizeInfo()
             viewModel.notifyScreenSizeChanged(
                 screenSizeInfo = screenSizeInfo,
                 windowSizeClass = windowSizeClass,
@@ -91,11 +93,12 @@ fun AppNavigationHost(
         }
 
         composable(route = AppNavigationItem.AGILE.name) {
+            // workaround: Issue with iOS we have to do it here
+            val screenSizeInfo = getScreenSizeInfo()
+            val windowSizeClass = calculateWindowSizeClass()
             val viewModel: AgileViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
 
-            // workaround: Issue with iOS we have to do it here
-            val screenSizeInfo = getScreenSizeInfo()
             viewModel.notifyScreenSizeChanged(
                 screenSizeInfo = screenSizeInfo,
                 windowSizeClass = windowSizeClass,
@@ -142,8 +145,10 @@ fun AppNavigationHost(
         }
 
         composable(route = AppNavigationItem.ACCOUNT.name) {
+            val windowSizeClass = calculateWindowSizeClass()
             val viewModel: AccountViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
+
             viewModel.notifyWindowSizeClassChanged(windowSizeClass = windowSizeClass)
 
             LaunchedEffect(lastDoubleTappedNavItem) {

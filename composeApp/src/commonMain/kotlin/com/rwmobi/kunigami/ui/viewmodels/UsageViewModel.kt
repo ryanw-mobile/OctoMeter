@@ -162,7 +162,7 @@ class UsageViewModel(
 
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo, windowSizeClass: WindowSizeClass) {
         _uiState.update { currentUiState ->
-            Logger.v("UsageViewModel: ${screenSizeInfo.heightDp}h x ${screenSizeInfo.widthDp}w, isPortrait = ${screenSizeInfo.isPortrait()}")
+            Logger.v("UsageViewModel: $windowSizeClass, ${screenSizeInfo.heightDp}h x ${screenSizeInfo.widthDp}w, isPortrait = ${screenSizeInfo.isPortrait()}")
             val requestedLayout = if (screenSizeInfo.isPortrait()) {
                 RequestedChartLayout.Portrait
             } else {
