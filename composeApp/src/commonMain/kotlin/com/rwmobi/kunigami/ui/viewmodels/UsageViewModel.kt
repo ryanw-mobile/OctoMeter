@@ -7,15 +7,20 @@
 
 package com.rwmobi.kunigami.ui.viewmodels
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
+import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
+import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.model.consumption.getConsumptionTimeSpan
+import com.rwmobi.kunigami.domain.model.consumption.getRange
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
-import com.rwmobi.kunigami.domain.usecase.GetUserAccountUseCase
+import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -24,6 +29,7 @@ import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionQueryFilter
+import com.rwmobi.kunigami.ui.model.consumption.Insights
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
 import io.github.koalaplot.core.bar.VerticalBarPlotEntry
@@ -40,9 +46,8 @@ import org.jetbrains.compose.resources.getString
 import kotlin.math.ceil
 
 class UsageViewModel(
-    private val octopusRepository: RestApiRepository,
+    private val syncUserProfileUseCase: SyncUserProfileUseCase,
     private val getConsumptionUseCase: GetConsumptionUseCase,
-    private val getUserAccountUseCase: GetUserAccountUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UsageUIState> = MutableStateFlow(UsageUIState(isLoading = true))
@@ -169,7 +174,7 @@ class UsageViewModel(
         }
     }
 
-    fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo) {
+    fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo, windowSizeClass: WindowSizeClass) {
         _uiState.update { currentUiState ->
             Logger.v("UsageViewModel: ${screenSizeInfo.heightDp}h x ${screenSizeInfo.widthDp}w, isPortrait = ${screenSizeInfo.isPortrait()}")
             val requestedLayout = if (screenSizeInfo.isPortrait()) {
@@ -183,6 +188,7 @@ class UsageViewModel(
             val usageColumns = (screenSizeInfo.widthDp / usageColumnWidth).toInt()
 
             currentUiState.copy(
+                requestedAdaptiveLayout = windowSizeClass.widthSizeClass,
                 requestedChartLayout = requestedLayout,
                 requestedUsageColumns = usageColumns,
             )

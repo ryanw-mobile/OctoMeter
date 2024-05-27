@@ -17,8 +17,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     factory {
         UsageViewModel(
-            octopusRepository = get(),
-            getUserAccountUseCase = get(),
+            syncUserProfileUseCase = get(),
             getConsumptionUseCase = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )

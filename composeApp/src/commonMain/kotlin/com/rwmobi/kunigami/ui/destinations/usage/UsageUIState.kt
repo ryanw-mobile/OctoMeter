@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.ui.destinations.usage
 
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -21,6 +22,7 @@ data class UsageUIState(
     val isDemoMode: Boolean? = null,
     val account: Account? = null, // Under demo mode, viewModel should provide a fake Account object
     val requestedChartLayout: RequestedChartLayout = RequestedChartLayout.Portrait,
+    val requestedAdaptiveLayout: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     val requestedUsageColumns: Int = 1,
     val consumptionQueryFilter: ConsumptionQueryFilter = ConsumptionQueryFilter(),
     val consumptionGroupedCells: List<ConsumptionGroupedCells> = emptyList(),
