@@ -34,6 +34,8 @@ import kunigami.composeapp.generated.resources.account_tariff_end_date
 import kunigami.composeapp.generated.resources.account_tariff_standing_charge
 import kunigami.composeapp.generated.resources.account_tariff_start_date
 import kunigami.composeapp.generated.resources.account_tariff_unit_rate
+import kunigami.composeapp.generated.resources.agile_product_code_retail_region
+import kunigami.composeapp.generated.resources.unknown
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
@@ -80,9 +82,10 @@ private fun TariffLayoutCompact(
             text = tariff.fullName,
         )
 
+        val regionCode = tariff.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
         Text(
             style = MaterialTheme.typography.bodySmall,
-            text = tariff.productCode,
+            text = stringResource(resource = Res.string.agile_product_code_retail_region, tariff.productCode, regionCode),
         )
 
         Spacer(modifier = Modifier.height(height = dimension.grid_2))
@@ -176,9 +179,10 @@ private fun TariffLayoutWide(
                 text = tariff.fullName,
             )
 
+            val regionCode = tariff.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
             Text(
                 style = MaterialTheme.typography.bodySmall,
-                text = tariff.productCode,
+                text = stringResource(resource = Res.string.agile_product_code_retail_region, tariff.productCode, regionCode),
             )
 
             Spacer(modifier = Modifier.height(height = dimension.grid_2))
