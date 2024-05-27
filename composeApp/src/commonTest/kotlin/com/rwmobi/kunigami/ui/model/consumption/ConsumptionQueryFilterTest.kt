@@ -10,6 +10,7 @@ import com.rwmobi.kunigami.domain.extensions.roundToDayEnd
 import com.rwmobi.kunigami.domain.extensions.roundToDayStart
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.extensions.toLocalMonthYear
+import com.rwmobi.kunigami.domain.extensions.toLocalWeekday
 import com.rwmobi.kunigami.domain.extensions.toLocalYear
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -115,7 +116,7 @@ class ConsumptionQueryFilterTest {
     @Test
     fun `getConsumptionPeriodString should return correct string for DAY_HALF_HOURLY`() {
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, pointOfReference = now)
-        filter.getConsumptionPeriodString() shouldBe now.toLocalDateString()
+        filter.getConsumptionPeriodString() shouldBe "${now.toLocalWeekday()}, ${now.toLocalDateString()}"
     }
 
     @Test
