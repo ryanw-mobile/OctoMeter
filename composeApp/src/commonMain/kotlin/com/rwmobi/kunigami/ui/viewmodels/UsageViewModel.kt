@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
+import com.rwmobi.kunigami.domain.extensions.roundToDayEnd
+import com.rwmobi.kunigami.domain.extensions.roundToDayStart
 import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.account.UserProfile
@@ -39,10 +41,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_load_account
 import org.jetbrains.compose.resources.getString
+import kotlin.time.Duration
 
 class UsageViewModel(
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
@@ -68,46 +72,54 @@ class UsageViewModel(
             val userProfile = getUserProfile()
 
             if (_uiState.value.isDemoMode == true) {
-                // Call isolated fake data generator
+                // TODO: Call isolated fake data generator
             } else if (userProfile != null) {
-                val accountMoveInDate = userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST
-                var newConsumptionQueryFilter = _uiState.value.consumptionQueryFilter.copy()
+                // Currently smart meter readings are not real-time. Yesterday's figures are the latest we can get.
+                val pointOfReference = Clock.System.now() - Duration.parse(value = "1d")
+                var newConsumptionQueryFilter = ConsumptionQueryFilter(
+                    presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
+                    pointOfReference = pointOfReference,
+                    requestedStart = pointOfReference.roundToDayStart(),
+                    requestedEnd = pointOfReference.roundToDayEnd(),
+                )
 
                 // UIState comes with a default presentationStyle. We try to go backward 5 times hoping for some valid results
-                (5 downTo 1).forEach { _ ->
-                    getConsumptionUseCase(
-                        periodFrom = newConsumptionQueryFilter.requestedStart,
-                        periodTo = newConsumptionQueryFilter.requestedEnd,
-                        groupBy = newConsumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
-                    ).fold(
-                        onSuccess = { consumptions ->
-                            // During BST we expect 2 half-hour records returned for the last day
-                            if (consumptions.size > 2) {
-                                propagateInsights(
-                                    tariff = userProfile.tariff,
-                                    consumptions = consumptions,
-                                )
-                                propagateConsumptions(
-                                    consumptionQueryFilter = newConsumptionQueryFilter,
-                                    consumptions = consumptions,
-                                )
-                                return@forEach
-                            } else {
-                                newConsumptionQueryFilter.navigateBackward(accountMoveInDate = accountMoveInDate)?.let {
-                                    newConsumptionQueryFilter = it
-                                } ?: run {
-                                    // No data
-                                    clearDataFields()
-                                    return@forEach
+                val accountMoveInDate = userProfile.account?.movedInAt ?: Instant.DISTANT_PAST
+                run loop@{
+                    for (iteration in 0..3) {
+                        getConsumptionUseCase(
+                            periodFrom = newConsumptionQueryFilter.requestedStart,
+                            periodTo = newConsumptionQueryFilter.requestedEnd,
+                            groupBy = newConsumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
+                        ).fold(
+                            onSuccess = { consumptions ->
+                                // During BST we expect 2 half-hour records returned for the last day
+                                if (consumptions.size > 2) {
+                                    propagateInsights(
+                                        tariff = userProfile.tariff,
+                                        consumptions = consumptions,
+                                    )
+                                    propagateConsumptions(
+                                        consumptionQueryFilter = newConsumptionQueryFilter,
+                                        consumptions = consumptions,
+                                    )
+                                    return@loop // Done
+                                } else {
+                                    newConsumptionQueryFilter.navigateBackward(accountMoveInDate = accountMoveInDate)?.let {
+                                        newConsumptionQueryFilter = it
+                                    } ?: run {
+                                        clearDataFields()
+                                        return@loop // Can't go back. Give up with no data.
+                                    }
                                 }
-                            }
-                        },
-                        onFailure = { throwable ->
-                            updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
-                            Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
-                            return@forEach
-                        },
-                    )
+                            },
+                            onFailure = { throwable ->
+                                updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
+                                Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+                                return@loop // API Error. Give up
+                            },
+                        )
+                    }
                 }
             } else {
                 // Not demo mode but couldn't get the user profile. We won't show anything
