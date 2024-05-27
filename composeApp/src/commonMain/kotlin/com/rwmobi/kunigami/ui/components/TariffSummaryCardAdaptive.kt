@@ -50,6 +50,7 @@ internal fun TariffSummaryCardAdaptive(
     modifier: Modifier = Modifier,
     layoutType: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     heading: String,
+    headingTextAlign: TextAlign = TextAlign.Start,
     tariff: Tariff,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -66,6 +67,7 @@ internal fun TariffSummaryCardAdaptive(
             TariffSummaryCardLinear(
                 modifier = cardModifier,
                 heading = heading,
+                headingTextAlign = headingTextAlign,
                 tariff = tariff,
             )
         }
@@ -74,6 +76,7 @@ internal fun TariffSummaryCardAdaptive(
             TariffSummaryCardLinear(
                 modifier = cardModifier,
                 heading = heading,
+                headingTextAlign = headingTextAlign,
                 tariff = tariff,
             )
         }
@@ -82,6 +85,7 @@ internal fun TariffSummaryCardAdaptive(
             TariffSummaryCardThreeColumns(
                 modifier = cardModifier,
                 heading = heading,
+                headingTextAlign = headingTextAlign,
                 tariff = tariff,
             )
         }
@@ -92,6 +96,7 @@ internal fun TariffSummaryCardAdaptive(
 private fun TariffSummaryCardLinear(
     modifier: Modifier = Modifier,
     heading: String,
+    headingTextAlign: TextAlign,
     tariff: Tariff,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -103,6 +108,7 @@ private fun TariffSummaryCardLinear(
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
+            textAlign = headingTextAlign,
             color = MaterialTheme.colorScheme.onSurface,
             text = heading,
         )
@@ -175,6 +181,7 @@ private fun TariffSummaryCardLinear(
 private fun TariffSummaryCardTwoColumns(
     modifier: Modifier = Modifier,
     heading: String,
+    headingTextAlign: TextAlign,
     tariff: Tariff,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -186,6 +193,7 @@ private fun TariffSummaryCardTwoColumns(
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
+            textAlign = headingTextAlign,
             color = MaterialTheme.colorScheme.onSurface,
             text = heading,
         )
@@ -248,6 +256,7 @@ private fun TariffSummaryCardTwoColumns(
 private fun TariffSummaryCardThreeColumns(
     modifier: Modifier = Modifier,
     heading: String,
+    headingTextAlign: TextAlign,
     tariff: Tariff,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -259,6 +268,7 @@ private fun TariffSummaryCardThreeColumns(
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
+            textAlign = headingTextAlign,
             color = MaterialTheme.colorScheme.onSurface,
             text = heading,
         )
@@ -330,6 +340,7 @@ private fun Preview() {
                 TariffSummaryCardAdaptive(
                     modifier = Modifier.fillMaxWidth(),
                     heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+                    headingTextAlign = TextAlign.Center,
                     tariff = TariffSamples.agileFlex221125,
                     layoutType = WindowWidthSizeClass.Compact,
                 )
@@ -337,6 +348,7 @@ private fun Preview() {
                 TariffSummaryCardAdaptive(
                     modifier = Modifier.fillMaxWidth(),
                     heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+                    headingTextAlign = TextAlign.Center,
                     tariff = TariffSamples.agileFlex221125,
                     layoutType = WindowWidthSizeClass.Medium,
                 )
@@ -344,6 +356,7 @@ private fun Preview() {
                 TariffSummaryCardAdaptive(
                     modifier = Modifier.fillMaxWidth(),
                     heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+                    headingTextAlign = TextAlign.Center,
                     tariff = TariffSamples.agileFlex221125,
                     layoutType = WindowWidthSizeClass.Expanded,
                 )

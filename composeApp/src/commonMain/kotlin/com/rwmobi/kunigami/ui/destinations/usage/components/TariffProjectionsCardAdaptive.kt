@@ -23,6 +23,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
@@ -85,6 +86,7 @@ private fun TariffProjectionsCardLinear(
                 modifier = Modifier.fillMaxWidth(),
                 layoutType = WindowWidthSizeClass.Compact,
                 heading = stringResource(resource = Res.string.usage_current_tariff).uppercase(),
+                headingTextAlign = TextAlign.Center,
                 tariff = it,
             )
         }
@@ -140,6 +142,7 @@ private fun TariffProjectionsCardLTwoColumns(
                 modifier = Modifier.weight(weight = 0.4f).fillMaxHeight(),
                 layoutType = WindowWidthSizeClass.Compact,
                 heading = stringResource(resource = Res.string.usage_current_tariff).uppercase(),
+                headingTextAlign = TextAlign.Center,
                 tariff = it,
             )
         }
@@ -164,6 +167,7 @@ private fun TariffProjectionsCardThreeColumns(
                 modifier = Modifier.weight(weight = 1f).fillMaxHeight(),
                 layoutType = WindowWidthSizeClass.Compact,
                 heading = stringResource(resource = Res.string.usage_current_tariff).uppercase(),
+                headingTextAlign = TextAlign.Center,
                 tariff = it,
             )
         }

@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
@@ -200,6 +201,7 @@ fun AgileScreen(
                                         top = dimension.grid_2,
                                     ),
                                 heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+                                headingTextAlign = TextAlign.Start,
                                 tariff = uiState.userProfile.tariff,
                                 layoutType = uiState.requestedAdaptiveLayout,
                             )
