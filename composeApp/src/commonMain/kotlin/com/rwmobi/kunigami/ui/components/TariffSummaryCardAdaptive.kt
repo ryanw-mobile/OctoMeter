@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.destinations.agile.components
+package com.rwmobi.kunigami.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
@@ -50,10 +50,19 @@ internal fun TariffSummaryCardAdaptive(
     heading: String,
     tariff: Tariff,
 ) {
+    val dimension = LocalDensity.current.getDimension()
+    val cardModifier = modifier
+        .clip(shape = MaterialTheme.shapes.medium)
+        .background(color = MaterialTheme.colorScheme.surfaceContainerHighest)
+        .padding(
+            vertical = dimension.grid_2,
+            horizontal = dimension.grid_2,
+        )
+
     when (layoutType) {
         WindowWidthSizeClass.Compact -> {
             TariffSummaryCardLinear(
-                modifier = modifier,
+                modifier = cardModifier,
                 heading = heading,
                 tariff = tariff,
             )
@@ -61,7 +70,7 @@ internal fun TariffSummaryCardAdaptive(
 
         WindowWidthSizeClass.Medium -> {
             TariffSummaryCardTwoColumns(
-                modifier = modifier,
+                modifier = cardModifier,
                 heading = heading,
                 tariff = tariff,
             )
@@ -69,7 +78,7 @@ internal fun TariffSummaryCardAdaptive(
 
         else -> {
             TariffSummaryCardThreeColumns(
-                modifier = modifier,
+                modifier = cardModifier,
                 heading = heading,
                 tariff = tariff,
             )
@@ -86,13 +95,7 @@ private fun TariffSummaryCardLinear(
     val dimension = LocalDensity.current.getDimension()
 
     Column(
-        modifier = modifier
-            .clip(shape = MaterialTheme.shapes.medium)
-            .background(color = MaterialTheme.colorScheme.surfaceContainer)
-            .padding(
-                vertical = dimension.grid_2,
-                horizontal = dimension.grid_2,
-            ),
+        modifier = modifier,
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
@@ -150,13 +153,7 @@ private fun TariffSummaryCardTwoColumns(
     val dimension = LocalDensity.current.getDimension()
 
     Column(
-        modifier = modifier
-            .clip(shape = MaterialTheme.shapes.medium)
-            .background(color = MaterialTheme.colorScheme.surfaceContainer)
-            .padding(
-                vertical = dimension.grid_2,
-                horizontal = dimension.grid_2,
-            ),
+        modifier = modifier,
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
@@ -228,13 +225,7 @@ private fun TariffSummaryCardThreeColumns(
     val dimension = LocalDensity.current.getDimension()
 
     Column(
-        modifier = modifier
-            .clip(shape = MaterialTheme.shapes.medium)
-            .background(color = MaterialTheme.colorScheme.surfaceContainer)
-            .padding(
-                vertical = dimension.grid_2,
-                horizontal = dimension.grid_2,
-            ),
+        modifier = modifier,
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),

@@ -43,10 +43,10 @@ import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
+import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.destinations.agile.components.AgileTariffCardAdaptive
-import com.rwmobi.kunigami.ui.destinations.agile.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
 import com.rwmobi.kunigami.ui.extensions.partitionList
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
