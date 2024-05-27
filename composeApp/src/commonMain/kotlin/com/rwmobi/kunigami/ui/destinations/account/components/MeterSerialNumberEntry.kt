@@ -61,7 +61,7 @@ internal fun MeterSerialNumberEntry(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(shape = MaterialTheme.shapes.small)
-                .background(color = MaterialTheme.colorScheme.surfaceContainer)
+                .background(color = MaterialTheme.colorScheme.surfaceContainerHighest)
                 .requiredHeight(height = dimension.minTouchTarget)
                 .selectable(
                     selected = isMeterSelected,
