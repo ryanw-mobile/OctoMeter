@@ -45,6 +45,7 @@ improved later:
 
 * Dual-rate tariffs (day unit rate and night unit rates) are not fully-supported
 * Native iOS UI theming (reusing Android Material 3 components right now)
+* British Daylight Saving Time issues: We do not have sufficient test data yet.
 
 <br /><br />
 
@@ -52,8 +53,8 @@ improved later:
 
 I use Android Studio Koala to build the Android and Deskop apps. Xcode 15.4 for iOS.
 
-* Android: You can download the apk from the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases.
-* iOS: [Test flight](https://testflight.apple.com/join/T6I940RE). Not in operation yet.
+* Android: You can download the apk from the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
+* iOS: We are setting up TestFlight closed testing. Send your TestFlight Apple ID to `kunigami(at)rwmobi.com` for time-limited testing. We may have to revoke access due to the 100 testers limitation.
 * To run the desktop app, execute `./gradlew runReleaseDistrubutable` or just `./gradlew run`
 * To export the desktop app into MacOS distributable, execute `./gradlew packageDmg` (I don't use
   Windows)
