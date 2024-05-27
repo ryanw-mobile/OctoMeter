@@ -69,7 +69,7 @@ internal fun TariffSummaryCardAdaptive(
         }
 
         WindowWidthSizeClass.Medium -> {
-            TariffSummaryCardTwoColumns(
+            TariffSummaryCardLinear(
                 modifier = cardModifier,
                 heading = heading,
                 tariff = tariff,

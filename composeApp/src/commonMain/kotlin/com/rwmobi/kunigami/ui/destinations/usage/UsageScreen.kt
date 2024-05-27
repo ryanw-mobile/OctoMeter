@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +27,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -43,8 +45,11 @@ import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
+import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
+import com.rwmobi.kunigami.ui.destinations.usage.components.AnnualProjectionCardAdaptive
+import com.rwmobi.kunigami.ui.destinations.usage.components.InsightsCard
 import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
 import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
 import com.rwmobi.kunigami.ui.extensions.partitionList
@@ -57,6 +62,7 @@ import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.bolt
 import kunigami.composeapp.generated.resources.kwh
 import kunigami.composeapp.generated.resources.unit_kwh
+import kunigami.composeapp.generated.resources.usage_current_tariff
 import kunigami.composeapp.generated.resources.usage_energy_consumption_breakdown
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -108,7 +114,7 @@ fun UsageScreen(
                                     .height(height = dimension.minListItemHeight),
                                 currentPresentationStyle = uiState.consumptionQueryFilter.presentationStyle,
                                 title = getConsumptionPeriodString(),
-                                canNavigateBack = uiState.consumptionQueryFilter.canNavigateBackward(accountMoveInDate = uiState.account?.movedInAt ?: Instant.DISTANT_PAST),
+                                canNavigateBack = uiState.consumptionQueryFilter.canNavigateBackward(accountMoveInDate = uiState.userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST),
                                 canNavigateForward = uiState.consumptionQueryFilter.canNavigateForward(),
                                 onNavigateBack = uiEvent.onPreviousTimeFrame,
                                 onNavigateForward = uiEvent.onNextTimeFrame,
@@ -151,6 +157,81 @@ fun UsageScreen(
                                         tooltipGenerator = { index ->
                                             barChartData.tooltips[index]
                                         },
+                                    )
+                                }
+                            }
+                        }
+
+                        item(key = "activeTariff") {
+                            uiState.userProfile?.tariff?.let {
+                                TariffSummaryCardAdaptive(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            horizontal = dimension.grid_2,
+                                            vertical = dimension.grid_1,
+                                        ),
+                                    layoutType = uiState.requestedAdaptiveLayout,
+                                    heading = stringResource(resource = Res.string.usage_current_tariff).uppercase(),
+                                    tariff = it,
+                                )
+                            }
+                        }
+
+                        item(key = "tariffAndEstimation") {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        horizontal = dimension.grid_2,
+                                        vertical = dimension.grid_1,
+                                    ),
+                                horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+                            ) {
+                                uiState.insights?.let { insights ->
+                                    InsightsCard(
+                                        modifier = Modifier.weight(0.5f),
+                                        insights = insights,
+                                    )
+
+                                    AnnualProjectionCardAdaptive(
+                                        modifier = Modifier.weight(0.5f),
+                                        insights = insights,
+                                        layoutType = uiState.requestedAdaptiveLayout,
+                                    )
+                                }
+                            }
+                        }
+
+                        item(key = "trial") {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(IntrinsicSize.Max)
+                                    .padding(
+                                        horizontal = dimension.grid_2,
+                                        vertical = dimension.grid_1,
+                                    ),
+                                horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+                            ) {
+                                uiState.userProfile?.tariff?.let {
+                                    TariffSummaryCardAdaptive(
+                                        modifier = Modifier.weight(1f),
+                                        layoutType = WindowWidthSizeClass.Compact,
+                                        heading = stringResource(resource = Res.string.usage_current_tariff).uppercase(),
+                                        tariff = it,
+                                    )
+                                }
+
+                                uiState.insights?.let { insights ->
+                                    InsightsCard(
+                                        modifier = Modifier.weight(1f),
+                                        insights = insights,
+                                    )
+
+                                    AnnualProjectionCardAdaptive(
+                                        modifier = Modifier.weight(1f),
+                                        insights = insights,
                                     )
                                 }
                             }
