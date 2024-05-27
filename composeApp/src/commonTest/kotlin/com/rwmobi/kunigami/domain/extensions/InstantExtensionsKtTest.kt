@@ -32,17 +32,17 @@ class InstantExtensionsKtTest {
     }
 
     @Test
-    fun `roundDownToDay should round down to start of day`() {
+    fun `roundToDayStart should round down to start of day`() {
         val instant = LocalDateTime(2023, 5, 1, 10, 45, 15).toInstant(timeZone)
         val expected = LocalDateTime(2023, 5, 1, 0, 0, 0).toInstant(timeZone)
-        instant.roundDownToDay() shouldBe expected
+        instant.roundToDayStart() shouldBe expected
     }
 
     @Test
-    fun `roundUpToDayEnd should round up to end of day`() {
+    fun `roundToDayEnd should round up to end of day`() {
         val instant = LocalDateTime(2023, 5, 1, 10, 45, 15).toInstant(timeZone)
         val expected = LocalDateTime(2023, 5, 1, 23, 59, 59, 999_999_999).toInstant(timeZone)
-        instant.roundUpToDayEnd() shouldBe expected
+        instant.roundToDayEnd() shouldBe expected
     }
 
     @Test

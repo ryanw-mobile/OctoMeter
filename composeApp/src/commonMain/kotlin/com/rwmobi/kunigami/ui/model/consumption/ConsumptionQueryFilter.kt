@@ -8,8 +8,8 @@
 package com.rwmobi.kunigami.ui.model.consumption
 
 import androidx.compose.runtime.Immutable
-import com.rwmobi.kunigami.domain.extensions.roundDownToDay
-import com.rwmobi.kunigami.domain.extensions.roundUpToDayEnd
+import com.rwmobi.kunigami.domain.extensions.roundToDayEnd
+import com.rwmobi.kunigami.domain.extensions.roundToDayStart
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.extensions.toLocalDay
 import com.rwmobi.kunigami.domain.extensions.toLocalDayMonth
@@ -47,8 +47,8 @@ import kotlin.time.Duration.Companion.nanoseconds
 data class ConsumptionQueryFilter(
     val presentationStyle: ConsumptionPresentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
     val pointOfReference: Instant = Clock.System.now(),
-    val requestedStart: Instant = Clock.System.now().roundDownToDay(),
-    val requestedEnd: Instant = Clock.System.now().roundUpToDayEnd(),
+    val requestedStart: Instant = Clock.System.now(),
+    val requestedEnd: Instant = Clock.System.now(),
 ) {
     companion object {
         fun calculateStartDate(pointOfReference: Instant, presentationStyle: ConsumptionPresentationStyle): Instant {
@@ -57,7 +57,7 @@ data class ConsumptionQueryFilter(
 
             return when (presentationStyle) {
                 ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
-                    pointOfReference.roundDownToDay()
+                    pointOfReference.roundToDayStart()
                 }
 
                 ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
@@ -100,7 +100,7 @@ data class ConsumptionQueryFilter(
 
             return when (presentationStyle) {
                 ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
-                    pointOfReference.roundUpToDayEnd()
+                    pointOfReference.roundToDayEnd()
                 }
 
                 ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
@@ -143,7 +143,7 @@ data class ConsumptionQueryFilter(
      */
     fun getConsumptionPeriodString(): String {
         return when (presentationStyle) {
-            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> pointOfReference.toLocalDateString()
+            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> "${pointOfReference.toLocalWeekday()}, ${pointOfReference.toLocalDateString()}"
             ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> "${requestedStart.toLocalDateString().substringBefore(delimiter = ",")} - ${requestedEnd.toLocalDateString()}"
             ConsumptionPresentationStyle.MONTH_WEEKS -> pointOfReference.toLocalMonthYear()
             ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> pointOfReference.toLocalMonthYear()
