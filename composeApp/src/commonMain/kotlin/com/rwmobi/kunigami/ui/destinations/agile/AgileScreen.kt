@@ -107,7 +107,7 @@ fun AgileScreen(
                     state = lazyListState,
                 ) {
                     if (uiState.isDemoMode == true) {
-                        item {
+                        item(key = "demoCta") {
                             DemoModeCtaAdaptive(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -121,7 +121,7 @@ fun AgileScreen(
                     }
 
                     uiState.barChartData?.let { barChartData ->
-                        item {
+                        item(key = "chart") {
                             BoxWithConstraints(
                                 modifier = Modifier.padding(top = dimension.grid_1),
                             ) {

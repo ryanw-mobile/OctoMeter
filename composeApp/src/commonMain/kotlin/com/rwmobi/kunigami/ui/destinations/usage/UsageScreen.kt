@@ -119,12 +119,12 @@ fun UsageScreen(
                     }
 
                     if (uiState.consumptionGroupedCells.isEmpty()) {
-                        item {
+                        item(key = "noData") {
                             Text("no data")
                         }
                     } else {
                         uiState.barChartData?.let { barChartData ->
-                            item {
+                            item(key = "chart") {
                                 BoxWithConstraints {
                                     val constraintModifier = when (uiState.requestedChartLayout) {
                                         is RequestedChartLayout.Portrait -> {
