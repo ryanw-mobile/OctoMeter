@@ -19,6 +19,11 @@
     <string name="kwh">kWh</string>
     <string name="unit_kwh">%1$s kWh</string>
     <string name="unit_pound">£%1$s</string>
+    <string name="standing_charge">Standing Charge</string>
+    <string name="standard_unit_rate">Standard Unit Rate</string>
+    <string name="unit_p_day">%1$d p/day</string>
+    <string name="unit_p_kwh">%1$d p/kWh</string>
+
     <string name="selected">Selected</string>
     <string name="loading">Loading...</string>
     <string name="provide_api_key">Provide API Key</string>
@@ -34,7 +39,7 @@
     <string name="grouping_label_month_weeks">Week Starting On</string>
     <string name="usage_chart_tooltip_spot_kwh">%1$s\n%2$s kWh</string>
     <string name="usage_chart_tooltip_range_kwh">%1$s - %2$s\n%3$s kWh</string>
-    <string name="usage_current_tariff">Your active tariff</string>
+    <string name="usage_current_tariff">Active tariff</string>
     <string name="usage_insights">Insights</string>
     <plurals name="usage_insights_consumption">
         <item quantity="one">Consumed %1$s kWh in one day</item>
@@ -49,7 +54,6 @@
     <string name="agile_about_tariff">About this tariff</string>
     <string name="agile_unit_rate_details">Published Unit Rates</string>
     <string name="agile_vat_unit_rate">VAT Unit Rate (p/kWh)</string>
-    <string name="agile_unit_rate">p/kWh</string>
     <string name="agile_expires_in">Expires in %1$s:%2$s</string>
     <string name="agile_different_tariff">You are on a different tariff</string>
     <string name="agile_product_code_retail_region">%1$s (Region %2$s)</string>
