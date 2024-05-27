@@ -168,6 +168,7 @@ fun UsageScreen(
                                 layoutType = uiState.requestedAdaptiveLayout,
                                 tariff = uiState.userProfile?.tariff,
                                 insights = uiState.insights,
+                                mpan = uiState.userProfile?.selectedMpan,
                             )
                         }
 

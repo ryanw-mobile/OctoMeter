@@ -32,12 +32,14 @@ import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.account_mpan
 import kunigami.composeapp.generated.resources.usage_current_tariff
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun TariffProjectionsCardAdaptive(
     modifier: Modifier = Modifier,
+    mpan: String?,
     tariff: Tariff?,
     insights: Insights?,
     layoutType: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
@@ -46,6 +48,7 @@ internal fun TariffProjectionsCardAdaptive(
         WindowWidthSizeClass.Compact -> {
             TariffProjectionsCardLinear(
                 modifier = modifier,
+                mpan = mpan,
                 tariff = tariff,
                 insights = insights,
             )
@@ -54,6 +57,7 @@ internal fun TariffProjectionsCardAdaptive(
         WindowWidthSizeClass.Medium -> {
             TariffProjectionsCardLTwoColumns(
                 modifier = modifier,
+                mpan = mpan,
                 tariff = tariff,
                 insights = insights,
             )
@@ -62,6 +66,7 @@ internal fun TariffProjectionsCardAdaptive(
         else -> {
             TariffProjectionsCardThreeColumns(
                 modifier = modifier,
+                mpan = mpan,
                 tariff = tariff,
                 insights = insights,
             )
@@ -72,6 +77,7 @@ internal fun TariffProjectionsCardAdaptive(
 @Composable
 private fun TariffProjectionsCardLinear(
     modifier: Modifier = Modifier,
+    mpan: String?,
     tariff: Tariff?,
     insights: Insights?,
 ) {
@@ -87,6 +93,7 @@ private fun TariffProjectionsCardLinear(
                 layoutType = WindowWidthSizeClass.Compact,
                 heading = stringResource(resource = Res.string.usage_current_tariff).uppercase(),
                 headingTextAlign = TextAlign.Center,
+                subheading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) },
                 tariff = it,
             )
         }
@@ -109,6 +116,7 @@ private fun TariffProjectionsCardLinear(
 @Composable
 private fun TariffProjectionsCardLTwoColumns(
     modifier: Modifier = Modifier,
+    mpan: String?,
     tariff: Tariff?,
     insights: Insights?,
 ) {
@@ -143,6 +151,7 @@ private fun TariffProjectionsCardLTwoColumns(
                 layoutType = WindowWidthSizeClass.Compact,
                 heading = stringResource(resource = Res.string.usage_current_tariff).uppercase(),
                 headingTextAlign = TextAlign.Center,
+                subheading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) },
                 tariff = it,
             )
         }
@@ -152,6 +161,7 @@ private fun TariffProjectionsCardLTwoColumns(
 @Composable
 private fun TariffProjectionsCardThreeColumns(
     modifier: Modifier = Modifier,
+    mpan: String?,
     tariff: Tariff?,
     insights: Insights?,
 ) {
@@ -168,6 +178,7 @@ private fun TariffProjectionsCardThreeColumns(
                 layoutType = WindowWidthSizeClass.Compact,
                 heading = stringResource(resource = Res.string.usage_current_tariff).uppercase(),
                 headingTextAlign = TextAlign.Center,
+                subheading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) },
                 tariff = it,
             )
         }
@@ -213,6 +224,7 @@ private fun Preview() {
                     tariff = TariffSamples.agileFlex221125,
                     insights = insights,
                     layoutType = WindowWidthSizeClass.Expanded,
+                    mpan = "1200000123456",
                 )
 
                 TariffProjectionsCardAdaptive(
@@ -220,6 +232,7 @@ private fun Preview() {
                     tariff = TariffSamples.agileFlex221125,
                     insights = insights,
                     layoutType = WindowWidthSizeClass.Medium,
+                    mpan = "1200000123456",
                 )
 
                 TariffProjectionsCardAdaptive(
@@ -227,6 +240,7 @@ private fun Preview() {
                     tariff = TariffSamples.agileFlex221125,
                     insights = insights,
                     layoutType = WindowWidthSizeClass.Compact,
+                    mpan = "1200000123456",
                 )
             }
         }

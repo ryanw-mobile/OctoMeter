@@ -35,23 +35,22 @@ import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_different_tariff
-import kunigami.composeapp.generated.resources.agile_product_code_retail_region
 import kunigami.composeapp.generated.resources.agile_tariff_standard_unit_rate_two_lines
 import kunigami.composeapp.generated.resources.agile_tariff_standing_charge_two_lines
 import kunigami.composeapp.generated.resources.standard_unit_rate
 import kunigami.composeapp.generated.resources.standing_charge
 import kunigami.composeapp.generated.resources.unit_p_day
 import kunigami.composeapp.generated.resources.unit_p_kwh
-import kunigami.composeapp.generated.resources.unknown
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun TariffSummaryCardAdaptive(
     modifier: Modifier = Modifier,
     layoutType: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
+    tariff: Tariff,
     heading: String,
     headingTextAlign: TextAlign = TextAlign.Start,
-    tariff: Tariff,
+    subheading: String? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
     val cardModifier = modifier
@@ -68,6 +67,7 @@ internal fun TariffSummaryCardAdaptive(
                 modifier = cardModifier,
                 heading = heading,
                 headingTextAlign = headingTextAlign,
+                subheading = subheading,
                 tariff = tariff,
             )
         }
@@ -77,6 +77,7 @@ internal fun TariffSummaryCardAdaptive(
                 modifier = cardModifier,
                 heading = heading,
                 headingTextAlign = headingTextAlign,
+                subheading = subheading,
                 tariff = tariff,
             )
         }
@@ -86,6 +87,7 @@ internal fun TariffSummaryCardAdaptive(
                 modifier = cardModifier,
                 heading = heading,
                 headingTextAlign = headingTextAlign,
+                subheading = subheading,
                 tariff = tariff,
             )
         }
@@ -97,6 +99,7 @@ private fun TariffSummaryCardLinear(
     modifier: Modifier = Modifier,
     heading: String,
     headingTextAlign: TextAlign,
+    subheading: String?,
     tariff: Tariff,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -123,15 +126,16 @@ private fun TariffSummaryCardLinear(
             text = tariff.displayName,
         )
 
-        val regionCode = tariff.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurface.copy(
-                alpha = 0.68f,
-            ),
-            text = stringResource(resource = Res.string.agile_product_code_retail_region, tariff.productCode, regionCode),
-        )
+        subheading?.let {
+            Text(
+                modifier = Modifier.wrapContentWidth(),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(
+                    alpha = 0.68f,
+                ),
+                text = subheading,
+            )
+        }
 
         Spacer(modifier = Modifier.size(size = dimension.grid_2))
 
@@ -182,6 +186,7 @@ private fun TariffSummaryCardTwoColumns(
     modifier: Modifier = Modifier,
     heading: String,
     headingTextAlign: TextAlign,
+    subheading: String?,
     tariff: Tariff,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -216,15 +221,16 @@ private fun TariffSummaryCardTwoColumns(
                     text = tariff.displayName,
                 )
 
-                val regionCode = tariff.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
-                Text(
-                    modifier = Modifier.wrapContentWidth(),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(
-                        alpha = 0.68f,
-                    ),
-                    text = stringResource(resource = Res.string.agile_product_code_retail_region, tariff.productCode, regionCode),
-                )
+                subheading?.let {
+                    Text(
+                        modifier = Modifier.wrapContentWidth(),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(
+                            alpha = 0.68f,
+                        ),
+                        text = subheading,
+                    )
+                }
             }
 
             Column(
@@ -257,6 +263,7 @@ private fun TariffSummaryCardThreeColumns(
     modifier: Modifier = Modifier,
     heading: String,
     headingTextAlign: TextAlign,
+    subheading: String?,
     tariff: Tariff,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -291,15 +298,16 @@ private fun TariffSummaryCardThreeColumns(
                     text = tariff.displayName,
                 )
 
-                val regionCode = tariff.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
-                Text(
-                    modifier = Modifier.wrapContentWidth(),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(
-                        alpha = 0.68f,
-                    ),
-                    text = stringResource(resource = Res.string.agile_product_code_retail_region, tariff.productCode, regionCode),
-                )
+                subheading?.let {
+                    Text(
+                        modifier = Modifier.wrapContentWidth(),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(
+                            alpha = 0.68f,
+                        ),
+                        text = subheading,
+                    )
+                }
             }
 
             Column(
@@ -341,6 +349,7 @@ private fun Preview() {
                     modifier = Modifier.fillMaxWidth(),
                     heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
                     headingTextAlign = TextAlign.Center,
+                    subheading = "Sample subheading",
                     tariff = TariffSamples.agileFlex221125,
                     layoutType = WindowWidthSizeClass.Compact,
                 )
@@ -349,6 +358,7 @@ private fun Preview() {
                     modifier = Modifier.fillMaxWidth(),
                     heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
                     headingTextAlign = TextAlign.Center,
+                    subheading = "Sample subheading",
                     tariff = TariffSamples.agileFlex221125,
                     layoutType = WindowWidthSizeClass.Medium,
                 )
@@ -357,6 +367,7 @@ private fun Preview() {
                     modifier = Modifier.fillMaxWidth(),
                     heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
                     headingTextAlign = TextAlign.Center,
+                    subheading = "Sample subheading",
                     tariff = TariffSamples.agileFlex221125,
                     layoutType = WindowWidthSizeClass.Expanded,
                 )
