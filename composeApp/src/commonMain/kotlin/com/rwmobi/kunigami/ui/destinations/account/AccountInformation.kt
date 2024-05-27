@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -93,12 +94,13 @@ internal fun AccountInformationScreen(
                 Icon(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .aspectRatio(1f)
-                        .padding(end = dimension.grid_2),
+                        .aspectRatio(1f),
                     tint = MaterialTheme.colorScheme.secondary,
                     painter = painterResource(resource = Res.drawable.bulb),
                     contentDescription = null,
                 )
+
+                Spacer(modifier = Modifier.width(width = dimension.grid_1))
 
                 Text(
                     style = MaterialTheme.typography.displaySmall,
