@@ -9,4 +9,7 @@ plugins {
     alias(libs.plugins.kotlinCocoapods) apply false
     alias(libs.plugins.kotlinxKover) apply false
     alias(libs.plugins.kotlinJvm) apply false
+    alias(libs.plugins.android.test) apply false
+    alias(libs.plugins.jetbrains.kotlin.android) apply false
+    alias(libs.plugins.baselineprofile) apply false
 }
