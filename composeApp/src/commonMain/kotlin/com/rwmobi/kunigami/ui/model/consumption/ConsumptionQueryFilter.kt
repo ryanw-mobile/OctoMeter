@@ -143,7 +143,7 @@ data class ConsumptionQueryFilter(
      */
     fun getConsumptionPeriodString(): String {
         return when (presentationStyle) {
-            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> pointOfReference.toLocalDateString()
+            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> "${pointOfReference.toLocalWeekday()}, ${pointOfReference.toLocalDateString()}"
             ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> "${requestedStart.toLocalDateString().substringBefore(delimiter = ",")} - ${requestedEnd.toLocalDateString()}"
             ConsumptionPresentationStyle.MONTH_WEEKS -> pointOfReference.toLocalMonthYear()
             ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> pointOfReference.toLocalMonthYear()

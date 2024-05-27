@@ -102,6 +102,9 @@ fun Instant.toLocalWeekday(): String {
     return localDate.format(customFormat)
 }
 
+/***
+ * Returns DayOfWeekNames DayOfMonth
+ */
 fun Instant.toLocalWeekdayDay(): String {
     val localDate = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
     val customFormat = LocalDate.Format {
