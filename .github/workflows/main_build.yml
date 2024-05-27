@@ -33,7 +33,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Gradle build
-        run: ./gradlew build koverXmlReportRelease --no-daemon
+        run: ./gradlew :composeApp:buildReleasePreBundle koverXmlReportRelease --no-daemon
         env:
           BITRISE: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
