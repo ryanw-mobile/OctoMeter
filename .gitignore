@@ -52,3 +52,7 @@ captures
 .kotlin/metadata
 .kotlin/sessions
 iosApp/Pods
+
+# iOS
+*.mobileprovision
+*.p12

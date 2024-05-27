@@ -56,7 +56,7 @@ fun AppNavigationHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = AppNavigationItem.USAGE.name,
+        startDestination = AppNavigationItem.AGILE.name,
     ) {
         composable(route = AppNavigationItem.USAGE.name) {
             val viewModel: UsageViewModel = viewModel { getKoin().get() }

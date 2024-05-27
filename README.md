@@ -43,21 +43,22 @@ Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/Octo
 There are the known issues to be sorted, since they are not affecting me, it will be queued to be
 improved later:
 
-* Properly handle dual-rate tariffs (day unit rate and night unit rates)
+* Dual-rate tariffs (day unit rate and night unit rates) are not fully-supported
+* Native iOS UI theming (reusing Android Material 3 components right now)
 
 <br /><br />
 
 ## Running the app
 
-I use Android Studio Koala for Android and Deskop apps. For iOS, I use Xcode 15.4.
+I use Android Studio Koala to build the Android and Deskop apps. Xcode 15.4 for iOS.
 
-* The easiest way to run on Android is to download the apk.
+* Android: You can download the apk from the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases.
+* iOS: [Test flight](https://testflight.apple.com/join/T6I940RE). Not in operation yet.
+* To run the desktop app, execute `./gradlew runReleaseDistrubutable` or just `./gradlew run`
 * To export the desktop app into MacOS distributable, execute `./gradlew packageDmg` (I don't use
   Windows)
-* To run the desktop app, execute `./gradlew runReleaseDistrubutable` or just `./gradlew run`
 * You can't export the Jar alone. To export the Jar for desktop. Jar doesn't comes with the native
   Skiko library so it won't run.
-* iOS TestFlight is coming soon.
 
 <br /><br />
 
@@ -66,12 +67,11 @@ I use Android Studio Koala for Android and Deskop apps. For iOS, I use Xcode 15.
 * `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
   It contains several subfolders:
     - `commonMain` is for code that’s common for all targets.
+    - `androidMain` is the traditional Android project root
     - Other folders are for Kotlin code that will be compiled for only the platform indicated in the
       folder name.
-      For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-      `iosMain` would be the right folder for such calls.
 
-* `/iosApp` contains iOS applications. Open `OctoMeter.xcworkspace` to build the App. We are setting up the Apple Developer account, but subject to Apple's approval.
+* `/iosApp` contains the iOS application. Open `OctoMeter.xcworkspace` to build the App.
 
 ### Dependencies
 
