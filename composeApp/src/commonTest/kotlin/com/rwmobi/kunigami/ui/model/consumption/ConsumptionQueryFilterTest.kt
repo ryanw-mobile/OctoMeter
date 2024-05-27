@@ -6,8 +6,8 @@
  */
 package com.rwmobi.kunigami.ui.model.consumption
 
-import com.rwmobi.kunigami.domain.extensions.roundDownToDay
-import com.rwmobi.kunigami.domain.extensions.roundUpToDayEnd
+import com.rwmobi.kunigami.domain.extensions.roundToDayEnd
+import com.rwmobi.kunigami.domain.extensions.roundToDayStart
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.extensions.toLocalMonthYear
 import com.rwmobi.kunigami.domain.extensions.toLocalYear
@@ -39,13 +39,13 @@ class ConsumptionQueryFilterTest {
     @Test
     fun `calculateStartDate should return correct start date for DAY_HALF_HOURLY`() {
         val startDate = ConsumptionQueryFilter.calculateStartDate(now, ConsumptionPresentationStyle.DAY_HALF_HOURLY)
-        startDate shouldBe now.roundDownToDay()
+        startDate shouldBe now.roundToDayStart()
     }
 
     @Test
     fun `calculateEndDate should return correct end date for DAY_HALF_HOURLY`() {
         val endDate = ConsumptionQueryFilter.calculateEndDate(now, ConsumptionPresentationStyle.DAY_HALF_HOURLY)
-        endDate shouldBe now.roundUpToDayEnd()
+        endDate shouldBe now.roundToDayEnd()
     }
 
     @Test
@@ -120,8 +120,8 @@ class ConsumptionQueryFilterTest {
 
     @Test
     fun `getConsumptionPeriodString should return correct string for WEEK_SEVEN_DAYS`() {
-        val start = now.roundDownToDay()
-        val end = now.roundUpToDayEnd()
+        val start = now.roundToDayStart()
+        val end = now.roundToDayEnd()
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.WEEK_SEVEN_DAYS, pointOfReference = now, requestedStart = start, requestedEnd = end)
         filter.getConsumptionPeriodString() shouldBe "${start.toLocalDateString().substringBefore(",")} - ${end.toLocalDateString()}"
     }

@@ -41,7 +41,7 @@ fun Instant.roundDownToHour(): Instant {
 /***
  * Return the Instant with the time portion set to all 0
  */
-fun Instant.roundDownToDay(): Instant {
+fun Instant.roundToDayStart(): Instant {
     val currentZone = TimeZone.currentSystemDefault()
     val currentLocalDateTime = toLocalDateTime(timeZone = currentZone)
     return LocalDateTime(
@@ -55,7 +55,7 @@ fun Instant.roundDownToDay(): Instant {
     ).toInstant(timeZone = currentZone)
 }
 
-fun Instant.roundUpToDayEnd(): Instant {
+fun Instant.roundToDayEnd(): Instant {
     val currentZone = TimeZone.currentSystemDefault()
     val currentLocalDateTime = toLocalDateTime(timeZone = currentZone)
     return LocalDateTime(
