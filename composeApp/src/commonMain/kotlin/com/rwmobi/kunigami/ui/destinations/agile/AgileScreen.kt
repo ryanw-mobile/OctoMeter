@@ -36,7 +36,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
@@ -45,7 +44,6 @@ import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
-import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
@@ -63,7 +61,6 @@ import kotlinx.coroutines.isActive
 import kotlinx.datetime.Clock
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_demo_introduction
-import kunigami.composeapp.generated.resources.agile_different_tariff
 import kunigami.composeapp.generated.resources.agile_product_code_retail_region
 import kunigami.composeapp.generated.resources.agile_unit_rate_details
 import kunigami.composeapp.generated.resources.agile_vat_unit_rate
@@ -210,24 +207,6 @@ fun AgileScreen(
                             rateGroupedCells = uiState.rateGroupedCells,
                             requestedAdaptiveLayout = uiState.requestedAdaptiveLayout,
                         )
-                    }
-
-                    if (uiState.isCurrentlyOnDifferentTariff() && uiState.userProfile?.tariff != null) {
-                        item(key = "currentDifferentTariff") {
-                            TariffSummaryCardAdaptive(
-                                modifier = modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        start = dimension.grid_3,
-                                        end = dimension.grid_3,
-                                        top = dimension.grid_2,
-                                    ),
-                                heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
-                                headingTextAlign = TextAlign.Start,
-                                tariff = uiState.userProfile.tariff,
-                                layoutType = uiState.requestedAdaptiveLayout,
-                            )
-                        }
                     }
 
                     if (uiState.rateGroupedCells.isNotEmpty()) {
