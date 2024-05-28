@@ -57,7 +57,7 @@ fun AppBottomNavigationBar(
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
-        for (item in AppDestination.getNavBarItems()) {
+        for (item in AppDestination.getNavBarDestinations()) {
             val selected = currentRoute == item.name
 
             val itemContentDescription = stringResource(item.titleResId)
