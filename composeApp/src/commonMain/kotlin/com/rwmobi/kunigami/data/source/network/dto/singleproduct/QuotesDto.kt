@@ -5,13 +5,12 @@
  *
  */
 
-package com.rwmobi.kunigami.data.source.network.dto
+package com.rwmobi.kunigami.data.source.network.dto.singleproduct
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AccountApiResponse(
-    @SerialName("number") val number: String,
-    @SerialName("properties") val properties: List<PropertyDto>,
+data class QuotesDto(
+    @SerialName("electricity_single_rate") val electricitySingleRate: ElectricityRateQuotesDto,
 )

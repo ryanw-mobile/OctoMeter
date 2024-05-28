@@ -7,9 +7,9 @@
 
 package com.rwmobi.kunigami.data.source.network
 
-import com.rwmobi.kunigami.data.source.network.dto.PricesApiResponse
-import com.rwmobi.kunigami.data.source.network.dto.ProductsApiResponse
-import com.rwmobi.kunigami.data.source.network.dto.SingleProductApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.prices.PricesApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.products.ProductsApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SingleProductApiResponse
 import com.rwmobi.kunigami.domain.extensions.formatInstantWithoutSeconds
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

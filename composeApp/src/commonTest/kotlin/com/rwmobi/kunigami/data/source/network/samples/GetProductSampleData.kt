@@ -7,17 +7,17 @@
 
 package com.rwmobi.kunigami.data.source.network.samples
 
-import com.rwmobi.kunigami.data.source.network.dto.ConsumptionDetailDto
-import com.rwmobi.kunigami.data.source.network.dto.DualFuelConsumptionDetailDto
-import com.rwmobi.kunigami.data.source.network.dto.DualRateConsumptionDetailDto
-import com.rwmobi.kunigami.data.source.network.dto.ElectricityRateQuotesDto
-import com.rwmobi.kunigami.data.source.network.dto.ElectricityTariffDto
 import com.rwmobi.kunigami.data.source.network.dto.LinkDto
-import com.rwmobi.kunigami.data.source.network.dto.QuotesDto
-import com.rwmobi.kunigami.data.source.network.dto.SampleConsumptionDto
-import com.rwmobi.kunigami.data.source.network.dto.SampleQuotesDto
-import com.rwmobi.kunigami.data.source.network.dto.SingleProductApiResponse
-import com.rwmobi.kunigami.data.source.network.dto.TariffDetailsDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.ConsumptionDetailDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.DualFuelConsumptionDetailDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.DualRateConsumptionDetailDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.ElectricityRateQuotesDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.ElectricityTariffDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.QuotesDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SampleConsumptionDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SampleQuotesDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SingleProductApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.TariffDetailsDto
 import kotlinx.datetime.Instant
 
 object GetProductSampleData {

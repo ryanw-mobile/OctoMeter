@@ -7,8 +7,8 @@
 
 package com.rwmobi.kunigami.data.source.network.samples
 
-import com.rwmobi.kunigami.data.source.network.dto.PricesApiResponse
-import com.rwmobi.kunigami.data.source.network.dto.RateDto
+import com.rwmobi.kunigami.data.source.network.dto.prices.PricesApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.prices.RateDto
 import kotlinx.datetime.Instant
 
 object GetNightUnitRatesSampleData {

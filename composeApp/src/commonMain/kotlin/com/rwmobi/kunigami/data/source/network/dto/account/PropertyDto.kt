@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.data.source.network.dto
+package com.rwmobi.kunigami.data.source.network.dto.account
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName

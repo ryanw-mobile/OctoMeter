@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.data.source.network.dto
+package com.rwmobi.kunigami.data.source.network.dto.products
 
 import kotlinx.serialization.Serializable
 

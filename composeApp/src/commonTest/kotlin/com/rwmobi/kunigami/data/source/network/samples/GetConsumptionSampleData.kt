@@ -7,8 +7,8 @@
 
 package com.rwmobi.kunigami.data.source.network.samples
 
-import com.rwmobi.kunigami.data.source.network.dto.ConsumptionApiResponse
-import com.rwmobi.kunigami.data.source.network.dto.ConsumptionDto
+import com.rwmobi.kunigami.data.source.network.dto.consumption.ConsumptionApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.consumption.ConsumptionDto
 import kotlinx.datetime.Instant
 
 object GetConsumptionSampleData {

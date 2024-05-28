@@ -5,17 +5,15 @@
  *
  */
 
-package com.rwmobi.kunigami.data.source.network.dto
+package com.rwmobi.kunigami.data.source.network.dto.account
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RateDto(
-    @SerialName("value_exc_vat") val vatExclusivePrice: Double,
-    @SerialName("value_inc_vat") val vatInclusivePrice: Double,
+data class AgreementDto(
+    @SerialName("tariff_code") val tariffCode: String,
     @SerialName("valid_from") val validFrom: Instant,
     @SerialName("valid_to") val validTo: Instant?,
-    @SerialName("payment_method") val paymentMethod: String?,
 )

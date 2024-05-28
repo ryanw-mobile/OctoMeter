@@ -61,6 +61,9 @@ class TariffsViewModel(
         }
     }
 
+    fun getTariffDetails(productCode: String) {
+    }
+
     fun requestScrollToTop(enabled: Boolean) {
         _uiState.update { currentUiState ->
             currentUiState.copy(

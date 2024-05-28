@@ -5,12 +5,12 @@
  *
  */
 
-package com.rwmobi.kunigami.data.source.network.dto
+package com.rwmobi.kunigami.data.source.network.dto.singleproduct
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class QuotesDto(
-    @SerialName("electricity_single_rate") val electricitySingleRate: ElectricityRateQuotesDto,
+data class ConsumptionDetailDto(
+    @SerialName("electricity_standard") val electricityStandard: Int,
 )

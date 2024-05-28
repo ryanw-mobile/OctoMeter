@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.data.repository.mapper
 
-import com.rwmobi.kunigami.data.source.network.dto.RateDto
+import com.rwmobi.kunigami.data.source.network.dto.prices.RateDto
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 

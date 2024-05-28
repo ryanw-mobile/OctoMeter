@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.data.repository.mapper
 
-import com.rwmobi.kunigami.data.source.network.dto.ProductDetailsDto
+import com.rwmobi.kunigami.data.source.network.dto.products.ProductDetailsDto
 import com.rwmobi.kunigami.domain.model.product.Product
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature

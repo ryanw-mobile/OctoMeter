@@ -5,12 +5,13 @@
  *
  */
 
-package com.rwmobi.kunigami.data.source.network.dto
+package com.rwmobi.kunigami.data.source.network.dto.singleproduct
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ConsumptionDetailDto(
+data class DualFuelConsumptionDetailDto(
     @SerialName("electricity_standard") val electricityStandard: Int,
+    @SerialName("gas_standard") val gasStandard: Int,
 )

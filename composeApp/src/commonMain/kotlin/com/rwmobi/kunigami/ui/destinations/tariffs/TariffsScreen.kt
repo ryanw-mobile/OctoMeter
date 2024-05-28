@@ -9,6 +9,8 @@ package com.rwmobi.kunigami.ui.destinations.tariffs
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -53,29 +55,37 @@ fun TariffsScreen(
                 modifier = Modifier.fillMaxSize(),
                 lazyListState = lazyListState,
             ) { contentModifier ->
-                LazyColumn(
+                Row(
                     modifier = contentModifier
                         .fillMaxSize()
                         .conditionalBlur(enabled = uiState.isLoading),
-                    state = lazyListState,
                 ) {
-                    itemsIndexed(
-                        items = uiState.products,
-                        key = { _, product -> product.code },
-                    ) { index, product ->
-                        ProductItem(
-                            modifier = Modifier
-                                .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
-                                .fillMaxWidth()
-                                .padding(vertical = dimension.grid_1),
-                            product = product,
-                        )
-
-                        if (index < uiState.products.lastIndex) {
-                            HorizontalDivider(
-                                modifier = Modifier.fillMaxWidth(),
+                    LazyColumn(
+                        modifier = Modifier.weight(1f),
+                        state = lazyListState,
+                    ) {
+                        itemsIndexed(
+                            items = uiState.products,
+                            key = { _, product -> product.code },
+                        ) { index, product ->
+                            ProductItem(
+                                modifier = Modifier
+                                    .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
+                                    .fillMaxWidth()
+                                    .padding(vertical = dimension.grid_1),
+                                product = product,
                             )
+
+                            if (index < uiState.products.lastIndex) {
+                                HorizontalDivider(
+                                    modifier = Modifier.fillMaxWidth(),
+                                )
+                            }
                         }
+                    }
+                    Column(
+                        modifier = Modifier.weight(1f),
+                    ) {
                     }
                 }
             }

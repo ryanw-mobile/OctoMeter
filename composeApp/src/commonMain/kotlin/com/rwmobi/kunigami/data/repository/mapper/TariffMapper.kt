@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.data.repository.mapper
 
-import com.rwmobi.kunigami.data.source.network.dto.SingleProductApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SingleProductApiResponse
 import com.rwmobi.kunigami.domain.exceptions.TariffNotFoundException
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.Tariff
