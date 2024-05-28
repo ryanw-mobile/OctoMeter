@@ -66,7 +66,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 internal fun AgileTariffCardAdaptive(
     modifier: Modifier = Modifier,
-    agileTariff: Tariff?,
+    differentTariff: Tariff?,
     colorPalette: List<Color>,
     rateRange: ClosedFloatingPointRange<Double>,
     rateGroupedCells: List<RateGroupedCells>,
@@ -83,7 +83,7 @@ internal fun AgileTariffCardAdaptive(
         WindowWidthSizeClass.Compact -> {
             AgileTariffCardCompact(
                 modifier = modifier,
-                tariff = agileTariff,
+                differentTariff = differentTariff,
                 colorPalette = colorPalette,
                 targetPercentage = targetPercentage,
                 expireMinutes = expireMinutes,
@@ -97,7 +97,7 @@ internal fun AgileTariffCardAdaptive(
         WindowWidthSizeClass.Medium -> {
             AgileTariffCardCompact(
                 modifier = modifier,
-                tariff = agileTariff,
+                differentTariff = differentTariff,
                 colorPalette = colorPalette,
                 targetPercentage = targetPercentage,
                 expireMinutes = expireMinutes,
@@ -111,7 +111,7 @@ internal fun AgileTariffCardAdaptive(
         else -> {
             AgileTariffCardExpanded(
                 modifier = modifier,
-                tariff = agileTariff,
+                differentTariff = differentTariff,
                 colorPalette = colorPalette,
                 targetPercentage = targetPercentage,
                 expireMinutes = expireMinutes,
@@ -157,7 +157,7 @@ private fun AgileTariffCardCompact(
     expireMinutes: Long,
     expireSeconds: Long,
     colorPalette: List<Color>,
-    tariff: Tariff?,
+    differentTariff: Tariff?,
     vatInclusivePrice: Double?,
     rateTrend: RateTrend?,
 ) {
@@ -214,12 +214,12 @@ private fun AgileTariffCardCompact(
                             )
                         }
 
-                        if (tariff != null) {
+                        if (differentTariff != null) {
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onSurface,
-                                text = stringResource(resource = Res.string.agile_tariff_standing_charge, tariff.vatInclusiveStandingCharge),
+                                text = stringResource(resource = Res.string.agile_tariff_standing_charge, differentTariff.vatInclusiveStandingCharge),
                             )
                             Spacer(modifier = Modifier.size(size = dimension.grid_1))
                         }
@@ -254,7 +254,7 @@ private fun AgileTariffCardCompact(
             }
         }
 
-        tariff?.let {
+        differentTariff?.let {
             TariffSummaryCardAdaptive(
                 modifier = Modifier.fillMaxWidth(),
                 heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
@@ -274,7 +274,7 @@ private fun AgileTariffCardExpanded(
     expireMinutes: Long,
     expireSeconds: Long,
     colorPalette: List<Color>,
-    tariff: Tariff?,
+    differentTariff: Tariff?,
     vatInclusivePrice: Double?,
     rateTrend: RateTrend?,
 ) {
@@ -351,12 +351,12 @@ private fun AgileTariffCardExpanded(
                         )
                     }
                     Spacer(modifier = Modifier.size(size = dimension.grid_1))
-                    if (tariff != null) {
+                    if (differentTariff != null) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.onSurface,
-                            text = stringResource(resource = Res.string.agile_tariff_standing_charge, tariff.vatInclusiveStandingCharge),
+                            text = stringResource(resource = Res.string.agile_tariff_standing_charge, differentTariff.vatInclusiveStandingCharge),
                         )
                     }
                 }
@@ -377,7 +377,7 @@ private fun AgileTariffCardExpanded(
             }
         }
 
-        tariff?.let {
+        differentTariff?.let {
             TariffSummaryCardAdaptive(
                 modifier = Modifier
                     .weight(weight = 1f)
@@ -405,7 +405,7 @@ private fun Preview() {
                         end = dimension.grid_3,
                         top = dimension.grid_1,
                     ),
-                agileTariff = TariffSamples.agileFlex221125,
+                differentTariff = TariffSamples.agileFlex221125,
                 colorPalette = generateGYRHueColorPalette(),
                 rateRange = 0.0..0.0,
                 rateGroupedCells = emptyList(),
