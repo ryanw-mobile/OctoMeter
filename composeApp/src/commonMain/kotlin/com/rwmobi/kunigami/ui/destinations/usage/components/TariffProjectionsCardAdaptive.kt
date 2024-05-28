@@ -91,9 +91,8 @@ private fun TariffProjectionsCardLinear(
             TariffSummaryCardAdaptive(
                 modifier = Modifier.fillMaxWidth(),
                 layoutType = WindowWidthSizeClass.Compact,
-                heading = stringResource(resource = Res.string.usage_current_tariff).uppercase(),
+                heading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) } ?: stringResource(resource = Res.string.usage_current_tariff).uppercase(),
                 headingTextAlign = TextAlign.Center,
-                subheading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) },
                 tariff = it,
             )
         }
@@ -149,9 +148,8 @@ private fun TariffProjectionsCardLTwoColumns(
             TariffSummaryCardAdaptive(
                 modifier = Modifier.weight(weight = 0.4f).fillMaxHeight(),
                 layoutType = WindowWidthSizeClass.Compact,
-                heading = stringResource(resource = Res.string.usage_current_tariff).uppercase(),
+                heading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) } ?: stringResource(resource = Res.string.usage_current_tariff).uppercase(),
                 headingTextAlign = TextAlign.Center,
-                subheading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) },
                 tariff = it,
             )
         }
@@ -176,9 +174,8 @@ private fun TariffProjectionsCardThreeColumns(
             TariffSummaryCardAdaptive(
                 modifier = Modifier.weight(weight = 1f).fillMaxHeight(),
                 layoutType = WindowWidthSizeClass.Compact,
-                heading = stringResource(resource = Res.string.usage_current_tariff).uppercase(),
+                heading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) } ?: stringResource(resource = Res.string.usage_current_tariff).uppercase(),
                 headingTextAlign = TextAlign.Center,
-                subheading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) },
                 tariff = it,
             )
         }
