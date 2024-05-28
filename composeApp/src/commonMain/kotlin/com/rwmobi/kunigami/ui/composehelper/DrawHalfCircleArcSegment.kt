@@ -85,15 +85,15 @@ internal fun DrawScope.drawHalfCircleArcSegment(
     }
 
     // Draw divider line on top of the arc
-    for (i in colorPalette.indices.reversed()) {
-        if (i < colorPalette.size - 1) {
-            val isFilledSegment = i < (percentage * colorPalette.size).toInt()
+    for (index in colorPalette.indices) {
+        if (index < colorPalette.size - 1) {
+            val isFilledSegment = index < (percentage * colorPalette.size).toInt()
             val backgroundColor = if (isFilledSegment) {
-                colorPalette[i]
+                colorPalette[index]
             } else {
-                colorPalette[i].darken(darkenFactor)
+                colorPalette[index].darken(darkenFactor)
             }
-            val dividerAngle = startAngle + (i + 1) * segmentAngle
+            val dividerAngle = startAngle + (index + 1) * segmentAngle
 
             val startX = (radius - dynamicStrokeWidth / 2) * cos(toRadians(dividerAngle.toDouble())).toFloat() + size.width / 2
             val startY = (radius - dynamicStrokeWidth / 2) * sin(toRadians(dividerAngle.toDouble())).toFloat() + size.height

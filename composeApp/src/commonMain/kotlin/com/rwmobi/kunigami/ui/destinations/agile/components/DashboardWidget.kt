@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.composehelper.drawHalfCircleArcSegment
@@ -47,7 +48,7 @@ internal fun DashboardWidget(
 ) {
     val countDownTextMagicWidth = 432f
     var textBoundWidth by remember { mutableStateOf(countDownTextMagicWidth) }
-    val fontScale = remember(textBoundWidth, textBoundWidth) { textBoundWidth / countDownTextMagicWidth }
+    val fontScale = remember(textBoundWidth) { textBoundWidth / countDownTextMagicWidth }
 
     val animatedPercentage by animateFloatAsState(
         targetValue = percentage,
@@ -82,10 +83,12 @@ internal fun DashboardWidget(
                 ) {
                     Text(
                         style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
                         text = stringResource(resource = Res.string.agile_expire),
                     )
                     Text(
                         style = MaterialTheme.typography.displaySmall,
+                        textAlign = TextAlign.Center,
                         text = it,
                     )
                 }
