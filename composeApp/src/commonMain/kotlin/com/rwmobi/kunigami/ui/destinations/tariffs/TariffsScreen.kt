@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ProductItem
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
+import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.theme.getDimension
 
 @Composable
@@ -53,7 +54,9 @@ fun TariffsScreen(
                 lazyListState = lazyListState,
             ) { contentModifier ->
                 LazyColumn(
-                    modifier = contentModifier.fillMaxSize(),
+                    modifier = contentModifier
+                        .fillMaxSize()
+                        .conditionalBlur(enabled = uiState.isLoading),
                     state = lazyListState,
                 ) {
                     itemsIndexed(

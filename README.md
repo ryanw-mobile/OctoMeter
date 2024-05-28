@@ -46,6 +46,9 @@ improved later:
 * Dual-rate tariffs (day unit rate and night unit rates) are not fully-supported
 * Native iOS UI theming (reusing Android Material 3 components right now)
 * British Daylight Saving Time issues: We do not have sufficient test data yet.
+* iOS: Slow first time launch
+* iOS: Slow screen recomposition when screen orientation changes
+* iOS: Agile chart sometimes does not refresh
 
 <br /><br />
 

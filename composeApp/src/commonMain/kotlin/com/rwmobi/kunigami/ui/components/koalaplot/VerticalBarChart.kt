@@ -69,6 +69,7 @@ fun VerticalBarChart(
         },
     ) {
         XYGraph(
+            panZoomEnabled = false,
             xAxisModel = CategoryAxisModel(
                 categories = entries.indices.toList(),
                 firstCategoryIsZero = false, // true means first column cut into half
