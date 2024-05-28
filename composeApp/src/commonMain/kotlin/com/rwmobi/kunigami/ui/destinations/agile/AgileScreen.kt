@@ -46,6 +46,7 @@ import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
+import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.destinations.agile.components.AgileTariffCardAdaptive
 import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
@@ -102,7 +103,9 @@ fun AgileScreen(
                 lazyListState = lazyListState,
             ) { contentModifier ->
                 LazyColumn(
-                    modifier = contentModifier.fillMaxSize(),
+                    modifier = contentModifier
+                        .fillMaxSize()
+                        .conditionalBlur(enabled = uiState.isLoading),
                     contentPadding = PaddingValues(bottom = dimension.grid_4),
                     state = lazyListState,
                 ) {

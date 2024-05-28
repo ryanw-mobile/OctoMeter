@@ -27,6 +27,7 @@ import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
+import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -57,9 +58,10 @@ fun AccountScreen(
             modifier = Modifier.fillMaxWidth(),
             lazyListState = lazyListState,
         ) { contentModifier ->
-
             LazyColumn(
-                modifier = contentModifier.fillMaxWidth(),
+                modifier = contentModifier
+                    .fillMaxWidth()
+                    .conditionalBlur(enabled = uiState.isLoading),
                 state = lazyListState,
             ) {
                 if (uiState.isDemoMode == true) {

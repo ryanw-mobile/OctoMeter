@@ -44,6 +44,7 @@ import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
+import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.destinations.usage.components.TariffProjectionsCardAdaptive
 import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
@@ -96,7 +97,9 @@ fun UsageScreen(
                 lazyListState = lazyListState,
             ) { contentModifier ->
                 LazyColumn(
-                    modifier = contentModifier.fillMaxSize(),
+                    modifier = contentModifier
+                        .fillMaxSize()
+                        .conditionalBlur(enabled = uiState.isLoading),
                     contentPadding = PaddingValues(bottom = dimension.grid_4),
                     state = lazyListState,
                 ) {
