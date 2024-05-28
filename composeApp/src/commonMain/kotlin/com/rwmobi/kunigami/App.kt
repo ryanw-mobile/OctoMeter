@@ -44,8 +44,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.rwmobi.kunigami.ui.components.AppBottomNavigationBar
 import com.rwmobi.kunigami.ui.components.AppNavigationRail
+import com.rwmobi.kunigami.ui.navigation.AppDestination
 import com.rwmobi.kunigami.ui.navigation.AppNavigationHost
-import com.rwmobi.kunigami.ui.navigation.AppNavigationItem
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.ok
@@ -84,7 +84,7 @@ fun App(
     androidStatusBarModifier: @Composable ((isDarkTheme: Boolean) -> Unit)? = null,
 ) {
     val windowSizeClass = calculateWindowSizeClass()
-    val lastDoubleTappedNavItem = remember { mutableStateOf<AppNavigationItem?>(null) }
+    val lastDoubleTappedNavItem = remember { mutableStateOf<AppDestination?>(null) }
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
     val navBackStackEntry by navController.currentBackStackEntryAsState()

@@ -21,7 +21,7 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 
 @Immutable
-enum class AppNavigationItem(val titleResId: StringResource, val iconResId: DrawableResource) {
+enum class AppDestination(val titleResId: StringResource, val iconResId: DrawableResource) {
     USAGE(titleResId = Res.string.navigation_usage, iconResId = Res.drawable.bar_chart),
     AGILE(titleResId = Res.string.navigation_agile, iconResId = Res.drawable.pulse),
     TARIFFS(titleResId = Res.string.navigation_tariffs, iconResId = Res.drawable.coin),
@@ -29,6 +29,6 @@ enum class AppNavigationItem(val titleResId: StringResource, val iconResId: Draw
     ;
 
     companion object {
-        fun getNavBarItems(): List<AppNavigationItem> = listOf(AGILE, USAGE, TARIFFS, ACCOUNT)
+        fun getNavBarItems(): List<AppDestination> = listOf(AGILE, USAGE, TARIFFS, ACCOUNT)
     }
 }

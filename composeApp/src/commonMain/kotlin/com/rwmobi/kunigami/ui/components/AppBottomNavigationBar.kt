@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.rwmobi.kunigami.ui.navigation.AppNavigationItem
+import com.rwmobi.kunigami.ui.navigation.AppDestination
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
@@ -42,7 +42,7 @@ import org.jetbrains.compose.resources.stringResource
 fun AppBottomNavigationBar(
     modifier: Modifier = Modifier,
     navController: NavController,
-    onCurrentRouteSecondTapped: (item: AppNavigationItem) -> Unit,
+    onCurrentRouteSecondTapped: (item: AppDestination) -> Unit,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -57,7 +57,7 @@ fun AppBottomNavigationBar(
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
-        for (item in AppNavigationItem.getNavBarItems()) {
+        for (item in AppDestination.getNavBarItems()) {
             val selected = currentRoute == item.name
 
             val itemContentDescription = stringResource(item.titleResId)

@@ -39,12 +39,12 @@ import org.koin.mp.KoinPlatform.getKoin
 fun AppNavigationHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    lastDoubleTappedNavItem: AppNavigationItem?,
+    lastDoubleTappedNavItem: AppDestination?,
     onShowSnackbar: suspend (String) -> Unit,
-    onScrolledToTop: (AppNavigationItem) -> Unit,
+    onScrolledToTop: (AppDestination) -> Unit,
 ) {
     val navigateToAccountTab = {
-        navController.navigate(AppNavigationItem.ACCOUNT.name) {
+        navController.navigate(AppDestination.ACCOUNT.name) {
             navController.graph.startDestinationRoute?.let {
                 popUpTo(it) {
                     inclusive = true
@@ -57,9 +57,9 @@ fun AppNavigationHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = AppNavigationItem.AGILE.name,
+        startDestination = AppDestination.AGILE.name,
     ) {
-        composable(route = AppNavigationItem.USAGE.name) {
+        composable(route = AppDestination.USAGE.name) {
             // Workaround: passing through parameters not working on iOS, so we do it here
             val screenSizeInfo = getScreenSizeInfo()
             val windowSizeClass = calculateWindowSizeClass()
@@ -72,7 +72,7 @@ fun AppNavigationHost(
             )
 
             LaunchedEffect(lastDoubleTappedNavItem) {
-                val enabled = lastDoubleTappedNavItem?.equals(AppNavigationItem.USAGE) ?: false
+                val enabled = lastDoubleTappedNavItem?.equals(AppDestination.USAGE) ?: false
                 viewModel.requestScrollToTop(enabled = enabled)
             }
 
@@ -85,14 +85,14 @@ fun AppNavigationHost(
                     onPreviousTimeFrame = viewModel::onPreviousTimeFrame,
                     onNextTimeFrame = viewModel::onNextTimeFrame,
                     onErrorShown = viewModel::errorShown,
-                    onScrolledToTop = { onScrolledToTop(AppNavigationItem.USAGE) },
+                    onScrolledToTop = { onScrolledToTop(AppDestination.USAGE) },
                     onShowSnackbar = onShowSnackbar,
                     onNavigateToAccountTab = navigateToAccountTab,
                 ),
             )
         }
 
-        composable(route = AppNavigationItem.AGILE.name) {
+        composable(route = AppDestination.AGILE.name) {
             // workaround: Issue with iOS we have to do it here
             val screenSizeInfo = getScreenSizeInfo()
             val windowSizeClass = calculateWindowSizeClass()
@@ -105,7 +105,7 @@ fun AppNavigationHost(
             )
 
             LaunchedEffect(lastDoubleTappedNavItem) {
-                val enabled = lastDoubleTappedNavItem?.equals(AppNavigationItem.AGILE) ?: false
+                val enabled = lastDoubleTappedNavItem?.equals(AppDestination.AGILE) ?: false
                 viewModel.requestScrollToTop(enabled = enabled)
             }
 
@@ -115,19 +115,19 @@ fun AppNavigationHost(
                 uiEvent = AgileUIEvent(
                     onRefresh = viewModel::refresh,
                     onErrorShown = viewModel::errorShown,
-                    onScrolledToTop = { onScrolledToTop(AppNavigationItem.AGILE) },
+                    onScrolledToTop = { onScrolledToTop(AppDestination.AGILE) },
                     onShowSnackbar = onShowSnackbar,
                     onNavigateToAccountTab = navigateToAccountTab,
                 ),
             )
         }
 
-        composable(route = AppNavigationItem.TARIFFS.name) {
+        composable(route = AppDestination.TARIFFS.name) {
             val viewModel: TariffsViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
 
             LaunchedEffect(lastDoubleTappedNavItem) {
-                val enabled = lastDoubleTappedNavItem?.equals(AppNavigationItem.TARIFFS) ?: false
+                val enabled = lastDoubleTappedNavItem?.equals(AppDestination.TARIFFS) ?: false
                 viewModel.requestScrollToTop(enabled = enabled)
             }
 
@@ -138,13 +138,13 @@ fun AppNavigationHost(
                     onRefresh = viewModel::refresh,
                     onProductItemClick = {}, // TODO: Not sure where to go
                     onErrorShown = viewModel::errorShown,
-                    onScrolledToTop = { onScrolledToTop(AppNavigationItem.TARIFFS) },
+                    onScrolledToTop = { onScrolledToTop(AppDestination.TARIFFS) },
                     onShowSnackbar = onShowSnackbar,
                 ),
             )
         }
 
-        composable(route = AppNavigationItem.ACCOUNT.name) {
+        composable(route = AppDestination.ACCOUNT.name) {
             val windowSizeClass = calculateWindowSizeClass()
             val viewModel: AccountViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
@@ -152,7 +152,7 @@ fun AppNavigationHost(
             viewModel.notifyWindowSizeClassChanged(windowSizeClass = windowSizeClass)
 
             LaunchedEffect(lastDoubleTappedNavItem) {
-                val enabled = lastDoubleTappedNavItem?.equals(AppNavigationItem.ACCOUNT) ?: false
+                val enabled = lastDoubleTappedNavItem?.equals(AppDestination.ACCOUNT) ?: false
                 viewModel.requestScrollToTop(enabled = enabled)
             }
 
@@ -166,7 +166,7 @@ fun AppNavigationHost(
                     onSubmitCredentials = viewModel::submitCredentials,
                     onMeterSerialNumberSelected = viewModel::updateMeterSerialNumber,
                     onErrorShown = viewModel::errorShown,
-                    onScrolledToTop = { onScrolledToTop(AppNavigationItem.ACCOUNT) },
+                    onScrolledToTop = { onScrolledToTop(AppDestination.ACCOUNT) },
                     onShowSnackbar = onShowSnackbar,
                 ),
             )
