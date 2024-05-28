@@ -106,7 +106,7 @@ fun AgileScreen(
                 LazyColumn(
                     modifier = contentModifier
                         .fillMaxSize()
-                        .conditionalBlur(enabled = uiState.isLoading && uiState.rateGroupedCells.isNotEmpty()),
+                        .conditionalBlur(enabled = uiState.isLoading && uiState.barChartData == null),
                     contentPadding = PaddingValues(bottom = dimension.grid_4),
                     state = lazyListState,
                 ) {
@@ -201,6 +201,7 @@ fun AgileScreen(
                                     end = dimension.grid_3,
                                     top = dimension.grid_1,
                                 ),
+                            agileTariff = uiState.agileTariff,
                             differentTariff = uiState.userProfile?.tariff,
                             colorPalette = colorPalette,
                             rateRange = uiState.rateRange,

@@ -11,6 +11,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -29,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -46,7 +48,7 @@ internal fun DashboardWidget(
     countDownText: String?,
     colorPalette: List<Color>,
 ) {
-    val countDownTextMagicWidth = 432f
+    val countDownTextMagicWidth = 500f
     var textBoundWidth by remember { mutableStateOf(countDownTextMagicWidth) }
     val fontScale = remember(textBoundWidth) { textBoundWidth / countDownTextMagicWidth }
 
@@ -80,14 +82,27 @@ internal fun DashboardWidget(
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Bottom,
                 ) {
                     Text(
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            lineHeightStyle = LineHeightStyle(
+                                alignment = LineHeightStyle.Alignment.Bottom,
+                                trim = LineHeightStyle.Trim.Both,
+                            ),
+                        ),
+                        maxLines = 1,
                         textAlign = TextAlign.Center,
                         text = stringResource(resource = Res.string.agile_expire),
                     )
                     Text(
-                        style = MaterialTheme.typography.displaySmall,
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            lineHeightStyle = LineHeightStyle(
+                                alignment = LineHeightStyle.Alignment.Bottom,
+                                trim = LineHeightStyle.Trim.Both,
+                            ),
+                        ),
+                        maxLines = 1,
                         textAlign = TextAlign.Center,
                         text = it,
                     )
