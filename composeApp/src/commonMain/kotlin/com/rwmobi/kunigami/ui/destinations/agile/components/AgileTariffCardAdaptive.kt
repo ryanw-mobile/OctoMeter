@@ -128,7 +128,7 @@ internal fun AgileTariffCardAdaptive(
             with(activeRate) {
                 val isActiveRateExpired =
                     (this == null) ||
-                            (validTo?.compareTo(Clock.System.now()) ?: 1) <= 0
+                        (validTo?.compareTo(Clock.System.now()) ?: 1) <= 0
 
                 if (isActiveRateExpired) {
                     activeRate =
