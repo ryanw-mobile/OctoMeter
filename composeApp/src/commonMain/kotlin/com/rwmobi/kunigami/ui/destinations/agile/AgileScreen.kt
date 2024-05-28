@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.ui.destinations.agile
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -35,7 +36,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
@@ -44,11 +44,11 @@ import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
-import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.destinations.agile.components.AgileTariffCardAdaptive
+import com.rwmobi.kunigami.ui.destinations.agile.components.DualTitleBar
 import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
 import com.rwmobi.kunigami.ui.extensions.partitionList
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
@@ -61,11 +61,12 @@ import kotlinx.coroutines.isActive
 import kotlinx.datetime.Clock
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_demo_introduction
-import kunigami.composeapp.generated.resources.agile_different_tariff
+import kunigami.composeapp.generated.resources.agile_product_code_retail_region
 import kunigami.composeapp.generated.resources.agile_unit_rate_details
 import kunigami.composeapp.generated.resources.agile_vat_unit_rate
 import kunigami.composeapp.generated.resources.provide_api_key
 import kunigami.composeapp.generated.resources.revenue
+import kunigami.composeapp.generated.resources.unknown
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -105,10 +106,25 @@ fun AgileScreen(
                 LazyColumn(
                     modifier = contentModifier
                         .fillMaxSize()
-                        .conditionalBlur(enabled = uiState.isLoading),
+                        .conditionalBlur(enabled = uiState.isLoading && uiState.barChartData == null),
                     contentPadding = PaddingValues(bottom = dimension.grid_4),
                     state = lazyListState,
                 ) {
+                    stickyHeader(key = "header") {
+                        val subtitle = uiState.agileTariff?.let {
+                            val regionCode = it.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
+                            stringResource(resource = Res.string.agile_product_code_retail_region, it.productCode, regionCode)
+                        }
+                        DualTitleBar(
+                            modifier = Modifier
+                                .background(color = MaterialTheme.colorScheme.secondary)
+                                .fillMaxWidth()
+                                .height(height = dimension.minListItemHeight),
+                            title = uiState.agileTariff?.displayName ?: "",
+                            subtitle = subtitle,
+                        )
+                    }
+
                     if (uiState.isDemoMode == true) {
                         item(key = "demoCta") {
                             DemoModeCtaAdaptive(
@@ -186,29 +202,12 @@ fun AgileScreen(
                                     top = dimension.grid_1,
                                 ),
                             agileTariff = uiState.agileTariff,
+                            differentTariff = uiState.userProfile?.tariff,
                             colorPalette = colorPalette,
                             rateRange = uiState.rateRange,
                             rateGroupedCells = uiState.rateGroupedCells,
                             requestedAdaptiveLayout = uiState.requestedAdaptiveLayout,
                         )
-                    }
-
-                    if (uiState.isCurrentlyOnDifferentTariff() && uiState.userProfile?.tariff != null) {
-                        item(key = "currentDifferentTariff") {
-                            TariffSummaryCardAdaptive(
-                                modifier = modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        start = dimension.grid_3,
-                                        end = dimension.grid_3,
-                                        top = dimension.grid_2,
-                                    ),
-                                heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
-                                headingTextAlign = TextAlign.Start,
-                                tariff = uiState.userProfile.tariff,
-                                layoutType = uiState.requestedAdaptiveLayout,
-                            )
-                        }
                     }
 
                     if (uiState.rateGroupedCells.isNotEmpty()) {

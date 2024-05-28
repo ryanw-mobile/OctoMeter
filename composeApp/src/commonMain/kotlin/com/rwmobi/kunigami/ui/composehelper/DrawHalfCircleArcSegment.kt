@@ -45,20 +45,30 @@ internal fun DrawScope.drawHalfCircleArcSegment(
     iconPainter: Painter? = null,
     iconColorFilter: ColorFilter? = null,
     iconAlpha: Float? = null,
+    onInnerSpaceMeasured: ((width: Float, height: Float) -> Unit)? = null,
 ) {
-    val effectiveStrokeWidth = strokeWidth ?: (size.width / 8f)
+    onInnerSpaceMeasured?.let {
+        it(size.width, size.height)
+    }
 
+    val dynamicStrokeWidth = strokeWidth ?: (size.width / 8f)
     val segmentAngle = sweepAngle / colorPalette.size
-    val diameter = size.width - effectiveStrokeWidth
+    val diameter = size.width - dynamicStrokeWidth
     val radius = diameter / 2
+    val indicatorIndex = (percentage * colorPalette.size).toInt().coerceIn(colorPalette.indices)
 
-    for (i in colorPalette.indices) {
-        val angle = startAngle + i * segmentAngle
-        val isFilledSegment = i < (percentage * colorPalette.size).toInt()
-        val color = if (isFilledSegment) {
-            colorPalette[i]
+    for (index in colorPalette.indices) {
+        val isIndicator = index == indicatorIndex
+        val effectiveStrokeWidth = if (isIndicator) dynamicStrokeWidth * 1.25f else dynamicStrokeWidth
+        val effectiveDiameter = size.width - effectiveStrokeWidth
+        val angle = startAngle + index * segmentAngle
+        val isFilledSegment = index < (percentage * colorPalette.size).toInt()
+        val color = if (isIndicator) {
+            Color.Red
+        } else if (isFilledSegment) {
+            colorPalette[index]
         } else {
-            colorPalette[i].darken(darkenFactor)
+            colorPalette[index].darken(darkenFactor)
         }
         drawArc(
             color = color,
@@ -66,7 +76,7 @@ internal fun DrawScope.drawHalfCircleArcSegment(
             sweepAngle = segmentAngle,
             useCenter = false,
             style = Stroke(width = effectiveStrokeWidth),
-            size = Size(width = diameter, height = diameter),
+            size = Size(width = effectiveDiameter, height = effectiveDiameter),
             topLeft = Offset(
                 x = effectiveStrokeWidth / 2,
                 y = effectiveStrokeWidth / 2,
@@ -75,20 +85,20 @@ internal fun DrawScope.drawHalfCircleArcSegment(
     }
 
     // Draw divider line on top of the arc
-    for (i in colorPalette.indices.reversed()) {
-        if (i < colorPalette.size - 1) {
-            val isFilledSegment = i < (percentage * colorPalette.size).toInt()
+    for (index in colorPalette.indices) {
+        if (index < colorPalette.size - 1) {
+            val isFilledSegment = index < (percentage * colorPalette.size).toInt()
             val backgroundColor = if (isFilledSegment) {
-                colorPalette[i]
+                colorPalette[index]
             } else {
-                colorPalette[i].darken(darkenFactor)
+                colorPalette[index].darken(darkenFactor)
             }
-            val dividerAngle = startAngle + (i + 1) * segmentAngle
+            val dividerAngle = startAngle + (index + 1) * segmentAngle
 
-            val startX = (radius - effectiveStrokeWidth / 2) * cos(toRadians(dividerAngle.toDouble())).toFloat() + size.width / 2
-            val startY = (radius - effectiveStrokeWidth / 2) * sin(toRadians(dividerAngle.toDouble())).toFloat() + size.height
-            val endX = (radius + effectiveStrokeWidth / 2) * cos(toRadians(dividerAngle.toDouble())).toFloat() + size.width / 2
-            val endY = (radius + effectiveStrokeWidth / 2) * sin(toRadians(dividerAngle.toDouble())).toFloat() + size.height
+            val startX = (radius - dynamicStrokeWidth / 2) * cos(toRadians(dividerAngle.toDouble())).toFloat() + size.width / 2
+            val startY = (radius - dynamicStrokeWidth / 2) * sin(toRadians(dividerAngle.toDouble())).toFloat() + size.height
+            val endX = (radius + dynamicStrokeWidth / 2) * cos(toRadians(dividerAngle.toDouble())).toFloat() + size.width / 2
+            val endY = (radius + dynamicStrokeWidth / 2) * sin(toRadians(dividerAngle.toDouble())).toFloat() + size.height
 
             drawLine(
                 color = backgroundColor.getContrastColor().copy(alpha = 0.5f),
@@ -100,11 +110,11 @@ internal fun DrawScope.drawHalfCircleArcSegment(
     }
 
     iconPainter?.let {
-        val innerRadius = size.height - effectiveStrokeWidth
+        val innerRadius = size.height - dynamicStrokeWidth
         val sqrtFive = 2.236f
         val iconSize = innerRadius * 2 * sqrtFive / 5
         val iconX = (size.width - iconSize) / 2
-        val iconY = effectiveStrokeWidth + (size.height - iconSize) / 4f
+        val iconY = dynamicStrokeWidth + (size.height - iconSize) / 4f
         with(iconPainter) {
             translate(
                 left = iconX,
@@ -135,7 +145,7 @@ private fun Preview() {
                     .aspectRatio(2f) // Ensure the aspect ratio is 2:1
                     .drawBehind {
                         drawHalfCircleArcSegment(
-                            percentage = 0.9f,
+                            percentage = 0.59f,
                             colorPalette = generateGYRHueColorPalette(),
                             iconPainter = iconPainter,
                             iconColorFilter = ColorFilter.tint(color = colorFilter),

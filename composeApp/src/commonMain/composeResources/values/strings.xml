@@ -21,7 +21,7 @@
     <string name="unit_kwh">%1$s kWh</string>
     <string name="unit_pound">£%1$s</string>
     <string name="standing_charge">Standing Charge</string>
-    <string name="standard_unit_rate">Standard Unit Rate</string>
+    <string name="standard_unit_rate">Unit Rate</string>
     <string name="unit_p_day">%1$d p/day</string>
     <string name="unit_p_kwh">%1$d p/kWh</string>
 
@@ -43,11 +43,11 @@
     <string name="usage_current_tariff">Active tariff</string>
     <string name="usage_insights">Insights</string>
     <plurals name="usage_insights_consumption">
-        <item quantity="one">Consumed %1$s kWh in one day</item>
-        <item quantity="other">Consumed %1$s kWh over %2$s days</item>
+        <item quantity="one">%1$s kWh USED IN ONE DAY</item>
+        <item quantity="other">%1$s kWh USED OVER %2$s DAYS</item>
     </plurals>
-    <string name="usage_estimated_cost">Estimated cost: £%1$s</string>
-    <string name="usage_estimated_daily">Daily average: %1$s kWh (£%2$s/day)</string>
+    <string name="usage_estimated_cost">estimated cost</string>
+    <string name="usage_estimated_daily">Daily average: %1$s kWh / £%2$s</string>
     <string name="usage_annual_projection">Projected annual consumption</string>
 
     <!-- Agile -->
@@ -55,12 +55,14 @@
     <string name="agile_about_tariff">About this tariff</string>
     <string name="agile_unit_rate_details">Published Unit Rates</string>
     <string name="agile_vat_unit_rate">VAT Unit Rate (p/kWh)</string>
+    <string name="agile_expire">Expires</string>
+    <string name="agile_expire_time">%1$s:%2$s</string>
     <string name="agile_expires_in">Expires in %1$s:%2$s</string>
     <string name="agile_different_tariff">You are on a different tariff</string>
     <string name="agile_product_code_retail_region">%1$s (Region %2$s)</string>
-    <string name="agile_tariff_standard_unit_rate_two_lines">Standard Unit Rate:\n%1$d p/kWh</string>
+    <string name="agile_tariff_standard_unit_rate_two_lines">Unit Rate:\n%1$d p/kWh</string>
     <string name="agile_tariff_standing_charge_two_lines">Standing Charge:\n%1$d p/day</string>
-    <string name="agile_tariff_standard_unit_rate">Standard Unit Rate: %1$d p/kWh</string>
+    <string name="agile_tariff_standard_unit_rate">Unit Rate: %1$d p/kWh</string>
     <string name="agile_tariff_standing_charge">Standing Charge: %1$d p/day</string>
 
     <!-- Product Features -->
