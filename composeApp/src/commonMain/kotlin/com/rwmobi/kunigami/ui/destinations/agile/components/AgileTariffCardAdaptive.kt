@@ -14,10 +14,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -40,7 +41,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
@@ -57,7 +57,7 @@ import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_different_tariff
-import kunigami.composeapp.generated.resources.agile_expires_in
+import kunigami.composeapp.generated.resources.agile_expire_time
 import kunigami.composeapp.generated.resources.agile_tariff_standing_charge
 import kunigami.composeapp.generated.resources.p_kwh
 import org.jetbrains.compose.resources.painterResource
@@ -234,22 +234,16 @@ private fun AgileTariffCardCompact(
                         modifier = Modifier.fillMaxWidth(),
                         colorPalette = colorPalette,
                         percentage = targetPercentage,
-                    )
-
-                    if (showCountdown) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            maxLines = 1,
-                            overflow = TextOverflow.Clip,
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.labelMedium,
-                            text = stringResource(
-                                resource = Res.string.agile_expires_in,
+                        countDownText = if (showCountdown) {
+                            stringResource(
+                                resource = Res.string.agile_expire_time,
                                 expireMinutes,
                                 expireSeconds.toString().padStart(length = 2, padChar = '0'),
-                            ),
-                        )
-                    }
+                            )
+                        } else {
+                            null
+                        },
+                    )
                 }
             }
         }
@@ -336,44 +330,46 @@ private fun AgileTariffCardExpanded(
                         }
                     }
 
-                    if (showCountdown) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            maxLines = 1,
-                            overflow = TextOverflow.Clip,
-                            style = MaterialTheme.typography.bodyLarge,
-                            textAlign = TextAlign.Center,
-                            text = stringResource(
-                                resource = Res.string.agile_expires_in,
-                                expireMinutes,
-                                expireSeconds.toString().padStart(length = 2, padChar = '0'),
-                            ),
-                        )
-                    }
                     Spacer(modifier = Modifier.size(size = dimension.grid_1))
                     if (differentTariff != null) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             style = MaterialTheme.typography.labelLarge,
+                            textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.onSurface,
                             text = stringResource(resource = Res.string.agile_tariff_standing_charge, differentTariff.vatInclusiveStandingCharge),
                         )
                     }
                 }
+            }
+        }
 
-                Row(
-                    modifier = Modifier.weight(weight = 1f),
-                ) {
-                    Spacer(modifier = Modifier.weight(0.25f))
-                    DashboardWidget(
-                        modifier = Modifier
-                            .weight(0.5f)
-                            .heightIn(max = 120.dp),
-                        colorPalette = colorPalette,
-                        percentage = targetPercentage,
-                    )
-                    Spacer(modifier = Modifier.weight(0.25f))
-                }
+        Card(
+            modifier = Modifier
+                .weight(weight = 1f)
+                .fillMaxHeight(),
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(all = dimension.grid_2),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                DashboardWidget(
+                    modifier = Modifier.aspectRatio(ratio = 2f),
+                    colorPalette = colorPalette,
+                    percentage = targetPercentage,
+                    countDownText = if (showCountdown) {
+                        stringResource(
+                            resource = Res.string.agile_expire_time,
+                            expireMinutes,
+                            expireSeconds.toString().padStart(length = 2, padChar = '0'),
+                        )
+                    } else {
+                        null
+                    },
+                )
             }
         }
 

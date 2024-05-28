@@ -55,6 +55,8 @@
     <string name="agile_about_tariff">About this tariff</string>
     <string name="agile_unit_rate_details">Published Unit Rates</string>
     <string name="agile_vat_unit_rate">VAT Unit Rate (p/kWh)</string>
+    <string name="agile_expire">Expires</string>
+    <string name="agile_expire_time">%1$s:%2$s</string>
     <string name="agile_expires_in">Expires in %1$s:%2$s</string>
     <string name="agile_different_tariff">You are on a different tariff</string>
     <string name="agile_product_code_retail_region">%1$s (Region %2$s)</string>
