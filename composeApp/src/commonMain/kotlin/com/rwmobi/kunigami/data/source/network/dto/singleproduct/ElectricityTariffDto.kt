@@ -25,10 +25,9 @@ data class ElectricityTariffDto(
     @SerialName("exit_fees_type") val exitFeesType: String,
     @SerialName("standard_unit_rate_exc_vat") val standardUnitRateExcVat: Double? = null,
     @SerialName("standard_unit_rate_inc_vat") val standardUnitRateIncVat: Double? = null,
-    // TODO: duel rates required different handling
-//    @SerialName("day_unit_rate_exc_vat") val dayUnitRateExcVat: Double? = null,
-//    @SerialName("day_unit_rate_inc_vat") val dayUnitRateIncVat: Double? = null,
-//    @SerialName("night_unit_rate_exc_vat") val nightUnitRateExcVat: Double? = null,
-//    @SerialName("night_unit_rate_inc_vat") val nightUnitRateIncVat: Double? = null,
+    @SerialName("day_unit_rate_exc_vat") val dayUnitRateExcVat: Double? = null,
+    @SerialName("day_unit_rate_inc_vat") val dayUnitRateIncVat: Double? = null,
+    @SerialName("night_unit_rate_exc_vat") val nightUnitRateExcVat: Double? = null,
+    @SerialName("night_unit_rate_inc_vat") val nightUnitRateIncVat: Double? = null,
     @SerialName("links") val links: List<LinkDto>,
 )

@@ -57,7 +57,7 @@ fun AppNavigationHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = AppDestination.AGILE.name,
+        startDestination = AppDestination.TARIFFS.name,
     ) {
         composable(route = AppDestination.USAGE.name) {
             // Workaround: passing through parameters not working on iOS, so we do it here
@@ -136,10 +136,11 @@ fun AppNavigationHost(
                 uiState = uiState,
                 uiEvent = TariffsUIEvent(
                     onRefresh = viewModel::refresh,
-                    onProductItemClick = {}, // TODO: Not sure where to go
+                    onProductItemClick = { viewModel.getProductDetails(it) },
                     onErrorShown = viewModel::errorShown,
                     onScrolledToTop = { onScrolledToTop(AppDestination.TARIFFS) },
                     onShowSnackbar = onShowSnackbar,
+                    onProductDetailsDismissed = viewModel::onProductDetailsDismissed,
                 ),
             )
         }

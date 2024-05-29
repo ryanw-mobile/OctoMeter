@@ -22,19 +22,21 @@ class GetFilteredProductsUseCase(
     suspend operator fun invoke(): Result<List<Product>> {
         return withContext(dispatcher) {
             val getProductsResult = restApiRepository.getProducts()
-
-            if (getProductsResult.isFailure) {
-                getProductsResult
-            } else {
-                getProductsResult.mapCatching { products ->
-                    products.filter {
-                        it.direction == ProductDirection.IMPORT &&
-                            it.brand == "OCTOPUS_ENERGY" &&
-                            !it.features.contains(ProductFeature.BUSINESS) &&
-                            !it.features.contains(ProductFeature.RESTRICTED)
+            getProductsResult.fold(
+                onSuccess = {
+                    getProductsResult.mapCatching { products ->
+                        products.filter {
+                            it.direction == ProductDirection.IMPORT &&
+                                it.brand == "OCTOPUS_ENERGY" &&
+                                !it.features.contains(ProductFeature.BUSINESS) &&
+                                !it.features.contains(ProductFeature.RESTRICTED)
+                        }
                     }
-                }
-            }
+                },
+                onFailure = {
+                    getProductsResult
+                },
+            )
         }
     }
 }

@@ -10,6 +10,7 @@ package com.rwmobi.kunigami.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIState
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TariffsViewModel(
+    private val restApiRepository: RestApiRepository,
     private val getFilteredProductsUseCase: GetFilteredProductsUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
@@ -36,19 +38,13 @@ class TariffsViewModel(
     }
 
     fun refresh() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isLoading = true,
-            )
-        }
-
+        startLoading()
         viewModelScope.launch(dispatcher) {
             val filteredProducts = getFilteredProductsUseCase()
             filteredProducts.fold(
                 onSuccess = { products ->
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
-                            isLoading = false,
                             products = products,
                         )
                     }
@@ -58,16 +54,63 @@ class TariffsViewModel(
                     Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
                 },
             )
+            stopLoading()
         }
     }
 
-    fun getTariffDetails(productCode: String) {
+    fun getProductDetails(productCode: String) {
+        startLoading()
+        viewModelScope.launch(dispatcher) {
+            val getProductDetailsResult = restApiRepository.getProductDetails(
+                productCode = productCode,
+            )
+
+            getProductDetailsResult.fold(
+                onSuccess = { product ->
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(
+                            productDetails = product,
+                        )
+                    }
+                    getProductDetailsResult
+                },
+                onFailure = { throwable ->
+                    updateUIForError(message = throwable.message ?: "Error when retrieving product details")
+                    Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving product details" })
+                },
+            )
+            stopLoading()
+        }
+    }
+
+    fun onProductDetailsDismissed() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                productDetails = null,
+            )
+        }
     }
 
     fun requestScrollToTop(enabled: Boolean) {
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 requestScrollToTop = enabled,
+            )
+        }
+    }
+
+    private fun startLoading() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = true,
+            )
+        }
+    }
+
+    private fun stopLoading() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = false,
             )
         }
     }
@@ -83,7 +126,6 @@ class TariffsViewModel(
                 )
             }
             currentUiState.copy(
-                isLoading = false,
                 errorMessages = newErrorMessages,
             )
         }

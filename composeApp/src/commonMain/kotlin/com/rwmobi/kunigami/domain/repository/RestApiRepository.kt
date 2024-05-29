@@ -23,6 +23,7 @@ interface RestApiRepository {
     ): Result<Tariff>
 
     suspend fun getProducts(): Result<List<Product>>
+    suspend fun getProductDetails(productCode: String): Result<Product>
     suspend fun getStandardUnitRates(
         productCode: String,
         tariffCode: String,

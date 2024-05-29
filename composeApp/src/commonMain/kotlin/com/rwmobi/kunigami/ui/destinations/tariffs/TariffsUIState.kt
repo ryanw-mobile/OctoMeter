@@ -15,6 +15,7 @@ import com.rwmobi.kunigami.ui.model.ErrorMessage
 data class TariffsUIState(
     val isLoading: Boolean = true,
     val products: List<Product> = emptyList(),
+    val productDetails: Product? = null,
     val requestScrollToTop: Boolean = false,
     val errorMessages: List<ErrorMessage> = emptyList(),
 )

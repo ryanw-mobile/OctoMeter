@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -83,9 +84,24 @@ fun TariffsScreen(
                             }
                         }
                     }
+
                     Column(
                         modifier = Modifier.weight(1f),
                     ) {
+                        uiState.productDetails?.let { product ->
+                            Button(
+                                onClick = uiEvent.onProductDetailsDismissed,
+                            ) {
+                                Text("close")
+                            }
+
+                            ProductItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = dimension.grid_1),
+                                product = product,
+                            )
+                        }
                     }
                 }
             }

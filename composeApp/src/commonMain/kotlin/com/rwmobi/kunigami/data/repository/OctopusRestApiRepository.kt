@@ -61,6 +61,20 @@ class OctopusRestApiRepository(
         }
     }
 
+    override suspend fun getProductDetails(
+        productCode: String,
+    ): Result<Product> {
+        return withContext(dispatcher) {
+            runCatching {
+                val apiResponse = productsEndpoint.getProduct(
+                    productCode = productCode,
+                )
+
+                apiResponse?.toProduct() ?: throw IllegalArgumentException("Cannot parse product")
+            }.except<CancellationException, _>()
+        }
+    }
+
     override suspend fun getStandardUnitRates(
         productCode: String,
         tariffCode: String,

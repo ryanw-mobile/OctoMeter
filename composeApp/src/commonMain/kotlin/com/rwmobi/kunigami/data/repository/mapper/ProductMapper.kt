@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.data.repository.mapper
 
 import com.rwmobi.kunigami.data.source.network.dto.products.ProductDetailsDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SingleProductApiResponse
 import com.rwmobi.kunigami.domain.model.product.Product
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
@@ -31,3 +32,25 @@ fun ProductDetailsDto.toProduct() = Product(
     availableTo = availableTo,
     brand = brand,
 )
+
+fun SingleProductApiResponse.toProduct(): Product {
+    return Product(
+        code = code,
+        direction = ProductDirection.UNKNOWN,
+        fullName = fullName,
+        displayName = displayName,
+        description = description,
+        features = mutableListOf<ProductFeature>().apply {
+            if (isVariable) add(ProductFeature.VARIABLE)
+            if (isGreen) add(ProductFeature.GREEN)
+            if (isTracker) add(ProductFeature.TRACKER)
+            if (isPrepay) add(ProductFeature.PREPAY)
+            if (isBusiness) add(ProductFeature.BUSINESS)
+            if (isRestricted) add(ProductFeature.RESTRICTED)
+        }.toList(),
+        term = term,
+        availableFrom = availableFrom,
+        availableTo = availableTo,
+        brand = brand,
+    )
+}
