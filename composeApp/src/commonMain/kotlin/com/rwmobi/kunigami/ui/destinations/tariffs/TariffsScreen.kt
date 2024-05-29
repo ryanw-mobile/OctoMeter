@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +39,7 @@ import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ProductItem
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
+import com.rwmobi.kunigami.ui.destinations.tariffs.components.CloseButtonBar
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.navigation_tariffs
@@ -128,21 +128,12 @@ fun TariffsScreen(
                         ) {
                             uiState.productDetails?.let { product ->
                                 stickyHeader {
-                                    DualTitleBar(
+                                    CloseButtonBar(
                                         modifier = Modifier
-                                            .background(color = MaterialTheme.colorScheme.secondary)
                                             .fillMaxWidth()
                                             .height(height = dimension.minListItemHeight),
-                                        title = stringResource(resource = Res.string.navigation_tariffs),
+                                        onCloseClicked = uiEvent.onProductDetailsDismissed,
                                     )
-                                }
-
-                                item {
-                                    Button(
-                                        onClick = uiEvent.onProductDetailsDismissed,
-                                    ) {
-                                        Text("close")
-                                    }
                                 }
 
                                 item {
@@ -170,10 +161,7 @@ fun TariffsScreen(
         }
     }
 
-    val bottomSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false,
-    )
-
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
     if (bottomSheetState.isVisible && uiState.requestedLayout != TariffScreenLayout.ListDetailPane) {
         TariffBottomSheet(
             modifier = Modifier.fillMaxSize(),
@@ -188,21 +176,28 @@ fun TariffsScreen(
     }
 
     LaunchedEffect(uiState.productDetails, uiState.requestedLayout) {
-        if (uiState.requestedLayout == TariffScreenLayout.ListDetailPane) {
-            if (bottomSheetState.isVisible) {
-                bottomSheetState.hide()
+        when {
+            uiState.requestedLayout == TariffScreenLayout.ListDetailPane -> {
+                if (bottomSheetState.isVisible) {
+                    bottomSheetState.hide()
+                }
             }
-        } else if (uiState.productDetails != null) {
-            if (!bottomSheetState.isVisible) {
-                bottomSheetState.show()
+
+            uiState.productDetails != null -> {
+                if (!bottomSheetState.isVisible) {
+                    bottomSheetState.show()
+                }
             }
-        } else {
-            if (bottomSheetState.isVisible) {
-                bottomSheetState.hide()
+
+            else -> {
+                if (bottomSheetState.isVisible) {
+                    bottomSheetState.hide()
+                }
             }
         }
     }
 
+    // We assign this to the main view only. The secondary pane (if any) won't be scrolled.
     LaunchedEffect(uiState.requestScrollToTop) {
         if (uiState.requestScrollToTop) {
             mainLazyListState.scrollToItem(index = 0)
