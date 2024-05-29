@@ -22,6 +22,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -36,12 +38,17 @@ import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ProductItem
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
-import com.rwmobi.kunigami.ui.destinations.tariffs.components.CloseButtonBar
+import com.rwmobi.kunigami.ui.destinations.tariffs.components.ButtonTitleBar
+import com.rwmobi.kunigami.ui.destinations.tariffs.components.DetailsScreenWrapper
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.TariffBottomSheet
-import com.rwmobi.kunigami.ui.destinations.tariffs.components.productDetails
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.arrow_ios_back_fill
+import kunigami.composeapp.generated.resources.close_fill
+import kunigami.composeapp.generated.resources.content_description_dismiss_this_pane
+import kunigami.composeapp.generated.resources.content_description_navigate_back
 import kunigami.composeapp.generated.resources.navigation_tariffs
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -64,8 +71,16 @@ fun TariffsScreen(
     val dimension = LocalDensity.current.getDimension()
     val mainLazyListState = rememberLazyListState()
 
+    val shouldShowTariffsList = (uiState.productSummaries.isNotEmpty()) &&
+        (
+            uiState.productDetails == null ||
+                uiState.requestedLayout is TariffScreenLayout.ListDetailPane ||
+                uiState.requestedLayout == TariffScreenLayout.Compact(useBottomSheet = true) ||
+                uiState.requestedLayout == TariffScreenLayout.Wide(useBottomSheet = true)
+            )
+
     Box(modifier = modifier) {
-        if (uiState.productSummaries.isNotEmpty()) {
+        if (shouldShowTariffsList) {
             Row(
                 modifier = Modifier
                     .fillMaxSize()
@@ -116,35 +131,56 @@ fun TariffsScreen(
                         color = MaterialTheme.colorScheme.surfaceContainerHighest,
                     )
 
-                    val detailLazyListState = rememberLazyListState()
-                    ScrollbarMultiplatform(
+                    DetailsScreenWrapper(
                         modifier = Modifier.weight(weight = 1f),
-                        lazyListState = detailLazyListState,
-                    ) { contentModifier ->
-                        LazyColumn(
-                            modifier = contentModifier.fillMaxSize(),
-                            state = detailLazyListState,
-                        ) {
-                            uiState.productDetails?.let { product ->
-                                stickyHeader {
-                                    CloseButtonBar(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(height = dimension.minListItemHeight),
-                                        onCloseClicked = uiEvent.onProductDetailsDismissed,
-                                    )
-                                }
-
-                                productDetails(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = dimension.grid_1),
-                                    productDetails = product,
-                                )
-                            }
+                        productDetails = uiState.productDetails,
+                    ) {
+                        uiState.productDetails?.let { productDetails ->
+                            ButtonTitleBar(
+                                modifier = Modifier
+                                    .background(color = MaterialTheme.colorScheme.secondary)
+                                    .fillMaxWidth()
+                                    .height(height = dimension.minListItemHeight),
+                                title = productDetails.displayName,
+                                color = MaterialTheme.colorScheme.onSecondary,
+                                rightButton = {
+                                    IconButton(onClick = uiEvent.onProductDetailsDismissed) {
+                                        Icon(
+                                            painter = painterResource(resource = Res.drawable.close_fill),
+                                            tint = MaterialTheme.colorScheme.onSecondary,
+                                            contentDescription = stringResource(resource = Res.string.content_description_dismiss_this_pane),
+                                        )
+                                    }
+                                },
+                            )
                         }
                     }
                 }
+            }
+        } else if (uiState.productDetails != null) {
+            DetailsScreenWrapper(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .conditionalBlur(enabled = uiState.isLoading && uiState.productSummaries.isEmpty()),
+                productDetails = uiState.productDetails,
+            ) {
+                ButtonTitleBar(
+                    modifier = Modifier
+                        .background(color = MaterialTheme.colorScheme.secondary)
+                        .fillMaxWidth()
+                        .height(height = dimension.minListItemHeight),
+                    title = uiState.productDetails.displayName,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    leftButton = {
+                        IconButton(onClick = uiEvent.onProductDetailsDismissed) {
+                            Icon(
+                                painter = painterResource(resource = Res.drawable.arrow_ios_back_fill),
+                                tint = MaterialTheme.colorScheme.onSecondary,
+                                contentDescription = stringResource(resource = Res.string.content_description_navigate_back),
+                            )
+                        }
+                    },
+                )
             }
         } else if (!uiState.isLoading) {
             // no data
