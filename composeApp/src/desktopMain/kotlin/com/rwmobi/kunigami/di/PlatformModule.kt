@@ -9,12 +9,11 @@ package com.rwmobi.kunigami.di
 
 import com.russhwolf.settings.Settings
 import com.rwmobi.kunigami.data.source.local.preferences.provideSettings
-import composeapp.kunigami.BuildConfig
 import io.ktor.client.engine.HttpClientEngine
-import io.ktor.client.engine.darwin.Darwin
+import io.ktor.client.engine.cio.CIO
 import org.koin.dsl.module
 
-val appModule = module {
-    single<HttpClientEngine> { Darwin.create() }
-    single<Settings> { provideSettings(serviceName = BuildConfig.PACKAGE_NAME) }
+val platformModule = module {
+    single<HttpClientEngine> { CIO.create() }
+    single<Settings> { provideSettings() }
 }

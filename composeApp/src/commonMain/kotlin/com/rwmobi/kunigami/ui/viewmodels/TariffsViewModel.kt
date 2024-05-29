@@ -17,7 +17,9 @@ import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffScreenLayout
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIState
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
+import com.rwmobi.kunigami.ui.extensions.getPlatformType
 import com.rwmobi.kunigami.ui.model.ErrorMessage
+import com.rwmobi.kunigami.ui.model.PlatformType
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,9 +44,10 @@ class TariffsViewModel(
 
     fun notifyScreenSizeChanged(windowSizeClass: WindowSizeClass) {
         _uiState.update { currentUiState ->
+            val platform = windowSizeClass.getPlatformType()
             val requestedLayout = when (windowSizeClass.widthSizeClass) {
-                WindowWidthSizeClass.Compact -> TariffScreenLayout.Compact
-                WindowWidthSizeClass.Medium -> TariffScreenLayout.Wide
+                WindowWidthSizeClass.Compact -> TariffScreenLayout.Compact(useBottomSheet = platform != PlatformType.DESKTOP)
+                WindowWidthSizeClass.Medium -> TariffScreenLayout.Wide(useBottomSheet = platform != PlatformType.DESKTOP)
                 else -> TariffScreenLayout.ListDetailPane
             }
 

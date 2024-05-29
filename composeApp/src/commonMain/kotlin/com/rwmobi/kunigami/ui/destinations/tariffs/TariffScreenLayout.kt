@@ -11,7 +11,7 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 sealed interface TariffScreenLayout {
-    data object Compact : TariffScreenLayout
-    data object Wide : TariffScreenLayout
+    data class Compact(val useBottomSheet: Boolean) : TariffScreenLayout
+    data class Wide(val useBottomSheet: Boolean) : TariffScreenLayout
     data object ListDetailPane : TariffScreenLayout
 }

@@ -19,7 +19,7 @@ fun initKoin() {
                 KermitKoinLogger(withTag("koin")),
             )
             modules(
-                appModule,
+                platformModule,
                 dispatcherModule,
                 viewModelModule,
                 userCaseModule,

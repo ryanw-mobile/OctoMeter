@@ -14,7 +14,7 @@ import io.ktor.client.engine.cio.CIO
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-val appModule = module {
+val platformModule = module {
     single<HttpClientEngine> { CIO.create() }
     single<Settings> { provideSettings(context = androidContext().applicationContext) }
 }
