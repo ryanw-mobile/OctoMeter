@@ -5,9 +5,9 @@
  *
  */
 
-@file:OptIn(ExperimentalLayoutApi::class, ExperimentalResourceApi::class)
+@file:OptIn(ExperimentalLayoutApi::class)
 
-package com.rwmobi.kunigami.ui.components
+package com.rwmobi.kunigami.ui.destinations.tariffs.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,16 +29,17 @@ import androidx.compose.ui.unit.Density
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
+import com.rwmobi.kunigami.ui.components.TagWithIcon
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.tariffs_fixed_term_months
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun ProductItem(
+internal fun ProductItem(
     modifier: Modifier = Modifier,
     productSummary: ProductSummary,
 ) {
@@ -51,12 +51,6 @@ fun ProductItem(
             horizontal = dimension.grid_2,
         ),
     ) {
-        Text(
-            modifier = Modifier.wrapContentSize(),
-            style = MaterialTheme.typography.labelMedium,
-            text = productSummary.code,
-        )
-
         Text(
             modifier = Modifier
                 .fillMaxWidth()
@@ -78,27 +72,15 @@ fun ProductItem(
 
         Spacer(modifier = Modifier.size(size = dimension.grid_1))
 
-        val availableFromDate = productSummary.availableFrom.toLocalDateTime(TimeZone.currentSystemDefault())
-        val availableTo = productSummary.availableTo?.let {
-            val localDateTime = it.toLocalDateTime(TimeZone.currentSystemDefault())
-            "to ${localDateTime.date}"
-        } ?: ""
-
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.bodyMedium,
-            text = "Available from ${availableFromDate.date} $availableTo",
-        )
-
         productSummary.term?.let {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.bodyMedium,
-                text = "Fixed term $it months",
+                text = stringResource(resource = Res.string.tariffs_fixed_term_months, it),
             )
-        }
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_1))
+            Spacer(modifier = Modifier.size(size = dimension.grid_1))
+        }
 
         if (productSummary.features.isNotEmpty()) {
             val currentDensity = LocalDensity.current

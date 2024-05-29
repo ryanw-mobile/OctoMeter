@@ -43,7 +43,7 @@ internal fun DetailsScreenWrapper(
                     header()
                 }
 
-                productDetails(
+                productDetailsLayout(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = dimension.grid_1),

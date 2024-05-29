@@ -65,6 +65,12 @@
     <string name="agile_tariff_standard_unit_rate">Unit Rate: %1$d p/kWh</string>
     <string name="agile_tariff_standing_charge">Standing Charge: %1$d p/day</string>
 
+    <!-- Tariffs -->
+    <string name="tariffs_retail_region">Retail Region</string>
+    <string name="tariffs_fixed_term_months">Fixed term %1$s months</string>
+    <string name="tariffs_available_from">Available from %1$s %2$s</string>
+    <string name="tariffs_available_to">to %1$s</string>
+
     <!-- Product Features -->
     <string name="product_feature_variable">Variable</string>
     <string name="product_feature_green">Green</string>

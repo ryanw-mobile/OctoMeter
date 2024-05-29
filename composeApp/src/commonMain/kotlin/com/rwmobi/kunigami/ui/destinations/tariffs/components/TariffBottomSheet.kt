@@ -35,7 +35,7 @@ internal fun TariffBottomSheet(
     ) {
         LazyColumn {
             productDetails?.let {
-                productDetails(
+                productDetailsLayout(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = dimension.grid_1),
