@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
-import com.rwmobi.kunigami.domain.model.product.Product
+import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
@@ -44,20 +44,21 @@ import org.jetbrains.compose.resources.stringResource
 
 internal fun LazyListScope.productDetails(
     modifier: Modifier = Modifier,
-    product: Product,
+    productDetails: ProductDetails,
 ) {
     item {
         ProductFacts(
             modifier = modifier,
-            product = product,
+            productDetails = productDetails,
         )
     }
+
 }
 
 @Composable
 private fun ProductFacts(
     modifier: Modifier = Modifier,
-    product: Product,
+    productDetails: ProductDetails,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -73,16 +74,16 @@ private fun ProductFacts(
                 .wrapContentHeight(),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.ExtraBold,
-            text = product.displayName,
+            text = productDetails.displayName,
         )
 
-        if (product.fullName != product.displayName) {
+        if (productDetails.fullName != productDetails.displayName) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
                 style = MaterialTheme.typography.titleMedium,
-                text = product.fullName,
+                text = productDetails.fullName,
             )
         }
 
@@ -91,13 +92,13 @@ private fun ProductFacts(
         Text(
             modifier = Modifier.wrapContentSize(),
             style = MaterialTheme.typography.labelMedium,
-            text = product.code,
+            text = productDetails.code,
         )
 
         Spacer(modifier = Modifier.size(size = dimension.grid_1))
 
-        val availableFromDate = product.availableFrom.toLocalDateTime(TimeZone.currentSystemDefault())
-        val availableTo = product.availableTo?.let {
+        val availableFromDate = productDetails.availableFrom.toLocalDateTime(TimeZone.currentSystemDefault())
+        val availableTo = productDetails.availableTo?.let {
             val localDateTime = it.toLocalDateTime(TimeZone.currentSystemDefault())
             "to ${localDateTime.date}"
         } ?: ""
@@ -108,7 +109,7 @@ private fun ProductFacts(
             text = "Available from ${availableFromDate.date} $availableTo",
         )
 
-        product.term?.let {
+        productDetails.term?.let {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.bodyMedium,
@@ -120,13 +121,13 @@ private fun ProductFacts(
 
         Spacer(modifier = Modifier.size(size = dimension.grid_1))
 
-        if (product.features.isNotEmpty()) {
+        if (productDetails.features.isNotEmpty()) {
             val currentDensity = LocalDensity.current
             CompositionLocalProvider(
                 LocalDensity provides Density(currentDensity.density, fontScale = 1f),
             ) {
                 FlowRow(modifier = Modifier.padding(vertical = dimension.grid_1)) {
-                    product.features.forEach {
+                    productDetails.features.forEach {
                         TagWithIcon(
                             modifier = Modifier.padding(end = dimension.grid_0_5),
                             icon = painterResource(resource = it.iconResource),
@@ -142,7 +143,7 @@ private fun ProductFacts(
         Text(
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.bodyMedium,
-            text = product.description,
+            text = productDetails.description,
         )
     }
 
@@ -159,7 +160,7 @@ private fun ProductItemPreview() {
     CommonPreviewSetup {
         ProductFacts(
             modifier = Modifier.fillMaxWidth(),
-            product = Product(
+            productDetails = ProductDetails(
                 code = "AGILE-24-04-03",
                 direction = ProductDirection.IMPORT,
                 fullName = "Agile Octopus April 2024 v1",

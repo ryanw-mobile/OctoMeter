@@ -62,7 +62,7 @@ class TariffsViewModel(
                 onSuccess = { products ->
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
-                            products = products,
+                            productSummaries = products,
                         )
                     }
                 },

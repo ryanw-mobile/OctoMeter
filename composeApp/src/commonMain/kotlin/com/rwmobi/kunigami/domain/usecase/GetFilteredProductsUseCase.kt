@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.domain.usecase
 
-import com.rwmobi.kunigami.domain.model.product.Product
+import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
@@ -19,7 +19,7 @@ class GetFilteredProductsUseCase(
     private val restApiRepository: RestApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
-    suspend operator fun invoke(): Result<List<Product>> {
+    suspend operator fun invoke(): Result<List<ProductSummary>> {
         return withContext(dispatcher) {
             val getProductsResult = restApiRepository.getProducts()
             getProductsResult.fold(

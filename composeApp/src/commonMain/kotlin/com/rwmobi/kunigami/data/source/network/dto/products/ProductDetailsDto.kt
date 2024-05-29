@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.data.source.network.dto.products
 
 import com.rwmobi.kunigami.data.source.network.dto.LinkDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.TariffDetailsDto
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -28,6 +29,8 @@ data class ProductDetailsDto(
     @SerialName("term") val term: Int?,
     @SerialName("available_from") val availableFrom: Instant,
     @SerialName("available_to") val availableTo: Instant?,
+    @SerialName("single_register_electricity_tariffs") val singleRegisterElectricityTariffs: Map<String, TariffDetailsDto>? = null,
+    @SerialName("dual_register_electricity_tariffs") val dualRegisterElectricityTariffs: Map<String, TariffDetailsDto>? = null,
     @SerialName("links") val linkDtos: List<LinkDto>,
     @SerialName("brand") val brand: String,
 )

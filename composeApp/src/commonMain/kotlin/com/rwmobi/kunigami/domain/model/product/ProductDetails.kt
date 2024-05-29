@@ -11,7 +11,7 @@ import androidx.compose.runtime.Immutable
 import kotlinx.datetime.Instant
 
 @Immutable
-data class Product(
+data class ProductDetails(
     val code: String,
     val direction: ProductDirection,
     val fullName: String,
@@ -21,6 +21,5 @@ data class Product(
     val term: Int?,
     val availableFrom: Instant,
     val availableTo: Instant?,
-    // We don't know how to parse links for product details yet
     val brand: String,
 )

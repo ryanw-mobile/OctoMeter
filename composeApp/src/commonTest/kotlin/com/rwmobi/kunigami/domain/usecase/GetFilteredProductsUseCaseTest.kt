@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.domain.usecase
 
-import com.rwmobi.kunigami.domain.model.product.Product
+import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
@@ -38,8 +38,8 @@ class GetFilteredProductsUseCaseTest {
 
     @Test
     fun `invoke should return filtered products successfully`() = runTest {
-        val products = listOf(
-            Product(
+        val productSummaries = listOf(
+            ProductSummary(
                 code = "1",
                 direction = ProductDirection.IMPORT,
                 fullName = "Product 1",
@@ -51,7 +51,7 @@ class GetFilteredProductsUseCaseTest {
                 availableTo = Instant.parse("2023-12-31T23:59:59Z"),
                 brand = "OCTOPUS_ENERGY",
             ),
-            Product(
+            ProductSummary(
                 code = "2",
                 direction = ProductDirection.EXPORT,
                 fullName = "Product 2",
@@ -63,7 +63,7 @@ class GetFilteredProductsUseCaseTest {
                 availableTo = Instant.parse("2023-12-31T23:59:59Z"),
                 brand = "OCTOPUS_ENERGY",
             ),
-            Product(
+            ProductSummary(
                 code = "3",
                 direction = ProductDirection.IMPORT,
                 fullName = "Product 3",
@@ -75,7 +75,7 @@ class GetFilteredProductsUseCaseTest {
                 availableTo = Instant.parse("2023-12-31T23:59:59Z"),
                 brand = "OCTOPUS_ENERGY",
             ),
-            Product(
+            ProductSummary(
                 code = "4",
                 direction = ProductDirection.IMPORT,
                 fullName = "Product 4",
@@ -89,13 +89,13 @@ class GetFilteredProductsUseCaseTest {
             ),
         )
 
-        fakeRestApiRepository.setProductsResponse = Result.success(products)
+        fakeRestApiRepository.setProductsResponse = Result.success(productSummaries)
 
         val result = getFilteredProductsUseCase()
 
         result.isSuccess shouldBe true
         result.getOrNull() shouldContainExactly listOf(
-            products[0],
+            productSummaries[0],
         )
     }
 
@@ -113,8 +113,8 @@ class GetFilteredProductsUseCaseTest {
 
     @Test
     fun `invoke should return empty list when no products match criteria`() = runTest {
-        val products = listOf(
-            Product(
+        val productSummaries = listOf(
+            ProductSummary(
                 code = "1",
                 direction = ProductDirection.EXPORT,
                 fullName = "Product 1",
@@ -128,7 +128,7 @@ class GetFilteredProductsUseCaseTest {
             ),
         )
 
-        fakeRestApiRepository.setProductsResponse = Result.success(products)
+        fakeRestApiRepository.setProductsResponse = Result.success(productSummaries)
 
         val result = getFilteredProductsUseCase()
 

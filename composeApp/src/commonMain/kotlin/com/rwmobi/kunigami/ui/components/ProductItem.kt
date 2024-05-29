@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
-import com.rwmobi.kunigami.domain.model.product.Product
+import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -41,7 +41,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun ProductItem(
     modifier: Modifier = Modifier,
-    product: Product,
+    productSummary: ProductSummary,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -54,7 +54,7 @@ fun ProductItem(
         Text(
             modifier = Modifier.wrapContentSize(),
             style = MaterialTheme.typography.labelMedium,
-            text = product.code,
+            text = productSummary.code,
         )
 
         Text(
@@ -63,23 +63,23 @@ fun ProductItem(
                 .wrapContentHeight(),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.ExtraBold,
-            text = product.displayName,
+            text = productSummary.displayName,
         )
 
-        if (product.fullName != product.displayName) {
+        if (productSummary.fullName != productSummary.displayName) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
                 style = MaterialTheme.typography.titleSmall,
-                text = product.fullName,
+                text = productSummary.fullName,
             )
         }
 
         Spacer(modifier = Modifier.size(size = dimension.grid_1))
 
-        val availableFromDate = product.availableFrom.toLocalDateTime(TimeZone.currentSystemDefault())
-        val availableTo = product.availableTo?.let {
+        val availableFromDate = productSummary.availableFrom.toLocalDateTime(TimeZone.currentSystemDefault())
+        val availableTo = productSummary.availableTo?.let {
             val localDateTime = it.toLocalDateTime(TimeZone.currentSystemDefault())
             "to ${localDateTime.date}"
         } ?: ""
@@ -90,7 +90,7 @@ fun ProductItem(
             text = "Available from ${availableFromDate.date} $availableTo",
         )
 
-        product.term?.let {
+        productSummary.term?.let {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.bodyMedium,
@@ -100,13 +100,13 @@ fun ProductItem(
 
         Spacer(modifier = Modifier.size(size = dimension.grid_1))
 
-        if (product.features.isNotEmpty()) {
+        if (productSummary.features.isNotEmpty()) {
             val currentDensity = LocalDensity.current
             CompositionLocalProvider(
                 LocalDensity provides Density(currentDensity.density, fontScale = 1f),
             ) {
                 FlowRow(modifier = Modifier.padding(vertical = dimension.grid_1)) {
-                    product.features.forEach {
+                    productSummary.features.forEach {
                         TagWithIcon(
                             modifier = Modifier.padding(end = dimension.grid_0_5),
                             icon = painterResource(resource = it.iconResource),
@@ -122,7 +122,7 @@ fun ProductItem(
         Text(
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.bodyMedium,
-            text = product.description,
+            text = productSummary.description,
         )
     }
 }
@@ -133,7 +133,7 @@ private fun ProductItemPreview() {
     CommonPreviewSetup {
         ProductItem(
             modifier = Modifier.fillMaxWidth(),
-            product = Product(
+            productSummary = ProductSummary(
                 code = "AGILE-24-04-03",
                 direction = ProductDirection.IMPORT,
                 fullName = "Agile Octopus April 2024 v1",

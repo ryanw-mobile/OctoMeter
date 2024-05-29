@@ -9,11 +9,12 @@ package com.rwmobi.kunigami.data.repository.mapper
 
 import com.rwmobi.kunigami.data.source.network.dto.products.ProductDetailsDto
 import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SingleProductApiResponse
-import com.rwmobi.kunigami.domain.model.product.Product
+import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
+import com.rwmobi.kunigami.domain.model.product.ProductSummary
 
-fun ProductDetailsDto.toProduct() = Product(
+fun ProductDetailsDto.toProductSummary() = ProductSummary(
     code = code,
     direction = ProductDirection.fromApiValue(direction),
     fullName = fullName,
@@ -33,8 +34,8 @@ fun ProductDetailsDto.toProduct() = Product(
     brand = brand,
 )
 
-fun SingleProductApiResponse.toProduct(): Product {
-    return Product(
+fun SingleProductApiResponse.toProductDetails(): ProductDetails {
+    return ProductDetails(
         code = code,
         direction = ProductDirection.UNKNOWN,
         fullName = fullName,

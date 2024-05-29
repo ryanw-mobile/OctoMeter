@@ -33,7 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import com.rwmobi.kunigami.domain.model.product.Product
+import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.ui.components.DualTitleBar
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ProductItem
@@ -67,11 +67,11 @@ fun TariffsScreen(
     val mainLazyListState = rememberLazyListState()
 
     Box(modifier = modifier) {
-        if (uiState.products.isNotEmpty()) {
+        if (uiState.productSummaries.isNotEmpty()) {
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .conditionalBlur(enabled = uiState.isLoading && uiState.products.isEmpty()),
+                    .conditionalBlur(enabled = uiState.isLoading && uiState.productSummaries.isEmpty()),
             ) {
                 ScrollbarMultiplatform(
                     modifier = Modifier.weight(weight = 1f),
@@ -92,7 +92,7 @@ fun TariffsScreen(
                         }
 
                         itemsIndexed(
-                            items = uiState.products,
+                            items = uiState.productSummaries,
                             key = { _, product -> product.code },
                         ) { index, product ->
                             ProductItem(
@@ -100,10 +100,10 @@ fun TariffsScreen(
                                     .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
                                     .fillMaxWidth()
                                     .padding(vertical = dimension.grid_1),
-                                product = product,
+                                productSummary = product,
                             )
 
-                            if (index < uiState.products.lastIndex) {
+                            if (index < uiState.productSummaries.lastIndex) {
                                 HorizontalDivider(
                                     modifier = Modifier.fillMaxWidth(),
                                 )
@@ -141,7 +141,7 @@ fun TariffsScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(vertical = dimension.grid_1),
-                                    product = product,
+                                    productDetails = product,
                                 )
                             }
                         }
@@ -153,7 +153,7 @@ fun TariffsScreen(
             Text("Placeholder for no data")
         }
 
-        if (uiState.isLoading && uiState.products.isEmpty()) {
+        if (uiState.isLoading && uiState.productSummaries.isEmpty()) {
             LoadingScreen(
                 modifier = Modifier.fillMaxSize(),
             )
@@ -164,7 +164,7 @@ fun TariffsScreen(
     if (bottomSheetState.isVisible && uiState.requestedLayout != TariffScreenLayout.ListDetailPane) {
         TariffBottomSheet(
             modifier = Modifier.fillMaxSize(),
-            product = uiState.productDetails,
+            productDetails = uiState.productDetails,
             bottomSheetState = bottomSheetState,
             onDismissRequest = uiEvent.onProductDetailsDismissed,
         )
@@ -209,7 +209,7 @@ fun TariffsScreen(
 @Composable
 private fun TariffBottomSheet(
     modifier: Modifier = Modifier,
-    product: Product?,
+    productDetails: ProductDetails?,
     bottomSheetState: SheetState,
     onDismissRequest: () -> Unit,
 ) {
@@ -220,12 +220,12 @@ private fun TariffBottomSheet(
         sheetState = bottomSheetState,
     ) {
         LazyColumn {
-            product?.let {
+            productDetails?.let {
                 productDetails(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = dimension.grid_1),
-                    product = it,
+                    productDetails = it,
                 )
             }
         }
