@@ -23,8 +23,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.ui.components.IconTextButton
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -43,7 +43,7 @@ internal fun ElectricityMeterPointCard(
     selectedMpan: String?,
     selectedMeterSerialNumber: String?,
     meterPoint: ElectricityMeterPoint,
-    tariff: Tariff?,
+    tariffSummary: TariffSummary?,
     requestedLayout: AccountScreenLayout,
     onReloadTariff: () -> Unit,
     onMeterSerialNumberSelected: (mpan: String, meterSerialNumber: String) -> Unit,
@@ -69,7 +69,7 @@ internal fun ElectricityMeterPointCard(
                 color = MaterialTheme.colorScheme.inverseSurface,
             )
 
-            if (tariff == null) {
+            if (tariffSummary == null) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -96,7 +96,7 @@ internal fun ElectricityMeterPointCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight(),
-                        tariff = tariff,
+                        tariffSummary = tariffSummary,
                         agreement = meterPoint.currentAgreement,
                         useWideLayout = requestedLayout !is AccountScreenLayout.Compact,
                     )

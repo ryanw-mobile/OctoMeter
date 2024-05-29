@@ -23,8 +23,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -33,13 +31,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.ui.components.DualTitleBar
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ProductItem
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.CloseButtonBar
+import com.rwmobi.kunigami.ui.destinations.tariffs.components.TariffBottomSheet
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.productDetails
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
@@ -201,33 +199,6 @@ fun TariffsScreen(
         if (uiState.requestScrollToTop) {
             mainLazyListState.scrollToItem(index = 0)
             uiEvent.onScrolledToTop()
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TariffBottomSheet(
-    modifier: Modifier = Modifier,
-    productDetails: ProductDetails?,
-    bottomSheetState: SheetState,
-    onDismissRequest: () -> Unit,
-) {
-    val dimension = LocalDensity.current.getDimension()
-    ModalBottomSheet(
-        modifier = modifier,
-        onDismissRequest = onDismissRequest,
-        sheetState = bottomSheetState,
-    ) {
-        LazyColumn {
-            productDetails?.let {
-                productDetails(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = dimension.grid_1),
-                    productDetails = it,
-                )
-            }
         }
     }
 }

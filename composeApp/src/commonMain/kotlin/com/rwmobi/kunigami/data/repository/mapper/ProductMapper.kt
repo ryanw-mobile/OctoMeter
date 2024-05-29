@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.data.repository.mapper
 
 import com.rwmobi.kunigami.data.source.network.dto.products.ProductDetailsDto
 import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SingleProductApiResponse
+import com.rwmobi.kunigami.domain.model.product.ElectricityTariffType
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
@@ -52,6 +53,22 @@ fun SingleProductApiResponse.toProductDetails(): ProductDetails {
         term = term,
         availableFrom = availableFrom,
         availableTo = availableTo,
+        electricityTariffType = when {
+            singleRegisterElectricityTariffs.isNotEmpty() -> ElectricityTariffType.SINGLE_REGISTER
+            dualRegisterElectricityTariffs.isNotEmpty() -> ElectricityTariffType.DUAL_REGISTER
+            else -> ElectricityTariffType.UNKNOWN
+        },
+        electricityTariffs = when {
+            singleRegisterElectricityTariffs.isNotEmpty() -> singleRegisterElectricityTariffs.mapNotNull { (key, value) ->
+                value.toTariffDetails()?.let { key to it }
+            }.toMap()
+
+            dualRegisterElectricityTariffs.isNotEmpty() -> dualRegisterElectricityTariffs.mapNotNull { (key, value) ->
+                value.toTariffDetails()?.let { key to it }
+            }.toMap()
+
+            else -> null
+        },
         brand = brand,
     )
 }

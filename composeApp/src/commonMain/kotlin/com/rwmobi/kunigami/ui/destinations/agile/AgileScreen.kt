@@ -111,7 +111,7 @@ fun AgileScreen(
                     state = lazyListState,
                 ) {
                     stickyHeader(key = "header") {
-                        val subtitle = uiState.agileTariff?.let {
+                        val subtitle = uiState.agileTariffSummary?.let {
                             val regionCode = it.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
                             stringResource(resource = Res.string.agile_product_code_retail_region, it.productCode, regionCode)
                         }
@@ -120,7 +120,7 @@ fun AgileScreen(
                                 .background(color = MaterialTheme.colorScheme.secondary)
                                 .fillMaxWidth()
                                 .height(height = dimension.minListItemHeight),
-                            title = uiState.agileTariff?.displayName ?: "",
+                            title = uiState.agileTariffSummary?.displayName ?: "",
                             subtitle = subtitle,
                         )
                     }
@@ -172,10 +172,10 @@ fun AgileScreen(
                                     colorPalette = colorPalette,
                                     backgroundPlot = { graphScope ->
                                         if (uiState.isCurrentlyOnDifferentTariff() &&
-                                            uiState.userProfile?.tariff != null
+                                            uiState.userProfile?.tariffSummary != null
                                         ) {
                                             graphScope.HorizontalLineAnnotation(
-                                                location = uiState.userProfile.tariff.vatInclusiveUnitRate,
+                                                location = uiState.userProfile.tariffSummary.vatInclusiveUnitRate,
                                                 lineStyle = LineStyle(
                                                     brush = SolidColor(MaterialTheme.colorScheme.error),
                                                     strokeWidth = dimension.grid_0_5,
@@ -201,8 +201,8 @@ fun AgileScreen(
                                     end = dimension.grid_3,
                                     top = dimension.grid_1,
                                 ),
-                            agileTariff = uiState.agileTariff,
-                            differentTariff = uiState.userProfile?.tariff,
+                            agileTariffSummary = uiState.agileTariffSummary,
+                            differentTariffSummary = uiState.userProfile?.tariffSummary,
                             colorPalette = colorPalette,
                             rateRange = uiState.rateRange,
                             rateGroupedCells = uiState.rateGroupedCells,

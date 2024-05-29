@@ -33,7 +33,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.model.rate.RateTrend
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -58,7 +58,7 @@ internal fun AgilePriceCard(
     textStyle: AgilePriceCardTextStyle,
     vatInclusivePrice: Double?,
     rateTrend: RateTrend?,
-    agileTariff: Tariff?,
+    agileTariffSummary: TariffSummary?,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -88,7 +88,7 @@ internal fun AgilePriceCard(
 
             Spacer(modifier = Modifier.height(height = dimension.grid_1))
 
-            agileTariff?.let {
+            agileTariffSummary?.let {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     style = textStyle.standingChargeStyle,

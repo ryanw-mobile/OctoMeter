@@ -7,11 +7,11 @@
 
 package com.rwmobi.kunigami.domain.model.account
 
-import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
 
 data class UserProfile(
     val selectedMpan: String? = null,
     val selectedMeterSerialNumber: String? = null,
     val account: Account? = null,
-    val tariff: Tariff? = null,
+    val tariffSummary: TariffSummary? = null,
 )

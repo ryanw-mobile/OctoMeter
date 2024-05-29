@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
+import com.rwmobi.kunigami.domain.model.product.ElectricityTariffType
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
@@ -46,13 +48,19 @@ internal fun LazyListScope.productDetails(
     modifier: Modifier = Modifier,
     productDetails: ProductDetails,
 ) {
-    item {
+    item(key = "productFacts") {
         ProductFacts(
             modifier = modifier,
             productDetails = productDetails,
         )
     }
 
+    productDetails.electricityTariffs?.let { electricityTariffs ->
+        itemsIndexed(items = electricityTariffs.keys.toList()) { index, key ->
+            val tariffDetails = electricityTariffs.get(key = key)
+            Text(text = tariffDetails.toString())
+        }
+    }
 }
 
 @Composable
@@ -168,6 +176,8 @@ private fun ProductItemPreview() {
                 description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
                 features = listOf(ProductFeature.VARIABLE, ProductFeature.GREEN),
                 term = 12,
+                electricityTariffType = ElectricityTariffType.UNKNOWN,
+                electricityTariffs = mapOf(),
                 availableFrom = Instant.parse("2024-03-31T23:00:00Z"),
                 availableTo = null,
                 brand = "OCTOPUS_ENERGY",

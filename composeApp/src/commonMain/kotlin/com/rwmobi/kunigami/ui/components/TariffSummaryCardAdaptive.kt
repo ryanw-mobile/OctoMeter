@@ -27,7 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
@@ -44,7 +44,7 @@ import org.jetbrains.compose.resources.stringResource
 internal fun TariffSummaryCardAdaptive(
     modifier: Modifier = Modifier,
     layoutType: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
-    tariff: Tariff,
+    tariffSummary: TariffSummary,
     heading: String,
     headingTextAlign: TextAlign = TextAlign.Start,
     subheading: String? = null,
@@ -65,7 +65,7 @@ internal fun TariffSummaryCardAdaptive(
                 heading = heading,
                 headingTextAlign = headingTextAlign,
                 subheading = subheading,
-                tariff = tariff,
+                tariffSummary = tariffSummary,
             )
         }
 
@@ -75,7 +75,7 @@ internal fun TariffSummaryCardAdaptive(
                 heading = heading,
                 headingTextAlign = headingTextAlign,
                 subheading = subheading,
-                tariff = tariff,
+                tariffSummary = tariffSummary,
             )
         }
 
@@ -85,7 +85,7 @@ internal fun TariffSummaryCardAdaptive(
                 heading = heading,
                 headingTextAlign = headingTextAlign,
                 subheading = subheading,
-                tariff = tariff,
+                tariffSummary = tariffSummary,
             )
         }
     }
@@ -97,7 +97,7 @@ private fun TariffSummaryCardLinear(
     heading: String,
     headingTextAlign: TextAlign,
     subheading: String?,
-    tariff: Tariff,
+    tariffSummary: TariffSummary,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -120,7 +120,7 @@ private fun TariffSummaryCardLinear(
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
-            text = tariff.displayName,
+            text = tariffSummary.displayName,
         )
 
         subheading?.let {
@@ -151,7 +151,7 @@ private fun TariffSummaryCardLinear(
                 modifier = Modifier.wrapContentWidth(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
-                text = stringResource(resource = Res.string.unit_p_day, tariff.vatInclusiveStandingCharge),
+                text = stringResource(resource = Res.string.unit_p_day, tariffSummary.vatInclusiveStandingCharge),
             )
         }
 
@@ -172,7 +172,7 @@ private fun TariffSummaryCardLinear(
                 modifier = Modifier.wrapContentWidth(),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
-                text = stringResource(resource = Res.string.unit_p_kwh, tariff.vatInclusiveUnitRate),
+                text = stringResource(resource = Res.string.unit_p_kwh, tariffSummary.vatInclusiveUnitRate),
             )
         }
     }
@@ -184,7 +184,7 @@ private fun TariffSummaryCardTwoColumns(
     heading: String,
     headingTextAlign: TextAlign,
     subheading: String?,
-    tariff: Tariff,
+    tariffSummary: TariffSummary,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -215,7 +215,7 @@ private fun TariffSummaryCardTwoColumns(
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    text = tariff.displayName,
+                    text = tariffSummary.displayName,
                 )
 
                 subheading?.let {
@@ -238,7 +238,7 @@ private fun TariffSummaryCardTwoColumns(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.End,
-                    text = stringResource(resource = Res.string.agile_tariff_standing_charge_two_lines, tariff.vatInclusiveStandingCharge),
+                    text = stringResource(resource = Res.string.agile_tariff_standing_charge_two_lines, tariffSummary.vatInclusiveStandingCharge),
                 )
 
                 Spacer(modifier = Modifier.size(size = dimension.grid_1))
@@ -248,7 +248,7 @@ private fun TariffSummaryCardTwoColumns(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.End,
-                    text = stringResource(resource = Res.string.agile_tariff_standard_unit_rate_two_lines, tariff.vatInclusiveUnitRate),
+                    text = stringResource(resource = Res.string.agile_tariff_standard_unit_rate_two_lines, tariffSummary.vatInclusiveUnitRate),
                 )
             }
         }
@@ -261,7 +261,7 @@ private fun TariffSummaryCardThreeColumns(
     heading: String,
     headingTextAlign: TextAlign,
     subheading: String?,
-    tariff: Tariff,
+    tariffSummary: TariffSummary,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -292,7 +292,7 @@ private fun TariffSummaryCardThreeColumns(
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    text = tariff.displayName,
+                    text = tariffSummary.displayName,
                 )
 
                 subheading?.let {
@@ -315,7 +315,7 @@ private fun TariffSummaryCardThreeColumns(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
-                    text = stringResource(resource = Res.string.agile_tariff_standing_charge_two_lines, tariff.vatInclusiveStandingCharge),
+                    text = stringResource(resource = Res.string.agile_tariff_standing_charge_two_lines, tariffSummary.vatInclusiveStandingCharge),
                 )
             }
 
@@ -327,7 +327,7 @@ private fun TariffSummaryCardThreeColumns(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
-                    text = stringResource(resource = Res.string.agile_tariff_standard_unit_rate_two_lines, tariff.vatInclusiveUnitRate),
+                    text = stringResource(resource = Res.string.agile_tariff_standard_unit_rate_two_lines, tariffSummary.vatInclusiveUnitRate),
                 )
             }
         }
@@ -343,7 +343,7 @@ private fun Preview() {
             heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
             headingTextAlign = TextAlign.Center,
             subheading = "Sample subheading",
-            tariff = TariffSamples.agileFlex221125,
+            tariffSummary = TariffSamples.agileFlex221125,
             layoutType = WindowWidthSizeClass.Compact,
         )
 
@@ -352,7 +352,7 @@ private fun Preview() {
             heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
             headingTextAlign = TextAlign.Center,
             subheading = "Sample subheading",
-            tariff = TariffSamples.agileFlex221125,
+            tariffSummary = TariffSamples.agileFlex221125,
             layoutType = WindowWidthSizeClass.Medium,
         )
 
@@ -361,7 +361,7 @@ private fun Preview() {
             heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
             headingTextAlign = TextAlign.Center,
             subheading = "Sample subheading",
-            tariff = TariffSamples.agileFlex221125,
+            tariffSummary = TariffSamples.agileFlex221125,
             layoutType = WindowWidthSizeClass.Expanded,
         )
     }

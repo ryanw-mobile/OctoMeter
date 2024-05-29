@@ -7,13 +7,13 @@
 
 package com.rwmobi.kunigami.domain.repository
 
-import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 
@@ -21,7 +21,7 @@ interface RestApiRepository {
     suspend fun getSimpleProductTariff(
         productCode: String,
         tariffCode: String,
-    ): Result<Tariff>
+    ): Result<TariffSummary>
 
     suspend fun getProducts(): Result<List<ProductSummary>>
     suspend fun getProductDetails(productCode: String): Result<ProductDetails>

@@ -26,8 +26,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
-import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_tariff_end_date
@@ -43,20 +43,20 @@ import org.jetbrains.compose.resources.stringResource
 internal fun TariffLayoutAdaptive(
     modifier: Modifier = Modifier,
     agreement: Agreement,
-    tariff: Tariff,
+    tariffSummary: TariffSummary,
     useWideLayout: Boolean = false,
 ) {
     if (useWideLayout) {
         TariffLayoutWide(
             modifier = modifier,
             agreement = agreement,
-            tariff = tariff,
+            tariffSummary = tariffSummary,
         )
     } else {
         TariffLayoutCompact(
             modifier = modifier,
             agreement = agreement,
-            tariff = tariff,
+            tariffSummary = tariffSummary,
         )
     }
 }
@@ -65,7 +65,7 @@ internal fun TariffLayoutAdaptive(
 private fun TariffLayoutCompact(
     modifier: Modifier = Modifier,
     agreement: Agreement,
-    tariff: Tariff,
+    tariffSummary: TariffSummary,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -75,17 +75,17 @@ private fun TariffLayoutCompact(
         Text(
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            text = tariff.displayName,
+            text = tariffSummary.displayName,
         )
         Text(
             style = MaterialTheme.typography.bodySmall,
-            text = tariff.fullName,
+            text = tariffSummary.fullName,
         )
 
-        val regionCode = tariff.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
+        val regionCode = tariffSummary.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
         Text(
             style = MaterialTheme.typography.bodySmall,
-            text = stringResource(resource = Res.string.agile_product_code_retail_region, tariff.productCode, regionCode),
+            text = stringResource(resource = Res.string.agile_product_code_retail_region, tariffSummary.productCode, regionCode),
         )
 
         Spacer(modifier = Modifier.height(height = dimension.grid_2))
@@ -121,7 +121,7 @@ private fun TariffLayoutCompact(
             ) {
                 Text(
                     style = MaterialTheme.typography.displaySmall,
-                    text = tariff.vatInclusiveUnitRate.toString(),
+                    text = tariffSummary.vatInclusiveUnitRate.toString(),
                 )
 
                 Text(
@@ -140,7 +140,7 @@ private fun TariffLayoutCompact(
             ) {
                 Text(
                     style = MaterialTheme.typography.displaySmall,
-                    text = tariff.vatInclusiveStandingCharge.toString(),
+                    text = tariffSummary.vatInclusiveStandingCharge.toString(),
                 )
 
                 Text(
@@ -156,7 +156,7 @@ private fun TariffLayoutCompact(
 @Composable
 private fun TariffLayoutWide(
     modifier: Modifier = Modifier,
-    tariff: Tariff,
+    tariffSummary: TariffSummary,
     agreement: Agreement,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -172,17 +172,17 @@ private fun TariffLayoutWide(
             Text(
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                text = tariff.displayName,
+                text = tariffSummary.displayName,
             )
             Text(
                 style = MaterialTheme.typography.bodySmall,
-                text = tariff.fullName,
+                text = tariffSummary.fullName,
             )
 
-            val regionCode = tariff.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
+            val regionCode = tariffSummary.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
             Text(
                 style = MaterialTheme.typography.bodySmall,
-                text = stringResource(resource = Res.string.agile_product_code_retail_region, tariff.productCode, regionCode),
+                text = stringResource(resource = Res.string.agile_product_code_retail_region, tariffSummary.productCode, regionCode),
             )
 
             Spacer(modifier = Modifier.height(height = dimension.grid_2))
@@ -212,7 +212,7 @@ private fun TariffLayoutWide(
         ) {
             Text(
                 style = MaterialTheme.typography.displaySmall,
-                text = tariff.vatInclusiveUnitRate.toString(),
+                text = tariffSummary.vatInclusiveUnitRate.toString(),
             )
 
             Text(
@@ -231,7 +231,7 @@ private fun TariffLayoutWide(
         ) {
             Text(
                 style = MaterialTheme.typography.displaySmall,
-                text = tariff.vatInclusiveStandingCharge.toString(),
+                text = tariffSummary.vatInclusiveStandingCharge.toString(),
             )
 
             Text(

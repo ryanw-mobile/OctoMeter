@@ -78,7 +78,7 @@ class AgileViewModel(
 
         viewModelScope.launch(dispatcher) {
             val currentUserProfile = getUserProfile()
-            val region = currentUserProfile?.tariff?.getRetailRegion() ?: demoRetailRegion
+            val region = currentUserProfile?.tariffSummary?.getRetailRegion() ?: demoRetailRegion
             getAgileRates(region = region)
             getAgileTariff(region = region)
             _uiState.update { currentUiState ->
@@ -208,7 +208,7 @@ class AgileViewModel(
             onSuccess = { agileTariff ->
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
-                        agileTariff = agileTariff,
+                        agileTariffSummary = agileTariff,
                     )
                 }
             },
@@ -216,7 +216,7 @@ class AgileViewModel(
                 Logger.e("AgileViewModel", throwable = throwable, message = { "Error when retrieving Agile tariff details" })
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
-                        agileTariff = null,
+                        agileTariffSummary = null,
                     )
                 }
             },
