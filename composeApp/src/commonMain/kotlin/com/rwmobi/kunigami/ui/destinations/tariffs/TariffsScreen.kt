@@ -40,6 +40,7 @@ import com.rwmobi.kunigami.ui.components.ProductItem
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.CloseButtonBar
+import com.rwmobi.kunigami.ui.destinations.tariffs.components.productDetails
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.navigation_tariffs
@@ -136,14 +137,12 @@ fun TariffsScreen(
                                     )
                                 }
 
-                                item {
-                                    ProductItem(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(vertical = dimension.grid_1),
-                                        product = product,
-                                    )
-                                }
+                                productDetails(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = dimension.grid_1),
+                                    product = product,
+                                )
                             }
                         }
                     }
@@ -222,14 +221,12 @@ private fun TariffBottomSheet(
     ) {
         LazyColumn {
             product?.let {
-                item {
-                    ProductItem(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = dimension.grid_1),
-                        product = it,
-                    )
-                }
+                productDetails(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = dimension.grid_1),
+                    product = it,
+                )
             }
         }
     }
