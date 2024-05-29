@@ -16,6 +16,7 @@ data class TariffsUIState(
     val isLoading: Boolean = true,
     val products: List<Product> = emptyList(),
     val productDetails: Product? = null,
+    val requestedLayout: TariffScreenLayout = TariffScreenLayout.Compact,
     val requestScrollToTop: Boolean = false,
     val errorMessages: List<ErrorMessage> = emptyList(),
 )

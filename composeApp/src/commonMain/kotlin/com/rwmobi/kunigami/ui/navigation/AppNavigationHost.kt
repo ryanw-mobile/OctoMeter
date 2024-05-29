@@ -123,8 +123,14 @@ fun AppNavigationHost(
         }
 
         composable(route = AppDestination.TARIFFS.name) {
+            // workaround: Issue with iOS we have to do it here
+            val windowSizeClass = calculateWindowSizeClass()
             val viewModel: TariffsViewModel = viewModel { getKoin().get() }
             val uiState by viewModel.uiState.collectAsStateMultiplatform()
+
+            viewModel.notifyScreenSizeChanged(
+                windowSizeClass = windowSizeClass,
+            )
 
             LaunchedEffect(lastDoubleTappedNavItem) {
                 val enabled = lastDoubleTappedNavItem?.equals(AppDestination.TARIFFS) ?: false

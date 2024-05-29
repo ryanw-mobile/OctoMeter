@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.destinations.agile.components
+package com.rwmobi.kunigami.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
@@ -31,7 +31,7 @@ import com.rwmobi.kunigami.ui.theme.getDimension
 internal fun DualTitleBar(
     modifier: Modifier = Modifier,
     title: String,
-    subtitle: String?,
+    subtitle: String? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
 

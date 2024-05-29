@@ -7,11 +7,14 @@
 
 package com.rwmobi.kunigami.ui.viewmodels
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
+import com.rwmobi.kunigami.ui.destinations.tariffs.TariffScreenLayout
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIState
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -34,6 +37,20 @@ class TariffsViewModel(
         _uiState.update { currentUiState ->
             val errorMessages = currentUiState.errorMessages.filterNot { it.id == errorId }
             currentUiState.copy(errorMessages = errorMessages)
+        }
+    }
+
+    fun notifyScreenSizeChanged(windowSizeClass: WindowSizeClass) {
+        _uiState.update { currentUiState ->
+            val requestedLayout = when (windowSizeClass.widthSizeClass) {
+                WindowWidthSizeClass.Compact -> TariffScreenLayout.Compact
+                WindowWidthSizeClass.Medium -> TariffScreenLayout.Wide
+                else -> TariffScreenLayout.ListDetailPane
+            }
+
+            currentUiState.copy(
+                requestedLayout = requestedLayout,
+            )
         }
     }
 

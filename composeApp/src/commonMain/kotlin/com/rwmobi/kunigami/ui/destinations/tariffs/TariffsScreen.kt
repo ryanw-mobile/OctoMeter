@@ -7,30 +7,40 @@
 
 package com.rwmobi.kunigami.ui.destinations.tariffs
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import com.rwmobi.kunigami.ui.components.DualTitleBar
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ProductItem
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.theme.getDimension
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.navigation_tariffs
+import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TariffsScreen(
     modifier: Modifier = Modifier,
@@ -48,23 +58,33 @@ fun TariffsScreen(
     }
 
     val dimension = LocalDensity.current.getDimension()
-    val lazyListState = rememberLazyListState()
+    val mainLazyListState = rememberLazyListState()
 
     Box(modifier = modifier) {
         if (uiState.products.isNotEmpty()) {
-            ScrollbarMultiplatform(
-                modifier = Modifier.fillMaxSize(),
-                lazyListState = lazyListState,
-            ) { contentModifier ->
-                Row(
-                    modifier = contentModifier
-                        .fillMaxSize()
-                        .conditionalBlur(enabled = uiState.isLoading),
-                ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .conditionalBlur(enabled = uiState.isLoading),
+            ) {
+                ScrollbarMultiplatform(
+                    modifier = Modifier.weight(weight = 1f),
+                    lazyListState = mainLazyListState,
+                ) { contentModifier ->
                     LazyColumn(
-                        modifier = Modifier.weight(1f),
-                        state = lazyListState,
+                        modifier = contentModifier.fillMaxSize(),
+                        state = mainLazyListState,
                     ) {
+                        stickyHeader {
+                            DualTitleBar(
+                                modifier = Modifier
+                                    .background(color = MaterialTheme.colorScheme.secondary)
+                                    .fillMaxWidth()
+                                    .height(height = dimension.minListItemHeight),
+                                title = stringResource(resource = Res.string.navigation_tariffs),
+                            )
+                        }
+
                         itemsIndexed(
                             items = uiState.products,
                             key = { _, product -> product.code },
@@ -84,23 +104,51 @@ fun TariffsScreen(
                             }
                         }
                     }
+                }
 
-                    Column(
-                        modifier = Modifier.weight(1f),
-                    ) {
-                        uiState.productDetails?.let { product ->
-                            Button(
-                                onClick = uiEvent.onProductDetailsDismissed,
-                            ) {
-                                Text("close")
+                if (uiState.requestedLayout == TariffScreenLayout.ListDetailPane) {
+                    VerticalDivider(
+                        modifier = Modifier.fillMaxHeight(),
+                        color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    )
+
+                    val detailLazyListState = rememberLazyListState()
+                    ScrollbarMultiplatform(
+                        modifier = Modifier.weight(weight = 1f),
+                        lazyListState = detailLazyListState,
+                    ) { contentModifier ->
+                        LazyColumn(
+                            modifier = contentModifier.fillMaxSize(),
+                            state = detailLazyListState,
+                        ) {
+                            uiState.productDetails?.let { product ->
+                                stickyHeader {
+                                    DualTitleBar(
+                                        modifier = Modifier
+                                            .background(color = MaterialTheme.colorScheme.secondary)
+                                            .fillMaxWidth()
+                                            .height(height = dimension.minListItemHeight),
+                                        title = stringResource(resource = Res.string.navigation_tariffs),
+                                    )
+                                }
+
+                                item {
+                                    Button(
+                                        onClick = uiEvent.onProductDetailsDismissed,
+                                    ) {
+                                        Text("close")
+                                    }
+                                }
+
+                                item {
+                                    ProductItem(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = dimension.grid_1),
+                                        product = product,
+                                    )
+                                }
                             }
-
-                            ProductItem(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = dimension.grid_1),
-                                product = product,
-                            )
                         }
                     }
                 }
@@ -123,7 +171,7 @@ fun TariffsScreen(
 
     LaunchedEffect(uiState.requestScrollToTop) {
         if (uiState.requestScrollToTop) {
-            lazyListState.scrollToItem(index = 0)
+            mainLazyListState.scrollToItem(index = 0)
             uiEvent.onScrolledToTop()
         }
     }
