@@ -11,6 +11,7 @@ import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SingleProductAp
 import com.rwmobi.kunigami.data.source.network.dto.singleproduct.TariffDetailsDto
 import com.rwmobi.kunigami.domain.exceptions.TariffNotFoundException
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
+import com.rwmobi.kunigami.domain.model.product.ExitFeesType
 import com.rwmobi.kunigami.domain.model.product.TariffDetails
 import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
@@ -71,7 +72,7 @@ fun TariffDetailsDto.toTariffDetails(): TariffDetails? {
             vatInclusiveStandingCharge = standingChargeIncVat,
             vatInclusiveOnlineDiscount = onlineDiscountIncVat,
             vatInclusiveDualFuelDiscount = dualFuelDiscountIncVat,
-            exitFeesType = exitFeesType,
+            exitFeesType = ExitFeesType.fromApiValue(value = exitFeesType),
             vatInclusiveExitFees = exitFeesIncVat,
             vatInclusiveStandardUnitRate = standardUnitRateIncVat,
             vatInclusiveDayUnitRate = dayUnitRateIncVat,

@@ -39,7 +39,7 @@ import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.ButtonTitleBar
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.DetailsScreenWrapper
-import com.rwmobi.kunigami.ui.destinations.tariffs.components.ProductItem
+import com.rwmobi.kunigami.ui.destinations.tariffs.components.ProductItemAdaptive
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.TariffBottomSheet
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
@@ -71,13 +71,12 @@ fun TariffsScreen(
     val dimension = LocalDensity.current.getDimension()
     val mainLazyListState = rememberLazyListState()
 
-    val shouldShowTariffsList = (uiState.productSummaries.isNotEmpty()) &&
-        (
-            uiState.productDetails == null ||
-                uiState.requestedLayout is TariffScreenLayout.ListDetailPane ||
-                uiState.requestedLayout == TariffScreenLayout.Compact(useBottomSheet = true) ||
-                uiState.requestedLayout == TariffScreenLayout.Wide(useBottomSheet = true)
-            )
+    val shouldShowTariffsList = (uiState.productSummaries.isNotEmpty()) && (
+        uiState.productDetails == null ||
+            uiState.requestedLayout is TariffScreenLayout.ListDetailPane ||
+            uiState.requestedLayout == TariffScreenLayout.Compact(useBottomSheet = true) ||
+            uiState.requestedLayout == TariffScreenLayout.Wide(useBottomSheet = true)
+        )
 
     Box(modifier = modifier) {
         if (shouldShowTariffsList) {
@@ -108,12 +107,13 @@ fun TariffsScreen(
                             items = uiState.productSummaries,
                             key = { _, product -> product.code },
                         ) { index, product ->
-                            ProductItem(
+                            ProductItemAdaptive(
                                 modifier = Modifier
                                     .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
                                     .fillMaxWidth()
                                     .padding(vertical = dimension.grid_1),
                                 productSummary = product,
+                                useWideLayout = uiState.requestedWideListLayout,
                             )
 
                             if (index < uiState.productSummaries.lastIndex) {

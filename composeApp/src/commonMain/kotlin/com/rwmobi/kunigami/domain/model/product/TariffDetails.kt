@@ -14,7 +14,7 @@ data class TariffDetails(
     val vatInclusiveStandingCharge: Double,
     val vatInclusiveOnlineDiscount: Double,
     val vatInclusiveDualFuelDiscount: Double,
-    val exitFeesType: String,
+    val exitFeesType: ExitFeesType,
     val vatInclusiveExitFees: Double,
     val vatInclusiveStandardUnitRate: Double?,
     val vatInclusiveDayUnitRate: Double?,

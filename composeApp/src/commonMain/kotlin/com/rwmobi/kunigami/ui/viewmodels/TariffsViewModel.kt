@@ -9,6 +9,8 @@ package com.rwmobi.kunigami.ui.viewmodels
 
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
@@ -20,6 +22,7 @@ import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.extensions.getPlatformType
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.model.PlatformType
+import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +37,7 @@ class TariffsViewModel(
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<TariffsUIState> = MutableStateFlow(TariffsUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
+    val windowWidthCompact: Dp = 599.dp
 
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
@@ -42,7 +46,7 @@ class TariffsViewModel(
         }
     }
 
-    fun notifyScreenSizeChanged(windowSizeClass: WindowSizeClass) {
+    fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo, windowSizeClass: WindowSizeClass) {
         _uiState.update { currentUiState ->
             val platform = windowSizeClass.getPlatformType()
             val requestedLayout = when (windowSizeClass.widthSizeClass) {
@@ -50,9 +54,16 @@ class TariffsViewModel(
                 WindowWidthSizeClass.Medium -> TariffScreenLayout.Wide(useBottomSheet = platform != PlatformType.DESKTOP)
                 else -> TariffScreenLayout.ListDetailPane
             }
+            val requestedWideListLayout = when {
+                windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact -> false
+                windowSizeClass.widthSizeClass == WindowWidthSizeClass.Medium -> true
+                (screenSizeInfo.widthDp / 2) > windowWidthCompact -> true // List pane width
+                else -> false
+            }
 
             currentUiState.copy(
                 requestedLayout = requestedLayout,
+                requestedWideListLayout = requestedWideListLayout,
             )
         }
     }
