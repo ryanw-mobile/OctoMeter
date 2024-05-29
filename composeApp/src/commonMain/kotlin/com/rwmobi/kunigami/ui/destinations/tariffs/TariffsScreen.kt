@@ -171,7 +171,7 @@ fun TariffsScreen(
     }
 
     val bottomSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true,
+        skipPartiallyExpanded = false,
     )
 
     if (bottomSheetState.isVisible && uiState.requestedLayout != TariffScreenLayout.ListDetailPane) {
