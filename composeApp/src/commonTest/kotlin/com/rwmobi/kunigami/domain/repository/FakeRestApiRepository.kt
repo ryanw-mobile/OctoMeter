@@ -31,6 +31,11 @@ class FakeRestApiRepository : RestApiRepository {
         return setProductsResponse ?: throw RuntimeException("Fake result not defined")
     }
 
+    var setProductResponse: Result<Product>? = null
+    override suspend fun getProductDetails(productCode: String): Result<Product> {
+        return setProductResponse ?: throw RuntimeException("Fake result not defined")
+    }
+
     var setStandardUnitRatesResponse: Result<List<Rate>>? = null
     override suspend fun getStandardUnitRates(
         productCode: String,

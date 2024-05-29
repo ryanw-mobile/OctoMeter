@@ -89,7 +89,7 @@ class SyncUserProfileUseCase(
                 // Caller making use of UserProfile should consider activating demo mode.
                 if (selectedAccount == null ||
                     selectedMpan == null ||
-                    selectedAccount == null ||
+                    selectedMeterSerialNumber == null ||
                     selectedTariff == null
                 ) {
                     null
