@@ -16,9 +16,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,10 +23,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.model.consumption.Insights
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_mpan
@@ -208,38 +205,29 @@ private fun Preview() {
         costAnnualProjection = 11.487,
     )
 
-    AppTheme {
-        Surface {
-            Column(
-                modifier = Modifier.verticalScroll(
-                    state = rememberScrollState(),
-                ),
-                verticalArrangement = Arrangement.spacedBy(space = 24.dp),
-            ) {
-                TariffProjectionsCardAdaptive(
-                    modifier = Modifier.padding(all = 16.dp),
-                    tariff = TariffSamples.agileFlex221125,
-                    insights = insights,
-                    layoutType = WindowWidthSizeClass.Expanded,
-                    mpan = "1200000123456",
-                )
+    CommonPreviewSetup {
+        TariffProjectionsCardAdaptive(
+            modifier = Modifier.padding(all = 16.dp),
+            tariff = TariffSamples.agileFlex221125,
+            insights = insights,
+            layoutType = WindowWidthSizeClass.Expanded,
+            mpan = "1200000123456",
+        )
 
-                TariffProjectionsCardAdaptive(
-                    modifier = Modifier.padding(all = 16.dp),
-                    tariff = TariffSamples.agileFlex221125,
-                    insights = insights,
-                    layoutType = WindowWidthSizeClass.Medium,
-                    mpan = "1200000123456",
-                )
+        TariffProjectionsCardAdaptive(
+            modifier = Modifier.padding(all = 16.dp),
+            tariff = TariffSamples.agileFlex221125,
+            insights = insights,
+            layoutType = WindowWidthSizeClass.Medium,
+            mpan = "1200000123456",
+        )
 
-                TariffProjectionsCardAdaptive(
-                    modifier = Modifier.padding(all = 16.dp),
-                    tariff = TariffSamples.agileFlex221125,
-                    insights = insights,
-                    layoutType = WindowWidthSizeClass.Compact,
-                    mpan = "1200000123456",
-                )
-            }
-        }
+        TariffProjectionsCardAdaptive(
+            modifier = Modifier.padding(all = 16.dp),
+            tariff = TariffSamples.agileFlex221125,
+            insights = insights,
+            layoutType = WindowWidthSizeClass.Compact,
+            mpan = "1200000123456",
+        )
     }
 }

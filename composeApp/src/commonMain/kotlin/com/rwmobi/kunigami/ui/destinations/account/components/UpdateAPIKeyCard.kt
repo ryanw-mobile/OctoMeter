@@ -22,8 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.IconTextButton
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_update_api_key
@@ -67,7 +67,7 @@ internal fun UpdateAPIKeyCard(
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
+    CommonPreviewSetup {
         UpdateAPIKeyCard(
             modifier = Modifier.fillMaxWidth(),
             onUpdateAPIKeyClicked = {},

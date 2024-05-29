@@ -17,15 +17,14 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.circle_check
@@ -82,15 +81,14 @@ internal fun PresentationStyleDropdownMenu(
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
-        Surface {
-            PresentationStyleDropdownMenu(
-                modifier = Modifier.fillMaxSize(),
-                currentPresentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
-                expanded = true,
-                onDismiss = {},
-                onSwitchPresentationStyle = {},
-            )
-        }
+    // Preview doesn't work for this component
+    CommonPreviewSetup {
+        PresentationStyleDropdownMenu(
+            modifier = Modifier.fillMaxSize(),
+            currentPresentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
+            expanded = true,
+            onDismiss = {},
+            onSwitchPresentationStyle = {},
+        )
     }
 }

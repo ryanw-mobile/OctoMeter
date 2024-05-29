@@ -50,7 +50,6 @@ import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.ok
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Immutable
 private enum class NavigationLayoutType {
@@ -79,7 +78,6 @@ private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?): Na
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-@Preview
 fun App(
     androidStatusBarModifier: @Composable ((isDarkTheme: Boolean) -> Unit)? = null,
 ) {

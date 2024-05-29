@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,7 +31,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 
 @Composable
@@ -100,16 +98,14 @@ fun IndicatorTextValueGridItem(
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
-        Surface {
-            IndicatorTextValueGridItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 8.dp),
-                indicatorColor = Color.Red,
-                label = "03:30",
-                value = "0.05",
-            )
-        }
+    CommonPreviewSetup {
+        IndicatorTextValueGridItem(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = 8.dp),
+            indicatorColor = Color.Red,
+            label = "03:30",
+            value = "0.05",
+        )
     }
 }

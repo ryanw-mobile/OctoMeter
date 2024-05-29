@@ -32,7 +32,6 @@ import kunigami.composeapp.generated.resources.loading
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-@Preview
 @Composable
 fun LoadingScreen(
     modifier: Modifier = Modifier,
@@ -70,5 +69,13 @@ fun LoadingScreen(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    CommonPreviewSetup {
+        LoadingScreen()
     }
 }

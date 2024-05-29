@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -29,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.wallet
@@ -109,18 +107,16 @@ fun DefaultFailureRetryScreen(
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
-        Surface {
-            DefaultFailureRetryScreen(
-                modifier = Modifier.fillMaxSize(),
-                text = "Something's very wrong with my wallet, let's try again?",
-                description = "Please check your internet connection?",
-                icon = painterResource(Res.drawable.wallet),
-                primaryButtonLabel = "Alright, try again",
-                onPrimaryButtonClicked = {},
-                secondaryButtonLabel = "No, thanks. Goodbye.",
-                onSecondaryButtonClicked = {},
-            )
-        }
+    CommonPreviewSetup {
+        DefaultFailureRetryScreen(
+            modifier = Modifier.fillMaxSize(),
+            text = "Something's very wrong with my wallet, let's try again?",
+            description = "Please check your internet connection?",
+            icon = painterResource(Res.drawable.wallet),
+            primaryButtonLabel = "Alright, try again",
+            onPrimaryButtonClicked = {},
+            secondaryButtonLabel = "No, thanks. Goodbye.",
+            onSecondaryButtonClicked = {},
+        )
     }
 }

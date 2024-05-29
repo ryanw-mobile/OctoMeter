@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -63,7 +62,7 @@ fun TagWithIcon(
 @Preview
 @Composable
 private fun TagWithIconPreview() {
-    AppTheme {
+    CommonPreviewSetup {
         TagWithIcon(
             icon = painterResource(resource = ProductFeature.GREEN.iconResource),
             text = stringResource(resource = ProductFeature.GREEN.stringResource),

@@ -85,9 +85,10 @@ private val mediumContrastDarkColorScheme = darkColorScheme(
 @Composable
 fun AppTheme(
     androidStatusBarModifier: @Composable ((isDarkTheme: Boolean) -> Unit)? = null,
+    useDarkTheme: Boolean? = null,
     content: @Composable () -> Unit,
 ) {
-    val shouldUseDarkTheme = shouldUseDarkTheme()
+    val shouldUseDarkTheme = useDarkTheme ?: shouldUseDarkTheme()
     androidStatusBarModifier?.let {
         it(shouldUseDarkTheme)
     }

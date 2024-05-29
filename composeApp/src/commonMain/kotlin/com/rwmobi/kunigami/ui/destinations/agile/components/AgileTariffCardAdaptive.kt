@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +32,7 @@ import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.model.rate.RateGroupedCells
@@ -40,7 +40,6 @@ import com.rwmobi.kunigami.ui.model.rate.RateTrend
 import com.rwmobi.kunigami.ui.model.rate.findActiveRate
 import com.rwmobi.kunigami.ui.model.rate.getRateTrend
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
@@ -269,37 +268,34 @@ private fun AgileTariffCardExpanded(
 @Preview
 @Composable
 private fun Preview() {
-    val dimension = LocalDensity.current.getDimension()
-    AppTheme {
-        Surface {
-            AgileTariffCardAdaptive(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = dimension.grid_3,
-                        end = dimension.grid_3,
-                        top = dimension.grid_1,
-                    ),
-                agileTariff = TariffSamples.agileFlex221125,
-                differentTariff = TariffSamples.agileFlex221125,
-                colorPalette = generateGYRHueColorPalette(),
-                rateRange = 0.0..5.0,
-                rateGroupedCells = listOf(
-                    RateGroupedCells(
-                        title = "Sample title",
-                        rates = listOf(
-                            Rate(
-                                vatExclusivePrice = 45.075,
-                                vatInclusivePrice = 25.076,
-                                validFrom = Clock.System.now(),
-                                validTo = null,
-                                paymentMethod = PaymentMethod.UNKNOWN,
-                            ),
+    CommonPreviewSetup { dimension ->
+        AgileTariffCardAdaptive(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = dimension.grid_3,
+                    end = dimension.grid_3,
+                    top = dimension.grid_1,
+                ),
+            agileTariff = TariffSamples.agileFlex221125,
+            differentTariff = TariffSamples.agileFlex221125,
+            colorPalette = generateGYRHueColorPalette(),
+            rateRange = 0.0..5.0,
+            rateGroupedCells = listOf(
+                RateGroupedCells(
+                    title = "Sample title",
+                    rates = listOf(
+                        Rate(
+                            vatExclusivePrice = 45.075,
+                            vatInclusivePrice = 25.076,
+                            validFrom = Clock.System.now(),
+                            validTo = null,
+                            paymentMethod = PaymentMethod.UNKNOWN,
                         ),
                     ),
                 ),
-                requestedAdaptiveLayout = WindowWidthSizeClass.Compact,
-            )
-        }
+            ),
+            requestedAdaptiveLayout = WindowWidthSizeClass.Compact,
+        )
     }
 }

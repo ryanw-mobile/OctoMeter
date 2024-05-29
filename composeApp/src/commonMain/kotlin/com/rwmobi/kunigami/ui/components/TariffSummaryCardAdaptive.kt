@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -28,10 +27,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_different_tariff
@@ -340,38 +337,32 @@ private fun TariffSummaryCardThreeColumns(
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
-        Surface(modifier = Modifier.padding(all = 8.dp)) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(space = 16.dp),
-            ) {
-                TariffSummaryCardAdaptive(
-                    modifier = Modifier.fillMaxWidth(),
-                    heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
-                    headingTextAlign = TextAlign.Center,
-                    subheading = "Sample subheading",
-                    tariff = TariffSamples.agileFlex221125,
-                    layoutType = WindowWidthSizeClass.Compact,
-                )
+    CommonPreviewSetup {
+        TariffSummaryCardAdaptive(
+            modifier = Modifier.fillMaxWidth(),
+            heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+            headingTextAlign = TextAlign.Center,
+            subheading = "Sample subheading",
+            tariff = TariffSamples.agileFlex221125,
+            layoutType = WindowWidthSizeClass.Compact,
+        )
 
-                TariffSummaryCardAdaptive(
-                    modifier = Modifier.fillMaxWidth(),
-                    heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
-                    headingTextAlign = TextAlign.Center,
-                    subheading = "Sample subheading",
-                    tariff = TariffSamples.agileFlex221125,
-                    layoutType = WindowWidthSizeClass.Medium,
-                )
+        TariffSummaryCardAdaptive(
+            modifier = Modifier.fillMaxWidth(),
+            heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+            headingTextAlign = TextAlign.Center,
+            subheading = "Sample subheading",
+            tariff = TariffSamples.agileFlex221125,
+            layoutType = WindowWidthSizeClass.Medium,
+        )
 
-                TariffSummaryCardAdaptive(
-                    modifier = Modifier.fillMaxWidth(),
-                    heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
-                    headingTextAlign = TextAlign.Center,
-                    subheading = "Sample subheading",
-                    tariff = TariffSamples.agileFlex221125,
-                    layoutType = WindowWidthSizeClass.Expanded,
-                )
-            }
-        }
+        TariffSummaryCardAdaptive(
+            modifier = Modifier.fillMaxWidth(),
+            heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+            headingTextAlign = TextAlign.Center,
+            subheading = "Sample subheading",
+            tariff = TariffSamples.agileFlex221125,
+            layoutType = WindowWidthSizeClass.Expanded,
+        )
     }
 }

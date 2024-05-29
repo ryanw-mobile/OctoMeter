@@ -19,7 +19,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -36,7 +35,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.theme.AppTheme
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.onboarding_button_connect
@@ -133,12 +132,10 @@ internal fun CredentialsInputForm(
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
-        Surface {
-            CredentialsInputForm(
-                isSubmitButtonEnabled = true,
-                onSubmitCredentials = { _, _ -> },
-            )
-        }
+    CommonPreviewSetup {
+        CredentialsInputForm(
+            isSubmitButtonEnabled = true,
+            onSubmitCredentials = { _, _ -> },
+        )
     }
 }

@@ -7,14 +7,17 @@
 
 package com.rwmobi.kunigami.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.Dimension
@@ -27,17 +30,38 @@ internal fun CommonPreviewSetup(
 ) {
     val dimension = LocalDensity.current.getDimension()
 
-    AppTheme {
-        Surface {
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .verticalScroll(
-                        state = rememberScrollState(),
-                    ),
-                verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
-            ) {
-                content(dimension)
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = Color.Black)
+            .verticalScroll(
+                state = rememberScrollState(),
+            ),
+        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_4),
+    ) {
+        AppTheme(
+            useDarkTheme = false,
+        ) {
+            Surface {
+                Column(
+                    modifier = modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+                ) {
+                    content(dimension)
+                }
+            }
+        }
+
+        AppTheme(
+            useDarkTheme = true,
+        ) {
+            Surface {
+                Column(
+                    modifier = modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+                ) {
+                    content(dimension)
+                }
             }
         }
     }

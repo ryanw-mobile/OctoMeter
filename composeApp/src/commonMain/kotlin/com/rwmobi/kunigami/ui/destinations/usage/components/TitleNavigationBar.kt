@@ -21,7 +21,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
@@ -139,21 +139,19 @@ internal fun TitleNavigationBar(
 @Preview
 @Composable
 private fun Preview() {
-    MaterialTheme {
-        Surface {
-            TitleNavigationBar(
-                modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.secondary)
-                    .fillMaxWidth()
-                    .height(height = 64.dp),
-                title = "Sample title",
-                currentPresentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
-                canNavigateBack = true,
-                onNavigateBack = {},
-                canNavigateForward = true,
-                onSwitchPresentationStyle = {},
-                onNavigateForward = {},
-            )
-        }
+    CommonPreviewSetup {
+        TitleNavigationBar(
+            modifier = Modifier
+                .background(color = MaterialTheme.colorScheme.secondary)
+                .fillMaxWidth()
+                .height(height = 64.dp),
+            title = "Sample title",
+            currentPresentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
+            canNavigateBack = true,
+            onNavigateBack = {},
+            canNavigateForward = true,
+            onSwitchPresentationStyle = {},
+            onNavigateForward = {},
+        )
     }
 }

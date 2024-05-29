@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.Density
 import com.rwmobi.kunigami.domain.model.product.Product
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -131,7 +130,7 @@ fun ProductItem(
 @Preview
 @Composable
 private fun ProductItemPreview() {
-    AppTheme {
+    CommonPreviewSetup {
         ProductItem(
             modifier = Modifier.fillMaxWidth(),
             product = Product(
