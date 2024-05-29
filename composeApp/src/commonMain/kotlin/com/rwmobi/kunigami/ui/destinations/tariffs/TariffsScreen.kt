@@ -173,23 +173,14 @@ fun TariffsScreen(
     }
 
     LaunchedEffect(uiState.productDetails, uiState.requestedLayout) {
-        when {
-            uiState.requestedLayout == TariffScreenLayout.ListDetailPane -> {
-                if (bottomSheetState.isVisible) {
-                    bottomSheetState.hide()
-                }
-            }
+        val isBottomSheetLayout = uiState.requestedLayout.let {
+            it is TariffScreenLayout.Wide && it.useBottomSheet || it is TariffScreenLayout.Compact && it.useBottomSheet
+        }
 
-            uiState.productDetails != null -> {
-                if (!bottomSheetState.isVisible) {
-                    bottomSheetState.show()
-                }
-            }
-
-            else -> {
-                if (bottomSheetState.isVisible) {
-                    bottomSheetState.hide()
-                }
+        if (isBottomSheetLayout) {
+            when {
+                uiState.productDetails != null && !bottomSheetState.isVisible -> bottomSheetState.show()
+                uiState.productDetails == null && bottomSheetState.isVisible -> bottomSheetState.hide()
             }
         }
     }
