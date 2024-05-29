@@ -21,15 +21,20 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import com.rwmobi.kunigami.domain.model.product.Product
 import com.rwmobi.kunigami.ui.components.DualTitleBar
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ProductItem
@@ -40,7 +45,7 @@ import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.navigation_tariffs
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun TariffsScreen(
     modifier: Modifier = Modifier,
@@ -65,7 +70,7 @@ fun TariffsScreen(
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .conditionalBlur(enabled = uiState.isLoading),
+                    .conditionalBlur(enabled = uiState.isLoading && uiState.products.isEmpty()),
             ) {
                 ScrollbarMultiplatform(
                     modifier = Modifier.weight(weight = 1f),
@@ -158,21 +163,79 @@ fun TariffsScreen(
             Text("Placeholder for no data")
         }
 
-        if (uiState.isLoading) {
+        if (uiState.isLoading && uiState.products.isEmpty()) {
             LoadingScreen(
                 modifier = Modifier.fillMaxSize(),
             )
         }
     }
 
+    val bottomSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+    )
+
+    if (bottomSheetState.isVisible && uiState.requestedLayout != TariffScreenLayout.ListDetailPane) {
+        TariffBottomSheet(
+            modifier = Modifier.fillMaxSize(),
+            product = uiState.productDetails,
+            bottomSheetState = bottomSheetState,
+            onDismissRequest = uiEvent.onProductDetailsDismissed,
+        )
+    }
+
     LaunchedEffect(true) {
         uiEvent.onRefresh()
+    }
+
+    LaunchedEffect(uiState.productDetails, uiState.requestedLayout) {
+        if (uiState.requestedLayout == TariffScreenLayout.ListDetailPane) {
+            if (bottomSheetState.isVisible) {
+                bottomSheetState.hide()
+            }
+        } else if (uiState.productDetails != null) {
+            if (!bottomSheetState.isVisible) {
+                bottomSheetState.show()
+            }
+        } else {
+            if (bottomSheetState.isVisible) {
+                bottomSheetState.hide()
+            }
+        }
     }
 
     LaunchedEffect(uiState.requestScrollToTop) {
         if (uiState.requestScrollToTop) {
             mainLazyListState.scrollToItem(index = 0)
             uiEvent.onScrolledToTop()
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TariffBottomSheet(
+    modifier: Modifier = Modifier,
+    product: Product?,
+    bottomSheetState: SheetState,
+    onDismissRequest: () -> Unit,
+) {
+    val dimension = LocalDensity.current.getDimension()
+    ModalBottomSheet(
+        modifier = modifier,
+        onDismissRequest = onDismissRequest,
+        sheetState = bottomSheetState,
+    ) {
+        LazyColumn {
+            product?.let {
+                item {
+                    ProductItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = dimension.grid_1),
+                        product = it,
+                    )
+                }
+            }
         }
     }
 }
