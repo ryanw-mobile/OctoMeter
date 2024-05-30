@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_load_account
 import kunigami.composeapp.generated.resources.account_error_update_credentials
+import kunigami.composeapp.generated.resources.tariffs_error_load_tariffs
 import org.jetbrains.compose.resources.getString
 
 class AccountViewModel(
@@ -179,20 +180,26 @@ class AccountViewModel(
     }
 
     private suspend fun filterError(throwable: Throwable) {
-        if (throwable is HttpException) {
-            _uiState.update { currentUiState ->
-                currentUiState.copy(
-                    requestedScreenType = AccountScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode)),
-                )
+        when (throwable) {
+            is HttpException -> {
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        requestedScreenType = AccountScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode)),
+                    )
+                }
             }
-        } else if (throwable is UnresolvedAddressException) {
-            _uiState.update { currentUiState ->
-                currentUiState.copy(
-                    requestedScreenType = AccountScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.NetworkError),
-                )
+
+            is UnresolvedAddressException -> {
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        requestedScreenType = AccountScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.NetworkError),
+                    )
+                }
             }
-        } else {
-            updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
+
+            else -> {
+                updateUIForError(message = throwable.message ?: getString(resource = Res.string.tariffs_error_load_tariffs))
+            }
         }
     }
 

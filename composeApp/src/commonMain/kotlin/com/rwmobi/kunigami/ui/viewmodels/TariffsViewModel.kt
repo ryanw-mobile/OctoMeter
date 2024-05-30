@@ -14,23 +14,32 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffScreenLayout
+import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsScreenType
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIState
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.extensions.getPlatformType
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.model.PlatformType
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
+import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
+import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.account_error_load_account
+import org.jetbrains.compose.resources.getString
 
 class TariffsViewModel(
+    private val userPreferencesRepository: UserPreferencesRepository,
     private val restApiRepository: RestApiRepository,
     private val getFilteredProductsUseCase: GetFilteredProductsUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
@@ -66,6 +75,7 @@ class TariffsViewModel(
                 requestedWideListLayout = requestedWideListLayout,
             )
         }
+        calculateScreenType()
     }
 
     fun refresh() {
@@ -79,10 +89,11 @@ class TariffsViewModel(
                             productSummaries = products,
                         )
                     }
+                    calculateScreenType()
                 },
                 onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: "Error when retrieving tariffs")
                     Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                    filterError(throwable = throwable)
                 },
             )
             stopLoading()
@@ -103,11 +114,11 @@ class TariffsViewModel(
                             productDetails = product,
                         )
                     }
-                    getProductDetailsResult
+                    calculateScreenType()
                 },
                 onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: "Error when retrieving product details")
                     Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving product details" })
+                    filterError(throwable = throwable)
                 },
             )
             stopLoading()
@@ -119,6 +130,22 @@ class TariffsViewModel(
             currentUiState.copy(
                 productDetails = null,
             )
+        }
+        calculateScreenType()
+    }
+
+    fun onSpecialErrorScreenShown() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                requestedScreenType = null,
+            )
+        }
+    }
+
+    fun clearCredentials() {
+        viewModelScope.launch {
+            userPreferencesRepository.clearCredentials()
+            refresh()
         }
     }
 
@@ -134,6 +161,7 @@ class TariffsViewModel(
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 isLoading = true,
+                requestedScreenType = null,
             )
         }
     }
@@ -143,6 +171,51 @@ class TariffsViewModel(
             currentUiState.copy(
                 isLoading = false,
             )
+        }
+    }
+
+    private fun calculateScreenType() {
+        _uiState.update { currentUiState ->
+            val requestedScreenType = if (currentUiState.requestedScreenType is TariffsScreenType.ErrorScreen) {
+                currentUiState.requestedScreenType
+            } else if (currentUiState.productDetails == null ||
+                currentUiState.requestedLayout is TariffScreenLayout.ListDetailPane ||
+                currentUiState.requestedLayout == TariffScreenLayout.Compact(useBottomSheet = true) ||
+                currentUiState.requestedLayout == TariffScreenLayout.Wide(useBottomSheet = true)
+            ) {
+                TariffsScreenType.TariffsList
+            } else {
+                // currentUiState.productDetails != null
+                TariffsScreenType.FullScreenTariffsDetail
+            }
+
+            currentUiState.copy(
+                requestedScreenType = requestedScreenType,
+            )
+        }
+    }
+
+    private suspend fun filterError(throwable: Throwable) {
+        when (throwable) {
+            is HttpException -> {
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        requestedScreenType = TariffsScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode)),
+                    )
+                }
+            }
+
+            is UnresolvedAddressException -> {
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        requestedScreenType = TariffsScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.NetworkError),
+                    )
+                }
+            }
+
+            else -> {
+                updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
+            }
         }
     }
 

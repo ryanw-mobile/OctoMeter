@@ -25,7 +25,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -36,11 +35,13 @@ import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.ui.components.DualTitleBar
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
+import com.rwmobi.kunigami.ui.components.SpecialErrorScreenRouter
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.ButtonTitleBar
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.DetailsScreenWrapper
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.ProductItemAdaptive
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.TariffBottomSheet
+import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.arrow_ios_back_fill
@@ -71,124 +72,144 @@ fun TariffsScreen(
     val dimension = LocalDensity.current.getDimension()
     val mainLazyListState = rememberLazyListState()
 
-    val shouldShowTariffsList = (uiState.productSummaries.isNotEmpty()) && (
-        uiState.productDetails == null ||
-            uiState.requestedLayout is TariffScreenLayout.ListDetailPane ||
-            uiState.requestedLayout == TariffScreenLayout.Compact(useBottomSheet = true) ||
-            uiState.requestedLayout == TariffScreenLayout.Wide(useBottomSheet = true)
-        )
-
     Box(modifier = modifier) {
-        if (shouldShowTariffsList) {
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .conditionalBlur(enabled = uiState.isLoading && uiState.productSummaries.isEmpty()),
-            ) {
-                ScrollbarMultiplatform(
-                    modifier = Modifier.weight(weight = 1f),
-                    lazyListState = mainLazyListState,
-                ) { contentModifier ->
-                    LazyColumn(
-                        modifier = contentModifier.fillMaxSize(),
-                        state = mainLazyListState,
-                    ) {
-                        stickyHeader {
-                            DualTitleBar(
-                                modifier = Modifier
-                                    .background(color = MaterialTheme.colorScheme.secondary)
-                                    .fillMaxWidth()
-                                    .height(height = dimension.minListItemHeight),
-                                title = stringResource(resource = Res.string.navigation_tariffs),
-                            )
+        when {
+            uiState.requestedScreenType is TariffsScreenType.ErrorScreen -> {
+                SpecialErrorScreenRouter(
+                    modifier = Modifier.fillMaxSize(),
+                    specialErrorScreen = uiState.requestedScreenType.specialErrorScreen,
+                    onRefresh = {
+                        uiEvent.onRefresh()
+                    },
+                    onClearCredential = {
+                        uiEvent.onSpecialErrorScreenShown()
+                        uiEvent.onClearCredentials()
+                    },
+                )
+            }
+
+            uiState.requestedScreenType == TariffsScreenType.TariffsList && uiState.productSummaries.isNotEmpty() -> {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    ScrollbarMultiplatform(
+                        modifier = Modifier.weight(weight = 1f),
+                        lazyListState = mainLazyListState,
+                    ) { contentModifier ->
+                        LazyColumn(
+                            modifier = contentModifier.fillMaxSize(),
+                            state = mainLazyListState,
+                        ) {
+                            stickyHeader {
+                                DualTitleBar(
+                                    modifier = Modifier
+                                        .background(color = MaterialTheme.colorScheme.secondary)
+                                        .fillMaxWidth()
+                                        .height(height = dimension.minListItemHeight),
+                                    title = stringResource(resource = Res.string.navigation_tariffs),
+                                )
+                            }
+
+                            itemsIndexed(
+                                items = uiState.productSummaries,
+                                key = { _, product -> product.code },
+                            ) { index, product ->
+                                ProductItemAdaptive(
+                                    modifier = Modifier
+                                        .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
+                                        .fillMaxWidth()
+                                        .padding(vertical = dimension.grid_1),
+                                    productSummary = product,
+                                    useWideLayout = uiState.requestedWideListLayout,
+                                )
+
+                                if (index < uiState.productSummaries.lastIndex) {
+                                    HorizontalDivider(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                    )
+                                }
+                            }
                         }
+                    }
 
-                        itemsIndexed(
-                            items = uiState.productSummaries,
-                            key = { _, product -> product.code },
-                        ) { index, product ->
-                            ProductItemAdaptive(
-                                modifier = Modifier
-                                    .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
-                                    .fillMaxWidth()
-                                    .padding(vertical = dimension.grid_1),
-                                productSummary = product,
-                                useWideLayout = uiState.requestedWideListLayout,
-                            )
+                    if (uiState.requestedLayout == TariffScreenLayout.ListDetailPane) {
+                        VerticalDivider(
+                            modifier = Modifier.fillMaxHeight(),
+                            color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                        )
 
-                            if (index < uiState.productSummaries.lastIndex) {
-                                HorizontalDivider(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                        DetailsScreenWrapper(
+                            modifier = Modifier.weight(weight = 1f),
+                            productDetails = uiState.productDetails,
+                        ) {
+                            uiState.productDetails?.let { productDetails ->
+                                ButtonTitleBar(
+                                    modifier = Modifier
+                                        .background(color = MaterialTheme.colorScheme.secondary)
+                                        .fillMaxWidth()
+                                        .height(height = dimension.minListItemHeight),
+                                    title = productDetails.displayName,
+                                    color = MaterialTheme.colorScheme.onSecondary,
+                                    rightButton = {
+                                        IconButton(onClick = uiEvent.onProductDetailsDismissed) {
+                                            Icon(
+                                                painter = painterResource(resource = Res.drawable.close_fill),
+                                                tint = MaterialTheme.colorScheme.onSecondary,
+                                                contentDescription = stringResource(resource = Res.string.content_description_dismiss_this_pane),
+                                            )
+                                        }
+                                    },
                                 )
                             }
                         }
                     }
                 }
+            }
 
-                if (uiState.requestedLayout == TariffScreenLayout.ListDetailPane) {
-                    VerticalDivider(
-                        modifier = Modifier.fillMaxHeight(),
-                        color = MaterialTheme.colorScheme.surfaceContainerHighest,
+            uiState.requestedScreenType == TariffsScreenType.FullScreenTariffsDetail -> {
+                DetailsScreenWrapper(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .conditionalBlur(enabled = uiState.isLoading && uiState.productSummaries.isEmpty()),
+                    productDetails = uiState.productDetails,
+                ) {
+                    ButtonTitleBar(
+                        modifier = Modifier
+                            .background(color = MaterialTheme.colorScheme.secondary)
+                            .fillMaxWidth()
+                            .height(height = dimension.minListItemHeight),
+                        title = uiState.productDetails?.displayName ?: "",
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        leftButton = {
+                            IconButton(onClick = uiEvent.onProductDetailsDismissed) {
+                                Icon(
+                                    painter = painterResource(resource = Res.drawable.arrow_ios_back_fill),
+                                    tint = MaterialTheme.colorScheme.onSecondary,
+                                    contentDescription = stringResource(resource = Res.string.content_description_navigate_back),
+                                )
+                            }
+                        },
                     )
-
-                    DetailsScreenWrapper(
-                        modifier = Modifier.weight(weight = 1f),
-                        productDetails = uiState.productDetails,
-                    ) {
-                        uiState.productDetails?.let { productDetails ->
-                            ButtonTitleBar(
-                                modifier = Modifier
-                                    .background(color = MaterialTheme.colorScheme.secondary)
-                                    .fillMaxWidth()
-                                    .height(height = dimension.minListItemHeight),
-                                title = productDetails.displayName,
-                                color = MaterialTheme.colorScheme.onSecondary,
-                                rightButton = {
-                                    IconButton(onClick = uiEvent.onProductDetailsDismissed) {
-                                        Icon(
-                                            painter = painterResource(resource = Res.drawable.close_fill),
-                                            tint = MaterialTheme.colorScheme.onSecondary,
-                                            contentDescription = stringResource(resource = Res.string.content_description_dismiss_this_pane),
-                                        )
-                                    }
-                                },
-                            )
-                        }
-                    }
                 }
             }
-        } else if (uiState.productDetails != null) {
-            DetailsScreenWrapper(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .conditionalBlur(enabled = uiState.isLoading && uiState.productSummaries.isEmpty()),
-                productDetails = uiState.productDetails,
-            ) {
-                ButtonTitleBar(
-                    modifier = Modifier
-                        .background(color = MaterialTheme.colorScheme.secondary)
-                        .fillMaxWidth()
-                        .height(height = dimension.minListItemHeight),
-                    title = uiState.productDetails.displayName,
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    leftButton = {
-                        IconButton(onClick = uiEvent.onProductDetailsDismissed) {
-                            Icon(
-                                painter = painterResource(resource = Res.drawable.arrow_ios_back_fill),
-                                tint = MaterialTheme.colorScheme.onSecondary,
-                                contentDescription = stringResource(resource = Res.string.content_description_navigate_back),
-                            )
-                        }
+
+            !uiState.isLoading && uiState.productSummaries.isEmpty() -> {
+                SpecialErrorScreenRouter(
+                    modifier = Modifier.fillMaxSize(),
+                    specialErrorScreen = SpecialErrorScreen.NoData,
+                    onRefresh = {
+                        uiEvent.onRefresh()
+                    },
+                    onClearCredential = {
+                        uiEvent.onSpecialErrorScreenShown()
+                        uiEvent.onClearCredentials()
                     },
                 )
             }
-        } else if (!uiState.isLoading) {
-            // no data
-            Text("Placeholder for no data")
         }
 
-        if (uiState.isLoading && uiState.productSummaries.isEmpty()) {
+        if (uiState.isLoading) {
             LoadingScreen(
                 modifier = Modifier.fillMaxSize(),
             )

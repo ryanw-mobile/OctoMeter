@@ -17,6 +17,7 @@ data class TariffsUIState(
     val isLoading: Boolean = true,
     val productSummaries: List<ProductSummary> = emptyList(),
     val productDetails: ProductDetails? = null,
+    val requestedScreenType: TariffsScreenType? = null,
     val requestedLayout: TariffScreenLayout = TariffScreenLayout.Compact(useBottomSheet = true),
     val requestedWideListLayout: Boolean = false,
     val requestScrollToTop: Boolean = false,

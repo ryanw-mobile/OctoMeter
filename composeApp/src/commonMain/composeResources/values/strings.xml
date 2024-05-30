@@ -78,6 +78,7 @@
     <string name="tariffs_dual_fuel_discount">Dual Fuel Discount</string>
     <string name="tariffs_exit_fees">Exit Fees</string>
     <string name="tariffs_direct_debit_monthly">Direct Debit Monthly</string>
+    <string name="tariffs_error_load_tariffs">Unable to retrieve tariffs</string>
 
     <!-- Product Features -->
     <string name="product_feature_variable">Variable</string>
