@@ -28,6 +28,7 @@ import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionQueryFilter
 import com.rwmobi.kunigami.ui.model.consumption.Insights
+import com.rwmobi.kunigami.ui.previewsampledata.FakeDemoUserProfile
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
 import io.github.koalaplot.core.bar.VerticalBarPlotEntry
@@ -62,14 +63,9 @@ class UsageViewModel(
     fun initialLoad() {
         startLoading()
         viewModelScope.launch(dispatcher) {
+            // Note that getUserProfile will provide a fake profile when isDemoMode == true
             val userProfile = getUserProfile()
-
-            if (_uiState.value.isDemoMode == true) {
-                // TODO: Call isolated fake data generator
-                _uiState.update { currentUiState ->
-                    currentUiState.clearDataFieldsAndStopLoading()
-                }
-            } else if (userProfile != null) {
+            if (userProfile != null) {
                 // Currently smart meter readings are not real-time. Yesterday's figures are the latest we can get.
                 val pointOfReference = Clock.System.now() - Duration.parse(value = "1d")
                 var newConsumptionQueryFilter = ConsumptionQueryFilter(
@@ -194,8 +190,10 @@ class UsageViewModel(
 
     private suspend fun refresh(consumptionQueryFilter: ConsumptionQueryFilter) {
         startLoading()
+
+        // Note that getUserProfile will provide a fake profile when isDemoMode == true
         val userProfile = getUserProfile()
-        if (userProfile != null || _uiState.value.isDemoMode == true) {
+        if (userProfile != null) {
             getConsumptionUseCase(
                 periodFrom = consumptionQueryFilter.requestedStart,
                 periodTo = consumptionQueryFilter.requestedEnd,
@@ -204,7 +202,7 @@ class UsageViewModel(
                 onSuccess = { consumptions ->
                     propagateInsights(
                         consumptions = consumptions,
-                        tariffSummary = userProfile?.tariffSummary,
+                        tariffSummary = userProfile.tariffSummary,
                     )
                     propagateConsumptionsAndStopLoading(
                         consumptionQueryFilter = consumptionQueryFilter,
@@ -221,6 +219,11 @@ class UsageViewModel(
         }
     }
 
+    /***
+     * IMPORTANT: For Demo purpose, when IncompleteCredentialsException is caught,
+     * we inject a Faked UserProfile on the fly only for this screen.
+     * Leave UserPreferences alone, so it will always turn on isDemoMode for the rest of the App.
+     */
     private suspend fun getUserProfile(): UserProfile? {
         syncUserProfileUseCase().fold(
             onSuccess = { userProfile ->
@@ -237,9 +240,10 @@ class UsageViewModel(
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             isDemoMode = true,
+                            userProfile = FakeDemoUserProfile.flexibleOctopusRegionADirectDebit,
                         )
                     }
-                    return null
+                    return FakeDemoUserProfile.flexibleOctopusRegionADirectDebit
                 } else {
                     Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
                     _uiState.update { currentUiState ->

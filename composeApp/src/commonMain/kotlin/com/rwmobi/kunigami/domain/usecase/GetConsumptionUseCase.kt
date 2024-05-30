@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.domain.usecase
 
+import com.rwmobi.kunigami.data.repository.DemoRestApiRepository
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
@@ -34,32 +35,56 @@ class GetConsumptionUseCase(
     ): Result<List<Consumption>> {
         return withContext(dispatcher) {
             runCatching {
-                val apiKey = userPreferencesRepository.getApiKey()
-                val mpan = userPreferencesRepository.getMpan()
-                val meterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
+                val isDemoMode = userPreferencesRepository.isDemoMode()
 
-                requireNotNull(value = apiKey, lazyMessage = { "API Key is null" })
-                requireNotNull(value = mpan, lazyMessage = { "MPAN is null" })
-                requireNotNull(value = meterSerialNumber, lazyMessage = { "Meter Serial Number is null" })
+                if (!isDemoMode) {
+                    val apiKey = userPreferencesRepository.getApiKey()
+                    val mpan = userPreferencesRepository.getMpan()
+                    val meterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
 
-                restApiRepository.getConsumption(
-                    apiKey = apiKey,
-                    mpan = mpan,
-                    meterSerialNumber = meterSerialNumber,
-                    periodFrom = periodFrom, // calculateStartDate(periodFrom = periodReference, groupBy = groupBy), // currentTime.minus(duration = Duration.parse("2d")),
-                    periodTo = periodTo, // calculateEndDate(periodFrom = periodReference, groupBy = groupBy),
-                    orderBy = ConsumptionDataOrder.PERIOD,
-                    groupBy = groupBy, // ConsumptionGrouping.HALF_HOURLY,
-                ).fold(
-                    onSuccess = { consumption ->
-                        consumption.sortedBy {
-                            it.intervalStart
-                        }
-                    },
-                    onFailure = { throwable ->
-                        throw throwable
-                    },
-                )
+                    requireNotNull(value = apiKey, lazyMessage = { "API Key is null" })
+                    requireNotNull(value = mpan, lazyMessage = { "MPAN is null" })
+                    requireNotNull(value = meterSerialNumber, lazyMessage = { "Meter Serial Number is null" })
+
+                    restApiRepository.getConsumption(
+                        apiKey = apiKey,
+                        mpan = mpan,
+                        meterSerialNumber = meterSerialNumber,
+                        periodFrom = periodFrom,
+                        periodTo = periodTo,
+                        orderBy = ConsumptionDataOrder.PERIOD,
+                        groupBy = groupBy,
+                    ).fold(
+                        onSuccess = { consumption ->
+                            consumption.sortedBy {
+                                it.intervalStart
+                            }
+                        },
+                        onFailure = { throwable ->
+                            throw throwable
+                        },
+                    )
+                } else {
+                    val demoRestApiRepository = DemoRestApiRepository()
+                    demoRestApiRepository.getConsumption(
+                        apiKey = "",
+                        mpan = "",
+                        meterSerialNumber = "",
+                        periodFrom = periodFrom,
+                        periodTo = periodTo,
+                        orderBy = ConsumptionDataOrder.PERIOD,
+                        groupBy = groupBy,
+                    ).fold(
+                        onSuccess = { consumption ->
+                            consumption.sortedBy {
+                                it.intervalStart
+                            }
+                        },
+                        onFailure = { throwable ->
+                            throw throwable
+                        },
+                    )
+                }
             }.except<CancellationException, _>()
         }
     }
