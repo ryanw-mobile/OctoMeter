@@ -74,7 +74,7 @@ fun TariffsScreen(
 
     Box(modifier = modifier) {
         when {
-            uiState.requestedScreenType is TariffsScreenType.ErrorScreen -> {
+            uiState.requestedScreenType is TariffsScreenType.Error -> {
                 SpecialErrorScreenRouter(
                     modifier = Modifier.fillMaxSize(),
                     specialErrorScreen = uiState.requestedScreenType.specialErrorScreen,
@@ -88,7 +88,7 @@ fun TariffsScreen(
                 )
             }
 
-            uiState.requestedScreenType == TariffsScreenType.TariffsList && uiState.productSummaries.isNotEmpty() -> {
+            uiState.requestedScreenType == TariffsScreenType.List && uiState.productSummaries.isNotEmpty() -> {
                 Row(
                     modifier = Modifier.fillMaxSize(),
                 ) {
@@ -167,7 +167,7 @@ fun TariffsScreen(
                 }
             }
 
-            uiState.requestedScreenType == TariffsScreenType.FullScreenTariffsDetail -> {
+            uiState.requestedScreenType == TariffsScreenType.FullScreenDetail -> {
                 DetailsScreenWrapper(
                     modifier = Modifier
                         .fillMaxSize()
@@ -209,7 +209,7 @@ fun TariffsScreen(
             }
         }
 
-        if (uiState.isLoading) {
+        if (uiState.isLoading && uiState.productSummaries.isEmpty()) {
             LoadingScreen(
                 modifier = Modifier.fillMaxSize(),
             )

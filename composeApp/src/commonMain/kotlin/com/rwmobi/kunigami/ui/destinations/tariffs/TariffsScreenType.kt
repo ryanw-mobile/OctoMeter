@@ -10,7 +10,7 @@ package com.rwmobi.kunigami.ui.destinations.tariffs
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 
 sealed interface TariffsScreenType {
-    data class ErrorScreen(val specialErrorScreen: SpecialErrorScreen) : TariffsScreenType
-    data object TariffsList : TariffsScreenType
-    data object FullScreenTariffsDetail : TariffsScreenType
+    data class Error(val specialErrorScreen: SpecialErrorScreen) : TariffsScreenType
+    data object List : TariffsScreenType
+    data object FullScreenDetail : TariffsScreenType
 }
