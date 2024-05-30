@@ -6,25 +6,28 @@
 <p><img src="app_banner_240518.webp" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 <br />
 
-This app is for Octopus Energy customers in the UK who have a smart meter installed. You can still
-try out the app if you don't, because the App will run under the demo mode by default by showing
-fake user data when authentication is required.
+This app is designed for Octopus Energy customers in the UK who have a smart meter installed. If you don’t have a smart meter, you can still try out the app. It runs in demo mode by default, showing fake user data when authentication is required.
 
 ### It works for me
 
-**This is not a sample app or a demo app**. This is a real app I developed for myself, and I use it
-every day to monitor energy consumption and save money. Technically it should work for other Octopus
-Energy customers. However, I am unable to imagine other scenarios such as the tariffs I do not use,
-or multiple meter installations which may return data that the App cannot process. Therefore, it is
-not guaranteed that it works for you when it should work for me.
+**This is not a sample or demo app**. This is a fully functional app that I developed for myself, and I use it every day to monitor energy consumption and save money. While it should technically work for other Octopus Energy customers, I can’t guarantee it will handle all scenarios such as different tariffs or multiple meter installations. These may produce data that the app cannot process.
 
-This app is still in rapid development. The first release is not ready yet but is expected around
-June 2024, as I will need to secure my next full-time job in the UK soon. For the same reason, this
-app was intentionally built to reach production-level quality as possible, such that you can have a
-better idea where I am at technically.
+This is a dashboard-type app that runs on desktop (desktop-first), Android, and iOS. It supports an adaptive layout that works on mobile, tablet, and dynamic desktop window sizes. The app honours light and dark modes on all supported platforms.
 
-This README will be updated with more technical details when the app is close to release. Stay
-tuned!
+The main purposes of this app are:
+
+* Compile smart meter electricity usage; estimate and project electricity usage and cost.
+* Track Octopus Agile tariff unit rates for the coming 24 hours, with countdown and automatic refresh.
+* Browse available Octopus Energy tariffs.
+
+For non-Octopus Energy customers, or non-UK residents, the demo mode will display random meter readings and default tariff rates to illustrate the app’s functionality.
+
+The current release meets my daily needs. However, this project will continue to be maintained and improved as a way for me to gain real-world Kotlin Multiplatform development experience. For this reason, the app was intentionally built to reach production-level quality as much as possible.
+
+If you like this app, consider giving me a star, [following me on Medium](https://medium.com/@callmeryan), or [connecting with me on LinkedIn](https://www.linkedin.com/in/ryanwmobile/). 
+
+I am also looking for my next Senior Android Dev role, too.
+
 <br /><br />
 
 ## Switch to Octopus!
