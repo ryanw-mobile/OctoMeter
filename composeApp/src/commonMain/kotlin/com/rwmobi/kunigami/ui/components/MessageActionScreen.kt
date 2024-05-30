@@ -36,13 +36,13 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun DefaultFailureRetryScreen(
+fun MessageActionScreen(
     modifier: Modifier = Modifier,
     icon: Painter,
     text: String,
     description: String? = null,
-    primaryButtonLabel: String,
-    onPrimaryButtonClicked: () -> Unit,
+    primaryButtonLabel: String? = null,
+    onPrimaryButtonClicked: (() -> Unit)? = null,
     secondaryButtonLabel: String? = null,
     onSecondaryButtonClicked: (() -> Unit)? = null,
 ) {
@@ -80,23 +80,25 @@ fun DefaultFailureRetryScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(height = dimension.grid_4))
+        if (primaryButtonLabel != null && onPrimaryButtonClicked != null) {
+            Spacer(modifier = Modifier.height(height = dimension.grid_4))
 
-        Button(
-            onClick = onPrimaryButtonClicked,
-        ) {
-            Text(
-                modifier = Modifier.padding(horizontal = dimension.grid_2),
-                style = MaterialTheme.typography.labelMedium,
-                text = primaryButtonLabel.uppercase(),
-            )
+            Button(
+                onClick = onPrimaryButtonClicked,
+            ) {
+                Text(
+                    modifier = Modifier.padding(horizontal = dimension.grid_2),
+                    style = MaterialTheme.typography.labelMedium,
+                    text = primaryButtonLabel.uppercase(),
+                )
+            }
         }
 
         if (secondaryButtonLabel != null && onSecondaryButtonClicked != null) {
             Spacer(modifier = Modifier.height(height = dimension.grid_2))
 
             TextButton(
-                onClick = onPrimaryButtonClicked,
+                onClick = onSecondaryButtonClicked,
             ) {
                 Text(
                     modifier = Modifier.padding(horizontal = dimension.grid_2),
@@ -112,7 +114,7 @@ fun DefaultFailureRetryScreen(
 @Composable
 private fun Preview() {
     CommonPreviewSetup {
-        DefaultFailureRetryScreen(
+        MessageActionScreen(
             modifier = Modifier.fillMaxSize(),
             text = "Something's very wrong with my wallet, let's try again?",
             description = "Please check your internet connection?",

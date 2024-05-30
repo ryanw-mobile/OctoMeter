@@ -8,7 +8,6 @@
 package com.rwmobi.kunigami.ui.viewmodels
 
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
@@ -24,13 +23,8 @@ import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
-import com.rwmobi.kunigami.ui.extensions.generateRandomLong
-import com.rwmobi.kunigami.ui.extensions.getPlatformType
-import com.rwmobi.kunigami.ui.model.ErrorMessage
-import com.rwmobi.kunigami.ui.model.PlatformType
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
-import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionQueryFilter
 import com.rwmobi.kunigami.ui.model.consumption.Insights
@@ -58,8 +52,6 @@ class UsageViewModel(
     private val _uiState: MutableStateFlow<UsageUIState> = MutableStateFlow(UsageUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
-    private val usageColumnWidth = 175.dp
-
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
             val errorMessages = currentUiState.errorMessages.filterNot { it.id == errorId }
@@ -69,12 +61,14 @@ class UsageViewModel(
 
     fun initialLoad() {
         startLoading()
-
         viewModelScope.launch(dispatcher) {
             val userProfile = getUserProfile()
 
             if (_uiState.value.isDemoMode == true) {
                 // TODO: Call isolated fake data generator
+                _uiState.update { currentUiState ->
+                    currentUiState.clearDataFieldsAndStopLoading()
+                }
             } else if (userProfile != null) {
                 // Currently smart meter readings are not real-time. Yesterday's figures are the latest we can get.
                 val pointOfReference = Clock.System.now() - Duration.parse(value = "1d")
@@ -101,7 +95,7 @@ class UsageViewModel(
                                         tariffSummary = userProfile.tariffSummary,
                                         consumptions = consumptions,
                                     )
-                                    propagateConsumptions(
+                                    propagateConsumptionsAndStopLoading(
                                         consumptionQueryFilter = newConsumptionQueryFilter,
                                         consumptions = consumptions,
                                     )
@@ -110,14 +104,16 @@ class UsageViewModel(
                                     newConsumptionQueryFilter.navigateBackward(accountMoveInDate = accountMoveInDate)?.let {
                                         newConsumptionQueryFilter = it
                                     } ?: run {
-                                        clearDataFields()
+                                        _uiState.update { currentUiState -> currentUiState.clearDataFieldsAndStopLoading() }
                                         return@loop // Can't go back. Give up with no data.
                                     }
                                 }
                             },
                             onFailure = { throwable ->
-                                updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
                                 Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+                                _uiState.update { currentUiState ->
+                                    currentUiState.filterErrorAndStopLoading(throwable = throwable, defaultMessage = "Error when retrieving consumptions")
+                                }
                                 return@loop // API Error. Give up
                             },
                         )
@@ -125,10 +121,8 @@ class UsageViewModel(
                 }
             } else {
                 // Not demo mode but couldn't get the user profile. We won't show anything
-                clearDataFields()
+                _uiState.update { currentUiState -> currentUiState.clearDataFieldsAndStopLoading() }
             }
-
-            stopLoading()
         }
     }
 
@@ -153,8 +147,9 @@ class UsageViewModel(
             val consumptionQueryFilter = _uiState.value.consumptionQueryFilter.navigateBackward(accountMoveInDate = accountMoveInDate)
             if (consumptionQueryFilter == null) {
                 Logger.e("UsageViewModel", message = { "onNavigateForward request declined." })
-                updateUIForError(message = "Requested date is outside of the allowed range.")
-                stopLoading()
+                _uiState.update { currentUiState ->
+                    currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException("Requested date is outside of the allowed range."))
+                }
             } else {
                 refresh(consumptionQueryFilter = consumptionQueryFilter)
             }
@@ -166,8 +161,9 @@ class UsageViewModel(
             val consumptionQueryFilter = _uiState.value.consumptionQueryFilter.navigateForward()
             if (consumptionQueryFilter == null) {
                 Logger.e("UsageViewModel", message = { "onNavigateForward request declined." })
-                updateUIForError(message = "Requested date is outside of the allowed range.")
-                stopLoading()
+                _uiState.update { currentUiState ->
+                    currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException("Requested date is outside of the allowed range."))
+                }
             } else {
                 refresh(consumptionQueryFilter = consumptionQueryFilter)
             }
@@ -176,23 +172,7 @@ class UsageViewModel(
 
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo, windowSizeClass: WindowSizeClass) {
         _uiState.update { currentUiState ->
-            Logger.v("UsageViewModel: $windowSizeClass, ${screenSizeInfo.heightDp}h x ${screenSizeInfo.widthDp}w, isPortrait = ${screenSizeInfo.isPortrait()}")
-            val showToolTipOnClick = windowSizeClass.getPlatformType() != PlatformType.DESKTOP
-            val usageColumns = (screenSizeInfo.widthDp / usageColumnWidth).toInt()
-            val requestedLayout = if (screenSizeInfo.isPortrait()) {
-                RequestedChartLayout.Portrait
-            } else {
-                RequestedChartLayout.LandScape(
-                    requestedMaxHeight = screenSizeInfo.heightDp / 2,
-                )
-            }
-
-            currentUiState.copy(
-                showToolTipOnClick = showToolTipOnClick,
-                requestedAdaptiveLayout = windowSizeClass.widthSizeClass,
-                requestedChartLayout = requestedLayout,
-                requestedUsageColumns = usageColumns,
-            )
+            currentUiState.updateLayoutType(screenSizeInfo = screenSizeInfo, windowSizeClass = windowSizeClass)
         }
     }
 
@@ -212,48 +192,31 @@ class UsageViewModel(
         }
     }
 
-    private fun stopLoading() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isLoading = false,
-            )
-        }
-    }
-
     private suspend fun refresh(consumptionQueryFilter: ConsumptionQueryFilter) {
         startLoading()
         val userProfile = getUserProfile()
-        getConsumptionUseCase(
-            periodFrom = consumptionQueryFilter.requestedStart,
-            periodTo = consumptionQueryFilter.requestedEnd,
-            groupBy = consumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
-        ).fold(
-            onSuccess = { consumptions ->
-                propagateInsights(
-                    consumptions = consumptions,
-                    tariffSummary = userProfile?.tariffSummary,
-                )
-                propagateConsumptions(
-                    consumptionQueryFilter = consumptionQueryFilter,
-                    consumptions = consumptions,
-                )
-            },
-            onFailure = { throwable ->
-                Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
-                updateUIForError(message = throwable.message ?: "Error when retrieving consumptions")
-            },
-        )
-        stopLoading()
-    }
-
-    private fun clearDataFields() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                userProfile = null,
-                consumptionGroupedCells = listOf(),
-                consumptionRange = 0.0..0.0,
-                barChartData = null,
-                insights = null,
+        if (userProfile != null || _uiState.value.isDemoMode == true) {
+            getConsumptionUseCase(
+                periodFrom = consumptionQueryFilter.requestedStart,
+                periodTo = consumptionQueryFilter.requestedEnd,
+                groupBy = consumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
+            ).fold(
+                onSuccess = { consumptions ->
+                    propagateInsights(
+                        consumptions = consumptions,
+                        tariffSummary = userProfile?.tariffSummary,
+                    )
+                    propagateConsumptionsAndStopLoading(
+                        consumptionQueryFilter = consumptionQueryFilter,
+                        consumptions = consumptions,
+                    )
+                },
+                onFailure = { throwable ->
+                    Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+                    _uiState.update { currentUiState ->
+                        currentUiState.filterErrorAndStopLoading(throwable = throwable, defaultMessage = "Error when retrieving consumptions")
+                    }
+                },
             )
         }
     }
@@ -276,14 +239,16 @@ class UsageViewModel(
                             isDemoMode = true,
                         )
                     }
+                    return null
                 } else {
                     Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
-                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
-                    stopLoading()
+                    _uiState.update { currentUiState ->
+                        currentUiState.filterErrorAndStopLoading(throwable = throwable)
+                    }
+                    return null
                 }
             },
         )
-        return null
     }
 
     private fun propagateInsights(
@@ -321,26 +286,26 @@ class UsageViewModel(
         return insights
     }
 
-    private suspend fun propagateConsumptions(
+    private suspend fun propagateConsumptionsAndStopLoading(
         consumptionQueryFilter: ConsumptionQueryFilter,
         consumptions: List<Consumption>,
     ) {
-        _uiState.update { currentUiState ->
-            val consumptionRange = consumptions.getRange()
-            val labels = consumptionQueryFilter.generateChartLabels(consumptions = consumptions)
-            val consumptionGroupedCells = consumptionQueryFilter.groupChartCells(consumptions = consumptions)
-            val toolTips = consumptionQueryFilter.generateChartToolTips(consumptions = consumptions)
-            val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
-                consumptions.forEachIndexed { index, consumption ->
-                    add(
-                        element = DefaultVerticalBarPlotEntry(
-                            x = index,
-                            y = DefaultVerticalBarPosition(yMin = 0.0, yMax = consumption.consumption),
-                        ),
-                    )
-                }
+        val consumptionRange = consumptions.getRange()
+        val labels = consumptionQueryFilter.generateChartLabels(consumptions = consumptions)
+        val consumptionGroupedCells = consumptionQueryFilter.groupChartCells(consumptions = consumptions)
+        val toolTips = consumptionQueryFilter.generateChartToolTips(consumptions = consumptions)
+        val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
+            consumptions.forEachIndexed { index, consumption ->
+                add(
+                    element = DefaultVerticalBarPlotEntry(
+                        x = index,
+                        y = DefaultVerticalBarPosition(yMin = 0.0, yMax = consumption.consumption),
+                    ),
+                )
             }
+        }
 
+        _uiState.update { currentUiState ->
             currentUiState.copy(
                 consumptionQueryFilter = consumptionQueryFilter,
                 consumptionGroupedCells = consumptionGroupedCells,
@@ -350,22 +315,7 @@ class UsageViewModel(
                     labels = labels,
                     tooltips = toolTips,
                 ),
-            )
-        }
-    }
-
-    private fun updateUIForError(message: String) {
-        _uiState.update { currentUiState ->
-            val newErrorMessages = if (_uiState.value.errorMessages.any { it.message == message }) {
-                currentUiState.errorMessages
-            } else {
-                currentUiState.errorMessages + ErrorMessage(
-                    id = generateRandomLong(),
-                    message = message,
-                )
-            }
-            currentUiState.copy(
-                errorMessages = newErrorMessages,
+                isLoading = false,
             )
         }
     }

@@ -44,7 +44,7 @@ internal fun ErrorScreenHandler(
 ) {
     when (specialErrorScreen) {
         SpecialErrorScreen.NoData -> {
-            DefaultFailureRetryScreen(
+            MessageActionScreen(
                 modifier = modifier,
                 icon = painterResource(resource = Res.drawable.file_dotted),
                 text = stringResource(resource = Res.string.error_screen_no_data_title),
@@ -58,7 +58,7 @@ internal fun ErrorScreenHandler(
 
         SpecialErrorScreen.HttpError(statusCode = 401) -> {
             // Unauthorised
-            DefaultFailureRetryScreen(
+            MessageActionScreen(
                 modifier = modifier,
                 icon = painterResource(resource = Res.drawable.folder_lock_outline),
                 text = stringResource(resource = Res.string.error_screen_unauthorised_title),
@@ -70,7 +70,7 @@ internal fun ErrorScreenHandler(
 
         is SpecialErrorScreen.HttpError -> {
             // TODO: Refine the errors as we encounter them in the future
-            DefaultFailureRetryScreen(
+            MessageActionScreen(
                 modifier = modifier,
                 icon = painterResource(resource = Res.drawable.lan_disconnect),
                 text = stringResource(resource = Res.string.error_screen_general_http_error_title, specialErrorScreen.statusCode),
@@ -83,7 +83,7 @@ internal fun ErrorScreenHandler(
         }
 
         SpecialErrorScreen.NetworkError -> {
-            DefaultFailureRetryScreen(
+            MessageActionScreen(
                 modifier = modifier,
                 icon = painterResource(resource = Res.drawable.access_point_network_off),
                 text = stringResource(resource = Res.string.error_screen_network_error_title),
@@ -94,7 +94,7 @@ internal fun ErrorScreenHandler(
         }
 
         else -> {
-            DefaultFailureRetryScreen(
+            MessageActionScreen(
                 modifier = modifier,
                 icon = painterResource(resource = Res.drawable.error_badge),
                 text = stringResource(resource = Res.string.error_screen_general_error_title),
@@ -117,7 +117,7 @@ internal fun ErrorScreenHandler(
 ) {
     when (specialErrorScreen) {
         SpecialErrorScreen.NoData -> {
-            DefaultFailureRetryScreen(
+            MessageActionScreen(
                 modifier = modifier,
                 icon = painterResource(resource = Res.drawable.file_dotted),
                 text = stringResource(resource = Res.string.error_screen_no_data_title),
@@ -130,7 +130,7 @@ internal fun ErrorScreenHandler(
         // Http 401 is considered unusual in this case. This is not right and needs investigation
         is SpecialErrorScreen.HttpError -> {
             // TODO: Refine the errors as we encounter them in the future
-            DefaultFailureRetryScreen(
+            MessageActionScreen(
                 modifier = modifier,
                 icon = painterResource(resource = Res.drawable.lan_disconnect),
                 text = stringResource(resource = Res.string.error_screen_general_http_error_title, specialErrorScreen.statusCode),
@@ -141,7 +141,7 @@ internal fun ErrorScreenHandler(
         }
 
         SpecialErrorScreen.NetworkError -> {
-            DefaultFailureRetryScreen(
+            MessageActionScreen(
                 modifier = modifier,
                 icon = painterResource(resource = Res.drawable.access_point_network_off),
                 text = stringResource(resource = Res.string.error_screen_network_error_title),
@@ -152,7 +152,7 @@ internal fun ErrorScreenHandler(
         }
 
         else -> {
-            DefaultFailureRetryScreen(
+            MessageActionScreen(
                 modifier = modifier,
                 icon = painterResource(resource = Res.drawable.error_badge),
                 text = stringResource(resource = Res.string.error_screen_general_error_title),
