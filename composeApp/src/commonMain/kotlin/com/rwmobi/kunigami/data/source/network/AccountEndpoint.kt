@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.data.source.network
 
 import com.rwmobi.kunigami.data.source.network.dto.account.AccountApiResponse
 import com.rwmobi.kunigami.data.source.network.extensions.encodeApiKey
+import com.rwmobi.kunigami.domain.exceptions.HttpException
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -48,7 +49,7 @@ class AccountEndpoint(
                 }
 
                 else -> {
-                    throw Exception("Error: HTTP ${response.status}")
+                    throw HttpException(response.status.value)
                 }
             }
         }
