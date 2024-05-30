@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.wallet
@@ -68,9 +69,12 @@ fun DefaultFailureRetryScreen(
             text = text,
         )
 
+        Spacer(modifier = Modifier.height(height = dimension.grid_1))
+
         description?.let {
             Text(
                 modifier = Modifier.padding(horizontal = dimension.grid_4),
+                textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleMedium,
                 text = it,
             )

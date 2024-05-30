@@ -27,6 +27,7 @@ import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
+import com.rwmobi.kunigami.ui.components.SpecialErrorScreenRouter
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
@@ -54,54 +55,68 @@ fun AccountScreen(
     val lazyListState = rememberLazyListState()
 
     Box(modifier = modifier) {
-        ScrollbarMultiplatform(
-            modifier = Modifier.fillMaxWidth(),
-            lazyListState = lazyListState,
-        ) { contentModifier ->
-            LazyColumn(
-                modifier = contentModifier
-                    .fillMaxWidth()
-                    .conditionalBlur(enabled = uiState.isLoading),
-                state = lazyListState,
-            ) {
-                if (uiState.isDemoMode == true) {
-                    item(key = "onboarding") {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            val widthConstraintModifier = when (uiState.requestedLayout) {
-                                is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
-                                is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
-                                else -> Modifier.widthIn(max = dimension.windowWidthMedium)
-                            }
+        if (uiState.requestedScreenType is AccountScreenType.ErrorScreen) {
+            SpecialErrorScreenRouter(
+                modifier = Modifier.fillMaxSize(),
+                specialErrorScreen = uiState.requestedScreenType.specialErrorScreen,
+                onRefresh = {
+                    uiEvent.onRefresh()
+                },
+                onClearCredential = {
+                    uiEvent.onSpecialErrorScreenShown()
+                    uiEvent.onClearCredentialButtonClicked()
+                },
+            )
+        } else {
+            ScrollbarMultiplatform(
+                modifier = Modifier.fillMaxWidth(),
+                lazyListState = lazyListState,
+            ) { contentModifier ->
+                LazyColumn(
+                    modifier = contentModifier
+                        .fillMaxWidth()
+                        .conditionalBlur(enabled = uiState.isLoading),
+                    state = lazyListState,
+                ) {
+                    if (uiState.requestedScreenType is AccountScreenType.Onboarding) {
+                        item(key = "onboarding") {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                val widthConstraintModifier = when (uiState.requestedLayout) {
+                                    is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
+                                    is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
+                                    else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                                }
 
-                            OnboardingScreen(
-                                modifier = widthConstraintModifier.padding(all = dimension.grid_2),
-                                uiState = uiState,
-                                uiEvent = uiEvent,
-                            )
+                                OnboardingScreen(
+                                    modifier = widthConstraintModifier.padding(all = dimension.grid_2),
+                                    uiState = uiState,
+                                    uiEvent = uiEvent,
+                                )
+                            }
                         }
                     }
-                }
 
-                if (uiState.isDemoMode == false && uiState.userProfile?.account != null) {
-                    item(key = "account") {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            val widthConstraintModifier = when (uiState.requestedLayout) {
-                                is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
-                                is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
-                                else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                    if (uiState.requestedScreenType is AccountScreenType.Account && uiState.userProfile?.account != null) {
+                        item(key = "account") {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                val widthConstraintModifier = when (uiState.requestedLayout) {
+                                    is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
+                                    is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
+                                    else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                                }
+
+                                AccountInformationScreen(
+                                    modifier = widthConstraintModifier.padding(horizontal = dimension.grid_2),
+                                    uiState = uiState,
+                                    uiEvent = uiEvent,
+                                )
                             }
-
-                            AccountInformationScreen(
-                                modifier = widthConstraintModifier.padding(horizontal = dimension.grid_2),
-                                uiState = uiState,
-                                uiEvent = uiEvent,
-                            )
                         }
                     }
                 }
@@ -117,7 +132,7 @@ fun AccountScreen(
         uiEvent.onRefresh()
     }
 
-    LaunchedEffect(uiState.isDemoMode) {
+    LaunchedEffect(uiState.requestedScreenType) {
         lazyListState.scrollToItem(index = 0)
     }
 
@@ -136,7 +151,7 @@ private fun Preview() {
         AccountScreen(
             uiState = AccountUIState(
                 isLoading = false,
-                isDemoMode = false,
+                requestedScreenType = AccountScreenType.Account,
                 userProfile = UserProfile(
                     account = Account(
                         id = 8638,
@@ -162,13 +177,13 @@ private fun Preview() {
             ),
             uiEvent = AccountUIEvent(
                 onClearCredentialButtonClicked = {},
-                onUpdateApiKeyClicked = {},
                 onSubmitCredentials = { _, _ -> },
                 onMeterSerialNumberSelected = { _, _ -> },
                 onRefresh = {},
                 onErrorShown = {},
                 onScrolledToTop = {},
                 onShowSnackbar = {},
+                onSpecialErrorScreenShown = {},
             ),
         )
     }

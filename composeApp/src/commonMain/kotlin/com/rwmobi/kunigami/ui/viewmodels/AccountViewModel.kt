@@ -12,15 +12,19 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.domain.usecase.UpdateMeterPreferenceUseCase
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
+import com.rwmobi.kunigami.ui.destinations.account.AccountScreenType
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.model.ErrorMessage
+import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
+import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +33,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_load_account
+import kunigami.composeapp.generated.resources.account_error_update_credentials
 import org.jetbrains.compose.resources.getString
 
 class AccountViewModel(
@@ -63,20 +68,14 @@ class AccountViewModel(
     }
 
     fun refresh() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isLoading = true,
-            )
-        }
-
+        startLoading()
         viewModelScope.launch(dispatcher) {
             syncUserProfileUseCase().fold(
                 onSuccess = { userProfile ->
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
-                            isDemoMode = false,
                             userProfile = userProfile,
-                            isLoading = false,
+                            requestedScreenType = AccountScreenType.Account,
                         )
                     }
                 },
@@ -84,16 +83,16 @@ class AccountViewModel(
                     if (throwable is IncompleteCredentialsException) {
                         _uiState.update { currentUiState ->
                             currentUiState.copy(
-                                isDemoMode = true,
-                                isLoading = false,
+                                requestedScreenType = AccountScreenType.Onboarding,
                             )
                         }
                     } else {
-                        updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
                         Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                        filterError(throwable = throwable)
                     }
                 },
             )
+            stopLoading()
         }
     }
 
@@ -108,12 +107,7 @@ class AccountViewModel(
         apiKey: String,
         accountNumber: String,
     ) {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isLoading = true,
-            )
-        }
-
+        startLoading()
         viewModelScope.launch {
             val result = initialiseAccountUseCase(apiKey = apiKey, accountNumber = accountNumber)
 
@@ -122,10 +116,12 @@ class AccountViewModel(
                     refresh()
                 },
                 onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
-                    Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                    // There is no retry for this case.
+                    Logger.e(getString(resource = Res.string.account_error_update_credentials), throwable = throwable, tag = "AccountViewModel")
+                    updateUIForError(message = getString(resource = Res.string.account_error_update_credentials))
                 },
             )
+            stopLoading()
         }
     }
 
@@ -133,6 +129,7 @@ class AccountViewModel(
         mpan: String,
         meterSerialNumber: String,
     ) {
+        startLoading()
         viewModelScope.launch {
             val result = updateMeterPreferenceUseCase(mpan = mpan, meterSerialNumber = meterSerialNumber)
 
@@ -141,9 +138,18 @@ class AccountViewModel(
                     refresh()
                 },
                 onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
                     Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                    filterError(throwable = throwable)
                 },
+            )
+            stopLoading()
+        }
+    }
+
+    fun onSpecialErrorScreenShown() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                requestedScreenType = null,
             )
         }
     }
@@ -153,6 +159,40 @@ class AccountViewModel(
             currentUiState.copy(
                 requestScrollToTop = enabled,
             )
+        }
+    }
+
+    private fun startLoading() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = true,
+            )
+        }
+    }
+
+    private fun stopLoading() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = false,
+            )
+        }
+    }
+
+    private suspend fun filterError(throwable: Throwable) {
+        if (throwable is HttpException) {
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    requestedScreenType = AccountScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode)),
+                )
+            }
+        } else if (throwable is UnresolvedAddressException) {
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    requestedScreenType = AccountScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.NetworkError),
+                )
+            }
+        } else {
+            updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
         }
     }
 
@@ -167,7 +207,6 @@ class AccountViewModel(
                 )
             }
             currentUiState.copy(
-                isLoading = false,
                 errorMessages = newErrorMessages,
             )
         }

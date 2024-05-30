@@ -138,7 +138,7 @@ private fun Preview() {
             AccountScreen(
                 uiState = AccountUIState(
                     isLoading = false,
-                    isDemoMode = true,
+                    requestedScreenType = AccountScreenType.Onboarding,
                     userProfile = UserProfile(
                         account = Account(
                             id = 8638,
@@ -164,13 +164,13 @@ private fun Preview() {
                 ),
                 uiEvent = AccountUIEvent(
                     onClearCredentialButtonClicked = {},
-                    onUpdateApiKeyClicked = {},
                     onSubmitCredentials = { _, _ -> },
                     onMeterSerialNumberSelected = { _, _ -> },
                     onRefresh = {},
                     onErrorShown = {},
                     onScrolledToTop = {},
                     onShowSnackbar = {},
+                    onSpecialErrorScreenShown = {},
                 ),
             )
         }

@@ -16,6 +16,7 @@
     <string name="ok">OK</string>
     <string name="retry">Retry</string>
     <string name="update">Update</string>
+    <string name="cancel">Cancel</string>
     <string name="no">No</string>
     <string name="kwh">kWh</string>
     <string name="p_kwh">p/kWh</string>
@@ -92,6 +93,7 @@
     <string name="account_clear_credential_button_cta">Clear</string>
     <string name="account_version_api_disclaimer">OctoMeter Version %1$s (Build %2$d)\n%3$s\n\nThe APIs are provided by Octopus Energy Ltd. Usage subject to their terms of service.</string>
 
+    <string name="account_error_update_credentials">Access denied. Credentials not updated. Please check and try again.</string>
     <string name="account_error_load_account">Unable to retrieve your account details.</string>
     <string name="account_error_load_tariff">Unable to retrieve your tariff.</string>
     <string name="account_error_account_empty">Unable to retrieve your account details. Try again?</string>
@@ -125,6 +127,12 @@
     <string name="onboarding_label_account">Account</string>
     <string name="onboarding_placeholder_account">A-12345678</string>
     <string name="onboarding_button_connect">Connect</string>
+
+    <!-- Common Error Screens -->
+    <string name="error_screen_unauthorised_title">Access Denied</string>
+    <string name="error_screen_unauthorised_description">Access was denied using the saved API Key and Account Number. Please clear the saved credentials and re-enter them.</string>
+    <string name="error_screen_network_error_title">Network Error</string>
+    <string name="error_screen_network_error_description">Please check your network connection and try again.</string>
 
     <!-- Desktop About dialog -->
     <string name="about_app_title">About OctoMeter</string>

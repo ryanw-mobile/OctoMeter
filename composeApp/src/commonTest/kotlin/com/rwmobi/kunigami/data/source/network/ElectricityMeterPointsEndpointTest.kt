@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.data.source.network
 
 import com.rwmobi.kunigami.data.source.network.samples.GetConsumptionSampleData
+import com.rwmobi.kunigami.domain.exceptions.HttpException
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
@@ -94,7 +95,7 @@ class ElectricityMeterPointsEndpointTest {
     }
 
     @Test
-    fun getConsumption_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getConsumption_ShouldThrowHttpException_WhenHttpStatusIsInternalServerError() = runTest {
         val electricityMeterPointsEndpoint = ElectricityMeterPointsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -104,7 +105,7 @@ class ElectricityMeterPointsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<Exception> {
+        shouldThrowExactly<HttpException> {
             electricityMeterPointsEndpoint.getConsumption(
                 apiKey = fakeApiKey,
                 mpan = fakeMpan,

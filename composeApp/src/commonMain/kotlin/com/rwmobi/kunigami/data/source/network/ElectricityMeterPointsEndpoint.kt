@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.data.source.network
 
 import com.rwmobi.kunigami.data.source.network.dto.consumption.ConsumptionApiResponse
 import com.rwmobi.kunigami.data.source.network.extensions.encodeApiKey
+import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.extensions.formatInstantWithoutSeconds
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -62,7 +63,7 @@ class ElectricityMeterPointsEndpoint(
                 }
 
                 else -> {
-                    throw Exception("Error: HTTP ${response.status}")
+                    throw HttpException(response.status.value)
                 }
             }
         }

@@ -28,6 +28,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -44,6 +48,8 @@ import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
 import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionAdaptive
 import com.rwmobi.kunigami.ui.destinations.account.components.ElectricityMeterPointCard
 import com.rwmobi.kunigami.ui.destinations.account.components.UpdateAPIKeyCard
+import com.rwmobi.kunigami.ui.destinations.account.components.UpdateApiKeyDialog
+import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -150,10 +156,22 @@ internal fun AccountInformationScreen(
             }
         }
 
+        var isUpdateAPIKeyDialogOpened by rememberSaveable { mutableStateOf(false) }
         UpdateAPIKeyCard(
             modifier = Modifier.fillMaxWidth(),
-            onUpdateAPIKeyClicked = uiEvent.onUpdateApiKeyClicked,
+            onUpdateAPIKeyClicked = { isUpdateAPIKeyDialogOpened = true },
         )
+
+        if (isUpdateAPIKeyDialogOpened && uiState.userProfile?.account?.accountNumber != null) {
+            UpdateApiKeyDialog(
+                initialValue = "",
+                onDismiss = { isUpdateAPIKeyDialogOpened = false },
+                onUpdateAPIKey = { newKey ->
+                    uiEvent.onSubmitCredentials(newKey, uiState.userProfile.account.accountNumber)
+                    isUpdateAPIKeyDialogOpened = false
+                },
+            )
+        }
 
         BoxWithConstraints {
             ClearCredentialSectionAdaptive(
@@ -176,7 +194,7 @@ private fun Preview() {
                 modifier = Modifier.padding(all = 32.dp),
                 uiState = AccountUIState(
                     isLoading = false,
-                    isDemoMode = false,
+                    requestedScreenType = AccountScreenType.Account,
                     requestedLayout = AccountScreenLayout.WideWrapped,
                     userProfile = UserProfile(
                         selectedMpan = "1200000345678",
@@ -215,13 +233,13 @@ private fun Preview() {
                 ),
                 uiEvent = AccountUIEvent(
                     onClearCredentialButtonClicked = {},
-                    onUpdateApiKeyClicked = {},
                     onSubmitCredentials = { _, _ -> },
                     onRefresh = {},
                     onMeterSerialNumberSelected = { _, _ -> },
                     onErrorShown = {},
                     onScrolledToTop = {},
                     onShowSnackbar = {},
+                    onSpecialErrorScreenShown = {},
                 ),
             )
         }
@@ -236,7 +254,7 @@ private fun ErrorPreview() {
             modifier = Modifier.padding(all = 32.dp),
             uiState = AccountUIState(
                 isLoading = false,
-                isDemoMode = false,
+                requestedScreenType = AccountScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.NetworkError),
                 requestedLayout = AccountScreenLayout.WideWrapped,
                 userProfile = UserProfile(
                     selectedMpan = "1200000345678",
@@ -248,13 +266,13 @@ private fun ErrorPreview() {
             ),
             uiEvent = AccountUIEvent(
                 onClearCredentialButtonClicked = {},
-                onUpdateApiKeyClicked = {},
                 onSubmitCredentials = { _, _ -> },
                 onRefresh = {},
                 onMeterSerialNumberSelected = { _, _ -> },
                 onErrorShown = {},
                 onScrolledToTop = {},
                 onShowSnackbar = {},
+                onSpecialErrorScreenShown = {},
             ),
         )
     }

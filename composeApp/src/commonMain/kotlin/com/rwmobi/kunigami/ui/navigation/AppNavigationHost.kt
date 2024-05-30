@@ -170,13 +170,13 @@ fun AppNavigationHost(
                 uiState = uiState,
                 uiEvent = AccountUIEvent(
                     onRefresh = viewModel::refresh,
-                    onUpdateApiKeyClicked = {}, // TODO: Dialog
                     onClearCredentialButtonClicked = viewModel::clearCredentials,
                     onSubmitCredentials = viewModel::submitCredentials,
                     onMeterSerialNumberSelected = viewModel::updateMeterSerialNumber,
                     onErrorShown = viewModel::errorShown,
                     onScrolledToTop = { onScrolledToTop(AppDestination.ACCOUNT) },
                     onShowSnackbar = onShowSnackbar,
+                    onSpecialErrorScreenShown = viewModel::onSpecialErrorScreenShown,
                 ),
             )
         }
