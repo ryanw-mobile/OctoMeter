@@ -7,20 +7,33 @@
 
 package com.rwmobi.kunigami.ui.destinations.agile
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.ui.extensions.generateRandomLong
+import com.rwmobi.kunigami.ui.extensions.getPlatformType
 import com.rwmobi.kunigami.ui.model.ErrorMessage
+import com.rwmobi.kunigami.ui.model.PlatformType
+import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
+import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.rate.RateGroupedCells
+import io.ktor.util.network.UnresolvedAddressException
+import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.account_error_load_tariff
+import org.jetbrains.compose.resources.getString
 
 @Immutable
 data class AgileUIState(
     val isLoading: Boolean = true,
     val isDemoMode: Boolean? = null,
     val showToolTipOnClick: Boolean = false,
+    val requestedScreenType: AgileScreenType = AgileScreenType.Chart,
     val requestedChartLayout: RequestedChartLayout = RequestedChartLayout.Portrait,
     val requestedRateColumns: Int = 1,
     val requestedAdaptiveLayout: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
@@ -32,11 +45,69 @@ data class AgileUIState(
     val requestScrollToTop: Boolean = false,
     val errorMessages: List<ErrorMessage> = emptyList(),
 ) {
-    fun isCurrentlyOnDifferentTariff(): Boolean {
+    private val rateColumnWidth = 175.dp
+
+    fun updateLayoutType(screenSizeInfo: ScreenSizeInfo, windowSizeClass: WindowSizeClass): AgileUIState {
+        val showToolTipOnClick = windowSizeClass.getPlatformType() != PlatformType.DESKTOP
+        val usageColumns = (screenSizeInfo.widthDp / rateColumnWidth).toInt()
+        val requestedLayout = if (screenSizeInfo.isPortrait()) {
+            RequestedChartLayout.Portrait
+        } else {
+            RequestedChartLayout.LandScape(
+                requestedMaxHeight = screenSizeInfo.heightDp / 2,
+            )
+        }
+
+        return copy(
+            showToolTipOnClick = showToolTipOnClick,
+            requestedChartLayout = requestedLayout,
+            requestedRateColumns = usageColumns,
+            requestedAdaptiveLayout = windowSizeClass.widthSizeClass,
+        )
+    }
+
+    fun isOnDifferentTariff(): Boolean {
         return (
             false == isDemoMode &&
                 userProfile?.tariffSummary != null &&
                 userProfile.tariffSummary.tariffCode != agileTariffSummary?.tariffCode
             )
+    }
+
+    suspend fun filterErrorAndStopLoading(throwable: Throwable): AgileUIState {
+        return when (throwable) {
+            is HttpException -> {
+                copy(
+                    requestedScreenType = AgileScreenType.Error(SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode)),
+                    isLoading = false,
+                )
+            }
+
+            is UnresolvedAddressException -> {
+                copy(
+                    requestedScreenType = AgileScreenType.Error(SpecialErrorScreen.NetworkError),
+                    isLoading = false,
+                )
+            }
+
+            else -> {
+                handleErrorAndStopLoading(message = throwable.message ?: getString(resource = Res.string.account_error_load_tariff))
+            }
+        }
+    }
+
+    private fun handleErrorAndStopLoading(message: String): AgileUIState {
+        val newErrorMessages = if (errorMessages.any { it.message == message }) {
+            errorMessages
+        } else {
+            errorMessages + ErrorMessage(
+                id = generateRandomLong(),
+                message = message,
+            )
+        }
+        return copy(
+            errorMessages = newErrorMessages,
+            isLoading = false,
+        )
     }
 }
