@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
-import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIState
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
@@ -24,7 +23,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TariffsViewModel(
-    private val userPreferencesRepository: UserPreferencesRepository,
     private val restApiRepository: RestApiRepository,
     private val getFilteredProductsUseCase: GetFilteredProductsUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
@@ -107,13 +105,6 @@ class TariffsViewModel(
             currentUiState.copy(
                 requestedScreenType = null,
             )
-        }
-    }
-
-    fun clearCredentials() {
-        viewModelScope.launch {
-            userPreferencesRepository.clearCredentials()
-            refresh()
         }
     }
 

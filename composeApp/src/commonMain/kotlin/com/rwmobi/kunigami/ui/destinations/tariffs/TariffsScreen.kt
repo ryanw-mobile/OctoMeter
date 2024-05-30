@@ -33,9 +33,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.ui.components.DualTitleBar
+import com.rwmobi.kunigami.ui.components.ErrorScreenHandler
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
-import com.rwmobi.kunigami.ui.components.SpecialErrorScreenRouter
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.ButtonTitleBar
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.DetailsScreenWrapper
@@ -75,15 +75,11 @@ fun TariffsScreen(
     Box(modifier = modifier) {
         when {
             uiState.requestedScreenType is TariffsScreenType.Error -> {
-                SpecialErrorScreenRouter(
+                ErrorScreenHandler(
                     modifier = Modifier.fillMaxSize(),
                     specialErrorScreen = uiState.requestedScreenType.specialErrorScreen,
                     onRefresh = {
                         uiEvent.onRefresh()
-                    },
-                    onClearCredential = {
-                        uiEvent.onSpecialErrorScreenShown()
-                        uiEvent.onClearCredentials()
                     },
                 )
             }
@@ -195,21 +191,17 @@ fun TariffsScreen(
             }
 
             !uiState.isLoading && uiState.productSummaries.isEmpty() -> {
-                SpecialErrorScreenRouter(
+                ErrorScreenHandler(
                     modifier = Modifier.fillMaxSize(),
                     specialErrorScreen = SpecialErrorScreen.NoData,
                     onRefresh = {
                         uiEvent.onRefresh()
                     },
-                    onClearCredential = {
-                        uiEvent.onSpecialErrorScreenShown()
-                        uiEvent.onClearCredentials()
-                    },
                 )
             }
         }
 
-        if (uiState.isLoading && uiState.productSummaries.isEmpty()) {
+        if (uiState.shouldShowLoadingScreen()) {
             LoadingScreen(
                 modifier = Modifier.fillMaxSize(),
             )
@@ -231,12 +223,7 @@ fun TariffsScreen(
     }
 
     LaunchedEffect(uiState.productDetails, uiState.requestedLayout) {
-        val isBottomSheetLayout = with(uiState.requestedLayout) {
-            (this is TariffScreenLayout.Wide && useBottomSheet) ||
-                (this is TariffScreenLayout.Compact && useBottomSheet)
-        }
-
-        if (isBottomSheetLayout) {
+        if (uiState.shouldUseBottomSheet()) {
             when {
                 uiState.productDetails != null && !bottomSheetState.isVisible -> bottomSheetState.show()
                 uiState.productDetails == null && bottomSheetState.isVisible -> bottomSheetState.hide()

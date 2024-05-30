@@ -135,10 +135,13 @@
     <string name="error_screen_network_error_title">Network Error</string>
     <string name="error_screen_network_error_description">Please check your network connection, then try again.</string>
     <string name="error_screen_general_http_error_title">HTTP Error %1$d</string>
+    <string name="error_screen_general_http_error_description_no_auth">You may try again later.</string>
     <string name="error_screen_general_http_error_description">You may try again later. Alternatively, you can clear the saved credentials and re-enter them to see if that solves the problem.</string>
     <string name="error_screen_general_error_title">Something is wrong</string>
+    <string name="error_screen_general_error_description_no_auth">You may try again later. If this is unexpected, log an issue on Github.</string>
     <string name="error_screen_general_error_description">You may try again later. Alternatively, you can clear the saved credentials and re-enter them to see if that solves the problem.</string>
     <string name="error_screen_no_data_title">There is nothing to show</string>
+    <string name="error_screen_no_data_description_no_auth">If this is unexpected, log an issue on Github</string>
     <string name="error_screen_no_data_description">You may try again later. Alternatively, you can clear the saved credentials and re-enter them to see if that solves the problem.</string>
 
     <!-- Desktop About dialog -->

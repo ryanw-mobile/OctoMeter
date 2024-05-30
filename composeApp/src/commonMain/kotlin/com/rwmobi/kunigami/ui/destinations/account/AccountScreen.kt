@@ -25,9 +25,9 @@ import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.account.UserProfile
+import com.rwmobi.kunigami.ui.components.ErrorScreenHandler
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
-import com.rwmobi.kunigami.ui.components.SpecialErrorScreenRouter
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
@@ -57,7 +57,7 @@ fun AccountScreen(
 
     Box(modifier = modifier) {
         if (uiState.requestedScreenType is AccountScreenType.ErrorScreen) {
-            SpecialErrorScreenRouter(
+            ErrorScreenHandler(
                 modifier = Modifier.fillMaxSize(),
                 specialErrorScreen = uiState.requestedScreenType.specialErrorScreen,
                 onRefresh = {
@@ -124,7 +124,7 @@ fun AccountScreen(
 
                         else -> {
                             item(key = "noData") {
-                                SpecialErrorScreenRouter(
+                                ErrorScreenHandler(
                                     modifier = Modifier.fillMaxSize(),
                                     specialErrorScreen = SpecialErrorScreen.NoData,
                                     onRefresh = {

@@ -149,7 +149,6 @@ fun AppNavigationHost(
                     onScrolledToTop = { onScrolledToTop(AppDestination.TARIFFS) },
                     onShowSnackbar = onShowSnackbar,
                     onProductDetailsDismissed = viewModel::onProductDetailsDismissed,
-                    onClearCredentials = viewModel::clearCredentials,
                     onSpecialErrorScreenShown = viewModel::onSpecialErrorScreenShown,
                 ),
             )

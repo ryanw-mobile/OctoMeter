@@ -39,6 +39,16 @@ data class TariffsUIState(
 ) {
     private val windowWidthCompact: Dp = 599.dp
 
+    fun shouldUseBottomSheet(): Boolean {
+        return with(requestedLayout) {
+            (this is TariffScreenLayout.Wide && useBottomSheet) ||
+                (this is TariffScreenLayout.Compact && useBottomSheet)
+        }
+    }
+
+    // Make it less instructive when hopping among products
+    fun shouldShowLoadingScreen() = isLoading && productSummaries.isEmpty()
+
     fun updateLayoutType(screenSizeInfo: ScreenSizeInfo, windowSizeClass: WindowSizeClass): TariffsUIState {
         val platform = windowSizeClass.getPlatformType()
         val requestedLayout = when (windowSizeClass.widthSizeClass) {
@@ -56,7 +66,7 @@ data class TariffsUIState(
         return copy(
             requestedLayout = requestedLayout,
             requestedWideListLayout = requestedWideListLayout,
-        ).updateScreenType()
+        ) // .updateScreenType()
     }
 
     fun updateScreenType(): TariffsUIState {
@@ -66,7 +76,7 @@ data class TariffsUIState(
                 isErrorScreen() -> requestedScreenType
                 shouldShowTariffsList() -> TariffsScreenType.List
                 hasProductDetailsLoaded() -> TariffsScreenType.FullScreenDetail
-                else -> null
+                else -> requestedScreenType // nothing triggered for a change, just keep it
             },
         )
     }

@@ -16,7 +16,6 @@ data class TariffsUIEvent(
     val onProductDetailsDismissed: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
     val onScrolledToTop: () -> Unit,
-    val onClearCredentials: () -> Unit,
     val onSpecialErrorScreenShown: () -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,
 )
