@@ -19,7 +19,7 @@ This is a dashboard-type app that runs on desktop (desktop-first), Android, and 
 The main purposes of this app are:
 
 * Compile smart meter electricity usage; estimate and project electricity usage and cost.
-* Track Octopus Agile tariff unit rates for the coming 24 hours, with countdown and automatic refresh.
+* Track the Agile Octopus tariff unit rates for the coming 24 hours, with countdown and automatic refresh.
 * Browse available Octopus Energy tariffs.
 
 For non-Octopus Energy customers, or non-UK residents, the demo mode will display random meter readings and default tariff rates to illustrate the app’s functionality.
