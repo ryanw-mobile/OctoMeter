@@ -49,6 +49,7 @@ import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSec
 import com.rwmobi.kunigami.ui.destinations.account.components.ElectricityMeterPointCard
 import com.rwmobi.kunigami.ui.destinations.account.components.UpdateAPIKeyCard
 import com.rwmobi.kunigami.ui.destinations.account.components.UpdateApiKeyDialog
+import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -193,7 +194,7 @@ private fun Preview() {
                 modifier = Modifier.padding(all = 32.dp),
                 uiState = AccountUIState(
                     isLoading = false,
-                    isDemoMode = false,
+                    requestedScreenType = AccountScreenType.Account,
                     requestedLayout = AccountScreenLayout.WideWrapped,
                     userProfile = UserProfile(
                         selectedMpan = "1200000345678",
@@ -253,7 +254,7 @@ private fun ErrorPreview() {
             modifier = Modifier.padding(all = 32.dp),
             uiState = AccountUIState(
                 isLoading = false,
-                isDemoMode = false,
+                requestedScreenType = AccountScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.NetworkError),
                 requestedLayout = AccountScreenLayout.WideWrapped,
                 userProfile = UserProfile(
                     selectedMpan = "1200000345678",

@@ -138,7 +138,7 @@ private fun Preview() {
             AccountScreen(
                 uiState = AccountUIState(
                     isLoading = false,
-                    isDemoMode = true,
+                    requestedScreenType = AccountScreenType.Onboarding,
                     userProfile = UserProfile(
                         account = Account(
                             id = 8638,

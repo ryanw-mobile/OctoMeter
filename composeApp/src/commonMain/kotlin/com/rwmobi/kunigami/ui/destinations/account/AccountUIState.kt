@@ -10,15 +10,13 @@ package com.rwmobi.kunigami.ui.destinations.account
 import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.model.ErrorMessage
-import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 
 @Immutable
 data class AccountUIState(
     val isLoading: Boolean = true,
-    val isDemoMode: Boolean? = null,
+    val requestedScreenType: AccountScreenType? = null,
     val requestedLayout: AccountScreenLayout = AccountScreenLayout.Compact,
     val userProfile: UserProfile? = null,
     val requestScrollToTop: Boolean = false,
-    val specialErrorScreen: SpecialErrorScreen? = null,
     val errorMessages: List<ErrorMessage> = emptyList(),
 )

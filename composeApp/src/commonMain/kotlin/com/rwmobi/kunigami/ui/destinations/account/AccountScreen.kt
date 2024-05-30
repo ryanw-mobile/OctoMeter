@@ -55,10 +55,10 @@ fun AccountScreen(
     val lazyListState = rememberLazyListState()
 
     Box(modifier = modifier) {
-        if (uiState.specialErrorScreen != null) {
+        if (uiState.requestedScreenType is AccountScreenType.ErrorScreen) {
             SpecialErrorScreenRouter(
                 modifier = Modifier.fillMaxSize(),
-                specialErrorScreen = uiState.specialErrorScreen,
+                specialErrorScreen = uiState.requestedScreenType.specialErrorScreen,
                 onRefresh = {
                     uiEvent.onRefresh()
                 },
@@ -78,7 +78,7 @@ fun AccountScreen(
                         .conditionalBlur(enabled = uiState.isLoading),
                     state = lazyListState,
                 ) {
-                    if (uiState.isDemoMode == true) {
+                    if (uiState.requestedScreenType is AccountScreenType.Onboarding) {
                         item(key = "onboarding") {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
@@ -99,7 +99,7 @@ fun AccountScreen(
                         }
                     }
 
-                    if (uiState.isDemoMode == false && uiState.userProfile?.account != null) {
+                    if (uiState.requestedScreenType is AccountScreenType.Account && uiState.userProfile?.account != null) {
                         item(key = "account") {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
@@ -132,7 +132,7 @@ fun AccountScreen(
         uiEvent.onRefresh()
     }
 
-    LaunchedEffect(uiState.isDemoMode) {
+    LaunchedEffect(uiState.requestedScreenType) {
         lazyListState.scrollToItem(index = 0)
     }
 
@@ -151,7 +151,7 @@ private fun Preview() {
         AccountScreen(
             uiState = AccountUIState(
                 isLoading = false,
-                isDemoMode = false,
+                requestedScreenType = AccountScreenType.Account,
                 userProfile = UserProfile(
                     account = Account(
                         id = 8638,

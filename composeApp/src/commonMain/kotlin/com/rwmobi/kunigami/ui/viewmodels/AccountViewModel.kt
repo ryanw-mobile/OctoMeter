@@ -19,6 +19,7 @@ import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.domain.usecase.UpdateMeterPreferenceUseCase
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
+import com.rwmobi.kunigami.ui.destinations.account.AccountScreenType
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -74,7 +75,7 @@ class AccountViewModel(
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             userProfile = userProfile,
-                            isDemoMode = false,
+                            requestedScreenType = AccountScreenType.Account,
                         )
                     }
                 },
@@ -82,7 +83,7 @@ class AccountViewModel(
                     if (throwable is IncompleteCredentialsException) {
                         _uiState.update { currentUiState ->
                             currentUiState.copy(
-                                isDemoMode = true,
+                                requestedScreenType = AccountScreenType.Onboarding,
                             )
                         }
                     } else {
@@ -148,7 +149,7 @@ class AccountViewModel(
     fun onSpecialErrorScreenShown() {
         _uiState.update { currentUiState ->
             currentUiState.copy(
-                specialErrorScreen = null,
+                requestedScreenType = null,
             )
         }
     }
@@ -165,7 +166,6 @@ class AccountViewModel(
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 isLoading = true,
-                specialErrorScreen = null,
             )
         }
     }
@@ -182,13 +182,13 @@ class AccountViewModel(
         if (throwable is HttpException) {
             _uiState.update { currentUiState ->
                 currentUiState.copy(
-                    specialErrorScreen = SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode),
+                    requestedScreenType = AccountScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode)),
                 )
             }
         } else if (throwable is UnresolvedAddressException) {
             _uiState.update { currentUiState ->
                 currentUiState.copy(
-                    specialErrorScreen = SpecialErrorScreen.NetworkError,
+                    requestedScreenType = AccountScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.NetworkError),
                 )
             }
         } else {
