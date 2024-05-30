@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.ui.components.DemoModeCtaAdaptive
+import com.rwmobi.kunigami.ui.components.ErrorScreenHandler
 import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.MessageActionScreen
@@ -81,9 +82,19 @@ fun UsageScreen(
     }
 
     Box(modifier = modifier) {
-        when {
+        when (uiState.requestedScreenType) {
+            is UsageScreenType.Error -> {
+                ErrorScreenHandler(
+                    modifier = Modifier.fillMaxSize(),
+                    specialErrorScreen = uiState.requestedScreenType.specialErrorScreen,
+                    onRefresh = {
+                        uiEvent.onInitialLoad()
+                    },
+                )
+            }
+
             // We need to retain the navigation bar even for no data
-            uiState.consumptionGroupedCells.isNotEmpty() || !uiState.isLoading -> {
+            UsageScreenType.Chart -> {
                 ScrollbarMultiplatform(
                     modifier = Modifier.fillMaxSize(),
                     enabled = uiState.consumptionGroupedCells.isNotEmpty(),
