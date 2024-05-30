@@ -132,7 +132,13 @@
     <string name="error_screen_unauthorised_title">Access Denied</string>
     <string name="error_screen_unauthorised_description">Access was denied using the saved API Key and Account Number. Please clear the saved credentials and re-enter them.</string>
     <string name="error_screen_network_error_title">Network Error</string>
-    <string name="error_screen_network_error_description">Please check your network connection and try again.</string>
+    <string name="error_screen_network_error_description">Please check your network connection, then try again.</string>
+    <string name="error_screen_general_http_error_title">HTTP Error %1$d</string>
+    <string name="error_screen_general_http_error_description">You may try again later. Alternatively, you can clear the saved credentials and re-enter them to see if that solves the problem.</string>
+    <string name="error_screen_general_error_title">Something is wrong</string>
+    <string name="error_screen_general_error_description">You may try again later. Alternatively, you can clear the saved credentials and re-enter them to see if that solves the problem.</string>
+    <string name="error_screen_no_data_title">There is nothing to show</string>
+    <string name="error_screen_no_data_description">You may try again later. Alternatively, you can clear the saved credentials and re-enter them to see if that solves the problem.</string>
 
     <!-- Desktop About dialog -->
     <string name="about_app_title">About OctoMeter</string>
