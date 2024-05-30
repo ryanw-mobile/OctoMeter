@@ -161,12 +161,12 @@ internal fun AccountInformationScreen(
             onUpdateAPIKeyClicked = { isUpdateAPIKeyDialogOpened = true },
         )
 
-        if (isUpdateAPIKeyDialogOpened) {
+        if (isUpdateAPIKeyDialogOpened && uiState.userProfile?.account?.accountNumber != null) {
             UpdateApiKeyDialog(
                 initialValue = "",
                 onDismiss = { isUpdateAPIKeyDialogOpened = false },
                 onUpdateAPIKey = { newKey ->
-                    uiEvent.onUpdateApiKey(newKey)
+                    uiEvent.onSubmitCredentials(newKey, uiState.userProfile.account.accountNumber)
                     isUpdateAPIKeyDialogOpened = false
                 },
             )

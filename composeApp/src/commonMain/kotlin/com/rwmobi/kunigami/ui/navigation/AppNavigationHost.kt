@@ -170,7 +170,6 @@ fun AppNavigationHost(
                 uiState = uiState,
                 uiEvent = AccountUIEvent(
                     onRefresh = viewModel::refresh,
-                    onUpdateApiKey = { viewModel.updateApiKey(it) },
                     onClearCredentialButtonClicked = viewModel::clearCredentials,
                     onSubmitCredentials = viewModel::submitCredentials,
                     onMeterSerialNumberSelected = viewModel::updateMeterSerialNumber,

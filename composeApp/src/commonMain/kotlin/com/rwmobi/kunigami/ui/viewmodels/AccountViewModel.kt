@@ -119,15 +119,6 @@ class AccountViewModel(
         }
     }
 
-    fun updateApiKey(apiKey: String) {
-        startLoading()
-        viewModelScope.launch {
-            userPreferencesRepository.setApiKey(apiKey = apiKey)
-            refresh()
-            stopLoading()
-        }
-    }
-
     fun updateMeterSerialNumber(
         mpan: String,
         meterSerialNumber: String,
