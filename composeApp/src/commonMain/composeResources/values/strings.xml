@@ -16,12 +16,15 @@
     <string name="ok">OK</string>
     <string name="retry">Retry</string>
     <string name="update">Update</string>
+    <string name="no">No</string>
     <string name="kwh">kWh</string>
     <string name="p_kwh">p/kWh</string>
     <string name="unit_kwh">%1$s kWh</string>
     <string name="unit_pound">£%1$s</string>
     <string name="standing_charge">Standing Charge</string>
     <string name="standard_unit_rate">Unit Rate</string>
+    <string name="day_unit_rate">Day Unit Rate</string>
+    <string name="night_unit_rate">Night Unit Rate</string>
     <string name="unit_p_day">%1$d p/day</string>
     <string name="unit_p_kwh">%1$d p/kWh</string>
 
@@ -70,6 +73,10 @@
     <string name="tariffs_fixed_term_months">Fixed term %1$s months</string>
     <string name="tariffs_available_from">Available from %1$s %2$s</string>
     <string name="tariffs_available_to">to %1$s</string>
+    <string name="tariffs_online_discount">Online Discount</string>
+    <string name="tariffs_dual_fuel_discount">Dual Fuel Discount</string>
+    <string name="tariffs_exit_fees">Exit Fees</string>
+    <string name="tariffs_direct_debit_monthly">Direct Debit Monthly</string>
 
     <!-- Product Features -->
     <string name="product_feature_variable">Variable</string>

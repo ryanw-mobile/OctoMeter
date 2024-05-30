@@ -57,7 +57,7 @@ fun AppNavigationHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = AppDestination.TARIFFS.name,
+        startDestination = AppDestination.AGILE.name,
     ) {
         composable(route = AppDestination.USAGE.name) {
             // Workaround: passing through parameters not working on iOS, so we do it here
