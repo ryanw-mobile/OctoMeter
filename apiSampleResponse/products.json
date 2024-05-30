@@ -1,0 +1,1039 @@
+{
+  "count": 43,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "code": "AGILE-24-04-03",
+      "direction": "IMPORT",
+      "full_name": "Agile Octopus April 2024 v1",
+      "display_name": "Agile Octopus",
+      "description": "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
+      "is_variable": true,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2024-04-03T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/AGILE-24-04-03/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "AGILE-BB-24-04-03",
+      "direction": "IMPORT",
+      "full_name": "Agile Octopus April 2024 v1",
+      "display_name": "Agile Octopus",
+      "description": "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
+      "is_variable": true,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2024-04-03T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/AGILE-BB-24-04-03/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "AGILE-OUTGOING-19-05-13",
+      "direction": "EXPORT",
+      "full_name": "Agile Outgoing Octopus May 2019",
+      "display_name": "Agile Outgoing Octopus",
+      "description": "Outgoing Octopus Agile rate pays you for all your exported energy based on the day-ahead wholesale rate.",
+      "is_variable": true,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2018-01-01T00:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/AGILE-OUTGOING-19-05-13/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "AGILE-OUTGOING-BB-23-02-28",
+      "direction": "EXPORT",
+      "full_name": "Agile Outgoing Octopus February 2023 v1",
+      "display_name": "Agile Outgoing Octopus",
+      "description": "Outgoing Octopus Agile rate pays you for all your exported energy based on the day-ahead wholesale rate.",
+      "is_variable": true,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2023-02-27T00:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/AGILE-OUTGOING-BB-23-02-28/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "COOP-FIX-12M-24-05-24",
+      "direction": "IMPORT",
+      "full_name": "Co-op 12M Fixed May 2024 v4",
+      "display_name": "Co-op 12M Fixed",
+      "description": "This tariff features 100% renewable electricity and fixes your unit rates and standing charge for 12 months.",
+      "is_variable": false,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2024-05-24T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/COOP-FIX-12M-24-05-24/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "COOP_ENERGY"
+    },
+    {
+      "code": "COOP-PP-VAR-20-04-01",
+      "direction": "IMPORT",
+      "full_name": "Co-op Key and Card",
+      "display_name": "Co-op Key and Card",
+      "description": "Non-smart prepayment tariff",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": true,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2020-03-03T00:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/COOP-PP-VAR-20-04-01/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "COOP_ENERGY"
+    },
+    {
+      "code": "COOP-SEG-EO-FIX-12M-24-04-05",
+      "direction": "EXPORT",
+      "full_name": "Co-op Smart Export Guarantee Export Only April 2024 v1",
+      "display_name": "Co-op Smart Export Guarantee Export Only",
+      "description": "This is our Smart Export Guarantee compliant export tariff for export only accounts",
+      "is_variable": false,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2024-04-05T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/COOP-SEG-EO-FIX-12M-24-04-05/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "COOP_ENERGY"
+    },
+    {
+      "code": "COOP-SEG-FIX-12M-20-11-11",
+      "direction": "EXPORT",
+      "full_name": "Co-op Smart Export Guarantee November 2020 v1",
+      "display_name": "Co-op Smart Export Guarantee",
+      "description": "This is our Smart Export Guarantee compliant export tariff",
+      "is_variable": false,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2020-11-11T17:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/COOP-SEG-FIX-12M-20-11-11/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "COOP_ENERGY"
+    },
+    {
+      "code": "COOP-VAR-23-04-01",
+      "direction": "IMPORT",
+      "full_name": "Co-op Flexible",
+      "display_name": "Co-op Flexible",
+      "description": "Co-op Flexible offers great value and 100% renewable electricity. As a variable tariff, your prices can rise and fall with wholesale prices - but we'll always give you notice of a change.",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-04-01T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/COOP-VAR-23-04-01/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "COOP_ENERGY"
+    },
+    {
+      "code": "COSY-22-12-08",
+      "direction": "IMPORT",
+      "full_name": "Cosy Octopus",
+      "display_name": "Cosy Octopus",
+      "description": "Cosy Octopus is a heat pump tariff with six hours of super cheap electricity every day to warm your home.",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2022-12-13T00:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/COSY-22-12-08/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "COSY-BB-23-02-07",
+      "direction": "IMPORT",
+      "full_name": "Cosy Octopus",
+      "display_name": "Cosy Octopus",
+      "description": "Cosy Octopus is a heat pump tariff with six hours of super cheap electricity every day to warm your home.",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-02-07T00:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/COSY-BB-23-02-07/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "CP-12M-24-05-24",
+      "direction": "IMPORT",
+      "full_name": "Co-op Community Power 12M Fixed May 2024 v4",
+      "display_name": "Co-op Community Power",
+      "description": "This tariff features 100% renewable electricity and fixes your unit rates and standing charge for 12 months.",
+      "is_variable": false,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2024-05-24T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/CP-12M-24-05-24/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "COOP_ENERGY"
+    },
+    {
+      "code": "FLUX-EXPORT-23-02-14",
+      "direction": "EXPORT",
+      "full_name": "Octopus Flux Export",
+      "display_name": "Octopus Flux Export",
+      "description": "Octopus Flux Export February 2023 v1",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-02-14T00:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/FLUX-EXPORT-23-02-14/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "FLUX-EXPORT-BB-23-02-14",
+      "direction": "EXPORT",
+      "full_name": "Octopus Flux Export",
+      "display_name": "Octopus Flux Export",
+      "description": "Octopus Flux Export February 2023 v2",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-02-14T00:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/FLUX-EXPORT-BB-23-02-14/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "FLUX-IMPORT-23-02-14",
+      "direction": "IMPORT",
+      "full_name": "Octopus Flux Import",
+      "display_name": "Octopus Flux Import",
+      "description": "Power your home with 100% renewable energy on this Octopus Energy electricity tariff designed exclusively for solar and battery owners.",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-02-14T00:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/FLUX-IMPORT-23-02-14/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "FLUX-IMPORT-BB-23-02-14",
+      "direction": "IMPORT",
+      "full_name": "Octopus Flux Import",
+      "display_name": "Octopus Flux Import",
+      "description": "Power your home with 100% renewable energy on this Octopus Energy electricity tariff designed exclusively for solar and battery owners.",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-02-14T00:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/FLUX-IMPORT-BB-23-02-14/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "GO-GREEN-VAR-22-10-14",
+      "direction": "IMPORT",
+      "full_name": "Octopus Go Green October 2022 v1",
+      "display_name": "Octopus Go Green",
+      "description": "Octopus Go Green is our EV tariff exclusively available to Volkswagen Group EV drivers.",
+      "is_variable": true,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2022-10-14T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/GO-GREEN-VAR-22-10-14/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "GO-VAR-22-10-14",
+      "direction": "IMPORT",
+      "full_name": "Octopus Go October 2022 v1",
+      "display_name": "Octopus Go",
+      "description": "The smart EV tariff with super cheap electricity between 00:30 - 04:30 every night",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2022-10-14T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/GO-VAR-22-10-14/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "GO-VAR-BB-23-02-07",
+      "direction": "IMPORT",
+      "full_name": "Octopus Go February 2023 v1",
+      "display_name": "Octopus Go",
+      "description": "The smart EV tariff with super cheap electricity between 00:30 - 04:30 every night",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-02-07T00:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/GO-VAR-BB-23-02-07/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "INTELLI-BB-VAR-23-03-01",
+      "direction": "IMPORT",
+      "full_name": "Intelligent Octopus Go March 2023 v1",
+      "display_name": "Intelligent Octopus Go",
+      "description": "With Intelligent Octopus Go EV tariff, you have access to a super low electricity rate between 23:30 - 05:30 every night, plus it smart-charges your car at the cheapest and greenest times overnight.",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-02-02T00:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/INTELLI-BB-VAR-23-03-01/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "INTELLI-FLUX-EXPORT-23-07-14",
+      "direction": "EXPORT",
+      "full_name": "Intelligent Octopus Flux Export",
+      "display_name": "Intelligent Octopus Flux Export",
+      "description": "Intelligent Octopus Flux Export v1",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-07-13T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/INTELLI-FLUX-EXPORT-23-07-14/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "INTELLI-FLUX-EXPORT-BB-23-07-14",
+      "direction": "EXPORT",
+      "full_name": "Intelligent Octopus Flux Export",
+      "display_name": "Intelligent Octopus Flux Export",
+      "description": "Intelligent Octopus Flux Export v1",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-07-13T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/INTELLI-FLUX-EXPORT-BB-23-07-14/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "INTELLI-FLUX-IMPORT-23-07-14",
+      "direction": "IMPORT",
+      "full_name": "Intelligent Octopus Flux Import",
+      "display_name": "Intelligent Octopus Flux Import",
+      "description": "Power your home with 100% renewable energy on this Octopus Energy electricity tariff designed exclusively for solar and battery owners.",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-07-13T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/INTELLI-FLUX-IMPORT-23-07-14/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "INTELLI-FLUX-IMPORT-BB-23-07-14",
+      "direction": "IMPORT",
+      "full_name": "Intelligent Octopus Flux Import",
+      "display_name": "Intelligent Octopus Flux Import",
+      "description": "Power your home with 100% renewable energy on this Octopus Energy electricity tariff designed exclusively for solar and battery owners.",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-07-13T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/INTELLI-FLUX-IMPORT-BB-23-07-14/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "INTELLI-VAR-22-10-14",
+      "direction": "IMPORT",
+      "full_name": "Intelligent Octopus Go October 2022 v1",
+      "display_name": "Intelligent Octopus Go",
+      "description": "With Intelligent Octopus Go EV tariff, you have access to a super low electricity rate between 23:30 - 05:30 every night, plus it smart-charges your car at the cheapest and greenest times overnight.",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2022-10-14T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/INTELLI-VAR-22-10-14/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "LP-SEG-EO-FIX-12M-24-04-05",
+      "direction": "EXPORT",
+      "full_name": "my london smart export guarantee export only april 2024 v1",
+      "display_name": "my london smart export only guarantee",
+      "description": "This is our Smart Export Guarantee compliant export tariff for export only accounts",
+      "is_variable": false,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2024-04-05T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/LP-SEG-EO-FIX-12M-24-04-05/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "LONDON_POWER"
+    },
+    {
+      "code": "LP-SEG-FIX-12M-20-11-11",
+      "direction": "EXPORT",
+      "full_name": "my london smart export guarantee november 2020 v1",
+      "display_name": "my london smart export guarantee",
+      "description": "This is our Smart Export Guarantee compliant export tariff",
+      "is_variable": false,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2020-11-11T17:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/LP-SEG-FIX-12M-20-11-11/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "LONDON_POWER"
+    },
+    {
+      "code": "LP-VAR-23-04-01",
+      "direction": "IMPORT",
+      "full_name": "my london flexible plan",
+      "display_name": "my london flexible plan",
+      "description": "my london flexible plan offers great value and 100% renewable electricity. As a variable tariff, your prices can rise and fall with wholesale prices - but we'll always give you notice of a change.",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-04-01T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/LP-VAR-23-04-01/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "LONDON_POWER"
+    },
+    {
+      "code": "OE-FIX-12M-24-05-24",
+      "direction": "IMPORT",
+      "full_name": "Octopus 12M Fixed May 2024 v4",
+      "display_name": "Octopus 12M Fixed",
+      "description": "This tariff features 100% renewable electricity and fixes your unit rates and standing charge for 12 months.",
+      "is_variable": false,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2024-05-24T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/OE-FIX-12M-24-05-24/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "OE-FIX-12M-BB-24-05-24",
+      "direction": "IMPORT",
+      "full_name": "Octopus 12M Fixed May 2024 v4",
+      "display_name": "Octopus 12M Fixed",
+      "description": "This tariff features 100% renewable electricity and fixes your unit rates and standing charge for 12 months.",
+      "is_variable": false,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2024-05-24T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/OE-FIX-12M-BB-24-05-24/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "OUTGOING-FIX-12M-19-05-13",
+      "direction": "EXPORT",
+      "full_name": "Outgoing Octopus 12M Fixed May 2019",
+      "display_name": "Outgoing Octopus 12M Fixed",
+      "description": "Outgoing Octopus flat rate pays you for all exported energy at a flat rate.",
+      "is_variable": false,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2019-05-16T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/OUTGOING-FIX-12M-19-05-13/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "OUTGOING-FIX-12M-BB-23-02-09",
+      "direction": "EXPORT",
+      "full_name": "Outgoing Octopus 12M Fixed February 2023 v1",
+      "display_name": "Outgoing Octopus 12M Fixed",
+      "description": "Outgoing Octopus flat rate pays you for all exported energy at a flat rate.",
+      "is_variable": false,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2023-02-09T00:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/OUTGOING-FIX-12M-BB-23-02-09/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "OUTGOING-LITE-FIX-12M-23-09-12",
+      "direction": "EXPORT",
+      "full_name": "Outgoing Octopus 12M Fixed Lite",
+      "display_name": "Outgoing Octopus Fixed Lite",
+      "description": "Outgoing Octopus Lite flat rate pays you for all exported energy at a flat rate.",
+      "is_variable": false,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2023-09-14T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/OUTGOING-LITE-FIX-12M-23-09-12/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "OUTGOING-LITE-FIX-12M-BB-23-09-12",
+      "direction": "EXPORT",
+      "full_name": "Outgoing Octopus 12M Fixed Lite",
+      "display_name": "Outgoing Octopus Fixed Lite",
+      "description": "Outgoing Octopus Lite flat rate pays you for all exported energy at a flat rate.",
+      "is_variable": false,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2023-09-14T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/OUTGOING-LITE-FIX-12M-BB-23-09-12/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "OUTGOING-SEG-EO-FIX-12M-24-04-05",
+      "direction": "EXPORT",
+      "full_name": "Octopus Outgoing Smart Export Guarantee Export Only April 2024 v1",
+      "display_name": "Octopus Outgoing Smart Export Guarantee Export Only",
+      "description": "Outgoing SEG is our Smart Export Guarantee compliant export tariff for our export only accounts",
+      "is_variable": false,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2024-04-05T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/OUTGOING-SEG-EO-FIX-12M-24-04-05/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "OUTGOING-SEG-EO-FIX-12M-BB-24-04-05",
+      "direction": "EXPORT",
+      "full_name": "Octopus Outgoing Smart Export Guarantee Export Only April 2024 v1",
+      "display_name": "Octopus Outgoing Smart Export Guarantee Export Only",
+      "description": "Outgoing SEG is our Smart Export Guarantee compliant export tariff for our export only accounts",
+      "is_variable": false,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2024-04-05T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/OUTGOING-SEG-EO-FIX-12M-BB-24-04-05/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "OUTGOING-SEG-FIX-12M-20-07-07",
+      "direction": "EXPORT",
+      "full_name": "Octopus Outgoing Smart Export Guarantee July 2020 v1",
+      "display_name": "Octopus Outgoing Smart Export Guarantee",
+      "description": "Outgoing SEG is our Smart Export Guarantee compliant export tariff",
+      "is_variable": false,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2020-07-14T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/OUTGOING-SEG-FIX-12M-20-07-07/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "OUTGOING-SEG-FIX-12M-BB-23-02-09",
+      "direction": "EXPORT",
+      "full_name": "Octopus Outgoing Smart Export Guarantee February 2023 v1",
+      "display_name": "Octopus Outgoing Smart Export Guarantee",
+      "description": "Outgoing SEG is our Smart Export Guarantee compliant export tariff",
+      "is_variable": false,
+      "is_green": true,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": 12,
+      "available_from": "2023-02-09T00:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/OUTGOING-SEG-FIX-12M-BB-23-02-09/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "POWER-PACK-24-02-15",
+      "direction": "EXPORT",
+      "full_name": "Octopus Power Pack",
+      "display_name": "Octopus Power Pack",
+      "description": "Octopus Power Pack",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2024-02-15T11:00:00Z",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/POWER-PACK-24-02-15/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "PREPAY-VAR-18-09-21",
+      "direction": "IMPORT",
+      "full_name": "Octopus Key and Card",
+      "display_name": "Octopus Key and Card",
+      "description": "Non-smart prepayment tariff",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": true,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2018-10-10T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/PREPAY-VAR-18-09-21/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "PREPAY-VAR-BB-23-04-01",
+      "direction": "IMPORT",
+      "full_name": "Octopus Key and Card",
+      "display_name": "Octopus Key and Card",
+      "description": "Non-smart prepayment tariff",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": true,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-04-01T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/PREPAY-VAR-BB-23-04-01/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    },
+    {
+      "code": "VAR-22-11-01",
+      "direction": "IMPORT",
+      "full_name": "Flexible Octopus",
+      "display_name": "Flexible Octopus",
+      "description": "Flexible Octopus offers great value and 100% renewable electricity. As a variable tariff, your prices can rise and fall with wholesale prices - but we'll always give you notice of a change.",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-03-28T10:35:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/VAR-22-11-01/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "OCTOPUS_ENERGY"
+    },
+    {
+      "code": "VAR-BB-23-04-01",
+      "direction": "IMPORT",
+      "full_name": "Flexible Octopus",
+      "display_name": "Flexible Octopus",
+      "description": "Flexible Octopus offers great value and 100% renewable electricity. As a variable tariff, your prices can rise and fall with wholesale prices - but we'll always give you notice of a change.",
+      "is_variable": true,
+      "is_green": false,
+      "is_tracker": false,
+      "is_prepay": false,
+      "is_business": false,
+      "is_restricted": false,
+      "term": null,
+      "available_from": "2023-04-01T00:00:00+01:00",
+      "available_to": null,
+      "links": [
+        {
+          "href": "https://api.octopus.energy/v1/products/VAR-BB-23-04-01/",
+          "method": "GET",
+          "rel": "self"
+        }
+      ],
+      "brand": "BULB"
+    }
+  ]
+}

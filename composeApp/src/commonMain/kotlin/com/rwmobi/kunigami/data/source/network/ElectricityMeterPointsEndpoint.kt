@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.data.source.network
 
-import com.rwmobi.kunigami.data.source.network.dto.ConsumptionApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.consumption.ConsumptionApiResponse
 import com.rwmobi.kunigami.data.source.network.extensions.encodeApiKey
 import com.rwmobi.kunigami.domain.extensions.formatInstantWithoutSeconds
 import io.ktor.client.HttpClient

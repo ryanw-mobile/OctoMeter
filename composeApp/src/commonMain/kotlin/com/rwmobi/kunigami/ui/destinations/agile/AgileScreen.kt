@@ -40,6 +40,7 @@ import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.ui.components.DemoModeCtaAdaptive
+import com.rwmobi.kunigami.ui.components.DualTitleBar
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
@@ -48,7 +49,6 @@ import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.destinations.agile.components.AgileTariffCardAdaptive
-import com.rwmobi.kunigami.ui.destinations.agile.components.DualTitleBar
 import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
 import com.rwmobi.kunigami.ui.extensions.partitionList
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
@@ -111,7 +111,7 @@ fun AgileScreen(
                     state = lazyListState,
                 ) {
                     stickyHeader(key = "header") {
-                        val subtitle = uiState.agileTariff?.let {
+                        val subtitle = uiState.agileTariffSummary?.let {
                             val regionCode = it.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
                             stringResource(resource = Res.string.agile_product_code_retail_region, it.productCode, regionCode)
                         }
@@ -120,7 +120,7 @@ fun AgileScreen(
                                 .background(color = MaterialTheme.colorScheme.secondary)
                                 .fillMaxWidth()
                                 .height(height = dimension.minListItemHeight),
-                            title = uiState.agileTariff?.displayName ?: "",
+                            title = uiState.agileTariffSummary?.displayName ?: "",
                             subtitle = subtitle,
                         )
                     }
@@ -172,10 +172,10 @@ fun AgileScreen(
                                     colorPalette = colorPalette,
                                     backgroundPlot = { graphScope ->
                                         if (uiState.isCurrentlyOnDifferentTariff() &&
-                                            uiState.userProfile?.tariff != null
+                                            uiState.userProfile?.tariffSummary != null
                                         ) {
                                             graphScope.HorizontalLineAnnotation(
-                                                location = uiState.userProfile.tariff.vatInclusiveUnitRate,
+                                                location = uiState.userProfile.tariffSummary.vatInclusiveUnitRate,
                                                 lineStyle = LineStyle(
                                                     brush = SolidColor(MaterialTheme.colorScheme.error),
                                                     strokeWidth = dimension.grid_0_5,
@@ -201,8 +201,8 @@ fun AgileScreen(
                                     end = dimension.grid_3,
                                     top = dimension.grid_1,
                                 ),
-                            agileTariff = uiState.agileTariff,
-                            differentTariff = uiState.userProfile?.tariff,
+                            agileTariffSummary = uiState.agileTariffSummary,
+                            differentTariffSummary = uiState.userProfile?.tariffSummary,
                             colorPalette = colorPalette,
                             rateRange = uiState.rateRange,
                             rateGroupedCells = uiState.rateGroupedCells,

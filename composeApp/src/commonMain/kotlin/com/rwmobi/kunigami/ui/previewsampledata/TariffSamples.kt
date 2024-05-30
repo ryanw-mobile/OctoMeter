@@ -7,11 +7,11 @@
 
 package com.rwmobi.kunigami.ui.previewsampledata
 
-import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import kotlinx.datetime.Clock
 
 object TariffSamples {
-    val agileFlex221125 = Tariff(
+    val agileFlex221125 = TariffSummary(
         productCode = "AGILE-FLEX-22-11-25",
         tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
         fullName = "Octopus 12M Fixed April 2024 v1",

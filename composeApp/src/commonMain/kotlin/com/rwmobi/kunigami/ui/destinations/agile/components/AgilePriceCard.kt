@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,9 +33,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import com.rwmobi.kunigami.domain.model.Tariff
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.model.rate.RateTrend
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
 import kunigami.composeapp.generated.resources.Res
@@ -59,7 +58,7 @@ internal fun AgilePriceCard(
     textStyle: AgilePriceCardTextStyle,
     vatInclusivePrice: Double?,
     rateTrend: RateTrend?,
-    agileTariff: Tariff?,
+    agileTariffSummary: TariffSummary?,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -89,7 +88,7 @@ internal fun AgilePriceCard(
 
             Spacer(modifier = Modifier.height(height = dimension.grid_1))
 
-            agileTariff?.let {
+            agileTariffSummary?.let {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     style = textStyle.standingChargeStyle,
@@ -153,20 +152,18 @@ private fun AgilePriceWithTrend(
 @Preview
 @Composable
 private fun AgilePriceWithTrendPreview() {
-    AppTheme {
-        Surface {
-            AgilePriceWithTrend(
-                modifier = Modifier.wrapContentSize(),
-                targetPercentage = 0.0f,
-                animatedVatInclusivePrice = 0.0f,
-                colorPalette = listOf(),
-                rateTrend = null,
-                textStyle = AgilePriceCardTextStyle(
-                    standingChargeStyle = MaterialTheme.typography.labelLarge,
-                    agilePriceStyle = MaterialTheme.typography.headlineLarge,
-                    agilePriceUnitStyle = MaterialTheme.typography.bodyLarge,
-                ),
-            )
-        }
+    CommonPreviewSetup {
+        AgilePriceWithTrend(
+            modifier = Modifier.wrapContentSize(),
+            targetPercentage = 0.0f,
+            animatedVatInclusivePrice = 0.0f,
+            colorPalette = listOf(),
+            rateTrend = null,
+            textStyle = AgilePriceCardTextStyle(
+                standingChargeStyle = MaterialTheme.typography.labelLarge,
+                agilePriceStyle = MaterialTheme.typography.headlineLarge,
+                agilePriceUnitStyle = MaterialTheme.typography.bodyLarge,
+            ),
+        )
     }
 }

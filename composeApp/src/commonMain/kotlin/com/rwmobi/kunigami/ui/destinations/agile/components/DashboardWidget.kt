@@ -15,9 +15,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -33,10 +31,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.composehelper.drawHalfCircleArcSegment
 import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_expire
 import org.jetbrains.compose.resources.stringResource
@@ -115,14 +112,12 @@ internal fun DashboardWidget(
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
-        Surface(modifier = Modifier.padding(all = 24.dp)) {
-            DashboardWidget(
-                modifier = Modifier.aspectRatio(ratio = 2f),
-                colorPalette = generateGYRHueColorPalette(),
-                countDownText = "33:33",
-                percentage = 0.8f,
-            )
-        }
+    CommonPreviewSetup {
+        DashboardWidget(
+            modifier = Modifier.aspectRatio(ratio = 2f),
+            colorPalette = generateGYRHueColorPalette(),
+            countDownText = "33:33",
+            percentage = 0.8f,
+        )
     }
 }

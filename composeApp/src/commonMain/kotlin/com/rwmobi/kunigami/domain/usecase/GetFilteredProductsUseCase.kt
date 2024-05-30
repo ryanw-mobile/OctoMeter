@@ -7,9 +7,9 @@
 
 package com.rwmobi.kunigami.domain.usecase
 
-import com.rwmobi.kunigami.domain.model.product.Product
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
+import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -19,22 +19,24 @@ class GetFilteredProductsUseCase(
     private val restApiRepository: RestApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
-    suspend operator fun invoke(): Result<List<Product>> {
+    suspend operator fun invoke(): Result<List<ProductSummary>> {
         return withContext(dispatcher) {
             val getProductsResult = restApiRepository.getProducts()
-
-            if (getProductsResult.isFailure) {
-                getProductsResult
-            } else {
-                getProductsResult.mapCatching { products ->
-                    products.filter {
-                        it.direction == ProductDirection.IMPORT &&
-                            it.brand == "OCTOPUS_ENERGY" &&
-                            !it.features.contains(ProductFeature.BUSINESS) &&
-                            !it.features.contains(ProductFeature.RESTRICTED)
+            getProductsResult.fold(
+                onSuccess = {
+                    getProductsResult.mapCatching { products ->
+                        products.filter {
+                            it.direction == ProductDirection.IMPORT &&
+                                it.brand == "OCTOPUS_ENERGY" &&
+                                !it.features.contains(ProductFeature.BUSINESS) &&
+                                !it.features.contains(ProductFeature.RESTRICTED)
+                        }
                     }
-                }
-            }
+                },
+                onFailure = {
+                    getProductsResult
+                },
+            )
         }
     }
 }

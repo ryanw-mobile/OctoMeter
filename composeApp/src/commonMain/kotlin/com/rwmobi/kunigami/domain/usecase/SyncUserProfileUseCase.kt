@@ -9,9 +9,9 @@ package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.exceptions.except
-import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.UserProfile
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -70,14 +70,14 @@ class SyncUserProfileUseCase(
                     },
                 )
 
-                var selectedTariff: Tariff? = null
+                var selectedTariffSummary: TariffSummary? = null
                 (selectedAccount?.getTariffCode(selectedMpan))?.let { tariffCode ->
                     restApiRepository.getSimpleProductTariff(
-                        productCode = Tariff.extractProductCode(tariffCode = tariffCode) ?: "",
+                        productCode = TariffSummary.extractProductCode(tariffCode = tariffCode) ?: "",
                         tariffCode = tariffCode,
                     ).fold(
                         onSuccess = { tariff ->
-                            selectedTariff = tariff
+                            selectedTariffSummary = tariff
                         },
                         onFailure = { throwable ->
                             throw throwable
@@ -89,8 +89,8 @@ class SyncUserProfileUseCase(
                 // Caller making use of UserProfile should consider activating demo mode.
                 if (selectedAccount == null ||
                     selectedMpan == null ||
-                    selectedAccount == null ||
-                    selectedTariff == null
+                    selectedMeterSerialNumber == null ||
+                    selectedTariffSummary == null
                 ) {
                     null
                 } else {
@@ -98,7 +98,7 @@ class SyncUserProfileUseCase(
                         selectedMpan = selectedMpan,
                         selectedMeterSerialNumber = selectedMeterSerialNumber,
                         account = selectedAccount,
-                        tariff = selectedTariff,
+                        tariffSummary = selectedTariffSummary,
                     )
                 }
             }.except<CancellationException, _>()

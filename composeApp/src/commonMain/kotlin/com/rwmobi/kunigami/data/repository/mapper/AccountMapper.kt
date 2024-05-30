@@ -7,9 +7,9 @@
 
 package com.rwmobi.kunigami.data.repository.mapper
 
-import com.rwmobi.kunigami.data.source.network.dto.AgreementDto
-import com.rwmobi.kunigami.data.source.network.dto.ElectricityMeterPointDto
-import com.rwmobi.kunigami.data.source.network.dto.PropertyDto
+import com.rwmobi.kunigami.data.source.network.dto.account.AgreementDto
+import com.rwmobi.kunigami.data.source.network.dto.account.ElectricityMeterPointDto
+import com.rwmobi.kunigami.data.source.network.dto.account.PropertyDto
 import com.rwmobi.kunigami.data.source.network.extensions.capitalizeWords
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.Agreement

@@ -38,6 +38,7 @@ import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.account.UserProfile
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.DefaultFailureRetryScreen
 import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
 import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionAdaptive
@@ -141,7 +142,7 @@ internal fun AccountInformationScreen(
                     selectedMpan = uiState.userProfile.selectedMpan,
                     selectedMeterSerialNumber = uiState.userProfile.selectedMeterSerialNumber,
                     meterPoint = meterPoint,
-                    tariff = uiState.userProfile.tariff,
+                    tariffSummary = uiState.userProfile.tariffSummary,
                     requestedLayout = uiState.requestedLayout,
                     onMeterSerialNumberSelected = uiEvent.onMeterSerialNumberSelected,
                     onReloadTariff = uiEvent.onRefresh,
@@ -208,7 +209,7 @@ private fun Preview() {
                                 ),
                             ),
                         ),
-                        tariff = TariffSamples.agileFlex221125,
+                        tariffSummary = TariffSamples.agileFlex221125,
                     ),
                     errorMessages = listOf(),
                 ),
@@ -230,33 +231,31 @@ private fun Preview() {
 @Preview
 @Composable
 private fun ErrorPreview() {
-    AppTheme {
-        Surface {
-            AccountInformationScreen(
-                modifier = Modifier.padding(all = 32.dp),
-                uiState = AccountUIState(
-                    isLoading = false,
-                    isDemoMode = false,
-                    requestedLayout = AccountScreenLayout.WideWrapped,
-                    userProfile = UserProfile(
-                        selectedMpan = "1200000345678",
-                        selectedMeterSerialNumber = "11A1234567",
-                        account = null,
-                        tariff = TariffSamples.agileFlex221125,
-                    ),
-                    errorMessages = listOf(),
+    CommonPreviewSetup {
+        AccountInformationScreen(
+            modifier = Modifier.padding(all = 32.dp),
+            uiState = AccountUIState(
+                isLoading = false,
+                isDemoMode = false,
+                requestedLayout = AccountScreenLayout.WideWrapped,
+                userProfile = UserProfile(
+                    selectedMpan = "1200000345678",
+                    selectedMeterSerialNumber = "11A1234567",
+                    account = null,
+                    tariffSummary = TariffSamples.agileFlex221125,
                 ),
-                uiEvent = AccountUIEvent(
-                    onClearCredentialButtonClicked = {},
-                    onUpdateApiKeyClicked = {},
-                    onSubmitCredentials = { _, _ -> },
-                    onRefresh = {},
-                    onMeterSerialNumberSelected = { _, _ -> },
-                    onErrorShown = {},
-                    onScrolledToTop = {},
-                    onShowSnackbar = {},
-                ),
-            )
-        }
+                errorMessages = listOf(),
+            ),
+            uiEvent = AccountUIEvent(
+                onClearCredentialButtonClicked = {},
+                onUpdateApiKeyClicked = {},
+                onSubmitCredentials = { _, _ -> },
+                onRefresh = {},
+                onMeterSerialNumberSelected = { _, _ -> },
+                onErrorShown = {},
+                onScrolledToTop = {},
+                onShowSnackbar = {},
+            ),
+        )
     }
 }

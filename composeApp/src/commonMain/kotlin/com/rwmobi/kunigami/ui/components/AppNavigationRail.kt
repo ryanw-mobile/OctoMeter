@@ -18,7 +18,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,8 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.rwmobi.kunigami.ui.navigation.AppNavigationItem
-import com.rwmobi.kunigami.ui.theme.AppTheme
+import com.rwmobi.kunigami.ui.navigation.AppDestination
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.content_description_navigation_rail
@@ -43,7 +41,7 @@ import org.jetbrains.compose.resources.stringResource
 fun AppNavigationRail(
     modifier: Modifier = Modifier,
     navController: NavController,
-    onCurrentRouteSecondTapped: (item: AppNavigationItem) -> Unit,
+    onCurrentRouteSecondTapped: (item: AppDestination) -> Unit,
 ) {
     val navigationRailContentDescription = stringResource(Res.string.content_description_navigation_rail)
     NavigationRail(
@@ -58,7 +56,7 @@ fun AppNavigationRail(
 
         Spacer(Modifier.weight(1f))
 
-        for (item in AppNavigationItem.getNavBarItems()) {
+        for (item in AppDestination.getNavBarDestinations()) {
             val selected = currentRoute == item.name
 
             val itemContentDescription = stringResource(item.titleResId)
@@ -104,15 +102,13 @@ fun AppNavigationRail(
 @Preview
 @Composable
 private fun NavigationRailPreview() {
-    AppTheme {
-        Surface {
-            AppNavigationRail(
-                modifier = Modifier
-                    .wrapContentHeight()
-                    .padding(0.dp),
-                navController = rememberNavController(),
-                onCurrentRouteSecondTapped = {},
-            )
-        }
+    CommonPreviewSetup {
+        AppNavigationRail(
+            modifier = Modifier
+                .wrapContentHeight()
+                .padding(0.dp),
+            navController = rememberNavController(),
+            onCurrentRouteSecondTapped = {},
+        )
     }
 }

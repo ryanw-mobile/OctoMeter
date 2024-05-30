@@ -15,14 +15,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -31,8 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.coin
@@ -84,16 +80,12 @@ fun IconTextButton(
 
 @Preview
 @Composable
-private fun IconTextButtonPreview() {
-    AppTheme {
-        Surface(
-            modifier = Modifier.padding(all = 48.dp),
-        ) {
-            IconTextButton(
-                icon = painterResource(resource = Res.drawable.coin),
-                text = "Money Generator",
-                onClick = {},
-            )
-        }
+private fun Preview() {
+    CommonPreviewSetup {
+        IconTextButton(
+            icon = painterResource(resource = Res.drawable.coin),
+            text = "Money Generator",
+            onClick = {},
+        )
     }
 }

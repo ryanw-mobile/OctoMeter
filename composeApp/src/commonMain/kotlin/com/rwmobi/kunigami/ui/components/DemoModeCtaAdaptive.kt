@@ -17,15 +17,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_demo_introduction
@@ -155,27 +152,21 @@ private fun DemoModeCTAWide(
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
-        Surface(modifier = Modifier.padding(all = 16.dp)) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(space = 16.dp),
-            ) {
-                DemoModeCtaAdaptive(
-                    modifier = Modifier.fillMaxWidth(),
-                    description = stringResource(resource = Res.string.agile_demo_introduction),
-                    ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
-                    onCtaButtonClicked = {},
-                    useWideLayout = false,
-                )
+    CommonPreviewSetup {
+        DemoModeCtaAdaptive(
+            modifier = Modifier.fillMaxWidth(),
+            description = stringResource(resource = Res.string.agile_demo_introduction),
+            ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
+            onCtaButtonClicked = {},
+            useWideLayout = false,
+        )
 
-                DemoModeCtaAdaptive(
-                    modifier = Modifier.fillMaxWidth(),
-                    description = stringResource(resource = Res.string.agile_demo_introduction),
-                    ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
-                    onCtaButtonClicked = {},
-                    useWideLayout = true,
-                )
-            }
-        }
+        DemoModeCtaAdaptive(
+            modifier = Modifier.fillMaxWidth(),
+            description = stringResource(resource = Res.string.agile_demo_introduction),
+            ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
+            onCtaButtonClicked = {},
+            useWideLayout = true,
+        )
     }
 }

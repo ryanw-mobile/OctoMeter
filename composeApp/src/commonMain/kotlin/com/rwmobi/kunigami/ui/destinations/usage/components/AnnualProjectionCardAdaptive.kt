@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -32,9 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.model.consumption.Insights
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
 import kunigami.composeapp.generated.resources.Res
@@ -195,50 +193,44 @@ private fun AnnualProjectionCardTwoColumns(
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
-        Surface {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(space = 24.dp),
-            ) {
-                AnnualProjectionCardAdaptive(
-                    insights = Insights(
-                        consumptionAggregateRounded = 42.290,
-                        consumptionTimeSpan = 8820,
-                        roughCost = 2.815,
-                        consumptionAnnualProjection = 48.504,
-                        costAnnualProjection = 24.868,
-                        consumptionDailyAverage = 23.519,
-                        costDailyAverage = 53.141,
-                    ),
-                    layoutType = WindowWidthSizeClass.Compact,
-                )
+    CommonPreviewSetup {
+        AnnualProjectionCardAdaptive(
+            insights = Insights(
+                consumptionAggregateRounded = 42.290,
+                consumptionTimeSpan = 8820,
+                roughCost = 2.815,
+                consumptionAnnualProjection = 48.504,
+                costAnnualProjection = 24.868,
+                consumptionDailyAverage = 23.519,
+                costDailyAverage = 53.141,
+            ),
+            layoutType = WindowWidthSizeClass.Compact,
+        )
 
-                AnnualProjectionCardAdaptive(
-                    insights = Insights(
-                        consumptionAggregateRounded = 42.290,
-                        consumptionTimeSpan = 8820,
-                        roughCost = 2.815,
-                        consumptionAnnualProjection = 48.504,
-                        costAnnualProjection = 24.868,
-                        consumptionDailyAverage = 23.519,
-                        costDailyAverage = 53.141,
-                    ),
-                    layoutType = WindowWidthSizeClass.Medium,
-                )
+        AnnualProjectionCardAdaptive(
+            insights = Insights(
+                consumptionAggregateRounded = 42.290,
+                consumptionTimeSpan = 8820,
+                roughCost = 2.815,
+                consumptionAnnualProjection = 48.504,
+                costAnnualProjection = 24.868,
+                consumptionDailyAverage = 23.519,
+                costDailyAverage = 53.141,
+            ),
+            layoutType = WindowWidthSizeClass.Medium,
+        )
 
-                AnnualProjectionCardAdaptive(
-                    insights = Insights(
-                        consumptionAggregateRounded = 42.290,
-                        consumptionTimeSpan = 8820,
-                        roughCost = 2.815,
-                        consumptionAnnualProjection = 48.504,
-                        costAnnualProjection = 24.868,
-                        consumptionDailyAverage = 23.519,
-                        costDailyAverage = 53.141,
-                    ),
-                    layoutType = WindowWidthSizeClass.Expanded,
-                )
-            }
-        }
+        AnnualProjectionCardAdaptive(
+            insights = Insights(
+                consumptionAggregateRounded = 42.290,
+                consumptionTimeSpan = 8820,
+                roughCost = 2.815,
+                consumptionAnnualProjection = 48.504,
+                costAnnualProjection = 24.868,
+                consumptionDailyAverage = 23.519,
+                costDailyAverage = 53.141,
+            ),
+            layoutType = WindowWidthSizeClass.Expanded,
+        )
     }
 }

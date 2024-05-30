@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.theme.AppTheme
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import kotlin.math.min
 
 internal fun DrawScope.drawArcSegment(
@@ -65,7 +65,7 @@ internal fun DrawScope.drawArcSegment(
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
+    CommonPreviewSetup {
         Surface(modifier = Modifier.padding(all = 24.dp)) {
             Box(
                 modifier = Modifier

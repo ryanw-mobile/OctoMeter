@@ -10,10 +10,10 @@ package com.rwmobi.kunigami
 import android.app.Application
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.koin.KermitKoinLogger
-import com.rwmobi.kunigami.di.appModule
 import com.rwmobi.kunigami.di.dataSourceModule
 import com.rwmobi.kunigami.di.dispatcherModule
 import com.rwmobi.kunigami.di.ktorModule
+import com.rwmobi.kunigami.di.platformModule
 import com.rwmobi.kunigami.di.repositoryModule
 import com.rwmobi.kunigami.di.userCaseModule
 import com.rwmobi.kunigami.di.viewModelModule
@@ -32,7 +32,7 @@ class KunigamiApplication : Application() {
                 KermitKoinLogger(Logger.withTag("koin")),
             )
             modules(
-                appModule,
+                platformModule,
                 dispatcherModule,
                 viewModelModule,
                 dataSourceModule,

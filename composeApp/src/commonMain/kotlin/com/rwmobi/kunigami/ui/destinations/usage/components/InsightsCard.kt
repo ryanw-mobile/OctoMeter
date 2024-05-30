@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,8 +24,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.model.consumption.Insights
-import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
 import kunigami.composeapp.generated.resources.Res
@@ -104,22 +103,20 @@ internal fun InsightsCard(
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
-        Surface {
-            InsightsCard(
-                modifier = Modifier
-                    .height(intrinsicSize = IntrinsicSize.Min)
-                    .padding(all = 24.dp),
-                insights = Insights(
-                    consumptionAggregateRounded = 86.693,
-                    consumptionTimeSpan = 2084,
-                    roughCost = 2880.027,
-                    consumptionDailyAverage = 71.227,
-                    costDailyAverage = 52.218,
-                    consumptionAnnualProjection = 82.473,
-                    costAnnualProjection = 4.136,
-                ),
-            )
-        }
+    CommonPreviewSetup {
+        InsightsCard(
+            modifier = Modifier
+                .height(intrinsicSize = IntrinsicSize.Min)
+                .padding(all = 24.dp),
+            insights = Insights(
+                consumptionAggregateRounded = 86.693,
+                consumptionTimeSpan = 2084,
+                roughCost = 2880.027,
+                consumptionDailyAverage = 71.227,
+                costDailyAverage = 52.218,
+                consumptionAnnualProjection = 82.473,
+                costAnnualProjection = 4.136,
+            ),
+        )
     }
 }

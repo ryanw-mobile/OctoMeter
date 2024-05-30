@@ -16,11 +16,11 @@ import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.extensions.roundToDayEnd
 import com.rwmobi.kunigami.domain.extensions.roundToDayStart
 import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
-import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.getConsumptionTimeSpan
 import com.rwmobi.kunigami.domain.model.consumption.getRange
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
@@ -96,7 +96,7 @@ class UsageViewModel(
                                 // During BST we expect 2 half-hour records returned for the last day
                                 if (consumptions.size > 2) {
                                     propagateInsights(
-                                        tariff = userProfile.tariff,
+                                        tariffSummary = userProfile.tariffSummary,
                                         consumptions = consumptions,
                                     )
                                     propagateConsumptions(
@@ -228,7 +228,7 @@ class UsageViewModel(
             onSuccess = { consumptions ->
                 propagateInsights(
                     consumptions = consumptions,
-                    tariff = userProfile?.tariff,
+                    tariffSummary = userProfile?.tariffSummary,
                 )
                 propagateConsumptions(
                     consumptionQueryFilter = consumptionQueryFilter,
@@ -284,19 +284,19 @@ class UsageViewModel(
     }
 
     private fun propagateInsights(
-        tariff: Tariff?,
+        tariffSummary: TariffSummary?,
         consumptions: List<Consumption>?,
     ): Insights? {
-        val insights = if (tariff == null || consumptions.isNullOrEmpty()) {
+        val insights = if (tariffSummary == null || consumptions.isNullOrEmpty()) {
             null
         } else {
             val consumptionAggregateRounded = consumptions.sumOf { it.consumption }.roundToNearestEvenHundredth()
             val consumptionTimeSpan = consumptions.getConsumptionTimeSpan()
-            val roughCost = ((consumptionTimeSpan * tariff.vatInclusiveStandingCharge) + (consumptionAggregateRounded * tariff.vatInclusiveUnitRate)) / 100.0
+            val roughCost = ((consumptionTimeSpan * tariffSummary.vatInclusiveStandingCharge) + (consumptionAggregateRounded * tariffSummary.vatInclusiveUnitRate)) / 100.0
             val consumptionDailyAverage = (consumptions.sumOf { it.consumption } / consumptions.getConsumptionTimeSpan()).roundToNearestEvenHundredth()
-            val costDailyAverage = (tariff.vatInclusiveStandingCharge + consumptionDailyAverage * tariff.vatInclusiveUnitRate) / 100.0
+            val costDailyAverage = (tariffSummary.vatInclusiveStandingCharge + consumptionDailyAverage * tariffSummary.vatInclusiveUnitRate) / 100.0
             val consumptionAnnualProjection = (consumptions.sumOf { it.consumption } / consumptionTimeSpan * 365.25).roundToNearestEvenHundredth()
-            val costAnnualProjection = (tariff.vatInclusiveStandingCharge * 365.25 + consumptionAnnualProjection * tariff.vatInclusiveUnitRate) / 100.0
+            val costAnnualProjection = (tariffSummary.vatInclusiveStandingCharge * 365.25 + consumptionAnnualProjection * tariffSummary.vatInclusiveUnitRate) / 100.0
 
             Insights(
                 consumptionAggregateRounded = consumptionAggregateRounded,

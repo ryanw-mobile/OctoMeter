@@ -7,12 +7,15 @@
 
 package com.rwmobi.kunigami.data.repository.mapper
 
-import com.rwmobi.kunigami.data.source.network.dto.ProductDetailsDto
-import com.rwmobi.kunigami.domain.model.product.Product
+import com.rwmobi.kunigami.data.source.network.dto.products.ProductDetailsDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SingleProductApiResponse
+import com.rwmobi.kunigami.domain.model.product.ElectricityTariffType
+import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
+import com.rwmobi.kunigami.domain.model.product.ProductSummary
 
-fun ProductDetailsDto.toProduct() = Product(
+fun ProductDetailsDto.toProductSummary() = ProductSummary(
     code = code,
     direction = ProductDirection.fromApiValue(direction),
     fullName = fullName,
@@ -31,3 +34,41 @@ fun ProductDetailsDto.toProduct() = Product(
     availableTo = availableTo,
     brand = brand,
 )
+
+fun SingleProductApiResponse.toProductDetails(): ProductDetails {
+    return ProductDetails(
+        code = code,
+        direction = ProductDirection.UNKNOWN,
+        fullName = fullName,
+        displayName = displayName,
+        description = description,
+        features = mutableListOf<ProductFeature>().apply {
+            if (isVariable) add(ProductFeature.VARIABLE)
+            if (isGreen) add(ProductFeature.GREEN)
+            if (isTracker) add(ProductFeature.TRACKER)
+            if (isPrepay) add(ProductFeature.PREPAY)
+            if (isBusiness) add(ProductFeature.BUSINESS)
+            if (isRestricted) add(ProductFeature.RESTRICTED)
+        }.toList(),
+        term = term,
+        availableFrom = availableFrom,
+        availableTo = availableTo,
+        electricityTariffType = when {
+            singleRegisterElectricityTariffs.isNotEmpty() -> ElectricityTariffType.SINGLE_REGISTER
+            dualRegisterElectricityTariffs.isNotEmpty() -> ElectricityTariffType.DUAL_REGISTER
+            else -> ElectricityTariffType.UNKNOWN
+        },
+        electricityTariffs = when {
+            singleRegisterElectricityTariffs.isNotEmpty() -> singleRegisterElectricityTariffs.mapNotNull { (key, value) ->
+                value.toTariffDetails()?.let { key to it }
+            }.toMap()
+
+            dualRegisterElectricityTariffs.isNotEmpty() -> dualRegisterElectricityTariffs.mapNotNull { (key, value) ->
+                value.toTariffDetails()?.let { key to it }
+            }.toMap()
+
+            else -> null
+        },
+        brand = brand,
+    )
+}

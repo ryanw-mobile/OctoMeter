@@ -20,7 +20,7 @@ actual fun ScrollbarMultiplatform(
     scrollState: ScrollState,
     content: @Composable (contentModifier: Modifier) -> Unit,
 ) {
-    content(Modifier)
+    content(modifier)
 }
 
 @Composable
@@ -30,7 +30,7 @@ actual fun ScrollbarMultiplatform(
     lazyListState: LazyListState,
     content: @Composable (contentModifier: Modifier) -> Unit,
 ) {
-    content(Modifier)
+    content(modifier)
 }
 
 @Composable
@@ -40,5 +40,5 @@ actual fun ScrollbarMultiplatform(
     lazyGridState: LazyGridState,
     content: @Composable (contentModifier: Modifier) -> Unit,
 ) {
-    content(Modifier)
+    content(modifier)
 }

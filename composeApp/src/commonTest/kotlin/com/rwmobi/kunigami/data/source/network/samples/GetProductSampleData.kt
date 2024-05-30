@@ -7,17 +7,17 @@
 
 package com.rwmobi.kunigami.data.source.network.samples
 
-import com.rwmobi.kunigami.data.source.network.dto.ConsumptionDetailDto
-import com.rwmobi.kunigami.data.source.network.dto.DualFuelConsumptionDetailDto
-import com.rwmobi.kunigami.data.source.network.dto.DualRateConsumptionDetailDto
-import com.rwmobi.kunigami.data.source.network.dto.ElectricityRateQuotesDto
-import com.rwmobi.kunigami.data.source.network.dto.ElectricityTariffDto
 import com.rwmobi.kunigami.data.source.network.dto.LinkDto
-import com.rwmobi.kunigami.data.source.network.dto.QuotesDto
-import com.rwmobi.kunigami.data.source.network.dto.SampleConsumptionDto
-import com.rwmobi.kunigami.data.source.network.dto.SampleQuotesDto
-import com.rwmobi.kunigami.data.source.network.dto.SingleProductApiResponse
-import com.rwmobi.kunigami.data.source.network.dto.TariffDetailsDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.ConsumptionDetailDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.DualFuelConsumptionDetailDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.DualRateConsumptionDetailDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.ElectricityRateQuotesDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.ElectricityTariffDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.QuotesDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SampleConsumptionDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SampleQuotesDto
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SingleProductApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.singleproduct.TariffDetailsDto
 import kotlinx.datetime.Instant
 
 object GetProductSampleData {
@@ -438,9 +438,21 @@ object GetProductSampleData {
                     exitFeesType = "NONE",
                     standardUnitRateExcVat = 24.052,
                     standardUnitRateIncVat = 25.2546,
+                    dayUnitRateExcVat = null,
+                    dayUnitRateIncVat = null,
+                    nightUnitRateExcVat = null,
+                    nightUnitRateIncVat = null,
                     links = listOf(
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-1R-VAR-22-11-01-A/standing-charges/", method = "GET", rel = "standing_charges"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-1R-VAR-22-11-01-A/standard-unit-rates/", method = "GET", rel = "standard_unit_rates"),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-1R-VAR-22-11-01-A/standing-charges/",
+                            method = "GET",
+                            rel = "standing_charges",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-1R-VAR-22-11-01-A/standard-unit-rates/",
+                            method = "GET",
+                            rel = "standard_unit_rates",
+                        ),
                     ),
                 ),
             ),
@@ -459,9 +471,21 @@ object GetProductSampleData {
                     exitFeesType = "NONE",
                     standardUnitRateExcVat = 22.64,
                     standardUnitRateIncVat = 23.772,
+                    dayUnitRateExcVat = null,
+                    dayUnitRateIncVat = null,
+                    nightUnitRateExcVat = null,
+                    nightUnitRateIncVat = null,
                     links = listOf(
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-1R-VAR-22-11-01-B/standing-charges/", method = "GET", rel = "standing_charges"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-1R-VAR-22-11-01-B/standard-unit-rates/", method = "GET", rel = "standard_unit_rates"),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-1R-VAR-22-11-01-B/standing-charges/",
+                            method = "GET",
+                            rel = "standing_charges",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-1R-VAR-22-11-01-B/standard-unit-rates/",
+                            method = "GET",
+                            rel = "standard_unit_rates",
+                        ),
                     ),
                 ),
             ),
@@ -480,9 +504,21 @@ object GetProductSampleData {
                     exitFeesType = "NONE",
                     standardUnitRateExcVat = 24.496,
                     standardUnitRateIncVat = 25.7208,
+                    dayUnitRateExcVat = null,
+                    dayUnitRateIncVat = null,
+                    nightUnitRateExcVat = null,
+                    nightUnitRateIncVat = null,
                     links = listOf(
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-1R-VAR-22-11-01-C/standing-charges/", method = "GET", rel = "standing_charges"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-1R-VAR-22-11-01-C/standard-unit-rates/", method = "GET", rel = "standard_unit_rates"),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-1R-VAR-22-11-01-C/standing-charges/",
+                            method = "GET",
+                            rel = "standing_charges",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-1R-VAR-22-11-01-C/standard-unit-rates/",
+                            method = "GET",
+                            rel = "standard_unit_rates",
+                        ),
                     ),
                 ),
             ),
@@ -501,10 +537,28 @@ object GetProductSampleData {
                     exitFeesExcVat = 0.0,
                     exitFeesIncVat = 0.0,
                     exitFeesType = "NONE",
+                    standardUnitRateExcVat = null,
+                    standardUnitRateIncVat = null,
+                    dayUnitRateExcVat = 30.008,
+                    dayUnitRateIncVat = 31.5084,
+                    nightUnitRateExcVat = 12.588,
+                    nightUnitRateIncVat = 13.2174,
                     links = listOf(
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-A/standing-charges/", method = "GET", rel = "standing_charges"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-A/day-unit-rates/", method = "GET", rel = "day_unit_rates"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-A/night-unit-rates/", method = "GET", rel = "night_unit_rates"),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-A/standing-charges/",
+                            method = "GET",
+                            rel = "standing_charges",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-A/day-unit-rates/",
+                            method = "GET",
+                            rel = "day_unit_rates",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-A/night-unit-rates/",
+                            method = "GET",
+                            rel = "night_unit_rates",
+                        ),
                     ),
                 ),
             ),
@@ -521,10 +575,28 @@ object GetProductSampleData {
                     exitFeesExcVat = 0.0,
                     exitFeesIncVat = 0.0,
                     exitFeesType = "NONE",
+                    standardUnitRateExcVat = null,
+                    standardUnitRateIncVat = null,
+                    dayUnitRateExcVat = 28.046,
+                    dayUnitRateIncVat = 29.4483,
+                    nightUnitRateExcVat = 12.503,
+                    nightUnitRateIncVat = 13.12815,
                     links = listOf(
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-B/standing-charges/", method = "GET", rel = "standing_charges"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-B/day-unit-rates/", method = "GET", rel = "day_unit_rates"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-B/night-unit-rates/", method = "GET", rel = "night_unit_rates"),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-B/standing-charges/",
+                            method = "GET",
+                            rel = "standing_charges",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-B/day-unit-rates/",
+                            method = "GET",
+                            rel = "day_unit_rates",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-B/night-unit-rates/",
+                            method = "GET",
+                            rel = "night_unit_rates",
+                        ),
                     ),
                 ),
             ),
@@ -541,10 +613,28 @@ object GetProductSampleData {
                     exitFeesExcVat = 0.0,
                     exitFeesIncVat = 0.0,
                     exitFeesType = "NONE",
+                    standardUnitRateExcVat = null,
+                    standardUnitRateIncVat = null,
+                    dayUnitRateExcVat = 30.451,
+                    dayUnitRateIncVat = 31.97355,
+                    nightUnitRateExcVat = 12.866,
+                    nightUnitRateIncVat = 13.5093,
                     links = listOf(
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-C/standing-charges/", method = "GET", rel = "standing_charges"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-C/day-unit-rates/", method = "GET", rel = "day_unit_rates"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-C/night-unit-rates/", method = "GET", rel = "night_unit_rates"),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-C/standing-charges/",
+                            method = "GET",
+                            rel = "standing_charges",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-C/day-unit-rates/",
+                            method = "GET",
+                            rel = "day_unit_rates",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/VAR-22-11-01/electricity-tariffs/E-2R-VAR-22-11-01-C/night-unit-rates/",
+                            method = "GET",
+                            rel = "night_unit_rates",
+                        ),
                     ),
                 ),
             ),
@@ -1311,9 +1401,21 @@ object GetProductSampleData {
                     exitFeesType = "NONE",
                     standardUnitRateExcVat = 23.344,
                     standardUnitRateIncVat = 24.5112,
+                    dayUnitRateExcVat = null,
+                    dayUnitRateIncVat = null,
+                    nightUnitRateExcVat = null,
+                    nightUnitRateIncVat = null,
                     links = listOf(
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-1R-OE-FIX-12M-24-04-11-A/standing-charges/", method = "GET", rel = "standing_charges"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-1R-OE-FIX-12M-24-04-11-A/standard-unit-rates/", method = "GET", rel = "standard_unit_rates"),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-1R-OE-FIX-12M-24-04-11-A/standing-charges/",
+                            method = "GET",
+                            rel = "standing_charges",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-1R-OE-FIX-12M-24-04-11-A/standard-unit-rates/",
+                            method = "GET",
+                            rel = "standard_unit_rates",
+                        ),
                     ),
                 ),
                 varying = null,
@@ -1332,9 +1434,21 @@ object GetProductSampleData {
                     exitFeesType = "NONE",
                     standardUnitRateExcVat = 21.932,
                     standardUnitRateIncVat = 23.0286,
+                    dayUnitRateExcVat = null,
+                    dayUnitRateIncVat = null,
+                    nightUnitRateExcVat = null,
+                    nightUnitRateIncVat = null,
                     links = listOf(
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-1R-OE-FIX-12M-24-04-11-B/standing-charges/", method = "GET", rel = "standing_charges"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-1R-OE-FIX-12M-24-04-11-B/standard-unit-rates/", method = "GET", rel = "standard_unit_rates"),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-1R-OE-FIX-12M-24-04-11-B/standing-charges/",
+                            method = "GET",
+                            rel = "standing_charges",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-1R-OE-FIX-12M-24-04-11-B/standard-unit-rates/",
+                            method = "GET",
+                            rel = "standard_unit_rates",
+                        ),
                     ),
                 ),
                 varying = null,
@@ -1353,9 +1467,21 @@ object GetProductSampleData {
                     exitFeesType = "NONE",
                     standardUnitRateExcVat = 23.788,
                     standardUnitRateIncVat = 24.9774,
+                    dayUnitRateExcVat = null,
+                    dayUnitRateIncVat = null,
+                    nightUnitRateExcVat = null,
+                    nightUnitRateIncVat = null,
                     links = listOf(
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-1R-OE-FIX-12M-24-04-11-C/standing-charges/", method = "GET", rel = "standing_charges"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-1R-OE-FIX-12M-24-04-11-C/standard-unit-rates/", method = "GET", rel = "standard_unit_rates"),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-1R-OE-FIX-12M-24-04-11-C/standing-charges/",
+                            method = "GET",
+                            rel = "standing_charges",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-1R-OE-FIX-12M-24-04-11-C/standard-unit-rates/",
+                            method = "GET",
+                            rel = "standard_unit_rates",
+                        ),
                     ),
                 ),
                 varying = null,
@@ -1376,10 +1502,26 @@ object GetProductSampleData {
                     exitFeesType = "NONE",
                     standardUnitRateExcVat = null,
                     standardUnitRateIncVat = null,
+                    dayUnitRateExcVat = 29.1791,
+                    dayUnitRateIncVat = 30.638055,
+                    nightUnitRateExcVat = 12.2402,
+                    nightUnitRateIncVat = 12.85221,
                     links = listOf(
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-A/standing-charges/", method = "GET", rel = "standing_charges"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-A/day-unit-rates/", method = "GET", rel = "day_unit_rates"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-A/night-unit-rates/", method = "GET", rel = "night_unit_rates"),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-A/standing-charges/",
+                            method = "GET",
+                            rel = "standing_charges",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-A/day-unit-rates/",
+                            method = "GET",
+                            rel = "day_unit_rates",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-A/night-unit-rates/",
+                            method = "GET",
+                            rel = "night_unit_rates",
+                        ),
                     ),
                 ),
                 varying = null,
@@ -1398,10 +1540,26 @@ object GetProductSampleData {
                     exitFeesType = "NONE",
                     standardUnitRateExcVat = null,
                     standardUnitRateIncVat = null,
+                    dayUnitRateExcVat = 27.2291,
+                    dayUnitRateIncVat = 28.590555,
+                    nightUnitRateExcVat = 12.1388,
+                    nightUnitRateIncVat = 12.74574,
                     links = listOf(
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-B/standing-charges/", method = "GET", rel = "standing_charges"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-B/day-unit-rates/", method = "GET", rel = "day_unit_rates"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-B/night-unit-rates/", method = "GET", rel = "night_unit_rates"),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-B/standing-charges/",
+                            method = "GET",
+                            rel = "standing_charges",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-B/day-unit-rates/",
+                            method = "GET",
+                            rel = "day_unit_rates",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-B/night-unit-rates/",
+                            method = "GET",
+                            rel = "night_unit_rates",
+                        ),
                     ),
                 ),
                 varying = null,
@@ -1420,10 +1578,26 @@ object GetProductSampleData {
                     exitFeesType = "NONE",
                     standardUnitRateExcVat = null,
                     standardUnitRateIncVat = null,
+                    dayUnitRateExcVat = 29.6235,
+                    dayUnitRateIncVat = 31.104675,
+                    nightUnitRateExcVat = 12.5164,
+                    nightUnitRateIncVat = 13.14222,
                     links = listOf(
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-C/standing-charges/", method = "GET", rel = "standing_charges"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-C/day-unit-rates/", method = "GET", rel = "day_unit_rates"),
-                        LinkDto(href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-C/night-unit-rates/", method = "GET", rel = "night_unit_rates"),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-C/standing-charges/",
+                            method = "GET",
+                            rel = "standing_charges",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-C/day-unit-rates/",
+                            method = "GET",
+                            rel = "day_unit_rates",
+                        ),
+                        LinkDto(
+                            href = "https://api.octopus.energy/v1/products/OE-FIX-12M-24-04-11/electricity-tariffs/E-2R-OE-FIX-12M-24-04-11-C/night-unit-rates/",
+                            method = "GET",
+                            rel = "night_unit_rates",
+                        ),
                     ),
                 ),
                 varying = null,

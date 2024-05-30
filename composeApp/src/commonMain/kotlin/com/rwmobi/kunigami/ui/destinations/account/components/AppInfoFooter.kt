@@ -13,15 +13,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.theme.AppTheme
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.theme.getDimension
 import composeapp.kunigami.BuildConfig
 import kunigami.composeapp.generated.resources.Res
@@ -57,9 +55,7 @@ internal fun AppInfoFooter(
 @Preview
 @Composable
 private fun AppInfoFooterPreview() {
-    AppTheme {
-        Surface(modifier = Modifier.padding(all = 48.dp)) {
-            AppInfoFooter(modifier = Modifier.fillMaxWidth())
-        }
+    CommonPreviewSetup {
+        AppInfoFooter(modifier = Modifier.fillMaxWidth())
     }
 }

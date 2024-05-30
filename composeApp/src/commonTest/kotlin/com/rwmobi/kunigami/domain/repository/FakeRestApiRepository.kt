@@ -7,28 +7,34 @@
 
 package com.rwmobi.kunigami.domain.repository
 
-import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
-import com.rwmobi.kunigami.domain.model.product.Product
+import com.rwmobi.kunigami.domain.model.product.ProductDetails
+import com.rwmobi.kunigami.domain.model.product.ProductSummary
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 
 class FakeRestApiRepository : RestApiRepository {
 
-    var setSimpleProductTariffResponse: Result<Tariff>? = null
+    var setSimpleProductTariffSummaryResponse: Result<TariffSummary>? = null
     override suspend fun getSimpleProductTariff(
         productCode: String,
         tariffCode: String,
-    ): Result<Tariff> {
-        return setSimpleProductTariffResponse ?: throw RuntimeException("Fake result not defined")
+    ): Result<TariffSummary> {
+        return setSimpleProductTariffSummaryResponse ?: throw RuntimeException("Fake result not defined")
     }
 
-    var setProductsResponse: Result<List<Product>>? = null
-    override suspend fun getProducts(): Result<List<Product>> {
+    var setProductsResponse: Result<List<ProductSummary>>? = null
+    override suspend fun getProducts(): Result<List<ProductSummary>> {
         return setProductsResponse ?: throw RuntimeException("Fake result not defined")
+    }
+
+    var setProductSummaryResponse: Result<ProductDetails>? = null
+    override suspend fun getProductDetails(productCode: String): Result<ProductDetails> {
+        return setProductSummaryResponse ?: throw RuntimeException("Fake result not defined")
     }
 
     var setStandardUnitRatesResponse: Result<List<Rate>>? = null

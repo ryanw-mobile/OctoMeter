@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
@@ -56,81 +57,83 @@ internal fun TitleNavigationBar(
     val dimension = LocalDensity.current.getDimension()
     var presentationStyleDropdownMenuExpanded by remember { mutableStateOf(false) }
 
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(
-            modifier = Modifier
-                .size(size = dimension.minTouchTarget)
-                .clickable(
-                    enabled = canNavigateBack,
-                    onClick = onNavigateBack,
-                ),
-            contentAlignment = Alignment.Center,
+    Surface {
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (canNavigateBack) {
-                Icon(
-                    modifier = Modifier.padding(all = dimension.grid_1),
-                    tint = MaterialTheme.colorScheme.onSecondary,
-                    painter = painterResource(resource = Res.drawable.chevron_left_circle),
-                    contentDescription = stringResource(resource = Res.string.content_description_previous_period),
-                )
-            }
-        }
-
-        Box(
-            modifier = Modifier
-                .padding(vertical = dimension.grid_1)
-                .weight(weight = 1f),
-        ) {
-            Button(
-                modifier = Modifier.fillMaxSize(),
-                colors = ButtonDefaults.buttonColors().copy(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(
-                        alpha = 0.32f,
-                    ),
-                ),
-                onClick = { presentationStyleDropdownMenuExpanded = true },
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                    text = title,
-                )
-            }
-
-            PresentationStyleDropdownMenu(
+            Box(
                 modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.surface),
-                currentPresentationStyle = currentPresentationStyle,
-                expanded = presentationStyleDropdownMenuExpanded,
-                onDismiss = { presentationStyleDropdownMenuExpanded = false },
-                onSwitchPresentationStyle = {
-                    presentationStyleDropdownMenuExpanded = false
-                    onSwitchPresentationStyle(it)
-                },
-            )
-        }
+                    .size(size = dimension.minTouchTarget)
+                    .clickable(
+                        enabled = canNavigateBack,
+                        onClick = onNavigateBack,
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                if (canNavigateBack) {
+                    Icon(
+                        modifier = Modifier.padding(all = dimension.grid_1),
+                        tint = MaterialTheme.colorScheme.onSecondary,
+                        painter = painterResource(resource = Res.drawable.chevron_left_circle),
+                        contentDescription = stringResource(resource = Res.string.content_description_previous_period),
+                    )
+                }
+            }
 
-        Box(
-            modifier = Modifier
-                .size(size = dimension.minTouchTarget)
-                .clickable(
-                    enabled = canNavigateForward,
-                    onClick = onNavigateForward,
-                ),
-            contentAlignment = Alignment.Center,
-        ) {
-            if (canNavigateForward) {
-                Icon(
-                    modifier = Modifier.padding(all = dimension.grid_1),
-                    tint = MaterialTheme.colorScheme.onSecondary,
-                    painter = painterResource(resource = Res.drawable.chevron_right_circle),
-                    contentDescription = stringResource(resource = Res.string.content_description_previous_period),
+            Box(
+                modifier = Modifier
+                    .padding(vertical = dimension.grid_1)
+                    .weight(weight = 1f),
+            ) {
+                Button(
+                    modifier = Modifier.fillMaxSize(),
+                    colors = ButtonDefaults.buttonColors().copy(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(
+                            alpha = 0.32f,
+                        ),
+                    ),
+                    onClick = { presentationStyleDropdownMenuExpanded = true },
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        text = title,
+                    )
+                }
+
+                PresentationStyleDropdownMenu(
+                    modifier = Modifier
+                        .background(color = MaterialTheme.colorScheme.surface),
+                    currentPresentationStyle = currentPresentationStyle,
+                    expanded = presentationStyleDropdownMenuExpanded,
+                    onDismiss = { presentationStyleDropdownMenuExpanded = false },
+                    onSwitchPresentationStyle = {
+                        presentationStyleDropdownMenuExpanded = false
+                        onSwitchPresentationStyle(it)
+                    },
                 )
+            }
+
+            Box(
+                modifier = Modifier
+                    .size(size = dimension.minTouchTarget)
+                    .clickable(
+                        enabled = canNavigateForward,
+                        onClick = onNavigateForward,
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                if (canNavigateForward) {
+                    Icon(
+                        modifier = Modifier.padding(all = dimension.grid_1),
+                        tint = MaterialTheme.colorScheme.onSecondary,
+                        painter = painterResource(resource = Res.drawable.chevron_right_circle),
+                        contentDescription = stringResource(resource = Res.string.content_description_previous_period),
+                    )
+                }
             }
         }
     }
@@ -139,21 +142,19 @@ internal fun TitleNavigationBar(
 @Preview
 @Composable
 private fun Preview() {
-    MaterialTheme {
-        Surface {
-            TitleNavigationBar(
-                modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.secondary)
-                    .fillMaxWidth()
-                    .height(height = 64.dp),
-                title = "Sample title",
-                currentPresentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
-                canNavigateBack = true,
-                onNavigateBack = {},
-                canNavigateForward = true,
-                onSwitchPresentationStyle = {},
-                onNavigateForward = {},
-            )
-        }
+    CommonPreviewSetup {
+        TitleNavigationBar(
+            modifier = Modifier
+                .background(color = MaterialTheme.colorScheme.secondary)
+                .fillMaxWidth()
+                .height(height = 64.dp),
+            title = "Sample title",
+            currentPresentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
+            canNavigateBack = true,
+            onNavigateBack = {},
+            canNavigateForward = true,
+            onSwitchPresentationStyle = {},
+            onNavigateForward = {},
+        )
     }
 }

@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.theme.AppTheme
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.coin
 import org.jetbrains.compose.resources.painterResource
@@ -135,7 +135,7 @@ private fun toRadians(deg: Double): Double = deg / 180.0 * PI
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
+    CommonPreviewSetup {
         Surface(modifier = Modifier.padding(all = 24.dp)) {
             val iconPainter = painterResource(resource = Res.drawable.coin)
             val colorFilter = MaterialTheme.colorScheme.onSurface

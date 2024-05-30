@@ -9,19 +9,21 @@ package com.rwmobi.kunigami.data.repository
 
 import com.rwmobi.kunigami.data.repository.mapper.toAccount
 import com.rwmobi.kunigami.data.repository.mapper.toConsumption
-import com.rwmobi.kunigami.data.repository.mapper.toProduct
+import com.rwmobi.kunigami.data.repository.mapper.toProductDetails
+import com.rwmobi.kunigami.data.repository.mapper.toProductSummary
 import com.rwmobi.kunigami.data.repository.mapper.toRate
 import com.rwmobi.kunigami.data.repository.mapper.toTariff
 import com.rwmobi.kunigami.data.source.network.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except
-import com.rwmobi.kunigami.domain.model.Tariff
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
-import com.rwmobi.kunigami.domain.model.product.Product
+import com.rwmobi.kunigami.domain.model.product.ProductDetails
+import com.rwmobi.kunigami.domain.model.product.ProductSummary
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -39,7 +41,7 @@ class OctopusRestApiRepository(
     override suspend fun getSimpleProductTariff(
         productCode: String,
         tariffCode: String,
-    ): Result<Tariff> {
+    ): Result<TariffSummary> {
         return withContext(dispatcher) {
             runCatching {
                 val apiResponse = productsEndpoint.getProduct(
@@ -52,11 +54,25 @@ class OctopusRestApiRepository(
     }
 
     // Don't forget that if it returns more than 100 records, you will have to look at page=2 for the subsequent entries.
-    override suspend fun getProducts(): Result<List<Product>> {
+    override suspend fun getProducts(): Result<List<ProductSummary>> {
         return withContext(dispatcher) {
             runCatching {
                 val apiResponse = productsEndpoint.getProducts()
-                apiResponse?.results?.map { it.toProduct() } ?: emptyList()
+                apiResponse?.results?.map { it.toProductSummary() } ?: emptyList()
+            }.except<CancellationException, _>()
+        }
+    }
+
+    override suspend fun getProductDetails(
+        productCode: String,
+    ): Result<ProductDetails> {
+        return withContext(dispatcher) {
+            runCatching {
+                val apiResponse = productsEndpoint.getProduct(
+                    productCode = productCode,
+                )
+
+                apiResponse?.toProductDetails() ?: throw IllegalArgumentException("Cannot parse product")
             }.except<CancellationException, _>()
         }
     }

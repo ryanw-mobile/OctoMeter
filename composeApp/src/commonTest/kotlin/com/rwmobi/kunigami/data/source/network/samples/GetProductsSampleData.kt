@@ -8,8 +8,8 @@
 package com.rwmobi.kunigami.data.source.network.samples
 
 import com.rwmobi.kunigami.data.source.network.dto.LinkDto
-import com.rwmobi.kunigami.data.source.network.dto.ProductDetailsDto
-import com.rwmobi.kunigami.data.source.network.dto.ProductsApiResponse
+import com.rwmobi.kunigami.data.source.network.dto.products.ProductDetailsDto
+import com.rwmobi.kunigami.data.source.network.dto.products.ProductsApiResponse
 import kotlinx.datetime.Instant
 
 object GetProductsSampleData {

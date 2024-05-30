@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -32,8 +31,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.theme.AppTheme
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_meter_serial
@@ -104,16 +102,14 @@ internal fun MeterSerialNumberEntry(
 @Preview
 @Composable
 private fun Preview() {
-    AppTheme {
-        Surface(modifier = Modifier.padding(all = 8.dp)) {
-            MeterSerialNumberEntry(
-                selectedMpan = "1200000345678B",
-                selectedMeterSerialNumber = "11A1234567",
-                mpan = "1200000345678",
-                meterSerialNumber = "11A1234567",
-                meterSerialNumberTextStyle = MaterialTheme.typography.titleMedium,
-                onMeterSerialNumberSelected = {},
-            )
-        }
+    CommonPreviewSetup {
+        MeterSerialNumberEntry(
+            selectedMpan = "1200000345678B",
+            selectedMeterSerialNumber = "11A1234567",
+            mpan = "1200000345678",
+            meterSerialNumber = "11A1234567",
+            meterSerialNumberTextStyle = MaterialTheme.typography.titleMedium,
+            onMeterSerialNumberSelected = {},
+        )
     }
 }

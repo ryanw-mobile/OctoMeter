@@ -156,7 +156,7 @@ private fun Preview() {
                             ),
                         ),
                     ),
-                    tariff = TariffSamples.agileFlex221125,
+                    tariffSummary = TariffSamples.agileFlex221125,
                 ),
                 errorMessages = listOf(),
             ),

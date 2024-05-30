@@ -34,6 +34,7 @@ val viewModelModule = module {
 
     factory {
         TariffsViewModel(
+            restApiRepository = get(),
             getFilteredProductsUseCase = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
