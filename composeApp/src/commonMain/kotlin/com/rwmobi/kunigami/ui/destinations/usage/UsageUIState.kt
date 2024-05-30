@@ -22,6 +22,7 @@ data class UsageUIState(
     val isLoading: Boolean = true,
     val isDemoMode: Boolean? = null,
     val userProfile: UserProfile? = null,
+    val showToolTipOnClick: Boolean = false,
     val requestedChartLayout: RequestedChartLayout = RequestedChartLayout.Portrait,
     val requestedAdaptiveLayout: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     val requestedUsageColumns: Int = 1,

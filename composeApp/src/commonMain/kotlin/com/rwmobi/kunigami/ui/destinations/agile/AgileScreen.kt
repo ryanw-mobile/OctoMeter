@@ -160,6 +160,7 @@ fun AgileScreen(
 
                                 VerticalBarChart(
                                     modifier = constraintModifier.padding(all = dimension.grid_2),
+                                    showToolTipOnClick = uiState.showToolTipOnClick,
                                     entries = barChartData.verticalBarPlotEntries,
                                     yAxisRange = uiState.rateRange,
                                     yAxisTitle = stringResource(resource = Res.string.agile_vat_unit_rate),

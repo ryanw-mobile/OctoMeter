@@ -20,6 +20,7 @@ import com.rwmobi.kunigami.ui.model.rate.RateGroupedCells
 data class AgileUIState(
     val isLoading: Boolean = true,
     val isDemoMode: Boolean? = null,
+    val showToolTipOnClick: Boolean = false,
     val requestedChartLayout: RequestedChartLayout = RequestedChartLayout.Portrait,
     val requestedRateColumns: Int = 1,
     val requestedAdaptiveLayout: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
