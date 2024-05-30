@@ -63,20 +63,14 @@ class AccountViewModel(
     }
 
     fun refresh() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isLoading = true,
-            )
-        }
-
+        startLoading()
         viewModelScope.launch(dispatcher) {
             syncUserProfileUseCase().fold(
                 onSuccess = { userProfile ->
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
-                            isDemoMode = false,
                             userProfile = userProfile,
-                            isLoading = false,
+                            isDemoMode = false,
                         )
                     }
                 },
@@ -85,15 +79,15 @@ class AccountViewModel(
                         _uiState.update { currentUiState ->
                             currentUiState.copy(
                                 isDemoMode = true,
-                                isLoading = false,
                             )
                         }
                     } else {
-                        updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
                         Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                        updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
                     }
                 },
             )
+            stopLoading()
         }
     }
 
@@ -108,12 +102,7 @@ class AccountViewModel(
         apiKey: String,
         accountNumber: String,
     ) {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isLoading = true,
-            )
-        }
-
+        startLoading()
         viewModelScope.launch {
             val result = initialiseAccountUseCase(apiKey = apiKey, accountNumber = accountNumber)
 
@@ -122,10 +111,20 @@ class AccountViewModel(
                     refresh()
                 },
                 onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
                     Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
                 },
             )
+            stopLoading()
+        }
+    }
+
+    fun updateApiKey(apiKey: String) {
+        startLoading()
+        viewModelScope.launch {
+            userPreferencesRepository.setApiKey(apiKey = apiKey)
+            refresh()
+            stopLoading()
         }
     }
 
@@ -133,6 +132,7 @@ class AccountViewModel(
         mpan: String,
         meterSerialNumber: String,
     ) {
+        startLoading()
         viewModelScope.launch {
             val result = updateMeterPreferenceUseCase(mpan = mpan, meterSerialNumber = meterSerialNumber)
 
@@ -141,9 +141,26 @@ class AccountViewModel(
                     refresh()
                 },
                 onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
                     Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
                 },
+            )
+            stopLoading()
+        }
+    }
+
+    private fun startLoading() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = true,
+            )
+        }
+    }
+
+    private fun stopLoading() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                isLoading = false,
             )
         }
     }
@@ -167,7 +184,6 @@ class AccountViewModel(
                 )
             }
             currentUiState.copy(
-                isLoading = false,
                 errorMessages = newErrorMessages,
             )
         }

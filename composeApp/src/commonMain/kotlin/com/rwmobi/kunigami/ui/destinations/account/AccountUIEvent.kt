@@ -12,7 +12,7 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class AccountUIEvent(
     val onRefresh: () -> Unit,
-    val onUpdateApiKeyClicked: () -> Unit,
+    val onUpdateApiKey: (apiKey: String) -> Unit,
     val onClearCredentialButtonClicked: () -> Unit,
     val onSubmitCredentials: (apiKey: String, accountNumber: String) -> Unit,
     val onMeterSerialNumberSelected: (mpan: String, meterSerialNumber: String) -> Unit,

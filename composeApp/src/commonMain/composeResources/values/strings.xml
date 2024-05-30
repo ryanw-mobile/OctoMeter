@@ -16,6 +16,7 @@
     <string name="ok">OK</string>
     <string name="retry">Retry</string>
     <string name="update">Update</string>
+    <string name="cancel">Cancel</string>
     <string name="no">No</string>
     <string name="kwh">kWh</string>
     <string name="p_kwh">p/kWh</string>
