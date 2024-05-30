@@ -164,7 +164,6 @@ private fun Preview() {
                 ),
                 uiEvent = AccountUIEvent(
                     onClearCredentialButtonClicked = {},
-                    onUpdateApiKey = {},
                     onSubmitCredentials = { _, _ -> },
                     onMeterSerialNumberSelected = { _, _ -> },
                     onRefresh = {},
