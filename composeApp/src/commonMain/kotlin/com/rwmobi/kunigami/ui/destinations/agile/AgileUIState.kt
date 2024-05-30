@@ -16,6 +16,7 @@ import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.extensions.getPlatformType
+import com.rwmobi.kunigami.ui.extensions.mapFromPlatform
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.model.PlatformType
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
@@ -66,19 +67,17 @@ data class AgileUIState(
         )
     }
 
-    fun isOnDifferentTariff(): Boolean {
-        return (
-            false == isDemoMode &&
-                userProfile?.tariffSummary != null &&
-                userProfile.tariffSummary.tariffCode != agileTariffSummary?.tariffCode
-            )
-    }
+    fun isOnDifferentTariff() = (
+        false == isDemoMode &&
+            userProfile?.tariffSummary != null &&
+            userProfile.tariffSummary.tariffCode != agileTariffSummary?.tariffCode
+        )
 
     suspend fun filterErrorAndStopLoading(throwable: Throwable): AgileUIState {
-        return when (throwable) {
+        return when (val translatedThrowable = throwable.mapFromPlatform()) {
             is HttpException -> {
                 copy(
-                    requestedScreenType = AgileScreenType.Error(SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode)),
+                    requestedScreenType = AgileScreenType.Error(SpecialErrorScreen.HttpError(statusCode = translatedThrowable.httpStatusCode)),
                     isLoading = false,
                 )
             }

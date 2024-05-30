@@ -17,6 +17,7 @@ import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.extensions.getPlatformType
+import com.rwmobi.kunigami.ui.extensions.mapFromPlatform
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.model.PlatformType
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
@@ -82,10 +83,10 @@ data class TariffsUIState(
     }
 
     suspend fun filterErrorAndStopLoading(throwable: Throwable): TariffsUIState {
-        return when (throwable) {
+        return when (val translatedThrowable = throwable.mapFromPlatform()) {
             is HttpException -> {
                 copy(
-                    requestedScreenType = TariffsScreenType.Error(SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode)),
+                    requestedScreenType = TariffsScreenType.Error(SpecialErrorScreen.HttpError(statusCode = translatedThrowable.httpStatusCode)),
                     isLoading = false,
                 )
             }

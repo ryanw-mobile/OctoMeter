@@ -13,6 +13,7 @@ import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
+import com.rwmobi.kunigami.ui.extensions.mapFromPlatform
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import io.ktor.util.network.UnresolvedAddressException
@@ -42,10 +43,10 @@ data class AccountUIState(
     }
 
     suspend fun filterErrorAndStopLoading(throwable: Throwable): AccountUIState {
-        return when (throwable) {
+        return when (val translatedThrowable = throwable.mapFromPlatform()) {
             is HttpException -> {
                 copy(
-                    requestedScreenType = AccountScreenType.ErrorScreen(SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode)),
+                    requestedScreenType = AccountScreenType.ErrorScreen(SpecialErrorScreen.HttpError(statusCode = translatedThrowable.httpStatusCode)),
                     isLoading = false,
                 )
             }

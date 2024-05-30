@@ -15,6 +15,7 @@ import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.extensions.getPlatformType
+import com.rwmobi.kunigami.ui.extensions.mapFromPlatform
 import com.rwmobi.kunigami.ui.model.ErrorMessage
 import com.rwmobi.kunigami.ui.model.PlatformType
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
@@ -68,22 +69,20 @@ data class UsageUIState(
         )
     }
 
-    fun clearDataFieldsAndStopLoading(): UsageUIState {
-        return copy(
-            userProfile = null,
-            consumptionGroupedCells = listOf(),
-            consumptionRange = 0.0..0.0,
-            barChartData = null,
-            insights = null,
-            isLoading = false,
-        )
-    }
+    fun clearDataFieldsAndStopLoading() = copy(
+        userProfile = null,
+        consumptionGroupedCells = listOf(),
+        consumptionRange = 0.0..0.0,
+        barChartData = null,
+        insights = null,
+        isLoading = false,
+    )
 
     suspend fun filterErrorAndStopLoading(throwable: Throwable, defaultMessage: String? = null): UsageUIState {
-        return when (throwable) {
+        return when (val translatedThrowable = throwable.mapFromPlatform()) {
             is HttpException -> {
                 copy(
-                    requestedScreenType = UsageScreenType.Error(SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode)),
+                    requestedScreenType = UsageScreenType.Error(SpecialErrorScreen.HttpError(statusCode = translatedThrowable.httpStatusCode)),
                     isLoading = false,
                 )
             }
