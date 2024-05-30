@@ -170,6 +170,7 @@ private fun Preview() {
                     onErrorShown = {},
                     onScrolledToTop = {},
                     onShowSnackbar = {},
+                    onSpecialErrorScreenShown = {},
                 ),
             )
         }

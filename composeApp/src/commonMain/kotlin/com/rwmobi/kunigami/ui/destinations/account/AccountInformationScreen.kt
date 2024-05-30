@@ -238,6 +238,7 @@ private fun Preview() {
                     onErrorShown = {},
                     onScrolledToTop = {},
                     onShowSnackbar = {},
+                    onSpecialErrorScreenShown = {},
                 ),
             )
         }
@@ -270,6 +271,7 @@ private fun ErrorPreview() {
                 onErrorShown = {},
                 onScrolledToTop = {},
                 onShowSnackbar = {},
+                onSpecialErrorScreenShown = {},
             ),
         )
     }

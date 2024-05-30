@@ -12,6 +12,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
@@ -21,6 +22,8 @@ import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.model.ErrorMessage
+import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
+import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +32,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_load_account
+import kunigami.composeapp.generated.resources.account_error_update_credentials
 import org.jetbrains.compose.resources.getString
 
 class AccountViewModel(
@@ -83,7 +87,7 @@ class AccountViewModel(
                         }
                     } else {
                         Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
-                        updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
+                        filterError(throwable = throwable)
                     }
                 },
             )
@@ -111,8 +115,9 @@ class AccountViewModel(
                     refresh()
                 },
                 onFailure = { throwable ->
-                    Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
-                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
+                    // There is no retry for this case.
+                    Logger.e(getString(resource = Res.string.account_error_update_credentials), throwable = throwable, tag = "AccountViewModel")
+                    updateUIForError(message = getString(resource = Res.string.account_error_update_credentials))
                 },
             )
             stopLoading()
@@ -133,10 +138,26 @@ class AccountViewModel(
                 },
                 onFailure = { throwable ->
                     Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
-                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
+                    filterError(throwable = throwable)
                 },
             )
             stopLoading()
+        }
+    }
+
+    fun onSpecialErrorScreenShown() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                specialErrorScreen = null,
+            )
+        }
+    }
+
+    fun requestScrollToTop(enabled: Boolean) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                requestScrollToTop = enabled,
+            )
         }
     }
 
@@ -144,6 +165,7 @@ class AccountViewModel(
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 isLoading = true,
+                specialErrorScreen = null,
             )
         }
     }
@@ -156,11 +178,21 @@ class AccountViewModel(
         }
     }
 
-    fun requestScrollToTop(enabled: Boolean) {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                requestScrollToTop = enabled,
-            )
+    private suspend fun filterError(throwable: Throwable) {
+        if (throwable is HttpException) {
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    specialErrorScreen = SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode),
+                )
+            }
+        } else if (throwable is UnresolvedAddressException) {
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    specialErrorScreen = SpecialErrorScreen.NetworkError,
+                )
+            }
+        } else {
+            updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
         }
     }
 

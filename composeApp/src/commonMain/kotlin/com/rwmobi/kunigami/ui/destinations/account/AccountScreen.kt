@@ -27,6 +27,7 @@ import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
+import com.rwmobi.kunigami.ui.components.SpecialErrorScreenRouter
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
@@ -54,54 +55,68 @@ fun AccountScreen(
     val lazyListState = rememberLazyListState()
 
     Box(modifier = modifier) {
-        ScrollbarMultiplatform(
-            modifier = Modifier.fillMaxWidth(),
-            lazyListState = lazyListState,
-        ) { contentModifier ->
-            LazyColumn(
-                modifier = contentModifier
-                    .fillMaxWidth()
-                    .conditionalBlur(enabled = uiState.isLoading),
-                state = lazyListState,
-            ) {
-                if (uiState.isDemoMode == true) {
-                    item(key = "onboarding") {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            val widthConstraintModifier = when (uiState.requestedLayout) {
-                                is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
-                                is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
-                                else -> Modifier.widthIn(max = dimension.windowWidthMedium)
-                            }
+        if (uiState.specialErrorScreen != null) {
+            SpecialErrorScreenRouter(
+                modifier = Modifier.fillMaxSize(),
+                specialErrorScreen = uiState.specialErrorScreen,
+                onRefresh = {
+                    uiEvent.onRefresh()
+                },
+                onClearCredential = {
+                    uiEvent.onSpecialErrorScreenShown()
+                    uiEvent.onClearCredentialButtonClicked()
+                },
+            )
+        } else {
+            ScrollbarMultiplatform(
+                modifier = Modifier.fillMaxWidth(),
+                lazyListState = lazyListState,
+            ) { contentModifier ->
+                LazyColumn(
+                    modifier = contentModifier
+                        .fillMaxWidth()
+                        .conditionalBlur(enabled = uiState.isLoading),
+                    state = lazyListState,
+                ) {
+                    if (uiState.isDemoMode == true) {
+                        item(key = "onboarding") {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                val widthConstraintModifier = when (uiState.requestedLayout) {
+                                    is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
+                                    is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
+                                    else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                                }
 
-                            OnboardingScreen(
-                                modifier = widthConstraintModifier.padding(all = dimension.grid_2),
-                                uiState = uiState,
-                                uiEvent = uiEvent,
-                            )
+                                OnboardingScreen(
+                                    modifier = widthConstraintModifier.padding(all = dimension.grid_2),
+                                    uiState = uiState,
+                                    uiEvent = uiEvent,
+                                )
+                            }
                         }
                     }
-                }
 
-                if (uiState.isDemoMode == false && uiState.userProfile?.account != null) {
-                    item(key = "account") {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            val widthConstraintModifier = when (uiState.requestedLayout) {
-                                is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
-                                is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
-                                else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                    if (uiState.isDemoMode == false && uiState.userProfile?.account != null) {
+                        item(key = "account") {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                val widthConstraintModifier = when (uiState.requestedLayout) {
+                                    is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
+                                    is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
+                                    else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                                }
+
+                                AccountInformationScreen(
+                                    modifier = widthConstraintModifier.padding(horizontal = dimension.grid_2),
+                                    uiState = uiState,
+                                    uiEvent = uiEvent,
+                                )
                             }
-
-                            AccountInformationScreen(
-                                modifier = widthConstraintModifier.padding(horizontal = dimension.grid_2),
-                                uiState = uiState,
-                                uiEvent = uiEvent,
-                            )
                         }
                     }
                 }
@@ -168,6 +183,7 @@ private fun Preview() {
                 onErrorShown = {},
                 onScrolledToTop = {},
                 onShowSnackbar = {},
+                onSpecialErrorScreenShown = {},
             ),
         )
     }

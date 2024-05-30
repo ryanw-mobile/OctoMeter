@@ -176,6 +176,7 @@ fun AppNavigationHost(
                     onErrorShown = viewModel::errorShown,
                     onScrolledToTop = { onScrolledToTop(AppDestination.ACCOUNT) },
                     onShowSnackbar = onShowSnackbar,
+                    onSpecialErrorScreenShown = viewModel::onSpecialErrorScreenShown,
                 ),
             )
         }
