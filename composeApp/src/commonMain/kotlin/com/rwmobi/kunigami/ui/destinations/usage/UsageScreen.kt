@@ -20,11 +20,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import com.rwmobi.kunigami.ui.components.DemoModeCtaAdaptive
 import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.MessageActionScreen
@@ -46,6 +48,8 @@ import kunigami.composeapp.generated.resources.error_screen_no_data_description_
 import kunigami.composeapp.generated.resources.error_screen_no_data_title
 import kunigami.composeapp.generated.resources.file_dotted
 import kunigami.composeapp.generated.resources.kwh
+import kunigami.composeapp.generated.resources.provide_api_key
+import kunigami.composeapp.generated.resources.usage_demo_introduction
 import kunigami.composeapp.generated.resources.usage_energy_consumption_breakdown
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -106,6 +110,20 @@ fun UsageScreen(
                                     onNavigateBack = uiEvent.onPreviousTimeFrame,
                                     onNavigateForward = uiEvent.onNextTimeFrame,
                                     onSwitchPresentationStyle = { uiEvent.onSwitchPresentationStyle(it) },
+                                )
+                            }
+                        }
+
+                        if (uiState.isDemoMode == true) {
+                            item(key = "demoCta") {
+                                DemoModeCtaAdaptive(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(all = dimension.grid_2),
+                                    description = stringResource(resource = Res.string.usage_demo_introduction),
+                                    ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
+                                    onCtaButtonClicked = uiEvent.onNavigateToAccountTab,
+                                    useWideLayout = uiState.requestedAdaptiveLayout != WindowWidthSizeClass.Compact,
                                 )
                             }
                         }
