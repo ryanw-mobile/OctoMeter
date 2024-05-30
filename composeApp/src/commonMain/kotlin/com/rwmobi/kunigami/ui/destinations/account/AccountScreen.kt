@@ -25,10 +25,11 @@ import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.account.UserProfile
+import com.rwmobi.kunigami.ui.components.ErrorScreenHandler
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
-import com.rwmobi.kunigami.ui.components.SpecialErrorScreenRouter
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
+import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -56,7 +57,7 @@ fun AccountScreen(
 
     Box(modifier = modifier) {
         if (uiState.requestedScreenType is AccountScreenType.ErrorScreen) {
-            SpecialErrorScreenRouter(
+            ErrorScreenHandler(
                 modifier = Modifier.fillMaxSize(),
                 specialErrorScreen = uiState.requestedScreenType.specialErrorScreen,
                 onRefresh = {
@@ -78,43 +79,61 @@ fun AccountScreen(
                         .conditionalBlur(enabled = uiState.isLoading),
                     state = lazyListState,
                 ) {
-                    if (uiState.requestedScreenType is AccountScreenType.Onboarding) {
-                        item(key = "onboarding") {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                val widthConstraintModifier = when (uiState.requestedLayout) {
-                                    is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
-                                    is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
-                                    else -> Modifier.widthIn(max = dimension.windowWidthMedium)
-                                }
+                    when {
+                        uiState.requestedScreenType is AccountScreenType.Onboarding -> {
+                            item(key = "onboarding") {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    val widthConstraintModifier = when (uiState.requestedLayout) {
+                                        is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
+                                        is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
+                                        else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                                    }
 
-                                OnboardingScreen(
-                                    modifier = widthConstraintModifier.padding(all = dimension.grid_2),
-                                    uiState = uiState,
-                                    uiEvent = uiEvent,
-                                )
+                                    OnboardingScreen(
+                                        modifier = widthConstraintModifier.padding(all = dimension.grid_2),
+                                        uiState = uiState,
+                                        uiEvent = uiEvent,
+                                    )
+                                }
                             }
                         }
-                    }
 
-                    if (uiState.requestedScreenType is AccountScreenType.Account && uiState.userProfile?.account != null) {
-                        item(key = "account") {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                val widthConstraintModifier = when (uiState.requestedLayout) {
-                                    is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
-                                    is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
-                                    else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                        uiState.requestedScreenType is AccountScreenType.Account && uiState.userProfile?.account != null -> {
+                            item(key = "account") {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    val widthConstraintModifier = when (uiState.requestedLayout) {
+                                        is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
+                                        is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
+                                        else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                                    }
+
+                                    AccountInformationScreen(
+                                        modifier = widthConstraintModifier.padding(horizontal = dimension.grid_2),
+                                        uiState = uiState,
+                                        uiEvent = uiEvent,
+                                    )
                                 }
+                            }
+                        }
 
-                                AccountInformationScreen(
-                                    modifier = widthConstraintModifier.padding(horizontal = dimension.grid_2),
-                                    uiState = uiState,
-                                    uiEvent = uiEvent,
+                        else -> {
+                            item(key = "noData") {
+                                ErrorScreenHandler(
+                                    modifier = Modifier.fillMaxSize(),
+                                    specialErrorScreen = SpecialErrorScreen.NoData,
+                                    onRefresh = {
+                                        uiEvent.onRefresh()
+                                    },
+                                    onClearCredential = {
+                                        uiEvent.onSpecialErrorScreenShown()
+                                        uiEvent.onClearCredentialButtonClicked()
+                                    },
                                 )
                             }
                         }

@@ -8,7 +8,6 @@
 package com.rwmobi.kunigami.ui.viewmodels
 
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
@@ -21,14 +20,10 @@ import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
+import com.rwmobi.kunigami.ui.destinations.agile.AgileScreenType
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
-import com.rwmobi.kunigami.ui.extensions.generateRandomLong
-import com.rwmobi.kunigami.ui.extensions.getPlatformType
-import com.rwmobi.kunigami.ui.model.ErrorMessage
-import com.rwmobi.kunigami.ui.model.PlatformType
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
-import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.rate.RateGroupedCells
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
@@ -58,8 +53,6 @@ class AgileViewModel(
     private val _uiState: MutableStateFlow<AgileUIState> = MutableStateFlow(AgileUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
-    private val rateColumnWidth = 175.dp
-
     // TODO: Low priority - not my business. Get Agile product code from user preferences.
     private val agileProductCode = "AGILE-24-04-03"
     private val demoRetailRegion = "A"
@@ -73,51 +66,28 @@ class AgileViewModel(
 
     fun refresh() {
         _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isLoading = true,
-            )
+            currentUiState.copy(isLoading = true)
         }
 
         viewModelScope.launch(dispatcher) {
             val currentUserProfile = getUserProfile()
-            val region = currentUserProfile?.tariffSummary?.getRetailRegion() ?: demoRetailRegion
-            getAgileRates(region = region)
-            getAgileTariff(region = region)
-            _uiState.update { currentUiState ->
-                currentUiState.copy(
-                    isLoading = false,
-                )
+            if (currentUserProfile != null || _uiState.value.isDemoMode == true) {
+                val region = currentUserProfile?.tariffSummary?.getRetailRegion() ?: demoRetailRegion
+                getAgileRates(region = region)
+                getAgileTariffAndStopLoading(region = region)
             }
         }
     }
 
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo, windowSizeClass: WindowSizeClass) {
         _uiState.update { currentUiState ->
-            Logger.v("AgileViewModel: ${screenSizeInfo.heightDp}h x ${screenSizeInfo.widthDp}w, isPortrait = ${screenSizeInfo.isPortrait()}")
-            val showToolTipOnClick = windowSizeClass.getPlatformType() != PlatformType.DESKTOP
-            val usageColumns = (screenSizeInfo.widthDp / rateColumnWidth).toInt()
-            val requestedLayout = if (screenSizeInfo.isPortrait()) {
-                RequestedChartLayout.Portrait
-            } else {
-                RequestedChartLayout.LandScape(
-                    requestedMaxHeight = screenSizeInfo.heightDp / 2,
-                )
-            }
-
-            currentUiState.copy(
-                showToolTipOnClick = showToolTipOnClick,
-                requestedChartLayout = requestedLayout,
-                requestedRateColumns = usageColumns,
-                requestedAdaptiveLayout = windowSizeClass.widthSizeClass,
-            )
+            currentUiState.updateLayoutType(screenSizeInfo = screenSizeInfo, windowSizeClass = windowSizeClass)
         }
     }
 
     fun requestScrollToTop(enabled: Boolean) {
         _uiState.update { currentUiState ->
-            currentUiState.copy(
-                requestScrollToTop = enabled,
-            )
+            currentUiState.copy(requestScrollToTop = enabled)
         }
     }
 
@@ -140,12 +110,14 @@ class AgileViewModel(
                         )
                     }
                 } else {
-                    updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
                     Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                    _uiState.update { currentUiState ->
+                        currentUiState.filterErrorAndStopLoading(throwable = throwable)
+                    }
                 }
+                return null
             },
         )
-        return null
     }
 
     private suspend fun getAgileRates(
@@ -161,29 +133,30 @@ class AgileViewModel(
             periodTo = periodTo,
         ).fold(
             onSuccess = { rates ->
+                val rateRange = if (rates.isEmpty()) {
+                    0.0..0.0 // Return a default range if the list is empty
+                } else {
+                    0.0..ceil(rates.maxOf { it.vatInclusivePrice } * 10) / 10.0
+                }
+
+                val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
+                    rates.forEachIndexed { index, rate ->
+                        add(
+                            element = DefaultVerticalBarPlotEntry(
+                                x = index,
+                                y = DefaultVerticalBarPosition(yMin = 0.0, yMax = rate.vatInclusivePrice),
+                            ),
+                        )
+                    }
+                }
+
+                val labels = generateChartLabels(rates = rates)
+                val rateGroupedCells = groupChartCells(rates = rates)
+                val toolTips = generateChartToolTips(rates = rates)
+
                 _uiState.update { currentUiState ->
-                    val rateRange = if (rates.isEmpty()) {
-                        0.0..0.0 // Return a default range if the list is empty
-                    } else {
-                        0.0..ceil(rates.maxOf { it.vatInclusivePrice } * 10) / 10.0
-                    }
-
-                    val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
-                        rates.forEachIndexed { index, rate ->
-                            add(
-                                element = DefaultVerticalBarPlotEntry(
-                                    x = index,
-                                    y = DefaultVerticalBarPosition(yMin = 0.0, yMax = rate.vatInclusivePrice),
-                                ),
-                            )
-                        }
-                    }
-
-                    val labels = generateChartLabels(rates = rates)
-                    val rateGroupedCells = groupChartCells(rates = rates)
-                    val toolTips = generateChartToolTips(rates = rates)
-
                     currentUiState.copy(
+                        requestedScreenType = AgileScreenType.Chart,
                         rateGroupedCells = rateGroupedCells,
                         rateRange = rateRange,
                         barChartData = BarChartData(
@@ -195,13 +168,15 @@ class AgileViewModel(
                 }
             },
             onFailure = { throwable ->
-                updateUIForError(message = throwable.message ?: "Error when retrieving rates")
                 Logger.e("AgileViewModel", throwable = throwable, message = { "Error when retrieving rates" })
+                _uiState.update { currentUiState ->
+                    currentUiState.filterErrorAndStopLoading(throwable = throwable)
+                }
             },
         )
     }
 
-    private suspend fun getAgileTariff(
+    private suspend fun getAgileTariffAndStopLoading(
         region: String,
     ) {
         getTariffRatesUseCase(
@@ -212,6 +187,7 @@ class AgileViewModel(
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
                         agileTariffSummary = agileTariff,
+                        isLoading = false,
                     )
                 }
             },
@@ -220,6 +196,7 @@ class AgileViewModel(
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
                         agileTariffSummary = null,
+                        isLoading = false,
                     )
                 }
             },
@@ -250,23 +227,6 @@ class AgileViewModel(
             val timeRange = rate.validFrom.toLocalHourMinuteString() +
                 (rate.validTo?.let { "- ${it.toLocalHourMinuteString()}" } ?: "")
             "$timeRange\n${rate.vatInclusivePrice.toString(precision = 2)}p"
-        }
-    }
-
-    private fun updateUIForError(message: String) {
-        _uiState.update { currentUiState ->
-            val newErrorMessages = if (_uiState.value.errorMessages.any { it.message == message }) {
-                currentUiState.errorMessages
-            } else {
-                currentUiState.errorMessages + ErrorMessage(
-                    id = generateRandomLong(),
-                    message = message,
-                )
-            }
-            currentUiState.copy(
-                isLoading = false,
-                errorMessages = newErrorMessages,
-            )
         }
     }
 

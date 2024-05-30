@@ -8,20 +8,12 @@
 package com.rwmobi.kunigami.ui.viewmodels
 
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
-import com.rwmobi.kunigami.ui.destinations.tariffs.TariffScreenLayout
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIState
-import com.rwmobi.kunigami.ui.extensions.generateRandomLong
-import com.rwmobi.kunigami.ui.extensions.getPlatformType
-import com.rwmobi.kunigami.ui.model.ErrorMessage
-import com.rwmobi.kunigami.ui.model.PlatformType
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +29,6 @@ class TariffsViewModel(
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<TariffsUIState> = MutableStateFlow(TariffsUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
-    val windowWidthCompact: Dp = 599.dp
 
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
@@ -48,22 +39,9 @@ class TariffsViewModel(
 
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo, windowSizeClass: WindowSizeClass) {
         _uiState.update { currentUiState ->
-            val platform = windowSizeClass.getPlatformType()
-            val requestedLayout = when (windowSizeClass.widthSizeClass) {
-                WindowWidthSizeClass.Compact -> TariffScreenLayout.Compact(useBottomSheet = platform != PlatformType.DESKTOP)
-                WindowWidthSizeClass.Medium -> TariffScreenLayout.Wide(useBottomSheet = platform != PlatformType.DESKTOP)
-                else -> TariffScreenLayout.ListDetailPane
-            }
-            val requestedWideListLayout = when {
-                windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact -> false
-                windowSizeClass.widthSizeClass == WindowWidthSizeClass.Medium -> true
-                (screenSizeInfo.widthDp / 2) > windowWidthCompact -> true // List pane width
-                else -> false
-            }
-
-            currentUiState.copy(
-                requestedLayout = requestedLayout,
-                requestedWideListLayout = requestedWideListLayout,
+            currentUiState.updateLayoutType(
+                screenSizeInfo = screenSizeInfo,
+                windowSizeClass = windowSizeClass,
             )
         }
     }
@@ -77,40 +55,40 @@ class TariffsViewModel(
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             productSummaries = products,
-                        )
+                            isLoading = false,
+                        ).updateScreenType()
                     }
                 },
                 onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: "Error when retrieving tariffs")
                     Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                    _uiState.update { currentUiState ->
+                        currentUiState.filterErrorAndStopLoading(throwable)
+                    }
                 },
             )
-            stopLoading()
         }
     }
 
     fun getProductDetails(productCode: String) {
         startLoading()
         viewModelScope.launch(dispatcher) {
-            val getProductDetailsResult = restApiRepository.getProductDetails(
-                productCode = productCode,
-            )
-
+            val getProductDetailsResult = restApiRepository.getProductDetails(productCode)
             getProductDetailsResult.fold(
                 onSuccess = { product ->
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             productDetails = product,
-                        )
+                            isLoading = false,
+                        ).updateScreenType()
                     }
-                    getProductDetailsResult
                 },
                 onFailure = { throwable ->
-                    updateUIForError(message = throwable.message ?: "Error when retrieving product details")
                     Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving product details" })
+                    _uiState.update { currentUiState ->
+                        currentUiState.filterErrorAndStopLoading(throwable)
+                    }
                 },
             )
-            stopLoading()
         }
     }
 
@@ -118,6 +96,14 @@ class TariffsViewModel(
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 productDetails = null,
+            ).updateScreenType()
+        }
+    }
+
+    fun onSpecialErrorScreenShown() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                requestedScreenType = null,
             )
         }
     }
@@ -134,30 +120,7 @@ class TariffsViewModel(
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 isLoading = true,
-            )
-        }
-    }
-
-    private fun stopLoading() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isLoading = false,
-            )
-        }
-    }
-
-    private fun updateUIForError(message: String) {
-        _uiState.update { currentUiState ->
-            val newErrorMessages = if (_uiState.value.errorMessages.any { it.message == message }) {
-                currentUiState.errorMessages
-            } else {
-                currentUiState.errorMessages + ErrorMessage(
-                    id = generateRandomLong(),
-                    message = message,
-                )
-            }
-            currentUiState.copy(
-                errorMessages = newErrorMessages,
+                requestedScreenType = null,
             )
         }
     }

@@ -43,7 +43,7 @@ import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.components.DefaultFailureRetryScreen
+import com.rwmobi.kunigami.ui.components.MessageActionScreen
 import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
 import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionAdaptive
 import com.rwmobi.kunigami.ui.destinations.account.components.ElectricityMeterPointCard
@@ -82,7 +82,7 @@ internal fun AccountInformationScreen(
         verticalArrangement = Arrangement.spacedBy(space = dimension.grid_3),
     ) {
         if (uiState.userProfile?.account == null) {
-            DefaultFailureRetryScreen(
+            MessageActionScreen(
                 modifier = modifier.fillMaxSize(),
                 text = stringResource(resource = Res.string.account_error_account_empty),
                 icon = painterResource(resource = Res.drawable.unlink),

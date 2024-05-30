@@ -8,6 +8,8 @@
 package com.rwmobi.kunigami.ui.model
 
 sealed interface SpecialErrorScreen {
+    data object NoData : SpecialErrorScreen
+    data object UnknownError : SpecialErrorScreen
     data object NetworkError : SpecialErrorScreen
     data class HttpError(val statusCode: Int) : SpecialErrorScreen
 }

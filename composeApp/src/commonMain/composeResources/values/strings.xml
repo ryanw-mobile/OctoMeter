@@ -53,6 +53,8 @@
     <string name="usage_estimated_cost">estimated cost</string>
     <string name="usage_estimated_daily">Daily average: %1$s kWh / £%2$s</string>
     <string name="usage_annual_projection">Projected annual consumption</string>
+    <string name="usage_demo_introduction">Demo Mode: The consumption figures shown are randomly generated.</string>
+
 
     <!-- Agile -->
     <string name="agile_demo_introduction">Demo Mode: The Agile Tariff shown for Retail Region A may not be available to you.</string>
@@ -78,6 +80,7 @@
     <string name="tariffs_dual_fuel_discount">Dual Fuel Discount</string>
     <string name="tariffs_exit_fees">Exit Fees</string>
     <string name="tariffs_direct_debit_monthly">Direct Debit Monthly</string>
+    <string name="tariffs_error_load_tariffs">Unable to retrieve tariffs</string>
 
     <!-- Product Features -->
     <string name="product_feature_variable">Variable</string>
@@ -132,7 +135,16 @@
     <string name="error_screen_unauthorised_title">Access Denied</string>
     <string name="error_screen_unauthorised_description">Access was denied using the saved API Key and Account Number. Please clear the saved credentials and re-enter them.</string>
     <string name="error_screen_network_error_title">Network Error</string>
-    <string name="error_screen_network_error_description">Please check your network connection and try again.</string>
+    <string name="error_screen_network_error_description">Please check your network connection, then try again.</string>
+    <string name="error_screen_general_http_error_title">HTTP Error %1$d</string>
+    <string name="error_screen_general_http_error_description_no_auth">You may try again later.</string>
+    <string name="error_screen_general_http_error_description">You may try again later. Alternatively, you can clear the saved credentials and re-enter them to see if that solves the problem.</string>
+    <string name="error_screen_general_error_title">Something is wrong</string>
+    <string name="error_screen_general_error_description_no_auth">You may try again later. If this is unexpected, log an issue on Github.</string>
+    <string name="error_screen_general_error_description">You may try again later. Alternatively, you can clear the saved credentials and re-enter them to see if that solves the problem.</string>
+    <string name="error_screen_no_data_title">There is nothing to show</string>
+    <string name="error_screen_no_data_description_no_auth">If this is unexpected, log an issue on Github</string>
+    <string name="error_screen_no_data_description">You may try again later. Alternatively, you can clear the saved credentials and re-enter them to see if that solves the problem.</string>
 
     <!-- Desktop About dialog -->
     <string name="about_app_title">About OctoMeter</string>

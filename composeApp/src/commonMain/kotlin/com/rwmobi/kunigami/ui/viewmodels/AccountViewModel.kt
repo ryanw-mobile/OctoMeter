@@ -8,23 +8,16 @@
 package com.rwmobi.kunigami.ui.viewmodels
 
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.domain.usecase.UpdateMeterPreferenceUseCase
-import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenType
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
-import com.rwmobi.kunigami.ui.extensions.generateRandomLong
-import com.rwmobi.kunigami.ui.model.ErrorMessage
-import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
-import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,15 +47,9 @@ class AccountViewModel(
     }
 
     fun notifyWindowSizeClassChanged(windowSizeClass: WindowSizeClass) {
-        val requestedLayout = when (windowSizeClass.widthSizeClass) {
-            WindowWidthSizeClass.Expanded -> AccountScreenLayout.WideWrapped
-            WindowWidthSizeClass.Medium -> AccountScreenLayout.Wide
-            else -> AccountScreenLayout.Compact
-        }
-
         _uiState.update { currentUiState ->
-            currentUiState.copy(
-                requestedLayout = requestedLayout,
+            currentUiState.updateLayoutType(
+                windowSizeClass = windowSizeClass,
             )
         }
     }
@@ -76,6 +63,7 @@ class AccountViewModel(
                         currentUiState.copy(
                             userProfile = userProfile,
                             requestedScreenType = AccountScreenType.Account,
+                            isLoading = false,
                         )
                     }
                 },
@@ -84,15 +72,17 @@ class AccountViewModel(
                         _uiState.update { currentUiState ->
                             currentUiState.copy(
                                 requestedScreenType = AccountScreenType.Onboarding,
+                                isLoading = false,
                             )
                         }
                     } else {
                         Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
-                        filterError(throwable = throwable)
+                        _uiState.update { currentUiState ->
+                            currentUiState.filterErrorAndStopLoading(throwable = throwable)
+                        }
                     }
                 },
             )
-            stopLoading()
         }
     }
 
@@ -110,18 +100,16 @@ class AccountViewModel(
         startLoading()
         viewModelScope.launch {
             val result = initialiseAccountUseCase(apiKey = apiKey, accountNumber = accountNumber)
-
             result.fold(
-                onSuccess = {
-                    refresh()
-                },
+                onSuccess = { refresh() },
                 onFailure = { throwable ->
                     // There is no retry for this case.
                     Logger.e(getString(resource = Res.string.account_error_update_credentials), throwable = throwable, tag = "AccountViewModel")
-                    updateUIForError(message = getString(resource = Res.string.account_error_update_credentials))
+                    _uiState.update { currentUiState ->
+                        currentUiState.updateUIForErrorAndStopLoading(message = getString(resource = Res.string.account_error_update_credentials))
+                    }
                 },
             )
-            stopLoading()
         }
     }
 
@@ -132,17 +120,15 @@ class AccountViewModel(
         startLoading()
         viewModelScope.launch {
             val result = updateMeterPreferenceUseCase(mpan = mpan, meterSerialNumber = meterSerialNumber)
-
             result.fold(
-                onSuccess = {
-                    refresh()
-                },
+                onSuccess = { refresh() },
                 onFailure = { throwable ->
                     Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
-                    filterError(throwable = throwable)
+                    _uiState.update { currentUiState ->
+                        currentUiState.filterErrorAndStopLoading(throwable = throwable)
+                    }
                 },
             )
-            stopLoading()
         }
     }
 
@@ -166,48 +152,6 @@ class AccountViewModel(
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 isLoading = true,
-            )
-        }
-    }
-
-    private fun stopLoading() {
-        _uiState.update { currentUiState ->
-            currentUiState.copy(
-                isLoading = false,
-            )
-        }
-    }
-
-    private suspend fun filterError(throwable: Throwable) {
-        if (throwable is HttpException) {
-            _uiState.update { currentUiState ->
-                currentUiState.copy(
-                    requestedScreenType = AccountScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode)),
-                )
-            }
-        } else if (throwable is UnresolvedAddressException) {
-            _uiState.update { currentUiState ->
-                currentUiState.copy(
-                    requestedScreenType = AccountScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.NetworkError),
-                )
-            }
-        } else {
-            updateUIForError(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
-        }
-    }
-
-    private fun updateUIForError(message: String) {
-        _uiState.update { currentUiState ->
-            val newErrorMessages = if (_uiState.value.errorMessages.any { it.message == message }) {
-                currentUiState.errorMessages
-            } else {
-                currentUiState.errorMessages + ErrorMessage(
-                    id = generateRandomLong(),
-                    message = message,
-                )
-            }
-            currentUiState.copy(
-                errorMessages = newErrorMessages,
             )
         }
     }
