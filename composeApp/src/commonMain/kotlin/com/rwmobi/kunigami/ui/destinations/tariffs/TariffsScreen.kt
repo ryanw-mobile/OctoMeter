@@ -209,7 +209,10 @@ fun TariffsScreen(
     }
 
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
-    if (bottomSheetState.isVisible && uiState.requestedLayout != TariffScreenLayout.ListDetailPane) {
+    if (bottomSheetState.isVisible &&
+        uiState.requestedLayout != TariffScreenLayout.ListDetailPane &&
+        uiState.requestedScreenType !is TariffsScreenType.Error
+    ) {
         TariffBottomSheet(
             modifier = Modifier.fillMaxSize(),
             productDetails = uiState.productDetails,
@@ -225,8 +228,8 @@ fun TariffsScreen(
     LaunchedEffect(uiState.productDetails, uiState.requestedLayout) {
         if (uiState.shouldUseBottomSheet()) {
             when {
-                uiState.productDetails != null && !bottomSheetState.isVisible -> bottomSheetState.show()
-                uiState.productDetails == null && bottomSheetState.isVisible -> bottomSheetState.hide()
+                uiState.productDetails != null && !bottomSheetState.isVisible && (uiState.requestedScreenType !is TariffsScreenType.Error) -> bottomSheetState.show()
+                (uiState.productDetails == null || uiState.requestedScreenType is TariffsScreenType.Error) && bottomSheetState.isVisible -> bottomSheetState.hide()
             }
         }
     }

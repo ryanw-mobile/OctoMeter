@@ -54,7 +54,9 @@ class TariffsViewModel(
                 onSuccess = { products ->
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
+                            requestedScreenType = null, // force recalculation
                             productSummaries = products,
+                            productDetails = null,
                             isLoading = false,
                         ).updateScreenType()
                     }
@@ -120,7 +122,6 @@ class TariffsViewModel(
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 isLoading = true,
-                requestedScreenType = null,
             )
         }
     }
