@@ -48,7 +48,6 @@ import io.github.koalaplot.core.xygraph.rememberAxisStyle
 @Composable
 fun VerticalBarChart(
     modifier: Modifier,
-    title: String? = null,
     xAxisTitle: String? = null,
     yAxisTitle: String? = null,
     entries: List<VerticalBarPlotEntry<Int, Double>>,
@@ -60,14 +59,7 @@ fun VerticalBarChart(
 ) {
     val dimension = LocalDensity.current.getDimension()
 
-    ChartLayout(
-        modifier = modifier,
-        title = {
-            title?.let {
-                ChartTitle(title = title)
-            }
-        },
-    ) {
+    ChartLayout(modifier = modifier) {
         XYGraph(
             panZoomEnabled = false,
             xAxisModel = CategoryAxisModel(
