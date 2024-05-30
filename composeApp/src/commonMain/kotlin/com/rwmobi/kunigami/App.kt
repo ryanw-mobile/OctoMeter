@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.HorizontalDivider
@@ -95,67 +96,69 @@ fun App(
         androidStatusBarModifier = androidStatusBarModifier,
     ) {
         Surface {
-            Row(
+            Scaffold(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .imePadding(),
-            ) {
-                AnimatedVisibility(
-                    visible = (navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL),
-                    enter = slideInHorizontally(initialOffsetX = { -it }),
-                    exit = shrinkHorizontally() + fadeOut(),
-                ) {
-                    Row {
-                        AppNavigationRail(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .wrapContentWidth(),
-                            navController = navController,
-                            onCurrentRouteSecondTapped = { lastDoubleTappedNavItem.value = it },
-                        )
+                    .safeDrawingPadding()
+                    .fillMaxSize(),
+                snackbarHost = {
+                    SnackbarHost(
+                        hostState = snackbarHostState,
+                    )
+                },
+                bottomBar = {
+                    AnimatedVisibility(
+                        visible = (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION),
+                        enter = slideInVertically(initialOffsetY = { it }),
+                        exit = shrinkVertically() + fadeOut(),
+                    ) {
+                        Column {
+                            HorizontalDivider(
+                                modifier = Modifier.fillMaxWidth(),
+                                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                            )
 
-                        VerticalDivider(
-                            modifier = Modifier.fillMaxHeight(),
-                            color = MaterialTheme.colorScheme.surfaceContainerHighest,
-                        )
-                    }
-                }
-
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    snackbarHost = {
-                        SnackbarHost(
-                            hostState = snackbarHostState,
-                        )
-                    },
-                    bottomBar = {
-                        AnimatedVisibility(
-                            visible = (navigationLayoutType == NavigationLayoutType.BOTTOM_NAVIGATION),
-                            enter = slideInVertically(initialOffsetY = { it }),
-                            exit = shrinkVertically() + fadeOut(),
-                        ) {
-                            Column {
-                                HorizontalDivider(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
-                                )
-
-                                AppBottomNavigationBar(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .wrapContentHeight(),
-                                    navController = navController,
-                                    onCurrentRouteSecondTapped = { lastDoubleTappedNavItem.value = it },
-                                )
-                            }
+                            AppBottomNavigationBar(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight(),
+                                navController = navController,
+                                onCurrentRouteSecondTapped = { lastDoubleTappedNavItem.value = it },
+                            )
                         }
-                    },
-                ) { paddingValues ->
+                    }
+                },
+            ) { paddingValues ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .imePadding()
+                        .padding(paddingValues),
+                ) {
+                    AnimatedVisibility(
+                        visible = (navigationLayoutType == NavigationLayoutType.NAVIGATION_RAIL),
+                        enter = slideInHorizontally(initialOffsetX = { -it }),
+                        exit = shrinkHorizontally() + fadeOut(),
+                    ) {
+                        Row {
+                            AppNavigationRail(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .wrapContentWidth(),
+                                navController = navController,
+                                onCurrentRouteSecondTapped = { lastDoubleTappedNavItem.value = it },
+                            )
+
+                            VerticalDivider(
+                                modifier = Modifier.fillMaxHeight()
+                                    .wrapContentWidth(),
+                                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                            )
+                        }
+                    }
+
                     val actionLabel = stringResource(Res.string.ok)
                     AppNavigationHost(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues),
+                        modifier = Modifier.fillMaxSize(),
                         navController = navController,
                         lastDoubleTappedNavItem = lastDoubleTappedNavItem.value,
                         onShowSnackbar = { errorMessageText ->
