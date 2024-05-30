@@ -69,14 +69,14 @@ I use Android Studio Koala to build the Android and Deskop apps. Xcode 15.4 for 
 
 <br /><br />
 
-## Some draft technical details
+## Some technical details
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
+* `/composeApp` is for Kotlin code shared across the Compose Multiplatform application.
   It contains several subfolders:
     - `commonMain` is for code that’s common for all targets.
-    - `androidMain` is the traditional Android project root
-    - Other folders are for Kotlin code that will be compiled for only the platform indicated in the
-      folder name.
+    - `androidMain` is the traditional Android project root.
+    - `desktopMain` is for the desktop (JVM) app.
+    - `iosMain` is for the Kotlin code to be exposed to the iOS app.
 
 * `/iosApp` contains the iOS application. Open `OctoMeter.xcworkspace` to build the App.
 
