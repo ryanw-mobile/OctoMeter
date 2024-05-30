@@ -145,6 +145,7 @@ fun UsageScreen(
 
                                     VerticalBarChart(
                                         modifier = constraintModifier.padding(all = dimension.grid_2),
+                                        showToolTipOnClick = uiState.showToolTipOnClick,
                                         entries = barChartData.verticalBarPlotEntries,
                                         yAxisRange = uiState.consumptionRange,
                                         yAxisTitle = stringResource(resource = Res.string.kwh),

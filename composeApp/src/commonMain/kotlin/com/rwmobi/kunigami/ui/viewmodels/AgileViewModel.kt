@@ -23,7 +23,9 @@ import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
+import com.rwmobi.kunigami.ui.extensions.getPlatformType
 import com.rwmobi.kunigami.ui.model.ErrorMessage
+import com.rwmobi.kunigami.ui.model.PlatformType
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
@@ -92,6 +94,8 @@ class AgileViewModel(
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo, windowSizeClass: WindowSizeClass) {
         _uiState.update { currentUiState ->
             Logger.v("AgileViewModel: ${screenSizeInfo.heightDp}h x ${screenSizeInfo.widthDp}w, isPortrait = ${screenSizeInfo.isPortrait()}")
+            val showToolTipOnClick = windowSizeClass.getPlatformType() != PlatformType.DESKTOP
+            val usageColumns = (screenSizeInfo.widthDp / rateColumnWidth).toInt()
             val requestedLayout = if (screenSizeInfo.isPortrait()) {
                 RequestedChartLayout.Portrait
             } else {
@@ -100,9 +104,8 @@ class AgileViewModel(
                 )
             }
 
-            val usageColumns = (screenSizeInfo.widthDp / rateColumnWidth).toInt()
-
             currentUiState.copy(
+                showToolTipOnClick = showToolTipOnClick,
                 requestedChartLayout = requestedLayout,
                 requestedRateColumns = usageColumns,
                 requestedAdaptiveLayout = windowSizeClass.widthSizeClass,
