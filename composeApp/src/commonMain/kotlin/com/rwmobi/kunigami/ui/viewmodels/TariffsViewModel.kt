@@ -64,7 +64,7 @@ class TariffsViewModel(
                 onFailure = { throwable ->
                     Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
                     _uiState.update { currentUiState ->
-                        currentUiState.filterErrorAndStopLoading(throwable = throwable)
+                        currentUiState.filterErrorAndStopLoading(throwable)
                     }
                 },
             )
@@ -74,10 +74,7 @@ class TariffsViewModel(
     fun getProductDetails(productCode: String) {
         startLoading()
         viewModelScope.launch(dispatcher) {
-            val getProductDetailsResult = restApiRepository.getProductDetails(
-                productCode = productCode,
-            )
-
+            val getProductDetailsResult = restApiRepository.getProductDetails(productCode)
             getProductDetailsResult.fold(
                 onSuccess = { product ->
                     _uiState.update { currentUiState ->
@@ -90,7 +87,7 @@ class TariffsViewModel(
                 onFailure = { throwable ->
                     Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving product details" })
                     _uiState.update { currentUiState ->
-                        currentUiState.filterErrorAndStopLoading(throwable = throwable)
+                        currentUiState.filterErrorAndStopLoading(throwable)
                     }
                 },
             )

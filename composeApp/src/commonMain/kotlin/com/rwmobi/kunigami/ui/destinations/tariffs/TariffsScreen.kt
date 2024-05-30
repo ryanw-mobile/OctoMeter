@@ -231,8 +231,9 @@ fun TariffsScreen(
     }
 
     LaunchedEffect(uiState.productDetails, uiState.requestedLayout) {
-        val isBottomSheetLayout = uiState.requestedLayout.let {
-            it is TariffScreenLayout.Wide && it.useBottomSheet || it is TariffScreenLayout.Compact && it.useBottomSheet
+        val isBottomSheetLayout = with(uiState.requestedLayout) {
+            (this is TariffScreenLayout.Wide && useBottomSheet) ||
+                (this is TariffScreenLayout.Compact && useBottomSheet)
         }
 
         if (isBottomSheetLayout) {

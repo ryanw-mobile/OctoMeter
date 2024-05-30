@@ -75,25 +75,25 @@ data class TariffsUIState(
         return when (throwable) {
             is HttpException -> {
                 copy(
-                    requestedScreenType = TariffsScreenType.Error(specialErrorScreen = SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode)),
+                    requestedScreenType = TariffsScreenType.Error(SpecialErrorScreen.HttpError(statusCode = throwable.httpStatusCode)),
                     isLoading = false,
                 )
             }
 
             is UnresolvedAddressException -> {
                 copy(
-                    requestedScreenType = TariffsScreenType.Error(specialErrorScreen = SpecialErrorScreen.NetworkError),
+                    requestedScreenType = TariffsScreenType.Error(SpecialErrorScreen.NetworkError),
                     isLoading = false,
                 )
             }
 
             else -> {
-                updateUIForErrorAndStopLoading(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
+                handleErrorAndStopLoading(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
             }
         }
     }
 
-    fun updateUIForErrorAndStopLoading(message: String): TariffsUIState {
+    private fun handleErrorAndStopLoading(message: String): TariffsUIState {
         val newErrorMessages = if (errorMessages.any { it.message == message }) {
             errorMessages
         } else {

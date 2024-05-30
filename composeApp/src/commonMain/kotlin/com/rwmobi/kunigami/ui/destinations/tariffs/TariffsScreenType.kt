@@ -7,8 +7,10 @@
 
 package com.rwmobi.kunigami.ui.destinations.tariffs
 
+import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 
+@Immutable
 sealed interface TariffsScreenType {
     data class Error(val specialErrorScreen: SpecialErrorScreen) : TariffsScreenType
     data object List : TariffsScreenType
