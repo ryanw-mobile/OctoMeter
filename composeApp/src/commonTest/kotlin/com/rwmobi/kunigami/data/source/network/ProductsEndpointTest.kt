@@ -13,6 +13,7 @@ import com.rwmobi.kunigami.data.source.network.samples.GetProductSampleData
 import com.rwmobi.kunigami.data.source.network.samples.GetProductsSampleData
 import com.rwmobi.kunigami.data.source.network.samples.GetStandardUnitRatesSampleData
 import com.rwmobi.kunigami.data.source.network.samples.GetStandingChargesSampleData
+import com.rwmobi.kunigami.domain.exceptions.HttpException
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
@@ -88,7 +89,7 @@ class ProductsEndpointTest {
     }
 
     @Test
-    fun getProducts_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getProducts_ShouldThrowHttpException_WhenHttpStatusIsInternalServerError() = runTest {
         val productsEndpoint = ProductsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -98,7 +99,7 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<Exception> {
+        shouldThrowExactly<HttpException> {
             productsEndpoint.getProducts()
         }
     }
@@ -165,7 +166,7 @@ class ProductsEndpointTest {
     }
 
     @Test
-    fun getProduct_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getProduct_ShouldThrowHttpException_WhenHttpStatusIsInternalServerError() = runTest {
         val productsEndpoint = ProductsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -175,7 +176,7 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<Exception> {
+        shouldThrowExactly<HttpException> {
             productsEndpoint.getProduct(productCode = "sample-product-code")
         }
     }
@@ -218,7 +219,7 @@ class ProductsEndpointTest {
     }
 
     @Test
-    fun getStandardUnitRates_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getStandardUnitRates_ShouldThrowHttpException_WhenHttpStatusIsInternalServerError() = runTest {
         val productsEndpoint = ProductsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -228,7 +229,7 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<Exception> {
+        shouldThrowExactly<HttpException> {
             productsEndpoint.getStandardUnitRates(
                 productCode = "fake-product-code",
                 tariffCode = "fake-tariff-code",
@@ -274,7 +275,7 @@ class ProductsEndpointTest {
     }
 
     @Test
-    fun getStandingCharges_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getStandingCharges_ShouldThrowHttpException_WhenHttpStatusIsInternalServerError() = runTest {
         val productsEndpoint = ProductsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -284,7 +285,7 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<Exception> {
+        shouldThrowExactly<HttpException> {
             productsEndpoint.getStandingCharges(
                 productCode = "fake-product-code",
                 tariffCode = "fake-tariff-code",
@@ -330,7 +331,7 @@ class ProductsEndpointTest {
     }
 
     @Test
-    fun getDayUnitRates_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getDayUnitRates_ShouldThrowHttpException_WhenHttpStatusIsInternalServerError() = runTest {
         val productsEndpoint = ProductsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -340,7 +341,7 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<Exception> {
+        shouldThrowExactly<HttpException> {
             productsEndpoint.getDayUnitRates(
                 productCode = "fake-product-code",
                 tariffCode = "fake-tariff-code",
@@ -386,7 +387,7 @@ class ProductsEndpointTest {
     }
 
     @Test
-    fun getNightUnitRates_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getNightUnitRates_ShouldThrowHttpException_WhenHttpStatusIsInternalServerError() = runTest {
         val productsEndpoint = ProductsEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -396,7 +397,7 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<Exception> {
+        shouldThrowExactly<HttpException> {
             productsEndpoint.getNightUnitRates(
                 productCode = "fake-product-code",
                 tariffCode = "fake-tariff-code",

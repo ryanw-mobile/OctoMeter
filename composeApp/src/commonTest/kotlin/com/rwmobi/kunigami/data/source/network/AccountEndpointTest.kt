@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.data.source.network
 
 import com.rwmobi.kunigami.data.source.network.samples.GetAccountSampleData
+import com.rwmobi.kunigami.domain.exceptions.HttpException
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
@@ -91,7 +92,7 @@ class AccountEndpointTest {
     }
 
     @Test
-    fun getAccount_ShouldThrowException_WhenHttpStatusIsInternalServerError() = runTest {
+    fun getAccount_ShouldThrowHttpException_WhenHttpStatusIsInternalServerError() = runTest {
         val accountEndpoint = AccountEndpoint(
             baseUrl = fakeBaseUrl,
             httpClient = setupEngine(
@@ -101,7 +102,7 @@ class AccountEndpointTest {
             ),
         )
 
-        shouldThrowExactly<Exception> {
+        shouldThrowExactly<HttpException> {
             accountEndpoint.getAccount(
                 apiKey = fakeApiKey,
                 accountNumber = fakeAccountNumber,
