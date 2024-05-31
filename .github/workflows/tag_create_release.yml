@@ -47,7 +47,7 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           release_name: Release ${{ env.version }}
-          draft: true
+          draft: false
           prerelease: false
           body: "Description of the release for version ${{ env.version }}"
           commitish: ${{ github.sha }}
