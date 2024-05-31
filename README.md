@@ -6,6 +6,8 @@
 <p><img src="app_banner_240518.webp" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 <br />
 
+### Made in the UK, For the UK.
+
 This app is designed for Octopus Energy customers in the UK who have a smart meter installed. If you don’t have a smart meter, you can still try out the app. It runs in demo mode by default, showing fake user data when authentication is required.
 
 ### It works for me
@@ -17,7 +19,7 @@ This is a dashboard-type app that runs on desktop (desktop-first), Android, and 
 The main purposes of this app are:
 
 * Compile smart meter electricity usage; estimate and project electricity usage and cost.
-* Track Octopus Agile tariff unit rates for the coming 24 hours, with countdown and automatic refresh.
+* Track the Agile Octopus tariff unit rates for the coming 24 hours, with countdown and automatic refresh.
 * Browse available Octopus Energy tariffs.
 
 For non-Octopus Energy customers, or non-UK residents, the demo mode will display random meter readings and default tariff rates to illustrate the app’s functionality.
@@ -52,6 +54,11 @@ improved later:
 * iOS: Slow first time launch
 * iOS: Slow screen recomposition when screen orientation changes
 * iOS: Agile chart sometimes does not refresh
+
+
+>**Important notes regarding fixed charges, tariff rates, and cost estimation shown on the app:**
+>This app applies the current direct debit tariff to estimate past usage costs. For flexible and Agile tariffs, the current rough calculations do not produce reliable estimations. There might be multiple tariffs covering a long period as well. We need to map the consumption against the exact tariff and rates by intervals and apply the rounding rules to approximate the actual billing amount. This limitation may be addressed in 2025 when I have enough personal data for verification, but it is the limitation we have for now.
+
 
 <br /><br />
 

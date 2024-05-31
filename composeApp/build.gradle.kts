@@ -346,6 +346,7 @@ kover {
                         "com.rwmobi.kunigami.App*",
                         "com.rwmobi.kunigami.MainKt*",
                         "com.rwmobi.kunigami.NavigationLayoutType",
+                        "com.rwmobi.kunigami.data.repositor.DemoRestApiRepository",
                         "*Fragment",
                         "*Fragment\$*",
                         "*Activity",

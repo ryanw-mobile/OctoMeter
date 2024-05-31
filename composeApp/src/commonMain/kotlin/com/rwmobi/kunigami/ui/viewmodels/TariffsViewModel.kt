@@ -42,7 +42,7 @@ class TariffsViewModel(
             currentUiState.updateLayoutType(
                 screenSizeInfo = screenSizeInfo,
                 windowSizeClass = windowSizeClass,
-            )
+            ).updateScreenType()
         }
     }
 

@@ -32,7 +32,9 @@ class GetConsumptionUseCaseTest {
 
     @BeforeTest
     fun setupUseCase() {
-        fakeUserPreferenceRepository = FakeUserPreferencesRepository()
+        fakeUserPreferenceRepository = FakeUserPreferencesRepository().apply {
+            demoMode = false // We do not test demo mode
+        }
         fakeRestApiRepository = FakeRestApiRepository()
         getConsumptionUseCase = GetConsumptionUseCase(
             userPreferencesRepository = fakeUserPreferenceRepository,
