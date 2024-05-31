@@ -16,7 +16,12 @@ import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import kotlinx.datetime.DateTimePeriod
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.plus
+import kotlinx.datetime.until
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.ln
@@ -24,7 +29,6 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
 import kotlin.random.Random
-import kotlin.time.Duration
 
 class DemoRestApiRepository : RestApiRepository {
     override suspend fun getSimpleProductTariff(productCode: String, tariffCode: String): Result<TariffSummary> {
@@ -57,20 +61,33 @@ class DemoRestApiRepository : RestApiRepository {
 
     /**
      * For Usage Screen Demo, we generate random fake data.
-     * The only parameters we care are: periodFrom, periodTo, orderBy, groupBy.
+     * The only parameters we care are: periodFrom, periodTo, groupBy.
+     * Since this piece of code has no practical value, we take it as iss - until it breaks.
      */
     override suspend fun getConsumption(apiKey: String, mpan: String, meterSerialNumber: String, periodFrom: Instant?, periodTo: Instant?, orderBy: ConsumptionDataOrder, groupBy: ConsumptionDataGroup): Result<List<Consumption>> {
         val consumptionList = mutableListOf<Consumption>()
-        var intervalStart = periodFrom!! // Instant.parse("2024-04-01T01:00:00Z")
-        val duration = Duration.parse("30m")
-        val mean = 0.5 // Midpoint of the range [0.110, 2.000]
-        val standardDeviation = 0.3167 // Adjust to control the spread of values
+        var intervalStart = periodFrom!!
+        val mean = 0.2 // Midpoint of the range [0.110, 2.000]
+        val standardDeviation = 0.2167 // Adjust to control the spread of values
+        val timeZone = TimeZone.currentSystemDefault()
+        val baseDurationMinutes = 30L // base duration in minutes for half-hourly intervals
 
-        repeat(48) { // 48 intervals of 30 minutes to cover 24 hours
-            val intervalEnd = intervalStart.plus(duration)
+        while (intervalStart < periodTo!!) {
+            val intervalEnd = when (groupBy) {
+                ConsumptionDataGroup.HALF_HOURLY -> intervalStart.plus(DateTimePeriod(minutes = 30), timeZone)
+                ConsumptionDataGroup.DAY -> intervalStart.plus(DateTimePeriod(days = 1), timeZone)
+                ConsumptionDataGroup.WEEK -> intervalStart.plus(DateTimePeriod(days = 7), timeZone)
+                ConsumptionDataGroup.MONTH -> intervalStart.plus(DateTimePeriod(months = 1), timeZone)
+                ConsumptionDataGroup.QUARTER -> TODO()
+            }
+
+            //  if (intervalEnd > periodTo) break
+
+            val intervalDurationMinutes = intervalStart.until(intervalEnd, DateTimeUnit.MINUTE)
+            val intervalFactor = intervalDurationMinutes.toDouble() / baseDurationMinutes
             var consumption = generateNormalDistribution(mean, standardDeviation)
-            // Clamp the values to be within the range [0.110, 2.000]
-            consumption = min(max(consumption, 0.110), 1.800)
+            consumption = min(max(consumption, 0.05), 1.5) * intervalFactor
+
             consumptionList.add(Consumption(consumption, intervalStart, intervalEnd))
             intervalStart = intervalEnd
         }
@@ -78,7 +95,7 @@ class DemoRestApiRepository : RestApiRepository {
         return Result.success(consumptionList)
     }
 
-    fun generateNormalDistribution(mean: Double, standardDeviation: Double): Double {
+    private fun generateNormalDistribution(mean: Double, standardDeviation: Double): Double {
         // Box-Muller transform to generate a normally distributed random number
         val u1 = Random.nextDouble()
         val u2 = Random.nextDouble()
