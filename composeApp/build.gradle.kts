@@ -280,6 +280,7 @@ compose.desktop {
             copyright = "© 2024 Ryan Wong and open source contributors. All rights reserved."
             vendor = "RW MobiMedia UK Limited"
             licenseFile.set(project.file("../LICENSE"))
+            includeAllModules = true
 
             macOS {
                 iconFile.set(project.file("icons/ic_launcher_macos.icns"))
