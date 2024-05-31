@@ -55,12 +55,10 @@ improved later:
 * iOS: Slow screen recomposition when screen orientation changes
 * iOS: Agile chart sometimes does not refresh
 
-```
-Important notes regarding fixed charges, tariff rates, and cost estimation shown on the app:
 
-This app applies the current tariff to estimate past usage costs. For flexible and Agile tariffs, the current rough calculations do not produce reliable estimations. There might be multiple tariffs covering a long period as well. We need to map the consumption against the exact tariff and rates by intervals and apply the rounding rules to approximate the actual billing amount. This limitation may be addressed in 2025 when I have enough personal data for verification, but it is the limitation we have for now.
+>**Important notes regarding fixed charges, tariff rates, and cost estimation shown on the app:**
+>This app applies the current direct debit tariff to estimate past usage costs. For flexible and Agile tariffs, the current rough calculations do not produce reliable estimations. There might be multiple tariffs covering a long period as well. We need to map the consumption against the exact tariff and rates by intervals and apply the rounding rules to approximate the actual billing amount. This limitation may be addressed in 2025 when I have enough personal data for verification, but it is the limitation we have for now.
 
-```
 
 <br /><br />
 
