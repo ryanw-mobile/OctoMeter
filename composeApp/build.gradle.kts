@@ -280,6 +280,7 @@ compose.desktop {
             copyright = "© 2024 Ryan Wong and open source contributors. All rights reserved."
             vendor = "RW MobiMedia UK Limited"
             licenseFile.set(project.file("../LICENSE"))
+            includeAllModules = true
 
             macOS {
                 iconFile.set(project.file("icons/ic_launcher_macos.icns"))
@@ -347,6 +348,12 @@ kover {
                         "com.rwmobi.kunigami.MainKt*",
                         "com.rwmobi.kunigami.NavigationLayoutType",
                         "com.rwmobi.kunigami.data.repositor.DemoRestApiRepository",
+                        "com.rwmobi.kunigami.ui.extensions.WindowSizeClassExtensions*",
+                        "com.rwmobi.kunigami.ui.extensions.ThrowableExtensions*",
+                        "com.rwmobi.kunigami.ui.extensions.GenerateRandomLong*",
+                        "com.rwmobi.kunigami.ui.extensions.GenerateRandomLong*",
+                        "com.rwmobi.kunigami.data.source.local.preferences.ProvideSettings*",
+                        "com.rwmobi.kunigami.data.source.local.preferences.MultiplatformPreferencesStore*",
                         "*Fragment",
                         "*Fragment\$*",
                         "*Activity",

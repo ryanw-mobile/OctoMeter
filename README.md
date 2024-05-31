@@ -8,7 +8,11 @@
 
 ### Made in the UK, For the UK.
 
+Complementary article: [Releasing my First True Kotlin Multiplatform App](https://medium.com/@callmeryan/releasing-my-first-true-kotlin-multiplatform-app-60d81e739eb0)
+
 This app is designed for Octopus Energy customers in the UK who have a smart meter installed. If you don’t have a smart meter, you can still try out the app. It runs in demo mode by default, showing fake user data when authentication is required.
+
+<p><img src="screenshots/240531_all_platforms_preview.webp" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 
 ### It works for me
 
@@ -39,6 +43,20 @@ I am also looking for my next Senior Android Dev role, too.
 
 <br /><br />
 
+## Running the app
+
+I use Android Studio Koala to build the Android and Deskop apps. Xcode 15.4 for iOS.
+
+* Android: You can download the apk from the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
+* iOS: Join as a tester at [Test Flight](https://testflight.apple.com/join/T6I940RE).
+* Desktop app, to build and run, execute `./gradlew runReleaseDistrubutable` or just `./gradlew run`
+* To export the desktop app into MacOS distributable, execute `./gradlew packageDmg` (I don't use
+  Windows)
+* You can't export the Jar alone. To export the Jar for desktop. Jar doesn't comes with the native
+  Skiko library so it won't run.
+
+<br /><br />
+
 ## To-do lists
 
 Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/OctoMeter/issues).
@@ -51,10 +69,6 @@ improved later:
 * Dual-rate tariffs (day unit rate and night unit rates) are not fully-supported
 * Native iOS UI theming (reusing Android Material 3 components right now)
 * British Daylight Saving Time issues: We do not have sufficient test data yet.
-* iOS: Slow first time launch
-* iOS: Slow screen recomposition when screen orientation changes
-* iOS: Agile chart sometimes does not refresh
-
 
 >**Important notes regarding fixed charges, tariff rates, and cost estimation shown on the app:**
 >This app applies the current direct debit tariff to estimate past usage costs. For flexible and Agile tariffs, the current rough calculations do not produce reliable estimations. There might be multiple tariffs covering a long period as well. We need to map the consumption against the exact tariff and rates by intervals and apply the rounding rules to approximate the actual billing amount. This limitation may be addressed in 2025 when I have enough personal data for verification, but it is the limitation we have for now.
@@ -62,19 +76,7 @@ improved later:
 
 <br /><br />
 
-## Running the app
 
-I use Android Studio Koala to build the Android and Deskop apps. Xcode 15.4 for iOS.
-
-* Android: You can download the apk from the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
-* iOS: We are setting up TestFlight closed testing. Send your TestFlight Apple ID to `kunigami(at)rwmobi.com` for time-limited testing. We may have to revoke access due to the 100 testers limitation.
-* To run the desktop app, execute `./gradlew runReleaseDistrubutable` or just `./gradlew run`
-* To export the desktop app into MacOS distributable, execute `./gradlew packageDmg` (I don't use
-  Windows)
-* You can't export the Jar alone. To export the Jar for desktop. Jar doesn't comes with the native
-  Skiko library so it won't run.
-
-<br /><br />
 
 ## Some technical details
 
