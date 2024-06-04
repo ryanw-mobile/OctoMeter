@@ -143,3 +143,16 @@ are currently unencrypted, but expected to do so when the library we use support
 ## License
 
 This project is licensed under the Mozilla Public License Version 2.0 (MPL-2.0) with a non-commercial clause. See the [LICENSE](./LICENSE) file for details.
+
+### Icon licenses
+
+Every tiny piece matters. This App contains the icons contributed by:
+* [Eva Icons](https://github.com/akveo/eva-icons/) - MIT
+* [Material Design](https://github.com/Templarian/MaterialDesign) - Apache 2.0
+* [Lineicons](https://github.com/LineiconsHQ/Lineicons) - MIT
+* [Solar Icons Set](https://www.figma.com/community/file/1166831539721848736) - CC BY 4.0
+* [Lucide](https://github.com/lucide-icons/lucide) - ISC
+* [Font Awesome](https://github.com/FortAwesome/Font-Awesome) - CC BY 4.0
+* [Material Design Icons](https://github.com/material-icons/material-icons) - Apache 2.0
+* [Fluent UI System Icons](https://github.com/microsoft/fluentui-system-icons) - MIT
+* [Fluent UI React](https://github.com/microsoft/fluentui/tree/master/packages/react-icons-mdl2) - MIT
