@@ -110,7 +110,6 @@ kotlin {
         desktopMain.dependencies {
             implementation("org.jetbrains.skiko:skiko-awt-runtime-$skikoTarget:$skikoVersion")
             implementation(compose.desktop.currentOs)
-            implementation(compose.material3)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.koin.jvm)
             implementation(libs.themedetector)
