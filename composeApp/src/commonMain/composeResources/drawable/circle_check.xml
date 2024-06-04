@@ -1,11 +1,16 @@
+<!--
+  ~ Font Awesome
+  - https://github.com/FortAwesome/Font-Awesome
+  ~ License: CC BY 4.0
+  -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
-    android:viewportWidth="15"
-    android:viewportHeight="15">
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+
     <path
-        android:fillColor="#00000000"
-        android:pathData="M4,7.5L7,10l4,-5m-3.5,9.5a7,7 0,1 1,0 -14a7,7 0,0 1,0 14Z"
-        android:strokeWidth="1"
-        android:strokeColor="#000000" />
+        android:fillColor="#000000"
+        android:pathData="M256,48a208,208 0,1 1,0 416a208,208 0,1 1,0 -416zM256,512a256,256 0,1 0,0 -512a256,256 0,1 0,0 512zM369,209c9.4,-9.4 9.4,-24.6 0,-33.9s-24.6,-9.4 -33.9,0l-111,111l-47,-47c-9.4,-9.4 -24.6,-9.4 -33.9,0s-9.4,24.6 0,33.9l64,64c9.4,9.4 24.6,9.4 33.9,0L369,209z" />
+
 </vector>
