@@ -237,13 +237,14 @@ class UsageViewModel(
             },
             onFailure = { throwable ->
                 if (throwable is IncompleteCredentialsException) {
+                    val fakeDemoUserProfile = FakeDemoUserProfile.flexibleOctopusRegionADirectDebit
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             isDemoMode = true,
-                            userProfile = FakeDemoUserProfile.flexibleOctopusRegionADirectDebit,
+                            userProfile = fakeDemoUserProfile,
                         )
                     }
-                    return FakeDemoUserProfile.flexibleOctopusRegionADirectDebit
+                    return fakeDemoUserProfile
                 } else {
                     Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
                     _uiState.update { currentUiState ->

@@ -29,6 +29,7 @@ class GetConsumptionUseCaseTest {
     private lateinit var getConsumptionUseCase: GetConsumptionUseCase
     private lateinit var fakeUserPreferenceRepository: FakeUserPreferencesRepository
     private lateinit var fakeRestApiRepository: FakeRestApiRepository
+    private lateinit var fakeDemoRestApiRepository: FakeRestApiRepository
 
     @BeforeTest
     fun setupUseCase() {
@@ -36,9 +37,11 @@ class GetConsumptionUseCaseTest {
             demoMode = false // We do not test demo mode
         }
         fakeRestApiRepository = FakeRestApiRepository()
+        fakeDemoRestApiRepository = FakeRestApiRepository()
         getConsumptionUseCase = GetConsumptionUseCase(
             userPreferencesRepository = fakeUserPreferenceRepository,
             restApiRepository = fakeRestApiRepository,
+            demoRestApiRepository = fakeDemoRestApiRepository,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }

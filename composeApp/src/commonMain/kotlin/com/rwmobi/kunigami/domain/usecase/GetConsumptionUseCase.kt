@@ -7,7 +7,6 @@
 
 package com.rwmobi.kunigami.domain.usecase
 
-import com.rwmobi.kunigami.data.repository.DemoRestApiRepository
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
@@ -23,6 +22,7 @@ import kotlin.coroutines.cancellation.CancellationException
 class GetConsumptionUseCase(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val restApiRepository: RestApiRepository,
+    private val demoRestApiRepository: RestApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     /***
@@ -65,7 +65,6 @@ class GetConsumptionUseCase(
                         },
                     )
                 } else {
-                    val demoRestApiRepository = DemoRestApiRepository()
                     demoRestApiRepository.getConsumption(
                         apiKey = "",
                         mpan = "",

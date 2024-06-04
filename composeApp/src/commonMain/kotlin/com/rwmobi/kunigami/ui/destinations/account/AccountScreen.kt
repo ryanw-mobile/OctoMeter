@@ -22,19 +22,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.model.account.Account
-import com.rwmobi.kunigami.domain.model.account.Agreement
-import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
-import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.components.ErrorScreenHandler
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
-import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
+import com.rwmobi.kunigami.ui.previewsampledata.FakeDemoUserProfile
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
-import kotlinx.datetime.Clock
-import kotlin.time.Duration
 
 @Composable
 fun AccountScreen(
@@ -171,27 +166,7 @@ private fun Preview() {
             uiState = AccountUIState(
                 isLoading = false,
                 requestedScreenType = AccountScreenType.Account,
-                userProfile = UserProfile(
-                    account = Account(
-                        id = 8638,
-                        accountNumber = "A-1234A1B1",
-                        fullAddress = "Address line 1\nAddress line 2\nAddress line 3\nAddress line 4",
-                        movedInAt = Clock.System.now(),
-                        movedOutAt = null,
-                        electricityMeterPoints = listOf(
-                            ElectricityMeterPoint(
-                                mpan = "1200000345678",
-                                meterSerialNumbers = listOf("11A1234567"),
-                                currentAgreement = Agreement(
-                                    tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
-                                    validFrom = Clock.System.now(),
-                                    validTo = Clock.System.now().plus(Duration.parse("365d")),
-                                ),
-                            ),
-                        ),
-                    ),
-                    tariffSummary = TariffSamples.agileFlex221125,
-                ),
+                userProfile = FakeDemoUserProfile.flexibleOctopusRegionADirectDebit,
                 errorMessages = listOf(),
             ),
             uiEvent = AccountUIEvent(

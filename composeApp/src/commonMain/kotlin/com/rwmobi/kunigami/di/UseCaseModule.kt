@@ -36,6 +36,7 @@ val userCaseModule = module {
         GetConsumptionUseCase(
             userPreferencesRepository = get(),
             restApiRepository = get(),
+            demoRestApiRepository = get(named("demo")),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
