@@ -39,8 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.toLocalDateString
 import com.rwmobi.kunigami.domain.model.account.Account
-import com.rwmobi.kunigami.domain.model.account.Agreement
-import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.MessageActionScreen
@@ -50,10 +48,10 @@ import com.rwmobi.kunigami.ui.destinations.account.components.ElectricityMeterPo
 import com.rwmobi.kunigami.ui.destinations.account.components.UpdateAPIKeyCard
 import com.rwmobi.kunigami.ui.destinations.account.components.UpdateApiKeyDialog
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
+import com.rwmobi.kunigami.ui.previewsampledata.AccountSamples
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
-import kotlinx.datetime.Clock
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_clear_credential_title
 import kunigami.composeapp.generated.resources.account_error_account_empty
@@ -67,7 +65,6 @@ import kunigami.composeapp.generated.resources.unlink
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import kotlin.time.Duration
 
 @Composable
 internal fun AccountInformationScreen(
@@ -199,34 +196,7 @@ private fun Preview() {
                     userProfile = UserProfile(
                         selectedMpan = "1200000345678",
                         selectedMeterSerialNumber = "11A1234567",
-                        account = // null,
-                        Account(
-                            id = 8638,
-                            accountNumber = "A-1234A1B1",
-                            fullAddress = "Address line 1\nAddress line 2\nAddress line 3\nAddress line 4",
-                            movedInAt = Clock.System.now(),
-                            movedOutAt = null,
-                            electricityMeterPoints = listOf(
-                                ElectricityMeterPoint(
-                                    mpan = "1200000345678",
-                                    meterSerialNumbers = listOf("11A1234567", "11A12345A7"),
-                                    currentAgreement = Agreement(
-                                        tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
-                                        validFrom = Clock.System.now(),
-                                        validTo = Clock.System.now().plus(Duration.parse("365d")),
-                                    ),
-                                ),
-                                ElectricityMeterPoint(
-                                    mpan = "1200000345670",
-                                    meterSerialNumbers = listOf("11A1234560"),
-                                    currentAgreement = Agreement(
-                                        tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
-                                        validFrom = Clock.System.now(),
-                                        validTo = Clock.System.now().plus(Duration.parse("365d")),
-                                    ),
-                                ),
-                            ),
-                        ),
+                        account = AccountSamples.accountTwoElectricityMeterPoint,
                         tariffSummary = TariffSamples.agileFlex221125,
                     ),
                     errorMessages = listOf(),
@@ -260,7 +230,7 @@ private fun ErrorPreview() {
                     selectedMpan = "1200000345678",
                     selectedMeterSerialNumber = "11A1234567",
                     account = null,
-                    tariffSummary = TariffSamples.agileFlex221125,
+                    tariffSummary = null,
                 ),
                 errorMessages = listOf(),
             ),
