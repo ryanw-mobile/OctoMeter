@@ -7,7 +7,6 @@
 
 package com.rwmobi.kunigami.ui.destinations.usage
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -140,13 +139,15 @@ fun UsageScreen(
                             }
 
                             if (uiState.consumptionGroupedCells.isEmpty()) {
-                                item(key = "noData") {
-                                    MessageActionScreen(
-                                        modifier = Modifier.fillMaxSize(),
-                                        icon = painterResource(resource = Res.drawable.file_dotted),
-                                        text = stringResource(resource = Res.string.error_screen_no_data_title),
-                                        description = stringResource(resource = Res.string.error_screen_no_data_description_no_auth),
-                                    )
+                                if (!uiState.isLoading) {
+                                    item(key = "noData") {
+                                        MessageActionScreen(
+                                            modifier = Modifier.fillMaxSize(),
+                                            icon = painterResource(resource = Res.drawable.file_dotted),
+                                            text = stringResource(resource = Res.string.error_screen_no_data_title),
+                                            description = stringResource(resource = Res.string.error_screen_no_data_description_no_auth),
+                                        )
+                                    }
                                 }
                             } else {
                                 uiState.barChartData?.let { barChartData ->
