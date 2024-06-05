@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.ui.components.ErrorScreenHandler
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
@@ -117,7 +116,7 @@ fun AccountScreen(
                             }
                         }
 
-                        else -> {
+                        !uiState.isLoading -> {
                             item(key = "noData") {
                                 ErrorScreenHandler(
                                     modifier = Modifier.fillMaxSize(),
