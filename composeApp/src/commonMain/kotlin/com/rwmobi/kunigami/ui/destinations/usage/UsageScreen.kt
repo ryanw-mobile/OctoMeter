@@ -11,6 +11,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,7 +56,6 @@ import kunigami.composeapp.generated.resources.usage_energy_consumption_breakdow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UsageScreen(
     modifier: Modifier = Modifier,
@@ -100,146 +100,147 @@ fun UsageScreen(
                     enabled = uiState.consumptionGroupedCells.isNotEmpty(),
                     lazyListState = lazyListState,
                 ) { contentModifier ->
-                    LazyColumn(
+                    Column(
                         modifier = contentModifier
                             .fillMaxSize()
                             .conditionalBlur(enabled = uiState.isLoading),
-                        contentPadding = PaddingValues(bottom = dimension.grid_4),
-                        state = lazyListState,
                     ) {
-                        stickyHeader {
-                            with(uiState.consumptionQueryFilter) {
-                                TitleNavigationBar(
-                                    modifier = Modifier
-                                        .background(color = MaterialTheme.colorScheme.secondary)
-                                        .fillMaxWidth()
-                                        .height(height = dimension.minListItemHeight),
-                                    currentPresentationStyle = uiState.consumptionQueryFilter.presentationStyle,
-                                    title = getConsumptionPeriodString(),
-                                    canNavigateBack = uiState.consumptionQueryFilter.canNavigateBackward(accountMoveInDate = uiState.userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST),
-                                    canNavigateForward = uiState.consumptionQueryFilter.canNavigateForward(),
-                                    onNavigateBack = uiEvent.onPreviousTimeFrame,
-                                    onNavigateForward = uiEvent.onNextTimeFrame,
-                                    onSwitchPresentationStyle = { uiEvent.onSwitchPresentationStyle(it) },
-                                )
-                            }
+                        with(uiState.consumptionQueryFilter) {
+                            TitleNavigationBar(
+                                modifier = Modifier
+                                    .background(color = MaterialTheme.colorScheme.secondary)
+                                    .fillMaxWidth()
+                                    .height(height = dimension.minListItemHeight),
+                                currentPresentationStyle = presentationStyle,
+                                title = getConsumptionPeriodString(),
+                                canNavigateBack = canNavigateBackward(accountMoveInDate = uiState.userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST),
+                                canNavigateForward = canNavigateForward(),
+                                onNavigateBack = uiEvent.onPreviousTimeFrame,
+                                onNavigateForward = uiEvent.onNextTimeFrame,
+                                onSwitchPresentationStyle = { uiEvent.onSwitchPresentationStyle(it) },
+                            )
                         }
 
-                        if (uiState.isDemoMode == true) {
-                            item(key = "demoCta") {
-                                DemoModeCtaAdaptive(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(all = dimension.grid_2),
-                                    description = stringResource(resource = Res.string.usage_demo_introduction),
-                                    ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
-                                    onCtaButtonClicked = uiEvent.onNavigateToAccountTab,
-                                    useWideLayout = uiState.requestedAdaptiveLayout != WindowWidthSizeClass.Compact,
-                                )
+                        LazyColumn(
+                            contentPadding = PaddingValues(bottom = dimension.grid_4),
+                            state = lazyListState,
+                        ) {
+                            if (uiState.isDemoMode == true) {
+                                item(key = "demoCta") {
+                                    DemoModeCtaAdaptive(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(all = dimension.grid_2),
+                                        description = stringResource(resource = Res.string.usage_demo_introduction),
+                                        ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
+                                        onCtaButtonClicked = uiEvent.onNavigateToAccountTab,
+                                        useWideLayout = uiState.requestedAdaptiveLayout != WindowWidthSizeClass.Compact,
+                                    )
+                                }
                             }
-                        }
 
-                        if (uiState.consumptionGroupedCells.isEmpty()) {
-                            item(key = "noData") {
-                                MessageActionScreen(
-                                    modifier = Modifier.fillMaxSize(),
-                                    icon = painterResource(resource = Res.drawable.file_dotted),
-                                    text = stringResource(resource = Res.string.error_screen_no_data_title),
-                                    description = stringResource(resource = Res.string.error_screen_no_data_description_no_auth),
-                                )
-                            }
-                        } else {
-                            uiState.barChartData?.let { barChartData ->
-                                item(key = "chart") {
-                                    BoxWithConstraints {
-                                        val constraintModifier = when (uiState.requestedChartLayout) {
-                                            is RequestedChartLayout.Portrait -> {
-                                                Modifier
-                                                    .fillMaxWidth()
-                                                    .aspectRatio(4 / 3f)
+                            if (uiState.consumptionGroupedCells.isEmpty()) {
+                                item(key = "noData") {
+                                    MessageActionScreen(
+                                        modifier = Modifier.fillMaxSize(),
+                                        icon = painterResource(resource = Res.drawable.file_dotted),
+                                        text = stringResource(resource = Res.string.error_screen_no_data_title),
+                                        description = stringResource(resource = Res.string.error_screen_no_data_description_no_auth),
+                                    )
+                                }
+                            } else {
+                                uiState.barChartData?.let { barChartData ->
+                                    item(key = "chart") {
+                                        BoxWithConstraints {
+                                            val constraintModifier = when (uiState.requestedChartLayout) {
+                                                is RequestedChartLayout.Portrait -> {
+                                                    Modifier
+                                                        .fillMaxWidth()
+                                                        .aspectRatio(4 / 3f)
+                                                }
+
+                                                is RequestedChartLayout.LandScape -> {
+                                                    Modifier
+                                                        .fillMaxWidth()
+                                                        .height(uiState.requestedChartLayout.requestedMaxHeight)
+                                                }
                                             }
 
-                                            is RequestedChartLayout.LandScape -> {
-                                                Modifier
-                                                    .fillMaxWidth()
-                                                    .height(uiState.requestedChartLayout.requestedMaxHeight)
-                                            }
+                                            VerticalBarChart(
+                                                modifier = constraintModifier.padding(all = dimension.grid_2),
+                                                showToolTipOnClick = uiState.showToolTipOnClick,
+                                                entries = barChartData.verticalBarPlotEntries,
+                                                yAxisRange = uiState.consumptionRange,
+                                                yAxisTitle = stringResource(resource = Res.string.kwh),
+                                                colorPalette = colorPalette,
+                                                labelGenerator = { index ->
+                                                    barChartData.labels[index]
+                                                },
+                                                tooltipGenerator = { index ->
+                                                    barChartData.tooltips[index]
+                                                },
+                                            )
                                         }
-
-                                        VerticalBarChart(
-                                            modifier = constraintModifier.padding(all = dimension.grid_2),
-                                            showToolTipOnClick = uiState.showToolTipOnClick,
-                                            entries = barChartData.verticalBarPlotEntries,
-                                            yAxisRange = uiState.consumptionRange,
-                                            yAxisTitle = stringResource(resource = Res.string.kwh),
-                                            colorPalette = colorPalette,
-                                            labelGenerator = { index ->
-                                                barChartData.labels[index]
-                                            },
-                                            tooltipGenerator = { index ->
-                                                barChartData.tooltips[index]
-                                            },
-                                        )
                                     }
                                 }
-                            }
 
-                            item(key = "tariffAndProjections") {
-                                TariffProjectionsCardAdaptive(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(
-                                            horizontal = dimension.grid_3,
-                                            vertical = dimension.grid_1,
-                                        ),
-                                    layoutType = uiState.requestedAdaptiveLayout,
-                                    tariffSummary = uiState.userProfile?.tariffSummary,
-                                    insights = uiState.insights,
-                                    mpan = uiState.userProfile?.selectedMpan,
-                                )
-                            }
-
-                            item(key = "headingConsumptionBreakdowns") {
-                                LargeTitleWithIcon(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(all = dimension.grid_2),
-                                    icon = painterResource(resource = Res.drawable.bolt),
-                                    label = stringResource(resource = Res.string.usage_energy_consumption_breakdown),
-                                )
-                            }
-
-                            uiState.consumptionGroupedCells.forEach { consumptionGroup ->
-                                item(key = "${consumptionGroup.title}Title") {
-                                    RateGroupTitle(
+                                item(key = "tariffAndProjections") {
+                                    TariffProjectionsCardAdaptive(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(
-                                                vertical = dimension.grid_2,
-                                                horizontal = dimension.grid_4,
+                                                horizontal = dimension.grid_3,
+                                                vertical = dimension.grid_1,
                                             ),
-                                        consumptionGroup = consumptionGroup,
+                                        layoutType = uiState.requestedAdaptiveLayout,
+                                        tariffSummary = uiState.userProfile?.tariffSummary,
+                                        insights = uiState.insights,
+                                        mpan = uiState.userProfile?.selectedMpan,
                                     )
                                 }
 
-                                // We can do fancier grouping, but for now evenly-distributed is ok
-                                val partitionedItems = consumptionGroup.consumptions.partitionList(columns = uiState.requestedUsageColumns)
-                                val maxRows = partitionedItems.maxOf { it.size }
-
-                                items(maxRows) { rowIndex ->
-                                    RateGroupCells(
+                                item(key = "headingConsumptionBreakdowns") {
+                                    LargeTitleWithIcon(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(
-                                                horizontal = dimension.grid_4,
-                                                vertical = dimension.grid_0_25,
-                                            ),
-                                        partitionedItems = partitionedItems,
-                                        rowIndex = rowIndex,
-                                        maxInRange = uiState.consumptionRange.endInclusive,
-                                        presentationStyle = uiState.consumptionQueryFilter.presentationStyle,
-                                        colorPalette = colorPalette,
+                                            .padding(all = dimension.grid_2),
+                                        icon = painterResource(resource = Res.drawable.bolt),
+                                        label = stringResource(resource = Res.string.usage_energy_consumption_breakdown),
                                     )
+                                }
+
+                                uiState.consumptionGroupedCells.forEach { consumptionGroup ->
+                                    item(key = "${consumptionGroup.title}Title") {
+                                        RateGroupTitle(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(
+                                                    vertical = dimension.grid_2,
+                                                    horizontal = dimension.grid_4,
+                                                ),
+                                            consumptionGroup = consumptionGroup,
+                                        )
+                                    }
+
+                                    // We can do fancier grouping, but for now evenly-distributed is ok
+                                    val partitionedItems = consumptionGroup.consumptions.partitionList(columns = uiState.requestedUsageColumns)
+                                    val maxRows = partitionedItems.maxOf { it.size }
+
+                                    items(maxRows) { rowIndex ->
+                                        RateGroupCells(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(
+                                                    horizontal = dimension.grid_4,
+                                                    vertical = dimension.grid_0_25,
+                                                ),
+                                            partitionedItems = partitionedItems,
+                                            rowIndex = rowIndex,
+                                            maxInRange = uiState.consumptionRange.endInclusive,
+                                            presentationStyle = uiState.consumptionQueryFilter.presentationStyle,
+                                            colorPalette = colorPalette,
+                                        )
+                                    }
                                 }
                             }
                         }
