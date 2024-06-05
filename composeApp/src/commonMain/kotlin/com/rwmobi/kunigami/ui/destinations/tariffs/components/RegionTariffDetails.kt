@@ -59,6 +59,7 @@ internal fun RegionTariffDetails(
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.secondary,
                 text = tariffCode,
             )
 
