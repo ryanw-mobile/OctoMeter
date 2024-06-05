@@ -13,7 +13,6 @@ import com.rwmobi.kunigami.domain.extensions.getLocalEnglishAbbreviatedDayOfWeek
 import com.rwmobi.kunigami.domain.extensions.getLocalMonthYearString
 import com.rwmobi.kunigami.domain.extensions.getLocalYear
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
@@ -28,13 +27,12 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlin.test.Test
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.nanoseconds
 
 class ConsumptionQueryFilterTest {
 
-    private val timeZone = TimeZone.currentSystemDefault()
+    private val timeZone = TimeZone.of("Europe/London")
     private val now = Clock.System.now()
 
     @Test
@@ -59,7 +57,7 @@ class ConsumptionQueryFilterTest {
     @Test
     fun `calculateEndDate should return correct end date for WEEK_SEVEN_DAYS`() {
         val endDate = ConsumptionQueryFilter.calculateEndDate(now, ConsumptionPresentationStyle.WEEK_SEVEN_DAYS)
-        val expectedEndDate = now.toLocalDateTime(timeZone).date.plus(7 - now.toLocalDateTime(timeZone).date.dayOfWeek.isoDayNumber, DateTimeUnit.DAY).atTime(23, 59, 59, 999999999).toInstant(timeZone)
+        val expectedEndDate = now.toLocalDateTime(timeZone).date.plus(7 - now.toLocalDateTime(timeZone).date.dayOfWeek.isoDayNumber, DateTimeUnit.DAY).atTime(23, 59, 59, 999_999_999).toInstant(timeZone)
         endDate shouldBe expectedEndDate
     }
 
@@ -80,7 +78,7 @@ class ConsumptionQueryFilterTest {
         val startOfNextMonth = LocalDate(localDateTime.year, localDateTime.monthNumber, 1).plus(1, DateTimeUnit.MONTH).atStartOfDayIn(timeZone)
         val endOfMonth = (startOfNextMonth - 1.nanoseconds).toLocalDateTime(timeZone)
         val daysUntilSunday = DayOfWeek.SUNDAY.isoDayNumber - endOfMonth.date.dayOfWeek.isoDayNumber
-        val expectedEndDate = endOfMonth.date.plus(daysUntilSunday, DateTimeUnit.DAY).atTime(23, 59, 59, 999999999).toInstant(timeZone)
+        val expectedEndDate = endOfMonth.date.plus(daysUntilSunday, DateTimeUnit.DAY).atTime(23, 59, 59, 999_999_999).toInstant(timeZone)
         endDate shouldBe expectedEndDate
     }
 
@@ -109,7 +107,7 @@ class ConsumptionQueryFilterTest {
     @Test
     fun `calculateEndDate should return correct end date for YEAR_TWELVE_MONTHS`() {
         val endDate = ConsumptionQueryFilter.calculateEndDate(now, ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS)
-        val expectedEndDate = LocalDate(now.toLocalDateTime(timeZone).year, 12, 31).atTime(23, 59, 59, 999999999).toInstant(timeZone)
+        val expectedEndDate = LocalDate(now.toLocalDateTime(timeZone).year, 12, 31).atTime(23, 59, 59, 999_999_999).toInstant(timeZone)
         endDate shouldBe expectedEndDate
     }
 
@@ -172,20 +170,172 @@ class ConsumptionQueryFilterTest {
     }
 
     @Test
-    fun `navigateBackward should return new filter if can navigate backward`() {
-        val accountMoveInDate = Instant.DISTANT_PAST
-        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, pointOfReference = now)
-        val newFilter = filter.navigateBackward(accountMoveInDate)
-        newFilter shouldNotBe null
-        newFilter!!.pointOfReference shouldBe now - Duration.parse("1d")
+    fun `navigateBackward should handle DAY_HALF_HOURLY correctly`() {
+        val reference = Instant.parse("2012-03-25T00:00:00Z")
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, pointOfReference = reference)
+        val newFilter = filter.navigateBackward(accountMoveInDate = Instant.DISTANT_PAST)
+        val expected = Instant.parse("2012-03-24T00:00:00Z")
+        newFilter!!.pointOfReference shouldBe expected
     }
 
     @Test
-    fun `navigateForward should return new filter if can navigate forward`() {
-        val futureTime = now - Duration.parse("1d")
-        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, pointOfReference = futureTime)
+    fun `navigateBackward should handle WEEK_SEVEN_DAYS correctly`() {
+        val reference = Instant.parse("2012-03-25T00:00:00Z")
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.WEEK_SEVEN_DAYS, pointOfReference = reference)
+        val newFilter = filter.navigateBackward(accountMoveInDate = Instant.DISTANT_PAST)
+        val expected = Instant.parse("2012-03-18T00:00:00Z")
+        newFilter!!.pointOfReference shouldBe expected
+    }
+
+    @Test
+    fun `navigateBackward should handle MONTH_WEEKS correctly`() {
+        val reference = Instant.parse("2012-03-31T23:00:00Z")
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.MONTH_WEEKS, pointOfReference = reference)
+        val newFilter = filter.navigateBackward(accountMoveInDate = Instant.DISTANT_PAST)
+        val expected = Instant.parse("2012-03-01T00:00:00Z")
+        newFilter!!.pointOfReference shouldBe expected
+    }
+
+    @Test
+    fun `navigateBackward should handle MONTH_THIRTY_DAYS correctly`() {
+        val reference = Instant.parse("2012-03-31T23:00:00Z")
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.MONTH_THIRTY_DAYS, pointOfReference = reference)
+        val newFilter = filter.navigateBackward(accountMoveInDate = Instant.DISTANT_PAST)
+        val expected = Instant.parse("2012-03-01T00:00:00Z")
+        newFilter!!.pointOfReference shouldBe expected
+    }
+
+    @Test
+    fun `navigateBackward should handle YEAR_TWELVE_MONTHS correctly`() {
+        val reference = Instant.parse("2012-12-31T00:00:00Z")
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS, pointOfReference = reference)
+        val newFilter = filter.navigateBackward(accountMoveInDate = Instant.DISTANT_PAST)
+        val expected = Instant.parse("2011-12-31T00:00:00Z")
+        newFilter!!.pointOfReference shouldBe expected
+    }
+
+    @Test
+    fun `navigateForward should handle DAY_HALF_HOURLY correctly`() {
+        val reference = Instant.parse("2012-03-25T00:00:00Z")
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, pointOfReference = reference)
         val newFilter = filter.navigateForward()
-        newFilter shouldNotBe null
-        newFilter!!.pointOfReference shouldBe now
+        val expected = Instant.parse("2012-03-25T23:00:00Z")
+        newFilter!!.pointOfReference shouldBe expected
+    }
+
+    @Test
+    fun `navigateForward should handle WEEK_SEVEN_DAYS correctly`() {
+        val reference = Instant.parse("2012-03-25T00:00:00Z")
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.WEEK_SEVEN_DAYS, pointOfReference = reference)
+        val newFilter = filter.navigateForward()
+        val expected = Instant.parse("2012-03-31T23:00:00Z")
+        newFilter!!.pointOfReference shouldBe expected
+    }
+
+    @Test
+    fun `navigateForward should handle MONTH_WEEKS correctly`() {
+        val reference = Instant.parse("2012-03-01T00:00:00Z")
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.MONTH_WEEKS, pointOfReference = reference)
+        val newFilter = filter.navigateForward()
+        val expected = Instant.parse("2012-03-31T23:00:00Z")
+        newFilter!!.pointOfReference shouldBe expected
+    }
+
+    @Test
+    fun `navigateForward should handle MONTH_THIRTY_DAYS correctly`() {
+        val reference = Instant.parse("2012-03-01T00:00:00Z")
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.MONTH_THIRTY_DAYS, pointOfReference = reference)
+        val newFilter = filter.navigateForward()
+        val expected = Instant.parse("2012-03-31T23:00:00Z")
+        newFilter!!.pointOfReference shouldBe expected
+    }
+
+    @Test
+    fun `navigateForward should handle YEAR_TWELVE_MONTHS correctly`() {
+        val reference = Instant.parse("2012-01-01T00:00:00Z")
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS, pointOfReference = reference)
+        val newFilter = filter.navigateForward()
+        val expected = Instant.parse("2013-01-01T00:00:00Z")
+        newFilter!!.pointOfReference shouldBe expected
+    }
+
+    /***
+     * Tests for the day of GMT to BST transition
+     */
+    private val transitionToBST = LocalDate(year = 2012, monthNumber = 3, dayOfMonth = 25).atStartOfDayIn(timeZone) // Last Sunday of March 2012
+    private val transitionToGMT = LocalDate(year = 2012, monthNumber = 10, dayOfMonth = 28).atStartOfDayIn(timeZone) // Last Sunday of October 2012
+
+    @Test
+    fun `calculateStartDate should handle GMT to BST transition correctly`() {
+        // Since the transition happens at 1 AM UTC (moving clocks forward), the local time of 0:00 is actually 1:00 UTC.
+        val transitionInstant = Instant.parse("2012-03-25T00:00:00Z") // Midnight UTC as the start of the day.
+        val startDate = ConsumptionQueryFilter.calculateStartDate(transitionInstant, ConsumptionPresentationStyle.DAY_HALF_HOURLY)
+        val expectedStartDate = Instant.parse("2012-03-25T00:00:00Z")
+        startDate shouldBe expectedStartDate
+    }
+
+    @Test
+    fun `calculateEndDate should handle GMT to BST transition correctly`() {
+        // The end of the day at midnight on the day clocks go forward, so 23:00 UTC is the last hour of the day.
+        val transitionInstant = Instant.parse("2012-03-25T00:00:00Z")
+        val endDate = ConsumptionQueryFilter.calculateEndDate(transitionInstant, ConsumptionPresentationStyle.DAY_HALF_HOURLY)
+        val expectedEndDate = Instant.parse("2012-03-25T22:59:59.999999999Z") // 23:00 UTC because we lose an hour (the day is only 23 hours long).
+        endDate shouldBe expectedEndDate
+    }
+
+    @Test
+    fun `calculateStartDate should handle BST to GMT transition correctly`() {
+        // The day starts at midnight, unaffected by the transition that will occur at 2 AM local (which is 1 AM UTC).
+        val transitionInstant = Instant.parse("2012-10-28T00:00:00Z")
+        val startDate = ConsumptionQueryFilter.calculateStartDate(transitionInstant, ConsumptionPresentationStyle.DAY_HALF_HOURLY)
+        val expectedStartDate = Instant.parse("2012-10-27T23:00:00Z")
+        startDate shouldBe expectedStartDate
+    }
+
+    @Test
+    fun `calculateEndDate should handle BST to GMT transition correctly`() {
+        // The day ends at midnight following a 25-hour long day because clocks are set back one hour.
+        val transitionInstant = Instant.parse("2012-10-28T00:00:00Z")
+        val endDate = ConsumptionQueryFilter.calculateEndDate(transitionInstant, ConsumptionPresentationStyle.DAY_HALF_HOURLY)
+        val expectedEndDate = Instant.parse("2012-10-28T23:59:59.999999999Z") // It is still 23:59:59.999999999 UTC, reflecting 25 hours total.
+        endDate shouldBe expectedEndDate
+    }
+
+    @Test
+    fun `navigateBackward should correctly handle the day of GMT to BST transition`() {
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, pointOfReference = transitionToBST)
+        val newFilter = filter.navigateBackward(Instant.DISTANT_PAST) // Assume account move-in date allows backward navigation
+        // Expected timestamp for one day before the BST transition
+        val expectedTimestamp = LocalDate(year = 2012, monthNumber = 3, dayOfMonth = 24).atStartOfDayIn(timeZone)
+        newFilter!!.pointOfReference shouldBe expectedTimestamp
+    }
+
+    @Test
+    fun `navigateForward should correctly handle the day of BST to GMT transition`() {
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, pointOfReference = transitionToGMT)
+        val newFilter = filter.navigateForward() // Assuming no constraints on moving forward
+        // Expected timestamp for one day after the GMT transition
+        val expectedTimestamp = LocalDate(year = 2012, monthNumber = 10, dayOfMonth = 29).atStartOfDayIn(timeZone)
+        newFilter!!.pointOfReference shouldBe expectedTimestamp
+    }
+
+    @Test
+    fun `navigateBackward should correctly handle the day before transitioning from BST to GMT`() {
+        val dayBeforeTransition = LocalDate(year = 2012, monthNumber = 10, dayOfMonth = 27).atStartOfDayIn(timeZone)
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, pointOfReference = dayBeforeTransition)
+        val newFilter = filter.navigateBackward(Instant.DISTANT_PAST)
+        // Expected timestamp for two days before the GMT transition
+        val expectedTimestamp = LocalDate(year = 2012, monthNumber = 10, dayOfMonth = 26).atStartOfDayIn(timeZone)
+        newFilter!!.pointOfReference shouldBe expectedTimestamp
+    }
+
+    @Test
+    fun `navigateForward should correctly handle the day before transitioning from BST to GMT`() {
+        val dayBeforeTransition = LocalDate(year = 2012, monthNumber = 10, dayOfMonth = 27).atStartOfDayIn(timeZone)
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, pointOfReference = dayBeforeTransition)
+        val newFilter = filter.navigateForward()
+        // Forward to the transition day
+        val expectedTimestamp = LocalDate(year = 2012, monthNumber = 10, dayOfMonth = 28).atStartOfDayIn(timeZone)
+        newFilter!!.pointOfReference shouldBe expectedTimestamp
     }
 }

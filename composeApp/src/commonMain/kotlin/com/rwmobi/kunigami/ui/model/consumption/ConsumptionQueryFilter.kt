@@ -23,7 +23,6 @@ import com.rwmobi.kunigami.domain.extensions.toSystemDefaultTimeZoneInstant
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import io.github.koalaplot.core.util.toString
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimePeriod
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
@@ -63,31 +62,31 @@ data class ConsumptionQueryFilter(
                     val daysSinceSunday = dayOfWeek.isoDayNumber
                     val startOfWeek = localDateTime.date
                         .minus(value = daysSinceSunday - 1, unit = DateTimeUnit.DAY)
-                        .atTime(hour = 0, minute = 0, second = 0, nanosecond = 0)
-                    startOfWeek.toSystemDefaultTimeZoneInstant()
+                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
+                    startOfWeek.toSystemDefaultTimeZoneInstant().atStartOfDay()
                 }
 
                 ConsumptionPresentationStyle.MONTH_WEEKS -> {
                     val startOfThisMonth = LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
-                        .atTime(hour = 0, minute = 0, second = 0, nanosecond = 0)
+                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
                     val dayOfWeek = startOfThisMonth.date.dayOfWeek
                     val daysSinceSunday = dayOfWeek.isoDayNumber
                     val startOfWeek = startOfThisMonth.date
                         .minus(value = daysSinceSunday - 1, unit = DateTimeUnit.DAY)
-                        .atTime(hour = 0, minute = 0, second = 0, nanosecond = 0)
-                    startOfWeek.toSystemDefaultTimeZoneInstant()
+                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
+                    startOfWeek.toSystemDefaultTimeZoneInstant().atStartOfDay()
                 }
 
                 ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
                     val startOfThisMonth = LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
-                        .atTime(hour = 0, minute = 0, second = 0, nanosecond = 0)
-                    startOfThisMonth.toSystemDefaultTimeZoneInstant()
+                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
+                    startOfThisMonth.toSystemDefaultTimeZoneInstant().atStartOfDay()
                 }
 
                 ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
                     val startOfThisMonth = LocalDate(year = localDateTime.year, monthNumber = 1, dayOfMonth = 1)
-                        .atTime(hour = 0, minute = 0, second = 0, nanosecond = 0)
-                    startOfThisMonth.toSystemDefaultTimeZoneInstant()
+                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
+                    startOfThisMonth.toSystemDefaultTimeZoneInstant().atStartOfDay()
                 }
             }
         }
@@ -105,8 +104,8 @@ data class ConsumptionQueryFilter(
                     val daysUntilSunday = DayOfWeek.SUNDAY.isoDayNumber - dayOfWeek.isoDayNumber
                     val endOfWeek = localDateTime.date
                         .plus(daysUntilSunday, DateTimeUnit.DAY)
-                        .atTime(hour = 23, minute = 59, second = 59, nanosecond = 999_999_999)
-                    endOfWeek.toSystemDefaultTimeZoneInstant()
+                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
+                    endOfWeek.toSystemDefaultTimeZoneInstant().atEndOfDay()
                 }
 
                 ConsumptionPresentationStyle.MONTH_WEEKS -> {
@@ -118,21 +117,22 @@ data class ConsumptionQueryFilter(
                     val daysUntilSunday = DayOfWeek.SUNDAY.isoDayNumber - dayOfWeek.isoDayNumber
                     val endOfWeek = endOfMonth.toSystemDefaultLocalDateTime().date
                         .plus(daysUntilSunday, DateTimeUnit.DAY)
-                        .atTime(hour = 23, minute = 59, second = 59, nanosecond = 999_999_999)
-                    endOfWeek.toSystemDefaultTimeZoneInstant()
+                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
+                    endOfWeek.toSystemDefaultTimeZoneInstant().atEndOfDay()
                 }
 
                 ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
                     LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
                         .plus(1, DateTimeUnit.MONTH)
-                        .atTime(hour = 0, minute = 0)
-                        .toSystemDefaultTimeZoneInstant() - 1.nanoseconds
+                        .minus(1, DateTimeUnit.DAY)
+                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
+                        .toSystemDefaultTimeZoneInstant().atEndOfDay()
                 }
 
                 ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
-                    val startOfThisMonth = LocalDate(year = localDateTime.year, monthNumber = 12, dayOfMonth = 31)
-                        .atTime(hour = 23, minute = 59, second = 59, nanosecond = 999_999_999)
-                    startOfThisMonth.toSystemDefaultTimeZoneInstant()
+                    val endOfThisYear = LocalDate(year = localDateTime.year, monthNumber = 12, dayOfMonth = 31)
+                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
+                    endOfThisYear.toSystemDefaultTimeZoneInstant().atEndOfDay()
                 }
             }
         }
@@ -350,25 +350,66 @@ data class ConsumptionQueryFilter(
         )
     }
 
+    /***
+     * To do the calculation, we work out from the localised date time regardless of DST,
+     * and we only work out the actual Instant after that.
+     * It is because 2 months before 1/May 00:00 should always be 1/Mar 00:00 to users, although the GMT representations are not.
+     */
     private fun getBackwardPointOfReference(): Instant {
-        val timeZone = TimeZone.currentSystemDefault()
         return when (presentationStyle) {
-            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> pointOfReference.minus(period = DateTimePeriod.parse("P1D"), timeZone = timeZone)
-            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> pointOfReference.minus(period = DateTimePeriod.parse("P1W"), timeZone = timeZone)
-            ConsumptionPresentationStyle.MONTH_WEEKS -> pointOfReference.minus(period = DateTimePeriod.parse("P1M"), timeZone = timeZone)
-            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> pointOfReference.minus(period = DateTimePeriod.parse("P1M"), timeZone = timeZone)
-            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> pointOfReference.minus(period = DateTimePeriod.parse("P1Y"), timeZone = timeZone)
+            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> with(pointOfReference.toSystemDefaultLocalDateTime()) {
+                val newDate = date.minus(value = 1, unit = DateTimeUnit.DAY)
+                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+            }
+
+            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> with(pointOfReference.toSystemDefaultLocalDateTime()) {
+                val newDate = date.minus(value = 1, unit = DateTimeUnit.WEEK)
+                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+            }
+
+            ConsumptionPresentationStyle.MONTH_WEEKS -> with(pointOfReference.toSystemDefaultLocalDateTime()) {
+                val newDate = date.minus(value = 1, unit = DateTimeUnit.MONTH)
+                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+            }
+
+            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> with(pointOfReference.toSystemDefaultLocalDateTime()) {
+                val newDate = date.minus(value = 1, unit = DateTimeUnit.MONTH)
+                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+            }
+
+            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> with(pointOfReference.toSystemDefaultLocalDateTime()) {
+                val newDate = date.minus(value = 1, unit = DateTimeUnit.YEAR)
+                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+            }
         }
     }
 
     private fun getForwardPointOfReference(): Instant {
-        val timeZone = TimeZone.currentSystemDefault()
         return when (presentationStyle) {
-            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> pointOfReference.plus(period = DateTimePeriod.parse("P1D"), timeZone = timeZone)
-            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> pointOfReference.plus(period = DateTimePeriod.parse("P1W"), timeZone = timeZone)
-            ConsumptionPresentationStyle.MONTH_WEEKS -> pointOfReference.plus(period = DateTimePeriod.parse("P1M"), timeZone = timeZone)
-            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> pointOfReference.plus(period = DateTimePeriod.parse("P1M"), timeZone = timeZone)
-            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> pointOfReference.plus(period = DateTimePeriod.parse("P1Y"), timeZone = timeZone)
+            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> with(pointOfReference.toSystemDefaultLocalDateTime()) {
+                val newDate = date.plus(value = 1, unit = DateTimeUnit.DAY)
+                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+            }
+
+            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> with(pointOfReference.toSystemDefaultLocalDateTime()) {
+                val newDate = date.plus(value = 1, unit = DateTimeUnit.WEEK)
+                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+            }
+
+            ConsumptionPresentationStyle.MONTH_WEEKS -> with(pointOfReference.toSystemDefaultLocalDateTime()) {
+                val newDate = date.plus(value = 1, unit = DateTimeUnit.MONTH)
+                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+            }
+
+            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> with(pointOfReference.toSystemDefaultLocalDateTime()) {
+                val newDate = date.plus(value = 1, unit = DateTimeUnit.MONTH)
+                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+            }
+
+            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> with(pointOfReference.toSystemDefaultLocalDateTime()) {
+                val newDate = date.plus(value = 1, unit = DateTimeUnit.YEAR)
+                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+            }
         }
     }
 }
