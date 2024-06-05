@@ -59,12 +59,12 @@ data class AccountUIState(
             }
 
             else -> {
-                updateUIForErrorAndStopLoading(message = throwable.message ?: getString(resource = Res.string.tariffs_error_load_tariffs))
+                handleErrorAndStopLoading(message = throwable.message ?: getString(resource = Res.string.tariffs_error_load_tariffs))
             }
         }
     }
 
-    fun updateUIForErrorAndStopLoading(message: String): AccountUIState {
+    fun handleErrorAndStopLoading(message: String): AccountUIState {
         val newErrorMessages = if (errorMessages.any { it.message == message }) {
             errorMessages
         } else {
