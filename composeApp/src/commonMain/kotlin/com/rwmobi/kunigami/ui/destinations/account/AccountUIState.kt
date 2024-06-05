@@ -46,25 +46,25 @@ data class AccountUIState(
         return when (val translatedThrowable = throwable.mapFromPlatform()) {
             is HttpException -> {
                 copy(
-                    requestedScreenType = AccountScreenType.ErrorScreen(SpecialErrorScreen.HttpError(statusCode = translatedThrowable.httpStatusCode)),
+                    requestedScreenType = AccountScreenType.Error(SpecialErrorScreen.HttpError(statusCode = translatedThrowable.httpStatusCode)),
                     isLoading = false,
                 )
             }
 
             is UnresolvedAddressException -> {
                 copy(
-                    requestedScreenType = AccountScreenType.ErrorScreen(SpecialErrorScreen.NetworkError),
+                    requestedScreenType = AccountScreenType.Error(SpecialErrorScreen.NetworkError),
                     isLoading = false,
                 )
             }
 
             else -> {
-                updateUIForErrorAndStopLoading(message = throwable.message ?: getString(resource = Res.string.tariffs_error_load_tariffs))
+                handleErrorAndStopLoading(message = throwable.message ?: getString(resource = Res.string.tariffs_error_load_tariffs))
             }
         }
     }
 
-    fun updateUIForErrorAndStopLoading(message: String): AccountUIState {
+    fun handleErrorAndStopLoading(message: String): AccountUIState {
         val newErrorMessages = if (errorMessages.any { it.message == message }) {
             errorMessages
         } else {

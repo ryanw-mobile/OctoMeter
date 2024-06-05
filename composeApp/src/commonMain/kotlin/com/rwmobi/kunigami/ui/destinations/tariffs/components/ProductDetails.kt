@@ -9,7 +9,8 @@ package com.rwmobi.kunigami.ui.destinations.tariffs.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -22,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.model.product.ElectricityTariffType
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
@@ -37,38 +39,31 @@ internal fun LazyListScope.productDetailsLayout(
 ) {
     item(key = "productFacts") {
         val dimension = LocalDensity.current.getDimension()
-        Box(
+        Column(
             modifier = modifier,
-            contentAlignment = Alignment.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
         ) {
             ProductFacts(
                 modifier = Modifier.widthIn(max = dimension.windowWidthCompact),
                 productDetails = productDetails,
             )
-        }
-    }
 
-    if (!productDetails.electricityTariffs.isNullOrEmpty()) {
-        item(key = "retailRegions") {
-            val dimension = LocalDensity.current.getDimension()
-            var selectedRegion by remember { mutableStateOf("_A") }
+            if (!productDetails.electricityTariffs.isNullOrEmpty()) {
+                var selectedRegion by remember { mutableStateOf("_A") }
+                RegionSelectionBar(
+                    modifier = Modifier
+                        .padding(horizontal = dimension.grid_1)
+                        .widthIn(max = dimension.windowWidthCompact)
+                        .clip(shape = MaterialTheme.shapes.extraLarge)
+                        .background(color = MaterialTheme.colorScheme.surfaceContainerHighest),
+//                        .padding(horizontal = dimension.grid_2, vertical = dimension.grid_0_5),
+                    electricityTariffs = productDetails.electricityTariffs,
+                    selectedRegion = selectedRegion,
+                    onRegionSelected = { key -> selectedRegion = key },
+                )
 
-            RegionSelectionBar(
-                modifier = Modifier
-                    .padding(vertical = dimension.grid_2)
-                    .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.surfaceContainerHighest)
-                    .padding(all = dimension.grid_2),
-                electricityTariffs = productDetails.electricityTariffs,
-                selectedRegion = selectedRegion,
-                onRegionSelected = { key -> selectedRegion = key },
-            )
-
-            productDetails.electricityTariffs[selectedRegion]?.let { tariffDetails ->
-                Box(
-                    modifier = modifier,
-                    contentAlignment = Alignment.Center,
-                ) {
+                productDetails.electricityTariffs[selectedRegion]?.let { tariffDetails ->
                     RegionTariffDetails(
                         modifier = Modifier
                             .widthIn(max = dimension.windowWidthCompact)
