@@ -11,7 +11,7 @@ import com.rwmobi.kunigami.data.source.network.dto.prices.PricesApiResponse
 import com.rwmobi.kunigami.data.source.network.dto.products.ProductsApiResponse
 import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SingleProductApiResponse
 import com.rwmobi.kunigami.domain.exceptions.HttpException
-import com.rwmobi.kunigami.domain.extensions.formatInstantWithoutSeconds
+import com.rwmobi.kunigami.domain.extensions.toIso8601WithoutSeconds
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -95,8 +95,8 @@ class ProductsEndpoint(
     ): PricesApiResponse? {
         return withContext(dispatcher) {
             val response = httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/standard-unit-rates") {
-                parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
-                parameter("period_to", periodTo?.formatInstantWithoutSeconds())
+                parameter("period_from", periodFrom?.toIso8601WithoutSeconds())
+                parameter("period_to", periodTo?.toIso8601WithoutSeconds())
             }
 
             when (response.status) {
@@ -124,8 +124,8 @@ class ProductsEndpoint(
     ): PricesApiResponse? {
         return withContext(dispatcher) {
             val response = httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/standing-charges") {
-                parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
-                parameter("period_to", periodTo?.formatInstantWithoutSeconds())
+                parameter("period_from", periodFrom?.toIso8601WithoutSeconds())
+                parameter("period_to", periodTo?.toIso8601WithoutSeconds())
             }
 
             when (response.status) {
@@ -152,8 +152,8 @@ class ProductsEndpoint(
     ): PricesApiResponse? {
         return withContext(dispatcher) {
             val response = httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/day-unit-rates") {
-                parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
-                parameter("period_to", periodTo?.formatInstantWithoutSeconds())
+                parameter("period_from", periodFrom?.toIso8601WithoutSeconds())
+                parameter("period_to", periodTo?.toIso8601WithoutSeconds())
             }
 
             when (response.status) {
@@ -180,8 +180,8 @@ class ProductsEndpoint(
     ): PricesApiResponse? {
         return withContext(dispatcher) {
             val response = httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/night-unit-rates") {
-                parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
-                parameter("period_to", periodTo?.formatInstantWithoutSeconds())
+                parameter("period_from", periodFrom?.toIso8601WithoutSeconds())
+                parameter("period_to", periodTo?.toIso8601WithoutSeconds())
             }
 
             when (response.status) {

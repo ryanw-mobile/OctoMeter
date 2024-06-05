@@ -8,16 +8,16 @@
 package com.rwmobi.kunigami.ui.model.consumption
 
 import androidx.compose.runtime.Immutable
-import com.rwmobi.kunigami.domain.extensions.roundToDayEnd
-import com.rwmobi.kunigami.domain.extensions.roundToDayStart
-import com.rwmobi.kunigami.domain.extensions.toLocalDateString
-import com.rwmobi.kunigami.domain.extensions.toLocalDay
-import com.rwmobi.kunigami.domain.extensions.toLocalDayMonth
-import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
-import com.rwmobi.kunigami.domain.extensions.toLocalMonth
-import com.rwmobi.kunigami.domain.extensions.toLocalMonthYear
-import com.rwmobi.kunigami.domain.extensions.toLocalWeekday
-import com.rwmobi.kunigami.domain.extensions.toLocalYear
+import com.rwmobi.kunigami.domain.extensions.atEndOfDay
+import com.rwmobi.kunigami.domain.extensions.atStartOfDay
+import com.rwmobi.kunigami.domain.extensions.getLocalDateString
+import com.rwmobi.kunigami.domain.extensions.getLocalDayMonthString
+import com.rwmobi.kunigami.domain.extensions.getLocalDayOfMonth
+import com.rwmobi.kunigami.domain.extensions.getLocalEnglishAbbreviatedDayOfWeekName
+import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
+import com.rwmobi.kunigami.domain.extensions.getLocalMonthString
+import com.rwmobi.kunigami.domain.extensions.getLocalMonthYearString
+import com.rwmobi.kunigami.domain.extensions.getLocalYear
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import io.github.koalaplot.core.util.toString
 import kotlinx.datetime.Clock
@@ -57,7 +57,7 @@ data class ConsumptionQueryFilter(
 
             return when (presentationStyle) {
                 ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
-                    pointOfReference.roundToDayStart()
+                    pointOfReference.atStartOfDay()
                 }
 
                 ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
@@ -100,7 +100,7 @@ data class ConsumptionQueryFilter(
 
             return when (presentationStyle) {
                 ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
-                    pointOfReference.roundToDayEnd()
+                    pointOfReference.atEndOfDay()
                 }
 
                 ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
@@ -143,11 +143,11 @@ data class ConsumptionQueryFilter(
      */
     fun getConsumptionPeriodString(): String {
         return when (presentationStyle) {
-            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> "${pointOfReference.toLocalWeekday()}, ${pointOfReference.toLocalDateString()}"
-            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> "${requestedStart.toLocalDateString().substringBefore(delimiter = ",")} - ${requestedEnd.toLocalDateString()}"
-            ConsumptionPresentationStyle.MONTH_WEEKS -> pointOfReference.toLocalMonthYear()
-            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> pointOfReference.toLocalMonthYear()
-            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> pointOfReference.toLocalYear()
+            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> "${pointOfReference.getLocalEnglishAbbreviatedDayOfWeekName()}, ${pointOfReference.getLocalDateString()}"
+            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> "${requestedStart.getLocalDateString().substringBefore(delimiter = ",")} - ${requestedEnd.getLocalDateString()}"
+            ConsumptionPresentationStyle.MONTH_WEEKS -> pointOfReference.getLocalMonthYearString()
+            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> pointOfReference.getLocalMonthYearString()
+            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> pointOfReference.getLocalYear().toString()
         }
     }
 
@@ -169,25 +169,25 @@ data class ConsumptionQueryFilter(
 
                 ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
                     consumptions.forEachIndexed { index, consumption ->
-                        put(key = index, value = consumption.intervalStart.toLocalWeekday())
+                        put(key = index, value = consumption.intervalStart.getLocalEnglishAbbreviatedDayOfWeekName())
                     }
                 }
 
                 ConsumptionPresentationStyle.MONTH_WEEKS -> {
                     consumptions.forEachIndexed { index, consumption ->
-                        put(key = index, value = consumption.intervalStart.toLocalDayMonth())
+                        put(key = index, value = consumption.intervalStart.getLocalDayMonthString())
                     }
                 }
 
                 ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
                     consumptions.forEachIndexed { index, consumption ->
-                        put(key = index, value = consumption.intervalStart.toLocalDay())
+                        put(key = index, value = consumption.intervalStart.getLocalDayOfMonth().toString())
                     }
                 }
 
                 ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
                     consumptions.forEachIndexed { index, consumption ->
-                        put(key = index, value = consumption.intervalStart.toLocalMonth())
+                        put(key = index, value = consumption.intervalStart.getLocalMonthString())
                     }
                 }
             }
@@ -200,7 +200,7 @@ data class ConsumptionQueryFilter(
         return when (presentationStyle) {
             ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
                 consumptions
-                    .groupBy { it.intervalStart.toLocalDateString() }
+                    .groupBy { it.intervalStart.getLocalDateString() }
                     .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
             }
 
@@ -224,14 +224,14 @@ data class ConsumptionQueryFilter(
 
             ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
                 consumptions
-                    .groupBy { it.intervalStart.toLocalMonthYear() }
+                    .groupBy { it.intervalStart.getLocalMonthYearString() }
                     .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
             }
 
             ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
                 consumptions
-                    .groupBy { it.intervalStart.toLocalYear() }
-                    .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+                    .groupBy { it.intervalStart.getLocalYear() }
+                    .map { (date, items) -> ConsumptionGroupedCells(title = date.toString(), consumptions = items) }
             }
         }
     }
@@ -244,8 +244,8 @@ data class ConsumptionQueryFilter(
                 consumptions.map { consumption ->
                     getString(
                         resource = Res.string.usage_chart_tooltip_range_kwh,
-                        consumption.intervalStart.toLocalHourMinuteString(),
-                        consumption.intervalEnd.toLocalHourMinuteString(),
+                        consumption.intervalStart.getLocalHHMMString(),
+                        consumption.intervalEnd.getLocalHHMMString(),
                         consumption.consumption.toString(precision = 2),
                     )
                 }
@@ -255,7 +255,7 @@ data class ConsumptionQueryFilter(
                 consumptions.map { consumption ->
                     getString(
                         resource = Res.string.usage_chart_tooltip_spot_kwh,
-                        consumption.intervalStart.toLocalDateString(),
+                        consumption.intervalStart.getLocalDateString(),
                         consumption.consumption.toString(precision = 2),
                     )
                 }
@@ -265,8 +265,8 @@ data class ConsumptionQueryFilter(
                 consumptions.map { consumption ->
                     getString(
                         resource = Res.string.usage_chart_tooltip_range_kwh,
-                        consumption.intervalStart.toLocalDayMonth(),
-                        (consumption.intervalEnd - 1.nanoseconds).toLocalDayMonth(),
+                        consumption.intervalStart.getLocalDayMonthString(),
+                        (consumption.intervalEnd - 1.nanoseconds).getLocalDayMonthString(),
                         consumption.consumption.toString(precision = 2),
                     )
                 }
@@ -276,7 +276,7 @@ data class ConsumptionQueryFilter(
                 consumptions.map { consumption ->
                     getString(
                         resource = Res.string.usage_chart_tooltip_spot_kwh,
-                        consumption.intervalStart.toLocalDayMonth(),
+                        consumption.intervalStart.getLocalDayMonthString(),
                         consumption.consumption.toString(precision = 2),
                     )
                 }
@@ -286,7 +286,7 @@ data class ConsumptionQueryFilter(
                 consumptions.map { consumption ->
                     getString(
                         resource = Res.string.usage_chart_tooltip_spot_kwh,
-                        consumption.intervalStart.toLocalMonthYear(),
+                        consumption.intervalStart.getLocalMonthYearString(),
                         consumption.consumption.toString(precision = 2),
                     )
                 }

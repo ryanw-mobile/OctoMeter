@@ -6,12 +6,12 @@
  */
 package com.rwmobi.kunigami.ui.model.consumption
 
-import com.rwmobi.kunigami.domain.extensions.roundToDayEnd
-import com.rwmobi.kunigami.domain.extensions.roundToDayStart
-import com.rwmobi.kunigami.domain.extensions.toLocalDateString
-import com.rwmobi.kunigami.domain.extensions.toLocalMonthYear
-import com.rwmobi.kunigami.domain.extensions.toLocalWeekday
-import com.rwmobi.kunigami.domain.extensions.toLocalYear
+import com.rwmobi.kunigami.domain.extensions.atEndOfDay
+import com.rwmobi.kunigami.domain.extensions.atStartOfDay
+import com.rwmobi.kunigami.domain.extensions.getLocalDateString
+import com.rwmobi.kunigami.domain.extensions.getLocalEnglishAbbreviatedDayOfWeekName
+import com.rwmobi.kunigami.domain.extensions.getLocalMonthYearString
+import com.rwmobi.kunigami.domain.extensions.getLocalYear
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import kotlinx.datetime.Clock
@@ -40,13 +40,13 @@ class ConsumptionQueryFilterTest {
     @Test
     fun `calculateStartDate should return correct start date for DAY_HALF_HOURLY`() {
         val startDate = ConsumptionQueryFilter.calculateStartDate(now, ConsumptionPresentationStyle.DAY_HALF_HOURLY)
-        startDate shouldBe now.roundToDayStart()
+        startDate shouldBe now.atStartOfDay()
     }
 
     @Test
     fun `calculateEndDate should return correct end date for DAY_HALF_HOURLY`() {
         val endDate = ConsumptionQueryFilter.calculateEndDate(now, ConsumptionPresentationStyle.DAY_HALF_HOURLY)
-        endDate shouldBe now.roundToDayEnd()
+        endDate shouldBe now.atEndOfDay()
     }
 
     @Test
@@ -116,33 +116,33 @@ class ConsumptionQueryFilterTest {
     @Test
     fun `getConsumptionPeriodString should return correct string for DAY_HALF_HOURLY`() {
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, pointOfReference = now)
-        filter.getConsumptionPeriodString() shouldBe "${now.toLocalWeekday()}, ${now.toLocalDateString()}"
+        filter.getConsumptionPeriodString() shouldBe "${now.getLocalEnglishAbbreviatedDayOfWeekName()}, ${now.getLocalDateString()}"
     }
 
     @Test
     fun `getConsumptionPeriodString should return correct string for WEEK_SEVEN_DAYS`() {
-        val start = now.roundToDayStart()
-        val end = now.roundToDayEnd()
+        val start = now.atStartOfDay()
+        val end = now.atEndOfDay()
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.WEEK_SEVEN_DAYS, pointOfReference = now, requestedStart = start, requestedEnd = end)
-        filter.getConsumptionPeriodString() shouldBe "${start.toLocalDateString().substringBefore(",")} - ${end.toLocalDateString()}"
+        filter.getConsumptionPeriodString() shouldBe "${start.getLocalDateString().substringBefore(",")} - ${end.getLocalDateString()}"
     }
 
     @Test
     fun `getConsumptionPeriodString should return correct string for MONTH_WEEKS`() {
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.MONTH_WEEKS, pointOfReference = now)
-        filter.getConsumptionPeriodString() shouldBe now.toLocalMonthYear()
+        filter.getConsumptionPeriodString() shouldBe now.getLocalMonthYearString()
     }
 
     @Test
     fun `getConsumptionPeriodString should return correct string for MONTH_THIRTY_DAYS`() {
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.MONTH_THIRTY_DAYS, pointOfReference = now)
-        filter.getConsumptionPeriodString() shouldBe now.toLocalMonthYear()
+        filter.getConsumptionPeriodString() shouldBe now.getLocalMonthYearString()
     }
 
     @Test
     fun `getConsumptionPeriodString should return correct string for YEAR_TWELVE_MONTHS`() {
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS, pointOfReference = now)
-        filter.getConsumptionPeriodString() shouldBe now.toLocalYear()
+        filter.getConsumptionPeriodString() shouldBe now.getLocalYear().toString()
     }
 
     @Test

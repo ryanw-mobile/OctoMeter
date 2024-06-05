@@ -10,7 +10,7 @@ package com.rwmobi.kunigami.data.source.network
 import com.rwmobi.kunigami.data.source.network.dto.consumption.ConsumptionApiResponse
 import com.rwmobi.kunigami.data.source.network.extensions.encodeApiKey
 import com.rwmobi.kunigami.domain.exceptions.HttpException
-import com.rwmobi.kunigami.domain.extensions.formatInstantWithoutSeconds
+import com.rwmobi.kunigami.domain.extensions.toIso8601WithoutSeconds
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -47,8 +47,8 @@ class ElectricityMeterPointsEndpoint(
             val response = httpClient.get("$endpointUrl/$mpan/meters/$meterSerialNumber/consumption") {
                 header("Authorization", "Basic ${encodeApiKey(apiKey)}")
                 parameter("page_size", pageSize)
-                parameter("period_from", periodFrom?.formatInstantWithoutSeconds())
-                parameter("period_to", periodTo?.formatInstantWithoutSeconds())
+                parameter("period_from", periodFrom?.toIso8601WithoutSeconds())
+                parameter("period_to", periodTo?.toIso8601WithoutSeconds())
                 parameter("order_by", orderBy)
                 parameter("group_by", groupBy)
             }
