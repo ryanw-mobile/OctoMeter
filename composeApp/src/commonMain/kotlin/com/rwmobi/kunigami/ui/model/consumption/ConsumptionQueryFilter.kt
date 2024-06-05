@@ -18,6 +18,8 @@ import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.extensions.getLocalMonthString
 import com.rwmobi.kunigami.domain.extensions.getLocalMonthYearString
 import com.rwmobi.kunigami.domain.extensions.getLocalYear
+import com.rwmobi.kunigami.domain.extensions.toSystemDefaultLocalDateTime
+import com.rwmobi.kunigami.domain.extensions.toSystemDefaultTimeZoneInstant
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import io.github.koalaplot.core.util.toString
 import kotlinx.datetime.Clock
@@ -27,12 +29,10 @@ import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.atTime
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.grouping_label_month_weeks
@@ -40,7 +40,6 @@ import kunigami.composeapp.generated.resources.presentation_style_week_seven_day
 import kunigami.composeapp.generated.resources.usage_chart_tooltip_range_kwh
 import kunigami.composeapp.generated.resources.usage_chart_tooltip_spot_kwh
 import org.jetbrains.compose.resources.getString
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.nanoseconds
 
 @Immutable
@@ -52,8 +51,7 @@ data class ConsumptionQueryFilter(
 ) {
     companion object {
         fun calculateStartDate(pointOfReference: Instant, presentationStyle: ConsumptionPresentationStyle): Instant {
-            val timeZone = TimeZone.currentSystemDefault()
-            val localDateTime = pointOfReference.toLocalDateTime(timeZone)
+            val localDateTime = pointOfReference.toSystemDefaultLocalDateTime()
 
             return when (presentationStyle) {
                 ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
@@ -66,7 +64,7 @@ data class ConsumptionQueryFilter(
                     val startOfWeek = localDateTime.date
                         .minus(value = daysSinceSunday - 1, unit = DateTimeUnit.DAY)
                         .atTime(hour = 0, minute = 0, second = 0, nanosecond = 0)
-                    startOfWeek.toInstant(timeZone)
+                    startOfWeek.toSystemDefaultTimeZoneInstant()
                 }
 
                 ConsumptionPresentationStyle.MONTH_WEEKS -> {
@@ -77,26 +75,25 @@ data class ConsumptionQueryFilter(
                     val startOfWeek = startOfThisMonth.date
                         .minus(value = daysSinceSunday - 1, unit = DateTimeUnit.DAY)
                         .atTime(hour = 0, minute = 0, second = 0, nanosecond = 0)
-                    startOfWeek.toInstant(timeZone)
+                    startOfWeek.toSystemDefaultTimeZoneInstant()
                 }
 
                 ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
                     val startOfThisMonth = LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
                         .atTime(hour = 0, minute = 0, second = 0, nanosecond = 0)
-                    startOfThisMonth.toInstant(timeZone)
+                    startOfThisMonth.toSystemDefaultTimeZoneInstant()
                 }
 
                 ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
                     val startOfThisMonth = LocalDate(year = localDateTime.year, monthNumber = 1, dayOfMonth = 1)
                         .atTime(hour = 0, minute = 0, second = 0, nanosecond = 0)
-                    startOfThisMonth.toInstant(timeZone)
+                    startOfThisMonth.toSystemDefaultTimeZoneInstant()
                 }
             }
         }
 
         fun calculateEndDate(pointOfReference: Instant, presentationStyle: ConsumptionPresentationStyle): Instant {
-            val timeZone = TimeZone.currentSystemDefault()
-            val localDateTime = pointOfReference.toLocalDateTime(timeZone)
+            val localDateTime = pointOfReference.toSystemDefaultLocalDateTime()
 
             return when (presentationStyle) {
                 ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
@@ -106,33 +103,36 @@ data class ConsumptionQueryFilter(
                 ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
                     val dayOfWeek = localDateTime.date.dayOfWeek
                     val daysUntilSunday = DayOfWeek.SUNDAY.isoDayNumber - dayOfWeek.isoDayNumber
-                    val endOfWeek = localDateTime.date.plus(daysUntilSunday, DateTimeUnit.DAY)
-                        .atTime(hour = 23, minute = 59, second = 59, nanosecond = 999999999)
-                    endOfWeek.toInstant(timeZone)
+                    val endOfWeek = localDateTime.date
+                        .plus(daysUntilSunday, DateTimeUnit.DAY)
+                        .atTime(hour = 23, minute = 59, second = 59, nanosecond = 999_999_999)
+                    endOfWeek.toSystemDefaultTimeZoneInstant()
                 }
 
                 ConsumptionPresentationStyle.MONTH_WEEKS -> {
-                    val startOfNextMonth = LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
+                    val endOfMonth = LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
                         .plus(1, DateTimeUnit.MONTH)
-                    val endOfMonth = (startOfNextMonth.atStartOfDayIn(timeZone) - 1.nanoseconds).toLocalDateTime(timeZone)
-                    val dayOfWeek = endOfMonth.date.dayOfWeek
+                        .atTime(hour = 0, minute = 0)
+                        .toSystemDefaultTimeZoneInstant() - 1.nanoseconds
+                    val dayOfWeek = endOfMonth.toSystemDefaultLocalDateTime().date.dayOfWeek
                     val daysUntilSunday = DayOfWeek.SUNDAY.isoDayNumber - dayOfWeek.isoDayNumber
-                    val endOfWeek = endOfMonth.date.plus(daysUntilSunday, DateTimeUnit.DAY)
-                        .atTime(hour = 23, minute = 59, second = 59, nanosecond = 999999999)
-                    endOfWeek.toInstant(timeZone)
+                    val endOfWeek = endOfMonth.toSystemDefaultLocalDateTime().date
+                        .plus(daysUntilSunday, DateTimeUnit.DAY)
+                        .atTime(hour = 23, minute = 59, second = 59, nanosecond = 999_999_999)
+                    endOfWeek.toSystemDefaultTimeZoneInstant()
                 }
 
                 ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
-                    val startOfNextMonth = LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
+                    LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
                         .plus(1, DateTimeUnit.MONTH)
-                    val endOfMonth = startOfNextMonth.atStartOfDayIn(timeZone) - 1.nanoseconds
-                    endOfMonth
+                        .atTime(hour = 0, minute = 0)
+                        .toSystemDefaultTimeZoneInstant() - 1.nanoseconds
                 }
 
                 ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
                     val startOfThisMonth = LocalDate(year = localDateTime.year, monthNumber = 12, dayOfMonth = 31)
-                        .atTime(hour = 23, minute = 59, second = 59, nanosecond = 999999999)
-                    startOfThisMonth.toInstant(timeZone)
+                        .atTime(hour = 23, minute = 59, second = 59, nanosecond = 999_999_999)
+                    startOfThisMonth.toSystemDefaultTimeZoneInstant()
                 }
             }
         }
@@ -353,7 +353,7 @@ data class ConsumptionQueryFilter(
     private fun getBackwardPointOfReference(): Instant {
         val timeZone = TimeZone.currentSystemDefault()
         return when (presentationStyle) {
-            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> pointOfReference.minus(duration = Duration.parseIsoString("P1D"))
+            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> pointOfReference.minus(period = DateTimePeriod.parse("P1D"), timeZone = timeZone)
             ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> pointOfReference.minus(period = DateTimePeriod.parse("P1W"), timeZone = timeZone)
             ConsumptionPresentationStyle.MONTH_WEEKS -> pointOfReference.minus(period = DateTimePeriod.parse("P1M"), timeZone = timeZone)
             ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> pointOfReference.minus(period = DateTimePeriod.parse("P1M"), timeZone = timeZone)
@@ -364,7 +364,7 @@ data class ConsumptionQueryFilter(
     private fun getForwardPointOfReference(): Instant {
         val timeZone = TimeZone.currentSystemDefault()
         return when (presentationStyle) {
-            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> pointOfReference.plus(duration = Duration.parseIsoString("P1D"))
+            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> pointOfReference.plus(period = DateTimePeriod.parse("P1D"), timeZone = timeZone)
             ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> pointOfReference.plus(period = DateTimePeriod.parse("P1W"), timeZone = timeZone)
             ConsumptionPresentationStyle.MONTH_WEEKS -> pointOfReference.plus(period = DateTimePeriod.parse("P1M"), timeZone = timeZone)
             ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> pointOfReference.plus(period = DateTimePeriod.parse("P1M"), timeZone = timeZone)
