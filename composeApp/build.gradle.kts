@@ -304,6 +304,7 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         reporter(ReporterType.SARIF)
     }
     filter {
+        exclude("**/BuildConfig.kt")
         exclude("**/generated/**")
         include("**/kotlin/**")
     }
@@ -312,6 +313,12 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
 tasks.named("preBuild") {
     dependsOn(tasks.named("ktlintFormat"))
 }
+
+tasks.withType<Test> {
+    // Set the timezone to 'Europe/London' for all tests
+    jvmArgs("-Duser.timezone=Europe/London")
+}
+
 dependencies {
     implementation(libs.androidx.profileinstaller)
     "baselineProfile"(project(":baselineprofile"))

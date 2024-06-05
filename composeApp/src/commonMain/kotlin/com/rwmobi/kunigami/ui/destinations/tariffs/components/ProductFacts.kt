@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
-import com.rwmobi.kunigami.domain.extensions.toLocalDateString
+import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.ui.components.TagWithIcon
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -76,9 +76,9 @@ internal fun ProductFacts(
 
         Spacer(modifier = Modifier.size(size = dimension.grid_1))
 
-        val availableFromDate = productDetails.availableFrom.toLocalDateString()
+        val availableFromDate = productDetails.availableFrom.getLocalDateString()
         val availableTo = productDetails.availableTo?.let {
-            stringResource(resource = Res.string.tariffs_available_to, it.toLocalDateString())
+            stringResource(resource = Res.string.tariffs_available_to, it.getLocalDateString())
         } ?: ""
 
         Text(

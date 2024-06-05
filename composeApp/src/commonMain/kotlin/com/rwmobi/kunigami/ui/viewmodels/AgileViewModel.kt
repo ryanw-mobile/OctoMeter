@@ -12,9 +12,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
-import com.rwmobi.kunigami.domain.extensions.roundDownToHour
-import com.rwmobi.kunigami.domain.extensions.toLocalDateString
-import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
+import com.rwmobi.kunigami.domain.extensions.atStartOfHour
+import com.rwmobi.kunigami.domain.extensions.getLocalDateString
+import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
@@ -123,7 +123,7 @@ class AgileViewModel(
     private suspend fun getAgileRates(
         region: String,
     ) {
-        val currentTime = Clock.System.now().roundDownToHour()
+        val currentTime = Clock.System.now().atStartOfHour()
         val periodTo = currentTime.plus(duration = Duration.parse("1d"))
 
         getStandardUnitRateUseCase(
@@ -218,14 +218,14 @@ class AgileViewModel(
 
     private fun groupChartCells(rates: List<Rate>): List<RateGroupedCells> {
         return rates
-            .groupBy { it.validFrom.toLocalDateString() }
+            .groupBy { it.validFrom.getLocalDateString() }
             .map { (date, items) -> RateGroupedCells(title = date, rates = items) }
     }
 
     private fun generateChartToolTips(rates: List<Rate>): List<String> {
         return rates.map { rate ->
-            val timeRange = rate.validFrom.toLocalHourMinuteString() +
-                (rate.validTo?.let { "- ${it.toLocalHourMinuteString()}" } ?: "")
+            val timeRange = rate.validFrom.getLocalHHMMString() +
+                (rate.validTo?.let { "- ${it.getLocalHHMMString()}" } ?: "")
             "$timeRange\n${rate.vatInclusivePrice.toString(precision = 2)}p"
         }
     }

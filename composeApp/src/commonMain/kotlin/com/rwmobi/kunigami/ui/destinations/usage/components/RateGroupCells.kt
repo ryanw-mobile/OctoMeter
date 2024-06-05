@@ -14,11 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
-import com.rwmobi.kunigami.domain.extensions.toLocalDay
-import com.rwmobi.kunigami.domain.extensions.toLocalDayMonth
-import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
-import com.rwmobi.kunigami.domain.extensions.toLocalMonth
-import com.rwmobi.kunigami.domain.extensions.toLocalWeekdayDay
+import com.rwmobi.kunigami.domain.extensions.getLocalDayMonthString
+import com.rwmobi.kunigami.domain.extensions.getLocalDayOfMonth
+import com.rwmobi.kunigami.domain.extensions.getLocalDayOfWeekAndDayString
+import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
+import com.rwmobi.kunigami.domain.extensions.getLocalMonthString
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
@@ -44,11 +44,11 @@ internal fun RateGroupCells(
             val item = partitionedItems.getOrNull(columnIndex)?.getOrNull(rowIndex)
             if (item != null) {
                 val label = when (presentationStyle) {
-                    ConsumptionPresentationStyle.DAY_HALF_HOURLY -> item.intervalStart.toLocalHourMinuteString()
-                    ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> item.intervalStart.toLocalWeekdayDay()
-                    ConsumptionPresentationStyle.MONTH_WEEKS -> item.intervalStart.toLocalDayMonth()
-                    ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> item.intervalStart.toLocalDay()
-                    ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> item.intervalStart.toLocalMonth()
+                    ConsumptionPresentationStyle.DAY_HALF_HOURLY -> item.intervalStart.getLocalHHMMString()
+                    ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> item.intervalStart.getLocalDayOfWeekAndDayString()
+                    ConsumptionPresentationStyle.MONTH_WEEKS -> item.intervalStart.getLocalDayMonthString()
+                    ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> item.intervalStart.getLocalDayOfMonth().toString()
+                    ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> item.intervalStart.getLocalMonthString()
                 }
                 IndicatorTextValueGridItem(
                     modifier = Modifier.weight(1f),
