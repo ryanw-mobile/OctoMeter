@@ -304,7 +304,7 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         reporter(ReporterType.SARIF)
     }
     filter {
-        exclude("BuildConfig.kt")
+        exclude("**/BuildConfig.kt")
         exclude("**/generated/**")
         include("**/kotlin/**")
     }
