@@ -7,10 +7,10 @@
 
 package com.rwmobi.kunigami.ui.destinations.tariffs
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -52,7 +52,7 @@ import kunigami.composeapp.generated.resources.navigation_tariffs
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TariffsScreen(
     modifier: Modifier = Modifier,
@@ -92,38 +92,39 @@ fun TariffsScreen(
                         modifier = Modifier.weight(weight = 1f),
                         lazyListState = mainLazyListState,
                     ) { contentModifier ->
-                        LazyColumn(
+                        Column(
                             modifier = contentModifier.fillMaxSize(),
-                            state = mainLazyListState,
                         ) {
-                            stickyHeader {
-                                DualTitleBar(
-                                    modifier = Modifier
-                                        .background(color = MaterialTheme.colorScheme.secondary)
-                                        .fillMaxWidth()
-                                        .height(height = dimension.minListItemHeight),
-                                    title = stringResource(resource = Res.string.navigation_tariffs),
-                                )
-                            }
+                            DualTitleBar(
+                                modifier = Modifier
+                                    .background(color = MaterialTheme.colorScheme.secondary)
+                                    .fillMaxWidth()
+                                    .height(height = dimension.minListItemHeight),
+                                title = stringResource(resource = Res.string.navigation_tariffs),
+                            )
 
-                            itemsIndexed(
-                                items = uiState.productSummaries,
-                                key = { _, product -> product.code },
-                            ) { index, product ->
-                                ProductItemAdaptive(
-                                    modifier = Modifier
-                                        .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
-                                        .fillMaxWidth()
-                                        .padding(vertical = dimension.grid_1),
-                                    productSummary = product,
-                                    useWideLayout = uiState.requestedWideListLayout,
-                                )
-
-                                if (index < uiState.productSummaries.lastIndex) {
-                                    HorizontalDivider(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                            LazyColumn(
+                                state = mainLazyListState,
+                            ) {
+                                itemsIndexed(
+                                    items = uiState.productSummaries,
+                                    key = { _, product -> product.code },
+                                ) { index, product ->
+                                    ProductItemAdaptive(
+                                        modifier = Modifier
+                                            .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
+                                            .fillMaxWidth()
+                                            .padding(vertical = dimension.grid_1),
+                                        productSummary = product,
+                                        useWideLayout = uiState.requestedWideListLayout,
                                     )
+
+                                    if (index < uiState.productSummaries.lastIndex) {
+                                        HorizontalDivider(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                        )
+                                    }
                                 }
                             }
                         }

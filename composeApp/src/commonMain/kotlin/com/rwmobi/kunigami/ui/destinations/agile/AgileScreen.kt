@@ -7,7 +7,6 @@
 
 package com.rwmobi.kunigami.ui.destinations.agile
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -64,7 +63,6 @@ import kunigami.composeapp.generated.resources.unknown
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AgileScreen(
     modifier: Modifier = Modifier,

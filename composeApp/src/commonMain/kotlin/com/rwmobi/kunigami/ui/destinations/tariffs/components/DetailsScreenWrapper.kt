@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.ui.destinations.tariffs.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,7 +20,6 @@ import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.theme.getDimension
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun DetailsScreenWrapper(
     modifier: Modifier,
@@ -34,21 +33,22 @@ internal fun DetailsScreenWrapper(
         modifier = modifier,
         lazyListState = detailLazyListState,
     ) { contentModifier ->
-        LazyColumn(
+        Column(
             modifier = contentModifier.fillMaxSize(),
-            state = detailLazyListState,
         ) {
-            productDetails?.let { product ->
-                stickyHeader {
-                    header()
-                }
+            header()
 
-                productDetailsLayout(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = dimension.grid_1),
-                    productDetails = product,
-                )
+            LazyColumn(
+                state = detailLazyListState,
+            ) {
+                productDetails?.let { product ->
+                    productDetailsLayout(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = dimension.grid_1),
+                        productDetails = product,
+                    )
+                }
             }
         }
     }
