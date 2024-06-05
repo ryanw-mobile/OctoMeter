@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -83,6 +84,7 @@ internal fun AgileTariffCardAdaptive(
                 showCountdown = activeRate?.validTo != null,
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
                 rateTrend = rateTrend,
+                rateGroupedCells = rateGroupedCells,
             )
         }
 
@@ -98,6 +100,7 @@ internal fun AgileTariffCardAdaptive(
                 showCountdown = activeRate?.validTo != null,
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
                 rateTrend = rateTrend,
+                rateGroupedCells = rateGroupedCells,
             )
         }
     }
@@ -140,6 +143,7 @@ private fun AgileTariffCardCompact(
     agileTariffSummary: TariffSummary?,
     differentTariffSummary: TariffSummary?,
     rateTrend: RateTrend?,
+    rateGroupedCells: List<RateGroupedCells>,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -153,6 +157,21 @@ private fun AgileTariffCardCompact(
                 .height(intrinsicSize = IntrinsicSize.Min),
             horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
         ) {
+            Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                Text(
+                    style = MaterialTheme.typography.labelLarge,
+                    text = "rateGroupCells",
+                )
+                Text(
+                    style = MaterialTheme.typography.labelLarge,
+                    text = rateGroupedCells.last().rates.last().validFrom.toString(),
+                )
+                Text(
+                    style = MaterialTheme.typography.labelLarge,
+                    text = rateGroupedCells.last().rates.last().validTo.toString(),
+                )
+            }
+
             AgilePriceCard(
                 modifier = Modifier
                     .weight(weight = 1f)
@@ -211,6 +230,7 @@ private fun AgileTariffCardExpanded(
     differentTariffSummary: TariffSummary?,
     vatInclusivePrice: Double?,
     rateTrend: RateTrend?,
+    rateGroupedCells: List<RateGroupedCells>,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -218,6 +238,21 @@ private fun AgileTariffCardExpanded(
         modifier = modifier.height(intrinsicSize = IntrinsicSize.Min),
         horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
     ) {
+        Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
+            Text(
+                style = MaterialTheme.typography.labelLarge,
+                text = "rateGroupCells",
+            )
+            Text(
+                style = MaterialTheme.typography.labelLarge,
+                text = rateGroupedCells.last().rates.last().validFrom.toString(),
+            )
+            Text(
+                style = MaterialTheme.typography.labelLarge,
+                text = rateGroupedCells.last().rates.last().validTo.toString(),
+            )
+        }
+
         AgilePriceCard(
             modifier = Modifier
                 .weight(weight = 1f)
