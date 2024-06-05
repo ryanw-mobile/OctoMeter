@@ -10,7 +10,7 @@ package com.rwmobi.kunigami.ui.destinations.account
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 
 sealed interface AccountScreenType {
-    data class ErrorScreen(val specialErrorScreen: SpecialErrorScreen) : AccountScreenType
+    data class Error(val specialErrorScreen: SpecialErrorScreen) : AccountScreenType
     data object Onboarding : AccountScreenType
     data object Account : AccountScreenType
 }

@@ -50,7 +50,7 @@ fun AccountScreen(
     val lazyListState = rememberLazyListState()
 
     Box(modifier = modifier) {
-        if (uiState.requestedScreenType is AccountScreenType.ErrorScreen) {
+        if (uiState.requestedScreenType is AccountScreenType.Error) {
             ErrorScreenHandler(
                 modifier = Modifier.fillMaxSize(),
                 specialErrorScreen = uiState.requestedScreenType.specialErrorScreen,
