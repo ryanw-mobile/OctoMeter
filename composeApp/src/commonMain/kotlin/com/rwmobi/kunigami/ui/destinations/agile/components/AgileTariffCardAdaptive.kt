@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
-import com.rwmobi.kunigami.domain.extensions.toLocalHourString
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
@@ -109,11 +108,11 @@ internal fun AgileTariffCardAdaptive(
         }
     }
 
-    LaunchedEffect(true) {
+    LaunchedEffect(rateGroupedCells) {
         while (true) {
             val isActiveRateExpired =
                 (activeRate == null) ||
-                    (activeRate?.validTo?.compareTo(Clock.System.now()) ?: 1) <= 0
+                        (activeRate?.validTo?.compareTo(Clock.System.now()) ?: 1) <= 0
 
             if (isActiveRateExpired) {
                 activeRate =
@@ -128,7 +127,7 @@ internal fun AgileTariffCardAdaptive(
             expireMinutes = expireMillis / MILLIS_IN_MINUTE
             expireSeconds = (expireMillis / DELAY_ONE_SECOND) % 60
 
-            verboseDebugText = "${Clock.System.now().toLocalHourString()}: expireMillis = $expireMillis, isActiveRateExpired = $isActiveRateExpired, activeRate null? ${activeRate == null}, validTo ${activeRate?.validTo ?: "null"} "
+            verboseDebugText = "last rateGroupCells is ${rateGroupedCells.last().rates.last().validTo ?: "null"} expireMillis = $expireMillis, isActiveRateExpired = $isActiveRateExpired, activeRate null? ${activeRate == null}, validTo ${activeRate?.validTo ?: "null"} "
 
             delay(DELAY_ONE_SECOND)
         }
