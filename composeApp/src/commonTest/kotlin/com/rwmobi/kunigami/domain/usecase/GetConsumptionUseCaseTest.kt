@@ -33,9 +33,7 @@ class GetConsumptionUseCaseTest {
 
     @BeforeTest
     fun setupUseCase() {
-        fakeUserPreferenceRepository = FakeUserPreferencesRepository().apply {
-            demoMode = false // We do not test demo mode
-        }
+        fakeUserPreferenceRepository = FakeUserPreferencesRepository()
         fakeRestApiRepository = FakeRestApiRepository()
         fakeDemoRestApiRepository = FakeRestApiRepository()
         getConsumptionUseCase = GetConsumptionUseCase(
@@ -70,6 +68,7 @@ class GetConsumptionUseCaseTest {
             ),
         )
 
+        fakeUserPreferenceRepository.demoMode = false
         fakeUserPreferenceRepository.apiKey = apiKey
         fakeUserPreferenceRepository.mpan = mpan
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
@@ -91,6 +90,7 @@ class GetConsumptionUseCaseTest {
         val mpan = "mpan_123"
         val meterSerialNumber = "meter_123"
 
+        fakeUserPreferenceRepository.demoMode = false
         fakeUserPreferenceRepository.apiKey = apiKey
         fakeUserPreferenceRepository.mpan = mpan
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
@@ -112,6 +112,7 @@ class GetConsumptionUseCaseTest {
         val mpan = null
         val meterSerialNumber = "meter_123"
 
+        fakeUserPreferenceRepository.demoMode = false
         fakeUserPreferenceRepository.apiKey = apiKey
         fakeUserPreferenceRepository.mpan = mpan
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
@@ -133,6 +134,7 @@ class GetConsumptionUseCaseTest {
         val mpan = "mpan_123"
         val meterSerialNumber = null
 
+        fakeUserPreferenceRepository.demoMode = false
         fakeUserPreferenceRepository.apiKey = apiKey
         fakeUserPreferenceRepository.mpan = mpan
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
@@ -155,6 +157,7 @@ class GetConsumptionUseCaseTest {
         val meterSerialNumber = "meter_123"
         val errorMessage = "API Error"
 
+        fakeUserPreferenceRepository.demoMode = false
         fakeUserPreferenceRepository.apiKey = apiKey
         fakeUserPreferenceRepository.mpan = mpan
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
@@ -169,5 +172,40 @@ class GetConsumptionUseCaseTest {
         result.isFailure shouldBe true
         result.exceptionOrNull().shouldBeInstanceOf<RuntimeException>()
         result.exceptionOrNull()!!.message shouldBe errorMessage
+    }
+
+    // Demo mode
+    @Test
+    fun `invoke should return consumption from fakeDemoRestApiRepository when under demoMode`() = runTest {
+        val expectedConsumption = listOf(
+            Consumption(
+                consumption = 0.113,
+                intervalStart = Instant.parse("2024-05-06T23:30:00Z"),
+                intervalEnd = Instant.parse("2024-05-07T00:00:00Z"),
+            ),
+            Consumption(
+                consumption = 0.58,
+                intervalStart = Instant.parse("2024-05-06T23:00:00Z"),
+                intervalEnd = Instant.parse("2024-05-06T23:30:00Z"),
+            ),
+            Consumption(
+                consumption = 0.201,
+                intervalStart = Instant.parse("2024-05-06T22:30:00Z"),
+                intervalEnd = Instant.parse("2024-05-06T23:00:00Z"),
+            ),
+        )
+
+        fakeUserPreferenceRepository.demoMode = true
+        fakeRestApiRepository.setConsumptionResponse = Result.failure(RuntimeException("getConsumptionUseCase should call DemoRestApiRepository under demo mode"))
+        fakeDemoRestApiRepository.setConsumptionResponse = Result.success(expectedConsumption)
+
+        val result = getConsumptionUseCase(
+            periodFrom = fakePeriodFrom,
+            periodTo = fakePeriodTo,
+            groupBy = groupBy,
+        )
+
+        result.isSuccess shouldBe true
+        result.getOrNull() shouldBe expectedConsumption.sortedBy { it.intervalStart }
     }
 }

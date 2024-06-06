@@ -18,7 +18,15 @@ import kotlin.math.roundToLong
  */
 fun Double.roundToNearestEvenHundredth(): Double {
     val scaled = this * 100
-    val rounded = scaled.roundToLong()
+    val rounded = if (scaled % 1.0 == 0.5) {
+        if (scaled.toLong() % 2 == 0L) {
+            scaled.toLong() // It's already even
+        } else {
+            scaled.toLong() + 1 // Round up to the nearest even
+        }
+    } else {
+        scaled.roundToLong()
+    }
     return rounded / 100.0
 }
 
