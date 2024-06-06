@@ -11,6 +11,7 @@ coroutines = "1.8.1"
 kermit = "2.0.3"
 koalaplotCore = "0.6.0"
 koin = "3.5.6"
+koinCompose = "1.1.5"
 kotest = "5.9.0"
 kotlin = "2.0.0"
 kotlinxDatetime = "0.6.0"
@@ -77,6 +78,7 @@ koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin"
 koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-jvm = { group = "io.insert-koin", name = "koin-core-jvm", version.ref = "koin" }
+koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koinCompose" }
 # koin-iosx64 = { group = "io.insert-koin", name = "koin-core-iosx64", version.ref = "koin" }
 # koin-iosarm64 = { group = "io.insert-koin", name = "koin-core-iosarm64", version.ref = "koin" }
 leakcanary-android = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
