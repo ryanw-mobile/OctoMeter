@@ -20,13 +20,25 @@ class MultiplatformPreferencesStore(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : PreferencesStore {
 
-    override suspend fun saveData(key: String, value: String) {
+    override suspend fun saveStringData(key: String, value: String) {
         withContext(dispatcher) {
             settings[key] = value
         }
     }
 
-    override suspend fun getData(key: String): String? {
+    override suspend fun getStringData(key: String): String? {
+        return withContext(dispatcher) {
+            settings[key]
+        }
+    }
+
+    override suspend fun saveFloatData(key: String, value: Float) {
+        withContext(dispatcher) {
+            settings[key] = value
+        }
+    }
+
+    override suspend fun getFloatData(key: String): Float? {
         return withContext(dispatcher) {
             settings[key]
         }
