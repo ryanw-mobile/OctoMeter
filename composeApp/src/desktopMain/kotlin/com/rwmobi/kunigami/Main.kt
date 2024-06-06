@@ -26,8 +26,6 @@ import com.rwmobi.kunigami.ui.composehelper.customizeMacOsAboutMenu
 import com.rwmobi.kunigami.ui.viewmodels.PlatformMainViewModel
 import composeapp.kunigami.BuildConfig
 import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.about_app_description
-import kunigami.composeapp.generated.resources.about_app_title
 import kunigami.composeapp.generated.resources.app_name
 import kunigami.composeapp.generated.resources.ic_launcher
 import org.jetbrains.compose.resources.painterResource
@@ -42,6 +40,13 @@ fun main() {
     System.setProperty(
         "apple.awt.application.name",
         "OctoMeter",
+    )
+
+    // This has to be executed before koinApplication, so we cannot use stringResources
+    val aboutAppDescription = "OctoMeter version %s (Build %s)\nMake the smartest use of your electricity\n\n%s"
+    customizeMacOsAboutMenu(
+        title = "About OctoMeter",
+        message = aboutAppDescription.format(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, BuildConfig.GITHUB_LINK),
     )
 
     koinApplication {
@@ -71,11 +76,6 @@ fun main() {
     }
 
     application {
-        customizeMacOsAboutMenu(
-            title = stringResource(resource = Res.string.about_app_title),
-            message = stringResource(resource = Res.string.about_app_description, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, BuildConfig.GITHUB_LINK),
-        )
-
         val viewModel: PlatformMainViewModel = koinInject()
         val preferredWindowSize by viewModel.windowSize.collectAsStateMultiplatform()
         val windowState = rememberWindowState(size = preferredWindowSize)
