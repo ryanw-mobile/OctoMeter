@@ -8,8 +8,10 @@
 package com.rwmobi.kunigami.data.source.local.preferences.interfaces
 
 interface PreferencesStore {
-    suspend fun saveData(key: String, value: String)
-    suspend fun getData(key: String): String?
+    suspend fun saveStringData(key: String, value: String)
+    suspend fun getStringData(key: String): String?
     suspend fun removeData(key: String)
     suspend fun clearAll()
+    suspend fun saveFloatData(key: String, value: Float)
+    suspend fun getFloatData(key: String): Float?
 }

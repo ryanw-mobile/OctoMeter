@@ -7,6 +7,8 @@
 
 package com.rwmobi.kunigami.domain.repository
 
+import androidx.compose.ui.unit.DpSize
+
 class FakeUserPreferencesRepository : UserPreferencesRepository {
 
     var demoMode: Boolean? = null
@@ -14,6 +16,7 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
     var accountNumber: String? = null
     var mpan: String? = null
     var meterSerialNumber: String? = null
+    var windowSize: DpSize? = null
 
     override suspend fun isDemoMode(): Boolean {
         return demoMode ?: throw RuntimeException("Fake result not defined")
@@ -60,5 +63,13 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
 
     override suspend fun clearStorage() {
         clearCredentials()
+    }
+
+    override suspend fun getWindowSize(): DpSize? {
+        return windowSize
+    }
+
+    override suspend fun setWindowSize(size: DpSize) {
+        windowSize = size
     }
 }
