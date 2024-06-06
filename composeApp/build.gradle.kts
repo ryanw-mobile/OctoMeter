@@ -273,7 +273,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.rwmobi.kunigami"
+            packageName = "OctoMeter"
             packageVersion = libs.versions.versionName.get()
             description = "OctoMeter: Empowering Smart Electricity Usage"
             copyright = "© 2024 Ryan Wong and open source contributors. All rights reserved."
