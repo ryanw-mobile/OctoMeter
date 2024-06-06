@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
+import com.rwmobi.kunigami.domain.extensions.toLocalHourString
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
@@ -68,6 +69,7 @@ internal fun AgileTariffCardAdaptive(
     var expireMinutes by remember { mutableStateOf(expireMillis / MILLIS_IN_MINUTE) }
     var expireSeconds by remember { mutableStateOf((expireMillis / DELAY_ONE_SECOND) % 60) }
     val targetPercentage = ((activeRate?.vatInclusivePrice ?: 0.0) / rateRange.endInclusive).toFloat().coerceIn(0f, 1f)
+    var verboseDebugText by remember { mutableStateOf("") }
 
     when (requestedAdaptiveLayout) {
         WindowWidthSizeClass.Compact,
@@ -85,6 +87,7 @@ internal fun AgileTariffCardAdaptive(
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
                 rateTrend = rateTrend,
                 rateGroupedCells = rateGroupedCells,
+                verboseDebugText = verboseDebugText,
             )
         }
 
@@ -101,30 +104,31 @@ internal fun AgileTariffCardAdaptive(
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
                 rateTrend = rateTrend,
                 rateGroupedCells = rateGroupedCells,
+                verboseDebugText = verboseDebugText,
             )
         }
     }
 
     LaunchedEffect(true) {
         while (true) {
-            with(activeRate) {
-                val isActiveRateExpired =
-                    (this == null) ||
-                        (validTo?.compareTo(Clock.System.now()) ?: 1) <= 0
+            val isActiveRateExpired =
+                (activeRate == null) ||
+                    (activeRate?.validTo?.compareTo(Clock.System.now()) ?: 1) <= 0
 
-                if (isActiveRateExpired) {
-                    activeRate =
-                        rateGroupedCells.findActiveRate(pointOfReference = Clock.System.now())
-                    rateTrend = rateGroupedCells.getRateTrend(activeRate = activeRate)
-                }
-
-                expireMillis = activeRate?.validTo?.let {
-                    (it - Clock.System.now()).inWholeMilliseconds
-                } ?: Clock.System.now().getNextHalfHourCountdownMillis()
-
-                expireMinutes = expireMillis / MILLIS_IN_MINUTE
-                expireSeconds = (expireMillis / DELAY_ONE_SECOND) % 60
+            if (isActiveRateExpired) {
+                activeRate =
+                    rateGroupedCells.findActiveRate(pointOfReference = Clock.System.now())
+                rateTrend = rateGroupedCells.getRateTrend(activeRate = activeRate)
             }
+
+            expireMillis = activeRate?.validTo?.let {
+                (it - Clock.System.now()).inWholeMilliseconds
+            } ?: Clock.System.now().getNextHalfHourCountdownMillis()
+
+            expireMinutes = expireMillis / MILLIS_IN_MINUTE
+            expireSeconds = (expireMillis / DELAY_ONE_SECOND) % 60
+
+            verboseDebugText = "${Clock.System.now().toLocalHourString()}: expireMillis = $expireMillis, isActiveRateExpired = $isActiveRateExpired, activeRate null? ${activeRate == null}, validTo ${activeRate?.validTo ?: "null"} "
 
             delay(DELAY_ONE_SECOND)
         }
@@ -144,6 +148,7 @@ private fun AgileTariffCardCompact(
     differentTariffSummary: TariffSummary?,
     rateTrend: RateTrend?,
     rateGroupedCells: List<RateGroupedCells>,
+    verboseDebugText: String,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -169,6 +174,10 @@ private fun AgileTariffCardCompact(
                 Text(
                     style = MaterialTheme.typography.labelLarge,
                     text = rateGroupedCells.last().rates.last().validTo.toString(),
+                )
+                Text(
+                    style = MaterialTheme.typography.labelLarge,
+                    text = verboseDebugText,
                 )
             }
 
@@ -231,6 +240,7 @@ private fun AgileTariffCardExpanded(
     vatInclusivePrice: Double?,
     rateTrend: RateTrend?,
     rateGroupedCells: List<RateGroupedCells>,
+    verboseDebugText: String,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -250,6 +260,10 @@ private fun AgileTariffCardExpanded(
             Text(
                 style = MaterialTheme.typography.labelLarge,
                 text = rateGroupedCells.last().rates.last().validTo.toString(),
+            )
+            Text(
+                style = MaterialTheme.typography.labelLarge,
+                text = verboseDebugText,
             )
         }
 
