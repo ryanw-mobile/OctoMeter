@@ -18,15 +18,36 @@ import kotlinx.datetime.format.char
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
-fun Instant.formatInstantWithoutSeconds(): String {
+// Time-zone aware conversion utils
+
+fun Instant.toSystemDefaultLocalDateTime(): LocalDateTime {
+    val currentZone = TimeZone.currentSystemDefault()
+    return toLocalDateTime(timeZone = currentZone)
+}
+
+fun Instant.toSystemDefaultLocalDate(): LocalDate {
+    val currentZone = TimeZone.currentSystemDefault()
+    return toLocalDateTime(timeZone = currentZone).date
+}
+
+fun LocalDateTime.toSystemDefaultTimeZoneInstant(): Instant {
+    val currentZone = TimeZone.currentSystemDefault()
+    return toInstant(currentZone)
+}
+
+// Date time computation utils
+
+/***
+ * Converts this instant to the ISO 8601 string representation without seconds, for example, 2023-01-02T23:40Z.
+ */
+fun Instant.toIso8601WithoutSeconds(): String {
     val formatted = toString()
     // This assumes the format is always compliant with ISO-8601 extended format.
     return formatted.substring(0, formatted.lastIndexOf(':')) + "Z"
 }
 
-fun Instant.roundDownToHour(): Instant {
-    val currentZone = TimeZone.currentSystemDefault()
-    val currentLocalDateTime = toLocalDateTime(timeZone = currentZone)
+fun Instant.atStartOfHour(): Instant {
+    val currentLocalDateTime = toSystemDefaultLocalDateTime()
     return LocalDateTime(
         year = currentLocalDateTime.year,
         month = currentLocalDateTime.month,
@@ -35,15 +56,11 @@ fun Instant.roundDownToHour(): Instant {
         minute = 0,
         second = 0,
         nanosecond = 0,
-    ).toInstant(timeZone = currentZone)
+    ).toSystemDefaultTimeZoneInstant()
 }
 
-/***
- * Return the Instant with the time portion set to all 0
- */
-fun Instant.roundToDayStart(): Instant {
-    val currentZone = TimeZone.currentSystemDefault()
-    val currentLocalDateTime = toLocalDateTime(timeZone = currentZone)
+fun Instant.atStartOfDay(): Instant {
+    val currentLocalDateTime = toSystemDefaultLocalDateTime()
     return LocalDateTime(
         year = currentLocalDateTime.year,
         month = currentLocalDateTime.month,
@@ -52,12 +69,11 @@ fun Instant.roundToDayStart(): Instant {
         minute = 0,
         second = 0,
         nanosecond = 0,
-    ).toInstant(timeZone = currentZone)
+    ).toSystemDefaultTimeZoneInstant()
 }
 
-fun Instant.roundToDayEnd(): Instant {
-    val currentZone = TimeZone.currentSystemDefault()
-    val currentLocalDateTime = toLocalDateTime(timeZone = currentZone)
+fun Instant.atEndOfDay(): Instant {
+    val currentLocalDateTime = toSystemDefaultLocalDateTime()
     return LocalDateTime(
         year = currentLocalDateTime.year,
         month = currentLocalDateTime.month,
@@ -66,88 +82,15 @@ fun Instant.roundToDayEnd(): Instant {
         minute = 59,
         second = 59,
         nanosecond = 999_999_999,
-    ).toInstant(timeZone = currentZone)
-}
-
-fun Instant.toLocalHourMinuteString(): String {
-    val currentLocalDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
-    return "${currentLocalDateTime.hour.toString().padStart(2, '0')}:${currentLocalDateTime.minute.toString().padStart(2, '0')}"
-}
-
-fun Instant.toLocalHourString(): String {
-    val currentLocalDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
-    return currentLocalDateTime.hour.toString().padStart(2, '0')
-}
-
-fun Instant.toLocalDateTimeString(): String {
-    val currentLocalDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
-    return "${toLocalDateString()} ${currentLocalDateTime.hour.toString().padStart(2, '0')}:${currentLocalDateTime.minute.toString().padStart(2, '0')}"
-}
-
-fun Instant.toLocalYear(): String {
-    val currentLocalDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
-    return currentLocalDateTime.year.toString()
-}
-
-fun Instant.toLocalDay(): String {
-    val currentLocalDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
-    return currentLocalDateTime.dayOfMonth.toString()
-}
-
-fun Instant.toLocalWeekday(): String {
-    val localDate = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
-    val customFormat = LocalDate.Format {
-        dayOfWeek(DayOfWeekNames.ENGLISH_ABBREVIATED)
-    }
-    return localDate.format(customFormat)
+    ).toSystemDefaultTimeZoneInstant()
 }
 
 /***
- * Returns DayOfWeekNames DayOfMonth
- */
-fun Instant.toLocalWeekdayDay(): String {
-    val localDate = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
-    val customFormat = LocalDate.Format {
-        dayOfWeek(DayOfWeekNames.ENGLISH_ABBREVIATED)
-        char(' ')
-        dayOfMonth(padding = Padding.ZERO)
-    }
-    return localDate.format(customFormat)
-}
-
-fun Instant.toLocalDayMonth(): String {
-    val localDate = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
-    val customFormat = LocalDate.Format {
-        dayOfMonth(padding = Padding.ZERO)
-        char(' ')
-        monthName(MonthNames.ENGLISH_ABBREVIATED)
-    }
-    return localDate.format(customFormat)
-}
-
-fun Instant.toLocalMonth(): String {
-    val localDate = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
-    val customFormat = LocalDate.Format {
-        monthName(MonthNames.ENGLISH_ABBREVIATED)
-    }
-    return localDate.format(customFormat)
-}
-
-fun Instant.toLocalMonthYear(): String {
-    val localDate = this.toLocalDateTime(TimeZone.currentSystemDefault()).date
-    val customFormat = LocalDate.Format {
-        monthName(MonthNames.ENGLISH_ABBREVIATED) // Full month name
-        char(' ')
-        year()
-    }
-    return localDate.format(customFormat)
-}
-
-/***
- * This is for recurrent background tasks that we want to trigger at 00 and 30 minutes.
+ * Returns the number of milliseconds to the upcoming 00 or 30 minutes.
+ * This is for recurrent background tasks.
  */
 fun Instant.getNextHalfHourCountdownMillis(): Long {
-    val currentLocalDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
+    val currentLocalDateTime = toSystemDefaultLocalDateTime()
     val currentMinute = currentLocalDateTime.minute
     val currentSecond = currentLocalDateTime.second
     val currentNanosecond = currentLocalDateTime.nanosecond
@@ -162,4 +105,100 @@ fun Instant.getNextHalfHourCountdownMillis(): Long {
     return delayInMillis.toLong()
 }
 
-expect fun Instant.toLocalDateString(): String
+// Formatting utils
+
+fun Instant.getLocalYear(): Int {
+    return toSystemDefaultLocalDateTime().year
+}
+
+/***
+ * Returns the integer day of month as Integer. To avoid confusion, caller may apply padding manually if needed.
+ */
+fun Instant.getLocalDayOfMonth(): Int {
+    val currentLocalDateTime = toSystemDefaultLocalDateTime()
+    return currentLocalDateTime.dayOfMonth
+}
+
+/***
+ * Returns the local time string with padding, that is, 00:00
+ */
+fun Instant.getLocalHHMMString(): String {
+    val currentLocalDateTime = toSystemDefaultLocalDateTime()
+    return "${currentLocalDateTime.hour.toString().padStart(2, '0')}:${currentLocalDateTime.minute.toString().padStart(2, '0')}"
+}
+
+/***
+ * Returns the local hour string with padding, that is, 00
+ */
+fun Instant.getLocalHourString(): String {
+    val currentLocalDateTime = toSystemDefaultLocalDateTime()
+    return currentLocalDateTime.hour.toString().padStart(2, '0')
+}
+
+/***
+ * Returns a concatenation of the platform-dependent getLocalDateString() and zero-padded HH:MM time string
+ */
+fun Instant.toLocalDateTimeString(): String {
+    val currentLocalDateTime = toSystemDefaultLocalDateTime()
+    return "${getLocalDateString()} ${currentLocalDateTime.hour.toString().padStart(2, '0')}:${currentLocalDateTime.minute.toString().padStart(2, '0')}"
+}
+
+fun Instant.getLocalEnglishAbbreviatedDayOfWeekName(): String {
+    val localDate = toSystemDefaultLocalDate()
+    val customFormat = LocalDate.Format {
+        dayOfWeek(DayOfWeekNames.ENGLISH_ABBREVIATED)
+    }
+    return localDate.format(customFormat)
+}
+
+/***
+ * Returns English abbreviated day of week name and day of month with padding. Example: Mon 02
+ */
+fun Instant.getLocalDayOfWeekAndDayString(): String {
+    val localDate = toSystemDefaultLocalDate()
+    val customFormat = LocalDate.Format {
+        dayOfWeek(DayOfWeekNames.ENGLISH_ABBREVIATED)
+        char(' ')
+        dayOfMonth(padding = Padding.ZERO)
+    }
+    return localDate.format(customFormat)
+}
+
+/***
+ * Returns local day of month with padding and English abbreviated month. Example: 02 Feb
+ */
+fun Instant.getLocalDayMonthString(): String {
+    val localDate = toSystemDefaultLocalDate()
+    val customFormat = LocalDate.Format {
+        dayOfMonth(padding = Padding.ZERO)
+        char(' ')
+        monthName(MonthNames.ENGLISH_ABBREVIATED)
+    }
+    return localDate.format(customFormat)
+}
+
+/***
+ * Returns local month in abbreviated English
+ */
+fun Instant.getLocalMonthString(): String {
+    val localDate = toSystemDefaultLocalDate()
+    val customFormat = LocalDate.Format {
+        monthName(MonthNames.ENGLISH_ABBREVIATED)
+    }
+    return localDate.format(customFormat)
+}
+
+/***
+ * Returns local month in abbreviated English and year. Example: Jan 2024
+ */
+fun Instant.getLocalMonthYearString(): String {
+    val localDate = toSystemDefaultLocalDate()
+    val customFormat = LocalDate.Format {
+        monthName(MonthNames.ENGLISH_ABBREVIATED) // Full month name
+        char(' ')
+        year()
+    }
+    return localDate.format(customFormat)
+}
+
+expect fun Instant.getLocalDateString(): String

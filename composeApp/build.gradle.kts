@@ -112,6 +112,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.koin.jvm)
+            implementation(libs.koin.compose)
             implementation(libs.themedetector)
         }
         iosMain.dependencies {
@@ -273,7 +274,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.rwmobi.kunigami"
+            packageName = "OctoMeter"
             packageVersion = libs.versions.versionName.get()
             description = "OctoMeter: Empowering Smart Electricity Usage"
             copyright = "© 2024 Ryan Wong and open source contributors. All rights reserved."
@@ -304,7 +305,9 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         reporter(ReporterType.SARIF)
     }
     filter {
+        exclude("**/BuildConfig.kt")
         exclude("**/generated/**")
+        exclude("**/MainViewController.kt")
         include("**/kotlin/**")
     }
 }
@@ -312,6 +315,12 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
 tasks.named("preBuild") {
     dependsOn(tasks.named("ktlintFormat"))
 }
+
+tasks.withType<Test> {
+    // Set the timezone to 'Europe/London' for all tests
+    jvmArgs("-Duser.timezone=Europe/London")
+}
+
 dependencies {
     implementation(libs.androidx.profileinstaller)
     "baselineProfile"(project(":baselineprofile"))

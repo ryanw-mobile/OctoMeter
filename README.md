@@ -3,7 +3,7 @@
 ### Production-grade Kotlin Multiplatform App targeting Android, iOS, Desktop
 
 <br />
-<p><img src="app_banner_240518.webp" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
+<p align="center"><img src="app_banner_240518.webp" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 <br />
 
 ### Made in the UK, For the UK.
@@ -12,7 +12,7 @@ Complementary article: [Releasing my First True Kotlin Multiplatform App](https:
 
 This app is designed for Octopus Energy customers in the UK who have a smart meter installed. If you don’t have a smart meter, you can still try out the app. It runs in demo mode by default, showing fake user data when authentication is required.
 
-<p><img src="screenshots/240531_all_platforms_preview.webp" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
+<p align="center"><img src="screenshots/240531_all_platforms_preview.webp" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 
 ### It works for me
 
@@ -29,7 +29,7 @@ The main purposes of this app are:
 For non-Octopus Energy customers, or non-UK residents, the demo mode will display random meter readings and default tariff rates to illustrate the app’s functionality.
 
 <br />
-<p><img src="https://github.com/ryanw-mobile/OctoMeter/blob/main/screenshots/240603_agile_animation.gif" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
+<p align="center"><img src="https://github.com/ryanw-mobile/OctoMeter/blob/main/screenshots/240603_agile_animation.gif" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 <br />
 
 The current release meets my daily needs. However, this project will continue to be maintained and improved as a way for me to gain real-world Kotlin Multiplatform development experience. For this reason, the app was intentionally built to reach production-level quality as much as possible.

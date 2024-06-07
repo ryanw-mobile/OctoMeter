@@ -106,7 +106,7 @@ class AccountViewModel(
                     // There is no retry for this case.
                     Logger.e(getString(resource = Res.string.account_error_update_credentials), throwable = throwable, tag = "AccountViewModel")
                     _uiState.update { currentUiState ->
-                        currentUiState.updateUIForErrorAndStopLoading(message = getString(resource = Res.string.account_error_update_credentials))
+                        currentUiState.handleErrorAndStopLoading(message = getString(resource = Res.string.account_error_update_credentials))
                     }
                 },
             )

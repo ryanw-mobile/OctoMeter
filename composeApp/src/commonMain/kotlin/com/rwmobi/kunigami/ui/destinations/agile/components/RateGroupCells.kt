@@ -14,8 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
-import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
@@ -43,7 +43,7 @@ internal fun RateGroupCells(
                     indicatorColor = colorPalette[
                         item.vatInclusivePrice.getPercentageColorIndex(maxValue = maxInRange),
                     ],
-                    label = item.validFrom.toLocalHourMinuteString(),
+                    label = item.validFrom.getLocalHHMMString(),
                     value = item.vatInclusivePrice.roundToTwoDecimalPlaces()
                         .toString(precision = 2),
                 )

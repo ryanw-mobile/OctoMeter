@@ -37,8 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.domain.extensions.toLocalDateString
-import com.rwmobi.kunigami.domain.model.account.Account
+import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.MessageActionScreen
@@ -128,14 +127,14 @@ internal fun AccountInformationScreen(
             uiState.userProfile.account.movedInAt?.let {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = stringResource(resource = Res.string.account_moved_in, it.toLocalDateString()),
+                    text = stringResource(resource = Res.string.account_moved_in, it.getLocalDateString()),
                 )
             }
 
             uiState.userProfile.account.movedOutAt?.let {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = stringResource(resource = Res.string.account_moved_out, it.toLocalDateString()),
+                    text = stringResource(resource = Res.string.account_moved_out, it.getLocalDateString()),
                 )
             }
 
@@ -224,7 +223,7 @@ private fun ErrorPreview() {
             modifier = Modifier.padding(all = 32.dp),
             uiState = AccountUIState(
                 isLoading = false,
-                requestedScreenType = AccountScreenType.ErrorScreen(specialErrorScreen = SpecialErrorScreen.NetworkError),
+                requestedScreenType = AccountScreenType.Error(specialErrorScreen = SpecialErrorScreen.NetworkError),
                 requestedLayout = AccountScreenLayout.WideWrapped,
                 userProfile = UserProfile(
                     selectedMpan = "1200000345678",

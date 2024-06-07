@@ -7,6 +7,8 @@
 
 package com.rwmobi.kunigami.domain.repository
 
+import androidx.compose.ui.unit.DpSize
+
 interface UserPreferencesRepository {
     suspend fun isDemoMode(): Boolean
     suspend fun getApiKey(): String?
@@ -19,4 +21,6 @@ interface UserPreferencesRepository {
     suspend fun setMeterSerialNumber(meterSerialNumber: String)
     suspend fun clearCredentials()
     suspend fun clearStorage()
+    suspend fun getWindowSize(): DpSize?
+    suspend fun setWindowSize(size: DpSize)
 }

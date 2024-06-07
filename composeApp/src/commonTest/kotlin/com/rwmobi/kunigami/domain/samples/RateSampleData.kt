@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.domain.samples
 
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -51,5 +52,43 @@ object RateSampleData {
         ).toInstant(timeZone),
         validTo = null,
         paymentMethod = PaymentMethod.DIRECT_DEBIT,
+    )
+
+    val rates = listOf(
+        Rate(
+            vatExclusivePrice = 17.42,
+            vatInclusivePrice = 18.291,
+            validFrom = Instant.parse("2024-05-07T21:30:00Z"),
+            validTo = Instant.parse("2024-05-07T22:00:00Z"),
+            paymentMethod = PaymentMethod.DIRECT_DEBIT,
+        ),
+        Rate(
+            vatExclusivePrice = 17.86,
+            vatInclusivePrice = 18.753,
+            validFrom = Instant.parse("2024-05-07T21:00:00Z"),
+            validTo = Instant.parse("2024-05-07T21:30:00Z"),
+            paymentMethod = PaymentMethod.DIRECT_DEBIT,
+        ),
+        Rate(
+            vatExclusivePrice = 17.42,
+            vatInclusivePrice = 18.291,
+            validFrom = Instant.parse("2024-05-07T20:30:00Z"),
+            validTo = Instant.parse("2024-05-07T21:00:00Z"),
+            paymentMethod = PaymentMethod.DIRECT_DEBIT,
+        ),
+        Rate(
+            vatExclusivePrice = 19.23,
+            vatInclusivePrice = 20.1915,
+            validFrom = Instant.parse("2024-05-07T20:00:00Z"),
+            validTo = Instant.parse("2024-05-07T20:30:00Z"),
+            paymentMethod = PaymentMethod.DIRECT_DEBIT,
+        ),
+        Rate(
+            vatExclusivePrice = 21.47,
+            vatInclusivePrice = 22.5435,
+            validFrom = Instant.parse("2024-05-07T19:30:00Z"),
+            validTo = Instant.parse("2024-05-07T20:00:00Z"),
+            paymentMethod = PaymentMethod.DIRECT_DEBIT,
+        ),
     )
 }

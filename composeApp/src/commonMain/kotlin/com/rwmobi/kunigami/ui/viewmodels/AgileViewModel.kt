@@ -12,9 +12,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
-import com.rwmobi.kunigami.domain.extensions.roundDownToHour
-import com.rwmobi.kunigami.domain.extensions.toLocalDateString
-import com.rwmobi.kunigami.domain.extensions.toLocalHourMinuteString
+import com.rwmobi.kunigami.domain.extensions.atStartOfHour
+import com.rwmobi.kunigami.domain.extensions.getLocalDateString
+import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
@@ -42,6 +42,7 @@ import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_load_account
 import org.jetbrains.compose.resources.getString
 import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.time.Duration
 
 class AgileViewModel(
@@ -123,7 +124,7 @@ class AgileViewModel(
     private suspend fun getAgileRates(
         region: String,
     ) {
-        val currentTime = Clock.System.now().roundDownToHour()
+        val currentTime = Clock.System.now().atStartOfHour()
         val periodTo = currentTime.plus(duration = Duration.parse("1d"))
 
         getStandardUnitRateUseCase(
@@ -136,7 +137,7 @@ class AgileViewModel(
                 val rateRange = if (rates.isEmpty()) {
                     0.0..0.0 // Return a default range if the list is empty
                 } else {
-                    0.0..ceil(rates.maxOf { it.vatInclusivePrice } * 10) / 10.0
+                    floor(rates.minOf { it.vatInclusivePrice } * 10) / 10.0..ceil(rates.maxOf { it.vatInclusivePrice } * 10) / 10.0
                 }
 
                 val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
@@ -144,7 +145,11 @@ class AgileViewModel(
                         add(
                             element = DefaultVerticalBarPlotEntry(
                                 x = index,
-                                y = DefaultVerticalBarPosition(yMin = 0.0, yMax = rate.vatInclusivePrice),
+                                y = if (rate.vatInclusivePrice >= 0) {
+                                    DefaultVerticalBarPosition(yMin = 0.0, yMax = rate.vatInclusivePrice)
+                                } else {
+                                    DefaultVerticalBarPosition(yMin = rate.vatInclusivePrice, yMax = 0.0)
+                                },
                             ),
                         )
                     }
@@ -218,14 +223,14 @@ class AgileViewModel(
 
     private fun groupChartCells(rates: List<Rate>): List<RateGroupedCells> {
         return rates
-            .groupBy { it.validFrom.toLocalDateString() }
+            .groupBy { it.validFrom.getLocalDateString() }
             .map { (date, items) -> RateGroupedCells(title = date, rates = items) }
     }
 
     private fun generateChartToolTips(rates: List<Rate>): List<String> {
         return rates.map { rate ->
-            val timeRange = rate.validFrom.toLocalHourMinuteString() +
-                (rate.validTo?.let { "- ${it.toLocalHourMinuteString()}" } ?: "")
+            val timeRange = rate.validFrom.getLocalHHMMString() +
+                (rate.validTo?.let { "- ${it.getLocalHHMMString()}" } ?: "")
             "$timeRange\n${rate.vatInclusivePrice.toString(precision = 2)}p"
         }
     }
