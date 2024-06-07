@@ -63,6 +63,7 @@ fun IconTextButton(
                         .fillMaxHeight()
                         .aspectRatio(ratio = 1f),
                     painter = icon,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     contentDescription = null,
                 )
 
@@ -71,6 +72,7 @@ fun IconTextButton(
                 Text(
                     modifier = Modifier.wrapContentHeight(),
                     style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                     text = text,
                 )
             }

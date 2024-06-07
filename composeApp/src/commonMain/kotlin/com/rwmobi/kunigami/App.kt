@@ -80,7 +80,7 @@ private fun WindowSizeClass.calculateNavigationLayout(currentRoute: String?): Na
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun App(
-    androidStatusBarModifier: @Composable ((isDarkTheme: Boolean) -> Unit)? = null,
+    androidStatusBarSideEffect: @Composable ((statusBarColor: Int, isDarkTheme: Boolean) -> Unit)? = null,
 ) {
     val windowSizeClass = calculateWindowSizeClass()
     val lastDoubleTappedNavItem = remember { mutableStateOf<AppDestination?>(null) }
@@ -93,7 +93,7 @@ fun App(
     )
 
     AppTheme(
-        androidStatusBarModifier = androidStatusBarModifier,
+        androidStatusBarSideEffect = androidStatusBarSideEffect,
     ) {
         Surface {
             Scaffold(

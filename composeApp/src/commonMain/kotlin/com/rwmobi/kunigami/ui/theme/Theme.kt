@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.toArgb
 import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 
 private val mediumContrastLightColorScheme = lightColorScheme(
@@ -84,17 +85,19 @@ private val mediumContrastDarkColorScheme = darkColorScheme(
 
 @Composable
 fun AppTheme(
-    androidStatusBarModifier: @Composable ((isDarkTheme: Boolean) -> Unit)? = null,
+    androidStatusBarSideEffect: @Composable ((statusBarColor: Int, isDarkTheme: Boolean) -> Unit)? = null,
     useDarkTheme: Boolean? = null,
     content: @Composable () -> Unit,
 ) {
     val shouldUseDarkTheme = useDarkTheme ?: shouldUseDarkTheme()
-    androidStatusBarModifier?.let {
-        it(shouldUseDarkTheme)
+    val colorScheme = if (shouldUseDarkTheme) mediumContrastDarkColorScheme else mediumContrastLightColorScheme
+
+    androidStatusBarSideEffect?.let {
+        it(colorScheme.secondary.toArgb(), shouldUseDarkTheme)
     }
 
     MaterialTheme(
-        colorScheme = if (shouldUseDarkTheme) mediumContrastDarkColorScheme else mediumContrastLightColorScheme,
+        colorScheme = colorScheme,
         typography = AppTypography(),
         content = content,
     )
