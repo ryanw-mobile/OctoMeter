@@ -102,26 +102,24 @@ internal fun AgileTariffCardAdaptive(
         }
     }
 
-    LaunchedEffect(true) {
+    LaunchedEffect(rateGroupedCells) {
         while (true) {
-            with(activeRate) {
-                val isActiveRateExpired =
-                    (this == null) ||
-                        (validTo?.compareTo(Clock.System.now()) ?: 1) <= 0
+            val isActiveRateExpired =
+                (activeRate == null) ||
+                    (activeRate?.validTo?.compareTo(Clock.System.now()) ?: 1) <= 0
 
-                if (isActiveRateExpired) {
-                    activeRate =
-                        rateGroupedCells.findActiveRate(pointOfReference = Clock.System.now())
-                    rateTrend = rateGroupedCells.getRateTrend(activeRate = activeRate)
-                }
-
-                expireMillis = activeRate?.validTo?.let {
-                    (it - Clock.System.now()).inWholeMilliseconds
-                } ?: Clock.System.now().getNextHalfHourCountdownMillis()
-
-                expireMinutes = expireMillis / MILLIS_IN_MINUTE
-                expireSeconds = (expireMillis / DELAY_ONE_SECOND) % 60
+            if (isActiveRateExpired) {
+                activeRate =
+                    rateGroupedCells.findActiveRate(pointOfReference = Clock.System.now())
+                rateTrend = rateGroupedCells.getRateTrend(activeRate = activeRate)
             }
+
+            expireMillis = activeRate?.validTo?.let {
+                (it - Clock.System.now()).inWholeMilliseconds
+            } ?: Clock.System.now().getNextHalfHourCountdownMillis()
+
+            expireMinutes = expireMillis / MILLIS_IN_MINUTE
+            expireSeconds = (expireMillis / DELAY_ONE_SECOND) % 60
 
             delay(DELAY_ONE_SECOND)
         }
