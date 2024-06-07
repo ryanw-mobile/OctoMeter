@@ -183,12 +183,21 @@ fun VerticalBarChart(
                                     ),
                                 ],
                             ),
-                            shape = RoundedCornerShape(
-                                topStart = 8.dp,
-                                topEnd = 8.dp,
-                                bottomEnd = 0.dp,
-                                bottomStart = 0.dp,
-                            ),
+                            shape = if (entries[index].y.yMin >= 0) {
+                                RoundedCornerShape(
+                                    topStart = 8.dp,
+                                    topEnd = 8.dp,
+                                    bottomEnd = 0.dp,
+                                    bottomStart = 0.dp,
+                                )
+                            } else {
+                                RoundedCornerShape(
+                                    topStart = 0.dp,
+                                    topEnd = 0.dp,
+                                    bottomEnd = 8.dp,
+                                    bottomStart = 8.dp,
+                                )
+                            },
                             hoverElement = {
                                 RichTooltip {
                                     Text(
