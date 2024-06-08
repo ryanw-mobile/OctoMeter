@@ -4,7 +4,6 @@ androidx-activityCompose = "1.9.0"
 androidx-core-ktx = "1.13.1"
 androidx-espresso-core = "3.5.1"
 androidx-test-junit = "1.1.5"
-compose = "1.7.0-alpha07"
 compose-plugin = "1.6.11"
 coreSplashscreen = "1.0.1"
 coroutines = "1.8.1"
@@ -29,6 +28,12 @@ multiplatformSettings = "1.1.1"
 navigationCompose = "2.8.0-alpha02"
 buildconfig = "5.3.5"
 securityCrypto = "1.1.0-alpha06"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+uiautomator = "2.3.0"
+benchmarkMacroJunit4 = "1.2.4"
+baselineprofile = "1.2.4"
+profileinstaller = "1.3.1"
 
 # App configurations, not dependencies
 versionCode = "6"
@@ -36,12 +41,6 @@ versionName = "1.1.0"
 android-minSdk = "26"
 android-targetSdk = "34"
 android-compileSdk = "34"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-uiautomator = "2.3.0"
-benchmarkMacroJunit4 = "1.2.4"
-baselineprofile = "1.2.4"
-profileinstaller = "1.3.1"
 
 
 [libraries]
@@ -57,15 +56,15 @@ koalaplot-core = { group = "io.github.koalaplot", name = "koalaplot-core", versi
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activityCompose" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
-kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose-plugin" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose-plugin" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
 ktor-client-mock = { group = "io.ktor", name = "ktor-client-mock", version.ref = "ktor" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "coroutines" }
@@ -95,15 +94,15 @@ androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profi
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
-jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+android-test = { id = "com.android.test", version.ref = "agp" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinxKover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 gradleKtlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
-android-test = { id = "com.android.test", version.ref = "agp" }
-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }

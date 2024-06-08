@@ -77,7 +77,7 @@ kotlin {
         val desktopMain by getting
 
         androidMain.dependencies {
-            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.compose.ui.tooling)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.core.splashscreen)
             implementation(libs.androidx.lifecycle.runtime.compose)
@@ -263,8 +263,8 @@ android {
     }
 
     dependencies {
-        debugImplementation(libs.compose.ui.tooling)
         debugImplementation(libs.leakcanary.android)
+        debugImplementation(libs.compose.ui.tooling.preview)
     }
 }
 
