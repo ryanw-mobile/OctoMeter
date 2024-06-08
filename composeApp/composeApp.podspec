@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'composeApp'
-    spec.version                  = '1.0.0'
+    spec.version                  = '1.1.0'
     spec.homepage                 = 'https://github.com/ryanw-mobile/OctoMeter/'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''

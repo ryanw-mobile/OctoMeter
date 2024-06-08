@@ -53,11 +53,10 @@ I use Android Studio Koala to build the Android and Deskop apps. Xcode 15.4 for 
 
 * Android: You can download the apk from the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
 * iOS: Join as a tester at [Test Flight](https://testflight.apple.com/join/T6I940RE).
-* Desktop app, to build and run, execute `./gradlew runReleaseDistrubutable` or just `./gradlew run`
-* To export the desktop app into MacOS distributable, execute `./gradlew packageDmg` (I don't use
-  Windows)
-* You can't export the Jar alone. To export the Jar for desktop. Jar doesn't comes with the native
-  Skiko library so it won't run.
+* MacOS Desktop App: You can download the DMG installer from the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
+* I don't have a Windows machine, so I cannot provide a .exe file for Windows.
+* To build and run the Desktop app yourself, execute `./gradlew run`
+
 
 <br /><br />
 
