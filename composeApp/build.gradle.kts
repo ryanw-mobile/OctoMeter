@@ -139,7 +139,7 @@ android {
                 .forEach { output ->
                     val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
                     val outputFileName =
-                        "kunigami-${variant.versionName}-$timestamp-${variant.name}.apk"
+                        "OctoMeter-${variant.versionName}-$timestamp-${variant.name}.apk"
                     output.outputFileName = outputFileName
                 }
         }
@@ -199,7 +199,7 @@ android {
 
         // Bundle output filename
         val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
-        setProperty("archivesBaseName", "kunigami-$versionName-$timestamp")
+        setProperty("archivesBaseName", "OctoMeter-$versionName-$timestamp")
     }
 
     buildTypes {
