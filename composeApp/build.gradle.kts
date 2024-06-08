@@ -283,7 +283,14 @@ compose.desktop {
             includeAllModules = true
 
             macOS {
+                bundleID = "com.rwmobi.kunigami"
                 iconFile.set(project.file("icons/ic_launcher_macos.icns"))
+                notarization {
+                    val providers = project.providers
+                    appleID.set(providers.environmentVariable("NOTARIZATION_APPLE_ID"))
+                    password.set(providers.environmentVariable("NOTARIZATION_PASSWORD"))
+                    teamID.set(providers.environmentVariable("NOTARIZATION_TEAM_ID"))
+                }
             }
             windows {
                 iconFile.set(project.file("icons/ic_launcher_windows.ico"))
