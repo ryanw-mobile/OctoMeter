@@ -78,7 +78,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ env.apk_path }}
-          asset_name: MyApp-${{ env.version }}.apk
+          asset_name: OctoMeter-${{ env.version }}.apk
           asset_content_type: application/vnd.android.package-archive
 
       - name: Find AAB file
@@ -93,5 +93,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ env.aab_path }}
-          asset_name: MyApp-${{ env.version }}.aab
+          asset_name: OctoMeter-${{ env.version }}.aab
           asset_content_type: application/vnd.android.package-archive
