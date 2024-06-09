@@ -213,9 +213,9 @@ android {
         }
 
         getByName("release") {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            isDebuggable = false
+            isShrinkResources = false
+            isMinifyEnabled = false
+            isDebuggable = true
             setProguardFiles(
                 listOf(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
