@@ -273,7 +273,7 @@ compose.desktop {
         mainClass = "com.rwmobi.kunigami.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Deb)
             packageName = "OctoMeter"
             packageVersion = libs.versions.versionName.get()
             description = "OctoMeter: Empowering Smart Electricity Usage"
@@ -284,6 +284,7 @@ compose.desktop {
 
             macOS {
                 bundleID = "com.rwmobi.kunigami"
+                dockName = "OctoMeter"
                 iconFile.set(project.file("icons/ic_launcher_macos.icns"))
                 notarization {
                     val providers = project.providers
@@ -291,13 +292,30 @@ compose.desktop {
                     password.set(providers.environmentVariable("NOTARIZATION_PASSWORD"))
                     teamID.set(providers.environmentVariable("NOTARIZATION_TEAM_ID"))
                 }
+                buildTypes.release {
+                    proguard {
+                        obfuscate = false
+                        optimize = false
+                    }
+                }
             }
             windows {
                 iconFile.set(project.file("icons/ic_launcher_windows.ico"))
+                menuGroup = "OctoMeter"
+                shortcut = true
+                dirChooser = true
+                perUserInstall = true
+                upgradeUuid = "4af5f6a6-3fbe-465b-af40-549cd7a9c09c"
             }
             linux {
                 iconFile.set(project.file("icons/ic_launcher_linux.png"))
             }
+        }
+
+        buildTypes.release.proguard {
+            obfuscate = true
+            optimize = true
+            configurationFiles.from(project.file("compose-desktop.pro"))
         }
     }
 }
