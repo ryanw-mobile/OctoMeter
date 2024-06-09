@@ -1,0 +1,52 @@
+name: Windows distributions on Tag
+
+on:
+  create:
+
+jobs:
+  build-and-release:
+    if: github.ref_type == 'tag' && startsWith(github.ref, 'refs/tags/winRelease/')
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set timezone
+        run: echo "TZ=Europe/London" >> $GITHUB_ENV
+
+      - name: set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+          cache: gradle
+
+      - name: Build and Package Project
+        run: .\gradlew packageReleaseDistributionForCurrentOS
+
+      - name: Extract Version Number
+        run: echo "version=${GITHUB_REF#refs/tags/winRelease/}" >> $GITHUB_ENV
+
+      - name: Find MSI file
+        shell: pwsh
+        run: |
+          $msi_path = Get-ChildItem -Path .\composeApp\build\compose\binaries\main\msi -Filter "OctoMeter-*.msi" | Select-Object -First 1
+          echo "msi_path=$msi_path" >> $env:GITHUB_ENV
+
+      - name: Upload MSI Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OctoMeter-${{ env.version }}.msi
+          path: ${{ env.msi_path }}
+
+      - name: Find EXE file
+        shell: pwsh
+        run: |
+          $exe_path = Get-ChildItem -Path .\composeApp\build\compose\binaries\main\exe -Filter "OctoMeter-*.exe" | Select-Object -First 1
+          echo "exe_path=$exe_path" >> $env:GITHUB_ENV
+
+      - name: Upload EXE Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OctoMeter-${{ env.version }}.exe
+          path: ${{ env.exe_path }}
