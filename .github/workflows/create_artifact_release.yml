@@ -40,7 +40,7 @@ jobs:
           CI_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.BITRISEIO_ANDROID_KEYSTORE_PASSWORD }}
 
       - name: Extract Version Number
-        run: echo "version=${GITHUB_REF#refs/tags/release/}" >> $GITHUB_ENV
+        run: echo "version=${GITHUB_REF#refs/tags/androidBuild/}" >> $GITHUB_ENV
 
       - name: Upload Mapping File Artifact
         uses: actions/upload-artifact@v4
@@ -63,16 +63,6 @@ jobs:
         run: |
           aab_path=$(find ./composeApp/build/outputs/bundle/release -name "OctoMeter-*.aab" | head -n 1)
           echo "aab_path=$aab_path" >> $GITHUB_ENV
-
-      - name: Upload Release Asset AAB
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.aab_path }}
-          asset_name: OctoMeter-${{ env.version }}.aab
-          asset_content_type: application/vnd.android.package-archive
 
       - name: Upload AAB Artifact
         uses: actions/upload-artifact@v4
