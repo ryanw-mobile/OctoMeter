@@ -27,6 +27,7 @@ internal fun RateGroupCells(
     modifier: Modifier = Modifier,
     partitionedItems: List<List<Rate>>,
     rowIndex: Int,
+    shouldHideLastColumn: Boolean,
     maxInRange: Double,
     colorPalette: List<Color>,
 ) {
@@ -35,7 +36,13 @@ internal fun RateGroupCells(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_3),
     ) {
-        for (columnIndex in partitionedItems.indices) {
+        val columnRangeToRender = if (shouldHideLastColumn) {
+            0..<partitionedItems.lastIndex
+        } else {
+            partitionedItems.indices
+        }
+        
+        for (columnIndex in columnRangeToRender) {
             val item = partitionedItems.getOrNull(columnIndex)?.getOrNull(rowIndex)
             if (item != null) {
                 IndicatorTextValueGridItem(

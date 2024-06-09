@@ -240,9 +240,9 @@ fun AgileScreen(
                                     )
                                 }
 
-                                // We can do fancier grouping, but for now evenly-distributed is ok
                                 val partitionedItems = rateGroup.rates.partitionList(columns = uiState.requestedRateColumns)
                                 val maxRows = partitionedItems.maxOf { it.size }
+                                val shouldHideLastColumn = partitionedItems.last().isEmpty()
 
                                 items(maxRows) { rowIndex ->
                                     RateGroupCells(
@@ -253,6 +253,7 @@ fun AgileScreen(
                                                 vertical = dimension.grid_0_25,
                                             ),
                                         partitionedItems = partitionedItems,
+                                        shouldHideLastColumn = shouldHideLastColumn,
                                         maxInRange = uiState.rateRange.endInclusive,
                                         rowIndex = rowIndex,
                                         colorPalette = colorPalette,
