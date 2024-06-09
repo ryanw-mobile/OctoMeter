@@ -77,7 +77,8 @@ kotlin {
         val desktopMain by getting
 
         androidMain.dependencies {
-            implementation(libs.compose.ui.tooling.preview)
+            // tooling.preview is causing crash
+            implementation(libs.compose.ui.tooling)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.core.splashscreen)
             implementation(libs.androidx.lifecycle.runtime.compose)
@@ -139,7 +140,7 @@ android {
                 .forEach { output ->
                     val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
                     val outputFileName =
-                        "kunigami-${variant.versionName}-$timestamp-${variant.name}.apk"
+                        "OctoMeter-${variant.versionName}-$timestamp-${variant.name}.apk"
                     output.outputFileName = outputFileName
                 }
         }
@@ -199,7 +200,7 @@ android {
 
         // Bundle output filename
         val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
-        setProperty("archivesBaseName", "kunigami-$versionName-$timestamp")
+        setProperty("archivesBaseName", "OctoMeter-$versionName-$timestamp")
     }
 
     buildTypes {
@@ -263,7 +264,6 @@ android {
     }
 
     dependencies {
-        debugImplementation(libs.compose.ui.tooling)
         debugImplementation(libs.leakcanary.android)
     }
 }

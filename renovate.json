@@ -30,17 +30,6 @@
         "com.google.devtools.ksp"
       ],
       "groupName": "kotlin"
-    },
-    {
-      "matchPackageNames": [
-        "androidx.compose.ui:ui-tooling",
-        "androidx.compose.ui:ui-tooling-preview"
-      ],
-      "groupName": "composeUiTooling",
-      "automerge": false,
-      "labels": [
-        "requires-approval"
-      ]
     }
   ],
   "automerge": true,
