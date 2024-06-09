@@ -292,12 +292,6 @@ compose.desktop {
                     password.set(providers.environmentVariable("NOTARIZATION_PASSWORD"))
                     teamID.set(providers.environmentVariable("NOTARIZATION_TEAM_ID"))
                 }
-                buildTypes.release {
-                    proguard {
-                        obfuscate = false
-                        optimize = false
-                    }
-                }
             }
             windows {
                 iconFile.set(project.file("icons/ic_launcher_windows.ico"))
@@ -312,6 +306,7 @@ compose.desktop {
             }
         }
 
+        // Release builds can be generated but not running properly at the moment
         buildTypes.release.proguard {
             obfuscate = true
             optimize = true
