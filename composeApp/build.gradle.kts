@@ -77,6 +77,7 @@ kotlin {
         val desktopMain by getting
 
         androidMain.dependencies {
+            // tooling.preview is causing crash
             implementation(libs.compose.ui.tooling)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.core.splashscreen)
@@ -264,7 +265,6 @@ android {
 
     dependencies {
         debugImplementation(libs.leakcanary.android)
-        debugImplementation(libs.compose.ui.tooling.preview)
     }
 }
 
