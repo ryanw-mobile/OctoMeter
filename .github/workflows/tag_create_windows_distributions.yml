@@ -22,7 +22,7 @@ jobs:
           cache: gradle
 
       - name: Build and Package Project
-        run: .\gradlew packageReleaseDistributionForCurrentOS
+        run: .\gradlew packageDistributionForCurrentOS
         env:
           CI: 'false'
 
