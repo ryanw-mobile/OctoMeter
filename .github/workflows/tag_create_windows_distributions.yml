@@ -23,6 +23,8 @@ jobs:
 
       - name: Build and Package Project
         run: .\gradlew packageReleaseDistributionForCurrentOS
+        env:
+          CI: 'false'
 
       - name: Extract Version Number
         run: echo "version=${GITHUB_REF#refs/tags/winRelease/}" >> $GITHUB_ENV
