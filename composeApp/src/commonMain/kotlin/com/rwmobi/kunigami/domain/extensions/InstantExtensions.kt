@@ -6,15 +6,21 @@
  */
 package com.rwmobi.kunigami.domain.extensions
 
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.format
 import kotlinx.datetime.format.DayOfWeekNames
 import kotlinx.datetime.format.MonthNames
 import kotlinx.datetime.format.Padding
 import kotlinx.datetime.format.char
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 
@@ -49,40 +55,25 @@ fun Instant.toIso8601WithoutSeconds(): String {
 fun Instant.atStartOfHour(): Instant {
     val currentLocalDateTime = toSystemDefaultLocalDateTime()
     return LocalDateTime(
-        year = currentLocalDateTime.year,
-        month = currentLocalDateTime.month,
-        dayOfMonth = currentLocalDateTime.dayOfMonth,
-        hour = currentLocalDateTime.hour,
-        minute = 0,
-        second = 0,
-        nanosecond = 0,
+        date = currentLocalDateTime.date,
+        time = LocalTime(
+            hour = currentLocalDateTime.hour,
+            minute = 0,
+        ),
     ).toSystemDefaultTimeZoneInstant()
 }
 
 fun Instant.atStartOfDay(): Instant {
-    val currentLocalDateTime = toSystemDefaultLocalDateTime()
-    return LocalDateTime(
-        year = currentLocalDateTime.year,
-        month = currentLocalDateTime.month,
-        dayOfMonth = currentLocalDateTime.dayOfMonth,
-        hour = 0,
-        minute = 0,
-        second = 0,
-        nanosecond = 0,
-    ).toSystemDefaultTimeZoneInstant()
+    val currentLocalDate = toSystemDefaultLocalDateTime().date
+    return currentLocalDate.atStartOfDayIn(timeZone = TimeZone.currentSystemDefault())
 }
 
 fun Instant.atEndOfDay(): Instant {
-    val currentLocalDateTime = toSystemDefaultLocalDateTime()
-    return LocalDateTime(
-        year = currentLocalDateTime.year,
-        month = currentLocalDateTime.month,
-        dayOfMonth = currentLocalDateTime.dayOfMonth,
-        hour = 23,
-        minute = 59,
-        second = 59,
-        nanosecond = 999_999_999,
-    ).toSystemDefaultTimeZoneInstant()
+    val currentLocalDate = toSystemDefaultLocalDateTime().date
+    return currentLocalDate
+        .plus(period = DatePeriod(days = 1))
+        .atStartOfDayIn(timeZone = TimeZone.currentSystemDefault())
+        .minus(value = 1, unit = DateTimeUnit.NANOSECOND)
 }
 
 /***
