@@ -41,7 +41,7 @@ internal fun RateGroupCells(
         } else {
             partitionedItems.indices
         }
-        
+
         for (columnIndex in columnRangeToRender) {
             val item = partitionedItems.getOrNull(columnIndex)?.getOrNull(rowIndex)
             if (item != null) {
