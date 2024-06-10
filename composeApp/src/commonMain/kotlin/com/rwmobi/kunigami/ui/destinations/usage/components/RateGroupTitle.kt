@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
-import com.rwmobi.kunigami.ui.model.consumption.ConsumptionGroupedCells
+import com.rwmobi.kunigami.ui.model.consumption.ConsumptionGroupWithPartitions
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.unit_kwh
 import org.jetbrains.compose.resources.stringResource
@@ -24,7 +24,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 internal fun RateGroupTitle(
     modifier: Modifier = Modifier,
-    consumptionGroup: ConsumptionGroupedCells,
+    consumptionGroupWithPartitions: ConsumptionGroupWithPartitions,
 ) {
     Row(
         modifier = modifier,
@@ -34,7 +34,7 @@ internal fun RateGroupTitle(
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            text = consumptionGroup.title,
+            text = consumptionGroupWithPartitions.title,
         )
 
         Text(
@@ -43,7 +43,11 @@ internal fun RateGroupTitle(
             fontWeight = FontWeight.Bold,
             text = stringResource(
                 resource = Res.string.unit_kwh,
-                consumptionGroup.consumptions.sumOf { it.consumption }.roundToTwoDecimalPlaces(),
+                consumptionGroupWithPartitions.partitionedItems.sumOf { partitionedItems ->
+                    partitionedItems.sumOf { consumption ->
+                        consumption.consumption
+                    }
+                }.roundToTwoDecimalPlaces(),
             ),
         )
     }

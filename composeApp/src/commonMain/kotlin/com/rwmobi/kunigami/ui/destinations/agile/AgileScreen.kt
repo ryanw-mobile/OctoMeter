@@ -45,6 +45,7 @@ import com.rwmobi.kunigami.ui.destinations.agile.components.RateGroupTitle
 import com.rwmobi.kunigami.ui.extensions.partitionList
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
+import com.rwmobi.kunigami.ui.model.rate.RateGroupWithPartitions
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.xygraph.HorizontalLineAnnotation
@@ -122,6 +123,21 @@ fun AgileScreen(
                             title = uiState.agileTariffSummary?.displayName ?: "",
                             subtitle = subtitle,
                         )
+
+                        // Pre-calculate the list of (rateGroup.title, partitionedItems)
+                        val rateGroupsWithPartitions = remember(uiState.rateGroupedCells, uiState.requestedRateColumns) {
+                            uiState.rateGroupedCells.map { rateGroup ->
+                                RateGroupWithPartitions(
+                                    title = rateGroup.title,
+                                    partitionedItems = rateGroup.rates.partitionList(columns = uiState.requestedRateColumns),
+                                )
+                            }
+                        }
+                        val shouldHideLastRateGroupColumn = remember(rateGroupsWithPartitions) {
+                            rateGroupsWithPartitions.all {
+                                it.partitionedItems.last().isEmpty()
+                            }
+                        }
 
                         LazyColumn(
                             contentPadding = PaddingValues(bottom = dimension.grid_4),
@@ -227,8 +243,8 @@ fun AgileScreen(
                                 }
                             }
 
-                            uiState.rateGroupedCells.forEach { rateGroup ->
-                                item(key = "${rateGroup.title}Title") {
+                            rateGroupsWithPartitions.forEach { rateGroupsWithPartitions ->
+                                item(key = "${rateGroupsWithPartitions.title}Title") {
                                     RateGroupTitle(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -236,14 +252,11 @@ fun AgileScreen(
                                                 vertical = dimension.grid_2,
                                                 horizontal = dimension.grid_4,
                                             ),
-                                        title = rateGroup.title,
+                                        title = rateGroupsWithPartitions.title,
                                     )
                                 }
 
-                                // We can do fancier grouping, but for now evenly-distributed is ok
-                                val partitionedItems = rateGroup.rates.partitionList(columns = uiState.requestedRateColumns)
-                                val maxRows = partitionedItems.maxOf { it.size }
-
+                                val maxRows = rateGroupsWithPartitions.partitionedItems.maxOf { it.size }
                                 items(maxRows) { rowIndex ->
                                     RateGroupCells(
                                         modifier = Modifier
@@ -252,7 +265,8 @@ fun AgileScreen(
                                                 horizontal = dimension.grid_4,
                                                 vertical = dimension.grid_0_25,
                                             ),
-                                        partitionedItems = partitionedItems,
+                                        partitionedItems = rateGroupsWithPartitions.partitionedItems,
+                                        shouldHideLastColumn = shouldHideLastRateGroupColumn,
                                         maxInRange = uiState.rateRange.endInclusive,
                                         rowIndex = rowIndex,
                                         colorPalette = colorPalette,

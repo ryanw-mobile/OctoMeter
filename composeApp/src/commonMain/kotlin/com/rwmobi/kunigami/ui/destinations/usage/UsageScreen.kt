@@ -41,6 +41,7 @@ import com.rwmobi.kunigami.ui.destinations.usage.components.TariffProjectionsCar
 import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
 import com.rwmobi.kunigami.ui.extensions.partitionList
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
+import com.rwmobi.kunigami.ui.model.consumption.ConsumptionGroupWithPartitions
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
@@ -118,6 +119,21 @@ fun UsageScreen(
                                 onNavigateForward = uiEvent.onNextTimeFrame,
                                 onSwitchPresentationStyle = { uiEvent.onSwitchPresentationStyle(it) },
                             )
+                        }
+
+                        // Pre-calculate the list of (rateGroup.title, partitionedItems)
+                        val consumptionGroupsWithPartitions = remember(uiState.consumptionGroupedCells, uiState.requestedUsageColumns) {
+                            uiState.consumptionGroupedCells.map { rateGroup ->
+                                ConsumptionGroupWithPartitions(
+                                    title = rateGroup.title,
+                                    partitionedItems = rateGroup.consumptions.partitionList(columns = uiState.requestedUsageColumns),
+                                )
+                            }
+                        }
+                        val shouldHideLastConsumptionGroupColumn = remember(consumptionGroupsWithPartitions) {
+                            consumptionGroupsWithPartitions.all {
+                                it.partitionedItems.last().isEmpty()
+                            }
                         }
 
                         LazyColumn(
@@ -210,8 +226,8 @@ fun UsageScreen(
                                     )
                                 }
 
-                                uiState.consumptionGroupedCells.forEach { consumptionGroup ->
-                                    item(key = "${consumptionGroup.title}Title") {
+                                consumptionGroupsWithPartitions.forEach { consumptionGroupWithPartitions ->
+                                    item(key = "${consumptionGroupWithPartitions.title}Title") {
                                         RateGroupTitle(
                                             modifier = Modifier
                                                 .fillMaxWidth()
@@ -219,14 +235,11 @@ fun UsageScreen(
                                                     vertical = dimension.grid_2,
                                                     horizontal = dimension.grid_4,
                                                 ),
-                                            consumptionGroup = consumptionGroup,
+                                            consumptionGroupWithPartitions = consumptionGroupWithPartitions,
                                         )
                                     }
 
-                                    // We can do fancier grouping, but for now evenly-distributed is ok
-                                    val partitionedItems = consumptionGroup.consumptions.partitionList(columns = uiState.requestedUsageColumns)
-                                    val maxRows = partitionedItems.maxOf { it.size }
-
+                                    val maxRows = consumptionGroupWithPartitions.partitionedItems.maxOf { it.size }
                                     items(maxRows) { rowIndex ->
                                         RateGroupCells(
                                             modifier = Modifier
@@ -235,7 +248,8 @@ fun UsageScreen(
                                                     horizontal = dimension.grid_4,
                                                     vertical = dimension.grid_0_25,
                                                 ),
-                                            partitionedItems = partitionedItems,
+                                            partitionedItems = consumptionGroupWithPartitions.partitionedItems,
+                                            shouldHideLastColumn = shouldHideLastConsumptionGroupColumn,
                                             rowIndex = rowIndex,
                                             maxInRange = uiState.consumptionRange.endInclusive,
                                             presentationStyle = uiState.consumptionQueryFilter.presentationStyle,

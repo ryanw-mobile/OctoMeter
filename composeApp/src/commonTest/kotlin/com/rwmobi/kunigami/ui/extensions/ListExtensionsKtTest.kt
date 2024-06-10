@@ -51,17 +51,18 @@ class ListExtensionsKtTest {
     fun `partitionList should handle more columns than items`() {
         val list = listOf(1, 2, 3)
         val result = list.partitionList(4)
-        result shouldHaveSize 3
+        result shouldHaveSize 4
         result[0] shouldBe listOf(1)
         result[1] shouldBe listOf(2)
         result[2] shouldBe listOf(3)
+        result[3] shouldBe emptyList()
     }
 
     @Test
     fun `partitionList should handle empty list`() {
         val list = emptyList<Int>()
         val result = list.partitionList(3)
-        result shouldHaveSize 2
+        result shouldHaveSize 3
         result.forEach { it shouldBe emptyList() }
     }
 
@@ -78,8 +79,9 @@ class ListExtensionsKtTest {
     fun `partitionList should remove the last empty column if columns is greater than 2`() {
         val list = listOf(1, 2, 3, 4)
         val result = list.partitionList(3)
-        result shouldHaveSize 2
+        result shouldHaveSize 3
         result[0] shouldBe listOf(1, 2)
         result[1] shouldBe listOf(3, 4)
+        result[2] shouldBe emptyList()
     }
 }
