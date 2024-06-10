@@ -51,12 +51,12 @@ I am also looking for my next Senior Android Dev role, too.
 
 I use Android Studio Koala to build the Android and Deskop apps. Xcode 15.4 for iOS.
 
-* Android: You can download the apk from the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
+All downloadables are provided under the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
+* MacOS Desktop App: We provide a DMG installer.
+* Windows Desktop App: We provide both EXE and MSI installers.
+* Android: We provide signed APK and App Bundle.
 * iOS: Join as a tester at [Test Flight](https://testflight.apple.com/join/T6I940RE).
-* MacOS Desktop App: You can download the DMG installer from the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
-* I don't have a Windows machine, so I cannot provide a .exe file for Windows.
 * To build and run the Desktop app yourself, execute `./gradlew run`
-
 
 <br /><br />
 
@@ -71,6 +71,7 @@ improved later:
 
 * Dual-rate tariffs (day unit rate and night unit rates) are not fully-supported
 * Native iOS UI theming (reusing Android Material 3 components right now)
+* Some UI scaling issues on Windows
 * British Daylight Saving Time issues: We do not have sufficient test data yet.
 
 > [!IMPORTANT]  
