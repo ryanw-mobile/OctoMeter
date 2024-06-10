@@ -43,6 +43,7 @@ import kunigami.composeapp.generated.resources.account_error_load_account
 import org.jetbrains.compose.resources.getString
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.math.min
 import kotlin.time.Duration
 
 class AgileViewModel(
@@ -137,7 +138,7 @@ class AgileViewModel(
                 val rateRange = if (rates.isEmpty()) {
                     0.0..0.0 // Return a default range if the list is empty
                 } else {
-                    floor(rates.minOf { it.vatInclusivePrice } * 10) / 10.0..ceil(rates.maxOf { it.vatInclusivePrice } * 10) / 10.0
+                    min(0.0, floor(rates.minOf { it.vatInclusivePrice } * 10) / 10.0)..ceil(rates.maxOf { it.vatInclusivePrice } * 10) / 10.0
                 }
 
                 val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
