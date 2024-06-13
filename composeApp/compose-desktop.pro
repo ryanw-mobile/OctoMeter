@@ -17,7 +17,6 @@
 
 # Kotlinx Serialization
 -keep class kotlinx.serialization.** { *; }
--keepclassmembers class kotlinx.serialization.** { *; }
 -dontwarn kotlinx.serialization.**
 -keepnames class kotlinx.serialization.internal.** { *; }
 
