@@ -212,6 +212,9 @@ fun AgileScreen(
                             }
 
                             item(key = "tariffDetails") {
+                                val differentTariffSummary = uiState.userProfile?.tariffSummary
+                                    ?.takeUnless { it.isSameTariff(uiState.agileTariffSummary?.tariffCode) }
+
                                 AgileTariffCardAdaptive(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -221,7 +224,7 @@ fun AgileScreen(
                                             top = dimension.grid_1,
                                         ),
                                     agileTariffSummary = uiState.agileTariffSummary,
-                                    differentTariffSummary = uiState.userProfile?.tariffSummary,
+                                    differentTariffSummary = differentTariffSummary,
                                     colorPalette = colorPalette,
                                     rateRange = uiState.rateRange,
                                     rateGroupedCells = uiState.rateGroupedCells,
