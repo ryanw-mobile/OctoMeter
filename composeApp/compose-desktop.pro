@@ -7,6 +7,7 @@
 # Keep Ktor classes
 -keep class io.ktor.** { *; }
 -dontwarn io.ktor.**
+-dontnote io.ktor.**
 
 # Keep all DTO classes in the package
 -keep class com.rwmobi.kunigami.data.source.network.dto.** { *; }
