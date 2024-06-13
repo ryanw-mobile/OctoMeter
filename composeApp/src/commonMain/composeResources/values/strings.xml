@@ -82,6 +82,22 @@
     <string name="tariffs_direct_debit_monthly">Direct Debit Monthly</string>
     <string name="tariffs_error_load_tariffs">Unable to retrieve tariffs</string>
 
+    <!-- Retail Regions -->
+    <string name="retail_region_eastern_england">Eastern England</string>
+    <string name="retail_region_east_midlands">East Midlands</string>
+    <string name="retail_region_london">London</string>
+    <string name="retail_region_merseyside_northern_wales">Merseyside and Northern Wales</string>
+    <string name="retail_region_west_midlands">West Midlands</string>
+    <string name="retail_region_north_eastern_england">North Eastern England</string>
+    <string name="retail_region_north_western_england">North Western England</string>
+    <string name="retail_region_southern_england">Southern England</string>
+    <string name="retail_region_south_eastern_england">South Eastern England</string>
+    <string name="retail_region_southern_wales">Southern Wales</string>
+    <string name="retail_region_south_western_england">South Western England</string>
+    <string name="retail_region_southern_scotland">Southern Scotland</string>
+    <string name="retail_region_yorkshire">Yorkshire</string>
+    <string name="retail_region_northern_scotland">Northern Scotland</string>
+
     <!-- Product Features -->
     <string name="product_feature_variable">Variable</string>
     <string name="product_feature_green">Green</string>
