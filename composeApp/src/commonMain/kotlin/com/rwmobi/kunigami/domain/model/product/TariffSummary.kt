@@ -52,4 +52,5 @@ data class TariffSummary(
     fun extractProductCode(): String? = extractProductCode(tariffCode = tariffCode)
     fun getRetailRegion(): String? = getRetailRegion(tariffCode = tariffCode)
     fun isSingleRate(): Boolean = isSingleRate(tariffCode = tariffCode)
+    fun isSameTariff(tariffCode: String?) = this.tariffCode == tariffCode
 }

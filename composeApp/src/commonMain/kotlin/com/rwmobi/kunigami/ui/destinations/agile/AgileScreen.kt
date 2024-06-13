@@ -45,6 +45,7 @@ import com.rwmobi.kunigami.ui.destinations.agile.components.RateGroupTitle
 import com.rwmobi.kunigami.ui.extensions.partitionList
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
+import com.rwmobi.kunigami.ui.model.product.RetailRegion
 import com.rwmobi.kunigami.ui.model.rate.RateGroupWithPartitions
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.style.LineStyle
@@ -58,8 +59,8 @@ import kunigami.composeapp.generated.resources.agile_product_code_retail_region
 import kunigami.composeapp.generated.resources.agile_unit_rate_details
 import kunigami.composeapp.generated.resources.agile_vat_unit_rate
 import kunigami.composeapp.generated.resources.provide_api_key
+import kunigami.composeapp.generated.resources.retail_region_unknown
 import kunigami.composeapp.generated.resources.revenue
-import kunigami.composeapp.generated.resources.unknown
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -111,10 +112,14 @@ fun AgileScreen(
                             .fillMaxSize()
                             .conditionalBlur(enabled = uiState.isLoading && uiState.barChartData == null),
                     ) {
-                        val subtitle = uiState.agileTariffSummary?.let {
-                            val regionCode = it.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
-                            stringResource(resource = Res.string.agile_product_code_retail_region, it.productCode, regionCode)
+                        val subtitle = uiState.agileTariffSummary?.let { summary ->
+                            val regionCode = RetailRegion.fromCode(summary.getRetailRegion())?.stringResource
+                                ?.let { stringResource(it) }
+                                ?: stringResource(resource = Res.string.retail_region_unknown)
+
+                            stringResource(resource = Res.string.agile_product_code_retail_region, summary.productCode, regionCode)
                         }
+
                         DualTitleBar(
                             modifier = Modifier
                                 .background(color = MaterialTheme.colorScheme.secondary)
@@ -212,6 +217,9 @@ fun AgileScreen(
                             }
 
                             item(key = "tariffDetails") {
+                                val differentTariffSummary = uiState.userProfile?.tariffSummary
+                                    ?.takeUnless { it.isSameTariff(uiState.agileTariffSummary?.tariffCode) }
+
                                 AgileTariffCardAdaptive(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -221,7 +229,7 @@ fun AgileScreen(
                                             top = dimension.grid_1,
                                         ),
                                     agileTariffSummary = uiState.agileTariffSummary,
-                                    differentTariffSummary = uiState.userProfile?.tariffSummary,
+                                    differentTariffSummary = if (uiState.agileTariffSummary != null) differentTariffSummary else null,
                                     colorPalette = colorPalette,
                                     rateRange = uiState.rateRange,
                                     rateGroupedCells = uiState.rateGroupedCells,
