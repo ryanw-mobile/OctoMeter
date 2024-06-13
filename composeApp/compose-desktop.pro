@@ -6,12 +6,28 @@
 
 # Keep Ktor classes
 -keep class io.ktor.** { *; }
+-dontwarn io.ktor.**
+
+# Keep all DTO classes in the package
+-keep class com.rwmobi.kunigami.data.source.network.dto.** { *; }
+-keep class com.rwmobi.kunigami.domain.model.** { *; }
+
+# Keep the class and fields of kotlinx.datetime.Instant
+-keep class kotlinx.datetime.Instant { *; }
 
 # Kotlinx Serialization
 -keep class kotlinx.serialization.** { *; }
 -keepclassmembers class kotlinx.serialization.** { *; }
 -dontwarn kotlinx.serialization.**
 -keepnames class kotlinx.serialization.internal.** { *; }
+
+# Do not warn about missing annotations and metadata
+-dontwarn kotlin.Metadata
+-dontwarn kotlin.jvm.internal.**
+-dontwarn kotlin.reflect.jvm.internal.**
+
+# Keep necessary Kotlin attributes
+-keepattributes Signature, *Annotation*
 
 # JNA classes
 -keep class com.sun.jna.** { *; }
