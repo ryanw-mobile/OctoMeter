@@ -42,7 +42,7 @@ enum class RetailRegion(val code: String, val stringResource: StringResource) {
     ;
 
     companion object {
-        fun fromCode(code: String): RetailRegion? {
+        fun fromCode(code: String?): RetailRegion? {
             return entries.find { it.code == code }
         }
     }

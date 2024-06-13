@@ -65,7 +65,7 @@
     <string name="agile_expire_time">%1$s:%2$s</string>
     <string name="agile_expires_in">Expires in %1$s:%2$s</string>
     <string name="agile_different_tariff">You are on a different tariff</string>
-    <string name="agile_product_code_retail_region">%1$s (Region %2$s)</string>
+    <string name="agile_product_code_retail_region">%1$s (%2$s)</string>
     <string name="agile_tariff_standard_unit_rate_two_lines">Unit Rate:\n%1$d p/kWh</string>
     <string name="agile_tariff_standing_charge_two_lines">Standing Charge:\n%1$d p/day</string>
     <string name="agile_tariff_standard_unit_rate">Unit Rate: %1$d p/kWh</string>
@@ -97,6 +97,7 @@
     <string name="retail_region_southern_scotland">Southern Scotland</string>
     <string name="retail_region_yorkshire">Yorkshire</string>
     <string name="retail_region_northern_scotland">Northern Scotland</string>
+    <string name="retail_region_unknown">Unknown Region</string>
 
     <!-- Product Features -->
     <string name="product_feature_variable">Variable</string>
