@@ -306,7 +306,6 @@ compose.desktop {
             }
         }
 
-        // Release builds can be generated but not running properly at the moment
         buildTypes.release.proguard {
             obfuscate = true
             optimize = true

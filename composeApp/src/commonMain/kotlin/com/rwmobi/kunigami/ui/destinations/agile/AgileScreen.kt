@@ -229,7 +229,7 @@ fun AgileScreen(
                                             top = dimension.grid_1,
                                         ),
                                     agileTariffSummary = uiState.agileTariffSummary,
-                                    differentTariffSummary = differentTariffSummary,
+                                    differentTariffSummary = if (uiState.agileTariffSummary != null) differentTariffSummary else null,
                                     colorPalette = colorPalette,
                                     rateRange = uiState.rateRange,
                                     rateGroupedCells = uiState.rateGroupedCells,
