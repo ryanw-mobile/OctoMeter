@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/17ca0b7ca0c34051a715c1927d016e69)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter?utm_source=github.com&utm_medium=referral&utm_content=ryanw-mobile/OctoMeter&utm_campaign=Badge_Grade)
 ## _Project Kunigami_ / <br/>OctoMeter: Empowering Smart Electricity Usage<br/>![Gradle Build](https://github.com/ryanw-mobile/OctoMeter/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/OctoMeter/graph/badge.svg?token=fGinpoyVUp)](https://codecov.io/gh/ryanw-mobile/OctoMeter)
 
 ### Production-grade Kotlin Multiplatform App targeting Android, iOS, Desktop
