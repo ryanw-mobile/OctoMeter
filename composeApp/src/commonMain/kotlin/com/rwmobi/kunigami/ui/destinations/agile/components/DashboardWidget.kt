@@ -37,7 +37,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
-import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.composehelper.drawHalfCircleArcSegment
 import com.rwmobi.kunigami.ui.composehelper.drawPlainColorArc
@@ -69,15 +68,10 @@ internal fun DashboardWidget(
 
     var breathingColor by remember { mutableStateOf(Color.Transparent) }
     var isAnimatedPercentageComplete by remember { mutableStateOf(false) }
-    var shouldUseDarkTheme = shouldUseDarkTheme()
+    val shouldUseDarkTheme = shouldUseDarkTheme()
 
     LaunchedEffect(animatedPercentage) {
-        Logger.v("animatedPercentage = $animatedPercentage")
-        if (animatedPercentage == percentage) {
-            isAnimatedPercentageComplete = true
-        } else {
-            isAnimatedPercentageComplete = false
-        }
+        isAnimatedPercentageComplete = animatedPercentage == percentage
     }
 
     if (isAnimatedPercentageComplete && animatedPercentage <= 0) {
