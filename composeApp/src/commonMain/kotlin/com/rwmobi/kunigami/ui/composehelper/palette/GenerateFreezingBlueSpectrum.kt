@@ -20,32 +20,30 @@ import androidx.compose.ui.graphics.Color
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 
 fun generateFreezingBlueSpectrum(
-    saturation: Float = 0.6f,
-    lightness: Float = 0.6f,
+    initialSaturation: Float = 0.4f, // Starting with a moderate saturation
+    finalSaturation: Float = 0.7f, // Ending with a higher saturation
+    initialLightness: Float = 0.85f, // Starting with a very light color
+    finalLightness: Float = 0.6f, // Ending with a moderate color
 ): List<Color> {
     val count = 100
     val startHue = 180f // Starting at cyan
-    val endHue = 240f // Ending at blue
-    val delta = (endHue - startHue) / (count - 1) // Calculate delta for exactly 100 steps
+    val endHue = 220f // Ending at a colder blue
+    val deltaHue = (endHue - startHue) / (count - 1) // Calculate delta for exactly 100 steps
+    val deltaSaturation = (finalSaturation - initialSaturation) / (count - 1) // Calculate delta for saturation
+    val deltaLightness = (finalLightness - initialLightness) / (count - 1) // Calculate delta for lightness
 
     return List(count) { i ->
-        val hue = startHue + delta * i // Compute the hue for this index
-        val adjustedLightness = if (lightness < 0.5f) {
-            lightness + (i.toFloat() / count) * 0.3f // Gradually increase lightness
-        } else {
-            lightness - (i.toFloat() / count) * 0.3f // Gradually decrease lightness
-        }
-        Color.hsl(hue, saturation, adjustedLightness)
+        val hue = startHue + deltaHue * i // Compute the hue for this index
+        val saturation = initialSaturation + deltaSaturation * i // Gradually increase saturation
+        val lightness = initialLightness + deltaLightness * i // Gradually decrease lightness
+        Color.hsl(hue, saturation, lightness)
     }
 }
 
 @Preview
 @Composable
 private fun Preview() {
-    val colors = generateFreezingBlueSpectrum(
-        saturation = 0.6f,
-        lightness = 0.6f,
-    )
+    val colors = generateFreezingBlueSpectrum()
     val gradient = Brush.horizontalGradient(colors)
     CommonPreviewSetup(
         modifier = Modifier,
