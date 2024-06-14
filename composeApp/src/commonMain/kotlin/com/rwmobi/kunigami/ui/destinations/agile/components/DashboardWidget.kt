@@ -8,7 +8,12 @@
 package com.rwmobi.kunigami.ui.destinations.agile.components
 
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,9 +37,13 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
+import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.composehelper.drawHalfCircleArcSegment
+import com.rwmobi.kunigami.ui.composehelper.drawPlainColorArc
+import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.composehelper.palette.generateGYRHueSpectrum
+import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_expire
 import org.jetbrains.compose.resources.stringResource
@@ -54,8 +64,38 @@ internal fun DashboardWidget(
 
     val animatedPercentage by animateFloatAsState(
         targetValue = percentage,
-        animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing),
+        animationSpec = tween(durationMillis = 1_000, easing = FastOutSlowInEasing),
     )
+
+    var breathingColor by remember { mutableStateOf(Color.Transparent) }
+    var isAnimatedPercentageComplete by remember { mutableStateOf(false) }
+    var shouldUseDarkTheme = shouldUseDarkTheme()
+
+    LaunchedEffect(animatedPercentage) {
+        Logger.v("animatedPercentage = $animatedPercentage")
+        if (animatedPercentage == percentage) {
+            isAnimatedPercentageComplete = true
+        } else {
+            isAnimatedPercentageComplete = false
+        }
+    }
+
+    if (isAnimatedPercentageComplete && animatedPercentage <= 0) {
+        val infiniteTransition = rememberInfiniteTransition()
+        val breathingPercentage by infiniteTransition.animateFloat(
+            initialValue = animatedPercentage,
+            targetValue = 0f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 2_000, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse,
+            ),
+        )
+        breathingColor = RatePalette.lookupColorFromPercentage(
+            percentage = breathingPercentage,
+            shouldUseDarkTheme = shouldUseDarkTheme,
+        )
+    }
+
     Box(
         modifier = modifier
             .aspectRatio(
@@ -63,13 +103,29 @@ internal fun DashboardWidget(
                 matchHeightConstraintsFirst = true,
             ) // Ensure the aspect ratio is 2:1
             .drawBehind {
-                drawHalfCircleArcSegment(
-                    percentage = animatedPercentage,
-                    colorPalette = colorPalette,
-                    onInnerSpaceMeasured = { width, _ ->
-                        textBoundWidth = width
-                    },
-                )
+                if (animatedPercentage >= 0) {
+                    drawHalfCircleArcSegment(
+                        percentage = animatedPercentage,
+                        colorPalette = colorPalette,
+                        onInnerSpaceMeasured = { width, _ ->
+                            textBoundWidth = width
+                        },
+                    )
+                } else {
+                    drawPlainColorArc(
+                        color = if (isAnimatedPercentageComplete) {
+                            breathingColor
+                        } else {
+                            RatePalette.lookupColorFromPercentage(
+                                percentage = animatedPercentage,
+                                shouldUseDarkTheme = shouldUseDarkTheme,
+                            )
+                        },
+                        onInnerSpaceMeasured = { width, _ ->
+                            textBoundWidth = width
+                        },
+                    )
+                }
             },
         contentAlignment = Alignment.BottomCenter,
     ) {
