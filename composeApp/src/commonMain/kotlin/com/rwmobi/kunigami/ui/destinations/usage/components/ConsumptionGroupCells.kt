@@ -21,6 +21,7 @@ import com.rwmobi.kunigami.domain.extensions.getLocalMonthString
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
+import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
@@ -62,6 +63,7 @@ internal fun ConsumptionGroupCells(
                     indicatorColor = RatePalette.lookupColorFromRange(
                         value = item.consumption,
                         range = consumptionRange,
+                        shouldUseDarkTheme = shouldUseDarkTheme(),
                     ),
                 )
             } else {

@@ -35,6 +35,7 @@ import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
+import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 import com.rwmobi.kunigami.ui.model.rate.RateGroupedCells
 import com.rwmobi.kunigami.ui.model.rate.RateTrend
 import com.rwmobi.kunigami.ui.model.rate.findActiveRate
@@ -79,7 +80,11 @@ internal fun AgileTariffCardAdaptive(
         // both value should be negative
         (effectiveVatInclusivePrice / rateRange.start).toFloat().coerceIn(0f, 1f) * -1
     }
-    val rateTrendIconTint = RatePalette.lookupColorFromRange(value = effectiveVatInclusivePrice, range = rateRange)
+    val rateTrendIconTint = RatePalette.lookupColorFromRange(
+        value = effectiveVatInclusivePrice,
+        range = rateRange,
+        shouldUseDarkTheme = shouldUseDarkTheme(),
+    )
 
     val countDownText = if (activeRate?.validTo != null) {
         stringResource(

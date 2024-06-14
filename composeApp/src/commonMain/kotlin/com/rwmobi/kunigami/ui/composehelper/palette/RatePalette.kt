@@ -20,10 +20,7 @@ object RatePalette {
         saturation = 0.6f,
         lightness = 0.6f,
     )
-    private val negativeSpectrum: List<Color> = generateFreezingBlueSpectrum(
-        saturation = 0.6f,
-        lightness = 0.6f,
-    )
+    private val negativeSpectrum: List<Color> = generateFreezingBlueSpectrum()
 
     fun getPositiveSpectrum() = positiveSpectrum
     fun getNegativeSpectrum() = negativeSpectrum
@@ -34,16 +31,26 @@ object RatePalette {
      * Therefore, the given the same max in the range, same positive value will always
      * resolves into the same color regardless the negative min in the range (if any).
      */
-    fun lookupColorFromRange(value: Double, range: ClosedFloatingPointRange<Double>): Color {
+    fun lookupColorFromRange(
+        value: Double,
+        range: ClosedFloatingPointRange<Double>,
+        shouldUseDarkTheme: Boolean,
+    ): Color {
+        // Sign is for picking the spectrum
+        // Magnitude (absolute value) is for determining the index
         val effectiveValue = value.coerceIn(range)
         val isPositive = effectiveValue >= 0
-        val effectiveSpectrum = if (isPositive) positiveSpectrum else negativeSpectrum
-        val effectiveRange = if (isPositive) 0.0..range.endInclusive else range.start..0.0
+        val effectiveSpectrum = when {
+            isPositive -> positiveSpectrum
+            shouldUseDarkTheme -> negativeSpectrum.reversed()
+            else -> negativeSpectrum
+        }
+        val effectiveRange = if (isPositive) 0.0..range.endInclusive else 0.0..abs(range.start)
         val rangeSpan = effectiveRange.endInclusive - effectiveRange.start
 
         // Avoid division by zero if the range span is zero
         val effectiveColorIndex = if (rangeSpan != 0.0) {
-            ((abs(effectiveValue - effectiveRange.start) / rangeSpan) * (effectiveSpectrum.size - 1)).toInt()
+            (abs(effectiveValue / rangeSpan) * (effectiveSpectrum.size - 1)).toInt()
         } else {
             0
         }
@@ -54,10 +61,17 @@ object RatePalette {
     /**
      * percentage: if negative, it will return the color in negativeSpectrum
      */
-    fun lookupColorFromPercentage(percentage: Float): Color {
+    fun lookupColorFromPercentage(
+        percentage: Float,
+        shouldUseDarkTheme: Boolean,
+    ): Color {
         val effectivePercentage = percentage.coerceIn(-1f..1f)
         val isPositive = effectivePercentage >= 0
-        val effectiveSpectrum = if (isPositive) positiveSpectrum else negativeSpectrum
+        val effectiveSpectrum = when {
+            isPositive -> positiveSpectrum
+            shouldUseDarkTheme -> negativeSpectrum.reversed()
+            else -> negativeSpectrum
+        }
 
         val index = (abs(effectivePercentage) * (effectiveSpectrum.size - 1)).toInt()
 

@@ -18,6 +18,7 @@ import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
+import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
 
@@ -48,6 +49,7 @@ internal fun RateGroupCells(
                     indicatorColor = RatePalette.lookupColorFromRange(
                         value = item.vatInclusivePrice,
                         range = rateRange,
+                        shouldUseDarkTheme = shouldUseDarkTheme(),
                     ),
                     label = item.validFrom.getLocalHHMMString(),
                     value = item.vatInclusivePrice.roundToTwoDecimalPlaces()

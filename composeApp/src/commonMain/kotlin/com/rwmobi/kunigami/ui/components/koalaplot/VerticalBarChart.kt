@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
+import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.ChartLayout
 import io.github.koalaplot.core.bar.DefaultVerticalBar
@@ -177,6 +178,7 @@ fun VerticalBarChart(
                                 RatePalette.lookupColorFromRange(
                                     value = if (entries[index].y.yMin >= 0) entries[index].y.yMax else entries[index].y.yMin,
                                     range = yAxisRange,
+                                    shouldUseDarkTheme = shouldUseDarkTheme(),
                                 ),
                             ),
                             shape = if (entries[index].y.yMin >= 0) {
