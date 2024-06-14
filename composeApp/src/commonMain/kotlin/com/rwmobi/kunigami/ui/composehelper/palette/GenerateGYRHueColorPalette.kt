@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.composehelper
+package com.rwmobi.kunigami.ui.composehelper.palette
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 
-fun generateGYRHueColorPalette(
+fun generateGYRHueSpectrum(
     saturation: Float = 0.5f,
     lightness: Float = 0.5f,
 ): List<Color> {
@@ -37,7 +37,7 @@ fun generateGYRHueColorPalette(
 @Preview
 @Composable
 private fun preview() {
-    val colors = generateGYRHueColorPalette(
+    val colors = generateGYRHueSpectrum(
         saturation = 0.6f,
         lightness = 0.6f,
     )

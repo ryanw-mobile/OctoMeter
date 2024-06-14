@@ -27,9 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -37,7 +35,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
+import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.ChartLayout
 import io.github.koalaplot.core.bar.DefaultVerticalBar
@@ -54,12 +52,11 @@ import io.github.koalaplot.core.xygraph.XYGraph
 import io.github.koalaplot.core.xygraph.XYGraphScope
 import io.github.koalaplot.core.xygraph.rememberAxisStyle
 
-@OptIn(ExperimentalKoalaPlotApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalKoalaPlotApi::class)
 @Composable
 fun VerticalBarChart(
     modifier: Modifier,
     showToolTipOnClick: Boolean,
-    colorPalette: List<Color>,
     entries: List<VerticalBarPlotEntry<Int, Double>>,
     yAxisRange: ClosedFloatingPointRange<Double>,
     labelGenerator: (index: Int) -> String?,
@@ -177,11 +174,10 @@ fun VerticalBarChart(
                                     }
                                 },
                             brush = SolidColor(
-                                colorPalette[
-                                    entries[index].y.yMax.getPercentageColorIndex(
-                                        maxValue = yAxisRange.endInclusive,
-                                    ),
-                                ],
+                                RatePalette.lookupColorFromRange(
+                                    value = entries[index].y.yMax,
+                                    range = yAxisRange,
+                                ),
                             ),
                             shape = if (entries[index].y.yMin >= 0) {
                                 RoundedCornerShape(
@@ -208,6 +204,7 @@ fun VerticalBarChart(
                                     )
                                 }
                             },
+                            border = null,
                         )
                     },
                 )

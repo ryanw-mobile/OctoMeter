@@ -34,8 +34,7 @@ import com.rwmobi.kunigami.ui.components.MessageActionScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
-import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
-import com.rwmobi.kunigami.ui.destinations.usage.components.RateGroupCells
+import com.rwmobi.kunigami.ui.destinations.usage.components.ConsumptionGroupCells
 import com.rwmobi.kunigami.ui.destinations.usage.components.RateGroupTitle
 import com.rwmobi.kunigami.ui.destinations.usage.components.TariffProjectionsCardAdaptive
 import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
@@ -74,12 +73,6 @@ fun UsageScreen(
 
     val dimension = LocalDensity.current.getDimension()
     val lazyListState = rememberLazyListState()
-    val colorPalette = remember {
-        generateGYRHueColorPalette(
-            saturation = 0.6f,
-            lightness = 0.6f,
-        )
-    }
 
     Box(modifier = modifier) {
         when (uiState.requestedScreenType) {
@@ -189,7 +182,6 @@ fun UsageScreen(
                                                 entries = barChartData.verticalBarPlotEntries,
                                                 yAxisRange = uiState.consumptionRange,
                                                 yAxisTitle = stringResource(resource = Res.string.kwh),
-                                                colorPalette = colorPalette,
                                                 labelGenerator = { index ->
                                                     barChartData.labels[index]
                                                 },
@@ -241,7 +233,7 @@ fun UsageScreen(
 
                                     val maxRows = consumptionGroupWithPartitions.partitionedItems.maxOf { it.size }
                                     items(maxRows) { rowIndex ->
-                                        RateGroupCells(
+                                        ConsumptionGroupCells(
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .padding(
@@ -251,9 +243,8 @@ fun UsageScreen(
                                             partitionedItems = consumptionGroupWithPartitions.partitionedItems,
                                             shouldHideLastColumn = shouldHideLastConsumptionGroupColumn,
                                             rowIndex = rowIndex,
-                                            maxInRange = uiState.consumptionRange.endInclusive,
+                                            consumptionRange = uiState.consumptionRange,
                                             presentationStyle = uiState.consumptionQueryFilter.presentationStyle,
-                                            colorPalette = colorPalette,
                                         )
                                     }
                                 }

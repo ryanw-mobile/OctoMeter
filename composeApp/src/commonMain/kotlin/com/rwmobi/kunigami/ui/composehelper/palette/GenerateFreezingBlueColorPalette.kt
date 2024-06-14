@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.ui.composehelper
+package com.rwmobi.kunigami.ui.composehelper.palette
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 
-fun generateFreezingBlueColorPalette(
+fun generateFreezingBlueSpectrum(
     saturation: Float = 0.6f,
     lightness: Float = 0.6f,
 ): List<Color> {
@@ -42,7 +42,7 @@ fun generateFreezingBlueColorPalette(
 @Preview
 @Composable
 private fun Preview() {
-    val colors = generateFreezingBlueColorPalette(
+    val colors = generateFreezingBlueSpectrum(
         saturation = 0.6f,
         lightness = 0.6f,
     )

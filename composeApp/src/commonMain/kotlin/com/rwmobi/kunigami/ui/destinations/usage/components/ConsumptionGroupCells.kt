@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.extensions.getLocalDayMonthString
 import com.rwmobi.kunigami.domain.extensions.getLocalDayOfMonth
@@ -21,20 +20,19 @@ import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.extensions.getLocalMonthString
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
-import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
+import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
 
 @Composable
-internal fun RateGroupCells(
+internal fun ConsumptionGroupCells(
     modifier: Modifier = Modifier,
     partitionedItems: List<List<Consumption>>,
     rowIndex: Int,
     shouldHideLastColumn: Boolean,
-    maxInRange: Double,
+    consumptionRange: ClosedFloatingPointRange<Double>,
     presentationStyle: ConsumptionPresentationStyle,
-    colorPalette: List<Color>,
 ) {
     val dimension = LocalDensity.current.getDimension()
     Row(
@@ -61,9 +59,10 @@ internal fun RateGroupCells(
                     modifier = Modifier.weight(1f),
                     label = label,
                     value = item.consumption.toString(precision = 2),
-                    indicatorColor = colorPalette[
-                        item.consumption.getPercentageColorIndex(maxValue = maxInRange),
-                    ],
+                    indicatorColor = RatePalette.lookupColorFromRange(
+                        value = item.consumption,
+                        range = consumptionRange,
+                    ),
                 )
             } else {
                 Spacer(modifier = Modifier.weight(1f))

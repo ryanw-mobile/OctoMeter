@@ -33,11 +33,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.composehelper.drawHalfCircleArcSegment
-import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
+import com.rwmobi.kunigami.ui.composehelper.palette.generateGYRHueSpectrum
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_expire
 import org.jetbrains.compose.resources.stringResource
 
+/***
+ * percentage: can be negative
+ */
 @Composable
 internal fun DashboardWidget(
     modifier: Modifier,
@@ -115,7 +118,7 @@ private fun Preview() {
     CommonPreviewSetup {
         DashboardWidget(
             modifier = Modifier.aspectRatio(ratio = 2f),
-            colorPalette = generateGYRHueColorPalette(),
+            colorPalette = generateGYRHueSpectrum(),
             countDownText = "33:33",
             percentage = 0.8f,
         )

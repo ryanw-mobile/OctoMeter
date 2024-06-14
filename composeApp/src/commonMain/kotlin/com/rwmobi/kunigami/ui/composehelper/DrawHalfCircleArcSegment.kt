@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
+import com.rwmobi.kunigami.ui.composehelper.palette.generateGYRHueSpectrum
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.coin
 import org.jetbrains.compose.resources.painterResource
@@ -146,7 +147,7 @@ private fun Preview() {
                     .drawBehind {
                         drawHalfCircleArcSegment(
                             percentage = 0.59f,
-                            colorPalette = generateGYRHueColorPalette(),
+                            colorPalette = generateGYRHueSpectrum(),
                             iconPainter = iconPainter,
                             iconColorFilter = ColorFilter.tint(color = colorFilter),
                             iconAlpha = 0.32f,

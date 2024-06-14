@@ -12,13 +12,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
-import com.rwmobi.kunigami.ui.extensions.getPercentageColorIndex
+import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
 
@@ -28,8 +27,7 @@ internal fun RateGroupCells(
     partitionedItems: List<List<Rate>>,
     rowIndex: Int,
     shouldHideLastColumn: Boolean,
-    maxInRange: Double,
-    colorPalette: List<Color>,
+    rateRange: ClosedFloatingPointRange<Double>,
 ) {
     val dimension = LocalDensity.current.getDimension()
     Row(
@@ -47,9 +45,10 @@ internal fun RateGroupCells(
             if (item != null) {
                 IndicatorTextValueGridItem(
                     modifier = Modifier.weight(1f),
-                    indicatorColor = colorPalette[
-                        item.vatInclusivePrice.getPercentageColorIndex(maxValue = maxInRange),
-                    ],
+                    indicatorColor = RatePalette.lookupColorFromRange(
+                        value = item.vatInclusivePrice,
+                        range = rateRange,
+                    ),
                     label = item.validFrom.getLocalHHMMString(),
                     value = item.vatInclusivePrice.roundToTwoDecimalPlaces()
                         .toString(precision = 2),
