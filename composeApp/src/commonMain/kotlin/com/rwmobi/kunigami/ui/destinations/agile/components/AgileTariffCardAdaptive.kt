@@ -76,8 +76,10 @@ internal fun AgileTariffCardAdaptive(
     val targetPercentage = if (vatInclusivePrice >= 0) {
         (effectiveVatInclusivePrice / rateRange.endInclusive).toFloat().coerceIn(0f, 1f)
     } else {
-        (effectiveVatInclusivePrice / rateRange.start).toFloat().coerceIn(-1f, 0f)
+        // both value should be negative
+        (effectiveVatInclusivePrice / rateRange.start).toFloat().coerceIn(0f, 1f) * -1
     }
+    val rateTrendIconTint = RatePalette.lookupColorFromRange(value = effectiveVatInclusivePrice, range = rateRange)
 
     val countDownText = if (activeRate?.validTo != null) {
         stringResource(
@@ -100,7 +102,7 @@ internal fun AgileTariffCardAdaptive(
                 targetPercentage = targetPercentage,
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
                 rateTrend = rateTrend,
-                rateTrendIconTint = RatePalette.lookupColorFromPercentage(targetPercentage),
+                rateTrendIconTint = rateTrendIconTint,
                 countDownText = countDownText,
             )
         }
@@ -113,7 +115,7 @@ internal fun AgileTariffCardAdaptive(
                 targetPercentage = targetPercentage,
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
                 rateTrend = rateTrend,
-                rateTrendIconTint = RatePalette.lookupColorFromPercentage(targetPercentage),
+                rateTrendIconTint = rateTrendIconTint,
                 countDownText = countDownText,
             )
         }
