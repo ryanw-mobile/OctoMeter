@@ -38,7 +38,6 @@ import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
-import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
 import com.rwmobi.kunigami.ui.destinations.agile.components.AgileTariffCardAdaptive
 import com.rwmobi.kunigami.ui.destinations.agile.components.RateGroupCells
 import com.rwmobi.kunigami.ui.destinations.agile.components.RateGroupTitle
@@ -82,12 +81,6 @@ fun AgileScreen(
 
     val dimension = LocalDensity.current.getDimension()
     val lazyListState = rememberLazyListState()
-    val colorPalette = remember {
-        generateGYRHueColorPalette(
-            saturation = 0.6f,
-            lightness = 0.6f,
-        )
-    }
 
     Box(modifier = modifier) {
         when {
@@ -193,7 +186,6 @@ fun AgileScreen(
                                             tooltipGenerator = { index ->
                                                 barChartData.tooltips[index]
                                             },
-                                            colorPalette = colorPalette,
                                             backgroundPlot = { graphScope ->
                                                 if (uiState.isOnDifferentTariff() &&
                                                     uiState.userProfile?.tariffSummary != null
@@ -230,7 +222,6 @@ fun AgileScreen(
                                         ),
                                     agileTariffSummary = uiState.agileTariffSummary,
                                     differentTariffSummary = if (uiState.agileTariffSummary != null) differentTariffSummary else null,
-                                    colorPalette = colorPalette,
                                     rateRange = uiState.rateRange,
                                     rateGroupedCells = uiState.rateGroupedCells,
                                     requestedAdaptiveLayout = uiState.requestedAdaptiveLayout,
@@ -275,9 +266,8 @@ fun AgileScreen(
                                             ),
                                         partitionedItems = rateGroupsWithPartitions.partitionedItems,
                                         shouldHideLastColumn = shouldHideLastRateGroupColumn,
-                                        maxInRange = uiState.rateRange.endInclusive,
+                                        rateRange = uiState.rateRange,
                                         rowIndex = rowIndex,
-                                        colorPalette = colorPalette,
                                     )
                                 }
                             }

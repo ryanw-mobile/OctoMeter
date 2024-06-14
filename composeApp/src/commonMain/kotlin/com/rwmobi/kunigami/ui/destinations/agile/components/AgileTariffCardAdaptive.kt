@@ -34,7 +34,8 @@ import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
-import com.rwmobi.kunigami.ui.composehelper.generateGYRHueColorPalette
+import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
+import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 import com.rwmobi.kunigami.ui.model.rate.RateGroupedCells
 import com.rwmobi.kunigami.ui.model.rate.RateTrend
 import com.rwmobi.kunigami.ui.model.rate.findActiveRate
@@ -51,10 +52,13 @@ import org.jetbrains.compose.resources.stringResource
 private const val DELAY_ONE_SECOND = 1_000L
 private const val MILLIS_IN_MINUTE = 60_000
 
+/***
+ * The caller should supply the final colorPalette (positive or negative)
+ * This composable has no business logic to split positive / negative cases.
+ */
 @Composable
 internal fun AgileTariffCardAdaptive(
     modifier: Modifier = Modifier,
-    colorPalette: List<Color>,
     rateRange: ClosedFloatingPointRange<Double>,
     rateGroupedCells: List<RateGroupedCells>,
     requestedAdaptiveLayout: WindowWidthSizeClass,
@@ -66,7 +70,31 @@ internal fun AgileTariffCardAdaptive(
     var expireMillis by remember { mutableStateOf(Clock.System.now().getNextHalfHourCountdownMillis()) }
     var expireMinutes by remember { mutableStateOf(expireMillis / MILLIS_IN_MINUTE) }
     var expireSeconds by remember { mutableStateOf((expireMillis / DELAY_ONE_SECOND) % 60) }
-    val targetPercentage = ((activeRate?.vatInclusivePrice ?: 0.0) / rateRange.endInclusive).toFloat().coerceIn(0f, 1f)
+
+    // We split the range into negative and positive as we have two spectrum for them
+    val vatInclusivePrice = activeRate?.vatInclusivePrice ?: 0.0
+    val effectiveVatInclusivePrice = vatInclusivePrice.coerceIn(rateRange.start, rateRange.endInclusive)
+    val targetPercentage = if (vatInclusivePrice >= 0) {
+        (effectiveVatInclusivePrice / rateRange.endInclusive).toFloat().coerceIn(0f, 1f)
+    } else {
+        // both value should be negative
+        (effectiveVatInclusivePrice / rateRange.start).toFloat().coerceIn(0f, 1f) * -1
+    }
+    val rateTrendIconTint = RatePalette.lookupColorFromRange(
+        value = effectiveVatInclusivePrice,
+        range = rateRange,
+        shouldUseDarkTheme = shouldUseDarkTheme(),
+    )
+
+    val countDownText = if (activeRate?.validTo != null) {
+        stringResource(
+            resource = Res.string.agile_expire_time,
+            expireMinutes,
+            expireSeconds.toString().padStart(length = 2, padChar = '0'),
+        )
+    } else {
+        null
+    }
 
     when (requestedAdaptiveLayout) {
         WindowWidthSizeClass.Compact,
@@ -76,13 +104,11 @@ internal fun AgileTariffCardAdaptive(
                 modifier = modifier,
                 agileTariffSummary = agileTariffSummary,
                 differentTariffSummary = differentTariffSummary,
-                colorPalette = colorPalette,
                 targetPercentage = targetPercentage,
-                expireMinutes = expireMinutes,
-                expireSeconds = expireSeconds,
-                showCountdown = activeRate?.validTo != null,
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
                 rateTrend = rateTrend,
+                rateTrendIconTint = rateTrendIconTint,
+                countDownText = countDownText,
             )
         }
 
@@ -91,13 +117,11 @@ internal fun AgileTariffCardAdaptive(
                 modifier = modifier,
                 agileTariffSummary = agileTariffSummary,
                 differentTariffSummary = differentTariffSummary,
-                colorPalette = colorPalette,
                 targetPercentage = targetPercentage,
-                expireMinutes = expireMinutes,
-                expireSeconds = expireSeconds,
-                showCountdown = activeRate?.validTo != null,
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
                 rateTrend = rateTrend,
+                rateTrendIconTint = rateTrendIconTint,
+                countDownText = countDownText,
             )
         }
     }
@@ -130,14 +154,12 @@ internal fun AgileTariffCardAdaptive(
 private fun AgileTariffCardCompact(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
-    showCountdown: Boolean,
-    expireMinutes: Long,
-    expireSeconds: Long,
-    colorPalette: List<Color>,
     vatInclusivePrice: Double?,
     agileTariffSummary: TariffSummary?,
     differentTariffSummary: TariffSummary?,
+    countDownText: String?,
     rateTrend: RateTrend?,
+    rateTrendIconTint: Color? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -157,8 +179,7 @@ private fun AgileTariffCardCompact(
                     .fillMaxHeight(),
                 vatInclusivePrice = vatInclusivePrice,
                 rateTrend = rateTrend,
-                colorPalette = colorPalette,
-                targetPercentage = targetPercentage,
+                rateTrendIconTint = rateTrendIconTint,
                 agileTariffSummary = agileTariffSummary,
                 textStyle = AgilePriceCardTextStyle(
                     standingChargeStyle = MaterialTheme.typography.bodyMedium,
@@ -171,17 +192,9 @@ private fun AgileTariffCardCompact(
                 modifier = Modifier
                     .weight(weight = 1f)
                     .fillMaxHeight(),
-                countDownText = if (showCountdown) {
-                    stringResource(
-                        resource = Res.string.agile_expire_time,
-                        expireMinutes,
-                        expireSeconds.toString().padStart(length = 2, padChar = '0'),
-                    )
-                } else {
-                    null
-                },
+                countDownText = countDownText,
                 targetPercentage = targetPercentage,
-                colorPalette = colorPalette,
+                colorPalette = RatePalette.getPositiveSpectrum(),
             )
         }
 
@@ -201,14 +214,12 @@ private fun AgileTariffCardCompact(
 private fun AgileTariffCardExpanded(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
-    showCountdown: Boolean,
-    expireMinutes: Long,
-    expireSeconds: Long,
-    colorPalette: List<Color>,
     agileTariffSummary: TariffSummary?,
     differentTariffSummary: TariffSummary?,
     vatInclusivePrice: Double?,
+    countDownText: String?,
     rateTrend: RateTrend?,
+    rateTrendIconTint: Color? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -222,8 +233,7 @@ private fun AgileTariffCardExpanded(
                 .fillMaxHeight(),
             vatInclusivePrice = vatInclusivePrice,
             rateTrend = rateTrend,
-            colorPalette = colorPalette,
-            targetPercentage = targetPercentage,
+            rateTrendIconTint = rateTrendIconTint,
             agileTariffSummary = agileTariffSummary,
             textStyle = AgilePriceCardTextStyle(
                 standingChargeStyle = MaterialTheme.typography.labelLarge,
@@ -236,17 +246,9 @@ private fun AgileTariffCardExpanded(
             modifier = Modifier
                 .weight(weight = 1f)
                 .fillMaxHeight(),
-            countDownText = if (showCountdown) {
-                stringResource(
-                    resource = Res.string.agile_expire_time,
-                    expireMinutes,
-                    expireSeconds.toString().padStart(length = 2, padChar = '0'),
-                )
-            } else {
-                null
-            },
+            countDownText = countDownText,
             targetPercentage = targetPercentage,
-            colorPalette = colorPalette,
+            colorPalette = RatePalette.getPositiveSpectrum(),
         )
 
         differentTariffSummary?.let {
@@ -277,7 +279,6 @@ private fun Preview() {
                 ),
             agileTariffSummary = TariffSamples.agileFlex221125,
             differentTariffSummary = TariffSamples.agileFlex221125,
-            colorPalette = generateGYRHueColorPalette(),
             rateRange = 0.0..5.0,
             rateGroupedCells = listOf(
                 RateGroupedCells(
