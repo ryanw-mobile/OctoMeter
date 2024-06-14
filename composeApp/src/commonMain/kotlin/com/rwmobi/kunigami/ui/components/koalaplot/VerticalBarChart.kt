@@ -175,7 +175,7 @@ fun VerticalBarChart(
                                 },
                             brush = SolidColor(
                                 RatePalette.lookupColorFromRange(
-                                    value = entries[index].y.yMax,
+                                    value = if (entries[index].y.yMin >= 0) entries[index].y.yMax else entries[index].y.yMin,
                                     range = yAxisRange,
                                 ),
                             ),
