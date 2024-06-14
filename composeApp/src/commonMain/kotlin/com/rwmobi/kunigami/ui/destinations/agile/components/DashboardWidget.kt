@@ -73,7 +73,7 @@ internal fun DashboardWidget(
         countDownText?.let {
             CompositionLocalProvider(
                 LocalDensity provides Density(
-                    density = LocalDensity.current.density,
+                    density = 2.625f,
                     fontScale = fontScale,
                 ),
             ) {

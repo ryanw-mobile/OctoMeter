@@ -73,7 +73,7 @@ internal fun DrawScope.drawHalfCircleArcSegment(
         drawArc(
             color = color,
             startAngle = angle,
-            sweepAngle = segmentAngle,
+            sweepAngle = segmentAngle + 0.5f, // Make sure it leaves no gap
             useCenter = false,
             style = Stroke(width = effectiveStrokeWidth),
             size = Size(width = effectiveDiameter, height = effectiveDiameter),
@@ -94,17 +94,17 @@ internal fun DrawScope.drawHalfCircleArcSegment(
                 colorPalette[index].darken(darkenFactor)
             }
             val dividerAngle = startAngle + (index + 1) * segmentAngle
-
-            val startX = (radius - dynamicStrokeWidth / 2) * cos(toRadians(dividerAngle.toDouble())).toFloat() + size.width / 2
-            val startY = (radius - dynamicStrokeWidth / 2) * sin(toRadians(dividerAngle.toDouble())).toFloat() + size.height
-            val endX = (radius + dynamicStrokeWidth / 2) * cos(toRadians(dividerAngle.toDouble())).toFloat() + size.width / 2
-            val endY = (radius + dynamicStrokeWidth / 2) * sin(toRadians(dividerAngle.toDouble())).toFloat() + size.height
+            val angleInRadians = toRadians(dividerAngle.toDouble())
+            val startX = (radius - dynamicStrokeWidth / 2) * cos(angleInRadians).toFloat() + size.width / 2
+            val startY = (radius - dynamicStrokeWidth / 2) * sin(angleInRadians).toFloat() + size.height
+            val endX = (radius + dynamicStrokeWidth / 2) * cos(angleInRadians).toFloat() + size.width / 2
+            val endY = (radius + dynamicStrokeWidth / 2) * sin(angleInRadians).toFloat() + size.height
 
             drawLine(
                 color = backgroundColor.getContrastColor().copy(alpha = 0.5f),
                 start = Offset(startX, startY),
                 end = Offset(endX, endY),
-                strokeWidth = 1f,
+                strokeWidth = 0.5f,
             )
         }
     }
