@@ -45,7 +45,7 @@ internal fun DashboardWidget(
     countDownText: String?,
     colorPalette: List<Color>,
 ) {
-    val countDownTextMagicWidth = 500f
+    val countDownTextMagicWidth = 480f
     var textBoundWidth by remember { mutableStateOf(countDownTextMagicWidth) }
     val fontScale = remember(textBoundWidth) { textBoundWidth / countDownTextMagicWidth }
 
