@@ -14,12 +14,12 @@ import kotlinx.datetime.Instant
 import kotlin.time.Duration
 
 @Immutable
-data class RatePartitionedList(
+data class RateGroup(
     val title: String,
     val rates: List<Rate>,
 )
 
-fun List<RatePartitionedList>.findActiveRate(pointOfReference: Instant): Rate? {
+fun List<RateGroup>.findActiveRate(pointOfReference: Instant): Rate? {
     this.forEach { group ->
         val activeRate = group.rates.find { rate ->
             rate.isActive(pointOfReference)
@@ -31,7 +31,7 @@ fun List<RatePartitionedList>.findActiveRate(pointOfReference: Instant): Rate? {
     return null
 }
 
-fun List<RatePartitionedList>.getRateTrend(activeRate: Rate?): RateTrend? {
+fun List<RateGroup>.getRateTrend(activeRate: Rate?): RateTrend? {
     return activeRate?.let {
         if (it.validTo == null) {
             RateTrend.STEADY
