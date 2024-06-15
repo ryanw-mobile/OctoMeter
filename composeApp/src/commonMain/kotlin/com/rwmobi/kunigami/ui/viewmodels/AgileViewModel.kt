@@ -24,7 +24,7 @@ import com.rwmobi.kunigami.ui.destinations.agile.AgileScreenType
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
-import com.rwmobi.kunigami.ui.model.rate.RateGroupedCells
+import com.rwmobi.kunigami.ui.model.rate.RatePartitionedList
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
 import io.github.koalaplot.core.bar.VerticalBarPlotEntry
@@ -222,10 +222,10 @@ class AgileViewModel(
         }
     }
 
-    private fun groupChartCells(rates: List<Rate>): List<RateGroupedCells> {
+    private fun groupChartCells(rates: List<Rate>): List<RatePartitionedList> {
         return rates
             .groupBy { it.validFrom.getLocalDateString() }
-            .map { (date, items) -> RateGroupedCells(title = date, rates = items) }
+            .map { (date, items) -> RatePartitionedList(title = date, rates = items) }
     }
 
     private fun generateChartToolTips(rates: List<Rate>): List<String> {
