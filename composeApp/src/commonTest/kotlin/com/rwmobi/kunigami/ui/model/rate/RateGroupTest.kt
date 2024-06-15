@@ -41,7 +41,7 @@ class RateGroupTest {
         )
         val partitionedList = listOf(
             RateGroup(
-                title = "Test Group",
+                const val TEST_GROUP_TITLE = "Test Group"
                 rates = listOf(rate),
             ),
         )
