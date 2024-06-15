@@ -11,6 +11,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Get the Release ID
+        id: get_release
+        uses: actions/github-script@v7
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
+        with:
+          script: |
+            const { GITHUB_REF } = process.env;
+            const tag = GITHUB_REF.split('/').pop();
+            const { data: releases } = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            const release = releases.find(rel => rel.tag_name === `release/${tag}`);
+            if (!release) {
+              throw new Error(`Release not found for tag ${tag}`);
+            }
+            core.setOutput('release_id', release.id);
+          result-encoding: string
+
       - name: set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -25,26 +45,6 @@ jobs:
 
       - name: Extract Version Number
         run: echo "version=${GITHUB_REF#refs/tags/winRelease/}" >> $GITHUB_ENV
-
-      - name: Get the Release ID
-        id: get_release
-        uses: actions/github-script@v7
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
-        with:
-          script: |
-            const { GITHUB_REF } = process.env;
-            const tag = GITHUB_REF.split('/').pop();
-            const { data: releases } = await github.rest.repos.listReleases({
-              owner: context.repo.owner,
-              repo: context.repo.repo
-            });
-            const release = releases.find(rel => rel.tag_name === tag);
-            if (!release) {
-              throw new Error(`Release not found for tag ${tag}`);
-            }
-            core.setOutput('release_id', release.id);
-          result-encoding: string
 
       - name: Find MSI file
         shell: pwsh
