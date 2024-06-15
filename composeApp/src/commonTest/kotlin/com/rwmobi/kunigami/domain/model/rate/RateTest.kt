@@ -34,7 +34,7 @@ class RateTest {
             validTo = validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
-        val pointOfReference = LocalDateTime(
+        val referencePoint = LocalDateTime(
             year = 2023,
             monthNumber = 5,
             dayOfMonth = 5,
@@ -42,7 +42,7 @@ class RateTest {
             minute = 0,
         ).toInstant(londonZone)
 
-        assertTrue(rate.isActive(pointOfReference))
+        assertTrue(rate.isActive(referencePoint))
     }
 
     @Test
@@ -69,7 +69,7 @@ class RateTest {
             validTo = validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
-        val pointOfReference = LocalDateTime(
+        val referencePoint = LocalDateTime(
             year = 2023,
             monthNumber = 4,
             dayOfMonth = 30,
@@ -78,7 +78,7 @@ class RateTest {
             second = 59,
         ).toInstant(londonZone)
 
-        assertFalse(rate.isActive(pointOfReference))
+        assertFalse(rate.isActive(referencePoint))
     }
 
     @Test
@@ -105,7 +105,7 @@ class RateTest {
             validTo = validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
-        val pointOfReference = LocalDateTime(
+        val referencePoint = LocalDateTime(
             year = 2023,
             monthNumber = 5,
             dayOfMonth = 11,
@@ -113,7 +113,7 @@ class RateTest {
             minute = 0,
         ).toInstant(londonZone)
 
-        assertFalse(rate.isActive(pointOfReference))
+        assertFalse(rate.isActive(referencePoint))
     }
 
     @Test
@@ -132,7 +132,7 @@ class RateTest {
             validTo = null,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
-        val pointOfReference = LocalDateTime(
+        val referencePoint = LocalDateTime(
             year = 2023,
             monthNumber = 5,
             dayOfMonth = 5,
@@ -140,7 +140,7 @@ class RateTest {
             minute = 0,
         ).toInstant(londonZone)
 
-        assertTrue(rate.isActive(pointOfReference))
+        assertTrue(rate.isActive(referencePoint))
     }
 
     @Test
@@ -159,7 +159,7 @@ class RateTest {
             validTo = null,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
-        val pointOfReference = LocalDateTime(
+        val referencePoint = LocalDateTime(
             year = 2023,
             monthNumber = 4,
             dayOfMonth = 30,
@@ -168,6 +168,6 @@ class RateTest {
             second = 59,
         ).toInstant(londonZone)
 
-        assertFalse(rate.isActive(pointOfReference))
+        assertFalse(rate.isActive(referencePoint))
     }
 }

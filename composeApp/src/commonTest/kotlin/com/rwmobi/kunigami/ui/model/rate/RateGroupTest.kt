@@ -45,7 +45,7 @@ class RateGroupTest {
                 rates = listOf(rate),
             ),
         )
-        val pointOfReference = LocalDateTime(
+        val referencePoint = LocalDateTime(
             year = 2023,
             monthNumber = 5,
             dayOfMonth = 5,
@@ -53,7 +53,7 @@ class RateGroupTest {
             minute = 0,
         ).toInstant(londonZone)
 
-        val activeRate = partitionedList.findActiveRate(pointOfReference)
+        val activeRate = partitionedList.findActiveRate(referencePoint)
 
         assertNotNull(activeRate)
         assertEquals(activeRate, rate)
@@ -89,7 +89,7 @@ class RateGroupTest {
                 rates = listOf(rate),
             ),
         )
-        val pointOfReference = LocalDateTime(
+        val referencePoint = LocalDateTime(
             year = 2023,
             monthNumber = 5,
             dayOfMonth = 11,
@@ -98,7 +98,7 @@ class RateGroupTest {
 
         ).toInstant(londonZone)
 
-        val activeRate = partitionedList.findActiveRate(pointOfReference)
+        val activeRate = partitionedList.findActiveRate(referencePoint)
 
         assertNull(activeRate)
     }

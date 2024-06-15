@@ -65,7 +65,7 @@ internal fun AgileTariffCardAdaptive(
     agileTariffSummary: TariffSummary?,
     differentTariffSummary: TariffSummary?,
 ) {
-    var activeRate by remember { mutableStateOf(rateGroupedCells.findActiveRate(pointOfReference = Clock.System.now())) }
+    var activeRate by remember { mutableStateOf(rateGroupedCells.findActiveRate(referencePoint = Clock.System.now())) }
     var rateTrend by remember { mutableStateOf(rateGroupedCells.getRateTrend(activeRate = activeRate)) }
     var expireMillis by remember { mutableStateOf(Clock.System.now().getNextHalfHourCountdownMillis()) }
     var expireMinutes by remember { mutableStateOf(expireMillis / MILLIS_IN_MINUTE) }
@@ -134,7 +134,7 @@ internal fun AgileTariffCardAdaptive(
 
             if (isActiveRateExpired) {
                 activeRate =
-                    rateGroupedCells.findActiveRate(pointOfReference = Clock.System.now())
+                    rateGroupedCells.findActiveRate(referencePoint = Clock.System.now())
                 rateTrend = rateGroupedCells.getRateTrend(activeRate = activeRate)
             }
 

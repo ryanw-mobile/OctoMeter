@@ -21,7 +21,7 @@ class RateTest {
     @Test
     fun `isActive should return true when point of reference is within the valid period`() {
         val rate = RateSampleData.rateWithValidTo
-        val pointOfReference = LocalDateTime(
+        val referencePoint = LocalDateTime(
             year = 2023,
             monthNumber = 5,
             dayOfMonth = 5,
@@ -30,13 +30,13 @@ class RateTest {
             second = 0,
         ).toInstant(timeZone)
 
-        rate.isActive(pointOfReference) shouldBe true
+        rate.isActive(referencePoint) shouldBe true
     }
 
     @Test
     fun `isActive should return false when point of reference is before the valid period`() {
         val rate = RateSampleData.rateWithValidTo
-        val pointOfReference = LocalDateTime(
+        val referencePoint = LocalDateTime(
             year = 2023,
             monthNumber = 4,
             dayOfMonth = 30,
@@ -45,13 +45,13 @@ class RateTest {
             second = 59,
         ).toInstant(timeZone)
 
-        rate.isActive(pointOfReference) shouldBe false
+        rate.isActive(referencePoint) shouldBe false
     }
 
     @Test
     fun `isActive should return false when point of reference is after the valid period`() {
         val rate = RateSampleData.rateWithValidTo
-        val pointOfReference = LocalDateTime(
+        val referencePoint = LocalDateTime(
             year = 2023,
             monthNumber = 5,
             dayOfMonth = 11,
@@ -60,13 +60,13 @@ class RateTest {
             second = 0,
         ).toInstant(timeZone)
 
-        rate.isActive(pointOfReference) shouldBe false
+        rate.isActive(referencePoint) shouldBe false
     }
 
     @Test
     fun `isActive should return true when validTo is null and point of reference is after validFrom`() {
         val rate = RateSampleData.rateWithoutValidTo
-        val pointOfReference = LocalDateTime(
+        val referencePoint = LocalDateTime(
             year = 2023,
             monthNumber = 5,
             dayOfMonth = 5,
@@ -75,13 +75,13 @@ class RateTest {
             second = 0,
         ).toInstant(timeZone)
 
-        rate.isActive(pointOfReference) shouldBe true
+        rate.isActive(referencePoint) shouldBe true
     }
 
     @Test
     fun `isActive should return false when validTo is null and point of reference is before validFrom`() {
         val rate = RateSampleData.rateWithoutValidTo
-        val pointOfReference = LocalDateTime(
+        val referencePoint = LocalDateTime(
             year = 2023,
             monthNumber = 4,
             dayOfMonth = 30,
@@ -90,6 +90,6 @@ class RateTest {
             second = 59,
         ).toInstant(timeZone)
 
-        rate.isActive(pointOfReference) shouldBe false
+        rate.isActive(referencePoint) shouldBe false
     }
 }

@@ -67,12 +67,12 @@ class UsageViewModel(
             val userProfile = getUserProfile()
             if (userProfile != null) {
                 // Currently smart meter readings are not real-time. Yesterday's figures are the latest we can get.
-                val pointOfReference = Clock.System.now() - Duration.parse(value = "1d")
+                val referencePoint = Clock.System.now() - Duration.parse(value = "1d")
                 var newConsumptionQueryFilter = ConsumptionQueryFilter(
                     presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
-                    pointOfReference = pointOfReference,
-                    requestedStart = pointOfReference.atStartOfDay(),
-                    requestedEnd = pointOfReference.atEndOfDay(),
+                    referencePoint = referencePoint,
+                    requestedStart = referencePoint.atStartOfDay(),
+                    requestedEnd = referencePoint.atEndOfDay(),
                 )
 
                 // UIState comes with a default presentationStyle. We try to go backward 5 times hoping for some valid results
@@ -127,9 +127,9 @@ class UsageViewModel(
             with(_uiState.value.consumptionQueryFilter) {
                 val newConsumptionQueryFilter = ConsumptionQueryFilter(
                     presentationStyle = presentationStyle,
-                    pointOfReference = pointOfReference,
-                    requestedStart = ConsumptionQueryFilter.calculateStartDate(pointOfReference = pointOfReference, presentationStyle = presentationStyle),
-                    requestedEnd = ConsumptionQueryFilter.calculateEndDate(pointOfReference = pointOfReference, presentationStyle = presentationStyle),
+                    referencePoint = referencePoint,
+                    requestedStart = ConsumptionQueryFilter.calculateStartDate(referencePoint = referencePoint, presentationStyle = presentationStyle),
+                    requestedEnd = ConsumptionQueryFilter.calculateEndDate(referencePoint = referencePoint, presentationStyle = presentationStyle),
                 )
 
                 refresh(consumptionQueryFilter = newConsumptionQueryFilter)
