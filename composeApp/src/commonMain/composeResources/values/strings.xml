@@ -28,6 +28,7 @@
     <string name="night_unit_rate">Night Unit Rate</string>
     <string name="unit_p_day">%1$d p/day</string>
     <string name="unit_p_kwh">%1$d p/kWh</string>
+    <string name="unit_percent">%1$d %</string>
 
     <string name="selected">Selected</string>
     <string name="loading">Loading...</string>
@@ -54,7 +55,8 @@
     <string name="usage_estimated_daily">Daily average: %1$s kWh / £%2$s</string>
     <string name="usage_annual_projection">Projected annual consumption</string>
     <string name="usage_demo_introduction">Demo Mode: The consumption figures shown are randomly generated.</string>
-
+    <string name="usage_consumption">Consumption</string>
+    <string name="usage_standing_charge">Standing Charge</string>
 
     <!-- Agile -->
     <string name="agile_demo_introduction">Demo Mode: The Agile Tariff shown for Retail Region A may not be available to you.</string>
@@ -109,7 +111,7 @@
 
     <!-- Account Screen -->
     <string name="account_clear_credential_title">Clear Credentials and Switch to Demo Mode</string>
-    <string name="account_clear_credential_description">Removing your API token and any account-specific data from local storage. Under demo mode, the application will utilise simulated local data to replicate authenticated access. Additionally, it will default to retail region A when retrieving tariffs.</string>
+    <string name="account_clear_credential_description">Removing your API token and any account-specific data from local storage. Under demo mode, the application will utilise simulated local data to replicate authenticated access. Additionally, it will default to Eastern England when retrieving tariffs.</string>
     <string name="account_clear_credential_button_cta">Clear</string>
     <string name="account_version_api_disclaimer">OctoMeter Version %1$s (Build %2$d)\n%3$s\n\nThe APIs are provided by Octopus Energy Ltd. Usage subject to their terms of service.</string>
 
@@ -136,7 +138,7 @@
 
     <!-- Onboarding -->
     <string name="onboarding_welcome_aboard">Welcome Aboard!</string>
-    <string name="onboarding_introduction_1">This app is currently running in demo mode, using simulated local data to replicate authenticated access. This means the electricity usage data displayed is not real. Additionally, the app will default to retail region A when retrieving tariffs.</string>
+    <string name="onboarding_introduction_1">This app is currently running in demo mode, using simulated local data to replicate authenticated access. This means the electricity usage data displayed is not real. Additionally, the app will default to Eastern England when retrieving tariffs.</string>
     <string name="onboarding_question_1">Are you an Octopus Energy customer with a smart meter installed?</string>
     <string name="onboarding_introduction_2">If you are a current Octopus Energy customer with a smart meter and have access to your web account, you can generate an API key for this app to pull your smart meter data. Visit: https://octopus.energy/dashboard/new/accounts/personal-details/api-access</string>
     <string name="onboarding_reminder_1">Your API key is confidential, so don't share it with anyone. If you have concerns, regenerating a new key will invalidate all previously issued keys.</string>

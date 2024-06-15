@@ -10,6 +10,7 @@ package com.rwmobi.kunigami.ui.model.consumption
 data class Insights(
     val consumptionAggregateRounded: Double,
     val consumptionTimeSpan: Int,
+    val consumptionChargeRatio: Double,
     val roughCost: Double,
     val consumptionDailyAverage: Double,
     val costDailyAverage: Double,

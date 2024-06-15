@@ -198,6 +198,7 @@ private fun Preview() {
             insights = Insights(
                 consumptionAggregateRounded = 42.290,
                 consumptionTimeSpan = 8820,
+                consumptionChargeRatio = 0.64,
                 roughCost = 2.815,
                 consumptionAnnualProjection = 48.504,
                 costAnnualProjection = 24.868,
@@ -211,6 +212,7 @@ private fun Preview() {
             insights = Insights(
                 consumptionAggregateRounded = 42.290,
                 consumptionTimeSpan = 8820,
+                consumptionChargeRatio = 0.64,
                 roughCost = 2.815,
                 consumptionAnnualProjection = 48.504,
                 costAnnualProjection = 24.868,
@@ -224,6 +226,7 @@ private fun Preview() {
             insights = Insights(
                 consumptionAggregateRounded = 42.290,
                 consumptionTimeSpan = 8820,
+                consumptionChargeRatio = 0.64,
                 roughCost = 2.815,
                 consumptionAnnualProjection = 48.504,
                 costAnnualProjection = 24.868,
