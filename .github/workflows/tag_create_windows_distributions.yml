@@ -44,7 +44,12 @@ jobs:
           CI: 'false'
 
       - name: Extract Version Number
-        run: echo "version=${GITHUB_REF#refs/tags/winRelease/}" >> $GITHUB_ENV
+        shell: pwsh
+        run: |
+          Write-Host "Extracting version from $env:GITHUB_REF"
+          $version = $env:GITHUB_REF -replace 'refs/tags/winRelease/', ''
+          echo "version=$version" >> $env:GITHUB_ENV
+          Write-Host "Extracted version: $version"
 
       - name: Find MSI file
         shell: pwsh
