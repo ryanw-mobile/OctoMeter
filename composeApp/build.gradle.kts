@@ -70,7 +70,7 @@ kotlin {
         else -> error("Unsupported arch: $osArch")
     }
 
-    val skikoVersion = "0.7.70" // or any more recent version
+    val skikoVersion = libs.versions.skiko
     val skikoTarget = "$targetOs-$targetArch"
 
     sourceSets {
@@ -110,7 +110,7 @@ kotlin {
             implementation(libs.multiplatform.settings)
         }
         desktopMain.dependencies {
-            implementation("org.jetbrains.skiko:skiko-awt-runtime-$skikoTarget:$skikoVersion")
+            runtimeOnly("org.jetbrains.skiko:skiko-awt-runtime-$skikoTarget:$skikoVersion")
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.koin.jvm)
