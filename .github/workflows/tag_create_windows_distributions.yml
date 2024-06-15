@@ -49,7 +49,7 @@ jobs:
       - name: Find MSI file
         shell: pwsh
         run: |
-          $msi_path = (Get-ChildItem -Path .\composeApp\build\compose\binaries\main\msi -Filter "OctoMeter-*.msi" | Select-Object -First 1).FullName
+          $msi_path = (Get-ChildItem -Path .\composeApp\build\compose\binaries\main-release\msi -Filter "OctoMeter-*.msi" | Select-Object -First 1).FullName
           echo "msi_path=$msi_path" >> $env:GITHUB_ENV
 
       - name: Upload MSI Release Asset
@@ -65,7 +65,7 @@ jobs:
       - name: Find EXE file
         shell: pwsh
         run: |
-          $exe_path = (Get-ChildItem -Path .\composeApp\build\compose\binaries\main\exe -Filter "OctoMeter-*.exe" | Select-Object -First 1).FullName
+          $exe_path = (Get-ChildItem -Path .\composeApp\build\compose\binaries\main-release\exe -Filter "OctoMeter-*.exe" | Select-Object -First 1).FullName
           echo "exe_path=$exe_path" >> $env:GITHUB_ENV
 
       - name: Upload EXE Release Asset
