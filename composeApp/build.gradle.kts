@@ -21,6 +21,9 @@ plugins {
     alias(libs.plugins.baselineprofile)
 }
 
+val productName = "OctoMeter"
+val productNameSpace = "com.rwmobi.kunigami"
+
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -141,13 +144,13 @@ android {
                 .forEach { output ->
                     val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
                     val outputFileName =
-                        "OctoMeter-${variant.versionName}-$timestamp-${variant.name}.apk"
+                        "$productName-${variant.versionName}-$timestamp-${variant.name}.apk"
                     output.outputFileName = outputFileName
                 }
         }
     }
 
-    namespace = "com.rwmobi.kunigami"
+    namespace = productNameSpace
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -186,7 +189,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.rwmobi.kunigami"
+        applicationId = productNameSpace
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = libs.versions.versionCode.get().toInt()
@@ -194,14 +197,14 @@ android {
 
         resourceConfigurations += setOf("en")
 
-        testInstrumentationRunner = "com.rwmobi.kunigami.ui.test.CustomTestRunner"
+        testInstrumentationRunner = "$productNameSpace.ui.test.CustomTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
 
         // Bundle output filename
         val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
-        setProperty("archivesBaseName", "OctoMeter-$versionName-$timestamp")
+        setProperty("archivesBaseName", "$productName-$versionName-$timestamp")
     }
 
     buildTypes {
@@ -271,11 +274,11 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.rwmobi.kunigami.MainKt"
+        mainClass = "$productNameSpace.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Deb)
-            packageName = "OctoMeter"
+            packageName = productName
             packageVersion = libs.versions.versionName.get()
             description = "OctoMeter: Empowering Smart Electricity Usage"
             copyright = "© 2024 Ryan Wong and open source contributors. All rights reserved."
@@ -284,8 +287,8 @@ compose.desktop {
             includeAllModules = true
 
             macOS {
-                bundleID = "com.rwmobi.kunigami"
-                dockName = "OctoMeter"
+                bundleID = productNameSpace
+                dockName = productName
                 iconFile.set(project.file("icons/ic_launcher_macos.icns"))
                 notarization {
                     val providers = project.providers
@@ -296,7 +299,7 @@ compose.desktop {
             }
             windows {
                 iconFile.set(project.file("icons/ic_launcher_windows.ico"))
-                menuGroup = "OctoMeter"
+                menuGroup = productName
                 shortcut = true
                 dirChooser = true
                 perUserInstall = true
@@ -348,7 +351,7 @@ dependencies {
 
 buildConfig {
     packageName("composeapp.kunigami")
-    buildConfigField("PACKAGE_NAME", provider { "com.rwmobi.kunigami" })
+    buildConfigField("PACKAGE_NAME", provider { "$productNameSpace" })
     buildConfigField("VERSION_NAME", provider { libs.versions.versionName.get() })
     buildConfigField("VERSION_CODE", provider { libs.versions.versionCode.get() })
     buildConfigField("GITHUB_LINK", provider { "https://github.com/ryanw-mobile/OctoMeter" })
@@ -363,25 +366,25 @@ kover {
                 // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
                 classes(
                     listOf(
-                        "com.rwmobi.kunigami.KunigamiApplication*",
-                        "com.rwmobi.kunigami.MainActivity*",
-                        "com.rwmobi.kunigami.*.*MembersInjector",
-                        "com.rwmobi.kunigami.*.*Factory",
-                        "com.rwmobi.kunigami.data.source.local.*_Impl*",
-                        "com.rwmobi.kunigami.data.source.local.*Impl_Factory",
-                        "com.rwmobi.kunigami.BR",
-                        "com.rwmobi.kunigami.BuildConfig",
-                        "com.rwmobi.kunigami.ComposableSingletons*",
-                        "com.rwmobi.kunigami.App*",
-                        "com.rwmobi.kunigami.MainKt*",
-                        "com.rwmobi.kunigami.NavigationLayoutType",
-                        "com.rwmobi.kunigami.data.repositor.DemoRestApiRepository",
-                        "com.rwmobi.kunigami.ui.extensions.WindowSizeClassExtensions*",
-                        "com.rwmobi.kunigami.ui.extensions.ThrowableExtensions*",
-                        "com.rwmobi.kunigami.ui.extensions.GenerateRandomLong*",
-                        "com.rwmobi.kunigami.ui.extensions.GenerateRandomLong*",
-                        "com.rwmobi.kunigami.data.source.local.preferences.ProvideSettings*",
-                        "com.rwmobi.kunigami.data.source.local.preferences.MultiplatformPreferencesStore*",
+                        "$productNameSpace.KunigamiApplication*",
+                        "$productNameSpace.MainActivity*",
+                        "$productNameSpace.*.*MembersInjector",
+                        "$productNameSpace.*.*Factory",
+                        "$productNameSpace.data.source.local.*_Impl*",
+                        "$productNameSpace.data.source.local.*Impl_Factory",
+                        "$productNameSpace.BR",
+                        "$productNameSpace.BuildConfig",
+                        "$productNameSpace.ComposableSingletons*",
+                        "$productNameSpace.App*",
+                        "$productNameSpace.MainKt*",
+                        "$productNameSpace.NavigationLayoutType",
+                        "$productNameSpace.data.repositor.DemoRestApiRepository",
+                        "$productNameSpace.ui.extensions.WindowSizeClassExtensions*",
+                        "$productNameSpace..ui.extensions.ThrowableExtensions*",
+                        "$productNameSpace.ui.extensions.GenerateRandomLong*",
+                        "$productNameSpace.ui.extensions.GenerateRandomLong*",
+                        "$productNameSpace.data.source.local.preferences.ProvideSettings*",
+                        "$productNameSpace.data.source.local.preferences.MultiplatformPreferencesStore*",
                         "*Fragment",
                         "*Fragment\$*",
                         "*Activity",
@@ -393,14 +396,14 @@ kover {
                 // excludes all classes located in specified package and it subpackages, wildcards '*' and '?' are available
                 packages(
                     listOf(
-                        "com.rwmobi.kunigami.di",
-                        "com.rwmobi.kunigami.ui.components",
-                        "com.rwmobi.kunigami.ui.composehelper",
-                        "com.rwmobi.kunigami.ui.destinations",
-                        "com.rwmobi.kunigami.ui.navigation",
-                        "com.rwmobi.kunigami.ui.previewparameter",
-                        "com.rwmobi.kunigami.ui.theme",
-                        "com.rwmobi.kunigami.ui.previewsampledata",
+                        "$productNameSpace.di",
+                        "$productNameSpace.ui.components",
+                        "$productNameSpace.ui.composehelper",
+                        "$productNameSpace.ui.destinations",
+                        "$productNameSpace.ui.navigation",
+                        "$productNameSpace.ui.previewparameter",
+                        "$productNameSpace.ui.theme",
+                        "$productNameSpace.ui.previewsampledata",
                         "androidx",
                         "dagger.hilt.internal.aggregatedroot.codegen",
                         "hilt_aggregated_deps",
