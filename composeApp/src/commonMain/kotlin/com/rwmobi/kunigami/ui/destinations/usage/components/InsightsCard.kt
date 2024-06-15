@@ -105,7 +105,7 @@ internal fun InsightsCard(
 
             Spacer(modifier = Modifier.weight(weight = 1f))
 
-            RatioBar(
+            AnimatedRatioBar(
                 modifier = Modifier
                     .padding(top = dimension.grid_1)
                     .defaultMinSize(minHeight = dimension.grid_2)
