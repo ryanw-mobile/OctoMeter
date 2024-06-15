@@ -7,6 +7,8 @@
 
 package com.rwmobi.kunigami.ui.destinations.usage.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +17,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,19 +36,28 @@ import kunigami.composeapp.generated.resources.unit_percent
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun RatioBar(
+internal fun AnimatedRatioBar(
     modifier: Modifier = Modifier,
     consumptionRatio: Double, // Ratio between 0.0 and 1.0
 ) {
     val consumptionColor = MaterialTheme.colorScheme.primary
     val standingChargeColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
-    val effectiveRatio = consumptionRatio.coerceIn(minimumValue = 0.0, maximumValue = 1.0)
+
+    var targetRatio by remember { mutableStateOf(0f) }
+    // Trigger the animation when the composable is first composed
+    LaunchedEffect(consumptionRatio) {
+        targetRatio = consumptionRatio.coerceIn(minimumValue = 0.0, maximumValue = 1.0).toFloat()
+    }
+    val animatedRatio by animateFloatAsState(
+        targetValue = targetRatio,
+        animationSpec = tween(durationMillis = 1_000),
+    )
 
     Box(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.large)
             .drawBehind {
-                val consumptionWidth = size.width * effectiveRatio.toFloat()
+                val consumptionWidth = size.width * animatedRatio
                 val standingChargeWidth = size.width - consumptionWidth
 
                 drawIntoCanvas {
@@ -64,7 +80,7 @@ internal fun RatioBar(
             modifier = Modifier.align(alignment = Alignment.Center),
             style = MaterialTheme.typography.labelSmall,
             color = Color.White,
-            text = stringResource(resource = Res.string.unit_percent, (consumptionRatio * 100).toString(precision = 0)),
+            text = stringResource(resource = Res.string.unit_percent, (animatedRatio * 100).toString(precision = 0)),
         )
     }
 }
@@ -75,7 +91,7 @@ private fun Preview() {
     CommonPreviewSetup(
         modifier = Modifier.padding(all = 8.dp),
     ) { dimension ->
-        RatioBar(
+        AnimatedRatioBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(dimension.grid_2),
