@@ -198,6 +198,7 @@ private fun Preview() {
     val insights = Insights(
         consumptionAggregateRounded = 85.115,
         consumptionTimeSpan = 303,
+        consumptionChargeRatio = 0.64,
         roughCost = 90.988,
         consumptionDailyAverage = 32.611,
         costDailyAverage = 12.434,

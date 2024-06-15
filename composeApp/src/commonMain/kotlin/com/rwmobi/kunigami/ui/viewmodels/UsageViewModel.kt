@@ -266,6 +266,7 @@ class UsageViewModel(
             val consumptionAggregateRounded = consumptions.sumOf { it.consumption }.roundToNearestEvenHundredth()
             val consumptionTimeSpan = consumptions.getConsumptionTimeSpan()
             val roughCost = ((consumptionTimeSpan * tariffSummary.vatInclusiveStandingCharge) + (consumptionAggregateRounded * tariffSummary.vatInclusiveUnitRate)) / 100.0
+            val consumptionChargeRatio = (consumptionAggregateRounded * tariffSummary.vatInclusiveUnitRate / 100.0) / roughCost
             val consumptionDailyAverage = (consumptions.sumOf { it.consumption } / consumptions.getConsumptionTimeSpan()).roundToNearestEvenHundredth()
             val costDailyAverage = (tariffSummary.vatInclusiveStandingCharge + consumptionDailyAverage * tariffSummary.vatInclusiveUnitRate) / 100.0
             val consumptionAnnualProjection = (consumptions.sumOf { it.consumption } / consumptionTimeSpan * 365.25).roundToNearestEvenHundredth()
@@ -274,6 +275,7 @@ class UsageViewModel(
             Insights(
                 consumptionAggregateRounded = consumptionAggregateRounded,
                 consumptionTimeSpan = consumptionTimeSpan,
+                consumptionChargeRatio = consumptionChargeRatio,
                 roughCost = roughCost,
                 consumptionDailyAverage = consumptionDailyAverage,
                 costDailyAverage = costDailyAverage,
