@@ -98,29 +98,41 @@ improved later:
 
 * [Kermit](https://github.com/touchlab/Kermit) - Apache 2.0 - A Kotlin Multiplatform logging library
 * [KoalaPlot](https://github.com/koalaplot/koalaplot-core) - MIT - A plotting library for Kotlin Multiplatform
-* [Jetpack Compose](https://developer.android.com/jetpack/androidx/releases/compose) - Apache 2.0 - Modern toolkit for building native UI
-* [AndroidX](https://developer.android.com/jetpack/androidx) - Apache 2.0 - AndroidX libraries
-* [Kotlinx](https://github.com/Kotlin) - Apache 2.0 - Kotlin extensions and libraries
+* [AndroidX Activity Compose](https://developer.android.com/jetpack/androidx/releases/activity) - Apache 2.0 - Jetpack Compose integration with Activity
+* [AndroidX Core Splashscreen](https://developer.android.com/jetpack/androidx/releases/core) - Apache 2.0 - Core splash screen
+* [AndroidX Security Crypto](https://developer.android.com/jetpack/androidx/releases/security) - Apache 2.0 - Security library for Android
+* [Jetpack Compose UI Tooling](https://developer.android.com/jetpack/compose/tooling) - Apache 2.0 - UI tooling for Jetpack Compose
 * [Ktor](https://ktor.io/) - Apache 2.0 - Framework for building asynchronous servers and clients in connected systems
+* [Kotlinx DateTime](https://github.com/Kotlin/kotlinx-datetime) - Apache 2.0 - A multiplatform Kotlin library for working with date and time
+* [Kotlinx Coroutines](https://github.com/Kotlin/kotlinx.coroutines) - Apache 2.0 - Libraries for Kotlin coroutines
+* [Kotlinx Serialization](https://github.com/Kotlin/kotlinx.serialization) - Apache 2.0 - Kotlin multiplatform serialization library
 * [Kotest](https://kotest.io/) - Apache 2.0 - Kotlin test framework
-* [Material3](https://github.com/material-components/material-components-android) - Apache 2.0 - Material Design components
-* [Koin](https://insert-koin.io/) - Apache 2.0 - Dependency Injection framework for Kotlin
+* [Material3 Window Size Class Multiplatform](https://github.com/material-components/material-components-android) - Apache 2.0 - Material Design components for Jetpack Compose
+* [Koin](https://insert-koin.io/) - Apache 2.0 - Dependency injection framework for Kotlin
 * [LeakCanary](https://square.github.io/leakcanary/) - Apache 2.0 - A memory leak detection library for Android
 * [Multiplatform Settings](https://github.com/russhwolf/multiplatform-settings) - Apache 2.0 - Multiplatform settings library for Kotlin
+* [Jetpack Navigation Compose](https://developer.android.com/jetpack/androidx/releases/navigation) - Apache 2.0 - Navigation component for Jetpack Compose
+* [AndroidX Lifecycle](https://developer.android.com/jetpack/androidx/releases/lifecycle) - Apache 2.0 - Lifecycles-aware components
 * [Theme Detector](https://github.com/Dansoftowner/jSystemThemeDetector) - MIT - Detect system theme (light/dark mode)
+* [AndroidX Test Ext JUnit](https://developer.android.com/jetpack/androidx/releases/test) - Apache 2.0 - Extensions for Android testing
+* [AndroidX Espresso](https://developer.android.com/training/testing/espresso) - Apache 2.0 - UI testing framework
+* [AndroidX UI Automator](https://developer.android.com/training/testing/ui-automator) - Apache 2.0 - UI automation testing framework
+* [AndroidX Benchmark](https://developer.android.com/jetpack/androidx/releases/benchmark) - Apache 2.0 - Benchmarking library
+* [AndroidX Profile Installer](https://developer.android.com/jetpack/androidx/releases/profileinstaller) - Apache 2.0 - Install profiles for faster startup
+* [Skiko](https://github.com/JetBrains/skiko) - Apache 2.0 - Kotlin Multiplatform bindings to Skia
 
 ### Plugins
 
 * [Android Application Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) - Google - Plugin for building Android applications
 * [Android Library Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) - Google - Plugin for building Android libraries
 * [Jetbrains Compose Plugin](https://github.com/JetBrains/compose-jb) - JetBrains - Plugin for Jetpack Compose
+* [Compose Compiler Plugin](https://developer.android.com/jetpack/compose) - JetBrains - Plugin for Jetpack Compose
 * [Kotlin Multiplatform Plugin](https://kotlinlang.org/docs/multiplatform.html) - JetBrains - Plugin for Kotlin Multiplatform projects
-* [Kover Plugin](https://github.com/Kotlin/kotlinx-kover) - JetBrains - Code coverage tool for Kotlin
+* [Kotlin CocoaPods Plugin](https://kotlinlang.org/docs/native-cocoapods.html) - JetBrains - Plugin for integrating with CocoaPods
 * [Ktlint Plugin](https://github.com/JLLeitschuh/ktlint-gradle) - JLLeitschuh - Plugin for Kotlin linter
+* [Kover Plugin](https://github.com/Kotlin/kotlinx-kover) - JetBrains - Code coverage tool for Kotlin
 * [Serialization Plugin](https://github.com/Kotlin/kotlinx.serialization) - JetBrains - Plugin for Kotlin serialization
-* [Kotlin JVM Plugin](https://kotlinlang.org/docs/gradle.html) - JetBrains - Plugin for Kotlin JVM projects
 * [BuildConfig Plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) - gmazzo - Plugin for generating BuildConfig classes
-* [Android Test Plugin](https://developer.android.com/studio/test) - Google - Plugin for Android testing
 * [Baseline Profile Plugin](https://developer.android.com/studio/profile/baselineprofile) - AndroidX - Plugin for generating baseline profiles
 
 <br /><br />
