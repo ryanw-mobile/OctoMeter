@@ -62,7 +62,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
         with:
-          upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release.outputs.release_id }}/assets
+          upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release.outputs.release_id }}/assets{?name,label}
           asset_path: ${{ env.msi_path }}
           asset_name: OctoMeter-${{ env.version }}.msi
           asset_content_type: application/x-msi
@@ -78,7 +78,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
         with:
-          upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release.outputs.release_id }}/assets
+          upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release.outputs.release_id }}/assets{?name,label}
           asset_path: ${{ env.exe_path }}
           asset_name: OctoMeter-${{ env.version }}.exe
           asset_content_type: application/vnd.microsoft.portable-executable
