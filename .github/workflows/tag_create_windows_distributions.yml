@@ -33,15 +33,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
         with:
           script: |
-            const { data: releases } = await github.repos.listReleases({
+            const { GITHUB_REF } = process.env;
+            const tag = GITHUB_REF.split('/').pop();
+            const { data: releases } = await github.rest.repos.listReleases({
               owner: context.repo.owner,
               repo: context.repo.repo
             });
-            const release = releases.find(rel => rel.tag_name === process.env.GITHUB_REF.split('/').pop());
+            const release = releases.find(rel => rel.tag_name === tag);
             if (!release) {
-              throw new Error(`Release not found for tag ${process.env.GITHUB_REF}`);
+              throw new Error(`Release not found for tag ${tag}`);
             }
-            return release.id;
+            core.setOutput('release_id', release.id);
           result-encoding: string
 
       - name: Find MSI file
@@ -55,7 +57,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
         with:
-          upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release.outputs.result }}/assets
+          upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release.outputs.release_id }}/assets
           asset_path: ${{ env.msi_path }}
           asset_name: OctoMeter-${{ env.version }}.msi
           asset_content_type: application/x-msi
@@ -71,7 +73,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
         with:
-          upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release.outputs.result }}/assets
+          upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.get_release.outputs.release_id }}/assets
           asset_path: ${{ env.exe_path }}
           asset_name: OctoMeter-${{ env.version }}.exe
           asset_content_type: application/vnd.microsoft.portable-executable
