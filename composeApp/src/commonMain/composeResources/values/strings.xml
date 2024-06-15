@@ -28,6 +28,7 @@
     <string name="night_unit_rate">Night Unit Rate</string>
     <string name="unit_p_day">%1$d p/day</string>
     <string name="unit_p_kwh">%1$d p/kWh</string>
+    <string name="unit_percent">%1$d %</string>
 
     <string name="selected">Selected</string>
     <string name="loading">Loading...</string>
