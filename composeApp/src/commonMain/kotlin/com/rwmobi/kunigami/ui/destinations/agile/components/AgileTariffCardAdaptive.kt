@@ -36,7 +36,7 @@ import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
-import com.rwmobi.kunigami.ui.model.rate.RateGroupedCells
+import com.rwmobi.kunigami.ui.model.rate.RateGroup
 import com.rwmobi.kunigami.ui.model.rate.RateTrend
 import com.rwmobi.kunigami.ui.model.rate.findActiveRate
 import com.rwmobi.kunigami.ui.model.rate.getRateTrend
@@ -60,12 +60,12 @@ private const val MILLIS_IN_MINUTE = 60_000
 internal fun AgileTariffCardAdaptive(
     modifier: Modifier = Modifier,
     rateRange: ClosedFloatingPointRange<Double>,
-    rateGroupedCells: List<RateGroupedCells>,
+    rateGroupedCells: List<RateGroup>,
     requestedAdaptiveLayout: WindowWidthSizeClass,
     agileTariffSummary: TariffSummary?,
     differentTariffSummary: TariffSummary?,
 ) {
-    var activeRate by remember { mutableStateOf(rateGroupedCells.findActiveRate(pointOfReference = Clock.System.now())) }
+    var activeRate by remember { mutableStateOf(rateGroupedCells.findActiveRate(referencePoint = Clock.System.now())) }
     var rateTrend by remember { mutableStateOf(rateGroupedCells.getRateTrend(activeRate = activeRate)) }
     var expireMillis by remember { mutableStateOf(Clock.System.now().getNextHalfHourCountdownMillis()) }
     var expireMinutes by remember { mutableStateOf(expireMillis / MILLIS_IN_MINUTE) }
@@ -134,7 +134,7 @@ internal fun AgileTariffCardAdaptive(
 
             if (isActiveRateExpired) {
                 activeRate =
-                    rateGroupedCells.findActiveRate(pointOfReference = Clock.System.now())
+                    rateGroupedCells.findActiveRate(referencePoint = Clock.System.now())
                 rateTrend = rateGroupedCells.getRateTrend(activeRate = activeRate)
             }
 
@@ -281,7 +281,7 @@ private fun Preview() {
             differentTariffSummary = TariffSamples.agileFlex221125,
             rateRange = 0.0..5.0,
             rateGroupedCells = listOf(
-                RateGroupedCells(
+                RateGroup(
                     title = "Sample title",
                     rates = listOf(
                         Rate(

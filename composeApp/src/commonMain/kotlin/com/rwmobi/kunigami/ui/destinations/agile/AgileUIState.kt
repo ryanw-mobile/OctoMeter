@@ -23,7 +23,7 @@ import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
-import com.rwmobi.kunigami.ui.model.rate.RateGroupedCells
+import com.rwmobi.kunigami.ui.model.rate.RateGroup
 import io.ktor.util.network.UnresolvedAddressException
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_load_tariff
@@ -40,7 +40,7 @@ data class AgileUIState(
     val requestedAdaptiveLayout: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     val userProfile: UserProfile? = null,
     val agileTariffSummary: TariffSummary? = null,
-    val rateGroupedCells: List<RateGroupedCells> = emptyList(),
+    val rateGroupedCells: List<RateGroup> = emptyList(),
     val rateRange: ClosedFloatingPointRange<Double> = 0.0..0.0,
     val barChartData: BarChartData? = null,
     val requestScrollToTop: Boolean = false,

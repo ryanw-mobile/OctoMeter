@@ -14,15 +14,15 @@ import kotlinx.datetime.Instant
 import kotlin.time.Duration
 
 @Immutable
-data class RateGroupedCells(
+data class RateGroup(
     val title: String,
     val rates: List<Rate>,
 )
 
-fun List<RateGroupedCells>.findActiveRate(pointOfReference: Instant): Rate? {
+fun List<RateGroup>.findActiveRate(referencePoint: Instant): Rate? {
     this.forEach { group ->
         val activeRate = group.rates.find { rate ->
-            rate.isActive(pointOfReference)
+            rate.isActive(referencePoint)
         }
         if (activeRate != null) {
             return activeRate
@@ -31,12 +31,12 @@ fun List<RateGroupedCells>.findActiveRate(pointOfReference: Instant): Rate? {
     return null
 }
 
-fun List<RateGroupedCells>.getRateTrend(activeRate: Rate?): RateTrend? {
+fun List<RateGroup>.getRateTrend(activeRate: Rate?): RateTrend? {
     return activeRate?.let {
         if (it.validTo == null) {
             RateTrend.STEADY
         } else {
-            val nextRate = findActiveRate(pointOfReference = it.validTo.plus(Duration.parse("5m")))
+            val nextRate = findActiveRate(referencePoint = it.validTo.plus(Duration.parse("5m")))
             Logger.v("getRateTrend: ${it.vatInclusivePrice} to ${nextRate?.vatInclusivePrice}")
             when {
                 nextRate == null -> null
