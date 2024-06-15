@@ -14,6 +14,7 @@ import kotlin.time.Duration
 class RateGroupTest {
 
     private val londonZone = TimeZone.of("Europe/London")
+    private val testGroupTitle = "Test Group"
 
     @Test
     fun `findActiveRate should return active rate when it exists`() {
@@ -41,7 +42,7 @@ class RateGroupTest {
         )
         val partitionedList = listOf(
             RateGroup(
-                const val TEST_GROUP_TITLE = "Test Group"
+                title = testGroupTitle,
                 rates = listOf(rate),
             ),
         )
@@ -85,7 +86,7 @@ class RateGroupTest {
         )
         val partitionedList = listOf(
             RateGroup(
-                title = "Test Group",
+                title = testGroupTitle,
                 rates = listOf(rate),
             ),
         )
@@ -121,7 +122,7 @@ class RateGroupTest {
         )
         val partitionedList = listOf(
             RateGroup(
-                title = "Test Group",
+                title = testGroupTitle,
                 rates = listOf(rate),
             ),
         )
@@ -157,7 +158,7 @@ class RateGroupTest {
         )
         val partitionedList = listOf(
             RateGroup(
-                title = "Test Group",
+                title = testGroupTitle,
                 rates = listOf(rate),
             ),
         )
@@ -200,7 +201,7 @@ class RateGroupTest {
         )
         val partitionedList = listOf(
             RateGroup(
-                title = "Test Group",
+                title = testGroupTitle,
                 rates = listOf(rate, nextRate),
             ),
         )
@@ -243,7 +244,7 @@ class RateGroupTest {
         )
         val partitionedList = listOf(
             RateGroup(
-                title = "Test Group",
+                title = testGroupTitle,
                 rates = listOf(rate, nextRate),
             ),
         )
@@ -286,7 +287,7 @@ class RateGroupTest {
         )
         val partitionedList = listOf(
             RateGroup(
-                title = "Test Group",
+                title = testGroupTitle,
                 rates = listOf(rate, nextRate),
             ),
         )
