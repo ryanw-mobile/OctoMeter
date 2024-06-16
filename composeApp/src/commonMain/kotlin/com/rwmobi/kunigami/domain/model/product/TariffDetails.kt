@@ -7,6 +7,9 @@
 
 package com.rwmobi.kunigami.domain.model.product
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class TariffDetails(
     val tariffPaymentTerm: TariffPaymentTerm,
     // The layered DTOs were flattened

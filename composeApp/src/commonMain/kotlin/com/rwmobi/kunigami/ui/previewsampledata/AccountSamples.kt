@@ -15,20 +15,31 @@ import kotlinx.datetime.Instant
 import kotlin.time.Duration
 
 internal object AccountSamples {
+    val agreementE1RVAR221101A = Agreement(
+        tariffCode = "E-1R-VAR-22-11-01-A",
+        validFrom = Instant.parse("2022-03-28T00:00:00Z"),
+        validTo = Instant.parse("2023-03-28T00:00:00Z"),
+    )
+
+    val agreementE1RVAR231101A = Agreement(
+        tariffCode = "E-1R-OE-FIX-12M-24-04-11-A",
+        validFrom = Instant.parse("2023-03-28T00:00:00Z"),
+        validTo = Instant.DISTANT_FUTURE,
+    )
+
     val account928 = Account(
         id = 928,
         accountNumber = "A-9009A9A9",
         fullAddress = "RW MobiMedia UK Limited\n2 Frederick Street\nKing's Cross\nLondon\nWC1X 0ND",
-        movedInAt = Instant.parse("2023-03-28T00:00:00Z"),
+        movedInAt = Instant.parse("2022-03-28T00:00:00Z"),
         movedOutAt = null,
         electricityMeterPoints = listOf(
             ElectricityMeterPoint(
                 mpan = "9900000999999",
                 meterSerialNumbers = listOf("99A9999999"),
-                currentAgreement = Agreement(
-                    tariffCode = "E-1R-VAR-22-11-01-A",
-                    validFrom = Instant.parse("2023-03-28T00:00:00Z"),
-                    validTo = null,
+                agreements = listOf(
+                    agreementE1RVAR221101A,
+                    agreementE1RVAR231101A,
                 ),
             ),
         ),
@@ -44,19 +55,23 @@ internal object AccountSamples {
             ElectricityMeterPoint(
                 mpan = "1200000345678",
                 meterSerialNumbers = listOf("11A1234567", "11A12345A7"),
-                currentAgreement = Agreement(
-                    tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
-                    validFrom = Clock.System.now(),
-                    validTo = Clock.System.now().plus(Duration.parse("365d")),
+                agreements = listOf(
+                    Agreement(
+                        tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
+                        validFrom = Clock.System.now(),
+                        validTo = Clock.System.now().plus(Duration.parse("365d")),
+                    ),
                 ),
             ),
             ElectricityMeterPoint(
                 mpan = "1200000345670",
                 meterSerialNumbers = listOf("11A1234560"),
-                currentAgreement = Agreement(
-                    tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
-                    validFrom = Clock.System.now(),
-                    validTo = Clock.System.now().plus(Duration.parse("365d")),
+                agreements = listOf(
+                    Agreement(
+                        tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
+                        validFrom = Clock.System.now(),
+                        validTo = Clock.System.now().plus(Duration.parse("365d")),
+                    ),
                 ),
             ),
         ),

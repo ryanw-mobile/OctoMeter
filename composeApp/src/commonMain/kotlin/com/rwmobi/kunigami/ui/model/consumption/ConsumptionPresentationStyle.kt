@@ -7,7 +7,6 @@
 
 package com.rwmobi.kunigami.ui.model.consumption
 
-import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.presentation_style_day_half_hourly
@@ -17,7 +16,6 @@ import kunigami.composeapp.generated.resources.presentation_style_week_seven_day
 import kunigami.composeapp.generated.resources.presentation_style_year_twelve_months
 import org.jetbrains.compose.resources.StringResource
 
-@Immutable
 enum class ConsumptionPresentationStyle(val stringResource: StringResource) {
     DAY_HALF_HOURLY(stringResource = Res.string.presentation_style_day_half_hourly),
     WEEK_SEVEN_DAYS(stringResource = Res.string.presentation_style_week_seven_days),

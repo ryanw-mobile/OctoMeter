@@ -14,6 +14,5 @@ internal object FakeDemoUserProfile {
         selectedMpan = "9900000999999",
         selectedMeterSerialNumber = "99A9999999",
         account = AccountSamples.account928,
-        tariffSummary = TariffSamples.var221101,
     )
 }

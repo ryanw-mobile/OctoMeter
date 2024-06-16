@@ -12,6 +12,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.model.account.UserProfile
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.extensions.mapFromPlatform
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -27,6 +28,7 @@ data class AccountUIState(
     val requestedScreenType: AccountScreenType? = null,
     val requestedLayout: AccountScreenLayout = AccountScreenLayout.Compact,
     val userProfile: UserProfile? = null,
+    val tariffSummary: TariffSummary? = null,
     val requestScrollToTop: Boolean = false,
     val errorMessages: List<ErrorMessage> = emptyList(),
 ) {

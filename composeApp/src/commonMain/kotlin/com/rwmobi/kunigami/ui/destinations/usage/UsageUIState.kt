@@ -13,6 +13,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.model.account.UserProfile
+import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.extensions.getPlatformType
 import com.rwmobi.kunigami.ui.extensions.mapFromPlatform
@@ -35,6 +36,7 @@ data class UsageUIState(
     val isLoading: Boolean = true,
     val isDemoMode: Boolean? = null,
     val userProfile: UserProfile? = null,
+    val tariffSummary: TariffSummary? = null,
     val showToolTipOnClick: Boolean = false,
     val requestedScreenType: UsageScreenType = UsageScreenType.Chart,
     val requestedChartLayout: RequestedChartLayout = RequestedChartLayout.Portrait,

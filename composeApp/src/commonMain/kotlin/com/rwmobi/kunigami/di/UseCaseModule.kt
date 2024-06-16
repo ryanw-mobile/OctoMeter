@@ -11,6 +11,7 @@ import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
 import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
+import com.rwmobi.kunigami.domain.usecase.GetTariffSummaryUseCase
 import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.domain.usecase.UpdateMeterPreferenceUseCase
@@ -66,6 +67,13 @@ val userCaseModule = module {
     factory {
         SyncUserProfileUseCase(
             userPreferencesRepository = get(),
+            restApiRepository = get(),
+            dispatcher = get(named("DefaultDispatcher")),
+        )
+    }
+
+    factory {
+        GetTariffSummaryUseCase(
             restApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )

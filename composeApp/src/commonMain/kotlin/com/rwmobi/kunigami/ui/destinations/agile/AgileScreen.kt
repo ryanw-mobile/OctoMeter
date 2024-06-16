@@ -188,10 +188,10 @@ fun AgileScreen(
                                             },
                                             backgroundPlot = { graphScope ->
                                                 if (uiState.isOnDifferentTariff() &&
-                                                    uiState.userProfile?.tariffSummary != null
+                                                    uiState.activeTariffSummary != null
                                                 ) {
                                                     graphScope.HorizontalLineAnnotation(
-                                                        location = uiState.userProfile.tariffSummary.vatInclusiveUnitRate,
+                                                        location = uiState.activeTariffSummary.vatInclusiveUnitRate,
                                                         lineStyle = LineStyle(
                                                             brush = SolidColor(MaterialTheme.colorScheme.error),
                                                             strokeWidth = dimension.grid_0_5,
@@ -209,7 +209,7 @@ fun AgileScreen(
                             }
 
                             item(key = "tariffDetails") {
-                                val differentTariffSummary = uiState.userProfile?.tariffSummary
+                                val differentTariffSummary = uiState.activeTariffSummary
                                     ?.takeUnless { it.isSameTariff(uiState.agileTariffSummary?.tariffCode) }
 
                                 AgileTariffCardAdaptive(

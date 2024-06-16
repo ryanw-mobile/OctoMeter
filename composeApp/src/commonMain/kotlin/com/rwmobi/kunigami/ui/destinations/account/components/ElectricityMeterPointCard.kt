@@ -69,24 +69,8 @@ internal fun ElectricityMeterPointCard(
                 color = MaterialTheme.colorScheme.inverseSurface,
             )
 
-            if (tariffSummary == null) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = dimension.grid_2),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
-                ) {
-                    Text(text = stringResource(resource = Res.string.account_error_null_tariff, meterPoint.currentAgreement.tariffCode))
-
-                    IconTextButton(
-                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                        icon = painterResource(resource = Res.drawable.reload),
-                        text = stringResource(resource = Res.string.retry),
-                        onClick = onReloadTariff,
-                    )
-                }
-            } else {
+            val latestAgreement = meterPoint.getLatestAgreement()
+            if (tariffSummary != null && latestAgreement != null) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -97,8 +81,25 @@ internal fun ElectricityMeterPointCard(
                             .fillMaxWidth()
                             .wrapContentHeight(),
                         tariffSummary = tariffSummary,
-                        agreement = meterPoint.currentAgreement,
+                        agreement = latestAgreement,
                         useWideLayout = requestedLayout !is AccountScreenLayout.Compact,
+                    )
+                }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = dimension.grid_2),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+                ) {
+                    Text(text = stringResource(resource = Res.string.account_error_null_tariff))
+
+                    IconTextButton(
+                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                        icon = painterResource(resource = Res.drawable.reload),
+                        text = stringResource(resource = Res.string.retry),
+                        onClick = onReloadTariff,
                     )
                 }
             }

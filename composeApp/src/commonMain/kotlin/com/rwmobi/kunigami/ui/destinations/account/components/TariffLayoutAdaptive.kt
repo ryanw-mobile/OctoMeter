@@ -29,6 +29,7 @@ import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.ui.theme.getDimension
+import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_tariff_end_date
 import kunigami.composeapp.generated.resources.account_tariff_standing_charge
@@ -187,15 +188,17 @@ private fun TariffLayoutWide(
 
             Spacer(modifier = Modifier.height(height = dimension.grid_2))
 
-            val tariffPeriod = agreement.validTo?.let {
+            val tariffPeriod = if (agreement.validTo != Instant.DISTANT_FUTURE) {
                 stringResource(
                     resource = Res.string.account_tariff_end_date,
-                    it.getLocalDateString(),
+                    agreement.validTo.getLocalDateString(),
                 )
-            } ?: stringResource(
-                resource = Res.string.account_tariff_start_date,
-                agreement.validFrom.getLocalDateString(),
-            )
+            } else {
+                stringResource(
+                    resource = Res.string.account_tariff_start_date,
+                    agreement.validFrom.getLocalDateString(),
+                )
+            }
 
             Text(
                 style = MaterialTheme.typography.bodySmall,

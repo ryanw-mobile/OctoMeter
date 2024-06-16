@@ -49,7 +49,7 @@ class GetTariffRatesUseCaseTest {
             availableTo = null,
         )
 
-        fakeRestApiRepository.setSimpleProductTariffSummaryResponse = Result.success(expectedTariffSummary)
+        fakeRestApiRepository.setSimpleProductTariffResponse = Result.success(expectedTariffSummary)
 
         val result = getTariffRatesUseCase(productCode, tariffCode)
 
@@ -63,7 +63,7 @@ class GetTariffRatesUseCaseTest {
         val tariffCode = "sample_tariff_code"
         val errorMessage = "API Error"
 
-        fakeRestApiRepository.setSimpleProductTariffSummaryResponse = Result.failure(RuntimeException(errorMessage))
+        fakeRestApiRepository.setSimpleProductTariffResponse = Result.failure(RuntimeException(errorMessage))
 
         val result = getTariffRatesUseCase(productCode, tariffCode)
 

@@ -19,12 +19,12 @@ import kotlinx.datetime.Instant
 
 class FakeRestApiRepository : RestApiRepository {
 
-    var setSimpleProductTariffSummaryResponse: Result<TariffSummary>? = null
+    var setSimpleProductTariffResponse: Result<TariffSummary>? = null
     override suspend fun getSimpleProductTariff(
         productCode: String,
         tariffCode: String,
     ): Result<TariffSummary> {
-        return setSimpleProductTariffSummaryResponse ?: throw RuntimeException("Fake result not defined")
+        return setSimpleProductTariffResponse ?: throw RuntimeException("Fake result not defined")
     }
 
     var setProductsResponse: Result<List<ProductSummary>>? = null
@@ -32,9 +32,9 @@ class FakeRestApiRepository : RestApiRepository {
         return setProductsResponse ?: throw RuntimeException("Fake result not defined")
     }
 
-    var setProductSummaryResponse: Result<ProductDetails>? = null
+    var setProductDetailsResponse: Result<ProductDetails>? = null
     override suspend fun getProductDetails(productCode: String): Result<ProductDetails> {
-        return setProductSummaryResponse ?: throw RuntimeException("Fake result not defined")
+        return setProductDetailsResponse ?: throw RuntimeException("Fake result not defined")
     }
 
     var setStandardUnitRatesResponse: Result<List<Rate>>? = null

@@ -7,9 +7,6 @@
 
 package com.rwmobi.kunigami.domain.model.rate
 
-import androidx.compose.runtime.Immutable
-
-@Immutable
 enum class PaymentMethod {
     UNKNOWN,
     DIRECT_DEBIT,
