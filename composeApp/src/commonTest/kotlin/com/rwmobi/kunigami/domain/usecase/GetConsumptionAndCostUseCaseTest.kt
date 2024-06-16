@@ -82,7 +82,7 @@ class GetConsumptionAndCostUseCaseTest {
         )
 
         assertTrue(result.isSuccess)
-        assertEquals(expectedConsumption.sortedBy { it.intervalStart }, result.getOrNull())
+        assertEquals(expectedConsumption.sortedBy { it.intervalStart }, result.getOrNull()?.map { it.consumption })
     }
 
     @Test
@@ -207,6 +207,6 @@ class GetConsumptionAndCostUseCaseTest {
         )
 
         assertTrue(result.isSuccess)
-        assertEquals(expectedConsumption.sortedBy { it.intervalStart }, result.getOrNull())
+        assertEquals(expectedConsumption.sortedBy { it.intervalStart }, result.getOrNull()?.map { it.consumption })
     }
 }
