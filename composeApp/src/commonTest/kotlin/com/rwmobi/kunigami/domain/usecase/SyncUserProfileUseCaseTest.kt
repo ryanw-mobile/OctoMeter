@@ -67,7 +67,7 @@ class SyncUserProfileUseCaseTest {
         assertTrue(result.isSuccess)
         val userProfile = result.getOrNull()
         assertIs<UserProfile>(userProfile)
-        assertEquals(account.electricityMeterPoints.first().mpan, userProfile!!.selectedMpan)
+        assertEquals(account.electricityMeterPoints.first().mpan, userProfile.selectedMpan)
         assertEquals(account.electricityMeterPoints.first().meterSerialNumbers.first(), userProfile.selectedMeterSerialNumber)
         assertEquals(account, userProfile.account)
     }

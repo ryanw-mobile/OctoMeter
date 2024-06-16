@@ -26,6 +26,7 @@ plugins {
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.kotlinPowerAssert)
 }
 
 val productName = "OctoMeter"
@@ -361,6 +362,17 @@ buildConfig {
     buildConfigField("VERSION_NAME", provider { libs.versions.versionName.get() })
     buildConfigField("VERSION_CODE", provider { libs.versions.versionCode.get() })
     buildConfigField("GITHUB_LINK", provider { "https://github.com/ryanw-mobile/OctoMeter" })
+}
+
+@OptIn(ExperimentalKotlinGradlePluginApi::class)
+powerAssert {
+    functions.addAll(
+        "kotlin.assert",
+        "kotlin.test.assertTrue",
+        "kotlin.test.assertEquals",
+        "kotlin.test.assertNull",
+        "kotlin.require",
+    )
 }
 
 kover {
