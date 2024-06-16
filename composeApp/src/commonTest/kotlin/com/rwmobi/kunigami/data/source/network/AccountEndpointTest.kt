@@ -9,8 +9,6 @@ package com.rwmobi.kunigami.data.source.network
 
 import com.rwmobi.kunigami.data.source.network.samples.GetAccountSampleData
 import com.rwmobi.kunigami.domain.exceptions.HttpException
-import io.kotest.assertions.throwables.shouldThrowExactly
-import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -24,6 +22,9 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.fail
 
 class AccountEndpointTest {
     private val fakeBaseUrl = "https://some.fakeurl.com"
@@ -70,7 +71,7 @@ class AccountEndpointTest {
             apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
-        result shouldBe GetAccountSampleData.dto
+        assertEquals(GetAccountSampleData.dto, result)
     }
 
     @Test
@@ -88,7 +89,7 @@ class AccountEndpointTest {
             apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
@@ -102,11 +103,14 @@ class AccountEndpointTest {
             ),
         )
 
-        shouldThrowExactly<HttpException> {
+        try {
             accountEndpoint.getAccount(
                 apiKey = fakeApiKey,
                 accountNumber = fakeAccountNumber,
             )
+            fail("Expected HttpException")
+        } catch (e: HttpException) {
+            // Successful if HttpException is thrown
         }
     }
 }

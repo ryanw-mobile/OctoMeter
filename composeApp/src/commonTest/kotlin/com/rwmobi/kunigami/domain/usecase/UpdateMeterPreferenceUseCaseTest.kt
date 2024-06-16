@@ -8,12 +8,13 @@
 package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
-import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class UpdateMeterPreferenceUseCaseTest {
@@ -37,8 +38,8 @@ class UpdateMeterPreferenceUseCaseTest {
 
         val result = updateMeterPreferenceUseCase(mpan, meterSerialNumber)
 
-        result.isSuccess shouldBe true
-        fakeUserPreferencesRepository.mpan shouldBe mpan
-        fakeUserPreferencesRepository.meterSerialNumber shouldBe meterSerialNumber
+        assertTrue(result.isSuccess)
+        assertEquals(mpan, fakeUserPreferencesRepository.mpan)
+        assertEquals(meterSerialNumber, fakeUserPreferencesRepository.meterSerialNumber)
     }
 }

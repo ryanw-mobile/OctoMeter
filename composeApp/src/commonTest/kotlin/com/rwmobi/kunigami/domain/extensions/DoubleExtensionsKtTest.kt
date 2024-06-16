@@ -1,7 +1,14 @@
+/*
+ * Copyright (c) 2024. Ryan Wong
+ * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
+ */
+
 import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
-import io.kotest.matchers.doubles.shouldBeExactly
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class DoubleExtensionsKtTest {
 
@@ -10,7 +17,7 @@ class DoubleExtensionsKtTest {
         val input = 0.015
         val expected = 0.02
         val result = input.roundToNearestEvenHundredth()
-        result shouldBeExactly expected
+        assertEquals(expected, result)
     }
 
     @Test
@@ -18,7 +25,7 @@ class DoubleExtensionsKtTest {
         val input = 0.025
         val expected = 0.02
         val result = input.roundToNearestEvenHundredth()
-        result shouldBeExactly expected
+        assertEquals(expected, result)
     }
 
     @Test
@@ -26,7 +33,7 @@ class DoubleExtensionsKtTest {
         val input = 0.045
         val expected = 0.04
         val result = input.roundToNearestEvenHundredth()
-        result shouldBeExactly expected
+        assertEquals(expected, result)
     }
 
     @Test
@@ -34,7 +41,7 @@ class DoubleExtensionsKtTest {
         val input = 0.055
         val expected = 0.06
         val result = input.roundToNearestEvenHundredth()
-        result shouldBeExactly expected
+        assertEquals(expected, result)
     }
 
     @Test
@@ -42,7 +49,7 @@ class DoubleExtensionsKtTest {
         val input = 0.1234
         val expected = 0.12
         val result = input.roundToTwoDecimalPlaces()
-        result shouldBeExactly expected
+        assertEquals(expected, result)
     }
 
     @Test
@@ -50,7 +57,7 @@ class DoubleExtensionsKtTest {
         val input = 0.1265
         val expected = 0.13
         val result = input.roundToTwoDecimalPlaces()
-        result shouldBeExactly expected
+        assertEquals(expected, result)
     }
 
     @Test
@@ -58,7 +65,7 @@ class DoubleExtensionsKtTest {
         val input = 0.1245
         val expected = 0.12
         val result = input.roundToTwoDecimalPlaces()
-        result shouldBeExactly expected
+        assertEquals(expected, result)
     }
 
     @Test
@@ -66,6 +73,6 @@ class DoubleExtensionsKtTest {
         val input = 0.1255
         val expected = 0.13
         val result = input.roundToTwoDecimalPlaces()
-        result shouldBeExactly expected
+        assertEquals(expected, result)
     }
 }

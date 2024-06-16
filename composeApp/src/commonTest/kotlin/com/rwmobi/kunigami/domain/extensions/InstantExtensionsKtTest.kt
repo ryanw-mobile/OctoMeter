@@ -7,13 +7,12 @@
 
 package com.rwmobi.kunigami.domain.extensions
 
-import io.kotest.matchers.longs.shouldBeExactly
-import io.kotest.matchers.shouldBe
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class InstantExtensionsKtTest {
 
@@ -22,40 +21,43 @@ class InstantExtensionsKtTest {
     @Test
     fun `toIso8601WithoutSeconds should format correctly`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 30, second = 15).toInstant(TimeZone.UTC)
-        instant.toIso8601WithoutSeconds() shouldBe "2023-05-01T10:30Z"
+        val expected = "2023-05-01T10:30Z"
+        assertEquals(expected, instant.toIso8601WithoutSeconds())
     }
 
     @Test
     fun `atStartOfHour should round down correctly`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
         val expected = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 0, second = 0).toInstant(timeZone)
-        instant.atStartOfHour() shouldBe expected
+        assertEquals(expected, instant.atStartOfHour())
     }
 
     @Test
     fun `atStartOfDay should round down to start of day`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
         val expected = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 0, minute = 0, second = 0).toInstant(timeZone)
-        instant.atStartOfDay() shouldBe expected
+        assertEquals(expected, instant.atStartOfDay())
     }
 
     @Test
     fun `atEndOfDay should round up to end of day`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
         val expected = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 23, minute = 59, second = 59, nanosecond = 999_999_999).toInstant(timeZone)
-        instant.atEndOfDay() shouldBe expected
+        assertEquals(expected, instant.atEndOfDay())
     }
 
     @Test
     fun `getLocalHHMMString should format correctly`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
-        instant.getLocalHHMMString() shouldBe "10:45"
+        val expected = "10:45"
+        assertEquals(expected, instant.getLocalHHMMString())
     }
 
     @Test
     fun `getLocalHourString should format correctly`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
-        instant.getLocalHourString() shouldBe "10"
+        val expected = "10"
+        assertEquals(expected, instant.getLocalHourString())
     }
 
     // This is not a very good test because it depends on platform AND local settings
@@ -63,105 +65,106 @@ class InstantExtensionsKtTest {
     fun `toLocalDateTimeString should format correctly`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
         val localDateString = instant.getLocalDateString()
-        instant.toLocalDateTimeString() shouldBe "$localDateString 10:45"
+        val expected = "$localDateString 10:45"
+        assertEquals(expected, instant.toLocalDateTimeString())
     }
 
     @Test
     fun `getLocalYear should return correct year`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
-        instant.getLocalYear() shouldBe 2023
+        val expected = 2023
+        assertEquals(expected, instant.getLocalYear())
     }
 
     @Test
     fun `getLocalDayOfMonth should return correct day`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
-        instant.getLocalDayOfMonth() shouldBe 1
+        val expected = 1
+        assertEquals(expected, instant.getLocalDayOfMonth())
     }
 
     @Test
     fun `getLocalEnglishAbbreviatedDayOfWeekName should return correct weekday`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
-        instant.getLocalEnglishAbbreviatedDayOfWeekName() shouldBe "Mon"
+        val expected = "Mon"
+        assertEquals(expected, instant.getLocalEnglishAbbreviatedDayOfWeekName())
     }
 
     @Test
     fun `getLocalDayOfWeekAndDayString should return correct weekday and day`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
-        instant.getLocalDayOfWeekAndDayString() shouldBe "Mon 01"
+        val expected = "Mon 01"
+        assertEquals(expected, instant.getLocalDayOfWeekAndDayString())
     }
 
     @Test
     fun `getLocalDayMonthString should return correct day and month`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
-        instant.getLocalDayMonthString() shouldBe "01 May"
+        val expected = "01 May"
+        assertEquals(expected, instant.getLocalDayMonthString())
     }
 
     @Test
     fun `getLocalMonthString should return correct month`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
-        instant.getLocalMonthString() shouldBe "May"
+        val expected = "May"
+        assertEquals(expected, instant.getLocalMonthString())
     }
 
     @Test
     fun `getLocalMonthYearString should return correct month and year`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
-        instant.getLocalMonthYearString() shouldBe "May 2023"
+        val expected = "May 2023"
+        assertEquals(expected, instant.getLocalMonthYearString())
     }
 
     @Test
     fun `getNextHalfHourCountdownMillis should return correct millis when current time is exactly on the hour`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 0, second = 0, nanosecond = 0).toInstant(timeZone)
-        val millis = instant.getNextHalfHourCountdownMillis()
-        val expectedMillis = 30 * 60 * 1000L // 30 minutes in milliseconds
-        millis shouldBeExactly expectedMillis
+        val expected = 30 * 60 * 1000L // 30 minutes in milliseconds
+        assertEquals(expected, instant.getNextHalfHourCountdownMillis())
     }
 
     @Test
     fun `getNextHalfHourCountdownMillis should return correct millis when current time is exactly on the half hour`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 30, second = 0, nanosecond = 0).toInstant(timeZone)
-        val millis = instant.getNextHalfHourCountdownMillis()
-        val expectedMillis = 30 * 60 * 1000L // 30 minutes in milliseconds
-        millis shouldBeExactly expectedMillis
+        val expected = 30 * 60 * 1000L // 30 minutes in milliseconds
+        assertEquals(expected, instant.getNextHalfHourCountdownMillis())
     }
 
     @Test
     fun `getNextHalfHourCountdownMillis should return correct millis when current time is just past the hour`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 1, second = 0, nanosecond = 0).toInstant(timeZone)
-        val millis = instant.getNextHalfHourCountdownMillis()
-        val expectedMillis = 29 * 60 * 1000L // 29 minutes in milliseconds
-        millis shouldBeExactly expectedMillis
+        val expected = 29 * 60 * 1000L // 29 minutes in milliseconds
+        assertEquals(expected, instant.getNextHalfHourCountdownMillis())
     }
 
     @Test
     fun `getNextHalfHourCountdownMillis should return correct millis when current time is just past the half hour`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 31, second = 0, nanosecond = 0).toInstant(timeZone)
-        val millis = instant.getNextHalfHourCountdownMillis()
-        val expectedMillis = 29 * 60 * 1000L // 29 minutes in milliseconds
-        millis shouldBeExactly expectedMillis
+        val expected = 29 * 60 * 1000L // 29 minutes in milliseconds
+        assertEquals(expected, instant.getNextHalfHourCountdownMillis())
     }
 
     @Test
     fun `getNextHalfHourCountdownMillis should return correct millis when current time is just before the half hour`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 29, second = 30, nanosecond = 0).toInstant(timeZone)
-        val millis = instant.getNextHalfHourCountdownMillis()
-        val expectedMillis = 30 * 1000L // 30 seconds in milliseconds
-        millis shouldBeExactly expectedMillis
+        val expected = 30 * 1000L // 30 seconds in milliseconds
+        assertEquals(expected, instant.getNextHalfHourCountdownMillis())
     }
 
     @Test
     fun `getNextHalfHourCountdownMillis should return correct millis when current time is just before the hour`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 59, second = 30, nanosecond = 0).toInstant(timeZone)
-        val millis = instant.getNextHalfHourCountdownMillis()
-        val expectedMillis = 30 * 1000L // 30 seconds in milliseconds
-        millis shouldBeExactly expectedMillis
+        val expected = 30 * 1000L // 30 seconds in milliseconds
+        assertEquals(expected, instant.getNextHalfHourCountdownMillis())
     }
 
     @Test
     fun `getNextHalfHourCountdownMillis should return correct millis including nanoseconds`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 29, second = 59, nanosecond = 999_000_000).toInstant(timeZone)
-        val millis = instant.getNextHalfHourCountdownMillis()
-        val expectedMillis = 1L // 1 millisecond
-        millis shouldBeExactly expectedMillis
+        val expected = 1L // 1 millisecond
+        assertEquals(expected, instant.getNextHalfHourCountdownMillis())
     }
 
     /***
@@ -176,7 +179,7 @@ class InstantExtensionsKtTest {
             .toInstant(londonZone)
         val actualStartOfDay = expectedStartOfDay.atStartOfDay()
 
-        actualStartOfDay shouldBe expectedStartOfDay
+        assertEquals(expectedStartOfDay, actualStartOfDay)
     }
 
     @Test
@@ -186,7 +189,7 @@ class InstantExtensionsKtTest {
             .toInstant(londonZone)
         val actualEndOfDay = expectedEndOfDay.atEndOfDay()
 
-        actualEndOfDay shouldBe expectedEndOfDay
+        assertEquals(expectedEndOfDay, actualEndOfDay)
     }
 
     @Test
@@ -197,7 +200,7 @@ class InstantExtensionsKtTest {
             .toInstant(londonZone)
         val actualStartOfDay = expectedStartOfDay.atStartOfDay()
 
-        actualStartOfDay shouldBe expectedStartOfDay
+        assertEquals(expectedStartOfDay, actualStartOfDay)
     }
 
     @Test
@@ -208,6 +211,6 @@ class InstantExtensionsKtTest {
             .toInstant(londonZone)
         val actualEndOfDay = expectedEndOfDay.atEndOfDay()
 
-        actualEndOfDay shouldBe expectedEndOfDay
+        assertEquals(expectedEndOfDay, actualEndOfDay)
     }
 }

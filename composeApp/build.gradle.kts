@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2024. Ryan Wong
+ * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
+ */
+
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -19,6 +26,7 @@ plugins {
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.kotlinPowerAssert)
 }
 
 val productName = "OctoMeter"
@@ -129,7 +137,6 @@ kotlin {
             implementation(kotlin("test-annotations-common"))
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.ktor.client.mock)
-            implementation(libs.kotest.assertions.core)
             implementation(libs.koin.test)
         }
     }
@@ -355,6 +362,17 @@ buildConfig {
     buildConfigField("VERSION_NAME", provider { libs.versions.versionName.get() })
     buildConfigField("VERSION_CODE", provider { libs.versions.versionCode.get() })
     buildConfigField("GITHUB_LINK", provider { "https://github.com/ryanw-mobile/OctoMeter" })
+}
+
+@OptIn(ExperimentalKotlinGradlePluginApi::class)
+powerAssert {
+    functions.addAll(
+        "kotlin.assert",
+        "kotlin.test.assertTrue",
+        "kotlin.test.assertEquals",
+        "kotlin.test.assertNull",
+        "kotlin.require",
+    )
 }
 
 kover {

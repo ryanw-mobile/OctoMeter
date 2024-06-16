@@ -106,7 +106,6 @@ improved later:
 * [Kotlinx DateTime](https://github.com/Kotlin/kotlinx-datetime) - Apache 2.0 - A multiplatform Kotlin library for working with date and time
 * [Kotlinx Coroutines](https://github.com/Kotlin/kotlinx.coroutines) - Apache 2.0 - Libraries for Kotlin coroutines
 * [Kotlinx Serialization](https://github.com/Kotlin/kotlinx.serialization) - Apache 2.0 - Kotlin multiplatform serialization library
-* [Kotest](https://kotest.io/) - Apache 2.0 - Kotlin test framework
 * [Material3 Window Size Class Multiplatform](https://github.com/material-components/material-components-android) - Apache 2.0 - Material Design components for Jetpack Compose
 * [Koin](https://insert-koin.io/) - Apache 2.0 - Dependency injection framework for Kotlin
 * [LeakCanary](https://square.github.io/leakcanary/) - Apache 2.0 - A memory leak detection library for Android
@@ -129,6 +128,7 @@ improved later:
 * [Compose Compiler Plugin](https://developer.android.com/jetpack/compose) - JetBrains - Plugin for Jetpack Compose
 * [Kotlin Multiplatform Plugin](https://kotlinlang.org/docs/multiplatform.html) - JetBrains - Plugin for Kotlin Multiplatform projects
 * [Kotlin CocoaPods Plugin](https://kotlinlang.org/docs/native-cocoapods.html) - JetBrains - Plugin for integrating with CocoaPods
+* [Kotlin Power Assert Plugin](https://kotlinlang.org/docs/reference/power-assert.html) - JetBrains - Plugin for enhanced assertions in Kotlin
 * [Ktlint Plugin](https://github.com/JLLeitschuh/ktlint-gradle) - JLLeitschuh - Plugin for Kotlin linter
 * [Kover Plugin](https://github.com/Kotlin/kotlinx-kover) - JetBrains - Code coverage tool for Kotlin
 * [Serialization Plugin](https://github.com/Kotlin/kotlinx.serialization) - JetBrains - Plugin for Kotlin serialization

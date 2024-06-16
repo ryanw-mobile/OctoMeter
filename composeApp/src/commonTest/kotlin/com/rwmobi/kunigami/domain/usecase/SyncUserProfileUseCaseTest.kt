@@ -12,13 +12,15 @@ import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import com.rwmobi.kunigami.domain.samples.AccountSampleData
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SyncUserProfileUseCaseTest {
@@ -43,8 +45,8 @@ class SyncUserProfileUseCaseTest {
 
         val result = syncUserProfileUseCase.invoke()
 
-        result.isFailure shouldBe true
-        result.exceptionOrNull().shouldBeInstanceOf<IncompleteCredentialsException>()
+        assertTrue(result.isFailure)
+        assertIs<IncompleteCredentialsException>(result.exceptionOrNull())
     }
 
     @Test
@@ -62,12 +64,12 @@ class SyncUserProfileUseCaseTest {
 
         val result = syncUserProfileUseCase()
 
-        result.isSuccess shouldBe true
+        assertTrue(result.isSuccess)
         val userProfile = result.getOrNull()
-        userProfile.shouldBeInstanceOf<UserProfile>()
-        userProfile.selectedMpan shouldBe account.electricityMeterPoints.first().mpan
-        userProfile.selectedMeterSerialNumber shouldBe account.electricityMeterPoints.first().meterSerialNumbers.first()
-        userProfile.account shouldBe account
+        assertIs<UserProfile>(userProfile)
+        assertEquals(account.electricityMeterPoints.first().mpan, userProfile.selectedMpan)
+        assertEquals(account.electricityMeterPoints.first().meterSerialNumbers.first(), userProfile.selectedMeterSerialNumber)
+        assertEquals(account, userProfile.account)
     }
 
     @Test
@@ -83,8 +85,8 @@ class SyncUserProfileUseCaseTest {
 
         val result = syncUserProfileUseCase()
 
-        result.isSuccess shouldBe true
-        result.getOrNull() shouldBe null
+        assertTrue(result.isSuccess)
+        assertNull(result.getOrNull())
     }
 
     @Test
@@ -106,7 +108,7 @@ class SyncUserProfileUseCaseTest {
 
         val result = syncUserProfileUseCase()
 
-        result.isSuccess shouldBe true
-        result.getOrNull() shouldBe null
+        assertTrue(result.isSuccess)
+        assertNull(result.getOrNull())
     }
 }

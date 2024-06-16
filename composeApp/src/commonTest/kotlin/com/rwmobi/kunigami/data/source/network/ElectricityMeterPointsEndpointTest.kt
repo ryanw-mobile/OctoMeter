@@ -9,8 +9,6 @@ package com.rwmobi.kunigami.data.source.network
 
 import com.rwmobi.kunigami.data.source.network.samples.GetConsumptionSampleData
 import com.rwmobi.kunigami.domain.exceptions.HttpException
-import io.kotest.assertions.throwables.shouldThrowExactly
-import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -24,6 +22,9 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.fail
 
 class ElectricityMeterPointsEndpointTest {
     private val fakeBaseUrl = "https://some.fakeurl.com"
@@ -72,7 +73,7 @@ class ElectricityMeterPointsEndpointTest {
             mpan = fakeMpan,
             meterSerialNumber = fakeMeterSerialNumber,
         )
-        result shouldBe GetConsumptionSampleData.dto
+        assertEquals(GetConsumptionSampleData.dto, result)
     }
 
     @Test
@@ -91,7 +92,7 @@ class ElectricityMeterPointsEndpointTest {
             mpan = fakeMpan,
             meterSerialNumber = fakeMeterSerialNumber,
         )
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
@@ -105,12 +106,15 @@ class ElectricityMeterPointsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<HttpException> {
+        try {
             electricityMeterPointsEndpoint.getConsumption(
                 apiKey = fakeApiKey,
                 mpan = fakeMpan,
                 meterSerialNumber = fakeMeterSerialNumber,
             )
+            fail("Expected HttpException")
+        } catch (e: HttpException) {
+            // Successful if HttpException is thrown
         }
     }
 }

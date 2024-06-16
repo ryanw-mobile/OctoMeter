@@ -9,14 +9,14 @@ package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GetTariffRatesUseCaseTest {
@@ -54,8 +54,8 @@ class GetTariffRatesUseCaseTest {
 
         val result = getTariffRatesUseCase(productCode, tariffCode)
 
-        result.isSuccess shouldBe true
-        result.getOrNull() shouldBe expectedTariffSummary
+        assertTrue(result.isSuccess)
+        assertEquals(expectedTariffSummary, result.getOrNull())
     }
 
     @Test
@@ -68,8 +68,8 @@ class GetTariffRatesUseCaseTest {
 
         val result = getTariffRatesUseCase(productCode, tariffCode)
 
-        result.isFailure shouldBe true
-        result.exceptionOrNull().shouldBeInstanceOf<RuntimeException>()
-        result.exceptionOrNull()!!.message shouldBe errorMessage
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is RuntimeException)
+        assertEquals(errorMessage, result.exceptionOrNull()?.message)
     }
 }
