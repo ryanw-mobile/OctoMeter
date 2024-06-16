@@ -27,7 +27,8 @@ class GetConsumptionAndCostUseCase(
 ) {
     /***
      * Pull consumption data, then maps with the corresponding tariff and rate.
-     * This use case will automatically adjust the start date and end date according to the grouping.
+     * Currently cost calculation is limited to half-hourly only.
+     * All other options will have null costs.
      */
     suspend operator fun invoke(
         periodFrom: Instant,
@@ -43,9 +44,9 @@ class GetConsumptionAndCostUseCase(
                     val mpan = userPreferencesRepository.getMpan()
                     val meterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
 
-                    requireNotNull(value = apiKey, lazyMessage = { "API Key is null" })
-                    requireNotNull(value = mpan, lazyMessage = { "MPAN is null" })
-                    requireNotNull(value = meterSerialNumber, lazyMessage = { "Meter Serial Number is null" })
+                    requireNotNull(value = apiKey, lazyMessage = { "Assertion failed: API Key is null" })
+                    requireNotNull(value = mpan, lazyMessage = { "Assertion failed: MPAN is null" })
+                    requireNotNull(value = meterSerialNumber, lazyMessage = { "Assertion failed: Meter Serial Number is null" })
 
                     restApiRepository.getConsumption(
                         apiKey = apiKey,

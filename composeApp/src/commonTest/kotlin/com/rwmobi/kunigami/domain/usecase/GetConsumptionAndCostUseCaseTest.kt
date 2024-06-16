@@ -104,7 +104,7 @@ class GetConsumptionAndCostUseCaseTest {
             ).getOrThrow()
         }
 
-        assertEquals("API Key is null", exception.message)
+        assertEquals("Assertion failed: API Key is null", exception.message)
     }
 
     @Test
@@ -126,7 +126,7 @@ class GetConsumptionAndCostUseCaseTest {
             ).getOrThrow()
         }
 
-        assertEquals("MPAN is null", exception.message)
+        assertEquals("Assertion failed: MPAN is null", exception.message)
     }
 
     @Test
@@ -148,7 +148,7 @@ class GetConsumptionAndCostUseCaseTest {
             ).getOrThrow()
         }
 
-        assertEquals("Meter Serial Number is null", exception.message)
+        assertEquals("Assertion failed: Meter Serial Number is null", exception.message)
     }
 
     @Test
