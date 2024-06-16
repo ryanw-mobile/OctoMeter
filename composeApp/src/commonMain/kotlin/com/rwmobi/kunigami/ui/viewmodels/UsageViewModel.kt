@@ -17,8 +17,8 @@ import com.rwmobi.kunigami.domain.extensions.atStartOfDay
 import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.getConsumptionTimeSpan
-import com.rwmobi.kunigami.domain.model.consumption.getRange
+import com.rwmobi.kunigami.domain.model.consumption.getConsumptionDaySpan
+import com.rwmobi.kunigami.domain.model.consumption.getConsumptionRange
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
@@ -302,10 +302,10 @@ class UsageViewModel(
             null
         } else {
             val consumptionAggregateRounded = consumptions.sumOf { it.consumption }.roundToNearestEvenHundredth()
-            val consumptionTimeSpan = consumptions.getConsumptionTimeSpan()
+            val consumptionTimeSpan = consumptions.getConsumptionDaySpan()
             val roughCost = ((consumptionTimeSpan * tariffSummary.vatInclusiveStandingCharge) + (consumptionAggregateRounded * tariffSummary.vatInclusiveUnitRate)) / 100.0
             val consumptionChargeRatio = (consumptionAggregateRounded * tariffSummary.vatInclusiveUnitRate / 100.0) / roughCost
-            val consumptionDailyAverage = (consumptions.sumOf { it.consumption } / consumptions.getConsumptionTimeSpan()).roundToNearestEvenHundredth()
+            val consumptionDailyAverage = (consumptions.sumOf { it.consumption } / consumptions.getConsumptionDaySpan()).roundToNearestEvenHundredth()
             val costDailyAverage = (tariffSummary.vatInclusiveStandingCharge + consumptionDailyAverage * tariffSummary.vatInclusiveUnitRate) / 100.0
             val consumptionAnnualProjection = (consumptions.sumOf { it.consumption } / consumptionTimeSpan * 365.25).roundToNearestEvenHundredth()
             val costAnnualProjection = (tariffSummary.vatInclusiveStandingCharge * 365.25 + consumptionAnnualProjection * tariffSummary.vatInclusiveUnitRate) / 100.0
@@ -335,7 +335,7 @@ class UsageViewModel(
         consumptionQueryFilter: ConsumptionQueryFilter,
         consumptions: List<Consumption>,
     ) {
-        val consumptionRange = consumptions.getRange()
+        val consumptionRange = consumptions.getConsumptionRange()
         val labels = consumptionQueryFilter.generateChartLabels(consumptions = consumptions)
         val consumptionGroupedCells = consumptionQueryFilter.groupChartCells(consumptions = consumptions)
         val toolTips = consumptionQueryFilter.generateChartToolTips(consumptions = consumptions)

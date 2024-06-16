@@ -20,23 +20,23 @@ data class Consumption(
 )
 
 /**
- * Returns the time span of this consumption set.
+ * Returns the number of days this consumption set spans across.
  * Note that an incomplete day with one record is counted as one whole day.
  */
-fun List<Consumption>.getConsumptionTimeSpan(): Int {
+fun List<Consumption>.getConsumptionDaySpan(): Int {
     val earliestStart = minOfOrNull { it.intervalStart }
     val latestEnd = maxOfOrNull { it.intervalEnd }
 
     return if (earliestStart != null && latestEnd != null) {
         val duration = latestEnd - earliestStart
         val durationInDays = duration.toDouble(DurationUnit.DAYS)
-        kotlin.math.ceil(durationInDays).toInt()
+        ceil(durationInDays).toInt()
     } else {
         0
     }
 }
 
-fun List<Consumption>.getRange(): ClosedFloatingPointRange<Double> {
+fun List<Consumption>.getConsumptionRange(): ClosedFloatingPointRange<Double> {
     return if (isEmpty()) {
         0.0..0.0 // Return a default range if the list is empty
     } else {
