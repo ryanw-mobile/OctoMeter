@@ -18,15 +18,16 @@ internal object AccountSamples {
     val agreementE1RVAR221101A = Agreement(
         tariffCode = "E-1R-VAR-22-11-01-A",
         validFrom = Instant.parse("2022-03-28T00:00:00Z"),
-        validTo = Instant.parse("2023-03-28T00:00:00Z"),
+        validTo = Instant.parse("2024-04-11T00:00:00Z"),
     )
 
     val agreementE1RVAR231101A = Agreement(
         tariffCode = "E-1R-OE-FIX-12M-24-04-11-A",
-        validFrom = Instant.parse("2023-03-28T00:00:00Z"),
+        validFrom = Instant.parse("2024-04-11T00:00:00Z"),
         validTo = Instant.DISTANT_FUTURE,
     )
 
+    // This account is used in demo mode - usage. Needs to have sensible values.
     val account928 = Account(
         id = 928,
         accountNumber = "A-9009A9A9",
