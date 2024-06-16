@@ -11,15 +11,14 @@ import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
-import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GetFilteredProductsUseCaseTest {
@@ -93,10 +92,8 @@ class GetFilteredProductsUseCaseTest {
 
         val result = getFilteredProductsUseCase()
 
-        result.isSuccess shouldBe true
-        result.getOrNull() shouldContainExactly listOf(
-            productSummaries[0],
-        )
+        assertTrue(result.isSuccess)
+        assertEquals(listOf(productSummaries[0]), result.getOrNull())
     }
 
     @Test
@@ -106,9 +103,10 @@ class GetFilteredProductsUseCaseTest {
 
         val result = getFilteredProductsUseCase()
 
-        result.isFailure shouldBe true
-        result.exceptionOrNull().shouldBeInstanceOf<RuntimeException>()
-        result.exceptionOrNull()!!.message shouldBe errorMessage
+        assertTrue(result.isFailure)
+        val exception = result.exceptionOrNull()
+        assertTrue(exception is RuntimeException)
+        assertEquals(errorMessage, exception!!.message)
     }
 
     @Test
@@ -132,7 +130,7 @@ class GetFilteredProductsUseCaseTest {
 
         val result = getFilteredProductsUseCase()
 
-        result.isSuccess shouldBe true
-        result.getOrNull() shouldBe emptyList()
+        assertTrue(result.isSuccess)
+        assertEquals(emptyList<ProductSummary>(), result.getOrNull())
     }
 }

@@ -10,15 +10,14 @@ package com.rwmobi.kunigami.domain.usecase
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import com.rwmobi.kunigami.domain.samples.RateSampleData
-import io.kotest.matchers.collections.shouldBeSortedBy
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class GetStandardUnitRateUseCaseTest {
 
@@ -49,10 +48,10 @@ class GetStandardUnitRateUseCaseTest {
             periodTo = Instant.parse("2023-01-04T00:00:00Z"),
         )
 
-        result.isSuccess shouldBe true
+        assertTrue(result.isSuccess)
         val sortedRates = result.getOrThrow()
-        sortedRates shouldHaveSize rates.size
-        sortedRates shouldBeSortedBy { it.validFrom }
+        assertEquals(rates.size, sortedRates.size)
+        assertEquals(rates.sortedBy { it.validFrom }, sortedRates)
     }
 
     @Test
@@ -67,8 +66,8 @@ class GetStandardUnitRateUseCaseTest {
             periodTo = Instant.parse("2023-01-04T00:00:00Z"),
         )
 
-        result.isFailure shouldBe true
-        result.exceptionOrNull()!!.message shouldBe exceptionMessage
+        assertTrue(result.isFailure)
+        assertEquals(exceptionMessage, result.exceptionOrNull()!!.message)
     }
 
     @Test
@@ -82,8 +81,8 @@ class GetStandardUnitRateUseCaseTest {
             periodTo = Instant.parse("2023-01-04T00:00:00Z"),
         )
 
-        result.isSuccess shouldBe true
+        assertTrue(result.isSuccess)
         val rates = result.getOrThrow()
-        rates shouldHaveSize 0
+        assertEquals(0, rates.size)
     }
 }

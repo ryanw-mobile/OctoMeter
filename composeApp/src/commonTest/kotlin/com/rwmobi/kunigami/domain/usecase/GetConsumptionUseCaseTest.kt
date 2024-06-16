@@ -11,14 +11,15 @@ import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GetConsumptionUseCaseTest {
@@ -80,8 +81,8 @@ class GetConsumptionUseCaseTest {
             groupBy = groupBy,
         )
 
-        result.isSuccess shouldBe true
-        result.getOrNull() shouldBe expectedConsumption.sortedBy { it.intervalStart }
+        assertTrue(result.isSuccess)
+        assertEquals(expectedConsumption.sortedBy { it.intervalStart }, result.getOrNull())
     }
 
     @Test
@@ -95,15 +96,15 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository.mpan = mpan
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
 
-        val result = getConsumptionUseCase(
-            periodFrom = fakePeriodFrom,
-            periodTo = fakePeriodTo,
-            groupBy = groupBy,
-        )
+        val exception = assertFailsWith<IllegalArgumentException> {
+            getConsumptionUseCase(
+                periodFrom = fakePeriodFrom,
+                periodTo = fakePeriodTo,
+                groupBy = groupBy,
+            ).getOrThrow()
+        }
 
-        result.isFailure shouldBe true
-        result.exceptionOrNull().shouldBeInstanceOf<IllegalArgumentException>()
-        result.exceptionOrNull()!!.message shouldBe "API Key is null"
+        assertEquals("API Key is null", exception.message)
     }
 
     @Test
@@ -117,15 +118,15 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository.mpan = mpan
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
 
-        val result = getConsumptionUseCase(
-            periodFrom = fakePeriodFrom,
-            periodTo = fakePeriodTo,
-            groupBy = groupBy,
-        )
+        val exception = assertFailsWith<IllegalArgumentException> {
+            getConsumptionUseCase(
+                periodFrom = fakePeriodFrom,
+                periodTo = fakePeriodTo,
+                groupBy = groupBy,
+            ).getOrThrow()
+        }
 
-        result.isFailure shouldBe true
-        result.exceptionOrNull().shouldBeInstanceOf<IllegalArgumentException>()
-        result.exceptionOrNull()!!.message shouldBe "MPAN is null"
+        assertEquals("MPAN is null", exception.message)
     }
 
     @Test
@@ -139,15 +140,15 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository.mpan = mpan
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
 
-        val result = getConsumptionUseCase(
-            periodFrom = fakePeriodFrom,
-            periodTo = fakePeriodTo,
-            groupBy = groupBy,
-        )
+        val exception = assertFailsWith<IllegalArgumentException> {
+            getConsumptionUseCase(
+                periodFrom = fakePeriodFrom,
+                periodTo = fakePeriodTo,
+                groupBy = groupBy,
+            ).getOrThrow()
+        }
 
-        result.isFailure shouldBe true
-        result.exceptionOrNull().shouldBeInstanceOf<IllegalArgumentException>()
-        result.exceptionOrNull()!!.message shouldBe "Meter Serial Number is null"
+        assertEquals("Meter Serial Number is null", exception.message)
     }
 
     @Test
@@ -163,15 +164,15 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
         fakeRestApiRepository.setConsumptionResponse = Result.failure(RuntimeException(errorMessage))
 
-        val result = getConsumptionUseCase(
-            periodFrom = fakePeriodFrom,
-            periodTo = fakePeriodTo,
-            groupBy = groupBy,
-        )
+        val exception = assertFailsWith<RuntimeException> {
+            getConsumptionUseCase(
+                periodFrom = fakePeriodFrom,
+                periodTo = fakePeriodTo,
+                groupBy = groupBy,
+            ).getOrThrow()
+        }
 
-        result.isFailure shouldBe true
-        result.exceptionOrNull().shouldBeInstanceOf<RuntimeException>()
-        result.exceptionOrNull()!!.message shouldBe errorMessage
+        assertEquals(errorMessage, exception.message)
     }
 
     // Demo mode
@@ -205,7 +206,7 @@ class GetConsumptionUseCaseTest {
             groupBy = groupBy,
         )
 
-        result.isSuccess shouldBe true
-        result.getOrNull() shouldBe expectedConsumption.sortedBy { it.intervalStart }
+        assertTrue(result.isSuccess)
+        assertEquals(expectedConsumption.sortedBy { it.intervalStart }, result.getOrNull())
     }
 }

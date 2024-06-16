@@ -8,11 +8,12 @@
 package com.rwmobi.kunigami.domain.model
 
 import com.rwmobi.kunigami.domain.samples.RateSampleData
-import io.kotest.matchers.shouldBe
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class RateTest {
 
@@ -30,7 +31,7 @@ class RateTest {
             second = 0,
         ).toInstant(timeZone)
 
-        rate.isActive(referencePoint) shouldBe true
+        assertTrue(rate.isActive(referencePoint))
     }
 
     @Test
@@ -45,7 +46,7 @@ class RateTest {
             second = 59,
         ).toInstant(timeZone)
 
-        rate.isActive(referencePoint) shouldBe false
+        assertFalse(rate.isActive(referencePoint))
     }
 
     @Test
@@ -60,7 +61,7 @@ class RateTest {
             second = 0,
         ).toInstant(timeZone)
 
-        rate.isActive(referencePoint) shouldBe false
+        assertFalse(rate.isActive(referencePoint))
     }
 
     @Test
@@ -75,7 +76,7 @@ class RateTest {
             second = 0,
         ).toInstant(timeZone)
 
-        rate.isActive(referencePoint) shouldBe true
+        assertTrue(rate.isActive(referencePoint))
     }
 
     @Test
@@ -90,6 +91,6 @@ class RateTest {
             second = 59,
         ).toInstant(timeZone)
 
-        rate.isActive(referencePoint) shouldBe false
+        assertFalse(rate.isActive(referencePoint))
     }
 }

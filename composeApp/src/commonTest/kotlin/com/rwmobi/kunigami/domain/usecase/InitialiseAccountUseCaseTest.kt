@@ -11,14 +11,15 @@ import com.rwmobi.kunigami.domain.exceptions.NoValidMeterException
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import com.rwmobi.kunigami.domain.samples.AccountSampleData
-import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.beInstanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class InitialiseAccountUseCaseTest {
@@ -50,11 +51,11 @@ class InitialiseAccountUseCaseTest {
 
         val result = initialiseAccountUseCase(apiKey, accountNumber)
 
-        result.isSuccess shouldBe true
-        fakeUserPreferenceRepository.apiKey shouldBe apiKey
-        fakeUserPreferenceRepository.accountNumber shouldBe accountNumber
-        fakeUserPreferenceRepository.mpan shouldBe AccountSampleData.accountA1234A1B1.electricityMeterPoints[0].mpan
-        fakeUserPreferenceRepository.meterSerialNumber shouldBe AccountSampleData.accountA1234A1B1.electricityMeterPoints[0].meterSerialNumbers[0]
+        assertTrue(result.isSuccess)
+        assertEquals(apiKey, fakeUserPreferenceRepository.apiKey)
+        assertEquals(accountNumber, fakeUserPreferenceRepository.accountNumber)
+        assertEquals(AccountSampleData.accountA1234A1B1.electricityMeterPoints[0].mpan, fakeUserPreferenceRepository.mpan)
+        assertEquals(AccountSampleData.accountA1234A1B1.electricityMeterPoints[0].meterSerialNumbers[0], fakeUserPreferenceRepository.meterSerialNumber)
     }
 
     @Test
@@ -65,8 +66,8 @@ class InitialiseAccountUseCaseTest {
 
         val result = initialiseAccountUseCase(apiKey, accountNumber)
 
-        result.isFailure shouldBe true
-        result.exceptionOrNull() should beInstanceOf<NoValidMeterException>()
+        assertTrue(result.isFailure)
+        assertIs<NoValidMeterException>(result.exceptionOrNull())
     }
 
     @Test
@@ -76,10 +77,10 @@ class InitialiseAccountUseCaseTest {
         val errorMessage = "API Error"
         fakeRestApiRepository.setAccountResponse = Result.failure(RuntimeException(errorMessage))
 
-        val result = initialiseAccountUseCase(apiKey, accountNumber)
+        val exception = assertFailsWith<RuntimeException> {
+            initialiseAccountUseCase(apiKey, accountNumber).getOrThrow()
+        }
 
-        result.isFailure shouldBe true
-        result.exceptionOrNull() should beInstanceOf<RuntimeException>()
-        result.exceptionOrNull()!!.message shouldBe errorMessage
+        assertEquals(errorMessage, exception.message)
     }
 }

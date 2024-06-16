@@ -14,8 +14,6 @@ import com.rwmobi.kunigami.data.source.network.samples.GetProductsSampleData
 import com.rwmobi.kunigami.data.source.network.samples.GetStandardUnitRatesSampleData
 import com.rwmobi.kunigami.data.source.network.samples.GetStandingChargesSampleData
 import com.rwmobi.kunigami.domain.exceptions.HttpException
-import io.kotest.assertions.throwables.shouldThrowExactly
-import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -29,6 +27,9 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.fail
 
 class ProductsEndpointTest {
     private val fakeBaseUrl = "https://some.fakeurl.com"
@@ -70,7 +71,7 @@ class ProductsEndpointTest {
         )
 
         val result = productsEndpoint.getProducts()
-        result shouldBe GetProductsSampleData.dto
+        assertEquals(GetProductsSampleData.dto, result)
     }
 
     @Test
@@ -85,7 +86,7 @@ class ProductsEndpointTest {
         )
 
         val result = productsEndpoint.getProducts()
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
@@ -99,8 +100,11 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<HttpException> {
+        try {
             productsEndpoint.getProducts()
+            fail("Expected HttpException")
+        } catch (e: HttpException) {
+            // Successful if HttpException is thrown
         }
     }
 
@@ -117,7 +121,7 @@ class ProductsEndpointTest {
         )
 
         val result = productsEndpoint.getProduct(productCode = "sample-product-code")
-        result shouldBe GetProductSampleData.dto_var_22_11_01
+        assertEquals(GetProductSampleData.dto_var_22_11_01, result)
     }
 
     @Test
@@ -132,7 +136,7 @@ class ProductsEndpointTest {
         )
 
         val result = productsEndpoint.getProduct(productCode = "sample-product-code")
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
@@ -147,7 +151,7 @@ class ProductsEndpointTest {
         )
 
         val result = productsEndpoint.getProduct(productCode = "sample-product-code")
-        result shouldBe GetProductSampleData.dto_agile_flex_22_11_25
+        assertEquals(GetProductSampleData.dto_agile_flex_22_11_25, result)
     }
 
     @Test
@@ -162,7 +166,7 @@ class ProductsEndpointTest {
         )
 
         val result = productsEndpoint.getProduct(productCode = "sample-product-code")
-        result shouldBe GetProductSampleData.dto_oe_fix_12m_24_04_11
+        assertEquals(GetProductSampleData.dto_oe_fix_12m_24_04_11, result)
     }
 
     @Test
@@ -176,8 +180,11 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<HttpException> {
+        try {
             productsEndpoint.getProduct(productCode = "sample-product-code")
+            fail("Expected HttpException")
+        } catch (e: HttpException) {
+            // Successful if HttpException is thrown
         }
     }
 
@@ -197,7 +204,7 @@ class ProductsEndpointTest {
             productCode = "fake-product-code",
             tariffCode = "fake-tariff-code",
         )
-        result shouldBe GetStandardUnitRatesSampleData.dto
+        assertEquals(GetStandardUnitRatesSampleData.dto, result)
     }
 
     @Test
@@ -215,7 +222,7 @@ class ProductsEndpointTest {
             productCode = "fake-product-code",
             tariffCode = "fake-tariff-code",
         )
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
@@ -229,11 +236,14 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<HttpException> {
+        try {
             productsEndpoint.getStandardUnitRates(
                 productCode = "fake-product-code",
                 tariffCode = "fake-tariff-code",
             )
+            fail("Expected HttpException")
+        } catch (e: HttpException) {
+            // Successful if HttpException is thrown
         }
     }
 
@@ -253,7 +263,7 @@ class ProductsEndpointTest {
             productCode = "fake-product-code",
             tariffCode = "fake-tariff-code",
         )
-        result shouldBe GetStandingChargesSampleData.dto
+        assertEquals(GetStandingChargesSampleData.dto, result)
     }
 
     @Test
@@ -271,7 +281,7 @@ class ProductsEndpointTest {
             productCode = "fake-product-code",
             tariffCode = "fake-tariff-code",
         )
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
@@ -285,11 +295,14 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<HttpException> {
+        try {
             productsEndpoint.getStandingCharges(
                 productCode = "fake-product-code",
                 tariffCode = "fake-tariff-code",
             )
+            fail("Expected HttpException")
+        } catch (e: HttpException) {
+            // Successful if HttpException is thrown
         }
     }
 
@@ -309,7 +322,7 @@ class ProductsEndpointTest {
             productCode = "fake-product-code",
             tariffCode = "fake-tariff-code",
         )
-        result shouldBe GetDayUnitRatesSampleData.dto
+        assertEquals(GetDayUnitRatesSampleData.dto, result)
     }
 
     @Test
@@ -327,7 +340,7 @@ class ProductsEndpointTest {
             productCode = "fake-product-code",
             tariffCode = "fake-tariff-code",
         )
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
@@ -341,11 +354,14 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<HttpException> {
+        try {
             productsEndpoint.getDayUnitRates(
                 productCode = "fake-product-code",
                 tariffCode = "fake-tariff-code",
             )
+            fail("Expected HttpException")
+        } catch (e: HttpException) {
+            // Successful if HttpException is thrown
         }
     }
 
@@ -365,7 +381,7 @@ class ProductsEndpointTest {
             productCode = "fake-product-code",
             tariffCode = "fake-tariff-code",
         )
-        result shouldBe GetNightUnitRatesSampleData.dto
+        assertEquals(GetNightUnitRatesSampleData.dto, result)
     }
 
     @Test
@@ -383,7 +399,7 @@ class ProductsEndpointTest {
             productCode = "fake-product-code",
             tariffCode = "fake-tariff-code",
         )
-        result shouldBe null
+        assertNull(result)
     }
 
     @Test
@@ -397,11 +413,14 @@ class ProductsEndpointTest {
             ),
         )
 
-        shouldThrowExactly<HttpException> {
+        try {
             productsEndpoint.getNightUnitRates(
                 productCode = "fake-product-code",
                 tariffCode = "fake-tariff-code",
             )
+            fail("Expected HttpException")
+        } catch (e: HttpException) {
+            // Successful if HttpException is thrown
         }
     }
 }

@@ -8,7 +8,6 @@
 package com.rwmobi.kunigami.ui.model.consumption
 
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
-import io.kotest.matchers.shouldBe
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.presentation_style_day_half_hourly
 import kunigami.composeapp.generated.resources.presentation_style_month_thirty_days
@@ -16,41 +15,42 @@ import kunigami.composeapp.generated.resources.presentation_style_month_weeks
 import kunigami.composeapp.generated.resources.presentation_style_week_seven_days
 import kunigami.composeapp.generated.resources.presentation_style_year_twelve_months
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class ConsumptionPresentationStyleTest {
 
     @Test
     fun `DAY_HALF_HOURLY should map to HALF_HOURLY ConsumptionDataGroup`() {
-        ConsumptionPresentationStyle.DAY_HALF_HOURLY.getConsumptionDataGroup() shouldBe ConsumptionDataGroup.HALF_HOURLY
+        assertEquals(ConsumptionDataGroup.HALF_HOURLY, ConsumptionPresentationStyle.DAY_HALF_HOURLY.getConsumptionDataGroup())
     }
 
     @Test
     fun `WEEK_SEVEN_DAYS should map to DAY ConsumptionDataGroup`() {
-        ConsumptionPresentationStyle.WEEK_SEVEN_DAYS.getConsumptionDataGroup() shouldBe ConsumptionDataGroup.DAY
+        assertEquals(ConsumptionDataGroup.DAY, ConsumptionPresentationStyle.WEEK_SEVEN_DAYS.getConsumptionDataGroup())
     }
 
     @Test
     fun `MONTH_WEEKS should map to WEEK ConsumptionDataGroup`() {
-        ConsumptionPresentationStyle.MONTH_WEEKS.getConsumptionDataGroup() shouldBe ConsumptionDataGroup.WEEK
+        assertEquals(ConsumptionDataGroup.WEEK, ConsumptionPresentationStyle.MONTH_WEEKS.getConsumptionDataGroup())
     }
 
     @Test
     fun `MONTH_THIRTY_DAYS should map to DAY ConsumptionDataGroup`() {
-        ConsumptionPresentationStyle.MONTH_THIRTY_DAYS.getConsumptionDataGroup() shouldBe ConsumptionDataGroup.DAY
+        assertEquals(ConsumptionDataGroup.DAY, ConsumptionPresentationStyle.MONTH_THIRTY_DAYS.getConsumptionDataGroup())
     }
 
     @Test
     fun `YEAR_TWELVE_MONTHS should map to MONTH ConsumptionDataGroup`() {
-        ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS.getConsumptionDataGroup() shouldBe ConsumptionDataGroup.MONTH
+        assertEquals(ConsumptionDataGroup.MONTH, ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS.getConsumptionDataGroup())
     }
 
     // Not a very good test, but we keep it for now.
     @Test
     fun `stringResource should match the expected resource`() {
-        ConsumptionPresentationStyle.DAY_HALF_HOURLY.stringResource shouldBe Res.string.presentation_style_day_half_hourly
-        ConsumptionPresentationStyle.WEEK_SEVEN_DAYS.stringResource shouldBe Res.string.presentation_style_week_seven_days
-        ConsumptionPresentationStyle.MONTH_WEEKS.stringResource shouldBe Res.string.presentation_style_month_weeks
-        ConsumptionPresentationStyle.MONTH_THIRTY_DAYS.stringResource shouldBe Res.string.presentation_style_month_thirty_days
-        ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS.stringResource shouldBe Res.string.presentation_style_year_twelve_months
+        assertEquals(Res.string.presentation_style_day_half_hourly, ConsumptionPresentationStyle.DAY_HALF_HOURLY.stringResource)
+        assertEquals(Res.string.presentation_style_week_seven_days, ConsumptionPresentationStyle.WEEK_SEVEN_DAYS.stringResource)
+        assertEquals(Res.string.presentation_style_month_weeks, ConsumptionPresentationStyle.MONTH_WEEKS.stringResource)
+        assertEquals(Res.string.presentation_style_month_thirty_days, ConsumptionPresentationStyle.MONTH_THIRTY_DAYS.stringResource)
+        assertEquals(Res.string.presentation_style_year_twelve_months, ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS.stringResource)
     }
 }

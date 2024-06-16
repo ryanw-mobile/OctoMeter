@@ -8,52 +8,55 @@
 package com.rwmobi.kunigami.domain.model
 
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
-import io.kotest.matchers.shouldBe
 import kotlinx.datetime.Clock
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class TariffTest {
 
     @Test
     fun `extractProductCode should return correct product code`() {
         val tariffCode1 = "E-1R-AGILE-FLEX-22-11-25-A"
-        TariffSummary.extractProductCode(tariffCode1) shouldBe "AGILE-FLEX-22-11-25"
+        assertEquals("AGILE-FLEX-22-11-25", TariffSummary.extractProductCode(tariffCode1))
 
         val tariffCode2 = "E-2R-OE-FIX-12M-24-04-11-C"
-        TariffSummary.extractProductCode(tariffCode2) shouldBe "OE-FIX-12M-24-04-11"
+        assertEquals("OE-FIX-12M-24-04-11", TariffSummary.extractProductCode(tariffCode2))
 
         val tariffCode3 = "E-2R-VAR-22-11-01-A"
-        TariffSummary.extractProductCode(tariffCode3) shouldBe "VAR-22-11-01"
+        assertEquals("VAR-22-11-01", TariffSummary.extractProductCode(tariffCode3))
 
         val invalidTariffCode = "E-1R"
-        TariffSummary.extractProductCode(invalidTariffCode) shouldBe null
+        assertNull(TariffSummary.extractProductCode(invalidTariffCode))
     }
 
     @Test
     fun `getRetailRegion should return correct retail region`() {
         val tariffCode1 = "E-1R-AGILE-FLEX-22-11-25-A"
-        TariffSummary.getRetailRegion(tariffCode1) shouldBe "A"
+        assertEquals("A", TariffSummary.getRetailRegion(tariffCode1))
 
         val tariffCode2 = "E-2R-OE-FIX-12M-24-04-11-C"
-        TariffSummary.getRetailRegion(tariffCode2) shouldBe "C"
+        assertEquals("C", TariffSummary.getRetailRegion(tariffCode2))
 
         val tariffCode3 = "E-2R-VAR-22-11-01-P"
-        TariffSummary.getRetailRegion(tariffCode3) shouldBe "P"
+        assertEquals("P", TariffSummary.getRetailRegion(tariffCode3))
 
         val invalidTariffCode = "E-1R-AGILE-FLEX-22-11-25-1"
-        TariffSummary.getRetailRegion(invalidTariffCode) shouldBe null
+        assertNull(TariffSummary.getRetailRegion(invalidTariffCode))
     }
 
     @Test
     fun `isSingleRate should return true for single rate tariff code`() {
         val singleRateTariffCode = "E-1R-AGILE-FLEX-22-11-25-A"
-        TariffSummary.isSingleRate(singleRateTariffCode) shouldBe true
+        assertTrue(TariffSummary.isSingleRate(singleRateTariffCode))
 
         val nonSingleRateTariffCode = "E-2R-OE-FIX-12M-24-04-11-C"
-        TariffSummary.isSingleRate(nonSingleRateTariffCode) shouldBe false
+        assertFalse(TariffSummary.isSingleRate(nonSingleRateTariffCode))
 
         val invalidTariffCode = "E-R-VAR-22-11-01-A"
-        TariffSummary.isSingleRate(invalidTariffCode) shouldBe false
+        assertFalse(TariffSummary.isSingleRate(invalidTariffCode))
     }
 
     @Test
@@ -70,7 +73,7 @@ class TariffTest {
             availableTo = null,
             isVariable = true,
         )
-        tariffSummary.extractProductCode() shouldBe "AGILE-FLEX-22-11-25"
+        assertEquals("AGILE-FLEX-22-11-25", tariffSummary.extractProductCode())
     }
 
     @Test
@@ -87,7 +90,7 @@ class TariffTest {
             availableTo = null,
             isVariable = true,
         )
-        tariffSummary.getRetailRegion() shouldBe "A"
+        assertEquals("A", tariffSummary.getRetailRegion())
     }
 
     @Test
@@ -104,6 +107,6 @@ class TariffTest {
             availableTo = null,
             isVariable = true,
         )
-        tariffSummary.isSingleRate() shouldBe true
+        assertTrue(tariffSummary.isSingleRate())
     }
 }

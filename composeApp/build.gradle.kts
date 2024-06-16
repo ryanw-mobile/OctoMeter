@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2024. Ryan Wong
+ * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
+ */
+
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -129,7 +136,6 @@ kotlin {
             implementation(kotlin("test-annotations-common"))
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.ktor.client.mock)
-            implementation(libs.kotest.assertions.core)
             implementation(libs.koin.test)
         }
     }
