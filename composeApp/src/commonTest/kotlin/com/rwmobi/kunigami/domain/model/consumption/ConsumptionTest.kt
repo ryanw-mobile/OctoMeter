@@ -21,7 +21,7 @@ class ConsumptionTest {
     fun `getConsumptionDaySpan should return correct time span in days`() {
         val consumptionList = listOf(
             Consumption(
-                consumption = 10.0,
+                kWhConsumed = 10.0,
                 intervalStart = LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
@@ -38,7 +38,7 @@ class ConsumptionTest {
                 ).toInstant(londonZone),
             ),
             Consumption(
-                consumption = 15.0,
+                kWhConsumed = 15.0,
                 intervalStart = LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
@@ -76,7 +76,7 @@ class ConsumptionTest {
     fun `getConsumptionRange should return correct range for non-empty list`() {
         val consumptionList = listOf(
             Consumption(
-                consumption = 10.0,
+                kWhConsumed = 10.0,
                 intervalStart = LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
@@ -93,7 +93,7 @@ class ConsumptionTest {
                 ).toInstant(londonZone),
             ),
             Consumption(
-                consumption = 15.0,
+                kWhConsumed = 15.0,
                 intervalStart = LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
@@ -110,7 +110,7 @@ class ConsumptionTest {
                 ).toInstant(londonZone),
             ),
             Consumption(
-                consumption = 12.5,
+                kWhConsumed = 12.5,
                 intervalStart = LocalDateTime(
                     year = 2023,
                     monthNumber = 5,

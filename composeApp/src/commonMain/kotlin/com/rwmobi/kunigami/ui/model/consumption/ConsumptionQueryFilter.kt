@@ -246,7 +246,7 @@ data class ConsumptionQueryFilter(
                         resource = Res.string.usage_chart_tooltip_range_kwh,
                         consumption.intervalStart.getLocalHHMMString(),
                         consumption.intervalEnd.getLocalHHMMString(),
-                        consumption.consumption.toString(precision = 2),
+                        consumption.kWhConsumed.toString(precision = 2),
                     )
                 }
             }
@@ -256,7 +256,7 @@ data class ConsumptionQueryFilter(
                     getString(
                         resource = Res.string.usage_chart_tooltip_spot_kwh,
                         consumption.intervalStart.getLocalDateString(),
-                        consumption.consumption.toString(precision = 2),
+                        consumption.kWhConsumed.toString(precision = 2),
                     )
                 }
             }
@@ -267,7 +267,7 @@ data class ConsumptionQueryFilter(
                         resource = Res.string.usage_chart_tooltip_range_kwh,
                         consumption.intervalStart.getLocalDayMonthString(),
                         (consumption.intervalEnd - 1.nanoseconds).getLocalDayMonthString(),
-                        consumption.consumption.toString(precision = 2),
+                        consumption.kWhConsumed.toString(precision = 2),
                     )
                 }
             }
@@ -277,7 +277,7 @@ data class ConsumptionQueryFilter(
                     getString(
                         resource = Res.string.usage_chart_tooltip_spot_kwh,
                         consumption.intervalStart.getLocalDayMonthString(),
-                        consumption.consumption.toString(precision = 2),
+                        consumption.kWhConsumed.toString(precision = 2),
                     )
                 }
             }
@@ -287,7 +287,7 @@ data class ConsumptionQueryFilter(
                     getString(
                         resource = Res.string.usage_chart_tooltip_spot_kwh,
                         consumption.intervalStart.getLocalMonthYearString(),
-                        consumption.consumption.toString(precision = 2),
+                        consumption.kWhConsumed.toString(precision = 2),
                     )
                 }
             }

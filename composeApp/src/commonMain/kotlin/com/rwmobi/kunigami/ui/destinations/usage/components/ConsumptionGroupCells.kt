@@ -59,9 +59,9 @@ internal fun ConsumptionGroupCells(
                 IndicatorTextValueGridItem(
                     modifier = Modifier.weight(1f),
                     label = label,
-                    value = item.consumption.toString(precision = 2),
+                    value = item.kWhConsumed.toString(precision = 2),
                     indicatorColor = RatePalette.lookupColorFromRange(
-                        value = item.consumption,
+                        value = item.kWhConsumed,
                         range = consumptionRange,
                         shouldUseDarkTheme = shouldUseDarkTheme(),
                     ),

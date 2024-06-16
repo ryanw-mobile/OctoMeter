@@ -14,7 +14,7 @@ import kotlin.time.DurationUnit
 
 @Immutable
 data class Consumption(
-    val consumption: Double,
+    val kWhConsumed: Double,
     val intervalStart: Instant,
     val intervalEnd: Instant,
 )
@@ -40,6 +40,6 @@ fun List<Consumption>.getConsumptionRange(): ClosedFloatingPointRange<Double> {
     return if (isEmpty()) {
         0.0..0.0 // Return a default range if the list is empty
     } else {
-        0.0..ceil(maxOf { it.consumption } * 10) / 10.0
+        0.0..ceil(maxOf { it.kWhConsumed } * 10) / 10.0
     }
 }

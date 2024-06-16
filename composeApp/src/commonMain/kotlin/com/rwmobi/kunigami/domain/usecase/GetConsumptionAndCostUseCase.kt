@@ -8,9 +8,9 @@
 package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.except
-import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.datetime.Instant
 import kotlin.coroutines.cancellation.CancellationException
 
-class GetConsumptionUseCase(
+class GetConsumptionAndCostUseCase(
     private val userPreferencesRepository: UserPreferencesRepository,
     private val restApiRepository: RestApiRepository,
     private val demoRestApiRepository: RestApiRepository,
@@ -32,7 +32,7 @@ class GetConsumptionUseCase(
         periodFrom: Instant,
         periodTo: Instant,
         groupBy: ConsumptionDataGroup,
-    ): Result<List<Consumption>> {
+    ): Result<List<ConsumptionWithCost>> {
         return withContext(dispatcher) {
             runCatching {
                 val isDemoMode = userPreferencesRepository.isDemoMode()
@@ -58,6 +58,11 @@ class GetConsumptionUseCase(
                         onSuccess = { consumption ->
                             consumption.sortedBy {
                                 it.intervalStart
+                            }.map {
+                                ConsumptionWithCost(
+                                    consumption = it,
+                                    vatInclusiveCost = null,
+                                )
                             }
                         },
                         onFailure = { throwable ->
@@ -77,6 +82,11 @@ class GetConsumptionUseCase(
                         onSuccess = { consumption ->
                             consumption.sortedBy {
                                 it.intervalStart
+                            }.map {
+                                ConsumptionWithCost(
+                                    consumption = it,
+                                    vatInclusiveCost = null,
+                                )
                             }
                         },
                         onFailure = { throwable ->

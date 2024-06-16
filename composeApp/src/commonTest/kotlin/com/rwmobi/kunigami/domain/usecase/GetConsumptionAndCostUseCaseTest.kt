@@ -22,12 +22,12 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetConsumptionUseCaseTest {
+class GetConsumptionAndCostUseCaseTest {
     private val fakePeriodFrom = Instant.DISTANT_PAST
     private val fakePeriodTo = Instant.DISTANT_FUTURE
     private val groupBy = ConsumptionDataGroup.HALF_HOURLY
 
-    private lateinit var getConsumptionUseCase: GetConsumptionUseCase
+    private lateinit var getConsumptionAndCostUseCase: GetConsumptionAndCostUseCase
     private lateinit var fakeUserPreferenceRepository: FakeUserPreferencesRepository
     private lateinit var fakeRestApiRepository: FakeRestApiRepository
     private lateinit var fakeDemoRestApiRepository: FakeRestApiRepository
@@ -37,7 +37,7 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository = FakeUserPreferencesRepository()
         fakeRestApiRepository = FakeRestApiRepository()
         fakeDemoRestApiRepository = FakeRestApiRepository()
-        getConsumptionUseCase = GetConsumptionUseCase(
+        getConsumptionAndCostUseCase = GetConsumptionAndCostUseCase(
             userPreferencesRepository = fakeUserPreferenceRepository,
             restApiRepository = fakeRestApiRepository,
             demoRestApiRepository = fakeDemoRestApiRepository,
@@ -53,17 +53,17 @@ class GetConsumptionUseCaseTest {
 
         val expectedConsumption = listOf(
             Consumption(
-                consumption = 0.113,
+                kWhConsumed = 0.113,
                 intervalStart = Instant.parse("2024-05-06T23:30:00Z"),
                 intervalEnd = Instant.parse("2024-05-07T00:00:00Z"),
             ),
             Consumption(
-                consumption = 0.58,
+                kWhConsumed = 0.58,
                 intervalStart = Instant.parse("2024-05-06T23:00:00Z"),
                 intervalEnd = Instant.parse("2024-05-06T23:30:00Z"),
             ),
             Consumption(
-                consumption = 0.201,
+                kWhConsumed = 0.201,
                 intervalStart = Instant.parse("2024-05-06T22:30:00Z"),
                 intervalEnd = Instant.parse("2024-05-06T23:00:00Z"),
             ),
@@ -75,7 +75,7 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
         fakeRestApiRepository.setConsumptionResponse = Result.success(expectedConsumption)
 
-        val result = getConsumptionUseCase(
+        val result = getConsumptionAndCostUseCase(
             periodFrom = fakePeriodFrom,
             periodTo = fakePeriodTo,
             groupBy = groupBy,
@@ -97,7 +97,7 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
 
         val exception = assertFailsWith<IllegalArgumentException> {
-            getConsumptionUseCase(
+            getConsumptionAndCostUseCase(
                 periodFrom = fakePeriodFrom,
                 periodTo = fakePeriodTo,
                 groupBy = groupBy,
@@ -119,7 +119,7 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
 
         val exception = assertFailsWith<IllegalArgumentException> {
-            getConsumptionUseCase(
+            getConsumptionAndCostUseCase(
                 periodFrom = fakePeriodFrom,
                 periodTo = fakePeriodTo,
                 groupBy = groupBy,
@@ -141,7 +141,7 @@ class GetConsumptionUseCaseTest {
         fakeUserPreferenceRepository.meterSerialNumber = meterSerialNumber
 
         val exception = assertFailsWith<IllegalArgumentException> {
-            getConsumptionUseCase(
+            getConsumptionAndCostUseCase(
                 periodFrom = fakePeriodFrom,
                 periodTo = fakePeriodTo,
                 groupBy = groupBy,
@@ -165,7 +165,7 @@ class GetConsumptionUseCaseTest {
         fakeRestApiRepository.setConsumptionResponse = Result.failure(RuntimeException(errorMessage))
 
         val exception = assertFailsWith<RuntimeException> {
-            getConsumptionUseCase(
+            getConsumptionAndCostUseCase(
                 periodFrom = fakePeriodFrom,
                 periodTo = fakePeriodTo,
                 groupBy = groupBy,
@@ -180,17 +180,17 @@ class GetConsumptionUseCaseTest {
     fun `invoke should return consumption from fakeDemoRestApiRepository when under demoMode`() = runTest {
         val expectedConsumption = listOf(
             Consumption(
-                consumption = 0.113,
+                kWhConsumed = 0.113,
                 intervalStart = Instant.parse("2024-05-06T23:30:00Z"),
                 intervalEnd = Instant.parse("2024-05-07T00:00:00Z"),
             ),
             Consumption(
-                consumption = 0.58,
+                kWhConsumed = 0.58,
                 intervalStart = Instant.parse("2024-05-06T23:00:00Z"),
                 intervalEnd = Instant.parse("2024-05-06T23:30:00Z"),
             ),
             Consumption(
-                consumption = 0.201,
+                kWhConsumed = 0.201,
                 intervalStart = Instant.parse("2024-05-06T22:30:00Z"),
                 intervalEnd = Instant.parse("2024-05-06T23:00:00Z"),
             ),
@@ -200,7 +200,7 @@ class GetConsumptionUseCaseTest {
         fakeRestApiRepository.setConsumptionResponse = Result.failure(RuntimeException("getConsumptionUseCase should call DemoRestApiRepository under demo mode"))
         fakeDemoRestApiRepository.setConsumptionResponse = Result.success(expectedConsumption)
 
-        val result = getConsumptionUseCase(
+        val result = getConsumptionAndCostUseCase(
             periodFrom = fakePeriodFrom,
             periodTo = fakePeriodTo,
             groupBy = groupBy,
