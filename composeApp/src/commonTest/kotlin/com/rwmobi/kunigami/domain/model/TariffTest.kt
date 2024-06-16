@@ -68,6 +68,7 @@ class TariffTest {
             vatInclusiveStandingCharge = 20.0,
             availableFrom = Clock.System.now(),
             availableTo = null,
+            isVariable = true,
         )
         tariffSummary.extractProductCode() shouldBe "AGILE-FLEX-22-11-25"
     }
@@ -84,6 +85,7 @@ class TariffTest {
             vatInclusiveStandingCharge = 20.0,
             availableFrom = Clock.System.now(),
             availableTo = null,
+            isVariable = true,
         )
         tariffSummary.getRetailRegion() shouldBe "A"
     }
@@ -100,6 +102,7 @@ class TariffTest {
             vatInclusiveStandingCharge = 20.0,
             availableFrom = Clock.System.now(),
             availableTo = null,
+            isVariable = true,
         )
         tariffSummary.isSingleRate() shouldBe true
     }

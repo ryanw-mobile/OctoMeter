@@ -47,6 +47,7 @@ class GetTariffRatesUseCaseTest {
             vatInclusiveStandingCharge = 94.682,
             availableFrom = Clock.System.now(),
             availableTo = null,
+            isVariable = true,
         )
 
         fakeRestApiRepository.setSimpleProductTariffResponse = Result.success(expectedTariffSummary)

@@ -17,6 +17,7 @@ data class TariffSummary(
     val displayName: String,
     val description: String,
     val tariffCode: String,
+    val isVariable: Boolean,
     val availableFrom: Instant,
     val availableTo: Instant?,
     val vatInclusiveUnitRate: Double,

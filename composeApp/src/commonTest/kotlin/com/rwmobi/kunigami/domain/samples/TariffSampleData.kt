@@ -23,6 +23,7 @@ internal object TariffSampleData {
         description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
         availableFrom = Clock.System.now(),
         availableTo = null,
+        isVariable = false,
     )
 
     val var221101 = TariffSummary(
@@ -33,6 +34,7 @@ internal object TariffSampleData {
         tariffCode = "E-1R-VAR-22-11-01-A",
         availableFrom = Instant.parse("2023-03-28T00:00:00Z"),
         availableTo = null,
+        isVariable = true,
         vatInclusiveUnitRate = 25.2546.roundToTwoDecimalPlaces(),
         vatInclusiveStandingCharge = 47.8485.roundToTwoDecimalPlaces(),
     )
