@@ -8,8 +8,8 @@
 package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.except
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
@@ -26,12 +26,13 @@ class GetConsumptionAndCostUseCase(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     /***
-     * Specify grouping, and start date, then use case will determine the right end date.
+     * Pull consumption data, then maps with the corresponding tariff and rate.
+     * This use case will automatically adjust the start date and end date according to the grouping.
      */
     suspend operator fun invoke(
         periodFrom: Instant,
         periodTo: Instant,
-        groupBy: ConsumptionDataGroup,
+        groupBy: ConsumptionTimeFrame,
     ): Result<List<ConsumptionWithCost>> {
         return withContext(dispatcher) {
             runCatching {

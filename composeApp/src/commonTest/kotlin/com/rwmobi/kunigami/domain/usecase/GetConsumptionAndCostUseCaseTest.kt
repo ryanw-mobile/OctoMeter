@@ -8,7 +8,7 @@
 package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,7 +25,7 @@ import kotlin.test.assertTrue
 class GetConsumptionAndCostUseCaseTest {
     private val fakePeriodFrom = Instant.DISTANT_PAST
     private val fakePeriodTo = Instant.DISTANT_FUTURE
-    private val groupBy = ConsumptionDataGroup.HALF_HOURLY
+    private val groupBy = ConsumptionTimeFrame.HALF_HOURLY
 
     private lateinit var getConsumptionAndCostUseCase: GetConsumptionAndCostUseCase
     private lateinit var fakeUserPreferenceRepository: FakeUserPreferencesRepository

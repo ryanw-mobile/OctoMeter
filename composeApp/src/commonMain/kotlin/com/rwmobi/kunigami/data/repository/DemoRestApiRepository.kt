@@ -9,8 +9,8 @@ package com.rwmobi.kunigami.data.repository
 
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
@@ -64,7 +64,7 @@ class DemoRestApiRepository : RestApiRepository {
      * The only parameters we care are: periodFrom, periodTo, groupBy.
      * Since this piece of code has no practical value, we take it as iss - until it breaks.
      */
-    override suspend fun getConsumption(apiKey: String, mpan: String, meterSerialNumber: String, periodFrom: Instant?, periodTo: Instant?, orderBy: ConsumptionDataOrder, groupBy: ConsumptionDataGroup): Result<List<Consumption>> {
+    override suspend fun getConsumption(apiKey: String, mpan: String, meterSerialNumber: String, periodFrom: Instant?, periodTo: Instant?, orderBy: ConsumptionDataOrder, groupBy: ConsumptionTimeFrame): Result<List<Consumption>> {
         val consumptionList = mutableListOf<Consumption>()
         var intervalStart = periodFrom!!
         val mean = 0.2 // Midpoint of the range [0.110, 2.000]
@@ -74,11 +74,11 @@ class DemoRestApiRepository : RestApiRepository {
 
         while (intervalStart < periodTo!!) {
             val intervalEnd = when (groupBy) {
-                ConsumptionDataGroup.HALF_HOURLY -> intervalStart.plus(DateTimePeriod(minutes = 30), timeZone)
-                ConsumptionDataGroup.DAY -> intervalStart.plus(DateTimePeriod(days = 1), timeZone)
-                ConsumptionDataGroup.WEEK -> intervalStart.plus(DateTimePeriod(days = 7), timeZone)
-                ConsumptionDataGroup.MONTH -> intervalStart.plus(DateTimePeriod(months = 1), timeZone)
-                ConsumptionDataGroup.QUARTER -> TODO()
+                ConsumptionTimeFrame.HALF_HOURLY -> intervalStart.plus(DateTimePeriod(minutes = 30), timeZone)
+                ConsumptionTimeFrame.DAY -> intervalStart.plus(DateTimePeriod(days = 1), timeZone)
+                ConsumptionTimeFrame.WEEK -> intervalStart.plus(DateTimePeriod(days = 7), timeZone)
+                ConsumptionTimeFrame.MONTH -> intervalStart.plus(DateTimePeriod(months = 1), timeZone)
+                ConsumptionTimeFrame.QUARTER -> TODO()
             }
 
             //  if (intervalEnd > periodTo) break

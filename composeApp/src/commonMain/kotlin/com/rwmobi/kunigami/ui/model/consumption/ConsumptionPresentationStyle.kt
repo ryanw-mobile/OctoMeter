@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.ui.model.consumption
 
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.presentation_style_day_half_hourly
 import kunigami.composeapp.generated.resources.presentation_style_month_thirty_days
@@ -27,13 +27,13 @@ enum class ConsumptionPresentationStyle(val stringResource: StringResource) {
     /***
      * UI uses interprets the grouping differently. This is to map to the Enum that the API expects.
      */
-    fun getConsumptionDataGroup(): ConsumptionDataGroup {
+    fun getConsumptionDataGroup(): ConsumptionTimeFrame {
         return when (this) {
-            DAY_HALF_HOURLY -> ConsumptionDataGroup.HALF_HOURLY
-            WEEK_SEVEN_DAYS -> ConsumptionDataGroup.DAY
-            MONTH_WEEKS -> ConsumptionDataGroup.WEEK
-            MONTH_THIRTY_DAYS -> ConsumptionDataGroup.DAY
-            YEAR_TWELVE_MONTHS -> ConsumptionDataGroup.MONTH
+            DAY_HALF_HOURLY -> ConsumptionTimeFrame.HALF_HOURLY
+            WEEK_SEVEN_DAYS -> ConsumptionTimeFrame.DAY
+            MONTH_WEEKS -> ConsumptionTimeFrame.WEEK
+            MONTH_THIRTY_DAYS -> ConsumptionTimeFrame.DAY
+            YEAR_TWELVE_MONTHS -> ConsumptionTimeFrame.MONTH
         }
     }
 }

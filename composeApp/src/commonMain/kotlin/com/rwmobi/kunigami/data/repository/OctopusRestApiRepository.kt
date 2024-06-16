@@ -19,8 +19,8 @@ import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
@@ -148,7 +148,7 @@ class OctopusRestApiRepository(
         periodFrom: Instant?,
         periodTo: Instant?,
         orderBy: ConsumptionDataOrder,
-        groupBy: ConsumptionDataGroup,
+        groupBy: ConsumptionTimeFrame,
     ): Result<List<Consumption>> {
         return withContext(dispatcher) {
             runCatching {
