@@ -12,7 +12,6 @@ kermit = "2.0.4"
 koalaplotCore = "0.6.0"
 koin = "3.5.6"
 koinCompose = "1.1.5"
-kotest = "5.9.1"
 kotlin = "2.0.0"
 kotlinxDatetime = "0.6.0"
 kotlinxSerialization = "1.7.0"
@@ -73,7 +72,6 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
-kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
 material3-windowsizeclass-multiplatform = { group = "dev.chrisbanes.material3", name = "material3-window-size-class-multiplatform", version.ref = "material3WindowSizeClassMultiplatform" }
 # mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
