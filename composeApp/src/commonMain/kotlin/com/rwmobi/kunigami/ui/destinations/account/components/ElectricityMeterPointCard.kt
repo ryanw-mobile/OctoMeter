@@ -9,6 +9,7 @@
 
 package com.rwmobi.kunigami.ui.destinations.account.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,19 +54,20 @@ internal fun ElectricityMeterPointCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(all = dimension.grid_2),
+                .padding(bottom = dimension.grid_2),
             verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
         ) {
             Text(
-                style = MaterialTheme.typography.titleLarge,
-                text = stringResource(resource = Res.string.account_mpan, meterPoint.mpan),
-            )
-
-            HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = dimension.grid_1),
-                color = MaterialTheme.colorScheme.inverseSurface,
+                    .background(color = MaterialTheme.colorScheme.secondaryContainer)
+                    .padding(
+                        horizontal = dimension.grid_2,
+                        vertical = dimension.grid_0_5,
+                    ),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                text = stringResource(resource = Res.string.account_mpan, meterPoint.mpan),
             )
 
             val latestAgreement = meterPoint.getLatestAgreement()
@@ -74,7 +75,11 @@ internal fun ElectricityMeterPointCard(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = dimension.grid_2),
+                        .padding(
+                            start = dimension.grid_2,
+                            end = dimension.grid_2,
+                            bottom = dimension.grid_2,
+                        ),
                 ) {
                     TariffLayoutAdaptive(
                         modifier = Modifier
@@ -89,7 +94,11 @@ internal fun ElectricityMeterPointCard(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = dimension.grid_2),
+                        .padding(
+                            start = dimension.grid_2,
+                            end = dimension.grid_2,
+                            bottom = dimension.grid_2,
+                        ),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
                 ) {
@@ -111,7 +120,8 @@ internal fun ElectricityMeterPointCard(
             }
 
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = dimension.grid_2),
                 verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
             ) {
                 meterPoint.meterSerialNumbers.forEach { meterSerialNumber ->

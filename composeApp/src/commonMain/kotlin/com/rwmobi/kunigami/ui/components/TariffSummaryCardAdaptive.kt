@@ -155,25 +155,27 @@ private fun TariffSummaryCardLinear(
             )
         }
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_0_5))
+        if (!tariffSummary.isVariable) {
+            Spacer(modifier = Modifier.size(size = dimension.grid_0_5))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
-        ) {
-            Text(
-                modifier = Modifier.weight(weight = 1f),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                text = stringResource(resource = Res.string.standard_unit_rate),
-            )
-            Text(
-                modifier = Modifier.wrapContentWidth(),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                text = stringResource(resource = Res.string.unit_p_kwh, tariffSummary.vatInclusiveUnitRate),
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
+            ) {
+                Text(
+                    modifier = Modifier.weight(weight = 1f),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    text = stringResource(resource = Res.string.standard_unit_rate),
+                )
+                Text(
+                    modifier = Modifier.wrapContentWidth(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    text = stringResource(resource = Res.string.unit_p_kwh, tariffSummary.vatInclusiveUnitRate),
+                )
+            }
         }
     }
 }
@@ -241,15 +243,17 @@ private fun TariffSummaryCardTwoColumns(
                     text = stringResource(resource = Res.string.agile_tariff_standing_charge_two_lines, tariffSummary.vatInclusiveStandingCharge),
                 )
 
-                Spacer(modifier = Modifier.size(size = dimension.grid_1))
+                if (!tariffSummary.isVariable) {
+                    Spacer(modifier = Modifier.size(size = dimension.grid_1))
 
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.End,
-                    text = stringResource(resource = Res.string.agile_tariff_standard_unit_rate_two_lines, tariffSummary.vatInclusiveUnitRate),
-                )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.End,
+                        text = stringResource(resource = Res.string.agile_tariff_standard_unit_rate_two_lines, tariffSummary.vatInclusiveUnitRate),
+                    )
+                }
             }
         }
     }
@@ -319,16 +323,18 @@ private fun TariffSummaryCardThreeColumns(
                 )
             }
 
-            Column(
-                modifier = Modifier.weight(1f),
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.Center,
-                    text = stringResource(resource = Res.string.agile_tariff_standard_unit_rate_two_lines, tariffSummary.vatInclusiveUnitRate),
-                )
+            if (!tariffSummary.isVariable) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.Center,
+                        text = stringResource(resource = Res.string.agile_tariff_standard_unit_rate_two_lines, tariffSummary.vatInclusiveUnitRate),
+                    )
+                }
             }
         }
     }
