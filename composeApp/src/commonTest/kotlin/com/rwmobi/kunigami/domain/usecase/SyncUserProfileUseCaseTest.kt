@@ -12,7 +12,6 @@ import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import com.rwmobi.kunigami.domain.samples.AccountSampleData
-import com.rwmobi.kunigami.domain.samples.TariffSampleData
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -52,7 +51,6 @@ class SyncUserProfileUseCaseTest {
     fun `should return UserProfile when all data is present`() = runTest {
         val apiKey = "validApiKey"
         val account = AccountSampleData.accountA1234A1B1
-        val tariffSummary = TariffSampleData.agileFlex221125
         fakeUserPreferenceRepository.apply {
             demoMode = false
             this.apiKey = apiKey
@@ -61,7 +59,6 @@ class SyncUserProfileUseCaseTest {
             this.meterSerialNumber = account.electricityMeterPoints.first().meterSerialNumbers.first()
         }
         fakeRestApiRepository.setAccountResponse = Result.success(listOf(account))
-        fakeRestApiRepository.setSimpleProductTariffSummaryResponse = Result.success(tariffSummary)
 
         val result = syncUserProfileUseCase()
 
@@ -71,7 +68,6 @@ class SyncUserProfileUseCaseTest {
         userProfile.selectedMpan shouldBe account.electricityMeterPoints.first().mpan
         userProfile.selectedMeterSerialNumber shouldBe account.electricityMeterPoints.first().meterSerialNumbers.first()
         userProfile.account shouldBe account
-        userProfile.tariffSummary shouldBe tariffSummary
     }
 
     @Test
@@ -106,7 +102,7 @@ class SyncUserProfileUseCaseTest {
         }
         val account = AccountSampleData.accountA1234A1B1
         fakeRestApiRepository.setAccountResponse = Result.success(listOf(account))
-        fakeRestApiRepository.setSimpleProductTariffSummaryResponse = null
+        fakeRestApiRepository.setSimpleProductTariffResponse = null
 
         val result = syncUserProfileUseCase()
 

@@ -42,6 +42,7 @@ fun SingleProductApiResponse.toTariff(tariffCode: String): TariffSummary {
         fullName = fullName,
         displayName = displayName,
         description = description,
+        isVariable = isVariable,
         availableFrom = availableFrom,
         availableTo = availableTo,
         tariffCode = rates.code,

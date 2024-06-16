@@ -20,18 +20,18 @@ data class Account(
     val electricityMeterPoints: List<ElectricityMeterPoint>,
 ) {
     /**
-     * Pick the first tariff we can find from the data we keep.
+     * Pick the active or last tariff code
      */
-    fun getDefaultTariffCode(): String? {
-        return electricityMeterPoints.getOrNull(0)?.currentAgreement?.tariffCode
+    fun getDefaultLatestTariffCode(): String? {
+        return electricityMeterPoints.getOrNull(0)?.getLatestAgreement()?.tariffCode
     }
 
-    fun getTariffCode(mpan: String?): String? {
+    fun getDefaultLatestTariffCode(mpan: String?): String? {
         if (mpan == null) return null
 
         return electricityMeterPoints.find {
             it.mpan == mpan
-        }?.currentAgreement?.tariffCode
+        }?.getLatestAgreement()?.tariffCode
     }
 
     fun getDefaultMpan(): String? {

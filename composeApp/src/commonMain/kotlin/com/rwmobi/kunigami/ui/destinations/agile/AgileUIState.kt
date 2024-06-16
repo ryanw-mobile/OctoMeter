@@ -39,6 +39,7 @@ data class AgileUIState(
     val requestedRateColumns: Int = 1,
     val requestedAdaptiveLayout: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     val userProfile: UserProfile? = null,
+    val activeTariffSummary: TariffSummary? = null,
     val agileTariffSummary: TariffSummary? = null,
     val rateGroupedCells: List<RateGroup> = emptyList(),
     val rateRange: ClosedFloatingPointRange<Double> = 0.0..0.0,
@@ -69,8 +70,8 @@ data class AgileUIState(
 
     fun isOnDifferentTariff() = (
         false == isDemoMode &&
-            userProfile?.tariffSummary != null &&
-            userProfile.tariffSummary.tariffCode != agileTariffSummary?.tariffCode
+            activeTariffSummary != null &&
+            activeTariffSummary.tariffCode != agileTariffSummary?.tariffCode
         )
 
     suspend fun filterErrorAndStopLoading(throwable: Throwable): AgileUIState {

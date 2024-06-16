@@ -19,6 +19,7 @@ import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
+import com.rwmobi.kunigami.domain.usecase.GetTariffSummaryUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.ui.destinations.agile.AgileScreenType
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
@@ -47,6 +48,7 @@ import kotlin.math.min
 import kotlin.time.Duration
 
 class AgileViewModel(
+    private val getTariffSummaryUseCase: GetTariffSummaryUseCase,
     private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val getStandardUnitRateUseCase: GetStandardUnitRateUseCase,
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
@@ -74,7 +76,15 @@ class AgileViewModel(
         viewModelScope.launch(dispatcher) {
             val currentUserProfile = getUserProfile()
             if (currentUserProfile != null || _uiState.value.isDemoMode == true) {
-                val region = currentUserProfile?.tariffSummary?.getRetailRegion() ?: demoRetailRegion
+                val tariffCode = currentUserProfile?.getElectricityMeterPoint()?.lookupAgreement(referencePoint = Clock.System.now())
+                val activeTariffSummary = tariffCode?.let { getTariffSummaryUseCase(tariffCode = it.tariffCode).getOrNull() }
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        activeTariffSummary = activeTariffSummary,
+                    )
+                }
+                val region = activeTariffSummary?.getRetailRegion() ?: demoRetailRegion
+
                 getAgileRates(region = region)
                 getAgileTariffAndStopLoading(region = region)
             }

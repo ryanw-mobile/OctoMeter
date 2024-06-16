@@ -14,5 +14,5 @@ import kotlinx.datetime.Instant
 data class Agreement(
     val tariffCode: String,
     val validFrom: Instant,
-    val validTo: Instant?,
+    val validTo: Instant,
 )

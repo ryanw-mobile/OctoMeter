@@ -9,7 +9,6 @@
 
 package com.rwmobi.kunigami.domain.model.product
 
-import androidx.compose.runtime.Immutable
 import co.touchlab.kermit.Logger
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.briefcase
@@ -28,7 +27,6 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 
-@Immutable
 enum class ProductFeature(val stringResource: StringResource, val iconResource: DrawableResource) {
     VARIABLE(stringResource = Res.string.product_feature_variable, iconResource = Res.drawable.shuffle),
     GREEN(stringResource = Res.string.product_feature_green, iconResource = Res.drawable.trees),

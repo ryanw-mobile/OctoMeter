@@ -7,11 +7,17 @@
 
 package com.rwmobi.kunigami.domain.model.account
 
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import androidx.compose.runtime.Immutable
 
+@Immutable
 data class UserProfile(
     val selectedMpan: String? = null,
     val selectedMeterSerialNumber: String? = null,
     val account: Account? = null,
-    val tariffSummary: TariffSummary? = null,
-)
+) {
+    fun getElectricityMeterPoint(): ElectricityMeterPoint? {
+        return selectedMpan?.let { mpan ->
+            account?.electricityMeterPoints?.firstOrNull { it.mpan == mpan }
+        }
+    }
+}

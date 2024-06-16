@@ -7,8 +7,10 @@
 
 package com.rwmobi.kunigami.ui.model.rate
 
+import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.model.rate.Rate
 
+@Immutable
 data class RateGroupWithPartitions(
     val title: String,
     val partitionedItems: List<List<Rate>>,

@@ -7,7 +7,6 @@
 
 package com.rwmobi.kunigami.ui.navigation
 
-import androidx.compose.runtime.Immutable
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.bar_chart
 import kunigami.composeapp.generated.resources.coin
@@ -20,7 +19,6 @@ import kunigami.composeapp.generated.resources.user
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 
-@Immutable
 enum class AppDestination(val titleResId: StringResource, val iconResId: DrawableResource) {
     USAGE(titleResId = Res.string.navigation_usage, iconResId = Res.drawable.bar_chart),
     AGILE(titleResId = Res.string.navigation_agile, iconResId = Res.drawable.pulse),

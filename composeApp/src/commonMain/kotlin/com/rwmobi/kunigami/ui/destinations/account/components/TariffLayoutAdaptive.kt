@@ -20,15 +20,21 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Density
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.ui.components.TagWithIcon
+import com.rwmobi.kunigami.ui.model.product.RetailRegion
 import com.rwmobi.kunigami.ui.theme.getDimension
+import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_tariff_end_date
 import kunigami.composeapp.generated.resources.account_tariff_standing_charge
@@ -37,6 +43,7 @@ import kunigami.composeapp.generated.resources.account_tariff_unit_rate
 import kunigami.composeapp.generated.resources.agile_product_code_retail_region
 import kunigami.composeapp.generated.resources.unknown
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -82,28 +89,46 @@ private fun TariffLayoutCompact(
             text = tariffSummary.fullName,
         )
 
-        val regionCode = tariffSummary.getRetailRegion() ?: stringResource(resource = Res.string.unknown)
+        val regionCode = tariffSummary.getRetailRegion()?.let { RetailRegion.fromCode(it) }
+        val regionCodeStringResource = regionCode?.let { stringResource(it.stringResource) } ?: stringResource(resource = Res.string.unknown)
+
         Text(
             style = MaterialTheme.typography.bodySmall,
-            text = stringResource(resource = Res.string.agile_product_code_retail_region, tariffSummary.productCode, regionCode),
+            text = stringResource(resource = Res.string.agile_product_code_retail_region, tariffSummary.productCode, regionCodeStringResource),
         )
 
         Spacer(modifier = Modifier.height(height = dimension.grid_2))
 
-        val tariffPeriod = agreement.validTo?.let {
+        val tariffPeriod = if (agreement.validTo != Instant.DISTANT_FUTURE) {
             stringResource(
                 resource = Res.string.account_tariff_end_date,
-                it.getLocalDateString(),
+                agreement.validTo.getLocalDateString(),
             )
-        } ?: stringResource(
-            resource = Res.string.account_tariff_start_date,
-            agreement.validFrom.getLocalDateString(),
-        )
+        } else {
+            stringResource(
+                resource = Res.string.account_tariff_start_date,
+                agreement.validFrom.getLocalDateString(),
+            )
+        }
 
         Text(
             style = MaterialTheme.typography.bodyMedium,
             text = tariffPeriod,
         )
+
+        if (tariffSummary.isVariable) {
+            Spacer(modifier = Modifier.height(height = dimension.grid_2))
+
+            val currentDensity = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(currentDensity.density, fontScale = 1f),
+            ) {
+                TagWithIcon(
+                    icon = painterResource(resource = ProductFeature.VARIABLE.iconResource),
+                    text = stringResource(resource = ProductFeature.VARIABLE.stringResource),
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(height = dimension.grid_3))
 
@@ -112,23 +137,25 @@ private fun TariffLayoutCompact(
                 .fillMaxWidth()
                 .wrapContentHeight(),
         ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(intrinsicSize = IntrinsicSize.Max),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    style = MaterialTheme.typography.displaySmall,
-                    text = tariffSummary.vatInclusiveUnitRate.toString(),
-                )
+            if (!tariffSummary.isVariable) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(intrinsicSize = IntrinsicSize.Max),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        style = MaterialTheme.typography.displaySmall,
+                        text = tariffSummary.vatInclusiveUnitRate.toString(),
+                    )
 
-                Text(
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                    text = stringResource(resource = Res.string.account_tariff_unit_rate),
-                )
+                    Text(
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
+                        text = stringResource(resource = Res.string.account_tariff_unit_rate),
+                    )
+                }
             }
 
             Column(
@@ -187,39 +214,57 @@ private fun TariffLayoutWide(
 
             Spacer(modifier = Modifier.height(height = dimension.grid_2))
 
-            val tariffPeriod = agreement.validTo?.let {
+            val tariffPeriod = if (agreement.validTo != Instant.DISTANT_FUTURE) {
                 stringResource(
                     resource = Res.string.account_tariff_end_date,
-                    it.getLocalDateString(),
+                    agreement.validTo.getLocalDateString(),
                 )
-            } ?: stringResource(
-                resource = Res.string.account_tariff_start_date,
-                agreement.validFrom.getLocalDateString(),
-            )
+            } else {
+                stringResource(
+                    resource = Res.string.account_tariff_start_date,
+                    agreement.validFrom.getLocalDateString(),
+                )
+            }
 
             Text(
                 style = MaterialTheme.typography.bodySmall,
                 text = tariffPeriod,
             )
+
+            if (tariffSummary.isVariable) {
+                Spacer(modifier = Modifier.height(height = dimension.grid_2))
+
+                val currentDensity = LocalDensity.current
+                CompositionLocalProvider(
+                    LocalDensity provides Density(currentDensity.density, fontScale = 1f),
+                ) {
+                    TagWithIcon(
+                        icon = painterResource(resource = ProductFeature.VARIABLE.iconResource),
+                        text = stringResource(resource = ProductFeature.VARIABLE.stringResource),
+                    )
+                }
+            }
         }
 
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .height(intrinsicSize = IntrinsicSize.Max),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                style = MaterialTheme.typography.displaySmall,
-                text = tariffSummary.vatInclusiveUnitRate.toString(),
-            )
+        if (!tariffSummary.isVariable) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(intrinsicSize = IntrinsicSize.Max),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    style = MaterialTheme.typography.displaySmall,
+                    text = tariffSummary.vatInclusiveUnitRate.toString(),
+                )
 
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                text = stringResource(resource = Res.string.account_tariff_unit_rate),
-            )
+                Text(
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    text = stringResource(resource = Res.string.account_tariff_unit_rate),
+                )
+            }
         }
 
         Column(

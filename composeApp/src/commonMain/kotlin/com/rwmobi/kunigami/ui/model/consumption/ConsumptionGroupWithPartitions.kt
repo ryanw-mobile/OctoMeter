@@ -7,8 +7,10 @@
 
 package com.rwmobi.kunigami.ui.model.consumption
 
+import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 
+@Immutable
 data class ConsumptionGroupWithPartitions(
     val title: String,
     val partitionedItems: List<List<Consumption>>,

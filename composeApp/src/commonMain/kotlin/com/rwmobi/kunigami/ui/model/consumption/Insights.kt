@@ -7,6 +7,9 @@
 
 package com.rwmobi.kunigami.ui.model.consumption
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class Insights(
     val consumptionAggregateRounded: Double,
     val consumptionTimeSpan: Int,

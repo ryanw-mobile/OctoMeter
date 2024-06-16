@@ -21,6 +21,8 @@ import com.rwmobi.kunigami.domain.model.consumption.getConsumptionTimeSpan
 import com.rwmobi.kunigami.domain.model.consumption.getRange
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
+import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
+import com.rwmobi.kunigami.domain.usecase.GetTariffSummaryUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
@@ -47,6 +49,8 @@ import kotlin.time.Duration
 
 class UsageViewModel(
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
+    private val getTariffSummaryUseCase: GetTariffSummaryUseCase,
+    private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val getConsumptionUseCase: GetConsumptionUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
@@ -60,6 +64,7 @@ class UsageViewModel(
         }
     }
 
+    // TODO: need refactoring
     fun initialLoad() {
         startLoading()
         viewModelScope.launch(dispatcher) {
@@ -68,6 +73,20 @@ class UsageViewModel(
             if (userProfile != null) {
                 // Currently smart meter readings are not real-time. Yesterday's figures are the latest we can get.
                 val referencePoint = Clock.System.now() - Duration.parse(value = "1d")
+
+                val matchingTariffCode = userProfile.getElectricityMeterPoint()?.lookupAgreement(
+                    referencePoint = referencePoint,
+                )
+
+                val tariffSummary = matchingTariffCode?.let {
+                    getTariffSummaryUseCase(tariffCode = it.tariffCode).getOrNull()
+                }
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        tariffSummary = tariffSummary,
+                    )
+                }
+
                 var newConsumptionQueryFilter = ConsumptionQueryFilter(
                     presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
                     referencePoint = referencePoint,
@@ -88,7 +107,7 @@ class UsageViewModel(
                                 // During BST we expect 2 half-hour records returned for the last day
                                 if (consumptions.size > 2) {
                                     propagateInsights(
-                                        tariffSummary = userProfile.tariffSummary,
+                                        tariffSummary = tariffSummary,
                                         consumptions = consumptions,
                                     )
                                     propagateConsumptionsAndStopLoading(
@@ -119,6 +138,56 @@ class UsageViewModel(
                 // Not demo mode but couldn't get the user profile. We won't show anything
                 _uiState.update { currentUiState -> currentUiState.clearDataFieldsAndStopLoading() }
             }
+        }
+    }
+
+    // TODO: Needs a use-case when we handle more complex queries
+    private suspend fun refresh(consumptionQueryFilter: ConsumptionQueryFilter) {
+        startLoading()
+
+        // Note that getUserProfile will provide a fake profile when isDemoMode == true
+        val userProfile = getUserProfile()
+
+        // If the query is over a period of time, it can have more than one tariffs
+        val matchingTariffCodes = userProfile?.getElectricityMeterPoint()?.lookupAgreements(
+            validFrom = consumptionQueryFilter.requestedStart,
+            validTo = consumptionQueryFilter.requestedEnd,
+        )
+
+        // It is abnormal to expect we can get meter readings without any corresponding tariffs.
+        // TODO: In ticket #137 we'll handle multiple tariffs (and multiple rates) in queries other than half-hourly
+        if (matchingTariffCodes?.isNotEmpty() == true) {
+            // TODO: Simplified handling by only considering one latest tariff for now
+            val latestTariff = matchingTariffCodes.maxBy { agreement -> agreement.validTo }
+            val tariffSummary = getTariffSummaryUseCase(tariffCode = latestTariff.tariffCode).getOrNull()
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    tariffSummary = tariffSummary,
+                )
+            }
+
+            getConsumptionUseCase(
+                periodFrom = consumptionQueryFilter.requestedStart,
+                periodTo = consumptionQueryFilter.requestedEnd,
+                groupBy = consumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
+            ).fold(
+                onSuccess = { consumptions ->
+                    propagateInsights(
+                        consumptions = consumptions,
+                        tariffSummary = tariffSummary,
+                    )
+                    propagateConsumptionsAndStopLoading(
+                        consumptionQueryFilter = consumptionQueryFilter,
+                        consumptions = consumptions,
+                    )
+                },
+                onFailure = { throwable ->
+                    Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+                    _uiState.update { currentUiState ->
+                        currentUiState.filterErrorAndStopLoading(throwable = throwable, defaultMessage = "Error when retrieving consumptions")
+                    }
+                },
+            )
         }
     }
 
@@ -184,37 +253,6 @@ class UsageViewModel(
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 isLoading = true,
-            )
-        }
-    }
-
-    private suspend fun refresh(consumptionQueryFilter: ConsumptionQueryFilter) {
-        startLoading()
-
-        // Note that getUserProfile will provide a fake profile when isDemoMode == true
-        val userProfile = getUserProfile()
-        if (userProfile != null) {
-            getConsumptionUseCase(
-                periodFrom = consumptionQueryFilter.requestedStart,
-                periodTo = consumptionQueryFilter.requestedEnd,
-                groupBy = consumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
-            ).fold(
-                onSuccess = { consumptions ->
-                    propagateInsights(
-                        consumptions = consumptions,
-                        tariffSummary = userProfile.tariffSummary,
-                    )
-                    propagateConsumptionsAndStopLoading(
-                        consumptionQueryFilter = consumptionQueryFilter,
-                        consumptions = consumptions,
-                    )
-                },
-                onFailure = { throwable ->
-                    Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
-                    _uiState.update { currentUiState ->
-                        currentUiState.filterErrorAndStopLoading(throwable = throwable, defaultMessage = "Error when retrieving consumptions")
-                    }
-                },
             )
         }
     }

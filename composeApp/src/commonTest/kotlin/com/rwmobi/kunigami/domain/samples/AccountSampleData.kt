@@ -24,10 +24,12 @@ object AccountSampleData {
             ElectricityMeterPoint(
                 mpan = "1200000345678",
                 meterSerialNumbers = listOf("11A1234567"),
-                currentAgreement = Agreement(
-                    tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
-                    validFrom = Clock.System.now(),
-                    validTo = Clock.System.now().plus(Duration.parse("365d")),
+                agreements = listOf(
+                    Agreement(
+                        tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
+                        validFrom = Clock.System.now(),
+                        validTo = Clock.System.now().plus(Duration.parse("365d")),
+                    ),
                 ),
             ),
         ),

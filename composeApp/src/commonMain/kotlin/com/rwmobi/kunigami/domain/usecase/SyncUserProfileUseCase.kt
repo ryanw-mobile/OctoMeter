@@ -11,7 +11,6 @@ import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.UserProfile
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -70,27 +69,11 @@ class SyncUserProfileUseCase(
                     },
                 )
 
-                var selectedTariffSummary: TariffSummary? = null
-                (selectedAccount?.getTariffCode(selectedMpan))?.let { tariffCode ->
-                    restApiRepository.getSimpleProductTariff(
-                        productCode = TariffSummary.extractProductCode(tariffCode = tariffCode) ?: "",
-                        tariffCode = tariffCode,
-                    ).fold(
-                        onSuccess = { tariff ->
-                            selectedTariffSummary = tariff
-                        },
-                        onFailure = { throwable ->
-                            throw throwable
-                        },
-                    )
-                }
-
                 // If any of the information is missing, we are not comfortable to proceed.
                 // Caller making use of UserProfile should consider activating demo mode.
                 if (selectedAccount == null ||
                     selectedMpan == null ||
-                    selectedMeterSerialNumber == null ||
-                    selectedTariffSummary == null
+                    selectedMeterSerialNumber == null
                 ) {
                     null
                 } else {
@@ -98,7 +81,6 @@ class SyncUserProfileUseCase(
                         selectedMpan = selectedMpan,
                         selectedMeterSerialNumber = selectedMeterSerialNumber,
                         account = selectedAccount,
-                        tariffSummary = selectedTariffSummary,
                     )
                 }
             }.except<CancellationException, _>()
