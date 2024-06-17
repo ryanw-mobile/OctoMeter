@@ -166,18 +166,22 @@ class OctopusRestApiRepository(
         }
     }
 
+    /***
+     * API can potentially return more than one property for a given account number.
+     * We have no way to tell if this is the case, but for simplicity, we take the first property only.
+     */
     override suspend fun getAccount(
         apiKey: String,
         accountNumber: String,
-    ): Result<List<Account>> {
+    ): Result<Account?> {
         return withContext(dispatcher) {
             runCatching {
                 val apiResponse = accountEndpoint.getAccount(
                     apiKey = apiKey,
                     accountNumber = accountNumber,
                 )
-                apiResponse?.properties?.map { it.toAccount(accountNumber = accountNumber) } ?: emptyList()
-            }.except<CancellationException, _>()
-        }
+                apiResponse?.properties?.firstOrNull()?.toAccount(accountNumber = accountNumber)
+            }
+        }.except<CancellationException, _>()
     }
 }

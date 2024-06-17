@@ -45,22 +45,22 @@ class SyncUserProfileUseCase(
                     apiKey = apiKey,
                     accountNumber = accountNumber,
                 ).fold(
-                    onSuccess = { accounts ->
-                        // If no mpan and meter serial number is selected, we default to the first account and record
+                    onSuccess = { account ->
+                        // If no mpan and meter serial number is selected, we default to the first mpan and Meter
                         if (selectedMpan == null || selectedMeterSerialNumber == null) {
-                            selectedAccount = accounts.firstOrNull()
-                            selectedMpan = accounts.firstOrNull()?.getDefaultMpan()?.also {
-                                userPreferencesRepository.setMpan(mpan = it)
+                            selectedAccount = account
+                            selectedMpan = account?.getDefaultMpan()?.also {
+                                userPreferencesRepository.setMpan(it)
                             }
-                            selectedMeterSerialNumber = accounts.firstOrNull()?.getDefaultMeterSerialNumber()?.also {
-                                userPreferencesRepository.setMeterSerialNumber(meterSerialNumber = it)
+                            selectedMeterSerialNumber = account?.getDefaultMeterSerialNumber()?.also {
+                                userPreferencesRepository.setMeterSerialNumber(it)
                             }
                         } else {
-                            selectedAccount = accounts.firstOrNull { account ->
-                                account.electricityMeterPoints.firstOrNull { electricityMeterPoint ->
-                                    electricityMeterPoint.mpan == selectedMpan &&
-                                        electricityMeterPoint.meterSerialNumbers.contains(selectedMeterSerialNumber)
-                                } != null
+                            val matchingMeterPoint = account?.electricityMeterPoints?.firstOrNull {
+                                it.mpan == selectedMpan && it.meterSerialNumbers.contains(selectedMeterSerialNumber)
+                            }
+                            if (matchingMeterPoint != null) {
+                                selectedAccount = account
                             }
                         }
                     },
@@ -71,17 +71,17 @@ class SyncUserProfileUseCase(
 
                 // If any of the information is missing, we are not comfortable to proceed.
                 // Caller making use of UserProfile should consider activating demo mode.
-                if (selectedAccount == null ||
-                    selectedMpan == null ||
-                    selectedMeterSerialNumber == null
+                if (selectedAccount != null &&
+                    selectedMpan != null &&
+                    selectedMeterSerialNumber != null
                 ) {
-                    null
-                } else {
                     UserProfile(
                         selectedMpan = selectedMpan,
                         selectedMeterSerialNumber = selectedMeterSerialNumber,
                         account = selectedAccount,
                     )
+                } else {
+                    null
                 }
             }.except<CancellationException, _>()
         }

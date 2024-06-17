@@ -45,5 +45,5 @@ interface RestApiRepository {
         groupBy: ConsumptionTimeFrame = ConsumptionTimeFrame.HALF_HOURLY,
     ): Result<List<Consumption>>
 
-    suspend fun getAccount(apiKey: String, accountNumber: String): Result<List<Account>>
+    suspend fun getAccount(apiKey: String, accountNumber: String): Result<Account?>
 }

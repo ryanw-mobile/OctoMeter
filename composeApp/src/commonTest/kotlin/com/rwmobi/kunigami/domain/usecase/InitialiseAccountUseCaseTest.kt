@@ -47,7 +47,7 @@ class InitialiseAccountUseCaseTest {
         val apiKey = fakeApiKey
         val accountNumber = fakeAccountNumber
         val expectedAccount = AccountSampleData.accountA1234A1B1
-        fakeRestApiRepository.setAccountResponse = Result.success(listOf(expectedAccount))
+        fakeRestApiRepository.setAccountResponse = Result.success(expectedAccount)
 
         val result = initialiseAccountUseCase(apiKey, accountNumber)
 
@@ -62,7 +62,7 @@ class InitialiseAccountUseCaseTest {
     fun `invoke should throw NoValidMeterException when account has no valid meters`() = runTest {
         val apiKey = fakeApiKey
         val accountNumber = fakeAccountNumber
-        fakeRestApiRepository.setAccountResponse = Result.success(emptyList())
+        fakeRestApiRepository.setAccountResponse = Result.success(null)
 
         val result = initialiseAccountUseCase(apiKey, accountNumber)
 
