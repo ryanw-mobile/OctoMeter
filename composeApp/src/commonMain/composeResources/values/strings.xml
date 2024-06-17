@@ -48,7 +48,7 @@
     <string name="usage_current_tariff">Active tariff</string>
     <string name="usage_insights">Insights</string>
     <plurals name="usage_insights_consumption">
-        <item quantity="one">%1$s kWh USED IN ONE DAY</item>
+        <item quantity="one">%1$s kWh USED THIS DAY</item>
         <item quantity="other">%1$s kWh USED OVER %2$s DAYS</item>
     </plurals>
     <string name="usage_estimated_cost">estimated cost</string>
