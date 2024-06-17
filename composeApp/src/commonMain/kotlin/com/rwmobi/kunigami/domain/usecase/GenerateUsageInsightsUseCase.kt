@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
+import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.model.consumption.getConsumptionDaySpan
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
@@ -22,7 +23,7 @@ class GenerateUsageInsightsUseCase {
         return if (tariffSummary == null || consumptionWithCost.isNullOrEmpty()) {
             null
         } else {
-            val consumptionAggregateRounded = consumptionWithCost.sumOf { it.consumption.kWhConsumed }.roundToNearestEvenHundredth()
+            val consumptionAggregateRounded = consumptionWithCost.sumOf { it.consumption.kWhConsumed }
             val consumptionTimeSpan = consumptionWithCost.map { it.consumption }.getConsumptionDaySpan()
             val isTrueCost = !consumptionWithCost.any { it.vatInclusiveCost == null }
             val consumptionCharge = if (isTrueCost) {
@@ -32,21 +33,21 @@ class GenerateUsageInsightsUseCase {
             }
             val costWithCharges = ((consumptionTimeSpan * tariffSummary.vatInclusiveStandingCharge) + consumptionCharge) / 100.0
             val consumptionChargeRatio = (consumptionCharge / 100.0) / costWithCharges
-            val consumptionDailyAverage = (consumptionWithCost.sumOf { it.consumption.kWhConsumed } / consumptionWithCost.map { it.consumption }.getConsumptionDaySpan()).roundToNearestEvenHundredth()
+            val consumptionDailyAverage = consumptionWithCost.sumOf { it.consumption.kWhConsumed } / consumptionWithCost.map { it.consumption }.getConsumptionDaySpan()
             val costDailyAverage = (tariffSummary.vatInclusiveStandingCharge + consumptionDailyAverage * tariffSummary.vatInclusiveUnitRate) / 100.0
-            val consumptionAnnualProjection = (consumptionWithCost.sumOf { it.consumption.kWhConsumed } / consumptionTimeSpan * 365.25).roundToNearestEvenHundredth()
-            val costAnnualProjection = (tariffSummary.vatInclusiveStandingCharge * 365.25 + consumptionAnnualProjection * consumptionCharge / consumptionAggregateRounded) / 100.0
+            val consumptionAnnualProjection = consumptionWithCost.sumOf { it.consumption.kWhConsumed } / consumptionTimeSpan * 365
+            val costAnnualProjection = (tariffSummary.vatInclusiveStandingCharge * 365 + consumptionAnnualProjection * consumptionCharge / consumptionAggregateRounded) / 100.0
 
             Insights(
-                consumptionAggregateRounded = consumptionAggregateRounded,
+                consumptionAggregateRounded = consumptionAggregateRounded.roundToNearestEvenHundredth(),
                 consumptionTimeSpan = consumptionTimeSpan,
-                consumptionChargeRatio = consumptionChargeRatio,
-                costWithCharges = costWithCharges,
+                consumptionChargeRatio = consumptionChargeRatio.roundToTwoDecimalPlaces(),
+                costWithCharges = costWithCharges.roundToTwoDecimalPlaces(),
                 isTrueCost = isTrueCost,
-                consumptionDailyAverage = consumptionDailyAverage,
-                costDailyAverage = costDailyAverage,
-                consumptionAnnualProjection = consumptionAnnualProjection,
-                costAnnualProjection = costAnnualProjection,
+                consumptionDailyAverage = consumptionDailyAverage.roundToNearestEvenHundredth(),
+                costDailyAverage = costDailyAverage.roundToTwoDecimalPlaces(),
+                consumptionAnnualProjection = consumptionAnnualProjection.roundToNearestEvenHundredth(),
+                costAnnualProjection = costAnnualProjection.roundToTwoDecimalPlaces(),
             )
         }
     }
