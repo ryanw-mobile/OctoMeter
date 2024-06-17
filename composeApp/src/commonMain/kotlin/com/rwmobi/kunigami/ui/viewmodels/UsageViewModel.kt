@@ -14,12 +14,11 @@ import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.extensions.atEndOfDay
 import com.rwmobi.kunigami.domain.extensions.atStartOfDay
-import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
-import com.rwmobi.kunigami.domain.model.consumption.getConsumptionDaySpan
 import com.rwmobi.kunigami.domain.model.consumption.getConsumptionRange
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.usecase.GenerateUsageInsightsUseCase
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionAndCostUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffSummaryUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
@@ -28,7 +27,6 @@ import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionQueryFilter
-import com.rwmobi.kunigami.ui.model.consumption.Insights
 import com.rwmobi.kunigami.ui.previewsampledata.FakeDemoUserProfile
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
@@ -50,6 +48,7 @@ class UsageViewModel(
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
     private val getTariffSummaryUseCase: GetTariffSummaryUseCase,
     private val getConsumptionAndCostUseCase: GetConsumptionAndCostUseCase,
+    private val generateUsageInsightsUseCase: GenerateUsageInsightsUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UsageUIState> = MutableStateFlow(UsageUIState(isLoading = true))
@@ -295,43 +294,16 @@ class UsageViewModel(
     private fun propagateInsights(
         tariffSummary: TariffSummary?,
         consumptionWithCost: List<ConsumptionWithCost>?,
-    ): Insights? {
-        val insights = if (tariffSummary == null || consumptionWithCost.isNullOrEmpty()) {
-            null
-        } else {
-            val consumptionAggregateRounded = consumptionWithCost.sumOf { it.consumption.kWhConsumed }.roundToNearestEvenHundredth()
-            val consumptionTimeSpan = consumptionWithCost.map { it.consumption }.getConsumptionDaySpan()
-            val consumptionCharge = if (consumptionWithCost.any { it.vatInclusiveCost == null }) {
-                consumptionAggregateRounded * tariffSummary.vatInclusiveUnitRate
-            } else {
-                consumptionWithCost.sumOf { it.vatInclusiveCost ?: 0.0 }
-            }
-            val roughCost = ((consumptionTimeSpan * tariffSummary.vatInclusiveStandingCharge) + consumptionCharge) / 100.0
-            val consumptionChargeRatio = (consumptionCharge / 100.0) / roughCost
-            val consumptionDailyAverage = (consumptionWithCost.sumOf { it.consumption.kWhConsumed } / consumptionWithCost.map { it.consumption }.getConsumptionDaySpan()).roundToNearestEvenHundredth()
-            val costDailyAverage = (tariffSummary.vatInclusiveStandingCharge + consumptionDailyAverage * tariffSummary.vatInclusiveUnitRate) / 100.0
-            val consumptionAnnualProjection = (consumptionWithCost.sumOf { it.consumption.kWhConsumed } / consumptionTimeSpan * 365.25).roundToNearestEvenHundredth()
-            val costAnnualProjection = (tariffSummary.vatInclusiveStandingCharge * 365.25 + consumptionAnnualProjection * consumptionCharge / consumptionAggregateRounded) / 100.0
-
-            Insights(
-                consumptionAggregateRounded = consumptionAggregateRounded,
-                consumptionTimeSpan = consumptionTimeSpan,
-                consumptionChargeRatio = consumptionChargeRatio,
-                roughCost = roughCost,
-                consumptionDailyAverage = consumptionDailyAverage,
-                costDailyAverage = costDailyAverage,
-                consumptionAnnualProjection = consumptionAnnualProjection,
-                costAnnualProjection = costAnnualProjection,
-            )
-        }
-
+    ) {
+        val insights = generateUsageInsightsUseCase(
+            tariffSummary = tariffSummary,
+            consumptionWithCost = consumptionWithCost,
+        )
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 insights = insights,
             )
         }
-
-        return insights
     }
 
     private suspend fun propagateConsumptionsAndStopLoading(
