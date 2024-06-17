@@ -15,12 +15,12 @@ data class Rate(
     val vatExclusivePrice: Double,
     val vatInclusivePrice: Double,
     val validFrom: Instant,
-    val validTo: Instant?,
+    val validTo: Instant, // Caller should put Instant.DISTANT_FUTURE if API returns null
     val paymentMethod: PaymentMethod,
 ) {
     fun isActive(referencePoint: Instant): Boolean {
         val isValidFrom = referencePoint >= validFrom
-        val isValidTo = validTo?.let { referencePoint <= it } ?: true
+        val isValidTo = referencePoint <= validTo
         return isValidFrom && isValidTo
     }
 }

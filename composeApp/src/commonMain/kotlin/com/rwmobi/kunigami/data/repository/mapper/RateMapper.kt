@@ -10,11 +10,12 @@ package com.rwmobi.kunigami.data.repository.mapper
 import com.rwmobi.kunigami.data.source.network.dto.prices.RateDto
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
+import kotlinx.datetime.Instant
 
 fun RateDto.toRate() = Rate(
     vatExclusivePrice = vatExclusivePrice,
     vatInclusivePrice = vatInclusivePrice,
     validFrom = validFrom,
-    validTo = validTo,
+    validTo = validTo ?: Instant.DISTANT_FUTURE,
     paymentMethod = PaymentMethod.fromValue(paymentMethod),
 )

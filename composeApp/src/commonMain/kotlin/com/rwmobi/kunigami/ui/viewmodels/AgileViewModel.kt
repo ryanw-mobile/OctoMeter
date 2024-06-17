@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
@@ -240,8 +241,12 @@ class AgileViewModel(
 
     private fun generateChartToolTips(rates: List<Rate>): List<String> {
         return rates.map { rate ->
-            val timeRange = rate.validFrom.getLocalHHMMString() +
-                (rate.validTo?.let { "- ${it.getLocalHHMMString()}" } ?: "")
+            val validToString = if (rate.validTo != Instant.DISTANT_FUTURE) {
+                "- ${rate.validTo.getLocalHHMMString()}"
+            } else {
+                ""
+            }
+            val timeRange = rate.validFrom.getLocalHHMMString() + validToString
             "$timeRange\n${rate.vatInclusivePrice.toString(precision = 2)}p"
         }
     }
