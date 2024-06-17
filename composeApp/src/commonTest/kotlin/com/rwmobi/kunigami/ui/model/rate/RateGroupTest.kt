@@ -2,6 +2,7 @@ package com.rwmobi.kunigami.ui.model.rate
 
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -117,7 +118,7 @@ class RateGroupTest {
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
             validFrom = validFrom,
-            validTo = null,
+            validTo = Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val partitionedList = listOf(
@@ -196,7 +197,7 @@ class RateGroupTest {
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 15.0,
             validFrom = validTo.plus(Duration.parse("PT1S")),
-            validTo = null,
+            validTo = Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val partitionedList = listOf(
@@ -239,7 +240,7 @@ class RateGroupTest {
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 10.0,
             validFrom = validTo.plus(Duration.parse("PT1S")),
-            validTo = null,
+            validTo = Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val partitionedList = listOf(
@@ -282,7 +283,7 @@ class RateGroupTest {
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
             validFrom = validTo.plus(Duration.parse("PT1S")),
-            validTo = null,
+            validTo = Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val partitionedList = listOf(
