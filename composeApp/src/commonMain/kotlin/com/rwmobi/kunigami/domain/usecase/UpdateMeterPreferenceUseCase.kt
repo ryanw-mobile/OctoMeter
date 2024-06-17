@@ -25,9 +25,12 @@ class UpdateMeterPreferenceUseCase(
     ): Result<Unit> {
         return withContext(dispatcher) {
             runCatching {
-                Logger.v("mpan = $mpan, meterSerialNumber = $meterSerialNumber")
-                userPreferencesRepository.setMpan(mpan = mpan)
-                userPreferencesRepository.setMeterSerialNumber(meterSerialNumber = meterSerialNumber)
+                Logger.v("Update MPAN = $mpan, meterSerialNumber = $meterSerialNumber")
+                userPreferencesRepository.apply {
+                    setMpan(mpan = mpan)
+                    setMeterSerialNumber(meterSerialNumber = meterSerialNumber)
+                }
+                Unit
             }.except<CancellationException, _>()
         }
     }

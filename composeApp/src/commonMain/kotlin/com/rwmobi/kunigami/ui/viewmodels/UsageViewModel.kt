@@ -72,7 +72,7 @@ class UsageViewModel(
                 // Currently smart meter readings are not real-time. Yesterday's figures are the latest we can get.
                 val referencePoint = Clock.System.now() - Duration.parse(value = "1d")
 
-                val matchingTariffCode = userProfile.getElectricityMeterPoint()?.lookupAgreement(
+                val matchingTariffCode = userProfile.getSelectedElectricityMeterPoint()?.lookupAgreement(
                     referencePoint = referencePoint,
                 )
 
@@ -93,7 +93,7 @@ class UsageViewModel(
                 )
 
                 // UIState comes with a default presentationStyle. We try to go backward 5 times hoping for some valid results
-                val accountMoveInDate = userProfile.account?.movedInAt ?: Instant.DISTANT_PAST
+                val accountMoveInDate = userProfile.account.movedInAt ?: Instant.DISTANT_PAST
                 run loop@{
                     for (iteration in 0..3) {
                         getConsumptionAndCostUseCase(
@@ -147,7 +147,7 @@ class UsageViewModel(
         val userProfile = getUserProfile()
 
         // If the query is over a period of time, it can have more than one tariffs
-        val matchingTariffCodes = userProfile?.getElectricityMeterPoint()?.lookupAgreements(
+        val matchingTariffCodes = userProfile?.getSelectedElectricityMeterPoint()?.lookupAgreements(
             validFrom = consumptionQueryFilter.requestedStart,
             validTo = consumptionQueryFilter.requestedEnd,
         )

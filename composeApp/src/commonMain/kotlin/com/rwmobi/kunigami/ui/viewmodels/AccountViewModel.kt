@@ -61,7 +61,7 @@ class AccountViewModel(
         viewModelScope.launch(dispatcher) {
             syncUserProfileUseCase().fold(
                 onSuccess = { userProfile ->
-                    val latestTariff = userProfile?.getElectricityMeterPoint()?.getLatestAgreement()
+                    val latestTariff = userProfile?.getSelectedElectricityMeterPoint()?.getLatestAgreement()
                     val tariffSummary = latestTariff?.let { getTariffSummaryUseCase(tariffCode = it.tariffCode).getOrNull() }
 
                     _uiState.update { currentUiState ->

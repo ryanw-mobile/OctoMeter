@@ -77,7 +77,7 @@ class AgileViewModel(
         viewModelScope.launch(dispatcher) {
             val currentUserProfile = getUserProfile()
             if (currentUserProfile != null || _uiState.value.isDemoMode == true) {
-                val tariffCode = currentUserProfile?.getElectricityMeterPoint()?.lookupAgreement(referencePoint = Clock.System.now())
+                val tariffCode = currentUserProfile?.getSelectedElectricityMeterPoint()?.lookupAgreement(referencePoint = Clock.System.now())
                 val activeTariffSummary = tariffCode?.let { getTariffSummaryUseCase(tariffCode = it.tariffCode).getOrNull() }
                 _uiState.update { currentUiState ->
                     currentUiState.copy(

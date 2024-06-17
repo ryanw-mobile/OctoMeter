@@ -8,6 +8,8 @@
 package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.except
+import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
@@ -16,6 +18,7 @@ import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
+import com.rwmobi.kunigami.ui.previewsampledata.FakeDemoUserProfile
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -43,8 +46,13 @@ class GetConsumptionAndCostUseCase(
         return withContext(dispatcher) {
             runCatching {
                 val isDemoMode = userPreferencesRepository.isDemoMode()
-
-                if (!isDemoMode) {
+                if (isDemoMode) {
+                    generateDemoResponse(
+                        periodFrom = periodFrom,
+                        periodTo = periodTo,
+                        groupBy = groupBy,
+                    )
+                } else {
                     val apiKey = userPreferencesRepository.getApiKey()
                     val mpan = userPreferencesRepository.getMpan()
                     val meterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
@@ -55,11 +63,9 @@ class GetConsumptionAndCostUseCase(
                     requireNotNull(value = meterSerialNumber, lazyMessage = { "Assertion failed: Meter Serial Number is null" })
                     requireNotNull(value = accountNumber, lazyMessage = { "Assertion failed: Account is null" })
 
-                    // We need to get the agreements covering the requested period
-                    val unitRates = mutableListOf<Rate>()
-                    val standingCharge = mutableListOf<Rate>()
-
+                    var unitRates: List<Rate> = emptyList()
                     if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
+                        // We need all the agreements covering the requested period to get the correct unit rates
                         val account = restApiRepository.getAccount(
                             apiKey = apiKey,
                             accountNumber = accountNumber,
@@ -67,36 +73,16 @@ class GetConsumptionAndCostUseCase(
 
                         if (account != null) {
                             // find the tariffs in the requested period
-                            val agreements = account.electricityMeterPoints.firstOrNull { it.mpan == mpan }?.lookupAgreements(
-                                validFrom = periodFrom,
-                                validTo = periodTo,
+                            val agreements = getAgreements(
+                                electricityMeterPoint = account.getElectricityMeterPoint(mpan = mpan),
+                                periodFrom = periodFrom,
+                                periodTo = periodTo,
                             )
-
-                            // To simplify processing, we assume tariffs do not overlap
-                            // It is not possible in the real world, plus the current implementation,
-                            //  we only deal with half-hourly won't even have more than one tariffs.
-
-                            agreements?.forEach { agreement ->
-                                val effectiveQueryStartDate = maxOf(agreement.validFrom, periodFrom)
-                                val effectiveQueryEndDate = minOf(agreement.validTo, periodTo)
-                                val productCode = TariffSummary.extractProductCode(tariffCode = agreement.tariffCode)
-
-                                unitRates.addAll(
-                                    restApiRepository.getStandardUnitRates(
-                                        productCode = productCode!!,
-                                        tariffCode = agreement.tariffCode,
-                                        periodFrom = effectiveQueryStartDate,
-                                        periodTo = effectiveQueryEndDate,
-                                    ).getOrNull() ?: emptyList(),
-                                )
-
-                                standingCharge.addAll(
-                                    restApiRepository.getStandingCharges(
-                                        productCode = productCode!!,
-                                        tariffCode = agreement.tariffCode,
-                                    ).getOrNull() ?: emptyList(),
-                                )
-                            }
+                            unitRates = getUnitRates(
+                                agreements = agreements,
+                                periodFrom = periodFrom,
+                                periodTo = periodTo,
+                            )
                         }
                     }
 
@@ -122,43 +108,86 @@ class GetConsumptionAndCostUseCase(
                                 )
                             }
                         },
-                        onFailure = { throwable ->
-                            throw throwable
-                        },
-                    )
-                } else {
-                    demoRestApiRepository.getConsumption(
-                        apiKey = "",
-                        mpan = "",
-                        meterSerialNumber = "",
-                        periodFrom = periodFrom,
-                        periodTo = periodTo,
-                        orderBy = ConsumptionDataOrder.PERIOD,
-                        groupBy = groupBy,
-                    ).fold(
-                        onSuccess = { consumption ->
-                            consumption.sortedBy {
-                                it.intervalStart
-                            }.map {
-                                ConsumptionWithCost(
-                                    consumption = it,
-                                    vatInclusiveCost = null,
-                                )
-                            }
-                        },
-                        onFailure = { throwable ->
-                            throw throwable
-                        },
+                        onFailure = { throw it },
                     )
                 }
             }.except<CancellationException, _>()
         }
     }
 
+    private suspend fun generateDemoResponse(periodFrom: Instant, periodTo: Instant, groupBy: ConsumptionTimeFrame): List<ConsumptionWithCost> {
+        // Since the user profile is completely fake, we are able to assign a variable tariff covering the entire period for cost calculations
+        val unitRates = FakeDemoUserProfile.flexibleOctopusRegionADirectDebit.getSelectedElectricityMeterPoint()?.agreements?.let { agreements ->
+            getUnitRates(
+                agreements = agreements,
+                periodFrom = periodFrom,
+                periodTo = periodTo,
+            )
+        } ?: emptyList()
+
+        return demoRestApiRepository.getConsumption(
+            apiKey = "",
+            mpan = "",
+            meterSerialNumber = "",
+            periodFrom = periodFrom,
+            periodTo = periodTo,
+            orderBy = ConsumptionDataOrder.PERIOD,
+            groupBy = groupBy,
+        ).fold(
+            onSuccess = { consumption ->
+                consumption.sortedBy {
+                    it.intervalStart
+                }.map {
+                    ConsumptionWithCost(
+                        consumption = it,
+                        vatInclusiveCost = calculateConsumptionCost(
+                            consumption = it,
+                            unitRates = unitRates,
+                        ),
+                    )
+                }
+            },
+            onFailure = { throw it },
+        )
+    }
+
+    private fun getAgreements(electricityMeterPoint: ElectricityMeterPoint?, periodFrom: Instant, periodTo: Instant): List<Agreement> {
+        return electricityMeterPoint?.lookupAgreements(
+            validFrom = periodFrom,
+            validTo = periodTo,
+        ) ?: emptyList()
+    }
+
+    /***
+     * To simplify processing, we assume tariffs do not overlap
+     * It is not possible in the real world, plus the current implementation,
+     * We only deal with half-hourly won't even have more than one tariffs.
+     */
+    private suspend fun getUnitRates(agreements: List<Agreement>, periodFrom: Instant, periodTo: Instant): List<Rate> {
+        val unitRates = mutableListOf<Rate>()
+        agreements.forEach { agreement ->
+            val effectiveQueryStartDate = maxOf(agreement.validFrom, periodFrom)
+            val effectiveQueryEndDate = minOf(agreement.validTo, periodTo)
+            val productCode = TariffSummary.extractProductCode(tariffCode = agreement.tariffCode)
+
+            unitRates.addAll(
+                restApiRepository.getStandardUnitRates(
+                    productCode = productCode!!,
+                    tariffCode = agreement.tariffCode,
+                    periodFrom = effectiveQueryStartDate,
+                    periodTo = effectiveQueryEndDate,
+                ).getOrNull() ?: emptyList(),
+            )
+        }
+        return unitRates
+    }
+
     private fun calculateConsumptionCost(
         consumption: Consumption,
         unitRates: List<Rate>,
     ): Double? {
+        if (unitRates.isEmpty()) return null
+
         val effectiveUnitRate = unitRates.firstOrNull {
             it.validFrom <= consumption.intervalStart &&
                 it.validTo >= consumption.intervalEnd

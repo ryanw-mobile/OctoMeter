@@ -35,10 +35,7 @@ class InitialiseAccountUseCase(
                         // Most users should have only 1 MPAN and 1 Meter in an account.
                         // We automatically pick the first MPAN and Meter Serial
                         // Users can change that on Account screen
-                        if (account == null ||
-                            account.electricityMeterPoints.isEmpty() ||
-                            account.electricityMeterPoints[0].meterSerialNumbers.isEmpty()
-                        ) {
+                        if (account == null || !account.hasValidMeter()) {
                             throw NoValidMeterException()
                         }
 
@@ -47,9 +44,7 @@ class InitialiseAccountUseCase(
                         userPreferencesRepository.setMpan(mpan = account.electricityMeterPoints[0].mpan)
                         userPreferencesRepository.setMeterSerialNumber(meterSerialNumber = account.electricityMeterPoints[0].meterSerialNumbers[0])
                     },
-                    onFailure = { throwable ->
-                        throw throwable
-                    },
+                    onFailure = { throw it },
                 )
             }.except<CancellationException, _>()
         }

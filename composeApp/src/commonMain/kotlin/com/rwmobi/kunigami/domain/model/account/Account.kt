@@ -44,6 +44,18 @@ data class Account(
         }
     }
 
+    fun getElectricityMeterPoint(mpan: String): ElectricityMeterPoint? {
+        return electricityMeterPoints.firstOrNull {
+            it.mpan == mpan
+        }
+    }
+
+    fun getElectricityMeterPoint(mpan: String, meterSerialNumber: String): ElectricityMeterPoint? {
+        return electricityMeterPoints.firstOrNull {
+            it.mpan == mpan && it.meterSerialNumbers.contains(meterSerialNumber)
+        }
+    }
+
     fun getDefaultMeterSerialNumber(): String? {
         return electricityMeterPoints.getOrNull(0)?.meterSerialNumbers?.getOrNull(0)
     }
@@ -56,5 +68,14 @@ data class Account(
         return electricityMeterPoints.firstOrNull {
             it.mpan == mpan
         }?.meterSerialNumbers?.contains(serial) == true
+    }
+
+    /***
+     * Returns true when the account has at least one electricity meter.
+     * Does not mean it is the meter user prefers
+     */
+    fun hasValidMeter(): Boolean {
+        return electricityMeterPoints.isNotEmpty() &&
+            electricityMeterPoints[0].meterSerialNumbers.isNotEmpty()
     }
 }

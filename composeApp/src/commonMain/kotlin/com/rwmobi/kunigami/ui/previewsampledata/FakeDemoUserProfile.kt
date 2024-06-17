@@ -11,8 +11,8 @@ import com.rwmobi.kunigami.domain.model.account.UserProfile
 
 internal object FakeDemoUserProfile {
     val flexibleOctopusRegionADirectDebit = UserProfile(
-        selectedMpan = "9900000999999",
-        selectedMeterSerialNumber = "99A9999999",
+        selectedMpan = AccountSamples.account928.electricityMeterPoints[0].mpan,
+        selectedMeterSerialNumber = AccountSamples.account928.electricityMeterPoints[0].meterSerialNumbers[0],
         account = AccountSamples.account928,
     )
 }

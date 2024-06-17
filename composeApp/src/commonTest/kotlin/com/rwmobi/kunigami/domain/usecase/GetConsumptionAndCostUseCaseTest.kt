@@ -189,6 +189,7 @@ class GetConsumptionAndCostUseCaseTest {
         )
 
         fakeUserPreferenceRepository.demoMode = true
+        fakeRestApiRepository.setStandardUnitRatesResponse = Result.success(emptyList())
         fakeRestApiRepository.setConsumptionResponse = Result.failure(RuntimeException("getConsumptionUseCase should call DemoRestApiRepository under demo mode"))
         fakeDemoRestApiRepository.setConsumptionResponse = Result.success(expectedConsumption)
 
