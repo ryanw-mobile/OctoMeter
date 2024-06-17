@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.model.consumption.Insights
+import com.rwmobi.kunigami.ui.previewsampledata.InsightsSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
 import kunigami.composeapp.generated.resources.Res
@@ -139,16 +140,7 @@ private fun Preview() {
             modifier = Modifier
                 .height(intrinsicSize = IntrinsicSize.Min)
                 .padding(all = 24.dp),
-            insights = Insights(
-                consumptionAggregateRounded = 86.693,
-                consumptionTimeSpan = 2084,
-                consumptionChargeRatio = 0.64,
-                roughCost = 2880.027,
-                consumptionDailyAverage = 71.227,
-                costDailyAverage = 52.218,
-                consumptionAnnualProjection = 82.473,
-                costAnnualProjection = 4.136,
-            ),
+            insights = InsightsSamples.trueCost,
         )
     }
 }

@@ -24,13 +24,14 @@ class GenerateUsageInsightsUseCase {
         } else {
             val consumptionAggregateRounded = consumptionWithCost.sumOf { it.consumption.kWhConsumed }.roundToNearestEvenHundredth()
             val consumptionTimeSpan = consumptionWithCost.map { it.consumption }.getConsumptionDaySpan()
-            val consumptionCharge = if (consumptionWithCost.any { it.vatInclusiveCost == null }) {
-                consumptionAggregateRounded * tariffSummary.vatInclusiveUnitRate
-            } else {
+            val isTrueCost = !consumptionWithCost.any { it.vatInclusiveCost == null }
+            val consumptionCharge = if (isTrueCost) {
                 consumptionWithCost.sumOf { it.vatInclusiveCost ?: 0.0 }
+            } else {
+                consumptionAggregateRounded * tariffSummary.vatInclusiveUnitRate
             }
-            val roughCost = ((consumptionTimeSpan * tariffSummary.vatInclusiveStandingCharge) + consumptionCharge) / 100.0
-            val consumptionChargeRatio = (consumptionCharge / 100.0) / roughCost
+            val costWithCharges = ((consumptionTimeSpan * tariffSummary.vatInclusiveStandingCharge) + consumptionCharge) / 100.0
+            val consumptionChargeRatio = (consumptionCharge / 100.0) / costWithCharges
             val consumptionDailyAverage = (consumptionWithCost.sumOf { it.consumption.kWhConsumed } / consumptionWithCost.map { it.consumption }.getConsumptionDaySpan()).roundToNearestEvenHundredth()
             val costDailyAverage = (tariffSummary.vatInclusiveStandingCharge + consumptionDailyAverage * tariffSummary.vatInclusiveUnitRate) / 100.0
             val consumptionAnnualProjection = (consumptionWithCost.sumOf { it.consumption.kWhConsumed } / consumptionTimeSpan * 365.25).roundToNearestEvenHundredth()
@@ -40,7 +41,8 @@ class GenerateUsageInsightsUseCase {
                 consumptionAggregateRounded = consumptionAggregateRounded,
                 consumptionTimeSpan = consumptionTimeSpan,
                 consumptionChargeRatio = consumptionChargeRatio,
-                roughCost = roughCost,
+                costWithCharges = costWithCharges,
+                isTrueCost = isTrueCost,
                 consumptionDailyAverage = consumptionDailyAverage,
                 costDailyAverage = costDailyAverage,
                 consumptionAnnualProjection = consumptionAnnualProjection,
