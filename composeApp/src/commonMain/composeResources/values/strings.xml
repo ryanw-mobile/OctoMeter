@@ -51,7 +51,8 @@
         <item quantity="one">%1$s kWh USED THIS DAY</item>
         <item quantity="other">%1$s kWh USED OVER %2$s DAYS</item>
     </plurals>
-    <string name="usage_estimated_cost">estimated cost</string>
+    <string name="usage_estimated_cost">estimated</string>
+    <string name="usage_reference_cost">reference*</string>
     <string name="usage_estimated_daily">Daily average: %1$s kWh / £%2$s</string>
     <string name="usage_annual_projection">Projected annual consumption</string>
     <string name="usage_demo_introduction">Demo Mode: The consumption figures shown are randomly generated.</string>
