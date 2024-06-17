@@ -28,6 +28,13 @@ class SyncUserProfileUseCaseTest {
     private lateinit var fakeUserPreferenceRepository: FakeUserPreferencesRepository
     private lateinit var fakeRestApiRepository: FakeRestApiRepository
 
+    // common values not affecting the test results
+    private val fakeApiKey = "test_api_key"
+    private val fakeAccountNumber = "A-9009A9A9"
+    private val fakeMpan = "9900000999999"
+    private val fakeMeterSerialNumber = "99A9999999"
+    private val fakeAccount = AccountSampleData.accountA1234A1B1
+
     @BeforeTest
     fun setupUseCase() {
         fakeUserPreferenceRepository = FakeUserPreferencesRepository()
@@ -51,37 +58,33 @@ class SyncUserProfileUseCaseTest {
 
     @Test
     fun `should return UserProfile when all data is present`() = runTest {
-        val apiKey = "validApiKey"
-        val account = AccountSampleData.accountA1234A1B1
         fakeUserPreferenceRepository.apply {
             demoMode = false
-            this.apiKey = apiKey
-            this.accountNumber = account.accountNumber
-            this.mpan = account.electricityMeterPoints.first().mpan
-            this.meterSerialNumber = account.electricityMeterPoints.first().meterSerialNumbers.first()
+            apiKey = fakeApiKey
+            accountNumber = fakeAccount.accountNumber
+            mpan = fakeAccount.electricityMeterPoints.first().mpan
+            meterSerialNumber = fakeAccount.electricityMeterPoints.first().meterSerialNumbers.first()
         }
-        fakeRestApiRepository.setAccountResponse = Result.success(listOf(account))
+        fakeRestApiRepository.setAccountResponse = Result.success(fakeAccount)
 
         val result = syncUserProfileUseCase()
 
         assertTrue(result.isSuccess)
         val userProfile = result.getOrNull()
         assertIs<UserProfile>(userProfile)
-        assertEquals(account.electricityMeterPoints.first().mpan, userProfile.selectedMpan)
-        assertEquals(account.electricityMeterPoints.first().meterSerialNumbers.first(), userProfile.selectedMeterSerialNumber)
-        assertEquals(account, userProfile.account)
+        assertEquals(fakeAccount.electricityMeterPoints.first().mpan, userProfile.selectedMpan)
+        assertEquals(fakeAccount.electricityMeterPoints.first().meterSerialNumbers.first(), userProfile.selectedMeterSerialNumber)
+        assertEquals(fakeAccount, userProfile.account)
     }
 
     @Test
     fun `should return null when account is null`() = runTest {
-        val apiKey = "validApiKey"
-        val accountNumber = "validAccountNumber"
         fakeUserPreferenceRepository.apply {
             demoMode = false
-            this.apiKey = apiKey
-            this.accountNumber = accountNumber
+            apiKey = fakeApiKey
+            accountNumber = fakeAccountNumber
         }
-        fakeRestApiRepository.setAccountResponse = Result.success(emptyList())
+        fakeRestApiRepository.setAccountResponse = Result.success(null)
 
         val result = syncUserProfileUseCase()
 
@@ -91,19 +94,14 @@ class SyncUserProfileUseCaseTest {
 
     @Test
     fun `should return null when tariff summary is null`() = runTest {
-        val apiKey = "validApiKey"
-        val accountNumber = "validAccountNumber"
-        val mpan = "validMpan"
-        val meterSerialNumber = "validMeterSerialNumber"
         fakeUserPreferenceRepository.apply {
             demoMode = false
-            this.apiKey = apiKey
-            this.accountNumber = accountNumber
-            this.mpan = mpan
-            this.meterSerialNumber = meterSerialNumber
+            apiKey = fakeApiKey
+            accountNumber = fakeAccountNumber
+            mpan = fakeMpan
+            meterSerialNumber = fakeMeterSerialNumber
         }
-        val account = AccountSampleData.accountA1234A1B1
-        fakeRestApiRepository.setAccountResponse = Result.success(listOf(account))
+        fakeRestApiRepository.setAccountResponse = Result.success(fakeAccount)
         fakeRestApiRepository.setSimpleProductTariffResponse = null
 
         val result = syncUserProfileUseCase()

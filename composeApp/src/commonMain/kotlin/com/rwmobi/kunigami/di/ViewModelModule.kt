@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.di
 
+import com.rwmobi.kunigami.domain.usecase.GenerateUsageInsightsUseCase
 import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
 import com.rwmobi.kunigami.ui.viewmodels.AgileViewModel
 import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel
@@ -18,9 +19,9 @@ val viewModelModule = module {
     factory {
         UsageViewModel(
             syncUserProfileUseCase = get(),
-            getConsumptionUseCase = get(),
-            getTariffRatesUseCase = get(),
+            getConsumptionAndCostUseCase = get(),
             getTariffSummaryUseCase = get(),
+            generateUsageInsightsUseCase = GenerateUsageInsightsUseCase(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }

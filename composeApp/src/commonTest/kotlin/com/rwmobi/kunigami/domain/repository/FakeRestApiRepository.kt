@@ -9,8 +9,8 @@ package com.rwmobi.kunigami.domain.repository
 
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
@@ -24,17 +24,17 @@ class FakeRestApiRepository : RestApiRepository {
         productCode: String,
         tariffCode: String,
     ): Result<TariffSummary> {
-        return setSimpleProductTariffResponse ?: throw RuntimeException("Fake result not defined")
+        return setSimpleProductTariffResponse ?: throw RuntimeException("Fake result setSimpleProductTariffResponse not defined")
     }
 
     var setProductsResponse: Result<List<ProductSummary>>? = null
     override suspend fun getProducts(): Result<List<ProductSummary>> {
-        return setProductsResponse ?: throw RuntimeException("Fake result not defined")
+        return setProductsResponse ?: throw RuntimeException("Fake result setProductsResponse not defined")
     }
 
     var setProductDetailsResponse: Result<ProductDetails>? = null
     override suspend fun getProductDetails(productCode: String): Result<ProductDetails> {
-        return setProductDetailsResponse ?: throw RuntimeException("Fake result not defined")
+        return setProductDetailsResponse ?: throw RuntimeException("Fake result setProductDetailsResponse not defined")
     }
 
     var setStandardUnitRatesResponse: Result<List<Rate>>? = null
@@ -44,7 +44,7 @@ class FakeRestApiRepository : RestApiRepository {
         periodFrom: Instant?,
         periodTo: Instant?,
     ): Result<List<Rate>> {
-        return setStandardUnitRatesResponse ?: throw RuntimeException("Fake result not defined")
+        return setStandardUnitRatesResponse ?: throw RuntimeException("Fake result setStandardUnitRatesResponse not defined")
     }
 
     var setStandingChargesResponse: Result<List<Rate>>? = null
@@ -52,7 +52,7 @@ class FakeRestApiRepository : RestApiRepository {
         productCode: String,
         tariffCode: String,
     ): Result<List<Rate>> {
-        return setStandingChargesResponse ?: throw RuntimeException("Fake result not defined")
+        return setStandingChargesResponse ?: throw RuntimeException("Fake result setStandingChargesResponse not defined")
     }
 
     var setDayUnitRatesResponse: Result<List<Rate>>? = null
@@ -60,7 +60,7 @@ class FakeRestApiRepository : RestApiRepository {
         productCode: String,
         tariffCode: String,
     ): Result<List<Rate>> {
-        return setDayUnitRatesResponse ?: throw RuntimeException("Fake result not defined")
+        return setDayUnitRatesResponse ?: throw RuntimeException("Fake result setDayUnitRatesResponse not defined")
     }
 
     var setNightUnitRatesResponse: Result<List<Rate>>? = null
@@ -68,7 +68,7 @@ class FakeRestApiRepository : RestApiRepository {
         productCode: String,
         tariffCode: String,
     ): Result<List<Rate>> {
-        return setNightUnitRatesResponse ?: throw RuntimeException("Fake result not defined")
+        return setNightUnitRatesResponse ?: throw RuntimeException("Fake result setNightUnitRatesResponse not defined")
     }
 
     var setConsumptionResponse: Result<List<Consumption>>? = null
@@ -79,16 +79,16 @@ class FakeRestApiRepository : RestApiRepository {
         periodFrom: Instant?,
         periodTo: Instant?,
         orderBy: ConsumptionDataOrder,
-        groupBy: ConsumptionDataGroup,
+        groupBy: ConsumptionTimeFrame,
     ): Result<List<Consumption>> {
-        return setConsumptionResponse ?: throw RuntimeException("Fake result not defined")
+        return setConsumptionResponse ?: throw RuntimeException("Fake result setConsumptionResponse not defined")
     }
 
-    var setAccountResponse: Result<List<Account>>? = null
+    var setAccountResponse: Result<Account?>? = null
     override suspend fun getAccount(
         apiKey: String,
         accountNumber: String,
-    ): Result<List<Account>> {
-        return setAccountResponse ?: throw RuntimeException("Fake result not defined")
+    ): Result<Account?> {
+        return setAccountResponse ?: throw RuntimeException("Fake result setAccountResponse not defined")
     }
 }

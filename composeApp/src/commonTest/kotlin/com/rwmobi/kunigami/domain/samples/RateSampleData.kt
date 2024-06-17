@@ -50,7 +50,7 @@ object RateSampleData {
             minute = 0,
             second = 0,
         ).toInstant(timeZone),
-        validTo = null,
+        validTo = Instant.DISTANT_FUTURE,
         paymentMethod = PaymentMethod.DIRECT_DEBIT,
     )
 

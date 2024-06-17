@@ -45,7 +45,7 @@ internal fun RateGroupTitle(
                 resource = Res.string.unit_kwh,
                 consumptionGroupWithPartitions.partitionedItems.sumOf { partitionedItems ->
                     partitionedItems.sumOf { consumption ->
-                        consumption.consumption
+                        consumption.kWhConsumed
                     }
                 }.roundToTwoDecimalPlaces(),
             ),

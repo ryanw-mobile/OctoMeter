@@ -37,52 +37,55 @@ class SyncUserProfileUseCase(
                 checkNotNull(value = apiKey, lazyMessage = { "Expect API Key but null" })
                 checkNotNull(value = accountNumber, lazyMessage = { "Expect Account Number but null" })
 
-                var selectedAccount: Account? = null
-                var selectedMpan = userPreferencesRepository.getMpan()
-                var selectedMeterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
-
                 restApiRepository.getAccount(
                     apiKey = apiKey,
                     accountNumber = accountNumber,
                 ).fold(
-                    onSuccess = { accounts ->
-                        // If no mpan and meter serial number is selected, we default to the first account and record
-                        if (selectedMpan == null || selectedMeterSerialNumber == null) {
-                            selectedAccount = accounts.firstOrNull()
-                            selectedMpan = accounts.firstOrNull()?.getDefaultMpan()?.also {
-                                userPreferencesRepository.setMpan(mpan = it)
-                            }
-                            selectedMeterSerialNumber = accounts.firstOrNull()?.getDefaultMeterSerialNumber()?.also {
-                                userPreferencesRepository.setMeterSerialNumber(meterSerialNumber = it)
-                            }
-                        } else {
-                            selectedAccount = accounts.firstOrNull { account ->
-                                account.electricityMeterPoints.firstOrNull { electricityMeterPoint ->
-                                    electricityMeterPoint.mpan == selectedMpan &&
-                                        electricityMeterPoint.meterSerialNumbers.contains(selectedMeterSerialNumber)
-                                } != null
-                            }
-                        }
-                    },
                     onFailure = { throwable ->
                         throw throwable
                     },
-                )
 
-                // If any of the information is missing, we are not comfortable to proceed.
-                // Caller making use of UserProfile should consider activating demo mode.
-                if (selectedAccount == null ||
-                    selectedMpan == null ||
-                    selectedMeterSerialNumber == null
-                ) {
-                    null
-                } else {
-                    UserProfile(
-                        selectedMpan = selectedMpan,
-                        selectedMeterSerialNumber = selectedMeterSerialNumber,
-                        account = selectedAccount,
-                    )
-                }
+                    onSuccess = { account ->
+                        var selectedAccount: Account? = null
+                        var selectedMpan = userPreferencesRepository.getMpan()
+                        var selectedMeterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
+
+                        // If no MPAN and meter serial number is selected, we default to the first MPAN and Meter
+                        if (selectedMpan != null && selectedMeterSerialNumber != null) {
+                            // Validate existing preferred MPAN and Meter still exists
+                            val matchingMeterPoint = account?.getElectricityMeterPoint(
+                                mpan = selectedMpan,
+                                meterSerialNumber = selectedMeterSerialNumber,
+                            )
+                            if (matchingMeterPoint != null) {
+                                selectedAccount = account
+                            }
+                        } else {
+                            selectedAccount = account
+                            selectedMpan = account?.getDefaultMpan()?.also {
+                                userPreferencesRepository.setMpan(it)
+                            }
+                            selectedMeterSerialNumber = account?.getDefaultMeterSerialNumber()?.also {
+                                userPreferencesRepository.setMeterSerialNumber(it)
+                            }
+                        }
+
+                        // If any of the information is missing, we are not comfortable to proceed.
+                        // Caller making use of UserProfile should consider activating demo mode.
+                        if (selectedAccount != null &&
+                            selectedMpan != null &&
+                            selectedMeterSerialNumber != null
+                        ) {
+                            UserProfile(
+                                selectedMpan = selectedMpan,
+                                selectedMeterSerialNumber = selectedMeterSerialNumber,
+                                account = selectedAccount,
+                            )
+                        } else {
+                            null
+                        }
+                    },
+                )
             }.except<CancellationException, _>()
         }
     }

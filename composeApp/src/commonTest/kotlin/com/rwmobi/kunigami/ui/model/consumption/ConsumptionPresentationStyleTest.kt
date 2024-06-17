@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.ui.model.consumption
 
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.presentation_style_day_half_hourly
 import kunigami.composeapp.generated.resources.presentation_style_month_thirty_days
@@ -21,27 +21,27 @@ class ConsumptionPresentationStyleTest {
 
     @Test
     fun `DAY_HALF_HOURLY should map to HALF_HOURLY ConsumptionDataGroup`() {
-        assertEquals(ConsumptionDataGroup.HALF_HOURLY, ConsumptionPresentationStyle.DAY_HALF_HOURLY.getConsumptionDataGroup())
+        assertEquals(ConsumptionTimeFrame.HALF_HOURLY, ConsumptionPresentationStyle.DAY_HALF_HOURLY.getConsumptionDataGroup())
     }
 
     @Test
     fun `WEEK_SEVEN_DAYS should map to DAY ConsumptionDataGroup`() {
-        assertEquals(ConsumptionDataGroup.DAY, ConsumptionPresentationStyle.WEEK_SEVEN_DAYS.getConsumptionDataGroup())
+        assertEquals(ConsumptionTimeFrame.DAY, ConsumptionPresentationStyle.WEEK_SEVEN_DAYS.getConsumptionDataGroup())
     }
 
     @Test
     fun `MONTH_WEEKS should map to WEEK ConsumptionDataGroup`() {
-        assertEquals(ConsumptionDataGroup.WEEK, ConsumptionPresentationStyle.MONTH_WEEKS.getConsumptionDataGroup())
+        assertEquals(ConsumptionTimeFrame.WEEK, ConsumptionPresentationStyle.MONTH_WEEKS.getConsumptionDataGroup())
     }
 
     @Test
     fun `MONTH_THIRTY_DAYS should map to DAY ConsumptionDataGroup`() {
-        assertEquals(ConsumptionDataGroup.DAY, ConsumptionPresentationStyle.MONTH_THIRTY_DAYS.getConsumptionDataGroup())
+        assertEquals(ConsumptionTimeFrame.DAY, ConsumptionPresentationStyle.MONTH_THIRTY_DAYS.getConsumptionDataGroup())
     }
 
     @Test
     fun `YEAR_TWELVE_MONTHS should map to MONTH ConsumptionDataGroup`() {
-        assertEquals(ConsumptionDataGroup.MONTH, ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS.getConsumptionDataGroup())
+        assertEquals(ConsumptionTimeFrame.MONTH, ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS.getConsumptionDataGroup())
     }
 
     // Not a very good test, but we keep it for now.

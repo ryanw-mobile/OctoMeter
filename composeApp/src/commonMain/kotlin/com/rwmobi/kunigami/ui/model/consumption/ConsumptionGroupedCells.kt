@@ -23,7 +23,7 @@ data class ConsumptionGroupedCells(
      * either way will not produce the exact the billed amount.
      */
     fun getAggregateConsumption(): Double {
-        return consumptions.sumOf { it.consumption }
+        return consumptions.sumOf { it.kWhConsumed }
     }
 }
 

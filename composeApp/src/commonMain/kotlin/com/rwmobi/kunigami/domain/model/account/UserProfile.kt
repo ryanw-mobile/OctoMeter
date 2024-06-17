@@ -11,13 +11,11 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class UserProfile(
-    val selectedMpan: String? = null,
-    val selectedMeterSerialNumber: String? = null,
-    val account: Account? = null,
+    val selectedMpan: String,
+    val selectedMeterSerialNumber: String,
+    val account: Account,
 ) {
-    fun getElectricityMeterPoint(): ElectricityMeterPoint? {
-        return selectedMpan?.let { mpan ->
-            account?.electricityMeterPoints?.firstOrNull { it.mpan == mpan }
-        }
+    fun getSelectedElectricityMeterPoint(): ElectricityMeterPoint? {
+        return account.electricityMeterPoints.firstOrNull { it.mpan == selectedMpan }
     }
 }

@@ -12,7 +12,7 @@ import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 
 fun ConsumptionDto.toConsumption() = Consumption(
-    consumption = consumption.roundToNearestEvenHundredth(),
+    kWhConsumed = consumption.roundToNearestEvenHundredth(),
     intervalStart = intervalStart,
     intervalEnd = intervalEnd,
 )
