@@ -21,7 +21,6 @@ import com.rwmobi.kunigami.domain.model.consumption.getConsumptionDaySpan
 import com.rwmobi.kunigami.domain.model.consumption.getConsumptionRange
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionAndCostUseCase
-import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffSummaryUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
@@ -50,7 +49,6 @@ import kotlin.time.Duration
 class UsageViewModel(
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
     private val getTariffSummaryUseCase: GetTariffSummaryUseCase,
-    private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val getConsumptionAndCostUseCase: GetConsumptionAndCostUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
@@ -303,12 +301,17 @@ class UsageViewModel(
         } else {
             val consumptionAggregateRounded = consumptionWithCost.sumOf { it.consumption.kWhConsumed }.roundToNearestEvenHundredth()
             val consumptionTimeSpan = consumptionWithCost.map { it.consumption }.getConsumptionDaySpan()
-            val roughCost = ((consumptionTimeSpan * tariffSummary.vatInclusiveStandingCharge) + (consumptionAggregateRounded * tariffSummary.vatInclusiveUnitRate)) / 100.0
-            val consumptionChargeRatio = (consumptionAggregateRounded * tariffSummary.vatInclusiveUnitRate / 100.0) / roughCost
+            val consumptionCharge = if (consumptionWithCost.any { it.vatInclusiveCost == null }) {
+                consumptionAggregateRounded * tariffSummary.vatInclusiveUnitRate
+            } else {
+                consumptionWithCost.sumOf { it.vatInclusiveCost ?: 0.0 }
+            }
+            val roughCost = ((consumptionTimeSpan * tariffSummary.vatInclusiveStandingCharge) + consumptionCharge) / 100.0
+            val consumptionChargeRatio = (consumptionCharge / 100.0) / roughCost
             val consumptionDailyAverage = (consumptionWithCost.sumOf { it.consumption.kWhConsumed } / consumptionWithCost.map { it.consumption }.getConsumptionDaySpan()).roundToNearestEvenHundredth()
             val costDailyAverage = (tariffSummary.vatInclusiveStandingCharge + consumptionDailyAverage * tariffSummary.vatInclusiveUnitRate) / 100.0
             val consumptionAnnualProjection = (consumptionWithCost.sumOf { it.consumption.kWhConsumed } / consumptionTimeSpan * 365.25).roundToNearestEvenHundredth()
-            val costAnnualProjection = (tariffSummary.vatInclusiveStandingCharge * 365.25 + consumptionAnnualProjection * tariffSummary.vatInclusiveUnitRate) / 100.0
+            val costAnnualProjection = (tariffSummary.vatInclusiveStandingCharge * 365.25 + consumptionAnnualProjection * consumptionCharge / consumptionAggregateRounded) / 100.0
 
             Insights(
                 consumptionAggregateRounded = consumptionAggregateRounded,
