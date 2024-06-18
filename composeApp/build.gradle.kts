@@ -27,6 +27,8 @@ plugins {
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.kotlinPowerAssert)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidxRoom)
 }
 
 val productName = "OctoMeter"
@@ -119,6 +121,8 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koalaplot.core)
             implementation(libs.multiplatform.settings)
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.sqlite.bundled)
         }
         desktopMain.dependencies {
             runtimeOnly("org.jetbrains.skiko:skiko-awt-runtime-$skikoTarget:$skikoVersion")
@@ -352,6 +356,7 @@ tasks.withType<Test> {
 }
 
 dependencies {
+    kspCommonMainMetadata(libs.androidx.room.complier)
     implementation(libs.androidx.profileinstaller)
     "baselineProfile"(project(":baselineprofile"))
 }
@@ -362,6 +367,10 @@ buildConfig {
     buildConfigField("VERSION_NAME", provider { libs.versions.versionName.get() })
     buildConfigField("VERSION_CODE", provider { libs.versions.versionCode.get() })
     buildConfigField("GITHUB_LINK", provider { "https://github.com/ryanw-mobile/OctoMeter" })
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
