@@ -33,7 +33,7 @@ fun List<RateGroup>.findActiveRate(referencePoint: Instant): Rate? {
 
 fun List<RateGroup>.getRateTrend(activeRate: Rate?): RateTrend? {
     return activeRate?.let {
-        if (it.validTo == null) {
+        if (it.validTo == Instant.DISTANT_FUTURE) {
             RateTrend.STEADY
         } else {
             val nextRate = findActiveRate(referencePoint = it.validTo.plus(Duration.parse("5m")))

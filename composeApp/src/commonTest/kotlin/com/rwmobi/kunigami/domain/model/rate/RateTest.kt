@@ -1,5 +1,6 @@
 package com.rwmobi.kunigami.domain.model.rate
 
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -129,7 +130,7 @@ class RateTest {
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
             validFrom = validFrom,
-            validTo = null,
+            validTo = Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val referencePoint = LocalDateTime(
@@ -156,7 +157,7 @@ class RateTest {
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
             validFrom = validFrom,
-            validTo = null,
+            validTo = Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val referencePoint = LocalDateTime(

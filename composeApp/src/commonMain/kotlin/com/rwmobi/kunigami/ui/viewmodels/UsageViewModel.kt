@@ -14,14 +14,12 @@ import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.extensions.atEndOfDay
 import com.rwmobi.kunigami.domain.extensions.atStartOfDay
-import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.model.account.UserProfile
-import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.getConsumptionTimeSpan
-import com.rwmobi.kunigami.domain.model.consumption.getRange
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
+import com.rwmobi.kunigami.domain.model.consumption.getConsumptionRange
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
-import com.rwmobi.kunigami.domain.usecase.GetConsumptionUseCase
-import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
+import com.rwmobi.kunigami.domain.usecase.GenerateUsageInsightsUseCase
+import com.rwmobi.kunigami.domain.usecase.GetConsumptionAndCostUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffSummaryUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
@@ -29,7 +27,6 @@ import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionQueryFilter
-import com.rwmobi.kunigami.ui.model.consumption.Insights
 import com.rwmobi.kunigami.ui.previewsampledata.FakeDemoUserProfile
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
@@ -50,8 +47,8 @@ import kotlin.time.Duration
 class UsageViewModel(
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
     private val getTariffSummaryUseCase: GetTariffSummaryUseCase,
-    private val getTariffRatesUseCase: GetTariffRatesUseCase,
-    private val getConsumptionUseCase: GetConsumptionUseCase,
+    private val getConsumptionAndCostUseCase: GetConsumptionAndCostUseCase,
+    private val generateUsageInsightsUseCase: GenerateUsageInsightsUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UsageUIState> = MutableStateFlow(UsageUIState(isLoading = true))
@@ -74,7 +71,7 @@ class UsageViewModel(
                 // Currently smart meter readings are not real-time. Yesterday's figures are the latest we can get.
                 val referencePoint = Clock.System.now() - Duration.parse(value = "1d")
 
-                val matchingTariffCode = userProfile.getElectricityMeterPoint()?.lookupAgreement(
+                val matchingTariffCode = userProfile.getSelectedElectricityMeterPoint()?.lookupAgreement(
                     referencePoint = referencePoint,
                 )
 
@@ -95,10 +92,10 @@ class UsageViewModel(
                 )
 
                 // UIState comes with a default presentationStyle. We try to go backward 5 times hoping for some valid results
-                val accountMoveInDate = userProfile.account?.movedInAt ?: Instant.DISTANT_PAST
+                val accountMoveInDate = userProfile.account.movedInAt ?: Instant.DISTANT_PAST
                 run loop@{
                     for (iteration in 0..3) {
-                        getConsumptionUseCase(
+                        getConsumptionAndCostUseCase(
                             periodFrom = newConsumptionQueryFilter.requestedStart,
                             periodTo = newConsumptionQueryFilter.requestedEnd,
                             groupBy = newConsumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
@@ -108,11 +105,11 @@ class UsageViewModel(
                                 if (consumptions.size > 2) {
                                     propagateInsights(
                                         tariffSummary = tariffSummary,
-                                        consumptions = consumptions,
+                                        consumptionWithCost = consumptions,
                                     )
                                     propagateConsumptionsAndStopLoading(
                                         consumptionQueryFilter = newConsumptionQueryFilter,
-                                        consumptions = consumptions,
+                                        consumptionWithCost = consumptions,
                                     )
                                     return@loop // Done
                                 } else {
@@ -149,7 +146,7 @@ class UsageViewModel(
         val userProfile = getUserProfile()
 
         // If the query is over a period of time, it can have more than one tariffs
-        val matchingTariffCodes = userProfile?.getElectricityMeterPoint()?.lookupAgreements(
+        val matchingTariffCodes = userProfile?.getSelectedElectricityMeterPoint()?.lookupAgreements(
             validFrom = consumptionQueryFilter.requestedStart,
             validTo = consumptionQueryFilter.requestedEnd,
         )
@@ -166,19 +163,19 @@ class UsageViewModel(
                 )
             }
 
-            getConsumptionUseCase(
+            getConsumptionAndCostUseCase(
                 periodFrom = consumptionQueryFilter.requestedStart,
                 periodTo = consumptionQueryFilter.requestedEnd,
                 groupBy = consumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
             ).fold(
                 onSuccess = { consumptions ->
                     propagateInsights(
-                        consumptions = consumptions,
+                        consumptionWithCost = consumptions,
                         tariffSummary = tariffSummary,
                     )
                     propagateConsumptionsAndStopLoading(
                         consumptionQueryFilter = consumptionQueryFilter,
-                        consumptions = consumptions,
+                        consumptionWithCost = consumptions,
                     )
                 },
                 onFailure = { throwable ->
@@ -296,46 +293,25 @@ class UsageViewModel(
 
     private fun propagateInsights(
         tariffSummary: TariffSummary?,
-        consumptions: List<Consumption>?,
-    ): Insights? {
-        val insights = if (tariffSummary == null || consumptions.isNullOrEmpty()) {
-            null
-        } else {
-            val consumptionAggregateRounded = consumptions.sumOf { it.consumption }.roundToNearestEvenHundredth()
-            val consumptionTimeSpan = consumptions.getConsumptionTimeSpan()
-            val roughCost = ((consumptionTimeSpan * tariffSummary.vatInclusiveStandingCharge) + (consumptionAggregateRounded * tariffSummary.vatInclusiveUnitRate)) / 100.0
-            val consumptionChargeRatio = (consumptionAggregateRounded * tariffSummary.vatInclusiveUnitRate / 100.0) / roughCost
-            val consumptionDailyAverage = (consumptions.sumOf { it.consumption } / consumptions.getConsumptionTimeSpan()).roundToNearestEvenHundredth()
-            val costDailyAverage = (tariffSummary.vatInclusiveStandingCharge + consumptionDailyAverage * tariffSummary.vatInclusiveUnitRate) / 100.0
-            val consumptionAnnualProjection = (consumptions.sumOf { it.consumption } / consumptionTimeSpan * 365.25).roundToNearestEvenHundredth()
-            val costAnnualProjection = (tariffSummary.vatInclusiveStandingCharge * 365.25 + consumptionAnnualProjection * tariffSummary.vatInclusiveUnitRate) / 100.0
-
-            Insights(
-                consumptionAggregateRounded = consumptionAggregateRounded,
-                consumptionTimeSpan = consumptionTimeSpan,
-                consumptionChargeRatio = consumptionChargeRatio,
-                roughCost = roughCost,
-                consumptionDailyAverage = consumptionDailyAverage,
-                costDailyAverage = costDailyAverage,
-                consumptionAnnualProjection = consumptionAnnualProjection,
-                costAnnualProjection = costAnnualProjection,
-            )
-        }
-
+        consumptionWithCost: List<ConsumptionWithCost>?,
+    ) {
+        val insights = generateUsageInsightsUseCase(
+            tariffSummary = tariffSummary,
+            consumptionWithCost = consumptionWithCost,
+        )
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 insights = insights,
             )
         }
-
-        return insights
     }
 
     private suspend fun propagateConsumptionsAndStopLoading(
         consumptionQueryFilter: ConsumptionQueryFilter,
-        consumptions: List<Consumption>,
+        consumptionWithCost: List<ConsumptionWithCost>,
     ) {
-        val consumptionRange = consumptions.getRange()
+        val consumptions = consumptionWithCost.map { it.consumption }
+        val consumptionRange = consumptions.getConsumptionRange()
         val labels = consumptionQueryFilter.generateChartLabels(consumptions = consumptions)
         val consumptionGroupedCells = consumptionQueryFilter.groupChartCells(consumptions = consumptions)
         val toolTips = consumptionQueryFilter.generateChartToolTips(consumptions = consumptions)
@@ -344,7 +320,7 @@ class UsageViewModel(
                 add(
                     element = DefaultVerticalBarPlotEntry(
                         x = index,
-                        y = DefaultVerticalBarPosition(yMin = 0.0, yMax = consumption.consumption),
+                        y = DefaultVerticalBarPosition(yMin = 0.0, yMax = consumption.kWhConsumed),
                     ),
                 )
             }

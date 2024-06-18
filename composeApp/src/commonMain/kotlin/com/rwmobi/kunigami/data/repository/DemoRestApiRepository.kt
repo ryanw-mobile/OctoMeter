@@ -9,8 +9,8 @@ package com.rwmobi.kunigami.data.repository
 
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
@@ -32,31 +32,31 @@ import kotlin.random.Random
 
 class DemoRestApiRepository : RestApiRepository {
     override suspend fun getSimpleProductTariff(productCode: String, tariffCode: String): Result<TariffSummary> {
-        TODO("Not yet implemented")
+        throw NotImplementedError("Disabled in demo mode")
     }
 
     override suspend fun getProducts(): Result<List<ProductSummary>> {
-        TODO("Not yet implemented")
+        throw NotImplementedError("Disabled in demo mode")
     }
 
     override suspend fun getProductDetails(productCode: String): Result<ProductDetails> {
-        TODO("Not yet implemented")
+        throw NotImplementedError("Disabled in demo mode")
     }
 
     override suspend fun getStandardUnitRates(productCode: String, tariffCode: String, periodFrom: Instant?, periodTo: Instant?): Result<List<Rate>> {
-        TODO("Not yet implemented")
+        throw NotImplementedError("Disabled in demo mode")
     }
 
     override suspend fun getStandingCharges(productCode: String, tariffCode: String): Result<List<Rate>> {
-        TODO("Not yet implemented")
+        throw NotImplementedError("Disabled in demo mode")
     }
 
     override suspend fun getDayUnitRates(productCode: String, tariffCode: String): Result<List<Rate>> {
-        TODO("Not yet implemented")
+        throw NotImplementedError("Disabled in demo mode")
     }
 
     override suspend fun getNightUnitRates(productCode: String, tariffCode: String): Result<List<Rate>> {
-        TODO("Not yet implemented")
+        throw NotImplementedError("Disabled in demo mode")
     }
 
     /**
@@ -64,7 +64,15 @@ class DemoRestApiRepository : RestApiRepository {
      * The only parameters we care are: periodFrom, periodTo, groupBy.
      * Since this piece of code has no practical value, we take it as iss - until it breaks.
      */
-    override suspend fun getConsumption(apiKey: String, mpan: String, meterSerialNumber: String, periodFrom: Instant?, periodTo: Instant?, orderBy: ConsumptionDataOrder, groupBy: ConsumptionDataGroup): Result<List<Consumption>> {
+    override suspend fun getConsumption(
+        apiKey: String,
+        mpan: String,
+        meterSerialNumber: String,
+        periodFrom: Instant?,
+        periodTo: Instant?,
+        orderBy: ConsumptionDataOrder,
+        groupBy: ConsumptionTimeFrame,
+    ): Result<List<Consumption>> {
         val consumptionList = mutableListOf<Consumption>()
         var intervalStart = periodFrom!!
         val mean = 0.2 // Midpoint of the range [0.110, 2.000]
@@ -74,14 +82,12 @@ class DemoRestApiRepository : RestApiRepository {
 
         while (intervalStart < periodTo!!) {
             val intervalEnd = when (groupBy) {
-                ConsumptionDataGroup.HALF_HOURLY -> intervalStart.plus(DateTimePeriod(minutes = 30), timeZone)
-                ConsumptionDataGroup.DAY -> intervalStart.plus(DateTimePeriod(days = 1), timeZone)
-                ConsumptionDataGroup.WEEK -> intervalStart.plus(DateTimePeriod(days = 7), timeZone)
-                ConsumptionDataGroup.MONTH -> intervalStart.plus(DateTimePeriod(months = 1), timeZone)
-                ConsumptionDataGroup.QUARTER -> TODO()
+                ConsumptionTimeFrame.HALF_HOURLY -> intervalStart.plus(DateTimePeriod(minutes = 30), timeZone)
+                ConsumptionTimeFrame.DAY -> intervalStart.plus(DateTimePeriod(days = 1), timeZone)
+                ConsumptionTimeFrame.WEEK -> intervalStart.plus(DateTimePeriod(days = 7), timeZone)
+                ConsumptionTimeFrame.MONTH -> intervalStart.plus(DateTimePeriod(months = 1), timeZone)
+                ConsumptionTimeFrame.QUARTER -> throw NotImplementedError("Disabled in demo mode")
             }
-
-            //  if (intervalEnd > periodTo) break
 
             val intervalDurationMinutes = intervalStart.until(intervalEnd, DateTimeUnit.MINUTE)
             val intervalFactor = intervalDurationMinutes.toDouble() / baseDurationMinutes
@@ -103,7 +109,7 @@ class DemoRestApiRepository : RestApiRepository {
         return z0 * standardDeviation + mean
     }
 
-    override suspend fun getAccount(apiKey: String, accountNumber: String): Result<List<Account>> {
-        TODO("Not yet implemented")
+    override suspend fun getAccount(apiKey: String, accountNumber: String): Result<Account?> {
+        throw NotImplementedError("Disabled in demo mode")
     }
 }

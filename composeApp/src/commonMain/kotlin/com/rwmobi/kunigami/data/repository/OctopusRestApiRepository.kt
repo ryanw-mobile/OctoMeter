@@ -19,8 +19,8 @@ import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataGroup
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
@@ -148,7 +148,7 @@ class OctopusRestApiRepository(
         periodFrom: Instant?,
         periodTo: Instant?,
         orderBy: ConsumptionDataOrder,
-        groupBy: ConsumptionDataGroup,
+        groupBy: ConsumptionTimeFrame,
     ): Result<List<Consumption>> {
         return withContext(dispatcher) {
             runCatching {
@@ -166,18 +166,22 @@ class OctopusRestApiRepository(
         }
     }
 
+    /***
+     * API can potentially return more than one property for a given account number.
+     * We have no way to tell if this is the case, but for simplicity, we take the first property only.
+     */
     override suspend fun getAccount(
         apiKey: String,
         accountNumber: String,
-    ): Result<List<Account>> {
+    ): Result<Account?> {
         return withContext(dispatcher) {
             runCatching {
                 val apiResponse = accountEndpoint.getAccount(
                     apiKey = apiKey,
                     accountNumber = accountNumber,
                 )
-                apiResponse?.properties?.map { it.toAccount(accountNumber = accountNumber) } ?: emptyList()
-            }.except<CancellationException, _>()
-        }
+                apiResponse?.properties?.firstOrNull()?.toAccount(accountNumber = accountNumber)
+            }
+        }.except<CancellationException, _>()
     }
 }

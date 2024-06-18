@@ -26,6 +26,7 @@ import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.model.consumption.Insights
+import com.rwmobi.kunigami.ui.previewsampledata.InsightsSamples
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
@@ -195,22 +196,11 @@ private fun TariffProjectionsCardThreeColumns(
 @Preview
 @Composable
 private fun Preview() {
-    val insights = Insights(
-        consumptionAggregateRounded = 85.115,
-        consumptionTimeSpan = 303,
-        consumptionChargeRatio = 0.64,
-        roughCost = 90.988,
-        consumptionDailyAverage = 32.611,
-        costDailyAverage = 12.434,
-        consumptionAnnualProjection = 30.235,
-        costAnnualProjection = 11.487,
-    )
-
     CommonPreviewSetup {
         TariffProjectionsCardAdaptive(
             modifier = Modifier.padding(all = 16.dp),
             tariffSummary = TariffSamples.agileFlex221125,
-            insights = insights,
+            insights = InsightsSamples.trueCost,
             layoutType = WindowWidthSizeClass.Expanded,
             mpan = "1200000123456",
         )
@@ -218,7 +208,7 @@ private fun Preview() {
         TariffProjectionsCardAdaptive(
             modifier = Modifier.padding(all = 16.dp),
             tariffSummary = TariffSamples.agileFlex221125,
-            insights = insights,
+            insights = InsightsSamples.trueCost,
             layoutType = WindowWidthSizeClass.Medium,
             mpan = "1200000123456",
         )
@@ -226,7 +216,7 @@ private fun Preview() {
         TariffProjectionsCardAdaptive(
             modifier = Modifier.padding(all = 16.dp),
             tariffSummary = TariffSamples.agileFlex221125,
-            insights = insights,
+            insights = InsightsSamples.trueCost,
             layoutType = WindowWidthSizeClass.Compact,
             mpan = "1200000123456",
         )

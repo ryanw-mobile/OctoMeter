@@ -23,6 +23,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.model.consumption.Insights
+import com.rwmobi.kunigami.ui.previewsampledata.InsightsSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
 import kunigami.composeapp.generated.resources.Res
@@ -39,6 +41,7 @@ import kunigami.composeapp.generated.resources.usage_consumption
 import kunigami.composeapp.generated.resources.usage_estimated_cost
 import kunigami.composeapp.generated.resources.usage_estimated_daily
 import kunigami.composeapp.generated.resources.usage_insights_consumption
+import kunigami.composeapp.generated.resources.usage_reference_cost
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -71,21 +74,32 @@ internal fun InsightsCard(
 
             Spacer(modifier = Modifier.weight(weight = 1f))
 
-            Text(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-                text = stringResource(resource = Res.string.unit_pound, insights.roughCost.toString(precision = 2)),
-            )
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    modifier = Modifier.padding(horizontal = dimension.grid_1),
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
+                    text = stringResource(resource = Res.string.unit_pound, insights.costWithCharges.toString(precision = 2)),
+                )
 
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-                text = stringResource(resource = Res.string.usage_estimated_cost),
-            )
+                val costLabel = if (insights.isTrueCost) {
+                    stringResource(resource = Res.string.usage_estimated_cost)
+                } else {
+                    stringResource(resource = Res.string.usage_reference_cost)
+                }
+
+                Text(
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Left,
+                    text = costLabel,
+                )
+            }
 
             Spacer(modifier = Modifier.weight(weight = 1f))
 
@@ -139,16 +153,7 @@ private fun Preview() {
             modifier = Modifier
                 .height(intrinsicSize = IntrinsicSize.Min)
                 .padding(all = 24.dp),
-            insights = Insights(
-                consumptionAggregateRounded = 86.693,
-                consumptionTimeSpan = 2084,
-                consumptionChargeRatio = 0.64,
-                roughCost = 2880.027,
-                consumptionDailyAverage = 71.227,
-                costDailyAverage = 52.218,
-                consumptionAnnualProjection = 82.473,
-                costAnnualProjection = 4.136,
-            ),
+            insights = InsightsSamples.trueCost,
         )
     }
 }

@@ -44,6 +44,7 @@ import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_different_tariff
 import kunigami.composeapp.generated.resources.agile_expire_time
@@ -288,7 +289,7 @@ private fun Preview() {
                             vatExclusivePrice = 45.075,
                             vatInclusivePrice = 25.076,
                             validFrom = Clock.System.now(),
-                            validTo = null,
+                            validTo = Instant.DISTANT_FUTURE,
                             paymentMethod = PaymentMethod.UNKNOWN,
                         ),
                     ),

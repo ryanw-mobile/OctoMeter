@@ -48,10 +48,11 @@
     <string name="usage_current_tariff">Active tariff</string>
     <string name="usage_insights">Insights</string>
     <plurals name="usage_insights_consumption">
-        <item quantity="one">%1$s kWh USED IN ONE DAY</item>
+        <item quantity="one">%1$s kWh USED THIS DAY</item>
         <item quantity="other">%1$s kWh USED OVER %2$s DAYS</item>
     </plurals>
-    <string name="usage_estimated_cost">estimated cost</string>
+    <string name="usage_estimated_cost">estimated</string>
+    <string name="usage_reference_cost">reference*</string>
     <string name="usage_estimated_daily">Daily average: %1$s kWh / £%2$s</string>
     <string name="usage_annual_projection">Projected annual consumption</string>
     <string name="usage_demo_introduction">Demo Mode: The consumption figures shown are randomly generated.</string>

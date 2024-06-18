@@ -228,7 +228,7 @@ private fun ErrorPreview() {
                 userProfile = UserProfile(
                     selectedMpan = "1200000345678",
                     selectedMeterSerialNumber = "11A1234567",
-                    account = null,
+                    account = AccountSamples.account928,
                 ),
                 tariffSummary = TariffSamples.agileFlex221125,
                 errorMessages = listOf(),

@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.model.consumption.Insights
+import com.rwmobi.kunigami.ui.previewsampledata.InsightsSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
 import kunigami.composeapp.generated.resources.Res
@@ -195,44 +196,17 @@ private fun AnnualProjectionCardTwoColumns(
 private fun Preview() {
     CommonPreviewSetup {
         AnnualProjectionCardAdaptive(
-            insights = Insights(
-                consumptionAggregateRounded = 42.290,
-                consumptionTimeSpan = 8820,
-                consumptionChargeRatio = 0.64,
-                roughCost = 2.815,
-                consumptionAnnualProjection = 48.504,
-                costAnnualProjection = 24.868,
-                consumptionDailyAverage = 23.519,
-                costDailyAverage = 53.141,
-            ),
+            insights = InsightsSamples.trueCost,
             layoutType = WindowWidthSizeClass.Compact,
         )
 
         AnnualProjectionCardAdaptive(
-            insights = Insights(
-                consumptionAggregateRounded = 42.290,
-                consumptionTimeSpan = 8820,
-                consumptionChargeRatio = 0.64,
-                roughCost = 2.815,
-                consumptionAnnualProjection = 48.504,
-                costAnnualProjection = 24.868,
-                consumptionDailyAverage = 23.519,
-                costDailyAverage = 53.141,
-            ),
+            insights = InsightsSamples.trueCost,
             layoutType = WindowWidthSizeClass.Medium,
         )
 
         AnnualProjectionCardAdaptive(
-            insights = Insights(
-                consumptionAggregateRounded = 42.290,
-                consumptionTimeSpan = 8820,
-                consumptionChargeRatio = 0.64,
-                roughCost = 2.815,
-                consumptionAnnualProjection = 48.504,
-                costAnnualProjection = 24.868,
-                consumptionDailyAverage = 23.519,
-                costDailyAverage = 53.141,
-            ),
+            insights = InsightsSamples.trueCost,
             layoutType = WindowWidthSizeClass.Expanded,
         )
     }
