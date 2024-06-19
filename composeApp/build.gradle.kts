@@ -287,6 +287,8 @@ android {
 
     dependencies {
         debugImplementation(libs.leakcanary.android)
+        testImplementation(libs.androidx.test.core.ktx)
+        testImplementation(libs.robolectric)
     }
 }
 
@@ -359,6 +361,7 @@ tasks.withType<Test> {
 }
 
 dependencies {
+    add("kspAndroid", libs.androidx.room.compiler) // For AndroidUnitTest
     add("kspCommonMainMetadata", libs.androidx.room.compiler)
     implementation(libs.androidx.profileinstaller)
     "baselineProfile"(project(":baselineprofile"))
