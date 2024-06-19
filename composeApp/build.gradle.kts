@@ -340,7 +340,7 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     }
     filter {
         exclude("**/BuildConfig.kt")
-        exclude("**/generated/**")
+        exclude { element -> element.file.path.contains("generated/") }
         exclude("**/MainViewController.kt")
         include("**/kotlin/**")
     }
