@@ -51,6 +51,7 @@ kotlin {
         framework {
             baseName = "composeApp"
             isStatic = true
+            binaryOption("bundleId", "composeApp.kunigami")
         }
     }
 
@@ -88,6 +89,11 @@ kotlin {
 
     sourceSets {
         val desktopMain by getting
+
+        iosMain {
+            // Fixes RoomDB Unresolved reference 'instantiateImpl'
+            kotlin.srcDir("build/generated/ksp/metadata")
+        }
 
         androidMain.dependencies {
             // tooling.preview is causing crash
@@ -135,6 +141,7 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
+
         commonTest.dependencies {
             implementation(kotlin("test"))
             implementation(kotlin("test-common"))
@@ -353,11 +360,19 @@ tasks.withType<Test> {
 
 dependencies {
     add("kspAndroid", libs.androidx.room.compiler)
-    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
-    add("kspIosX64", libs.androidx.room.compiler)
-    add("kspIosArm64", libs.androidx.room.compiler)
+    add("kspCommonMainMetadata", libs.androidx.room.compiler)
+//    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+//    add("kspIosX64", libs.androidx.room.compiler)
+//    add("kspIosArm64", libs.androidx.room.compiler)
     implementation(libs.androidx.profileinstaller)
     "baselineProfile"(project(":baselineprofile"))
+}
+
+// https://github.com/JetBrains/compose-multiplatform/issues/4928
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().configureEach {
+    if (name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
 }
 
 buildConfig {
