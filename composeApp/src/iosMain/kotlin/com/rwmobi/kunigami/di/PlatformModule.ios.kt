@@ -11,6 +11,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.russhwolf.settings.Settings
 import com.rwmobi.kunigami.data.source.local.database.OctometerDatabase
+import com.rwmobi.kunigami.data.source.local.database.instantiateImpl
 import com.rwmobi.kunigami.data.source.local.preferences.provideSettings
 import composeapp.kunigami.BuildConfig
 import io.ktor.client.engine.HttpClientEngine
