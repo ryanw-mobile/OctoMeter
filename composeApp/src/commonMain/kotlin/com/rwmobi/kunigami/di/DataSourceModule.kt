@@ -7,6 +7,12 @@
 
 package com.rwmobi.kunigami.di
 
+import androidx.room.RoomDatabase
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.rwmobi.kunigami.data.source.local.database.OctometerDatabase
+import com.rwmobi.kunigami.data.source.local.database.RoomDatabaseDataSource
+import com.rwmobi.kunigami.data.source.local.database.dao.ConsumptionDao
+import com.rwmobi.kunigami.data.source.local.database.interfaces.DatabaseDataSource
 import com.rwmobi.kunigami.data.source.local.preferences.MultiplatformPreferencesStore
 import com.rwmobi.kunigami.data.source.local.preferences.interfaces.PreferencesStore
 import org.koin.core.qualifier.named
@@ -18,5 +24,26 @@ val dataSourceModule = module {
             settings = get(),
             dispatcher = get(named("IoDispatcher")),
         )
+    }
+
+    factory<ConsumptionDao> {
+        val database: OctometerDatabase = get()
+        database.consumptionDao
+    }
+
+    factory<DatabaseDataSource> {
+        RoomDatabaseDataSource(
+            consumptionDao = get(),
+        )
+    }
+
+    single<OctometerDatabase> {
+        val builder: RoomDatabase.Builder<OctometerDatabase> = get()
+        builder
+            .fallbackToDestructiveMigrationOnDowngrade(dropAllTables = true)
+            .fallbackToDestructiveMigration(dropAllTables = true)
+            .setDriver(BundledSQLiteDriver())
+            .setQueryCoroutineContext(get(named("IoDispatcher")))
+            .build()
     }
 }
