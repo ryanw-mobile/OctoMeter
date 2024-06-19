@@ -38,6 +38,7 @@ skiko = "0.8.8"
 room = "2.7.0-alpha04"
 ksp = "2.0.0-1.0.22"
 sqlite = "2.5.0-alpha04"
+slf4j = "2.0.13"
 
 # App configurations, not dependencies
 versionCode = "7"
@@ -97,6 +98,7 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
 androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmarkMacroJunit4" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
+slf4j = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
 # For Renovate only
 skiko-macos = { group = "org.jetbrains.skiko", name = "skiko-awt-runtime-macos-arm64", version.ref = "skiko" }
 skiko-windows = { group = "org.jetbrains.skiko", name = "skiko-awt-runtime-windows-x64", version.ref = "skiko" }

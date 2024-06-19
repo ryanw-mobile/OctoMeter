@@ -132,6 +132,7 @@ kotlin {
             implementation(libs.koin.jvm)
             implementation(libs.koin.compose)
             implementation(libs.themedetector)
+            implementation(libs.slf4j)
         }
         iosMain {
             // Fixes RoomDB Unresolved reference 'instantiateImpl' in iosMain
