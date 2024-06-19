@@ -102,6 +102,10 @@ improved later:
 * [AndroidX Core Splashscreen](https://developer.android.com/jetpack/androidx/releases/core) - Apache 2.0 - Core splash screen
 * [AndroidX Security Crypto](https://developer.android.com/jetpack/androidx/releases/security) - Apache 2.0 - Security library for Android
 * [Jetpack Compose UI Tooling](https://developer.android.com/jetpack/compose/tooling) - Apache 2.0 - UI tooling for Jetpack Compose
+* [AndroidX Test Core KTX](https://developer.android.com/jetpack/androidx/releases/test) - Apache 2.0 - Core KTX library for AndroidX test
+* [AndroidX Room](https://developer.android.com/jetpack/androidx/releases/room) - Apache 2.0 - Room Database
+* [AndroidX SQLite Bundled](https://developer.android.com/jetpack/androidx/releases/sqlite) - Apache 2.0 - Bundled SQLite for AndroidX
+* [Robolectric](http://robolectric.org/) - Apache 2.0 - Unit testing framework for Android
 * [Ktor](https://ktor.io/) - Apache 2.0 - Framework for building asynchronous servers and clients in connected systems
 * [Kotlinx DateTime](https://github.com/Kotlin/kotlinx-datetime) - Apache 2.0 - A multiplatform Kotlin library for working with date and time
 * [Kotlinx Coroutines](https://github.com/Kotlin/kotlinx.coroutines) - Apache 2.0 - Libraries for Kotlin coroutines
@@ -118,12 +122,16 @@ improved later:
 * [AndroidX UI Automator](https://developer.android.com/training/testing/ui-automator) - Apache 2.0 - UI automation testing framework
 * [AndroidX Benchmark](https://developer.android.com/jetpack/androidx/releases/benchmark) - Apache 2.0 - Benchmarking library
 * [AndroidX Profile Installer](https://developer.android.com/jetpack/androidx/releases/profileinstaller) - Apache 2.0 - Install profiles for faster startup
+* [SLF4J](http://www.slf4j.org/) - MIT - Simple Logging Facade for Java
 * [Skiko](https://github.com/JetBrains/skiko) - Apache 2.0 - Kotlin Multiplatform bindings to Skia
 
 ### Plugins
 
 * [Android Application Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) - Google - Plugin for building Android applications
 * [Android Library Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) - Google - Plugin for building Android libraries
+* [KSP Plugin](https://github.com/google/ksp) - Google - Kotlin Symbol Processing API
+* [Android Test Plugin](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration) - Google - Plugin for Android test projects
+* [AndroidX Room Plugin](https://developer.android.com/jetpack/androidx/releases/room) - Google - Plugin for AndroidX Room
 * [Jetbrains Compose Plugin](https://github.com/JetBrains/compose-jb) - JetBrains - Plugin for Jetpack Compose
 * [Compose Compiler Plugin](https://developer.android.com/jetpack/compose) - JetBrains - Plugin for Jetpack Compose
 * [Kotlin Multiplatform Plugin](https://kotlinlang.org/docs/multiplatform.html) - JetBrains - Plugin for Kotlin Multiplatform projects
