@@ -90,11 +90,6 @@ kotlin {
     sourceSets {
         val desktopMain by getting
 
-        iosMain {
-            // Fixes RoomDB Unresolved reference 'instantiateImpl'
-            kotlin.srcDir("build/generated/ksp/metadata")
-        }
-
         androidMain.dependencies {
             // tooling.preview is causing crash
             implementation(libs.compose.ui.tooling)
@@ -138,8 +133,12 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.themedetector)
         }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
+        iosMain {
+            // Fixes RoomDB Unresolved reference 'instantiateImpl' in iosMain
+            kotlin.srcDir("build/generated/ksp/metadata")
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+            }
         }
 
         commonTest.dependencies {
@@ -359,11 +358,7 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    add("kspAndroid", libs.androidx.room.compiler)
     add("kspCommonMainMetadata", libs.androidx.room.compiler)
-//    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
-//    add("kspIosX64", libs.androidx.room.compiler)
-//    add("kspIosArm64", libs.androidx.room.compiler)
     implementation(libs.androidx.profileinstaller)
     "baselineProfile"(project(":baselineprofile"))
 }
