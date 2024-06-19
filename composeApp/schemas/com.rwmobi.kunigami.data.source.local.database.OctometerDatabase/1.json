@@ -1,0 +1,50 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "59163b4b144036ca0de8a4e70c54c8b0",
+    "entities": [
+      {
+        "tableName": "consumption",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`meter_serial` TEXT NOT NULL, `interval_start` INTEGER NOT NULL, `interval_end` INTEGER NOT NULL, `kwh_consumed` REAL NOT NULL, PRIMARY KEY(`meter_serial`, `interval_start`))",
+        "fields": [
+          {
+            "fieldPath": "meterSerial",
+            "columnName": "meter_serial",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intervalStart",
+            "columnName": "interval_start",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intervalEnd",
+            "columnName": "interval_end",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kWhConsumed",
+            "columnName": "kwh_consumed",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "meter_serial",
+            "interval_start"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '59163b4b144036ca0de8a4e70c54c8b0')"
+    ]
+  }
+}
