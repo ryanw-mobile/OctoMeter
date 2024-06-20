@@ -28,6 +28,7 @@ import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.ui.components.TagWithIcon
 import com.rwmobi.kunigami.ui.theme.getDimension
+import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.tariffs_available_from
 import kunigami.composeapp.generated.resources.tariffs_available_to
@@ -76,10 +77,12 @@ internal fun ProductFacts(
 
         Spacer(modifier = Modifier.size(size = dimension.grid_1))
 
-        val availableFromDate = productDetails.availableFrom.getLocalDateString()
-        val availableTo = productDetails.availableTo?.let {
-            stringResource(resource = Res.string.tariffs_available_to, it.getLocalDateString())
-        } ?: ""
+        val availableFromDate = productDetails.availability.start.getLocalDateString()
+        val availableTo = if (productDetails.availability.endInclusive != Instant.DISTANT_FUTURE) {
+            stringResource(resource = Res.string.tariffs_available_to, productDetails.availability.endInclusive.getLocalDateString())
+        } else {
+            ""
+        }
 
         Text(
             modifier = Modifier.fillMaxWidth(),

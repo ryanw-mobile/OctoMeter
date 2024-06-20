@@ -51,8 +51,7 @@ fun SingleProductApiResponse.toProductDetails(): ProductDetails {
             if (isRestricted) add(ProductFeature.RESTRICTED)
         }.toList(),
         term = term,
-        availableFrom = availableFrom,
-        availableTo = availableTo,
+        availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
         electricityTariffType = when {
             singleRegisterElectricityTariffs.isNotEmpty() -> ElectricityTariffType.SINGLE_REGISTER
             dualRegisterElectricityTariffs.isNotEmpty() -> ElectricityTariffType.DUAL_REGISTER
