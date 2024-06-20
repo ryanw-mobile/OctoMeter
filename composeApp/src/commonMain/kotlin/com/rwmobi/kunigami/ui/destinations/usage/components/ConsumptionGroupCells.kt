@@ -50,11 +50,11 @@ internal fun ConsumptionGroupCells(
             val item = partitionedItems.getOrNull(columnIndex)?.getOrNull(rowIndex)
             if (item != null) {
                 val label = when (presentationStyle) {
-                    ConsumptionPresentationStyle.DAY_HALF_HOURLY -> item.intervalStart.getLocalHHMMString()
-                    ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> item.intervalStart.getLocalDayOfWeekAndDayString()
-                    ConsumptionPresentationStyle.MONTH_WEEKS -> item.intervalStart.getLocalDayMonthString()
-                    ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> item.intervalStart.getLocalDayOfMonth().toString()
-                    ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> item.intervalStart.getLocalMonthString()
+                    ConsumptionPresentationStyle.DAY_HALF_HOURLY -> item.interval.start.getLocalHHMMString()
+                    ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> item.interval.start.getLocalDayOfWeekAndDayString()
+                    ConsumptionPresentationStyle.MONTH_WEEKS -> item.interval.start.getLocalDayMonthString()
+                    ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> item.interval.start.getLocalDayOfMonth().toString()
+                    ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> item.interval.start.getLocalMonthString()
                 }
                 IndicatorTextValueGridItem(
                     modifier = Modifier.weight(1f),

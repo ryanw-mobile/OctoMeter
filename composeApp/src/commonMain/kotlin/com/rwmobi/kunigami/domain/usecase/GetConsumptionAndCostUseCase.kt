@@ -92,7 +92,7 @@ class GetConsumptionAndCostUseCase(
                     ).fold(
                         onSuccess = { consumption ->
                             consumption.sortedBy {
-                                it.intervalStart
+                                it.interval.start
                             }.map {
                                 ConsumptionWithCost(
                                     consumption = it,
@@ -129,7 +129,7 @@ class GetConsumptionAndCostUseCase(
         ).fold(
             onSuccess = { consumption ->
                 consumption.sortedBy {
-                    it.intervalStart
+                    it.interval.start
                 }.map {
                     ConsumptionWithCost(
                         consumption = it,
@@ -178,8 +178,8 @@ class GetConsumptionAndCostUseCase(
         if (unitRates.isEmpty()) return null
 
         val effectiveUnitRate = unitRates.firstOrNull {
-            it.validity.start <= consumption.intervalStart &&
-                it.validity.endInclusive >= consumption.intervalEnd
+            it.validity.start <= consumption.interval.start &&
+                it.validity.endInclusive >= consumption.interval.endInclusive
         }
 
         return effectiveUnitRate?.let { rate ->

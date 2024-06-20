@@ -147,7 +147,7 @@ data class ConsumptionQueryFilter(
                 ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
                     var lastRateValue: Int? = null
                     consumptions.forEachIndexed { index, consumption ->
-                        val currentTime = consumption.intervalStart.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
+                        val currentTime = consumption.interval.start.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
                         if (currentTime != lastRateValue && currentTime % 2 == 0) {
                             put(
                                 key = index,
@@ -162,7 +162,7 @@ data class ConsumptionQueryFilter(
                     consumptions.forEachIndexed { index, consumption ->
                         put(
                             key = index,
-                            value = consumption.intervalStart.getLocalEnglishAbbreviatedDayOfWeekName(),
+                            value = consumption.interval.start.getLocalEnglishAbbreviatedDayOfWeekName(),
                         )
                     }
                 }
@@ -171,7 +171,7 @@ data class ConsumptionQueryFilter(
                     consumptions.forEachIndexed { index, consumption ->
                         put(
                             key = index,
-                            value = consumption.intervalStart.getLocalDayMonthString(),
+                            value = consumption.interval.start.getLocalDayMonthString(),
                         )
                     }
                 }
@@ -180,7 +180,7 @@ data class ConsumptionQueryFilter(
                     consumptions.forEachIndexed { index, consumption ->
                         put(
                             key = index,
-                            value = consumption.intervalStart.getLocalDayOfMonth().toString(),
+                            value = consumption.interval.start.getLocalDayOfMonth().toString(),
                         )
                     }
                 }
@@ -189,7 +189,7 @@ data class ConsumptionQueryFilter(
                     consumptions.forEachIndexed { index, consumption ->
                         put(
                             key = index,
-                            value = consumption.intervalStart.getLocalMonthString(),
+                            value = consumption.interval.start.getLocalMonthString(),
                         )
                     }
                 }
@@ -203,7 +203,7 @@ data class ConsumptionQueryFilter(
         return when (presentationStyle) {
             ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
                 consumptions
-                    .groupBy { it.intervalStart.getLocalDateString() }
+                    .groupBy { it.interval.start.getLocalDateString() }
                     .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
             }
 
@@ -227,13 +227,13 @@ data class ConsumptionQueryFilter(
 
             ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
                 consumptions
-                    .groupBy { it.intervalStart.getLocalMonthYearString() }
+                    .groupBy { it.interval.start.getLocalMonthYearString() }
                     .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
             }
 
             ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
                 consumptions
-                    .groupBy { it.intervalStart.getLocalYear() }
+                    .groupBy { it.interval.start.getLocalYear() }
                     .map { (date, items) -> ConsumptionGroupedCells(title = date.toString(), consumptions = items) }
             }
         }
@@ -247,8 +247,8 @@ data class ConsumptionQueryFilter(
                 consumptions.map { consumption ->
                     getString(
                         resource = Res.string.usage_chart_tooltip_range_kwh,
-                        consumption.intervalStart.getLocalHHMMString(),
-                        consumption.intervalEnd.getLocalHHMMString(),
+                        consumption.interval.start.getLocalHHMMString(),
+                        consumption.interval.start.getLocalHHMMString(),
                         consumption.kWhConsumed.toString(precision = 2),
                     )
                 }
@@ -258,7 +258,7 @@ data class ConsumptionQueryFilter(
                 consumptions.map { consumption ->
                     getString(
                         resource = Res.string.usage_chart_tooltip_spot_kwh,
-                        consumption.intervalStart.getLocalDateString(),
+                        consumption.interval.start.getLocalDateString(),
                         consumption.kWhConsumed.toString(precision = 2),
                     )
                 }
@@ -268,8 +268,8 @@ data class ConsumptionQueryFilter(
                 consumptions.map { consumption ->
                     getString(
                         resource = Res.string.usage_chart_tooltip_range_kwh,
-                        consumption.intervalStart.getLocalDayMonthString(),
-                        (consumption.intervalEnd - 1.nanoseconds).getLocalDayMonthString(),
+                        consumption.interval.start.getLocalDayMonthString(),
+                        (consumption.interval.endInclusive - 1.nanoseconds).getLocalDayMonthString(),
                         consumption.kWhConsumed.toString(precision = 2),
                     )
                 }
@@ -279,7 +279,7 @@ data class ConsumptionQueryFilter(
                 consumptions.map { consumption ->
                     getString(
                         resource = Res.string.usage_chart_tooltip_spot_kwh,
-                        consumption.intervalStart.getLocalDayMonthString(),
+                        consumption.interval.start.getLocalDayMonthString(),
                         consumption.kWhConsumed.toString(precision = 2),
                     )
                 }
@@ -289,7 +289,7 @@ data class ConsumptionQueryFilter(
                 consumptions.map { consumption ->
                     getString(
                         resource = Res.string.usage_chart_tooltip_spot_kwh,
-                        consumption.intervalStart.getLocalMonthYearString(),
+                        consumption.interval.start.getLocalMonthYearString(),
                         consumption.kWhConsumed.toString(precision = 2),
                     )
                 }

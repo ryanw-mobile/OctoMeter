@@ -93,7 +93,12 @@ class DemoRestApiRepository : RestApiRepository {
             var consumption = generateNormalDistribution(mean, standardDeviation)
             consumption = min(max(consumption, 0.05), 1.5) * intervalFactor
 
-            consumptionList.add(Consumption(consumption, intervalStart, intervalEnd))
+            consumptionList.add(
+                Consumption(
+                    kWhConsumed = consumption,
+                    interval = intervalStart..intervalEnd,
+                ),
+            )
             intervalStart = intervalEnd
         }
 

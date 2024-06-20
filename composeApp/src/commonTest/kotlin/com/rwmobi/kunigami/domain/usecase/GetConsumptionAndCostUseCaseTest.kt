@@ -58,18 +58,15 @@ class GetConsumptionAndCostUseCaseTest {
         val expectedConsumption = listOf(
             Consumption(
                 kWhConsumed = 0.113,
-                intervalStart = Instant.parse("2024-05-06T23:30:00Z"),
-                intervalEnd = Instant.parse("2024-05-07T00:00:00Z"),
+                interval = Instant.parse("2024-05-06T23:30:00Z")..Instant.parse("2024-05-07T00:00:00Z"),
             ),
             Consumption(
                 kWhConsumed = 0.58,
-                intervalStart = Instant.parse("2024-05-06T23:00:00Z"),
-                intervalEnd = Instant.parse("2024-05-06T23:30:00Z"),
+                interval = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:30:00Z"),
             ),
             Consumption(
                 kWhConsumed = 0.201,
-                intervalStart = Instant.parse("2024-05-06T22:30:00Z"),
-                intervalEnd = Instant.parse("2024-05-06T23:00:00Z"),
+                interval = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:00:00Z"),
             ),
         )
 
@@ -87,7 +84,7 @@ class GetConsumptionAndCostUseCaseTest {
         )
 
         assertTrue(result.isSuccess)
-        assertEquals(expectedConsumption.sortedBy { it.intervalStart }, result.getOrNull()?.map { it.consumption })
+        assertEquals(expectedConsumption.sortedBy { it.interval.start }, result.getOrNull()?.map { it.consumption })
     }
 
     @Test
@@ -168,18 +165,15 @@ class GetConsumptionAndCostUseCaseTest {
         val expectedConsumption = listOf(
             Consumption(
                 kWhConsumed = 0.113,
-                intervalStart = Instant.parse("2024-05-06T23:30:00Z"),
-                intervalEnd = Instant.parse("2024-05-07T00:00:00Z"),
+                interval = Instant.parse("2024-05-06T23:30:00Z")..Instant.parse("2024-05-07T00:00:00Z"),
             ),
             Consumption(
                 kWhConsumed = 0.58,
-                intervalStart = Instant.parse("2024-05-06T23:00:00Z"),
-                intervalEnd = Instant.parse("2024-05-06T23:30:00Z"),
+                interval = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:30:00Z"),
             ),
             Consumption(
                 kWhConsumed = 0.201,
-                intervalStart = Instant.parse("2024-05-06T22:30:00Z"),
-                intervalEnd = Instant.parse("2024-05-06T23:00:00Z"),
+                interval = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:00:00Z"),
             ),
         )
 
@@ -194,6 +188,6 @@ class GetConsumptionAndCostUseCaseTest {
         )
 
         assertTrue(result.isSuccess)
-        assertEquals(expectedConsumption.sortedBy { it.intervalStart }, result.getOrNull()?.map { it.consumption })
+        assertEquals(expectedConsumption.sortedBy { it.interval.start }, result.getOrNull()?.map { it.consumption })
     }
 }
