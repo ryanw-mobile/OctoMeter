@@ -87,7 +87,7 @@ internal fun AgileTariffCardAdaptive(
         shouldUseDarkTheme = shouldUseDarkTheme(),
     )
 
-    val countDownText = if (activeRate?.validTo != null) {
+    val countDownText = if (activeRate?.validity?.endInclusive != null) {
         stringResource(
             resource = Res.string.agile_expire_time,
             expireMinutes,
@@ -131,7 +131,7 @@ internal fun AgileTariffCardAdaptive(
         while (true) {
             val isActiveRateExpired =
                 (activeRate == null) ||
-                    (activeRate?.validTo?.compareTo(Clock.System.now()) ?: 1) <= 0
+                    (activeRate?.validity?.endInclusive?.compareTo(Clock.System.now()) ?: 1) <= 0
 
             if (isActiveRateExpired) {
                 activeRate =
@@ -139,7 +139,7 @@ internal fun AgileTariffCardAdaptive(
                 rateTrend = rateGroupedCells.getRateTrend(activeRate = activeRate)
             }
 
-            expireMillis = activeRate?.validTo?.let {
+            expireMillis = activeRate?.validity?.endInclusive?.let {
                 (it - Clock.System.now()).inWholeMilliseconds
             } ?: Clock.System.now().getNextHalfHourCountdownMillis()
 
@@ -288,8 +288,7 @@ private fun Preview() {
                         Rate(
                             vatExclusivePrice = 45.075,
                             vatInclusivePrice = 25.076,
-                            validFrom = Clock.System.now(),
-                            validTo = Instant.DISTANT_FUTURE,
+                            validity = Clock.System.now()..Instant.DISTANT_FUTURE,
                             paymentMethod = PaymentMethod.UNKNOWN,
                         ),
                     ),

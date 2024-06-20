@@ -51,7 +51,7 @@ internal fun RateGroupCells(
                         range = rateRange,
                         shouldUseDarkTheme = shouldUseDarkTheme(),
                     ),
-                    label = item.validFrom.getLocalHHMMString(),
+                    label = item.validity.start.getLocalHHMMString(),
                     value = item.vatInclusivePrice.roundToTwoDecimalPlaces()
                         .toString(precision = 2),
                 )

@@ -31,8 +31,7 @@ class RateTest {
         val rate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
-            validFrom = validFrom,
-            validTo = validTo,
+            validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val referencePoint = LocalDateTime(
@@ -66,8 +65,7 @@ class RateTest {
         val rate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
-            validFrom = validFrom,
-            validTo = validTo,
+            validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val referencePoint = LocalDateTime(
@@ -102,8 +100,7 @@ class RateTest {
         val rate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
-            validFrom = validFrom,
-            validTo = validTo,
+            validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val referencePoint = LocalDateTime(
@@ -129,8 +126,7 @@ class RateTest {
         val rate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
-            validFrom = validFrom,
-            validTo = Instant.DISTANT_FUTURE,
+            validity = validFrom..Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val referencePoint = LocalDateTime(
@@ -156,8 +152,7 @@ class RateTest {
         val rate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
-            validFrom = validFrom,
-            validTo = Instant.DISTANT_FUTURE,
+            validity = validFrom..Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val referencePoint = LocalDateTime(

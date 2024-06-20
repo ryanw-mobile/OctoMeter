@@ -178,8 +178,8 @@ class GetConsumptionAndCostUseCase(
         if (unitRates.isEmpty()) return null
 
         val effectiveUnitRate = unitRates.firstOrNull {
-            it.validFrom <= consumption.intervalStart &&
-                it.validTo >= consumption.intervalEnd
+            it.validity.start <= consumption.intervalStart &&
+                it.validity.endInclusive >= consumption.intervalEnd
         }
 
         return effectiveUnitRate?.let { rate ->

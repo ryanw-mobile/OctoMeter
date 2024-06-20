@@ -14,13 +14,13 @@ import kotlinx.datetime.Instant
 data class Rate(
     val vatExclusivePrice: Double,
     val vatInclusivePrice: Double,
-    val validFrom: Instant,
-    val validTo: Instant, // Caller should put Instant.DISTANT_FUTURE if API returns null
+    val validity: ClosedRange<Instant>, // Caller should end using Instant.DISTANT_FUTURE if API returns null
     val paymentMethod: PaymentMethod,
 ) {
     fun isActive(referencePoint: Instant): Boolean {
-        val isValidFrom = referencePoint >= validFrom
-        val isValidTo = referencePoint <= validTo
-        return isValidFrom && isValidTo
+//        val isValidFrom = referencePoint >= validity.start
+//        val isValidTo = referencePoint <= validity.endInclusive
+//        isValidFrom && isValidTo
+        return validity.contains(referencePoint)
     }
 }

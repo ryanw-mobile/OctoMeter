@@ -50,7 +50,7 @@ class GetStandardUnitRateUseCaseTest {
         assertTrue(result.isSuccess)
         val sortedRates = result.getOrThrow()
         assertEquals(rates.size, sortedRates.size)
-        assertEquals(rates.sortedBy { it.validFrom }, sortedRates)
+        assertEquals(rates.sortedBy { it.validity.start }, sortedRates)
     }
 
     @Test

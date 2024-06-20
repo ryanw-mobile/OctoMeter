@@ -223,7 +223,7 @@ class AgileViewModel(
         return buildMap {
             var lastRateValue: Int? = null
             rates.forEachIndexed { index, rate ->
-                val currentTime = rate.validFrom.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
+                val currentTime = rate.validity.start.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
                 if (currentTime != lastRateValue) {
                     put(key = index, value = currentTime.toString().padStart(2, '0'))
                     lastRateValue = currentTime
@@ -234,18 +234,18 @@ class AgileViewModel(
 
     private fun groupChartCells(rates: List<Rate>): List<RateGroup> {
         return rates
-            .groupBy { it.validFrom.getLocalDateString() }
+            .groupBy { it.validity.start.getLocalDateString() }
             .map { (date, items) -> RateGroup(title = date, rates = items) }
     }
 
     private fun generateChartToolTips(rates: List<Rate>): List<String> {
         return rates.map { rate ->
-            val validToString = if (rate.validTo != Instant.DISTANT_FUTURE) {
-                "- ${rate.validTo.getLocalHHMMString()}"
+            val validToString = if (rate.validity.endInclusive != Instant.DISTANT_FUTURE) {
+                "- ${rate.validity.endInclusive.getLocalHHMMString()}"
             } else {
                 ""
             }
-            val timeRange = rate.validFrom.getLocalHHMMString() + validToString
+            val timeRange = rate.validity.start.getLocalHHMMString() + validToString
             "$timeRange\n${rate.vatInclusivePrice.toString(precision = 2)}p"
         }
     }

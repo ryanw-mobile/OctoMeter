@@ -33,7 +33,7 @@ class GetStandardUnitRateUseCase(
                     period = period,
                 ).fold(
                     onSuccess = { rates ->
-                        rates.sortedBy { it.validFrom }
+                        rates.sortedBy { it.validity.start }
                     },
                     onFailure = { throwable ->
                         throw throwable
