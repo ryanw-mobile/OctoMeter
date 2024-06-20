@@ -152,7 +152,7 @@ class UsageViewModel(
         // TODO: In ticket #137 we'll handle multiple tariffs (and multiple rates) in queries other than half-hourly
         if (matchingTariffCodes?.isNotEmpty() == true) {
             // TODO: Simplified handling by only considering one latest tariff for now
-            val latestTariff = matchingTariffCodes.maxBy { agreement -> agreement.validTo }
+            val latestTariff = matchingTariffCodes.maxBy { agreement -> agreement.period.endInclusive }
             val tariffSummary = getTariffSummaryUseCase(tariffCode = latestTariff.tariffCode).getOrNull()
             _uiState.update { currentUiState ->
                 currentUiState.copy(

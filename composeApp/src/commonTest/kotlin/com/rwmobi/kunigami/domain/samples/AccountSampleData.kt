@@ -27,8 +27,7 @@ object AccountSampleData {
                 agreements = listOf(
                     Agreement(
                         tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
-                        validFrom = Clock.System.now(),
-                        validTo = Clock.System.now().plus(Duration.parse("365d")),
+                        period = Clock.System.now()..Clock.System.now().plus(Duration.parse("365d")),
                     ),
                 ),
             ),

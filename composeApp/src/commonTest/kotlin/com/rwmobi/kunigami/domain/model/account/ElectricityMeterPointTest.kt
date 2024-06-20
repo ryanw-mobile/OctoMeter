@@ -11,18 +11,15 @@ class ElectricityMeterPointTest {
     private val now = Clock.System.now()
     private val agreement1 = Agreement(
         tariffCode = "TARIFF1",
-        validFrom = now.minus(Duration.parse("90d")),
-        validTo = now.minus(Duration.parse("60d")),
+        period = now.minus(Duration.parse("90d"))..now.minus(Duration.parse("60d")),
     )
     private val agreement2 = Agreement(
         tariffCode = "TARIFF2",
-        validFrom = now.minus(Duration.parse("60d")),
-        validTo = now.minus(Duration.parse("30d")),
+        period = now.minus(Duration.parse("60d"))..now.minus(Duration.parse("30d")),
     )
     private val agreement3 = Agreement(
         tariffCode = "TARIFF3",
-        validFrom = now.minus(Duration.parse("30d")),
-        validTo = now.plus(Duration.parse("30d")),
+        period = now.minus(Duration.parse("30d"))..now.plus(Duration.parse("30d")),
     )
     private val meterPoint = ElectricityMeterPoint(
         mpan = "MPAN1",

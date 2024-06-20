@@ -156,8 +156,8 @@ class GetConsumptionAndCostUseCase(
     private suspend fun getUnitRates(agreements: List<Agreement>, period: ClosedRange<Instant>): List<Rate> {
         val unitRates = mutableListOf<Rate>()
         agreements.forEach { agreement ->
-            val effectiveQueryStartDate = maxOf(agreement.validFrom, period.start)
-            val effectiveQueryEndDate = minOf(agreement.validTo, period.endInclusive)
+            val effectiveQueryStartDate = maxOf(agreement.period.start, period.start)
+            val effectiveQueryEndDate = minOf(agreement.period.endInclusive, period.endInclusive)
             val productCode = TariffSummary.extractProductCode(tariffCode = agreement.tariffCode)
 
             unitRates.addAll(

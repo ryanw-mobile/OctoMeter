@@ -99,15 +99,15 @@ private fun TariffLayoutCompact(
 
         Spacer(modifier = Modifier.height(height = dimension.grid_2))
 
-        val tariffPeriod = if (agreement.validTo != Instant.DISTANT_FUTURE) {
+        val tariffPeriod = if (agreement.period.endInclusive != Instant.DISTANT_FUTURE) {
             stringResource(
                 resource = Res.string.account_tariff_end_date,
-                agreement.validTo.getLocalDateString(),
+                agreement.period.endInclusive.getLocalDateString(),
             )
         } else {
             stringResource(
                 resource = Res.string.account_tariff_start_date,
-                agreement.validFrom.getLocalDateString(),
+                agreement.period.start.getLocalDateString(),
             )
         }
 
@@ -214,15 +214,15 @@ private fun TariffLayoutWide(
 
             Spacer(modifier = Modifier.height(height = dimension.grid_2))
 
-            val tariffPeriod = if (agreement.validTo != Instant.DISTANT_FUTURE) {
+            val tariffPeriod = if (agreement.period.endInclusive != Instant.DISTANT_FUTURE) {
                 stringResource(
                     resource = Res.string.account_tariff_end_date,
-                    agreement.validTo.getLocalDateString(),
+                    agreement.period.endInclusive.getLocalDateString(),
                 )
             } else {
                 stringResource(
                     resource = Res.string.account_tariff_start_date,
-                    agreement.validFrom.getLocalDateString(),
+                    agreement.period.start.getLocalDateString(),
                 )
             }
 
