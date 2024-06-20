@@ -15,6 +15,7 @@ import com.rwmobi.kunigami.domain.model.product.ExitFeesType
 import com.rwmobi.kunigami.domain.model.product.TariffDetails
 import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
 import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import kotlinx.datetime.Instant
 
 fun SingleProductApiResponse.toTariff(tariffCode: String): TariffSummary {
     val tariffDetails = when {
@@ -43,8 +44,7 @@ fun SingleProductApiResponse.toTariff(tariffCode: String): TariffSummary {
         displayName = displayName,
         description = description,
         isVariable = isVariable,
-        availableFrom = availableFrom,
-        availableTo = availableTo,
+        availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
         tariffCode = rates.code,
         vatInclusiveUnitRate = rates.standardUnitRateIncVat?.roundToTwoDecimalPlaces() ?: throw IllegalArgumentException("unit rate not found for tariff $tariffCode"),
         vatInclusiveStandingCharge = rates.standingChargeIncVat.roundToTwoDecimalPlaces(),
