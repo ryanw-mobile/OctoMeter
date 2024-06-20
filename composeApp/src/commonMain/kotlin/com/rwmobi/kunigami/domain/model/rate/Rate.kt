@@ -18,9 +18,6 @@ data class Rate(
     val paymentMethod: PaymentMethod,
 ) {
     fun isActive(referencePoint: Instant): Boolean {
-//        val isValidFrom = referencePoint >= validity.start
-//        val isValidTo = referencePoint <= validity.endInclusive
-//        isValidFrom && isValidTo
         return validity.contains(referencePoint)
     }
 }
