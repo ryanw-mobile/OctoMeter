@@ -82,8 +82,7 @@ class GetConsumptionAndCostUseCaseTest {
         fakeRestApiRepository.setConsumptionResponse = Result.success(expectedConsumption)
 
         val result = getConsumptionAndCostUseCase(
-            periodFrom = fakePeriodFrom,
-            periodTo = fakePeriodTo,
+            period = fakePeriodFrom..fakePeriodTo,
             groupBy = groupBy,
         )
 
@@ -100,8 +99,7 @@ class GetConsumptionAndCostUseCaseTest {
 
         val exception = assertFailsWith<IllegalArgumentException> {
             getConsumptionAndCostUseCase(
-                periodFrom = fakePeriodFrom,
-                periodTo = fakePeriodTo,
+                period = fakePeriodFrom..fakePeriodTo,
                 groupBy = groupBy,
             ).getOrThrow()
         }
@@ -118,8 +116,7 @@ class GetConsumptionAndCostUseCaseTest {
 
         val exception = assertFailsWith<IllegalArgumentException> {
             getConsumptionAndCostUseCase(
-                periodFrom = fakePeriodFrom,
-                periodTo = fakePeriodTo,
+                period = fakePeriodFrom..fakePeriodTo,
                 groupBy = groupBy,
             ).getOrThrow()
         }
@@ -136,8 +133,7 @@ class GetConsumptionAndCostUseCaseTest {
 
         val exception = assertFailsWith<IllegalArgumentException> {
             getConsumptionAndCostUseCase(
-                periodFrom = fakePeriodFrom,
-                periodTo = fakePeriodTo,
+                period = fakePeriodFrom..fakePeriodTo,
                 groupBy = groupBy,
             ).getOrThrow()
         }
@@ -158,8 +154,7 @@ class GetConsumptionAndCostUseCaseTest {
 
         val exception = assertFailsWith<RuntimeException> {
             getConsumptionAndCostUseCase(
-                periodFrom = fakePeriodFrom,
-                periodTo = fakePeriodTo,
+                period = fakePeriodFrom..fakePeriodTo,
                 groupBy = groupBy,
             ).getOrThrow()
         }
@@ -194,8 +189,7 @@ class GetConsumptionAndCostUseCaseTest {
         fakeDemoRestApiRepository.setConsumptionResponse = Result.success(expectedConsumption)
 
         val result = getConsumptionAndCostUseCase(
-            periodFrom = fakePeriodFrom,
-            periodTo = fakePeriodTo,
+            period = fakePeriodFrom..fakePeriodTo,
             groupBy = groupBy,
         )
 

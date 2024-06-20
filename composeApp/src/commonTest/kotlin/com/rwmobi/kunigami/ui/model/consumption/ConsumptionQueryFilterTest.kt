@@ -123,7 +123,7 @@ class ConsumptionQueryFilterTest {
     fun `getConsumptionPeriodString should return correct string for WEEK_SEVEN_DAYS`() {
         val start = now.atStartOfDay()
         val end = now.atEndOfDay()
-        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.WEEK_SEVEN_DAYS, referencePoint = now, requestedStart = start, requestedEnd = end)
+        val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.WEEK_SEVEN_DAYS, referencePoint = now, requestedPeriod = start..end)
         assertEquals("${start.getLocalDateString().substringBefore(",")} - ${end.getLocalDateString()}", filter.getConsumptionPeriodString())
     }
 

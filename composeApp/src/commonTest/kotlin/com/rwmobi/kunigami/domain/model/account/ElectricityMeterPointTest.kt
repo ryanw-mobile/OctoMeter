@@ -47,7 +47,7 @@ class ElectricityMeterPointTest {
     fun `lookupAgreements should return agreements in effect within given date range`() {
         val validFrom = now.minus(Duration.parse("60d"))
         val validTo = now
-        val agreements = meterPoint.lookupAgreements(validFrom, validTo)
+        val agreements = meterPoint.lookupAgreements(period = validFrom..validTo)
         assertEquals(listOf(agreement2, agreement3), agreements)
     }
 
@@ -55,7 +55,7 @@ class ElectricityMeterPointTest {
     fun `lookupAgreements should return empty list if no agreements in effect within given date range`() {
         val validFrom = now.plus(Duration.parse("50d"))
         val validTo = now.plus(Duration.parse("50d"))
-        val agreements = meterPoint.lookupAgreements(validFrom, validTo)
+        val agreements = meterPoint.lookupAgreements(period = validFrom..validTo)
         assertTrue(agreements.isEmpty())
     }
 

@@ -44,8 +44,7 @@ class GetStandardUnitRateUseCaseTest {
         val result = getStandardUnitRateUseCase(
             productCode = "testProduct",
             tariffCode = "testTariff",
-            periodFrom = Instant.parse("2023-01-01T00:00:00Z"),
-            periodTo = Instant.parse("2023-01-04T00:00:00Z"),
+            period = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-01-04T00:00:00Z"),
         )
 
         assertTrue(result.isSuccess)
@@ -62,8 +61,7 @@ class GetStandardUnitRateUseCaseTest {
         val result = getStandardUnitRateUseCase(
             productCode = "testProduct",
             tariffCode = "testTariff",
-            periodFrom = Instant.parse("2023-01-01T00:00:00Z"),
-            periodTo = Instant.parse("2023-01-04T00:00:00Z"),
+            period = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-01-04T00:00:00Z"),
         )
 
         assertTrue(result.isFailure)
@@ -77,8 +75,7 @@ class GetStandardUnitRateUseCaseTest {
         val result = getStandardUnitRateUseCase(
             productCode = "testProduct",
             tariffCode = "testTariff",
-            periodFrom = Instant.parse("2023-01-01T00:00:00Z"),
-            periodTo = Instant.parse("2023-01-04T00:00:00Z"),
+            period = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-01-04T00:00:00Z"),
         )
 
         assertTrue(result.isSuccess)

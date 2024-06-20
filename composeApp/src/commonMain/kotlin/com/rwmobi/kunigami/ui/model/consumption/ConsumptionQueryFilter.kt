@@ -45,8 +45,7 @@ import kotlin.time.Duration.Companion.nanoseconds
 data class ConsumptionQueryFilter(
     val presentationStyle: ConsumptionPresentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
     val referencePoint: Instant = Clock.System.now(),
-    val requestedStart: Instant = Clock.System.now(),
-    val requestedEnd: Instant = Clock.System.now(),
+    val requestedPeriod: ClosedRange<Instant> = Clock.System.now()..Clock.System.now(),
 ) {
     companion object {
         fun calculateStartDate(referencePoint: Instant, presentationStyle: ConsumptionPresentationStyle): Instant {
@@ -144,7 +143,7 @@ data class ConsumptionQueryFilter(
     fun getConsumptionPeriodString(): String {
         return when (presentationStyle) {
             ConsumptionPresentationStyle.DAY_HALF_HOURLY -> "${referencePoint.getLocalEnglishAbbreviatedDayOfWeekName()}, ${referencePoint.getLocalDateString()}"
-            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> "${requestedStart.getLocalDateString().substringBefore(delimiter = ",")} - ${requestedEnd.getLocalDateString()}"
+            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> "${requestedPeriod.start.getLocalDateString().substringBefore(delimiter = ",")} - ${requestedPeriod.endInclusive.getLocalDateString()}"
             ConsumptionPresentationStyle.MONTH_WEEKS -> referencePoint.getLocalMonthYearString()
             ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> referencePoint.getLocalMonthYearString()
             ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> referencePoint.getLocalYear().toString()
@@ -305,8 +304,11 @@ data class ConsumptionQueryFilter(
      * We consider the end date for eligibility to make sure we show all available data.
      */
     fun canNavigateBackward(accountMoveInDate: Instant): Boolean {
-        val newreferencePoint = getBackwardreferencePoint()
-        val newRequestedEnd = calculateEndDate(referencePoint = newreferencePoint, presentationStyle = presentationStyle)
+        val newReferencePoint = getBackwardreferencePoint()
+        val newRequestedEnd = calculateEndDate(
+            referencePoint = newReferencePoint,
+            presentationStyle = presentationStyle,
+        )
         return newRequestedEnd >= accountMoveInDate
     }
 
@@ -318,15 +320,20 @@ data class ConsumptionQueryFilter(
             return null
         }
 
-        val newreferencePoint = getBackwardreferencePoint()
-        val newRequestedStart = calculateStartDate(referencePoint = newreferencePoint, presentationStyle = presentationStyle)
-        val newRequestedEnd = calculateEndDate(referencePoint = newreferencePoint, presentationStyle = presentationStyle)
+        val newReferencePoint = getBackwardreferencePoint()
+        val newRequestedStart = calculateStartDate(
+            referencePoint = newReferencePoint,
+            presentationStyle = presentationStyle,
+        )
+        val newRequestedEnd = calculateEndDate(
+            referencePoint = newReferencePoint,
+            presentationStyle = presentationStyle,
+        )
 
         return ConsumptionQueryFilter(
             presentationStyle = presentationStyle,
-            referencePoint = newreferencePoint,
-            requestedStart = newRequestedStart,
-            requestedEnd = newRequestedEnd,
+            referencePoint = newReferencePoint,
+            requestedPeriod = newRequestedStart..newRequestedEnd,
         )
     }
 
@@ -338,15 +345,20 @@ data class ConsumptionQueryFilter(
             return null
         }
 
-        val newreferencePoint = getForwardreferencePoint()
-        val newRequestedStart = calculateStartDate(referencePoint = newreferencePoint, presentationStyle = presentationStyle)
-        val newRequestedEnd = calculateEndDate(referencePoint = newreferencePoint, presentationStyle = presentationStyle)
+        val newReferencePoint = getForwardreferencePoint()
+        val newRequestedStart = calculateStartDate(
+            referencePoint = newReferencePoint,
+            presentationStyle = presentationStyle,
+        )
+        val newRequestedEnd = calculateEndDate(
+            referencePoint = newReferencePoint,
+            presentationStyle = presentationStyle,
+        )
 
         return ConsumptionQueryFilter(
             presentationStyle = presentationStyle,
-            referencePoint = newreferencePoint,
-            requestedStart = newRequestedStart,
-            requestedEnd = newRequestedEnd,
+            referencePoint = newReferencePoint,
+            requestedPeriod = newRequestedStart..newRequestedEnd,
         )
     }
 

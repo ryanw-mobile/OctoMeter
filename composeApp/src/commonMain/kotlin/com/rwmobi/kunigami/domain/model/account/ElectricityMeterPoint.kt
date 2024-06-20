@@ -35,12 +35,9 @@ data class ElectricityMeterPoint(
      * Note: previous agreement end day = new agreement start day
      * Returns empty list if no matching result
      */
-    fun lookupAgreements(
-        validFrom: Instant,
-        validTo: Instant,
-    ): List<Agreement> {
+    fun lookupAgreements(period: ClosedRange<Instant>): List<Agreement> {
         return agreements.filter { agreement ->
-            agreement.validFrom <= validTo && agreement.validTo > validFrom
+            agreement.validFrom <= period.endInclusive && agreement.validTo > period.start
         }
     }
 

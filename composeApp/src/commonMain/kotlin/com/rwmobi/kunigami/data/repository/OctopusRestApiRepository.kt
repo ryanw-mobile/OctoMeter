@@ -80,16 +80,15 @@ class OctopusRestApiRepository(
     override suspend fun getStandardUnitRates(
         productCode: String,
         tariffCode: String,
-        periodFrom: Instant?,
-        periodTo: Instant?,
+        period: ClosedRange<Instant>,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
             runCatching {
                 val apiResponse = productsEndpoint.getStandardUnitRates(
                     productCode = productCode,
                     tariffCode = tariffCode,
-                    periodFrom = periodFrom,
-                    periodTo = periodTo,
+                    periodFrom = period.start,
+                    periodTo = period.endInclusive,
                 )
                 apiResponse?.results?.map { it.toRate() } ?: emptyList()
             }.except<CancellationException, _>()
@@ -145,8 +144,7 @@ class OctopusRestApiRepository(
         apiKey: String,
         mpan: String,
         meterSerialNumber: String,
-        periodFrom: Instant?,
-        periodTo: Instant?,
+        period: ClosedRange<Instant>,
         orderBy: ConsumptionDataOrder,
         groupBy: ConsumptionTimeFrame,
     ): Result<List<Consumption>> {
@@ -155,8 +153,8 @@ class OctopusRestApiRepository(
                 val apiResponse = electricityMeterPointsEndpoint.getConsumption(
                     apiKey = apiKey,
                     mpan = mpan,
-                    periodFrom = periodFrom,
-                    periodTo = periodTo,
+                    periodFrom = period.start,
+                    periodTo = period.endInclusive,
                     meterSerialNumber = meterSerialNumber,
                     orderBy = orderBy.apiValue,
                     groupBy = groupBy.apiValue,

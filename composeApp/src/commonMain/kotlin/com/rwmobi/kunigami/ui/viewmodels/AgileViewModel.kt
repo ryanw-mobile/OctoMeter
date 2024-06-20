@@ -142,8 +142,7 @@ class AgileViewModel(
         getStandardUnitRateUseCase(
             productCode = agileProductCode,
             tariffCode = "E-1R-$agileProductCode-$region",
-            periodFrom = currentTime,
-            periodTo = periodTo,
+            period = currentTime..periodTo,
         ).fold(
             onSuccess = { rates ->
                 val rateRange = if (rates.isEmpty()) {
