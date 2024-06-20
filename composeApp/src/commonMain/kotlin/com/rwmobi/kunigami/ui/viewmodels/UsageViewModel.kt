@@ -190,7 +190,10 @@ class UsageViewModel(
                 val newConsumptionQueryFilter = ConsumptionQueryFilter(
                     presentationStyle = presentationStyle,
                     referencePoint = referencePoint,
-                    requestedPeriod = ConsumptionQueryFilter.calculateStartDate(referencePoint = referencePoint, presentationStyle = presentationStyle)..ConsumptionQueryFilter.calculateEndDate(referencePoint = referencePoint, presentationStyle = presentationStyle),
+                    requestedPeriod = ConsumptionQueryFilter.calculateQueryPeriod(
+                        referencePoint = referencePoint,
+                        presentationStyle = presentationStyle,
+                    ),
                 )
 
                 refresh(consumptionQueryFilter = newConsumptionQueryFilter)
