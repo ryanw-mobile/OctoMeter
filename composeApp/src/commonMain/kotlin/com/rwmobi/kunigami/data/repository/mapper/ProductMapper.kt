@@ -14,6 +14,7 @@ import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
+import kotlinx.datetime.Instant
 
 fun ProductDetailsDto.toProductSummary() = ProductSummary(
     code = code,
@@ -30,8 +31,7 @@ fun ProductDetailsDto.toProductSummary() = ProductSummary(
         if (isRestricted) add(ProductFeature.RESTRICTED)
     }.toList(),
     term = term,
-    availableFrom = availableFrom,
-    availableTo = availableTo,
+    availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
     brand = brand,
 )
 
@@ -51,8 +51,7 @@ fun SingleProductApiResponse.toProductDetails(): ProductDetails {
             if (isRestricted) add(ProductFeature.RESTRICTED)
         }.toList(),
         term = term,
-        availableFrom = availableFrom,
-        availableTo = availableTo,
+        availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
         electricityTariffType = when {
             singleRegisterElectricityTariffs.isNotEmpty() -> ElectricityTariffType.SINGLE_REGISTER
             dualRegisterElectricityTariffs.isNotEmpty() -> ElectricityTariffType.DUAL_REGISTER

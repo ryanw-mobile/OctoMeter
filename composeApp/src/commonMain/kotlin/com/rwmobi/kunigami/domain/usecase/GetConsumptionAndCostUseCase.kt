@@ -39,8 +39,7 @@ class GetConsumptionAndCostUseCase(
      * it will still return the consumption but with null costs.
      */
     suspend operator fun invoke(
-        periodFrom: Instant,
-        periodTo: Instant,
+        period: ClosedRange<Instant>,
         groupBy: ConsumptionTimeFrame,
     ): Result<List<ConsumptionWithCost>> {
         return withContext(dispatcher) {
@@ -48,8 +47,7 @@ class GetConsumptionAndCostUseCase(
                 val isDemoMode = userPreferencesRepository.isDemoMode()
                 if (isDemoMode) {
                     generateDemoResponse(
-                        periodFrom = periodFrom,
-                        periodTo = periodTo,
+                        period = period,
                         groupBy = groupBy,
                     )
                 } else {
@@ -75,13 +73,11 @@ class GetConsumptionAndCostUseCase(
                             // find the tariffs in the requested period
                             val agreements = getAgreements(
                                 electricityMeterPoint = account.getElectricityMeterPoint(mpan = mpan),
-                                periodFrom = periodFrom,
-                                periodTo = periodTo,
+                                period = period,
                             )
                             unitRates = getUnitRates(
                                 agreements = agreements,
-                                periodFrom = periodFrom,
-                                periodTo = periodTo,
+                                period = period,
                             )
                         }
                     }
@@ -90,14 +86,13 @@ class GetConsumptionAndCostUseCase(
                         apiKey = apiKey,
                         mpan = mpan,
                         meterSerialNumber = meterSerialNumber,
-                        periodFrom = periodFrom,
-                        periodTo = periodTo,
+                        period = period,
                         orderBy = ConsumptionDataOrder.PERIOD,
                         groupBy = groupBy,
                     ).fold(
                         onSuccess = { consumption ->
                             consumption.sortedBy {
-                                it.intervalStart
+                                it.interval.start
                             }.map {
                                 ConsumptionWithCost(
                                     consumption = it,
@@ -115,13 +110,12 @@ class GetConsumptionAndCostUseCase(
         }
     }
 
-    private suspend fun generateDemoResponse(periodFrom: Instant, periodTo: Instant, groupBy: ConsumptionTimeFrame): List<ConsumptionWithCost> {
+    private suspend fun generateDemoResponse(period: ClosedRange<Instant>, groupBy: ConsumptionTimeFrame): List<ConsumptionWithCost> {
         // Since the user profile is completely fake, we are able to assign a variable tariff covering the entire period for cost calculations
         val unitRates = FakeDemoUserProfile.flexibleOctopusRegionADirectDebit.getSelectedElectricityMeterPoint()?.agreements?.let { agreements ->
             getUnitRates(
                 agreements = agreements,
-                periodFrom = periodFrom,
-                periodTo = periodTo,
+                period = period,
             )
         } ?: emptyList()
 
@@ -129,14 +123,13 @@ class GetConsumptionAndCostUseCase(
             apiKey = "",
             mpan = "",
             meterSerialNumber = "",
-            periodFrom = periodFrom,
-            periodTo = periodTo,
+            period = period,
             orderBy = ConsumptionDataOrder.PERIOD,
             groupBy = groupBy,
         ).fold(
             onSuccess = { consumption ->
                 consumption.sortedBy {
-                    it.intervalStart
+                    it.interval.start
                 }.map {
                     ConsumptionWithCost(
                         consumption = it,
@@ -151,11 +144,8 @@ class GetConsumptionAndCostUseCase(
         )
     }
 
-    private fun getAgreements(electricityMeterPoint: ElectricityMeterPoint?, periodFrom: Instant, periodTo: Instant): List<Agreement> {
-        return electricityMeterPoint?.lookupAgreements(
-            validFrom = periodFrom,
-            validTo = periodTo,
-        ) ?: emptyList()
+    private fun getAgreements(electricityMeterPoint: ElectricityMeterPoint?, period: ClosedRange<Instant>): List<Agreement> {
+        return electricityMeterPoint?.lookupAgreements(period = period) ?: emptyList()
     }
 
     /***
@@ -163,19 +153,18 @@ class GetConsumptionAndCostUseCase(
      * It is not possible in the real world, plus the current implementation,
      * We only deal with half-hourly won't even have more than one tariffs.
      */
-    private suspend fun getUnitRates(agreements: List<Agreement>, periodFrom: Instant, periodTo: Instant): List<Rate> {
+    private suspend fun getUnitRates(agreements: List<Agreement>, period: ClosedRange<Instant>): List<Rate> {
         val unitRates = mutableListOf<Rate>()
         agreements.forEach { agreement ->
-            val effectiveQueryStartDate = maxOf(agreement.validFrom, periodFrom)
-            val effectiveQueryEndDate = minOf(agreement.validTo, periodTo)
+            val effectiveQueryStartDate = maxOf(agreement.period.start, period.start)
+            val effectiveQueryEndDate = minOf(agreement.period.endInclusive, period.endInclusive)
             val productCode = TariffSummary.extractProductCode(tariffCode = agreement.tariffCode)
 
             unitRates.addAll(
                 restApiRepository.getStandardUnitRates(
                     productCode = productCode!!,
                     tariffCode = agreement.tariffCode,
-                    periodFrom = effectiveQueryStartDate,
-                    periodTo = effectiveQueryEndDate,
+                    period = effectiveQueryStartDate..effectiveQueryEndDate,
                 ).getOrNull() ?: emptyList(),
             )
         }
@@ -189,8 +178,8 @@ class GetConsumptionAndCostUseCase(
         if (unitRates.isEmpty()) return null
 
         val effectiveUnitRate = unitRates.firstOrNull {
-            it.validFrom <= consumption.intervalStart &&
-                it.validTo >= consumption.intervalEnd
+            it.validity.start <= consumption.interval.start &&
+                it.validity.endInclusive >= consumption.interval.endInclusive
         }
 
         return effectiveUnitRate?.let { rate ->

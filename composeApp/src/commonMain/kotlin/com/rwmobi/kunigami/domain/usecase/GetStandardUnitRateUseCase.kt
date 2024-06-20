@@ -23,19 +23,17 @@ class GetStandardUnitRateUseCase(
     suspend operator fun invoke(
         productCode: String,
         tariffCode: String,
-        periodFrom: Instant,
-        periodTo: Instant,
+        period: ClosedRange<Instant>,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
             runCatching {
                 restApiRepository.getStandardUnitRates(
                     productCode = productCode,
                     tariffCode = tariffCode,
-                    periodFrom = periodFrom,
-                    periodTo = periodTo,
+                    period = period,
                 ).fold(
                     onSuccess = { rates ->
-                        rates.sortedBy { it.validFrom }
+                        rates.sortedBy { it.validity.start }
                     },
                     onFailure = { throwable ->
                         throw throwable

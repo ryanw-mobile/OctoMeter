@@ -41,8 +41,7 @@ class FakeRestApiRepository : RestApiRepository {
     override suspend fun getStandardUnitRates(
         productCode: String,
         tariffCode: String,
-        periodFrom: Instant?,
-        periodTo: Instant?,
+        period: ClosedRange<Instant>,
     ): Result<List<Rate>> {
         return setStandardUnitRatesResponse ?: throw RuntimeException("Fake result setStandardUnitRatesResponse not defined")
     }
@@ -76,8 +75,7 @@ class FakeRestApiRepository : RestApiRepository {
         apiKey: String,
         mpan: String,
         meterSerialNumber: String,
-        periodFrom: Instant?,
-        periodTo: Instant?,
+        period: ClosedRange<Instant>,
         orderBy: ConsumptionDataOrder,
         groupBy: ConsumptionTimeFrame,
     ): Result<List<Consumption>> {

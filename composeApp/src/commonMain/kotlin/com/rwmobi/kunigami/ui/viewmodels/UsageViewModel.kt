@@ -87,8 +87,7 @@ class UsageViewModel(
                 var newConsumptionQueryFilter = ConsumptionQueryFilter(
                     presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
                     referencePoint = referencePoint,
-                    requestedStart = referencePoint.atStartOfDay(),
-                    requestedEnd = referencePoint.atEndOfDay(),
+                    requestedPeriod = referencePoint.atStartOfDay()..referencePoint.atEndOfDay(),
                 )
 
                 // UIState comes with a default presentationStyle. We try to go backward 5 times hoping for some valid results
@@ -96,8 +95,7 @@ class UsageViewModel(
                 run loop@{
                     for (iteration in 0..3) {
                         getConsumptionAndCostUseCase(
-                            periodFrom = newConsumptionQueryFilter.requestedStart,
-                            periodTo = newConsumptionQueryFilter.requestedEnd,
+                            period = newConsumptionQueryFilter.requestedPeriod,
                             groupBy = newConsumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
                         ).fold(
                             onSuccess = { consumptions ->
@@ -147,15 +145,14 @@ class UsageViewModel(
 
         // If the query is over a period of time, it can have more than one tariffs
         val matchingTariffCodes = userProfile?.getSelectedElectricityMeterPoint()?.lookupAgreements(
-            validFrom = consumptionQueryFilter.requestedStart,
-            validTo = consumptionQueryFilter.requestedEnd,
+            period = consumptionQueryFilter.requestedPeriod,
         )
 
         // It is abnormal to expect we can get meter readings without any corresponding tariffs.
         // TODO: In ticket #137 we'll handle multiple tariffs (and multiple rates) in queries other than half-hourly
         if (matchingTariffCodes?.isNotEmpty() == true) {
             // TODO: Simplified handling by only considering one latest tariff for now
-            val latestTariff = matchingTariffCodes.maxBy { agreement -> agreement.validTo }
+            val latestTariff = matchingTariffCodes.maxBy { agreement -> agreement.period.endInclusive }
             val tariffSummary = getTariffSummaryUseCase(tariffCode = latestTariff.tariffCode).getOrNull()
             _uiState.update { currentUiState ->
                 currentUiState.copy(
@@ -164,8 +161,7 @@ class UsageViewModel(
             }
 
             getConsumptionAndCostUseCase(
-                periodFrom = consumptionQueryFilter.requestedStart,
-                periodTo = consumptionQueryFilter.requestedEnd,
+                period = consumptionQueryFilter.requestedPeriod,
                 groupBy = consumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
             ).fold(
                 onSuccess = { consumptions ->
@@ -194,8 +190,10 @@ class UsageViewModel(
                 val newConsumptionQueryFilter = ConsumptionQueryFilter(
                     presentationStyle = presentationStyle,
                     referencePoint = referencePoint,
-                    requestedStart = ConsumptionQueryFilter.calculateStartDate(referencePoint = referencePoint, presentationStyle = presentationStyle),
-                    requestedEnd = ConsumptionQueryFilter.calculateEndDate(referencePoint = referencePoint, presentationStyle = presentationStyle),
+                    requestedPeriod = ConsumptionQueryFilter.calculateQueryPeriod(
+                        referencePoint = referencePoint,
+                        presentationStyle = presentationStyle,
+                    ),
                 )
 
                 refresh(consumptionQueryFilter = newConsumptionQueryFilter)

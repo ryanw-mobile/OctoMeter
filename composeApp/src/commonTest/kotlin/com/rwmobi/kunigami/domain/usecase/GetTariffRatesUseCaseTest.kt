@@ -13,6 +13,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -45,8 +46,7 @@ class GetTariffRatesUseCaseTest {
             displayName = "Octopus 12M Fixed",
             vatInclusiveUnitRate = 99.257,
             vatInclusiveStandingCharge = 94.682,
-            availableFrom = Clock.System.now(),
-            availableTo = null,
+            availability = Clock.System.now()..Instant.DISTANT_FUTURE,
             isVariable = true,
         )
 

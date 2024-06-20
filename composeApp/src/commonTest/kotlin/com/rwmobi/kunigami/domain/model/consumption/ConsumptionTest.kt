@@ -22,14 +22,13 @@ class ConsumptionTest {
         val consumptionList = listOf(
             Consumption(
                 kWhConsumed = 10.0,
-                intervalStart = LocalDateTime(
+                interval = LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
                     dayOfMonth = 1,
                     hour = 0,
                     minute = 0,
-                ).toInstant(londonZone),
-                intervalEnd = LocalDateTime(
+                ).toInstant(londonZone)..LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
                     dayOfMonth = 1,
@@ -39,14 +38,13 @@ class ConsumptionTest {
             ),
             Consumption(
                 kWhConsumed = 15.0,
-                intervalStart = LocalDateTime(
+                interval = LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
                     dayOfMonth = 2,
                     hour = 0,
                     minute = 0,
-                ).toInstant(londonZone),
-                intervalEnd = LocalDateTime(
+                ).toInstant(londonZone)..LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
                     dayOfMonth = 2,
@@ -77,14 +75,13 @@ class ConsumptionTest {
         val consumptionList = listOf(
             Consumption(
                 kWhConsumed = 10.0,
-                intervalStart = LocalDateTime(
+                interval = LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
                     dayOfMonth = 1,
                     hour = 0,
                     minute = 0,
-                ).toInstant(londonZone),
-                intervalEnd = LocalDateTime(
+                ).toInstant(londonZone)..LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
                     dayOfMonth = 1,
@@ -94,14 +91,13 @@ class ConsumptionTest {
             ),
             Consumption(
                 kWhConsumed = 15.0,
-                intervalStart = LocalDateTime(
+                interval = LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
                     dayOfMonth = 2,
                     hour = 0,
                     minute = 0,
-                ).toInstant(londonZone),
-                intervalEnd = LocalDateTime(
+                ).toInstant(londonZone)..LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
                     dayOfMonth = 2,
@@ -111,14 +107,13 @@ class ConsumptionTest {
             ),
             Consumption(
                 kWhConsumed = 12.5,
-                intervalStart = LocalDateTime(
+                interval = LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
                     dayOfMonth = 3,
                     hour = 0,
                     minute = 0,
-                ).toInstant(londonZone),
-                intervalEnd = LocalDateTime(
+                ).toInstant(londonZone)..LocalDateTime(
                     year = 2023,
                     monthNumber = 5,
                     dayOfMonth = 3,

@@ -15,7 +15,6 @@ import kotlinx.datetime.Instant
 fun RateDto.toRate() = Rate(
     vatExclusivePrice = vatExclusivePrice,
     vatInclusivePrice = vatInclusivePrice,
-    validFrom = validFrom,
-    validTo = validTo ?: Instant.DISTANT_FUTURE,
+    validity = validFrom..(validTo ?: Instant.DISTANT_FUTURE),
     paymentMethod = PaymentMethod.fromValue(paymentMethod),
 )

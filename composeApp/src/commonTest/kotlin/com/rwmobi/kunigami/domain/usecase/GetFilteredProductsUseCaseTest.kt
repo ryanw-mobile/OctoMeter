@@ -46,8 +46,7 @@ class GetFilteredProductsUseCaseTest {
                 description = "Description 1",
                 features = listOf(ProductFeature.GREEN),
                 term = 12,
-                availableFrom = Instant.parse("2023-01-01T00:00:00Z"),
-                availableTo = Instant.parse("2023-12-31T23:59:59Z"),
+                availability = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-12-31T23:59:59Z"),
                 brand = "OCTOPUS_ENERGY",
             ),
             ProductSummary(
@@ -58,8 +57,7 @@ class GetFilteredProductsUseCaseTest {
                 description = "Description 2",
                 features = listOf(ProductFeature.VARIABLE),
                 term = 12,
-                availableFrom = Instant.parse("2023-01-01T00:00:00Z"),
-                availableTo = Instant.parse("2023-12-31T23:59:59Z"),
+                availability = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-12-31T23:59:59Z"),
                 brand = "OCTOPUS_ENERGY",
             ),
             ProductSummary(
@@ -70,8 +68,7 @@ class GetFilteredProductsUseCaseTest {
                 description = "Description 3",
                 features = listOf(ProductFeature.BUSINESS),
                 term = 12,
-                availableFrom = Instant.parse("2023-01-01T00:00:00Z"),
-                availableTo = Instant.parse("2023-12-31T23:59:59Z"),
+                availability = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-12-31T23:59:59Z"),
                 brand = "OCTOPUS_ENERGY",
             ),
             ProductSummary(
@@ -82,8 +79,7 @@ class GetFilteredProductsUseCaseTest {
                 description = "Description 4",
                 features = listOf(ProductFeature.PREPAY),
                 term = 12,
-                availableFrom = Instant.parse("2023-01-01T00:00:00Z"),
-                availableTo = Instant.parse("2023-12-31T23:59:59Z"),
+                availability = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-12-31T23:59:59Z"),
                 brand = "OTHER_BRAND",
             ),
         )
@@ -120,8 +116,7 @@ class GetFilteredProductsUseCaseTest {
                 description = "Description 1",
                 features = listOf(ProductFeature.BUSINESS),
                 term = 12,
-                availableFrom = Instant.parse("2023-01-01T00:00:00Z"),
-                availableTo = Instant.parse("2023-12-31T23:59:59Z"),
+                availability = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-12-31T23:59:59Z"),
                 brand = "OTHER_BRAND",
             ),
         )

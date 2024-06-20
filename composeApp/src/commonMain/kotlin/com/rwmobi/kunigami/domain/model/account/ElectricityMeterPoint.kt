@@ -24,8 +24,8 @@ data class ElectricityMeterPoint(
      */
     fun lookupAgreement(referencePoint: Instant = Clock.System.now()): Agreement? {
         return agreements.firstOrNull { agreement ->
-            val isAvailableFrom = agreement.validFrom <= referencePoint
-            val isAvailableTo = agreement.validTo > referencePoint
+            val isAvailableFrom = agreement.period.start <= referencePoint
+            val isAvailableTo = agreement.period.endInclusive > referencePoint
             isAvailableFrom && isAvailableTo
         }
     }
@@ -35,12 +35,9 @@ data class ElectricityMeterPoint(
      * Note: previous agreement end day = new agreement start day
      * Returns empty list if no matching result
      */
-    fun lookupAgreements(
-        validFrom: Instant,
-        validTo: Instant,
-    ): List<Agreement> {
+    fun lookupAgreements(period: ClosedRange<Instant>): List<Agreement> {
         return agreements.filter { agreement ->
-            agreement.validFrom <= validTo && agreement.validTo > validFrom
+            agreement.period.start <= period.endInclusive && agreement.period.endInclusive > period.start
         }
     }
 
@@ -50,7 +47,7 @@ data class ElectricityMeterPoint(
      */
     fun getLatestAgreement(): Agreement? {
         return agreements.maxByOrNull { agreement ->
-            agreement.validTo
+            agreement.period.endInclusive
         }
     }
 }

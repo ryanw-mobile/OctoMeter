@@ -8,7 +8,6 @@
 package com.rwmobi.kunigami.ui.model.rate
 
 import androidx.compose.runtime.Immutable
-import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 import kotlin.time.Duration
@@ -33,11 +32,11 @@ fun List<RateGroup>.findActiveRate(referencePoint: Instant): Rate? {
 
 fun List<RateGroup>.getRateTrend(activeRate: Rate?): RateTrend? {
     return activeRate?.let {
-        if (it.validTo == Instant.DISTANT_FUTURE) {
+        if (it.validity.endInclusive == Instant.DISTANT_FUTURE) {
             RateTrend.STEADY
         } else {
-            val nextRate = findActiveRate(referencePoint = it.validTo.plus(Duration.parse("5m")))
-            Logger.v("getRateTrend: ${it.vatInclusivePrice} to ${nextRate?.vatInclusivePrice}")
+            val nextRate = findActiveRate(referencePoint = it.validity.endInclusive.plus(Duration.parse("5m")))
+
             when {
                 nextRate == null -> null
                 it.vatInclusivePrice > nextRate.vatInclusivePrice -> RateTrend.DOWN

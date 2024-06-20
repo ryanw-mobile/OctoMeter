@@ -92,8 +92,7 @@ private fun ProductItemPreview() {
                 term = 12,
                 electricityTariffType = ElectricityTariffType.UNKNOWN,
                 electricityTariffs = mapOf(),
-                availableFrom = Instant.parse("2024-03-31T23:00:00Z"),
-                availableTo = null,
+                availability = Instant.parse("2024-03-31T23:00:00Z")..Instant.DISTANT_FUTURE,
                 brand = "OCTOPUS_ENERGY",
             ),
         )

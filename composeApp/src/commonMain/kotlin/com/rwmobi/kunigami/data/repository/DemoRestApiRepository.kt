@@ -43,7 +43,7 @@ class DemoRestApiRepository : RestApiRepository {
         throw NotImplementedError("Disabled in demo mode")
     }
 
-    override suspend fun getStandardUnitRates(productCode: String, tariffCode: String, periodFrom: Instant?, periodTo: Instant?): Result<List<Rate>> {
+    override suspend fun getStandardUnitRates(productCode: String, tariffCode: String, period: ClosedRange<Instant>): Result<List<Rate>> {
         throw NotImplementedError("Disabled in demo mode")
     }
 
@@ -68,19 +68,18 @@ class DemoRestApiRepository : RestApiRepository {
         apiKey: String,
         mpan: String,
         meterSerialNumber: String,
-        periodFrom: Instant?,
-        periodTo: Instant?,
+        period: ClosedRange<Instant>,
         orderBy: ConsumptionDataOrder,
         groupBy: ConsumptionTimeFrame,
     ): Result<List<Consumption>> {
         val consumptionList = mutableListOf<Consumption>()
-        var intervalStart = periodFrom!!
+        var intervalStart = period.start
         val mean = 0.2 // Midpoint of the range [0.110, 2.000]
         val standardDeviation = 0.2167 // Adjust to control the spread of values
         val timeZone = TimeZone.currentSystemDefault()
         val baseDurationMinutes = 30L // base duration in minutes for half-hourly intervals
 
-        while (intervalStart < periodTo!!) {
+        while (intervalStart < period.endInclusive) {
             val intervalEnd = when (groupBy) {
                 ConsumptionTimeFrame.HALF_HOURLY -> intervalStart.plus(DateTimePeriod(minutes = 30), timeZone)
                 ConsumptionTimeFrame.DAY -> intervalStart.plus(DateTimePeriod(days = 1), timeZone)
@@ -94,7 +93,12 @@ class DemoRestApiRepository : RestApiRepository {
             var consumption = generateNormalDistribution(mean, standardDeviation)
             consumption = min(max(consumption, 0.05), 1.5) * intervalFactor
 
-            consumptionList.add(Consumption(consumption, intervalStart, intervalEnd))
+            consumptionList.add(
+                Consumption(
+                    kWhConsumed = consumption,
+                    interval = intervalStart..intervalEnd,
+                ),
+            )
             intervalStart = intervalEnd
         }
 

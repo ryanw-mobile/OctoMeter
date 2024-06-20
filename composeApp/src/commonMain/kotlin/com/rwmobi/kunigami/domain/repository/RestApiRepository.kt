@@ -28,8 +28,7 @@ interface RestApiRepository {
     suspend fun getStandardUnitRates(
         productCode: String,
         tariffCode: String,
-        periodFrom: Instant? = null,
-        periodTo: Instant? = null,
+        period: ClosedRange<Instant>,
     ): Result<List<Rate>>
 
     suspend fun getStandingCharges(productCode: String, tariffCode: String): Result<List<Rate>>
@@ -39,8 +38,7 @@ interface RestApiRepository {
         apiKey: String,
         mpan: String,
         meterSerialNumber: String,
-        periodFrom: Instant? = null,
-        periodTo: Instant? = null,
+        period: ClosedRange<Instant>,
         orderBy: ConsumptionDataOrder = ConsumptionDataOrder.LATEST_FIRST,
         groupBy: ConsumptionTimeFrame = ConsumptionTimeFrame.HALF_HOURLY,
     ): Result<List<Consumption>>

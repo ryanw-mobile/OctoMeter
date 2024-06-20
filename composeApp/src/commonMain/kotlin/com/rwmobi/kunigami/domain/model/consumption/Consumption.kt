@@ -15,8 +15,7 @@ import kotlin.time.DurationUnit
 @Immutable
 data class Consumption(
     val kWhConsumed: Double,
-    val intervalStart: Instant,
-    val intervalEnd: Instant,
+    val interval: ClosedRange<Instant>,
 )
 
 /**
@@ -24,8 +23,8 @@ data class Consumption(
  * Note that an incomplete day with one record is counted as one whole day.
  */
 fun List<Consumption>.getConsumptionDaySpan(): Int {
-    val earliestStart = minOfOrNull { it.intervalStart }
-    val latestEnd = maxOfOrNull { it.intervalEnd }
+    val earliestStart = minOfOrNull { it.interval.start }
+    val latestEnd = maxOfOrNull { it.interval.endInclusive }
 
     return if (earliestStart != null && latestEnd != null) {
         val duration = latestEnd - earliestStart

@@ -21,18 +21,15 @@ class GenerateUsageInsightsUseCaseTest {
     private val tariffSummary = TariffSampleData.var221101
     private val consumption1 = Consumption(
         kWhConsumed = 10.0,
-        intervalStart = Instant.parse("2023-03-30T01:00:00Z"),
-        intervalEnd = Instant.parse("2023-03-30T01:30:00Z"),
+        interval = Instant.parse("2023-03-30T01:00:00Z")..Instant.parse("2023-03-30T01:30:00Z"),
     )
     private val consumption2 = Consumption(
         kWhConsumed = 15.0,
-        intervalStart = Instant.parse("2023-03-30T01:30:00Z"),
-        intervalEnd = Instant.parse("2023-03-30T02:00:00Z"),
+        interval = Instant.parse("2023-03-30T01:30:00Z")..Instant.parse("2023-03-30T02:00:00Z"),
     )
     private val consumption3 = Consumption(
         kWhConsumed = 15.0,
-        intervalStart = Instant.parse("2023-03-30T02:00:00Z"),
-        intervalEnd = Instant.parse("2023-03-30T02:30:00Z"),
+        interval = Instant.parse("2023-03-30T02:00:00Z")..Instant.parse("2023-03-30T02:30:00Z"),
     )
     private val consumptionWithCost1 = ConsumptionWithCost(consumption = consumption1, vatInclusiveCost = 45.0)
     private val consumptionWithCost2 = ConsumptionWithCost(consumption = consumption2, vatInclusiveCost = 5.0)

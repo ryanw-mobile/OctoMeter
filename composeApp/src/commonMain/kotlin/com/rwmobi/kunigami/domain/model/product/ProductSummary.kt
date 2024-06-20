@@ -19,7 +19,6 @@ data class ProductSummary(
     val description: String,
     val features: List<ProductFeature>,
     val term: Int?,
-    val availableFrom: Instant,
-    val availableTo: Instant?,
+    val availability: ClosedRange<Instant>,
     val brand: String,
 )

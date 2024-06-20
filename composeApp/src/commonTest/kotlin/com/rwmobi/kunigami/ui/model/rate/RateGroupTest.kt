@@ -37,8 +37,7 @@ class RateGroupTest {
         val rate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
-            validFrom = validFrom,
-            validTo = validTo,
+            validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val partitionedList = listOf(
@@ -81,8 +80,7 @@ class RateGroupTest {
         val rate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
-            validFrom = validFrom,
-            validTo = validTo,
+            validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val partitionedList = listOf(
@@ -117,8 +115,7 @@ class RateGroupTest {
         val rate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
-            validFrom = validFrom,
-            validTo = Instant.DISTANT_FUTURE,
+            validity = validFrom..Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val partitionedList = listOf(
@@ -153,8 +150,7 @@ class RateGroupTest {
         val rate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
-            validFrom = validFrom,
-            validTo = validTo,
+            validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val partitionedList = listOf(
@@ -189,15 +185,13 @@ class RateGroupTest {
         val rate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
-            validFrom = validFrom,
-            validTo = validTo,
+            validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val nextRate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 15.0,
-            validFrom = validTo.plus(Duration.parse("PT1S")),
-            validTo = Instant.DISTANT_FUTURE,
+            validity = validTo.plus(Duration.parse("PT1S"))..Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val partitionedList = listOf(
@@ -232,15 +226,13 @@ class RateGroupTest {
         val rate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
-            validFrom = validFrom,
-            validTo = validTo,
+            validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val nextRate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 10.0,
-            validFrom = validTo.plus(Duration.parse("PT1S")),
-            validTo = Instant.DISTANT_FUTURE,
+            validity = validTo.plus(Duration.parse("PT1S"))..Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val partitionedList = listOf(
@@ -275,15 +267,13 @@ class RateGroupTest {
         val rate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
-            validFrom = validFrom,
-            validTo = validTo,
+            validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val nextRate = Rate(
             vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
-            validFrom = validTo.plus(Duration.parse("PT1S")),
-            validTo = Instant.DISTANT_FUTURE,
+            validity = validTo.plus(Duration.parse("PT1S"))..Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val partitionedList = listOf(

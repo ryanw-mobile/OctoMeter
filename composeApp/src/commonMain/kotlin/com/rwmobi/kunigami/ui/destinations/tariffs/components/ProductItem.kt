@@ -232,8 +232,7 @@ private fun ProductItemPreview() {
                 description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
                 features = listOf(ProductFeature.VARIABLE, ProductFeature.GREEN),
                 term = 12,
-                availableFrom = Instant.parse("2024-03-31T23:00:00Z"),
-                availableTo = null,
+                availability = Instant.parse("2024-03-31T23:00:00Z")..Instant.DISTANT_FUTURE,
                 brand = "OCTOPUS_ENERGY",
             ),
         )
@@ -249,8 +248,7 @@ private fun ProductItemPreview() {
                 description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
                 features = listOf(ProductFeature.VARIABLE, ProductFeature.GREEN),
                 term = 12,
-                availableFrom = Instant.parse("2024-03-31T23:00:00Z"),
-                availableTo = null,
+                availability = Instant.parse("2024-03-31T23:00:00Z")..Instant.DISTANT_FUTURE,
                 brand = "OCTOPUS_ENERGY",
             ),
         )
