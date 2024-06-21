@@ -21,6 +21,7 @@ import kotlin.time.Duration
  * The purpose of this test is to make sure we never put real implementation to this demo repository.
  * Tests will fail if we provide more implementation than we need for demo mode
  */
+@Suppress("TooManyFunctions")
 class DemoRestApiRepositoryTest {
 
     private val demoRepository = DemoRestApiRepository()

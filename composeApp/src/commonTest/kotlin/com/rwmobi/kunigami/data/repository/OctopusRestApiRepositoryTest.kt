@@ -34,8 +34,9 @@ import kotlin.test.assertTrue
  * This can be an integration test.
  * We provide MockEngine to real Endpoints instead of mocking endpoints.
  */
+@Suppress("TooManyFunctions")
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalSerializationApi::class)
-class OctopusRestApiRepositoryTest() {
+class OctopusRestApiRepositoryTest {
 
     private lateinit var octopusRestApiRepository: OctopusRestApiRepository
 

@@ -32,6 +32,7 @@ import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.nanoseconds
 
+@Suppress("TooManyFunctions")
 class ConsumptionQueryFilterTest {
 
     private val timeZone = TimeZone.of("Europe/London")

@@ -14,6 +14,7 @@ import kotlinx.datetime.toInstant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Suppress("TooManyFunctions")
 class InstantExtensionsKtTest {
 
     private val timeZone = TimeZone.currentSystemDefault()
