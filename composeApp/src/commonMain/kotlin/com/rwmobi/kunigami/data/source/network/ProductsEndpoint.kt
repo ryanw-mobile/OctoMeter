@@ -37,6 +37,7 @@ class ProductsEndpoint(
         availableAt: String? = null,
         isGreen: Boolean? = null,
         isPrepay: Boolean? = null,
+        page: Int? = null,
     ): ProductsApiResponse? {
         return withContext(dispatcher) {
             val response = httpClient.get("$endpointUrl/") {
@@ -46,6 +47,7 @@ class ProductsEndpoint(
                 parameter("available_at", availableAt)
                 parameter("is_green", isGreen)
                 parameter("is_prepay", isPrepay)
+                parameter("page", page)
             }
 
             when (response.status) {
@@ -92,11 +94,13 @@ class ProductsEndpoint(
         tariffCode: String,
         periodFrom: Instant? = null,
         periodTo: Instant? = null,
+        page: Int? = null,
     ): PricesApiResponse? {
         return withContext(dispatcher) {
             val response = httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/standard-unit-rates") {
                 parameter("period_from", periodFrom?.toIso8601WithoutSeconds())
                 parameter("period_to", periodTo?.toIso8601WithoutSeconds())
+                parameter("page", page)
             }
 
             when (response.status) {
@@ -121,11 +125,13 @@ class ProductsEndpoint(
         tariffCode: String,
         periodFrom: Instant? = null,
         periodTo: Instant? = null,
+        page: Int? = null,
     ): PricesApiResponse? {
         return withContext(dispatcher) {
             val response = httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/standing-charges") {
                 parameter("period_from", periodFrom?.toIso8601WithoutSeconds())
                 parameter("period_to", periodTo?.toIso8601WithoutSeconds())
+                parameter("page", page)
             }
 
             when (response.status) {
@@ -149,11 +155,13 @@ class ProductsEndpoint(
         tariffCode: String,
         periodFrom: Instant? = null,
         periodTo: Instant? = null,
+        page: Int?,
     ): PricesApiResponse? {
         return withContext(dispatcher) {
             val response = httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/day-unit-rates") {
                 parameter("period_from", periodFrom?.toIso8601WithoutSeconds())
                 parameter("period_to", periodTo?.toIso8601WithoutSeconds())
+                parameter("page", page)
             }
 
             when (response.status) {
@@ -177,11 +185,13 @@ class ProductsEndpoint(
         tariffCode: String,
         periodFrom: Instant? = null,
         periodTo: Instant? = null,
+        page: Int? = null,
     ): PricesApiResponse? {
         return withContext(dispatcher) {
             val response = httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/night-unit-rates") {
                 parameter("period_from", periodFrom?.toIso8601WithoutSeconds())
                 parameter("period_to", periodTo?.toIso8601WithoutSeconds())
+                parameter("page", page)
             }
 
             when (response.status) {

@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.data.repository
 
+import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.data.repository.mapper.toAccount
 import com.rwmobi.kunigami.data.repository.mapper.toConsumption
 import com.rwmobi.kunigami.data.repository.mapper.toProductDetails
@@ -31,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Instant
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Duration
 
 class OctopusRestApiRepository(
     private val productsEndpoint: ProductsEndpoint,
@@ -153,13 +155,17 @@ class OctopusRestApiRepository(
                 val apiResponse = electricityMeterPointsEndpoint.getConsumption(
                     apiKey = apiKey,
                     mpan = mpan,
-                    periodFrom = period.start,
+                    periodFrom = period.start - Duration.parse("7d"),
                     periodTo = period.endInclusive,
                     meterSerialNumber = meterSerialNumber,
                     orderBy = orderBy.apiValue,
                     groupBy = groupBy.apiValue,
                 )
-                apiResponse?.results?.map { it.toConsumption() } ?: emptyList()
+                Logger.v("count: ${apiResponse?.count}, next = ${apiResponse?.next}")
+
+                apiResponse?.results?.map {
+                    it.toConsumption()
+                } ?: emptyList()
             }.except<CancellationException, _>()
         }
     }
