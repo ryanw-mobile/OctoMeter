@@ -46,6 +46,7 @@ fun SingleProductApiResponse.toTariff(tariffCode: String): TariffSummary {
         isVariable = isVariable,
         availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
         tariffCode = rates.code,
+        tariffActiveAt = tariffsActiveAt,
         vatInclusiveUnitRate = rates.standardUnitRateIncVat?.roundToTwoDecimalPlaces() ?: throw IllegalArgumentException("unit rate not found for tariff $tariffCode"),
         vatInclusiveStandingCharge = rates.standingChargeIncVat.roundToTwoDecimalPlaces(),
     )
