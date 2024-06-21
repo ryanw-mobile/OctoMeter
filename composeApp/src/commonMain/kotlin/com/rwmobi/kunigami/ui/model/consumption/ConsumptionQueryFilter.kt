@@ -10,7 +10,6 @@ package com.rwmobi.kunigami.ui.model.consumption
 import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.extensions.endOfMonth
 import com.rwmobi.kunigami.domain.extensions.endOfWeek
-import com.rwmobi.kunigami.domain.extensions.endOfYear
 import com.rwmobi.kunigami.domain.extensions.getDayRange
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.extensions.getLocalDayMonthString
@@ -20,9 +19,11 @@ import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.extensions.getLocalMonthString
 import com.rwmobi.kunigami.domain.extensions.getLocalMonthYearString
 import com.rwmobi.kunigami.domain.extensions.getLocalYear
+import com.rwmobi.kunigami.domain.extensions.getMonthRange
+import com.rwmobi.kunigami.domain.extensions.getWeekRange
+import com.rwmobi.kunigami.domain.extensions.getYearRange
 import com.rwmobi.kunigami.domain.extensions.startOfMonth
 import com.rwmobi.kunigami.domain.extensions.startOfWeek
-import com.rwmobi.kunigami.domain.extensions.startOfYear
 import com.rwmobi.kunigami.domain.extensions.toSystemDefaultLocalDateTime
 import com.rwmobi.kunigami.domain.extensions.toSystemDefaultTimeZoneInstant
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
@@ -59,7 +60,7 @@ data class ConsumptionQueryFilter(
                 }
 
                 ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
-                    localDateTime.startOfWeek()..localDateTime.endOfWeek()
+                    referencePoint.getWeekRange()
                 }
 
                 ConsumptionPresentationStyle.MONTH_WEEKS -> {
@@ -69,11 +70,11 @@ data class ConsumptionQueryFilter(
                 }
 
                 ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
-                    localDateTime.startOfMonth()..localDateTime.endOfMonth()
+                    referencePoint.getMonthRange()
                 }
 
                 ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
-                    localDateTime.startOfYear()..localDateTime.endOfYear()
+                    referencePoint.getYearRange()
                 }
             }
         }

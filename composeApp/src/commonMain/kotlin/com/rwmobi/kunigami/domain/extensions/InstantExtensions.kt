@@ -78,6 +78,21 @@ fun Instant.atEndOfDay(): Instant {
 
 fun Instant.getDayRange(): ClosedRange<Instant> = atStartOfDay()..atEndOfDay()
 
+fun Instant.getWeekRange(): ClosedRange<Instant> {
+    val localDateTime = toSystemDefaultLocalDateTime()
+    return localDateTime.startOfWeek()..localDateTime.endOfWeek()
+}
+
+fun Instant.getMonthRange(): ClosedRange<Instant> {
+    val localDateTime = toSystemDefaultLocalDateTime()
+    return localDateTime.startOfMonth()..localDateTime.endOfMonth()
+}
+
+fun Instant.getYearRange(): ClosedRange<Instant> {
+    val localDateTime = toSystemDefaultLocalDateTime()
+    return localDateTime.startOfYear()..localDateTime.endOfYear()
+}
+
 /***
  * Returns the number of milliseconds to the upcoming 00 or 30 minutes.
  * This is for recurrent background tasks.
