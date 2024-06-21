@@ -22,6 +22,7 @@ import com.rwmobi.kunigami.domain.usecase.GenerateUsageInsightsUseCase
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionAndCostUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffSummaryUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
+import com.rwmobi.kunigami.ui.destinations.usage.UsageScreenType
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
@@ -184,9 +185,12 @@ class UsageViewModel(
         }
     }
 
-    fun onSwitchPresentationStyle(presentationStyle: ConsumptionPresentationStyle) {
+    fun onSwitchPresentationStyle(
+        consumptionQueryFilter: ConsumptionQueryFilter,
+        presentationStyle: ConsumptionPresentationStyle,
+    ) {
         viewModelScope.launch(dispatcher) {
-            with(_uiState.value.consumptionQueryFilter) {
+            with(consumptionQueryFilter) {
                 val newConsumptionQueryFilter = ConsumptionQueryFilter(
                     presentationStyle = presentationStyle,
                     referencePoint = referencePoint,
@@ -201,31 +205,31 @@ class UsageViewModel(
         }
     }
 
-    fun onPreviousTimeFrame() {
+    fun onPreviousTimeFrame(consumptionQueryFilter: ConsumptionQueryFilter) {
         viewModelScope.launch(dispatcher) {
             val accountMoveInDate = _uiState.value.userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST
-            val consumptionQueryFilter = _uiState.value.consumptionQueryFilter.navigateBackward(accountMoveInDate = accountMoveInDate)
-            if (consumptionQueryFilter == null) {
+            val newConsumptionQueryFilter = consumptionQueryFilter.navigateBackward(accountMoveInDate = accountMoveInDate)
+            if (newConsumptionQueryFilter == null) {
                 Logger.e("UsageViewModel", message = { "onNavigateForward request declined." })
                 _uiState.update { currentUiState ->
                     currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException("Requested date is outside of the allowed range."))
                 }
             } else {
-                refresh(consumptionQueryFilter = consumptionQueryFilter)
+                refresh(consumptionQueryFilter = newConsumptionQueryFilter)
             }
         }
     }
 
-    fun onNextTimeFrame() {
+    fun onNextTimeFrame(consumptionQueryFilter: ConsumptionQueryFilter) {
         viewModelScope.launch(dispatcher) {
-            val consumptionQueryFilter = _uiState.value.consumptionQueryFilter.navigateForward()
-            if (consumptionQueryFilter == null) {
+            val newConsumptionQueryFilter = consumptionQueryFilter.navigateForward()
+            if (newConsumptionQueryFilter == null) {
                 Logger.e("UsageViewModel", message = { "onNavigateForward request declined." })
                 _uiState.update { currentUiState ->
                     currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException("Requested date is outside of the allowed range."))
                 }
             } else {
-                refresh(consumptionQueryFilter = consumptionQueryFilter)
+                refresh(consumptionQueryFilter = newConsumptionQueryFilter)
             }
         }
     }
@@ -334,6 +338,7 @@ class UsageViewModel(
                     labels = labels,
                     tooltips = toolTips,
                 ),
+                requestedScreenType = UsageScreenType.Chart,
                 isLoading = false,
             )
         }

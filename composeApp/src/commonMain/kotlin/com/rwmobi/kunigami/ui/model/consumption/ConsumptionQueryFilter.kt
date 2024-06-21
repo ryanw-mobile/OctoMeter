@@ -45,7 +45,7 @@ import kotlin.time.Duration.Companion.nanoseconds
 data class ConsumptionQueryFilter(
     val presentationStyle: ConsumptionPresentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
     val referencePoint: Instant = Clock.System.now(),
-    val requestedPeriod: ClosedRange<Instant> = Clock.System.now()..Clock.System.now(),
+    val requestedPeriod: ClosedRange<Instant> = calculateQueryPeriod(referencePoint = Clock.System.now(), ConsumptionPresentationStyle.DAY_HALF_HOURLY),
 ) {
     companion object {
         fun calculateQueryPeriod(referencePoint: Instant, presentationStyle: ConsumptionPresentationStyle): ClosedRange<Instant> {

@@ -42,7 +42,7 @@ data class UsageUIState(
     val requestedChartLayout: RequestedChartLayout = RequestedChartLayout.Portrait,
     val requestedAdaptiveLayout: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     val requestedUsageColumns: Int = 1,
-    val consumptionQueryFilter: ConsumptionQueryFilter = ConsumptionQueryFilter(),
+    val consumptionQueryFilter: ConsumptionQueryFilter? = null,
     val consumptionGroupedCells: List<ConsumptionGroupedCells> = emptyList(),
     val consumptionRange: ClosedFloatingPointRange<Double> = 0.0..0.0,
     val barChartData: BarChartData? = null,
