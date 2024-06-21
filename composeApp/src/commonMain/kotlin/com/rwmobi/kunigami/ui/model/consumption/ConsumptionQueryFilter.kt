@@ -8,8 +8,9 @@
 package com.rwmobi.kunigami.ui.model.consumption
 
 import androidx.compose.runtime.Immutable
-import com.rwmobi.kunigami.domain.extensions.atEndOfDay
-import com.rwmobi.kunigami.domain.extensions.atStartOfDay
+import com.rwmobi.kunigami.domain.extensions.endOfMonth
+import com.rwmobi.kunigami.domain.extensions.endOfWeek
+import com.rwmobi.kunigami.domain.extensions.endOfYear
 import com.rwmobi.kunigami.domain.extensions.getDayRange
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.extensions.getLocalDayMonthString
@@ -19,18 +20,18 @@ import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.extensions.getLocalMonthString
 import com.rwmobi.kunigami.domain.extensions.getLocalMonthYearString
 import com.rwmobi.kunigami.domain.extensions.getLocalYear
+import com.rwmobi.kunigami.domain.extensions.startOfMonth
+import com.rwmobi.kunigami.domain.extensions.startOfWeek
+import com.rwmobi.kunigami.domain.extensions.startOfYear
 import com.rwmobi.kunigami.domain.extensions.toSystemDefaultLocalDateTime
 import com.rwmobi.kunigami.domain.extensions.toSystemDefaultTimeZoneInstant
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import io.github.koalaplot.core.util.toString
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
-import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
@@ -58,70 +59,21 @@ data class ConsumptionQueryFilter(
                 }
 
                 ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
-                    val dayOfWeek = localDateTime.date.dayOfWeek
-                    val daysSinceSunday = dayOfWeek.isoDayNumber
-                    val startOfWeek = localDateTime.date
-                        .minus(value = daysSinceSunday - 1, unit = DateTimeUnit.DAY)
-                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
-                        .toSystemDefaultTimeZoneInstant().atStartOfDay()
-
-                    val daysUntilSunday = DayOfWeek.SUNDAY.isoDayNumber - dayOfWeek.isoDayNumber
-                    val endOfWeek = localDateTime.date
-                        .plus(daysUntilSunday, DateTimeUnit.DAY)
-                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
-                        .toSystemDefaultTimeZoneInstant().atEndOfDay()
-
-                    startOfWeek..endOfWeek
+                    localDateTime.startOfWeek()..localDateTime.endOfWeek()
                 }
 
                 ConsumptionPresentationStyle.MONTH_WEEKS -> {
-                    val startOfMonth = LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
-                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
-                    val startDayOfWeek = startOfMonth.date.dayOfWeek
-                    val daysSinceSunday = startDayOfWeek.isoDayNumber
-                    val startOfWeek = startOfMonth.date
-                        .minus(value = daysSinceSunday - 1, unit = DateTimeUnit.DAY)
-                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
-                        .toSystemDefaultTimeZoneInstant().atStartOfDay()
-
-                    val endOfMonth = LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
-                        .plus(1, DateTimeUnit.MONTH)
-                        .atTime(hour = 0, minute = 0)
-                        .toSystemDefaultTimeZoneInstant() - 1.nanoseconds
-                    val endDayOfWeek = endOfMonth.toSystemDefaultLocalDateTime().date.dayOfWeek
-                    val daysUntilSunday = DayOfWeek.SUNDAY.isoDayNumber - endDayOfWeek.isoDayNumber
-                    val endOfWeek = endOfMonth.toSystemDefaultLocalDateTime().date
-                        .plus(daysUntilSunday, DateTimeUnit.DAY)
-                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
-                        .toSystemDefaultTimeZoneInstant().atEndOfDay()
-
+                    val startOfWeek = localDateTime.startOfMonth().toSystemDefaultLocalDateTime().startOfWeek()
+                    val endOfWeek = localDateTime.endOfMonth().toSystemDefaultLocalDateTime().endOfWeek()
                     startOfWeek..endOfWeek
                 }
 
                 ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
-                    val startOfThisMonth = LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
-                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
-                        .toSystemDefaultTimeZoneInstant().atStartOfDay()
-
-                    val endOfThisMonth = LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
-                        .plus(1, DateTimeUnit.MONTH)
-                        .minus(1, DateTimeUnit.DAY)
-                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
-                        .toSystemDefaultTimeZoneInstant().atEndOfDay()
-
-                    startOfThisMonth..endOfThisMonth
+                    localDateTime.startOfMonth()..localDateTime.endOfMonth()
                 }
 
                 ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
-                    val startOfThisMonth = LocalDate(year = localDateTime.year, monthNumber = 1, dayOfMonth = 1)
-                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
-                        .toSystemDefaultTimeZoneInstant().atStartOfDay()
-
-                    val endOfThisYear = LocalDate(year = localDateTime.year, monthNumber = 12, dayOfMonth = 31)
-                        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
-                        .toSystemDefaultTimeZoneInstant().atEndOfDay()
-
-                    startOfThisMonth..endOfThisYear
+                    localDateTime.startOfYear()..localDateTime.endOfYear()
                 }
             }
         }
