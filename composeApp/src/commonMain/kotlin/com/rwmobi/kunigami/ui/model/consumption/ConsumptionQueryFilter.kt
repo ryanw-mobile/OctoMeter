@@ -10,6 +10,7 @@ package com.rwmobi.kunigami.ui.model.consumption
 import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.extensions.atEndOfDay
 import com.rwmobi.kunigami.domain.extensions.atStartOfDay
+import com.rwmobi.kunigami.domain.extensions.getDayRange
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.extensions.getLocalDayMonthString
 import com.rwmobi.kunigami.domain.extensions.getLocalDayOfMonth
@@ -53,7 +54,7 @@ data class ConsumptionQueryFilter(
 
             return when (presentationStyle) {
                 ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
-                    referencePoint.atStartOfDay()..referencePoint.atEndOfDay()
+                    referencePoint.getDayRange()
                 }
 
                 ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {

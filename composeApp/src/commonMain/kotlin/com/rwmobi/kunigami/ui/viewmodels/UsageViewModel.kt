@@ -12,8 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
-import com.rwmobi.kunigami.domain.extensions.atEndOfDay
-import com.rwmobi.kunigami.domain.extensions.atStartOfDay
+import com.rwmobi.kunigami.domain.extensions.getDayRange
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.model.consumption.getConsumptionRange
@@ -88,7 +87,7 @@ class UsageViewModel(
                 var newConsumptionQueryFilter = ConsumptionQueryFilter(
                     presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
                     referencePoint = referencePoint,
-                    requestedPeriod = referencePoint.atStartOfDay()..referencePoint.atEndOfDay(),
+                    requestedPeriod = referencePoint.getDayRange(),
                 )
 
                 // UIState comes with a default presentationStyle. We try to go backward 5 times hoping for some valid results

@@ -76,6 +76,8 @@ fun Instant.atEndOfDay(): Instant {
         .minus(value = 1, unit = DateTimeUnit.NANOSECOND)
 }
 
+fun Instant.getDayRange(): ClosedRange<Instant> = atStartOfDay()..atEndOfDay()
+
 /***
  * Returns the number of milliseconds to the upcoming 00 or 30 minutes.
  * This is for recurrent background tasks.
