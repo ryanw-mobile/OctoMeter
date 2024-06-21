@@ -12,20 +12,18 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 import kotlin.time.Duration
 
 /***
  * The purpose of this test is to make sure we never put real implementation to this demo repository.
- * Tests will fail if we provide more implementation that we need for demo mode
+ * Tests will fail if we provide more implementation than we need for demo mode
  */
 class DemoRestApiRepositoryTest {
 
     private val demoRepository = DemoRestApiRepository()
-    private val now = Clock.System.now()
-    private val start = now - Duration.parse("30d")
-    private val end = now
 
     @Test
     fun `getSimpleProductTariff should throw NotImplementedError`() = runTest {
@@ -50,8 +48,11 @@ class DemoRestApiRepositoryTest {
 
     @Test
     fun `getStandardUnitRates should throw NotImplementedError`() = runTest {
+        val now = Clock.System.now()
+        val start = now - Duration.parse("30d")
+
         assertFailsWith<NotImplementedError> {
-            demoRepository.getStandardUnitRates("productCode", "tariffCode", start..end, 1)
+            demoRepository.getStandardUnitRates("productCode", "tariffCode", start..now, 1)
         }
     }
 
@@ -84,12 +85,35 @@ class DemoRestApiRepositoryTest {
     }
 
     @Test
-    fun `getConsumption should generate random consumption data`() = runTest {
+    fun `getConsumption should generate random consumption data for HALF_HOURLY ConsumptionTimeFrame`() = runTest {
+        val now = Clock.System.now()
+        val start = now - Duration.parse("1d")
+
         val result = demoRepository.getConsumption(
             apiKey = "apiKey",
             mpan = "mpan",
             meterSerialNumber = "meterSerialNumber",
-            period = start..end,
+            period = start..now,
+            orderBy = ConsumptionDataOrder.PERIOD,
+            groupBy = ConsumptionTimeFrame.HALF_HOURLY,
+            requestedPage = 1,
+        )
+
+        assertTrue(result.isSuccess)
+        val consumptionList = result.getOrNull()
+        assertEquals(48, consumptionList!!.size)
+    }
+
+    @Test
+    fun `getConsumption should generate random consumption data for DAY ConsumptionTimeFrame`() = runTest {
+        val now = Clock.System.now()
+        val start = now - Duration.parse("30d")
+
+        val result = demoRepository.getConsumption(
+            apiKey = "apiKey",
+            mpan = "mpan",
+            meterSerialNumber = "meterSerialNumber",
+            period = start..now,
             orderBy = ConsumptionDataOrder.PERIOD,
             groupBy = ConsumptionTimeFrame.DAY,
             requestedPage = 1,
@@ -97,23 +121,60 @@ class DemoRestApiRepositoryTest {
 
         assertTrue(result.isSuccess)
         val consumptionList = result.getOrNull()
-        assertTrue(consumptionList?.isNotEmpty() == true)
+        assertEquals(30, consumptionList!!.size)
+    }
 
-        // Validate that consumption values are within expected range
-        consumptionList?.forEach { consumption ->
-            assertTrue(consumption.kWhConsumed >= 0.05)
-            assertTrue(consumption.kWhConsumed <= 1.5 * 24) // 24 hours in a day
-        }
+    @Test
+    fun `getConsumption should generate random consumption data for WEEK ConsumptionTimeFrame`() = runTest {
+        val now = Clock.System.now()
+        val start = now - Duration.parse("7d")
+
+        val result = demoRepository.getConsumption(
+            apiKey = "apiKey",
+            mpan = "mpan",
+            meterSerialNumber = "meterSerialNumber",
+            period = start..now,
+            orderBy = ConsumptionDataOrder.PERIOD,
+            groupBy = ConsumptionTimeFrame.WEEK,
+            requestedPage = 1,
+        )
+
+        assertTrue(result.isSuccess)
+        val consumptionList = result.getOrNull()
+        assertEquals(1, consumptionList!!.size)
+    }
+
+    @Test
+    fun `getConsumption should generate random consumption data for MONTH ConsumptionTimeFrame`() = runTest {
+        val now = Clock.System.now()
+        val start = now - Duration.parse("365d")
+
+        val result = demoRepository.getConsumption(
+            apiKey = "apiKey",
+            mpan = "mpan",
+            meterSerialNumber = "meterSerialNumber",
+            period = start..now,
+            orderBy = ConsumptionDataOrder.PERIOD,
+            groupBy = ConsumptionTimeFrame.MONTH,
+            requestedPage = 1,
+        )
+
+        assertTrue(result.isSuccess)
+        val consumptionList = result.getOrNull()
+        assertEquals(12, consumptionList!!.size)
     }
 
     @Test
     fun `getConsumption should throw NotImplementedError for QUARTER ConsumptionTimeFrame`() = runTest {
+        val now = Clock.System.now()
+        val start = now - Duration.parse("120d")
+
         assertFailsWith<NotImplementedError> {
             demoRepository.getConsumption(
                 apiKey = "apiKey",
                 mpan = "mpan",
                 meterSerialNumber = "meterSerialNumber",
-                period = start..end,
+                period = start..now,
                 orderBy = ConsumptionDataOrder.PERIOD,
                 groupBy = ConsumptionTimeFrame.QUARTER,
                 requestedPage = 1,
