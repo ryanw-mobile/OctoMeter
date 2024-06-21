@@ -15,4 +15,11 @@ data class ConsumptionApiResponse(
     val next: String?,
     val previous: String?,
     val results: List<ConsumptionDto>,
-)
+) {
+    fun getNextPageNumber(): Int? {
+        val regex = Regex("page=(\\d+)")
+        return next?.let {
+            regex.find(it)?.groups?.get(1)?.value?.toIntOrNull()
+        }
+    }
+}

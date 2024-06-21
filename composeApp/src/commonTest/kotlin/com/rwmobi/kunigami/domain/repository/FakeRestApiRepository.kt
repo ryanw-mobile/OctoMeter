@@ -28,7 +28,7 @@ class FakeRestApiRepository : RestApiRepository {
     }
 
     var setProductsResponse: Result<List<ProductSummary>>? = null
-    override suspend fun getProducts(): Result<List<ProductSummary>> {
+    override suspend fun getProducts(requestedPage: Int?): Result<List<ProductSummary>> {
         return setProductsResponse ?: throw RuntimeException("Fake result setProductsResponse not defined")
     }
 
@@ -42,6 +42,7 @@ class FakeRestApiRepository : RestApiRepository {
         productCode: String,
         tariffCode: String,
         period: ClosedRange<Instant>,
+        requestedPage: Int?,
     ): Result<List<Rate>> {
         return setStandardUnitRatesResponse ?: throw RuntimeException("Fake result setStandardUnitRatesResponse not defined")
     }
@@ -50,6 +51,7 @@ class FakeRestApiRepository : RestApiRepository {
     override suspend fun getStandingCharges(
         productCode: String,
         tariffCode: String,
+        requestedPage: Int?,
     ): Result<List<Rate>> {
         return setStandingChargesResponse ?: throw RuntimeException("Fake result setStandingChargesResponse not defined")
     }
@@ -58,6 +60,7 @@ class FakeRestApiRepository : RestApiRepository {
     override suspend fun getDayUnitRates(
         productCode: String,
         tariffCode: String,
+        requestedPage: Int?,
     ): Result<List<Rate>> {
         return setDayUnitRatesResponse ?: throw RuntimeException("Fake result setDayUnitRatesResponse not defined")
     }
@@ -66,6 +69,7 @@ class FakeRestApiRepository : RestApiRepository {
     override suspend fun getNightUnitRates(
         productCode: String,
         tariffCode: String,
+        requestedPage: Int?,
     ): Result<List<Rate>> {
         return setNightUnitRatesResponse ?: throw RuntimeException("Fake result setNightUnitRatesResponse not defined")
     }
@@ -78,6 +82,7 @@ class FakeRestApiRepository : RestApiRepository {
         period: ClosedRange<Instant>,
         orderBy: ConsumptionDataOrder,
         groupBy: ConsumptionTimeFrame,
+        requestedPage: Int?,
     ): Result<List<Consumption>> {
         return setConsumptionResponse ?: throw RuntimeException("Fake result setConsumptionResponse not defined")
     }

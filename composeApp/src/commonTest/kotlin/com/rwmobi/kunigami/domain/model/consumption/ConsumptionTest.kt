@@ -13,6 +13,7 @@ import kotlinx.datetime.toInstant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Suppress("TooManyFunctions")
 class ConsumptionTest {
 
     private val londonZone = TimeZone.of("Europe/London")

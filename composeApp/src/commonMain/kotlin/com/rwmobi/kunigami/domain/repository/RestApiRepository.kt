@@ -23,17 +23,34 @@ interface RestApiRepository {
         tariffCode: String,
     ): Result<TariffSummary>
 
-    suspend fun getProducts(): Result<List<ProductSummary>>
+    suspend fun getProducts(requestedPage: Int? = null): Result<List<ProductSummary>>
     suspend fun getProductDetails(productCode: String): Result<ProductDetails>
+
     suspend fun getStandardUnitRates(
         productCode: String,
         tariffCode: String,
         period: ClosedRange<Instant>,
+        requestedPage: Int? = null,
     ): Result<List<Rate>>
 
-    suspend fun getStandingCharges(productCode: String, tariffCode: String): Result<List<Rate>>
-    suspend fun getDayUnitRates(productCode: String, tariffCode: String): Result<List<Rate>>
-    suspend fun getNightUnitRates(productCode: String, tariffCode: String): Result<List<Rate>>
+    suspend fun getStandingCharges(
+        productCode: String,
+        tariffCode: String,
+        requestedPage: Int? = null,
+    ): Result<List<Rate>>
+
+    suspend fun getDayUnitRates(
+        productCode: String,
+        tariffCode: String,
+        requestedPage: Int? = null,
+    ): Result<List<Rate>>
+
+    suspend fun getNightUnitRates(
+        productCode: String,
+        tariffCode: String,
+        requestedPage: Int? = null,
+    ): Result<List<Rate>>
+
     suspend fun getConsumption(
         apiKey: String,
         mpan: String,
@@ -41,7 +58,11 @@ interface RestApiRepository {
         period: ClosedRange<Instant>,
         orderBy: ConsumptionDataOrder = ConsumptionDataOrder.LATEST_FIRST,
         groupBy: ConsumptionTimeFrame = ConsumptionTimeFrame.HALF_HOURLY,
+        requestedPage: Int? = null,
     ): Result<List<Consumption>>
 
-    suspend fun getAccount(apiKey: String, accountNumber: String): Result<Account?>
+    suspend fun getAccount(
+        apiKey: String,
+        accountNumber: String,
+    ): Result<Account?>
 }

@@ -10,6 +10,7 @@ import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Suppress("TooManyFunctions")
 class DoubleExtensionsKtTest {
 
     @Test

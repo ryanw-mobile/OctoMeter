@@ -26,6 +26,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.fail
 
+@Suppress("TooManyFunctions")
 class ElectricityMeterPointsEndpointTest {
     private val fakeBaseUrl = "https://some.fakeurl.com"
     private val fakeApiKey = "sk_live_xXxX1xx1xx1xx1XXxX1Xxx1x"
