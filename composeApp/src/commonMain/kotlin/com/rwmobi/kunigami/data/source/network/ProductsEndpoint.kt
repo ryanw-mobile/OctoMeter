@@ -155,7 +155,7 @@ class ProductsEndpoint(
         tariffCode: String,
         periodFrom: Instant? = null,
         periodTo: Instant? = null,
-        page: Int?,
+        page: Int? = null,
     ): PricesApiResponse? {
         return withContext(dispatcher) {
             val response = httpClient.get("$endpointUrl/$productCode/electricity-tariffs/$tariffCode/day-unit-rates") {

@@ -7,7 +7,6 @@
 
 package com.rwmobi.kunigami.data.repository
 
-import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.data.repository.mapper.toAccount
 import com.rwmobi.kunigami.data.repository.mapper.toConsumption
 import com.rwmobi.kunigami.data.repository.mapper.toProductDetails
@@ -32,7 +31,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Instant
 import kotlin.coroutines.cancellation.CancellationException
-import kotlin.time.Duration
 
 class OctopusRestApiRepository(
     private val productsEndpoint: ProductsEndpoint,
@@ -46,21 +44,31 @@ class OctopusRestApiRepository(
     ): Result<TariffSummary> {
         return withContext(dispatcher) {
             runCatching {
-                val apiResponse = productsEndpoint.getProduct(
-                    productCode = productCode,
-                )
-
+                val apiResponse = productsEndpoint.getProduct(productCode = productCode)
                 apiResponse?.toTariff(tariffCode = tariffCode) ?: throw IllegalArgumentException("Cannot parse tariff")
             }.except<CancellationException, _>()
         }
     }
 
-    // Don't forget that if it returns more than 100 records, you will have to look at page=2 for the subsequent entries.
-    override suspend fun getProducts(): Result<List<ProductSummary>> {
+    /***
+     * This API supports paging. Every page contains at most 100 records.
+     * Supply `requestedPage` to specify a page.
+     * Otherwise, this function will retrieve all possible data the backend can provide.
+     */
+    override suspend fun getProducts(
+        requestedPage: Int?,
+    ): Result<List<ProductSummary>> {
         return withContext(dispatcher) {
             runCatching {
-                val apiResponse = productsEndpoint.getProducts()
-                apiResponse?.results?.map { it.toProductSummary() } ?: emptyList()
+                val combinedList = mutableListOf<ProductSummary>()
+                var page: Int? = requestedPage
+                do {
+                    val apiResponse = productsEndpoint.getProducts(page = page)
+                    combinedList.addAll(apiResponse?.results?.map { it.toProductSummary() } ?: emptyList())
+                    page = apiResponse?.getNextPageNumber()
+                } while (page != null)
+
+                combinedList
             }.except<CancellationException, _>()
         }
     }
@@ -70,78 +78,136 @@ class OctopusRestApiRepository(
     ): Result<ProductDetails> {
         return withContext(dispatcher) {
             runCatching {
-                val apiResponse = productsEndpoint.getProduct(
-                    productCode = productCode,
-                )
-
+                val apiResponse = productsEndpoint.getProduct(productCode = productCode)
                 apiResponse?.toProductDetails() ?: throw IllegalArgumentException("Cannot parse product")
             }.except<CancellationException, _>()
         }
     }
 
+    /***
+     * This API supports paging. Every page contains at most 100 records.
+     * Supply `requestedPage` to specify a page.
+     * Otherwise, this function will retrieve all possible data the backend can provide.
+     */
     override suspend fun getStandardUnitRates(
         productCode: String,
         tariffCode: String,
         period: ClosedRange<Instant>,
+        requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
             runCatching {
-                val apiResponse = productsEndpoint.getStandardUnitRates(
-                    productCode = productCode,
-                    tariffCode = tariffCode,
-                    periodFrom = period.start,
-                    periodTo = period.endInclusive,
-                )
-                apiResponse?.results?.map { it.toRate() } ?: emptyList()
+                val combinedList = mutableListOf<Rate>()
+                var page: Int? = requestedPage
+                do {
+                    val apiResponse = productsEndpoint.getStandardUnitRates(
+                        productCode = productCode,
+                        tariffCode = tariffCode,
+                        periodFrom = period.start,
+                        periodTo = period.endInclusive,
+                        page = page,
+                    )
+                    combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
+                    page = apiResponse?.getNextPageNumber()
+                } while (page != null)
+
+                combinedList
             }.except<CancellationException, _>()
         }
     }
 
+    /***
+     * This API supports paging. Every page contains at most 100 records.
+     * Supply `requestedPage` to specify a page.
+     * Otherwise, this function will retrieve all possible data the backend can provide.
+     */
     override suspend fun getStandingCharges(
         productCode: String,
         tariffCode: String,
+        requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
             runCatching {
-                val apiResponse = productsEndpoint.getStandingCharges(
-                    productCode = productCode,
-                    tariffCode = tariffCode,
-                )
-                apiResponse?.results?.map { it.toRate() } ?: emptyList()
+                val combinedList = mutableListOf<Rate>()
+                var page: Int? = requestedPage
+                do {
+                    val apiResponse = productsEndpoint.getStandingCharges(
+                        productCode = productCode,
+                        tariffCode = tariffCode,
+                        page = page,
+                    )
+                    combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
+                    page = apiResponse?.getNextPageNumber()
+                } while (page != null)
+
+                combinedList
             }.except<CancellationException, _>()
         }
     }
 
+    /***
+     * This API supports paging. Every page contains at most 100 records.
+     * Supply `requestedPage` to specify a page.
+     * Otherwise, this function will retrieve all possible data the backend can provide.
+     */
     override suspend fun getDayUnitRates(
         productCode: String,
         tariffCode: String,
+        requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
             runCatching {
-                val apiResponse = productsEndpoint.getDayUnitRates(
-                    productCode = productCode,
-                    tariffCode = tariffCode,
-                )
-                apiResponse?.results?.map { it.toRate() } ?: emptyList()
+                val combinedList = mutableListOf<Rate>()
+                var page: Int? = requestedPage
+                do {
+                    val apiResponse = productsEndpoint.getDayUnitRates(
+                        productCode = productCode,
+                        tariffCode = tariffCode,
+                        page = page,
+                    )
+                    combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
+                    page = apiResponse?.getNextPageNumber()
+                } while (page != null)
+
+                combinedList
             }.except<CancellationException, _>()
         }
     }
 
+    /***
+     * This API supports paging. Every page contains at most 100 records.
+     * Supply `requestedPage` to specify a page.
+     * Otherwise, this function will retrieve all possible data the backend can provide.
+     */
     override suspend fun getNightUnitRates(
         productCode: String,
         tariffCode: String,
+        requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
             runCatching {
-                val apiResponse = productsEndpoint.getNightUnitRates(
-                    productCode = productCode,
-                    tariffCode = tariffCode,
-                )
-                apiResponse?.results?.map { it.toRate() } ?: emptyList()
+                val combinedList = mutableListOf<Rate>()
+                var page: Int? = requestedPage
+                do {
+                    val apiResponse = productsEndpoint.getNightUnitRates(
+                        productCode = productCode,
+                        tariffCode = tariffCode,
+                        page = page,
+                    )
+                    combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
+                    page = apiResponse?.getNextPageNumber()
+                } while (page != null)
+
+                combinedList
             }.except<CancellationException, _>()
         }
     }
 
+    /***
+     * This API supports paging. Every page contains at most 100 records.
+     * Supply `requestedPage` to specify a page.
+     * Otherwise, this function will retrieve all possible data the backend can provide.
+     */
     override suspend fun getConsumption(
         apiKey: String,
         mpan: String,
@@ -149,23 +215,28 @@ class OctopusRestApiRepository(
         period: ClosedRange<Instant>,
         orderBy: ConsumptionDataOrder,
         groupBy: ConsumptionTimeFrame,
+        requestedPage: Int?,
     ): Result<List<Consumption>> {
         return withContext(dispatcher) {
             runCatching {
-                val apiResponse = electricityMeterPointsEndpoint.getConsumption(
-                    apiKey = apiKey,
-                    mpan = mpan,
-                    periodFrom = period.start - Duration.parse("7d"),
-                    periodTo = period.endInclusive,
-                    meterSerialNumber = meterSerialNumber,
-                    orderBy = orderBy.apiValue,
-                    groupBy = groupBy.apiValue,
-                )
-                Logger.v("count: ${apiResponse?.count}, next = ${apiResponse?.next}")
+                val combinedList = mutableListOf<Consumption>()
+                var page: Int? = requestedPage
+                do {
+                    val apiResponse = electricityMeterPointsEndpoint.getConsumption(
+                        apiKey = apiKey,
+                        mpan = mpan,
+                        periodFrom = period.start,
+                        periodTo = period.endInclusive,
+                        meterSerialNumber = meterSerialNumber,
+                        orderBy = orderBy.apiValue,
+                        groupBy = groupBy.apiValue,
+                        page = page,
+                    )
+                    combinedList.addAll(apiResponse?.results?.map { it.toConsumption() } ?: emptyList())
+                    page = apiResponse?.getNextPageNumber()
+                } while (page != null)
 
-                apiResponse?.results?.map {
-                    it.toConsumption()
-                } ?: emptyList()
+                combinedList
             }.except<CancellationException, _>()
         }
     }

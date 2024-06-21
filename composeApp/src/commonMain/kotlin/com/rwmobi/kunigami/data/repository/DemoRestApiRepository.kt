@@ -35,7 +35,7 @@ class DemoRestApiRepository : RestApiRepository {
         throw NotImplementedError("Disabled in demo mode")
     }
 
-    override suspend fun getProducts(): Result<List<ProductSummary>> {
+    override suspend fun getProducts(requestedPage: Int?): Result<List<ProductSummary>> {
         throw NotImplementedError("Disabled in demo mode")
     }
 
@@ -43,19 +43,19 @@ class DemoRestApiRepository : RestApiRepository {
         throw NotImplementedError("Disabled in demo mode")
     }
 
-    override suspend fun getStandardUnitRates(productCode: String, tariffCode: String, period: ClosedRange<Instant>): Result<List<Rate>> {
+    override suspend fun getStandardUnitRates(productCode: String, tariffCode: String, period: ClosedRange<Instant>, requestedPage: Int?): Result<List<Rate>> {
         throw NotImplementedError("Disabled in demo mode")
     }
 
-    override suspend fun getStandingCharges(productCode: String, tariffCode: String): Result<List<Rate>> {
+    override suspend fun getStandingCharges(productCode: String, tariffCode: String, requestedPage: Int?): Result<List<Rate>> {
         throw NotImplementedError("Disabled in demo mode")
     }
 
-    override suspend fun getDayUnitRates(productCode: String, tariffCode: String): Result<List<Rate>> {
+    override suspend fun getDayUnitRates(productCode: String, tariffCode: String, requestedPage: Int?): Result<List<Rate>> {
         throw NotImplementedError("Disabled in demo mode")
     }
 
-    override suspend fun getNightUnitRates(productCode: String, tariffCode: String): Result<List<Rate>> {
+    override suspend fun getNightUnitRates(productCode: String, tariffCode: String, requestedPage: Int?): Result<List<Rate>> {
         throw NotImplementedError("Disabled in demo mode")
     }
 
@@ -71,6 +71,7 @@ class DemoRestApiRepository : RestApiRepository {
         period: ClosedRange<Instant>,
         orderBy: ConsumptionDataOrder,
         groupBy: ConsumptionTimeFrame,
+        requestedPage: Int?,
     ): Result<List<Consumption>> {
         val consumptionList = mutableListOf<Consumption>()
         var intervalStart = period.start
