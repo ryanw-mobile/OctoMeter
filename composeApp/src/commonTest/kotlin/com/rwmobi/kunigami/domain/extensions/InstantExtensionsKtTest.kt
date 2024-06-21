@@ -48,6 +48,13 @@ class InstantExtensionsKtTest {
     }
 
     @Test
+    fun `getDateRange should return correct range`() {
+        val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
+        val expected = instant.atStartOfDay()..instant.atEndOfDay()
+        assertEquals(expected, instant.getDayRange())
+    }
+
+    @Test
     fun `getLocalHHMMString should format correctly`() {
         val instant = LocalDateTime(year = 2023, monthNumber = 5, dayOfMonth = 1, hour = 10, minute = 45, second = 15).toInstant(timeZone)
         val expected = "10:45"

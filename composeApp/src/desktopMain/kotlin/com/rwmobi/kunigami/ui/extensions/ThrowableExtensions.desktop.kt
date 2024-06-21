@@ -7,7 +7,15 @@
 
 package com.rwmobi.kunigami.ui.extensions
 
-/***
- * This is needed to handle Ktor Darwin Engine exceptions which does not exist in CommonMain
- */
-actual fun Throwable.mapFromPlatform(): Throwable = this
+import io.ktor.util.network.UnresolvedAddressException
+import java.net.UnknownHostException
+
+actual fun Throwable.mapFromPlatform(): Throwable {
+    return when (this) {
+        is UnknownHostException -> {
+            UnresolvedAddressException()
+        }
+
+        else -> this
+    }
+}

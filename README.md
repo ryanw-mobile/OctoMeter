@@ -122,7 +122,7 @@ improved later:
 * [AndroidX UI Automator](https://developer.android.com/training/testing/ui-automator) - Apache 2.0 - UI automation testing framework
 * [AndroidX Benchmark](https://developer.android.com/jetpack/androidx/releases/benchmark) - Apache 2.0 - Benchmarking library
 * [AndroidX Profile Installer](https://developer.android.com/jetpack/androidx/releases/profileinstaller) - Apache 2.0 - Install profiles for faster startup
-* [SLF4J](http://www.slf4j.org/) - MIT - Simple Logging Facade for Java
+* [SLF4J](http://www.slf4j.org/) - MIT - Simple facade for logging systems.
 * [Skiko](https://github.com/JetBrains/skiko) - Apache 2.0 - Kotlin Multiplatform bindings to Skia
 
 ### Plugins
