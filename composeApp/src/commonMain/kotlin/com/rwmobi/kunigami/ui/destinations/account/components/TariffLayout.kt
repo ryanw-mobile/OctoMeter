@@ -124,87 +124,9 @@ internal fun TariffLayout(
         }
 
         when {
-            tariff.isSingleRate() -> {
-                tariff.vatInclusiveStandardUnitRate?.let { rate ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End,
-                    ) {
-                        Text(
-                            style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.End,
-                            text = stringResource(resource = Res.string.account_tariff_unit_rate),
-                        )
-
-                        Spacer(modifier = Modifier.width(dimension.grid_2))
-
-                        Text(
-                            style = MaterialTheme.typography.titleLarge,
-                            text = rate.toString(),
-                        )
-                    }
-                }
-            }
-
-            tariff.hasDualRates() -> {
-                tariff.vatInclusiveDayUnitRate?.let { rate ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End,
-                    ) {
-                        Text(
-                            style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.End,
-                            text = stringResource(resource = Res.string.account_tariff_day_unit_rate),
-                        )
-
-                        Spacer(modifier = Modifier.width(dimension.grid_2))
-
-                        Text(
-                            style = MaterialTheme.typography.titleLarge,
-                            text = rate.toString(),
-                        )
-                    }
-                }
-
-                tariff.vatInclusiveNightUnitRate?.let { rate ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End,
-                    ) {
-                        Text(
-                            style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.End,
-                            text = stringResource(resource = Res.string.account_tariff_night_unit_rate),
-                        )
-
-                        Spacer(modifier = Modifier.width(dimension.grid_2))
-
-                        Text(
-                            style = MaterialTheme.typography.titleLarge,
-                            text = rate.toString(),
-                        )
-                    }
-                }
-            }
-
-            tariff.isVariable -> {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.End,
-                    text = stringResource(resource = Res.string.tariffs_variable_rate),
-                )
-            }
+            tariff.isSingleRate() -> showSingleRate(tariff = tariff)
+            tariff.hasDualRates() -> showDualRates(tariff = tariff)
+            tariff.isVariable -> showVariableRate()
         }
 
         if (showDivider) {
@@ -215,4 +137,97 @@ internal fun TariffLayout(
             )
         }
     }
+}
+
+@Composable
+private fun showSingleRate(
+    tariff: Tariff,
+) {
+    val dimension = LocalDensity.current.getDimension()
+
+    tariff.vatInclusiveStandardUnitRate?.let { rate ->
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+        ) {
+            Text(
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.End,
+                text = stringResource(resource = Res.string.account_tariff_unit_rate),
+            )
+
+            Spacer(modifier = Modifier.width(dimension.grid_2))
+
+            Text(
+                style = MaterialTheme.typography.titleLarge,
+                text = rate.toString(),
+            )
+        }
+    }
+}
+
+@Composable
+private fun showDualRates(
+    tariff: Tariff,
+) {
+    val dimension = LocalDensity.current.getDimension()
+
+    tariff.vatInclusiveDayUnitRate?.let { rate ->
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+        ) {
+            Text(
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.End,
+                text = stringResource(resource = Res.string.account_tariff_day_unit_rate),
+            )
+
+            Spacer(modifier = Modifier.width(dimension.grid_2))
+
+            Text(
+                style = MaterialTheme.typography.titleLarge,
+                text = rate.toString(),
+            )
+        }
+    }
+
+    tariff.vatInclusiveNightUnitRate?.let { rate ->
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+        ) {
+            Text(
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.End,
+                text = stringResource(resource = Res.string.account_tariff_night_unit_rate),
+            )
+
+            Spacer(modifier = Modifier.width(dimension.grid_2))
+
+            Text(
+                style = MaterialTheme.typography.titleLarge,
+                text = rate.toString(),
+            )
+        }
+    }
+}
+
+@Composable
+private fun showVariableRate() {
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        style = MaterialTheme.typography.titleMedium,
+        textAlign = TextAlign.End,
+        text = stringResource(resource = Res.string.tariffs_variable_rate),
+    )
 }
