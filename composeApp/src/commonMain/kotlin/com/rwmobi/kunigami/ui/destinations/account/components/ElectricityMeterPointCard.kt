@@ -11,7 +11,6 @@ package com.rwmobi.kunigami.ui.destinations.account.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -71,30 +70,26 @@ internal fun ElectricityMeterPointCard(
             )
 
             if (meterPoint.agreements.isNotEmpty()) {
-                // TODO: Show all tariffs
-                meterPoint.agreements.forEach { agreement ->
-                    val tariff = tariffHistory.firstOrNull { it.tariffCode == agreement.tariffCode }
-                    if (tariff != null) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    start = dimension.grid_2,
-                                    end = dimension.grid_2,
-                                    bottom = dimension.grid_2,
-                                ),
-                        ) {
-                            TariffLayoutAdaptive(
+                meterPoint.agreements
+                    .sortedByDescending { it.period.start }
+                    .forEachIndexed { index, agreement ->
+                        val tariff = tariffHistory.firstOrNull { it.tariffCode == agreement.tariffCode }
+                        if (tariff != null) {
+                            TariffLayout(
                                 modifier = Modifier
                                     .fillMaxWidth()
+                                    .padding(
+                                        start = dimension.grid_2,
+                                        end = dimension.grid_2,
+                                        bottom = dimension.grid_1,
+                                    )
                                     .wrapContentHeight(),
                                 tariff = tariff,
                                 agreement = agreement,
-                                useWideLayout = requestedLayout !is AccountScreenLayout.Compact,
+                                showDivider = index < meterPoint.agreements.lastIndex,
                             )
                         }
                     }
-                }
             } else {
                 Column(
                     modifier = Modifier
