@@ -51,7 +51,7 @@ class SyncUserProfileUseCaseTest {
     fun `should return IncompleteCredentialsException when in demo mode`() = runTest {
         fakeUserPreferenceRepository.demoMode = true
 
-        val result = syncUserProfileUseCase.invoke()
+        val result = syncUserProfileUseCase()
 
         assertTrue(result.isFailure)
         assertIs<IncompleteCredentialsException>(result.exceptionOrNull())
