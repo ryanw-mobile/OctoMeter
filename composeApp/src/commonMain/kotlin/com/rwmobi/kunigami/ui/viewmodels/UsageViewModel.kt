@@ -16,10 +16,10 @@ import com.rwmobi.kunigami.domain.extensions.getDayRange
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.model.consumption.getConsumptionRange
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.usecase.GenerateUsageInsightsUseCase
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionAndCostUseCase
-import com.rwmobi.kunigami.domain.usecase.GetTariffSummaryUseCase
+import com.rwmobi.kunigami.domain.usecase.GetTariffUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.ui.destinations.usage.UsageScreenType
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
@@ -46,7 +46,7 @@ import kotlin.time.Duration
 
 class UsageViewModel(
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
-    private val getTariffSummaryUseCase: GetTariffSummaryUseCase,
+    private val getTariffUseCase: GetTariffUseCase,
     private val getConsumptionAndCostUseCase: GetConsumptionAndCostUseCase,
     private val generateUsageInsightsUseCase: GenerateUsageInsightsUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
@@ -71,12 +71,12 @@ class UsageViewModel(
                 val referencePoint = Clock.System.now() - Duration.parse(value = "1d")
                 val matchingTariffCode = userProfile.getSelectedElectricityMeterPoint()?.lookupAgreement(referencePoint = referencePoint)
                 val tariffSummary = matchingTariffCode?.let {
-                    getTariffSummaryUseCase(tariffCode = it.tariffCode).getOrNull()
+                    getTariffUseCase(tariffCode = it.tariffCode).getOrNull()
                 }
 
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
-                        tariffSummary = tariffSummary,
+                        tariff = tariffSummary,
                     )
                 }
 
@@ -100,7 +100,7 @@ class UsageViewModel(
                                 propagateInsightConsumptionsAndStopLoading(
                                     consumptionQueryFilter = newConsumptionQueryFilter,
                                     consumptionWithCost = consumptions,
-                                    tariffSummary = tariffSummary,
+                                    tariff = tariffSummary,
                                 )
                                 remainingRetryAttempt = 0 // Done
                             } else {
@@ -145,10 +145,10 @@ class UsageViewModel(
         if (matchingTariffCodes?.isNotEmpty() == true) {
             // TODO: Simplified handling by only considering one latest tariff for now
             val latestTariff = matchingTariffCodes.maxBy { agreement -> agreement.period.endInclusive }
-            val tariffSummary = getTariffSummaryUseCase(tariffCode = latestTariff.tariffCode).getOrNull()
+            val tariffSummary = getTariffUseCase(tariffCode = latestTariff.tariffCode).getOrNull()
             _uiState.update { currentUiState ->
                 currentUiState.copy(
-                    tariffSummary = tariffSummary,
+                    tariff = tariffSummary,
                 )
             }
 
@@ -160,7 +160,7 @@ class UsageViewModel(
                     propagateInsightConsumptionsAndStopLoading(
                         consumptionQueryFilter = consumptionQueryFilter,
                         consumptionWithCost = consumptions,
-                        tariffSummary = tariffSummary,
+                        tariff = tariffSummary,
                     )
                 },
                 onFailure = { throwable ->
@@ -284,7 +284,7 @@ class UsageViewModel(
     private suspend fun propagateInsightConsumptionsAndStopLoading(
         consumptionQueryFilter: ConsumptionQueryFilter,
         consumptionWithCost: List<ConsumptionWithCost>,
-        tariffSummary: TariffSummary?,
+        tariff: Tariff?,
     ) {
         val consumptions = consumptionWithCost.map { it.consumption }
         val consumptionRange = consumptions.getConsumptionRange()
@@ -303,7 +303,7 @@ class UsageViewModel(
         }
 
         val insights = generateUsageInsightsUseCase(
-            tariffSummary = tariffSummary,
+            tariff = tariff,
             consumptionWithCost = consumptionWithCost,
         )
 

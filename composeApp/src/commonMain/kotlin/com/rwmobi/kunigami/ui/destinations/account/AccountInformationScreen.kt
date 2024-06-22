@@ -144,7 +144,7 @@ internal fun AccountInformationScreen(
                     selectedMpan = uiState.userProfile.selectedMpan,
                     selectedMeterSerialNumber = uiState.userProfile.selectedMeterSerialNumber,
                     meterPoint = meterPoint,
-                    tariffSummary = uiState.tariffSummary,
+                    tariffHistory = uiState.userProfile.tariffs,
                     requestedLayout = uiState.requestedLayout,
                     onMeterSerialNumberSelected = uiEvent.onMeterSerialNumberSelected,
                     onReloadTariff = uiEvent.onRefresh,
@@ -196,8 +196,8 @@ private fun Preview() {
                         selectedMpan = "1200000345678",
                         selectedMeterSerialNumber = "11A1234567",
                         account = AccountSamples.accountTwoElectricityMeterPoint,
+                        tariffs = listOf(TariffSamples.agileFlex221125),
                     ),
-                    tariffSummary = TariffSamples.agileFlex221125,
                     errorMessages = listOf(),
                 ),
                 uiEvent = AccountUIEvent(
@@ -229,8 +229,8 @@ private fun ErrorPreview() {
                     selectedMpan = "1200000345678",
                     selectedMeterSerialNumber = "11A1234567",
                     account = AccountSamples.account928,
+                    tariffs = listOf(TariffSamples.agileFlex221125),
                 ),
-                tariffSummary = TariffSamples.agileFlex221125,
                 errorMessages = listOf(),
             ),
             uiEvent = AccountUIEvent(

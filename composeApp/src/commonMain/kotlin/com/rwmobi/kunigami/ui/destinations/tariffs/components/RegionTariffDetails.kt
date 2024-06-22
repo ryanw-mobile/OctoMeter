@@ -22,10 +22,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.product.ExitFeesType
-import com.rwmobi.kunigami.domain.model.product.TariffDetails
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.LabelValueRow
+import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.day_unit_rate
@@ -45,7 +46,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 internal fun RegionTariffDetails(
     modifier: Modifier,
-    tariffDetails: TariffDetails,
+    tariff: Tariff,
 ) {
     val localDensity = LocalDensity.current
     val dimension = localDensity.getDimension()
@@ -54,7 +55,7 @@ internal fun RegionTariffDetails(
         modifier = modifier.wrapContentHeight(),
         verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
     ) {
-        with(tariffDetails) {
+        with(tariff) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.titleLarge,
@@ -165,18 +166,7 @@ private fun Preview() {
     CommonPreviewSetup {
         RegionTariffDetails(
             modifier = Modifier.fillMaxSize(),
-            tariffDetails = TariffDetails(
-                tariffPaymentTerm = TariffPaymentTerm.DIRECT_DEBIT_MONTHLY,
-                tariffCode = "Sample Tariff Code",
-                vatInclusiveStandingCharge = 46.860,
-                vatInclusiveOnlineDiscount = 19.812,
-                vatInclusiveDualFuelDiscount = 55.008,
-                exitFeesType = ExitFeesType.UNKNOWN,
-                vatInclusiveExitFees = 17.172,
-                vatInclusiveStandardUnitRate = 13.25,
-                vatInclusiveDayUnitRate = 12.24,
-                vatInclusiveNightUnitRate = 16.43,
-            ),
+            tariff = TariffSamples.agileFlex221125,
         )
     }
 }

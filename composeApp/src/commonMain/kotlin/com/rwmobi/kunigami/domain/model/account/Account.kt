@@ -34,6 +34,16 @@ data class Account(
         }?.getLatestAgreement()?.tariffCode
     }
 
+    fun getTariffHistory(mpan: String?): List<String> {
+        if (mpan == null) return emptyList()
+
+        return electricityMeterPoints.find {
+            it.mpan == mpan
+        }?.agreements?.map {
+            it.tariffCode
+        } ?: emptyList()
+    }
+
     fun getDefaultMpan(): String? {
         return electricityMeterPoints.getOrNull(0)?.mpan
     }

@@ -14,7 +14,7 @@ import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
@@ -158,7 +158,7 @@ class GetConsumptionAndCostUseCase(
         agreements.forEach { agreement ->
             val effectiveQueryStartDate = maxOf(agreement.period.start, period.start)
             val effectiveQueryEndDate = minOf(agreement.period.endInclusive, period.endInclusive)
-            val productCode = TariffSummary.extractProductCode(tariffCode = agreement.tariffCode)
+            val productCode = Tariff.extractProductCode(tariffCode = agreement.tariffCode)
 
             unitRates.addAll(
                 restApiRepository.getStandardUnitRates(

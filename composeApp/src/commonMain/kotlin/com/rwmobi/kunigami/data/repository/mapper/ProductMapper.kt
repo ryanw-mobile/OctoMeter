@@ -57,13 +57,20 @@ fun SingleProductApiResponse.toProductDetails(): ProductDetails {
             dualRegisterElectricityTariffs.isNotEmpty() -> ElectricityTariffType.DUAL_REGISTER
             else -> ElectricityTariffType.UNKNOWN
         },
+        // TODO: This is not a very good implementation - Need to refactor when support dual rates
         electricityTariffs = when {
             singleRegisterElectricityTariffs.isNotEmpty() -> singleRegisterElectricityTariffs.mapNotNull { (key, value) ->
-                value.toTariffDetails()?.let { key to it }
+                val tariffCode = value.varying?.code ?: value.directDebitMonthly?.code
+                tariffCode?.let {
+                    key to toTariff(tariffCode = tariffCode)
+                }
             }.toMap()
 
             dualRegisterElectricityTariffs.isNotEmpty() -> dualRegisterElectricityTariffs.mapNotNull { (key, value) ->
-                value.toTariffDetails()?.let { key to it }
+                val tariffCode = value.varying?.code ?: value.directDebitMonthly?.code
+                tariffCode?.let {
+                    key to toTariff(tariffCode = tariffCode)
+                }
             }.toMap()
 
             else -> null

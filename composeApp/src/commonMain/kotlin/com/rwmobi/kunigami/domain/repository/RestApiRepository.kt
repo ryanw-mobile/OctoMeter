@@ -13,15 +13,14 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 
 interface RestApiRepository {
-    suspend fun getSimpleProductTariff(
-        productCode: String,
+    suspend fun getTariff(
         tariffCode: String,
-    ): Result<TariffSummary>
+    ): Result<Tariff>
 
     suspend fun getProducts(requestedPage: Int? = null): Result<List<ProductSummary>>
     suspend fun getProductDetails(productCode: String): Result<ProductDetails>

@@ -13,17 +13,16 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 
 class FakeRestApiRepository : RestApiRepository {
 
-    var setSimpleProductTariffResponse: Result<TariffSummary>? = null
-    override suspend fun getSimpleProductTariff(
-        productCode: String,
+    var setSimpleProductTariffResponse: Result<Tariff>? = null
+    override suspend fun getTariff(
         tariffCode: String,
-    ): Result<TariffSummary> {
+    ): Result<Tariff> {
         return setSimpleProductTariffResponse ?: throw RuntimeException("Fake result setSimpleProductTariffResponse not defined")
     }
 

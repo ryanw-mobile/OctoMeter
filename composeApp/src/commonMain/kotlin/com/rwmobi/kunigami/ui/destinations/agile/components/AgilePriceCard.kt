@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.model.rate.RateTrend
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
@@ -47,7 +47,7 @@ internal fun AgilePriceCard(
     vatInclusivePrice: Double?,
     rateTrend: RateTrend?,
     rateTrendIconTint: Color? = null,
-    agileTariffSummary: TariffSummary?,
+    agileTariff: Tariff?,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -76,7 +76,7 @@ internal fun AgilePriceCard(
 
             Spacer(modifier = Modifier.height(height = dimension.grid_1))
 
-            agileTariffSummary?.let {
+            agileTariff?.let {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     style = textStyle.standingChargeStyle,

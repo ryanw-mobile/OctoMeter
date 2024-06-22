@@ -8,17 +8,18 @@
 package com.rwmobi.kunigami.data.repository.mapper
 
 import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SingleProductApiResponse
-import com.rwmobi.kunigami.data.source.network.dto.singleproduct.TariffDetailsDto
 import com.rwmobi.kunigami.domain.exceptions.TariffNotFoundException
-import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.product.ExitFeesType
-import com.rwmobi.kunigami.domain.model.product.TariffDetails
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import kotlinx.datetime.Instant
 
-fun SingleProductApiResponse.toTariff(tariffCode: String): TariffSummary {
-    val tariffDetails = when {
+fun SingleProductApiResponse.toTariff(
+    tariffCode: String,
+): Tariff {
+    // SingleProductApiResponse comes with all retail regions
+    // We filter the one requested
+    val retailRegionTariff = when {
         tariffCode.startsWith("E-1R") -> {
             singleRegisterElectricityTariffs["_${tariffCode[tariffCode.lastIndex]}"]
         }
@@ -32,45 +33,30 @@ fun SingleProductApiResponse.toTariff(tariffCode: String): TariffSummary {
         }
     }
 
-    if (tariffDetails == null) {
+    if (retailRegionTariff == null) {
         throw IllegalArgumentException("$tariffCode not found in product $code")
     }
 
-    val rates = tariffDetails.varying ?: tariffDetails.directDebitMonthly ?: throw TariffNotFoundException(tariffCode)
-
-    return TariffSummary(
-        productCode = code,
-        fullName = fullName,
-        displayName = displayName,
-        description = description,
-        isVariable = isVariable,
-        availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
-        tariffCode = rates.code,
-        tariffActiveAt = tariffsActiveAt,
-        vatInclusiveUnitRate = rates.standardUnitRateIncVat?.roundToTwoDecimalPlaces() ?: throw IllegalArgumentException("unit rate not found for tariff $tariffCode"),
-        vatInclusiveStandingCharge = rates.standingChargeIncVat.roundToTwoDecimalPlaces(),
-    )
-}
-
-fun TariffDetailsDto.toTariffDetails(): TariffDetails? {
+    val rates = retailRegionTariff.varying ?: retailRegionTariff.directDebitMonthly ?: throw TariffNotFoundException(tariffCode)
     val tariffPaymentTerm = when {
-        directDebitMonthly != null -> TariffPaymentTerm.DIRECT_DEBIT_MONTHLY
-        varying != null -> TariffPaymentTerm.VARYING
+        retailRegionTariff.directDebitMonthly != null -> TariffPaymentTerm.DIRECT_DEBIT_MONTHLY
+        retailRegionTariff.varying != null -> TariffPaymentTerm.VARYING
         else -> TariffPaymentTerm.UNKNOWN
     }
 
-    val activePaymentTerm = when (tariffPaymentTerm) {
-        TariffPaymentTerm.DIRECT_DEBIT_MONTHLY -> directDebitMonthly
-        TariffPaymentTerm.VARYING -> varying
-        else -> null
-    }
+    return with(rates) {
+        Tariff(
+            productCode = code,
+            fullName = fullName,
+            displayName = displayName,
+            description = description,
+            isVariable = isVariable,
+            availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
 
-    if (activePaymentTerm == null) return null
-
-    return with(activePaymentTerm) {
-        TariffDetails(
-            tariffPaymentTerm = tariffPaymentTerm,
             tariffCode = code,
+            tariffActiveAt = tariffsActiveAt,
+
+            tariffPaymentTerm = tariffPaymentTerm,
             vatInclusiveStandingCharge = standingChargeIncVat,
             vatInclusiveOnlineDiscount = onlineDiscountIncVat,
             vatInclusiveDualFuelDiscount = dualFuelDiscountIncVat,

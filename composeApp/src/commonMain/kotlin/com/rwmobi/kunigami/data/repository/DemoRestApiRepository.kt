@@ -13,7 +13,7 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.datetime.DateTimePeriod
@@ -31,7 +31,7 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 
 class DemoRestApiRepository : RestApiRepository {
-    override suspend fun getSimpleProductTariff(productCode: String, tariffCode: String): Result<TariffSummary> {
+    override suspend fun getTariff(tariffCode: String): Result<Tariff> {
         throw NotImplementedError("Disabled in demo mode")
     }
 

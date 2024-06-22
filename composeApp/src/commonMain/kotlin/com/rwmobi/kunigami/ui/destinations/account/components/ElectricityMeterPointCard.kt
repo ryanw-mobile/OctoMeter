@@ -24,7 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.components.IconTextButton
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -43,7 +43,7 @@ internal fun ElectricityMeterPointCard(
     selectedMpan: String?,
     selectedMeterSerialNumber: String?,
     meterPoint: ElectricityMeterPoint,
-    tariffSummary: TariffSummary?,
+    tariffHistory: List<Tariff>,
     requestedLayout: AccountScreenLayout,
     onReloadTariff: () -> Unit,
     onMeterSerialNumberSelected: (mpan: String, meterSerialNumber: String) -> Unit,
@@ -70,25 +70,30 @@ internal fun ElectricityMeterPointCard(
                 text = stringResource(resource = Res.string.account_mpan, meterPoint.mpan),
             )
 
-            val latestAgreement = meterPoint.getLatestAgreement()
-            if (tariffSummary != null && latestAgreement != null) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            start = dimension.grid_2,
-                            end = dimension.grid_2,
-                            bottom = dimension.grid_2,
-                        ),
-                ) {
-                    TariffLayoutAdaptive(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        tariffSummary = tariffSummary,
-                        agreement = latestAgreement,
-                        useWideLayout = requestedLayout !is AccountScreenLayout.Compact,
-                    )
+            if (meterPoint.agreements.isNotEmpty()) {
+                // TODO: Show all tariffs
+                meterPoint.agreements.forEach { agreement ->
+                    val tariff = tariffHistory.firstOrNull { it.tariffCode == agreement.tariffCode }
+                    if (tariff != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    start = dimension.grid_2,
+                                    end = dimension.grid_2,
+                                    bottom = dimension.grid_2,
+                                ),
+                        ) {
+                            TariffLayoutAdaptive(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight(),
+                                tariff = tariff,
+                                agreement = agreement,
+                                useWideLayout = requestedLayout !is AccountScreenLayout.Compact,
+                            )
+                        }
+                    }
                 }
             } else {
                 Column(

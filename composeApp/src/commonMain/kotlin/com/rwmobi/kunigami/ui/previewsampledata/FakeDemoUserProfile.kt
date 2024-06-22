@@ -14,5 +14,9 @@ internal object FakeDemoUserProfile {
         selectedMpan = AccountSamples.account928.electricityMeterPoints[0].mpan,
         selectedMeterSerialNumber = AccountSamples.account928.electricityMeterPoints[0].meterSerialNumbers[0],
         account = AccountSamples.account928,
+        tariffs = listOf(
+            TariffSamples.fix12M240411,
+            TariffSamples.var221101,
+        ),
     )
 }

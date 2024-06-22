@@ -23,7 +23,7 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -38,14 +38,16 @@ class OctopusRestApiRepository(
     private val accountEndpoint: AccountEndpoint,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : RestApiRepository {
-    override suspend fun getSimpleProductTariff(
-        productCode: String,
+    override suspend fun getTariff(
         tariffCode: String,
-    ): Result<TariffSummary> {
+    ): Result<Tariff> {
         return withContext(dispatcher) {
+            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
             runCatching {
                 val apiResponse = productsEndpoint.getProduct(productCode = productCode)
-                apiResponse?.toTariff(tariffCode = tariffCode) ?: throw IllegalArgumentException("Cannot parse tariff")
+                apiResponse?.toTariff(tariffCode = tariffCode) ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
             }.except<CancellationException, _>()
         }
     }
@@ -79,7 +81,7 @@ class OctopusRestApiRepository(
         return withContext(dispatcher) {
             runCatching {
                 val apiResponse = productsEndpoint.getProduct(productCode = productCode)
-                apiResponse?.toProductDetails() ?: throw IllegalArgumentException("Cannot parse product")
+                apiResponse?.toProductDetails() ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
             }.except<CancellationException, _>()
         }
     }
