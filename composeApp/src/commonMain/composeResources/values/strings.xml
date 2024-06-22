@@ -84,6 +84,7 @@
     <string name="tariffs_exit_fees">Exit Fees</string>
     <string name="tariffs_direct_debit_monthly">Direct Debit Monthly</string>
     <string name="tariffs_error_load_tariffs">Unable to retrieve tariffs</string>
+    <string name="tariffs_tariff_effective">Rates effective %1$s</string>
 
     <!-- Retail Regions -->
     <string name="retail_region_eastern_england">Eastern England</string>
