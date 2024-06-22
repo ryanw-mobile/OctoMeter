@@ -13,17 +13,11 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,10 +26,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
@@ -56,9 +48,7 @@ import kunigami.composeapp.generated.resources.account_clear_credential_title
 import kunigami.composeapp.generated.resources.account_error_account_empty
 import kunigami.composeapp.generated.resources.account_moved_in
 import kunigami.composeapp.generated.resources.account_moved_out
-import kunigami.composeapp.generated.resources.account_number
 import kunigami.composeapp.generated.resources.account_unknown_installation_address
-import kunigami.composeapp.generated.resources.bulb
 import kunigami.composeapp.generated.resources.retry
 import kunigami.composeapp.generated.resources.unlink
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -89,28 +79,6 @@ internal fun AccountInformationScreen(
             )
         } else {
             Spacer(modifier = Modifier.height(height = dimension.grid_2))
-
-            Row(
-                modifier = Modifier.height(IntrinsicSize.Min),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .aspectRatio(1f),
-                    tint = MaterialTheme.colorScheme.secondary,
-                    painter = painterResource(resource = Res.drawable.bulb),
-                    contentDescription = null,
-                )
-
-                Spacer(modifier = Modifier.width(width = dimension.grid_1))
-
-                Text(
-                    style = MaterialTheme.typography.displaySmall,
-                    fontWeight = FontWeight.Bold,
-                    text = stringResource(resource = Res.string.account_number, uiState.userProfile.account.accountNumber),
-                )
-            }
 
             uiState.userProfile.account.fullAddress?.let {
                 Text(
