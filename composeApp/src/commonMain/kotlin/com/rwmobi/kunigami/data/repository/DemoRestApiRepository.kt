@@ -43,19 +43,19 @@ class DemoRestApiRepository : RestApiRepository {
         throw NotImplementedError("Disabled in demo mode")
     }
 
-    override suspend fun getStandardUnitRates(productCode: String, tariffCode: String, period: ClosedRange<Instant>, requestedPage: Int?): Result<List<Rate>> {
+    override suspend fun getStandardUnitRates(tariffCode: String, period: ClosedRange<Instant>, requestedPage: Int?): Result<List<Rate>> {
         throw NotImplementedError("Disabled in demo mode")
     }
 
-    override suspend fun getStandingCharges(productCode: String, tariffCode: String, requestedPage: Int?): Result<List<Rate>> {
+    override suspend fun getStandingCharges(tariffCode: String, requestedPage: Int?): Result<List<Rate>> {
         throw NotImplementedError("Disabled in demo mode")
     }
 
-    override suspend fun getDayUnitRates(productCode: String, tariffCode: String, requestedPage: Int?): Result<List<Rate>> {
+    override suspend fun getDayUnitRates(tariffCode: String, requestedPage: Int?): Result<List<Rate>> {
         throw NotImplementedError("Disabled in demo mode")
     }
 
-    override suspend fun getNightUnitRates(productCode: String, tariffCode: String, requestedPage: Int?): Result<List<Rate>> {
+    override suspend fun getNightUnitRates(tariffCode: String, requestedPage: Int?): Result<List<Rate>> {
         throw NotImplementedError("Disabled in demo mode")
     }
 

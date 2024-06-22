@@ -92,12 +92,14 @@ class OctopusRestApiRepository(
      * Otherwise, this function will retrieve all possible data the backend can provide.
      */
     override suspend fun getStandardUnitRates(
-        productCode: String,
         tariffCode: String,
         period: ClosedRange<Instant>,
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
+            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
             runCatching {
                 val combinedList = mutableListOf<Rate>()
                 var page: Int? = requestedPage
@@ -124,11 +126,13 @@ class OctopusRestApiRepository(
      * Otherwise, this function will retrieve all possible data the backend can provide.
      */
     override suspend fun getStandingCharges(
-        productCode: String,
         tariffCode: String,
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
+            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
             runCatching {
                 val combinedList = mutableListOf<Rate>()
                 var page: Int? = requestedPage
@@ -153,11 +157,13 @@ class OctopusRestApiRepository(
      * Otherwise, this function will retrieve all possible data the backend can provide.
      */
     override suspend fun getDayUnitRates(
-        productCode: String,
         tariffCode: String,
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
+            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
             runCatching {
                 val combinedList = mutableListOf<Rate>()
                 var page: Int? = requestedPage
@@ -182,11 +188,13 @@ class OctopusRestApiRepository(
      * Otherwise, this function will retrieve all possible data the backend can provide.
      */
     override suspend fun getNightUnitRates(
-        productCode: String,
         tariffCode: String,
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
+            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
             runCatching {
                 val combinedList = mutableListOf<Rate>()
                 var page: Int? = requestedPage

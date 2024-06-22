@@ -141,7 +141,6 @@ class AgileViewModel(
         val periodTo = currentTime.plus(duration = Duration.parse("1d"))
 
         getStandardUnitRateUseCase(
-            productCode = agileProductCode,
             tariffCode = "E-1R-$agileProductCode-${region.code}",
             period = currentTime..periodTo,
         ).fold(

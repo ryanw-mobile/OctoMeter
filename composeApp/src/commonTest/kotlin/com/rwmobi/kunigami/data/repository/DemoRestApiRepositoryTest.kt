@@ -24,12 +24,13 @@ import kotlin.time.Duration
 @Suppress("TooManyFunctions")
 class DemoRestApiRepositoryTest {
 
+    private val sampleTariffCode = "E-1R-SAMPLE-TARIFF-A"
     private val demoRepository = DemoRestApiRepository()
 
     @Test
     fun `getSimpleProductTariff should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
-            demoRepository.getTariff(tariffCode = "tariffCode")
+            demoRepository.getTariff(tariffCode = sampleTariffCode)
         }
     }
 
@@ -54,8 +55,7 @@ class DemoRestApiRepositoryTest {
 
         assertFailsWith<NotImplementedError> {
             demoRepository.getStandardUnitRates(
-                productCode = "productCode",
-                tariffCode = "tariffCode",
+                tariffCode = sampleTariffCode,
                 period = start..now,
                 requestedPage = 1,
             )
@@ -66,8 +66,7 @@ class DemoRestApiRepositoryTest {
     fun `getStandingCharges should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
             demoRepository.getStandingCharges(
-                productCode = "productCode",
-                tariffCode = "tariffCode",
+                tariffCode = sampleTariffCode,
                 requestedPage = 1,
             )
         }
@@ -77,8 +76,7 @@ class DemoRestApiRepositoryTest {
     fun `getDayUnitRates should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
             demoRepository.getDayUnitRates(
-                productCode = "productCode",
-                tariffCode = "tariffCode",
+                tariffCode = sampleTariffCode,
                 requestedPage = 1,
             )
         }
@@ -88,8 +86,7 @@ class DemoRestApiRepositoryTest {
     fun `getNightUnitRates should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
             demoRepository.getNightUnitRates(
-                productCode = "productCode",
-                tariffCode = "tariffCode",
+                tariffCode = sampleTariffCode,
                 requestedPage = 1,
             )
         }

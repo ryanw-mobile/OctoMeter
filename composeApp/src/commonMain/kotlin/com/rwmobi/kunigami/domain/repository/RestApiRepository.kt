@@ -18,34 +18,27 @@ import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 
 interface RestApiRepository {
-    suspend fun getTariff(
-        tariffCode: String,
-    ): Result<Tariff>
-
+    suspend fun getTariff(tariffCode: String): Result<Tariff>
     suspend fun getProducts(requestedPage: Int? = null): Result<List<ProductSummary>>
     suspend fun getProductDetails(productCode: String): Result<ProductDetails>
 
     suspend fun getStandardUnitRates(
-        productCode: String,
         tariffCode: String,
         period: ClosedRange<Instant>,
         requestedPage: Int? = null,
     ): Result<List<Rate>>
 
     suspend fun getStandingCharges(
-        productCode: String,
         tariffCode: String,
         requestedPage: Int? = null,
     ): Result<List<Rate>>
 
     suspend fun getDayUnitRates(
-        productCode: String,
         tariffCode: String,
         requestedPage: Int? = null,
     ): Result<List<Rate>>
 
     suspend fun getNightUnitRates(
-        productCode: String,
         tariffCode: String,
         requestedPage: Int? = null,
     ): Result<List<Rate>>

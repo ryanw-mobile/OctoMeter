@@ -162,7 +162,6 @@ class GetConsumptionAndCostUseCase(
 
             unitRates.addAll(
                 restApiRepository.getStandardUnitRates(
-                    productCode = productCode!!,
                     tariffCode = agreement.tariffCode,
                     period = effectiveQueryStartDate..effectiveQueryEndDate,
                 ).getOrNull() ?: emptyList(),

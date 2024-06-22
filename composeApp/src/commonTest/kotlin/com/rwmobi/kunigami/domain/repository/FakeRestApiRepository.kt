@@ -38,7 +38,6 @@ class FakeRestApiRepository : RestApiRepository {
 
     var setStandardUnitRatesResponse: Result<List<Rate>>? = null
     override suspend fun getStandardUnitRates(
-        productCode: String,
         tariffCode: String,
         period: ClosedRange<Instant>,
         requestedPage: Int?,
@@ -48,7 +47,6 @@ class FakeRestApiRepository : RestApiRepository {
 
     var setStandingChargesResponse: Result<List<Rate>>? = null
     override suspend fun getStandingCharges(
-        productCode: String,
         tariffCode: String,
         requestedPage: Int?,
     ): Result<List<Rate>> {
@@ -57,7 +55,6 @@ class FakeRestApiRepository : RestApiRepository {
 
     var setDayUnitRatesResponse: Result<List<Rate>>? = null
     override suspend fun getDayUnitRates(
-        productCode: String,
         tariffCode: String,
         requestedPage: Int?,
     ): Result<List<Rate>> {
@@ -66,7 +63,6 @@ class FakeRestApiRepository : RestApiRepository {
 
     var setNightUnitRatesResponse: Result<List<Rate>>? = null
     override suspend fun getNightUnitRates(
-        productCode: String,
         tariffCode: String,
         requestedPage: Int?,
     ): Result<List<Rate>> {
