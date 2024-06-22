@@ -13,7 +13,7 @@ import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
-import com.rwmobi.kunigami.domain.usecase.GetTariffSummaryUseCase
+import com.rwmobi.kunigami.domain.usecase.GetTariffUseCase
 import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.domain.usecase.UpdateMeterPreferenceUseCase
@@ -35,7 +35,7 @@ class AccountViewModel(
     private val initialiseAccountUseCase: InitialiseAccountUseCase,
     private val updateMeterPreferenceUseCase: UpdateMeterPreferenceUseCase,
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
-    private val getTariffSummaryUseCase: GetTariffSummaryUseCase,
+    private val getTariffUseCase: GetTariffUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<AccountUIState> = MutableStateFlow(AccountUIState(isLoading = true))
@@ -61,13 +61,9 @@ class AccountViewModel(
         viewModelScope.launch(dispatcher) {
             syncUserProfileUseCase().fold(
                 onSuccess = { userProfile ->
-                    val latestTariff = userProfile?.getSelectedElectricityMeterPoint()?.getLatestAgreement()
-                    val tariffSummary = latestTariff?.let { getTariffSummaryUseCase(tariffCode = it.tariffCode).getOrNull() }
-
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
                             userProfile = userProfile,
-                            tariffSummary = tariffSummary,
                             requestedScreenType = AccountScreenType.Account,
                             isLoading = false,
                         )

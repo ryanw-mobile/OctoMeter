@@ -13,17 +13,16 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 
 class FakeRestApiRepository : RestApiRepository {
 
-    var setSimpleProductTariffResponse: Result<TariffSummary>? = null
-    override suspend fun getSimpleProductTariff(
-        productCode: String,
+    var setSimpleProductTariffResponse: Result<Tariff>? = null
+    override suspend fun getTariff(
         tariffCode: String,
-    ): Result<TariffSummary> {
+    ): Result<Tariff> {
         return setSimpleProductTariffResponse ?: throw RuntimeException("Fake result setSimpleProductTariffResponse not defined")
     }
 
@@ -39,7 +38,6 @@ class FakeRestApiRepository : RestApiRepository {
 
     var setStandardUnitRatesResponse: Result<List<Rate>>? = null
     override suspend fun getStandardUnitRates(
-        productCode: String,
         tariffCode: String,
         period: ClosedRange<Instant>,
         requestedPage: Int?,
@@ -49,7 +47,6 @@ class FakeRestApiRepository : RestApiRepository {
 
     var setStandingChargesResponse: Result<List<Rate>>? = null
     override suspend fun getStandingCharges(
-        productCode: String,
         tariffCode: String,
         requestedPage: Int?,
     ): Result<List<Rate>> {
@@ -58,7 +55,6 @@ class FakeRestApiRepository : RestApiRepository {
 
     var setDayUnitRatesResponse: Result<List<Rate>>? = null
     override suspend fun getDayUnitRates(
-        productCode: String,
         tariffCode: String,
         requestedPage: Int?,
     ): Result<List<Rate>> {
@@ -67,7 +63,6 @@ class FakeRestApiRepository : RestApiRepository {
 
     var setNightUnitRatesResponse: Result<List<Rate>>? = null
     override suspend fun getNightUnitRates(
-        productCode: String,
         tariffCode: String,
         requestedPage: Int?,
     ): Result<List<Rate>> {

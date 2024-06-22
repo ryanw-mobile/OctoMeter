@@ -202,7 +202,7 @@ fun UsageScreen(
                                                 vertical = dimension.grid_1,
                                             ),
                                         layoutType = uiState.requestedAdaptiveLayout,
-                                        tariffSummary = uiState.tariffSummary,
+                                        tariff = uiState.tariff,
                                         insights = uiState.insights,
                                         mpan = uiState.userProfile?.selectedMpan,
                                     )

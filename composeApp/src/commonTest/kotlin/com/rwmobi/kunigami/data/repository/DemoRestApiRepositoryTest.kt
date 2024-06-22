@@ -24,26 +24,27 @@ import kotlin.time.Duration
 @Suppress("TooManyFunctions")
 class DemoRestApiRepositoryTest {
 
+    private val sampleTariffCode = "E-1R-SAMPLE-TARIFF-A"
     private val demoRepository = DemoRestApiRepository()
 
     @Test
     fun `getSimpleProductTariff should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
-            demoRepository.getSimpleProductTariff("productCode", "tariffCode")
+            demoRepository.getTariff(tariffCode = sampleTariffCode)
         }
     }
 
     @Test
     fun `getProducts should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
-            demoRepository.getProducts(1)
+            demoRepository.getProducts(requestedPage = 1)
         }
     }
 
     @Test
     fun `getProductDetails should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
-            demoRepository.getProductDetails("productCode")
+            demoRepository.getProductDetails(productCode = "productCode")
         }
     }
 
@@ -53,35 +54,51 @@ class DemoRestApiRepositoryTest {
         val start = now - Duration.parse("30d")
 
         assertFailsWith<NotImplementedError> {
-            demoRepository.getStandardUnitRates("productCode", "tariffCode", start..now, 1)
+            demoRepository.getStandardUnitRates(
+                tariffCode = sampleTariffCode,
+                period = start..now,
+                requestedPage = 1,
+            )
         }
     }
 
     @Test
     fun `getStandingCharges should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
-            demoRepository.getStandingCharges("productCode", "tariffCode", 1)
+            demoRepository.getStandingCharges(
+                tariffCode = sampleTariffCode,
+                requestedPage = 1,
+            )
         }
     }
 
     @Test
     fun `getDayUnitRates should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
-            demoRepository.getDayUnitRates("productCode", "tariffCode", 1)
+            demoRepository.getDayUnitRates(
+                tariffCode = sampleTariffCode,
+                requestedPage = 1,
+            )
         }
     }
 
     @Test
     fun `getNightUnitRates should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
-            demoRepository.getNightUnitRates("productCode", "tariffCode", 1)
+            demoRepository.getNightUnitRates(
+                tariffCode = sampleTariffCode,
+                requestedPage = 1,
+            )
         }
     }
 
     @Test
     fun `getAccount should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
-            demoRepository.getAccount("apiKey", "accountNumber")
+            demoRepository.getAccount(
+                apiKey = "apiKey",
+                accountNumber = "accountNumber",
+            )
         }
     }
 
@@ -162,7 +179,10 @@ class DemoRestApiRepositoryTest {
 
         assertTrue(result.isSuccess)
         val consumptionList = result.getOrNull()
-        assertEquals(12, consumptionList!!.size)
+        assertEquals(
+            expected = 12,
+            actual = consumptionList!!.size,
+        )
     }
 
     @Test

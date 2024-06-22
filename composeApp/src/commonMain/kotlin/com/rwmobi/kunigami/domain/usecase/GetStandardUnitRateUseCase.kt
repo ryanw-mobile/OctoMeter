@@ -21,14 +21,12 @@ class GetStandardUnitRateUseCase(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(
-        productCode: String,
         tariffCode: String,
         period: ClosedRange<Instant>,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
             runCatching {
                 restApiRepository.getStandardUnitRates(
-                    productCode = productCode,
                     tariffCode = tariffCode,
                     period = period,
                 ).fold(

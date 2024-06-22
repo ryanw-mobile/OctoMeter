@@ -11,7 +11,6 @@ package com.rwmobi.kunigami.ui.destinations.account.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,7 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.components.IconTextButton
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -43,7 +42,7 @@ internal fun ElectricityMeterPointCard(
     selectedMpan: String?,
     selectedMeterSerialNumber: String?,
     meterPoint: ElectricityMeterPoint,
-    tariffSummary: TariffSummary?,
+    tariffHistory: List<Tariff>,
     requestedLayout: AccountScreenLayout,
     onReloadTariff: () -> Unit,
     onMeterSerialNumberSelected: (mpan: String, meterSerialNumber: String) -> Unit,
@@ -70,26 +69,27 @@ internal fun ElectricityMeterPointCard(
                 text = stringResource(resource = Res.string.account_mpan, meterPoint.mpan),
             )
 
-            val latestAgreement = meterPoint.getLatestAgreement()
-            if (tariffSummary != null && latestAgreement != null) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            start = dimension.grid_2,
-                            end = dimension.grid_2,
-                            bottom = dimension.grid_2,
-                        ),
-                ) {
-                    TariffLayoutAdaptive(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
-                        tariffSummary = tariffSummary,
-                        agreement = latestAgreement,
-                        useWideLayout = requestedLayout !is AccountScreenLayout.Compact,
-                    )
-                }
+            if (meterPoint.agreements.isNotEmpty()) {
+                meterPoint.agreements
+                    .sortedByDescending { it.period.start }
+                    .forEachIndexed { index, agreement ->
+                        val tariff = tariffHistory.firstOrNull { it.tariffCode == agreement.tariffCode }
+                        if (tariff != null) {
+                            TariffLayout(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(
+                                        start = dimension.grid_2,
+                                        end = dimension.grid_2,
+                                        bottom = dimension.grid_1,
+                                    )
+                                    .wrapContentHeight(),
+                                tariff = tariff,
+                                agreement = agreement,
+                                showDivider = index < meterPoint.agreements.lastIndex,
+                            )
+                        }
+                    }
             } else {
                 Column(
                     modifier = Modifier

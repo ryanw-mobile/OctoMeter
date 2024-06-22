@@ -18,7 +18,7 @@ import kotlin.test.assertNull
 
 class GenerateUsageInsightsUseCaseTest {
 
-    private val tariffSummary = TariffSampleData.var221101
+    private val tariff = TariffSampleData.var221101
     private val consumption1 = Consumption(
         kWhConsumed = 10.0,
         interval = Instant.parse("2023-03-30T01:00:00Z")..Instant.parse("2023-03-30T01:30:00Z"),
@@ -37,9 +37,9 @@ class GenerateUsageInsightsUseCaseTest {
     private val generateUsageInsightsUseCase = GenerateUsageInsightsUseCase()
 
     @Test
-    fun `generateUsageInsightsUseCase should return null when tariffSummary is null`() {
+    fun `generateUsageInsightsUseCase should return null when tariff is null`() {
         val result = generateUsageInsightsUseCase(
-            tariffSummary = null,
+            tariff = null,
             consumptionWithCost = listOf(consumptionWithCost1),
         )
         assertNull(result)
@@ -48,7 +48,7 @@ class GenerateUsageInsightsUseCaseTest {
     @Test
     fun `generateUsageInsightsUseCase should return null when consumptionWithCost is null`() {
         val result = generateUsageInsightsUseCase(
-            tariffSummary = tariffSummary,
+            tariff = tariff,
             consumptionWithCost = null,
         )
         assertNull(result)
@@ -57,7 +57,7 @@ class GenerateUsageInsightsUseCaseTest {
     @Test
     fun `generateUsageInsightsUseCase should return null when consumptionWithCost is empty`() {
         val result = generateUsageInsightsUseCase(
-            tariffSummary = tariffSummary,
+            tariff = tariff,
             consumptionWithCost = emptyList(),
         )
         assertNull(result)
@@ -77,7 +77,7 @@ class GenerateUsageInsightsUseCaseTest {
             costAnnualProjection = 415.55,
         )
         val result = generateUsageInsightsUseCase(
-            tariffSummary = tariffSummary,
+            tariff = tariff,
             consumptionWithCost = listOf(consumptionWithCost1, consumptionWithCost2, consumptionWithCost3),
         )
         assertEquals(result, expectedInsights)
@@ -98,7 +98,7 @@ class GenerateUsageInsightsUseCaseTest {
             costAnnualProjection = 1096.28,
         )
         val result = generateUsageInsightsUseCase(
-            tariffSummary = tariffSummary,
+            tariff = tariff,
             consumptionWithCost = listOf(consumptionWithCostWithoutCost),
         )
         assertEquals(result, expectedInsights)

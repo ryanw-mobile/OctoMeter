@@ -7,25 +7,19 @@
 
 package com.rwmobi.kunigami.domain.usecase
 
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-/***
- * TODO: Handle multiple tariffs
- */
-class GetTariffSummaryUseCase(
+class GetTariffUseCase(
     private val restApiRepository: RestApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
-    suspend operator fun invoke(tariffCode: String): Result<TariffSummary> {
+    suspend operator fun invoke(tariffCode: String): Result<Tariff> {
         return withContext(dispatcher) {
-            restApiRepository.getSimpleProductTariff(
-                productCode = TariffSummary.extractProductCode(tariffCode = tariffCode) ?: "",
-                tariffCode = tariffCode,
-            )
+            restApiRepository.getTariff(tariffCode = tariffCode)
         }
     }
 }

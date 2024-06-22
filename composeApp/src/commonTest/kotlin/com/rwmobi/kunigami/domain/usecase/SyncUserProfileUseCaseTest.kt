@@ -12,6 +12,7 @@ import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import com.rwmobi.kunigami.domain.samples.AccountSampleData
+import com.rwmobi.kunigami.domain.samples.TariffSampleData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -50,7 +51,7 @@ class SyncUserProfileUseCaseTest {
     fun `should return IncompleteCredentialsException when in demo mode`() = runTest {
         fakeUserPreferenceRepository.demoMode = true
 
-        val result = syncUserProfileUseCase.invoke()
+        val result = syncUserProfileUseCase()
 
         assertTrue(result.isFailure)
         assertIs<IncompleteCredentialsException>(result.exceptionOrNull())
@@ -65,6 +66,7 @@ class SyncUserProfileUseCaseTest {
             mpan = fakeAccount.electricityMeterPoints.first().mpan
             meterSerialNumber = fakeAccount.electricityMeterPoints.first().meterSerialNumbers.first()
         }
+        fakeRestApiRepository.setSimpleProductTariffResponse = Result.success(TariffSampleData.var221101)
         fakeRestApiRepository.setAccountResponse = Result.success(fakeAccount)
 
         val result = syncUserProfileUseCase()

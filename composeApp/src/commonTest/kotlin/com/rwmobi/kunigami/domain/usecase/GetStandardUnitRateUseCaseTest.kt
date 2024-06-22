@@ -24,6 +24,8 @@ class GetStandardUnitRateUseCaseTest {
     private lateinit var getStandardUnitRateUseCase: GetStandardUnitRateUseCase
     private lateinit var fakeUserPreferenceRepository: FakeUserPreferencesRepository
     private lateinit var fakeRestApiRepository: FakeRestApiRepository
+    private val sampleTariffCode = "E-1R-SAMPLE-TARIFF-A"
+    private val samplePeriod = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-01-04T00:00:00Z")
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeTest
@@ -42,9 +44,8 @@ class GetStandardUnitRateUseCaseTest {
         fakeRestApiRepository.setStandardUnitRatesResponse = Result.success(rates)
 
         val result = getStandardUnitRateUseCase(
-            productCode = "testProduct",
-            tariffCode = "testTariff",
-            period = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-01-04T00:00:00Z"),
+            tariffCode = sampleTariffCode,
+            period = samplePeriod,
         )
 
         assertTrue(result.isSuccess)
@@ -59,9 +60,8 @@ class GetStandardUnitRateUseCaseTest {
         fakeRestApiRepository.setStandardUnitRatesResponse = Result.failure(RuntimeException(exceptionMessage))
 
         val result = getStandardUnitRateUseCase(
-            productCode = "testProduct",
-            tariffCode = "testTariff",
-            period = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-01-04T00:00:00Z"),
+            tariffCode = sampleTariffCode,
+            period = samplePeriod,
         )
 
         assertTrue(result.isFailure)
@@ -73,9 +73,8 @@ class GetStandardUnitRateUseCaseTest {
         fakeRestApiRepository.setStandardUnitRatesResponse = Result.success(emptyList())
 
         val result = getStandardUnitRateUseCase(
-            productCode = "testProduct",
-            tariffCode = "testTariff",
-            period = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-01-04T00:00:00Z"),
+            tariffCode = sampleTariffCode,
+            period = samplePeriod,
         )
 
         assertTrue(result.isSuccess)

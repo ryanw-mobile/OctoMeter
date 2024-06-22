@@ -68,7 +68,7 @@ internal fun LazyListScope.productDetailsLayout(
                         modifier = Modifier
                             .widthIn(max = dimension.windowWidthCompact)
                             .padding(all = dimension.grid_2),
-                        tariffDetails = tariffDetails,
+                        tariff = tariffDetails,
                     )
                 }
             }

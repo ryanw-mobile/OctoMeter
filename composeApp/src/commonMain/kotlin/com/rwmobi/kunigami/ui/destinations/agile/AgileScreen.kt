@@ -44,7 +44,6 @@ import com.rwmobi.kunigami.ui.destinations.agile.components.RateGroupTitle
 import com.rwmobi.kunigami.ui.extensions.partitionList
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
-import com.rwmobi.kunigami.ui.model.product.RetailRegion
 import com.rwmobi.kunigami.ui.model.rate.RateGroupWithPartitions
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.style.LineStyle
@@ -105,12 +104,12 @@ fun AgileScreen(
                             .fillMaxSize()
                             .conditionalBlur(enabled = uiState.isLoading && uiState.barChartData == null),
                     ) {
-                        val subtitle = uiState.agileTariffSummary?.let { summary ->
-                            val regionCode = RetailRegion.fromCode(summary.getRetailRegion())?.stringResource
+                        val subtitle = uiState.agileTariff?.let { primaryTariff ->
+                            val regionCode = primaryTariff.getRetailRegion()?.stringResource
                                 ?.let { stringResource(it) }
                                 ?: stringResource(resource = Res.string.retail_region_unknown)
 
-                            stringResource(resource = Res.string.agile_product_code_retail_region, summary.productCode, regionCode)
+                            stringResource(resource = Res.string.agile_product_code_retail_region, primaryTariff.productCode, regionCode)
                         }
 
                         DualTitleBar(
@@ -118,7 +117,7 @@ fun AgileScreen(
                                 .background(color = MaterialTheme.colorScheme.secondary)
                                 .fillMaxWidth()
                                 .height(height = dimension.minListItemHeight),
-                            title = uiState.agileTariffSummary?.displayName ?: "",
+                            title = uiState.agileTariff?.displayName ?: "",
                             subtitle = subtitle,
                         )
 
@@ -187,11 +186,13 @@ fun AgileScreen(
                                                 barChartData.tooltips[index]
                                             },
                                             backgroundPlot = { graphScope ->
+                                                // TODO: Implement assumes fixed rate. Needs dynamic rates lookup
+                                                val unitRate = uiState.activeTariff?.resolveUnitRate()
                                                 if (uiState.isOnDifferentTariff() &&
-                                                    uiState.activeTariffSummary != null
+                                                    unitRate != null
                                                 ) {
                                                     graphScope.HorizontalLineAnnotation(
-                                                        location = uiState.activeTariffSummary.vatInclusiveUnitRate,
+                                                        location = unitRate,
                                                         lineStyle = LineStyle(
                                                             brush = SolidColor(MaterialTheme.colorScheme.error),
                                                             strokeWidth = dimension.grid_0_5,
@@ -209,8 +210,8 @@ fun AgileScreen(
                             }
 
                             item(key = "tariffDetails") {
-                                val differentTariffSummary = uiState.activeTariffSummary
-                                    ?.takeUnless { it.isSameTariff(uiState.agileTariffSummary?.tariffCode) }
+                                val secondaryTariff = uiState.activeTariff
+                                    ?.takeUnless { it.isSameTariff(uiState.agileTariff?.tariffCode) }
 
                                 AgileTariffCardAdaptive(
                                     modifier = Modifier
@@ -220,8 +221,8 @@ fun AgileScreen(
                                             end = dimension.grid_3,
                                             top = dimension.grid_1,
                                         ),
-                                    agileTariffSummary = uiState.agileTariffSummary,
-                                    differentTariffSummary = if (uiState.agileTariffSummary != null) differentTariffSummary else null,
+                                    agileTariff = uiState.agileTariff,
+                                    secondaryTariff = if (uiState.agileTariff != null) secondaryTariff else null,
                                     rateRange = uiState.rateRange,
                                     rateGroupedCells = uiState.rateGroupedCells,
                                     requestedAdaptiveLayout = uiState.requestedAdaptiveLayout,
