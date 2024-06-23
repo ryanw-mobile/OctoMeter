@@ -77,22 +77,22 @@ class TariffTest {
 
     @Test
     fun `extractProductCode instance method should return correct product code`() {
-        val tariffSummary = TariffSampleData.agileFlex221125
-        assertEquals("AGILE-FLEX-22-11-25", tariffSummary.extractProductCode())
+        val tariff = TariffSampleData.agileFlex221125
+        assertEquals("AGILE-FLEX-22-11-25", tariff.extractProductCode())
     }
 
     @Test
     fun `getRetailRegion instance method should return correct retail region`() {
-        val tariffSummary = TariffSampleData.agileFlex221125
-        assertEquals(RetailRegion.EASTERN_ENGLAND, tariffSummary.getRetailRegion())
+        val tariff = TariffSampleData.agileFlex221125
+        assertEquals(RetailRegion.EASTERN_ENGLAND, tariff.getRetailRegion())
     }
 
     @Test
     fun `isSingleRate instance method should return true for single rate tariff code`() {
-        val tariffSummary = TariffSampleData.agileFlex221125
-        assertTrue(tariffSummary.isSingleRate())
+        val tariff = TariffSampleData.agileFlex221125
+        assertTrue(tariff.isSingleRate())
     }
-    
+
     @Test
     fun `hasStandardUnitRate should return true when standard unit rate is not null`() {
         val tariff = sampleTariff
@@ -135,5 +135,35 @@ class TariffTest {
             vatInclusiveNightUnitRate = null,
         )
         assertFalse(tariff.hasDualRates())
+    }
+
+    @Test
+    fun `isAgileProduct should return true when product code contains AGILE`() {
+        val tariff = TariffSampleData.agileFlex221125
+        assertTrue(tariff.isAgileProduct())
+    }
+
+    @Test
+    fun `isAgileProduct should return false when product code does not contain AGILE`() {
+        val tariff = TariffSampleData.var221101
+        assertFalse(tariff.isAgileProduct())
+    }
+
+    @Test
+    fun `isSameTariff should return true when tariff code matches`() {
+        val tariff = TariffSampleData.agileFlex221125
+        assertTrue(tariff.isSameTariff(tariffCode = "E-1R-AGILE-FLEX-22-11-25-A"))
+    }
+
+    @Test
+    fun `isSameTariff should return false when tariff code does not match`() {
+        val tariff = TariffSampleData.agileFlex221125
+        assertFalse(tariff.isSameTariff(tariffCode = "random-tariff-code"))
+    }
+
+    @Test
+    fun `isSameTariff should return false when tariff code is null`() {
+        val tariff = TariffSampleData.agileFlex221125
+        assertFalse(tariff.isSameTariff(tariffCode = null))
     }
 }
