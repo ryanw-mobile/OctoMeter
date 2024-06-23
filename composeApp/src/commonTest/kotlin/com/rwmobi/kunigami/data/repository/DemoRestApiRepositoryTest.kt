@@ -74,9 +74,11 @@ class DemoRestApiRepositoryTest {
 
     @Test
     fun `getDayUnitRates should throw NotImplementedError`() = runTest {
+        val now = Clock.System.now()
         assertFailsWith<NotImplementedError> {
             demoRepository.getDayUnitRates(
                 tariffCode = sampleTariffCode,
+                period = now..now,
                 requestedPage = 1,
             )
         }
@@ -84,9 +86,11 @@ class DemoRestApiRepositoryTest {
 
     @Test
     fun `getNightUnitRates should throw NotImplementedError`() = runTest {
+        val now = Clock.System.now()
         assertFailsWith<NotImplementedError> {
             demoRepository.getNightUnitRates(
                 tariffCode = sampleTariffCode,
+                period = now..now,
                 requestedPage = 1,
             )
         }

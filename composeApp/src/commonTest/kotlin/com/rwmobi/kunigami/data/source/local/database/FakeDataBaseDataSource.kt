@@ -12,19 +12,23 @@ import com.rwmobi.kunigami.data.source.local.database.interfaces.DatabaseDataSou
 import kotlinx.datetime.Instant
 
 class FakeDataBaseDataSource : DatabaseDataSource {
+
+    var exception: Throwable? = null
     override suspend fun insert(consumptionEntity: ConsumptionEntity) {
-        TODO("Not yet implemented")
+        exception?.let { throw it }
     }
 
     override suspend fun insert(consumptionEntity: List<ConsumptionEntity>) {
-        TODO("Not yet implemented")
+        exception?.let { throw it }
     }
 
+    var getConsumptionsResponse: List<ConsumptionEntity>? = null
     override suspend fun getConsumptions(meterSerial: String, interval: ClosedRange<Instant>): List<ConsumptionEntity> {
-        TODO("Not yet implemented")
+        exception?.let { throw it }
+        return getConsumptionsResponse ?: throw RuntimeException("Fake result getConsumptionsResponse not defined")
     }
 
     override suspend fun clear() {
-        TODO("Not yet implemented")
+        exception?.let { throw it }
     }
 }
