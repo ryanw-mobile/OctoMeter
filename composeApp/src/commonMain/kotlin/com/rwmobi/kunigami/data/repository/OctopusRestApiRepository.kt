@@ -13,6 +13,7 @@ import com.rwmobi.kunigami.data.repository.mapper.toProductDetails
 import com.rwmobi.kunigami.data.repository.mapper.toProductSummary
 import com.rwmobi.kunigami.data.repository.mapper.toRate
 import com.rwmobi.kunigami.data.repository.mapper.toTariff
+import com.rwmobi.kunigami.data.source.local.database.interfaces.DatabaseDataSource
 import com.rwmobi.kunigami.data.source.network.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
@@ -38,6 +39,7 @@ class OctopusRestApiRepository(
     private val productsEndpoint: ProductsEndpoint,
     private val electricityMeterPointsEndpoint: ElectricityMeterPointsEndpoint,
     private val accountEndpoint: AccountEndpoint,
+    private val databaseDataSource: DatabaseDataSource,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : RestApiRepository {
     override suspend fun getTariff(
