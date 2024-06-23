@@ -418,10 +418,8 @@ kover {
                         "$productNameSpace.App*",
                         "$productNameSpace.MainKt*",
                         "$productNameSpace.NavigationLayoutType",
-                        "$productNameSpace.data.repositor.DemoRestApiRepository",
                         "$productNameSpace.ui.extensions.WindowSizeClassExtensions*",
-                        "$productNameSpace..ui.extensions.ThrowableExtensions*",
-                        "$productNameSpace.ui.extensions.GenerateRandomLong*",
+                        "$productNameSpace.ui.extensions.ThrowableExtensions*",
                         "$productNameSpace.ui.extensions.GenerateRandomLong*",
                         "$productNameSpace.data.source.local.preferences.ProvideSettings*",
                         "$productNameSpace.data.source.local.preferences.MultiplatformPreferencesStore*",
@@ -445,9 +443,7 @@ kover {
                         "$productNameSpace.ui.theme",
                         "$productNameSpace.ui.previewsampledata",
                         "androidx",
-                        "dagger.hilt.internal.aggregatedroot.codegen",
-                        "hilt_aggregated_deps",
-                        "kunigami.composeapp.generated.resources",
+                        "kunigami.composeapp.generated.*",
                     ),
                 )
             }
