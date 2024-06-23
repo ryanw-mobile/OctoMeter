@@ -36,6 +36,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Duration
 
 /***
  * This can be an integration test.
@@ -424,7 +425,7 @@ class OctopusRestApiRepositoryTest {
             apiKey = fakeApiKey,
             mpan = fakeMpan,
             meterSerialNumber = fakeMeterSerialNumber,
-            period = now..now,
+            period = now..now.plus(Duration.parse("1d")),
             orderBy = ConsumptionDataOrder.PERIOD,
             groupBy = ConsumptionTimeFrame.HALF_HOURLY,
         )
