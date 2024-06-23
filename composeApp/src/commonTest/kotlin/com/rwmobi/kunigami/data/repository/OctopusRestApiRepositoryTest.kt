@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.data.repository
 
+import com.rwmobi.kunigami.data.source.local.database.FakeDataBaseDataSource
 import com.rwmobi.kunigami.data.source.network.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
@@ -124,6 +125,7 @@ class OctopusRestApiRepositoryTest {
                 httpClient = client,
                 dispatcher = UnconfinedTestDispatcher(),
             ),
+            databaseDataSource = FakeDataBaseDataSource(),
             dispatcher = UnconfinedTestDispatcher(),
         )
     }
