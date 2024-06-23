@@ -44,10 +44,10 @@ class OctopusRestApiRepository(
         tariffCode: String,
     ): Result<Tariff> {
         return withContext(dispatcher) {
-            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
-
             runCatching {
+                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
                 val apiResponse = productsEndpoint.getProduct(productCode = productCode)
                 apiResponse?.toTariff(tariffCode = tariffCode) ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
             }.except<CancellationException, _>()
