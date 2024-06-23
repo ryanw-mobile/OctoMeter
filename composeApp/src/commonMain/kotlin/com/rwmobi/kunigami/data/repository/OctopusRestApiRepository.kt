@@ -133,6 +133,7 @@ class OctopusRestApiRepository(
      */
     override suspend fun getStandingCharges(
         tariffCode: String,
+        period: ClosedRange<Instant>?,
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
@@ -146,6 +147,8 @@ class OctopusRestApiRepository(
                     val apiResponse = productsEndpoint.getStandingCharges(
                         productCode = productCode,
                         tariffCode = tariffCode,
+                        periodFrom = period?.start,
+                        periodTo = period?.endInclusive,
                         page = page,
                     )
                     combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
@@ -164,6 +167,7 @@ class OctopusRestApiRepository(
      */
     override suspend fun getDayUnitRates(
         tariffCode: String,
+        period: ClosedRange<Instant>?,
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
@@ -177,6 +181,8 @@ class OctopusRestApiRepository(
                     val apiResponse = productsEndpoint.getDayUnitRates(
                         productCode = productCode,
                         tariffCode = tariffCode,
+                        periodFrom = period?.start,
+                        periodTo = period?.endInclusive,
                         page = page,
                     )
                     combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
@@ -195,6 +201,7 @@ class OctopusRestApiRepository(
      */
     override suspend fun getNightUnitRates(
         tariffCode: String,
+        period: ClosedRange<Instant>?,
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
@@ -208,6 +215,8 @@ class OctopusRestApiRepository(
                     val apiResponse = productsEndpoint.getNightUnitRates(
                         productCode = productCode,
                         tariffCode = tariffCode,
+                        periodFrom = period?.start,
+                        periodTo = period?.endInclusive,
                         page = page,
                     )
                     combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
