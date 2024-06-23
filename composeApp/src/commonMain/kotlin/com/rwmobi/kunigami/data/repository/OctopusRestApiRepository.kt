@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.data.repository
 
 import com.rwmobi.kunigami.data.repository.mapper.toAccount
 import com.rwmobi.kunigami.data.repository.mapper.toConsumption
+import com.rwmobi.kunigami.data.repository.mapper.toConsumptionEntity
 import com.rwmobi.kunigami.data.repository.mapper.toProductDetails
 import com.rwmobi.kunigami.data.repository.mapper.toProductSummary
 import com.rwmobi.kunigami.data.repository.mapper.toRate
@@ -18,6 +19,7 @@ import com.rwmobi.kunigami.data.source.network.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except
+import com.rwmobi.kunigami.domain.extensions.getHalfHourlyTimeSlotCount
 import com.rwmobi.kunigami.domain.extensions.toSystemDefaultLocalDate
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
@@ -233,6 +235,17 @@ class OctopusRestApiRepository(
     ): Result<List<Consumption>> {
         return withContext(dispatcher) {
             runCatching {
+                // cache: if half-hourly, calculate the expected number of entries and see if the cache has them
+                if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
+                    val cachedEntries = databaseDataSource.getConsumptions(
+                        meterSerial = meterSerialNumber,
+                        interval = period,
+                    )
+                    if (cachedEntries.size == period.getHalfHourlyTimeSlotCount()) {
+                        return@runCatching cachedEntries.map { it.toConsumption() }
+                    }
+                }
+
                 val combinedList = mutableListOf<Consumption>()
                 var page: Int? = requestedPage
                 do {
@@ -247,6 +260,14 @@ class OctopusRestApiRepository(
                         page = page,
                     )
                     combinedList.addAll(apiResponse?.results?.map { it.toConsumption() } ?: emptyList())
+
+                    // cache the results - only for half-hourly
+                    if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
+                        apiResponse?.results?.map { it.toConsumptionEntity(meterSerial = meterSerialNumber) }?.let {
+                            databaseDataSource.insert(consumptionEntity = it)
+                        }
+                    }
+
                     page = apiResponse?.getNextPageNumber()
                 } while (page != null)
 
