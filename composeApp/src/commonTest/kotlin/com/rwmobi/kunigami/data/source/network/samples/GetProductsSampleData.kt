@@ -10,6 +10,9 @@ package com.rwmobi.kunigami.data.source.network.samples
 import com.rwmobi.kunigami.data.source.network.dto.LinkDto
 import com.rwmobi.kunigami.data.source.network.dto.products.ProductDetailsDto
 import com.rwmobi.kunigami.data.source.network.dto.products.ProductsApiResponse
+import com.rwmobi.kunigami.domain.model.product.ProductDirection
+import com.rwmobi.kunigami.domain.model.product.ProductFeature
+import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import kotlinx.datetime.Instant
 
 object GetProductsSampleData {
@@ -143,6 +146,74 @@ object GetProductsSampleData {
 }
         """.trimIndent()
 
+    val jsonPage1 =
+        """{
+    "count": 2,
+    "next": "https://some.endpoint.test/v1/products/AGILE-24-04-03/?page=2",
+    "previous": null,
+    "results": [
+        {
+            "code": "AGILE-24-04-03",
+            "direction": "IMPORT",
+            "full_name": "Agile Octopus April 2024 v1",
+            "display_name": "Agile Octopus",
+            "description": "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
+            "is_variable": true,
+            "is_green": true,
+            "is_tracker": false,
+            "is_prepay": false,
+            "is_business": false,
+            "is_restricted": false,
+            "term": 12,
+            "available_from": "2024-04-03T00:00:00+01:00",
+            "available_to": null,
+            "links": [
+                {
+                    "href": "https://api.octopus.energy/v1/products/AGILE-24-04-03/",
+                    "method": "GET",
+                    "rel": "self"
+                }
+            ],
+            "brand": "OCTOPUS_ENERGY"
+        }
+    ]
+}
+        """.trimIndent()
+
+    val jsonPage2 =
+        """{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "code": "AGILE-BB-24-04-03",
+            "direction": "IMPORT",
+            "full_name": "Agile Octopus April 2024 v1",
+            "display_name": "Agile Octopus",
+            "description": "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
+            "is_variable": true,
+            "is_green": true,
+            "is_tracker": false,
+            "is_prepay": false,
+            "is_business": false,
+            "is_restricted": false,
+            "term": 12,
+            "available_from": "2024-04-03T00:00:00+01:00",
+            "available_to": null,
+            "links": [
+                {
+                    "href": "https://api.octopus.energy/v1/products/AGILE-BB-24-04-03/",
+                    "method": "GET",
+                    "rel": "self"
+                }
+            ],
+            "brand": "BULB"
+        }
+    ]
+}
+        """.trimIndent()
+
     val dto = ProductsApiResponse(
         count = 5,
         next = null,
@@ -269,5 +340,92 @@ object GetProductsSampleData {
                 brand = "COOP_ENERGY",
             ),
         ),
+    )
+
+    val productSummary = listOf(
+        ProductSummary(
+            code = "AGILE-24-04-03",
+            direction = ProductDirection.IMPORT,
+            fullName = "Agile Octopus April 2024 v1",
+            displayName = "Agile Octopus",
+            description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
+            features = listOf(ProductFeature.VARIABLE, ProductFeature.GREEN),
+            term = 12,
+            availability = Instant.parse("2024-04-02T23:00:00Z")..Instant.DISTANT_FUTURE,
+            brand = "OCTOPUS_ENERGY",
+        ),
+        ProductSummary(
+            code = "AGILE-BB-24-04-03",
+            direction = ProductDirection.IMPORT,
+            fullName = "Agile Octopus April 2024 v1",
+            displayName = "Agile Octopus",
+            description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
+            features = listOf(ProductFeature.VARIABLE, ProductFeature.GREEN),
+            term = 12,
+            availability = Instant.parse("2024-04-02T23:00:00Z")..Instant.DISTANT_FUTURE,
+            brand = "BULB",
+        ),
+        ProductSummary(
+            code = "AGILE-OUTGOING-19-05-13",
+            direction = ProductDirection.EXPORT,
+            fullName = "Agile Outgoing Octopus May 2019",
+            displayName = "Agile Outgoing Octopus",
+            description = "Outgoing Octopus Agile rate pays you for all your exported energy based on the day-ahead wholesale rate.",
+            features = listOf(ProductFeature.VARIABLE, ProductFeature.GREEN),
+            term = 12,
+            availability = Instant.parse("2018-01-01T00:00:00Z")..Instant.DISTANT_FUTURE,
+            brand = "OCTOPUS_ENERGY",
+        ),
+        ProductSummary(
+            code = "AGILE-OUTGOING-BB-23-02-28",
+            direction = ProductDirection.EXPORT,
+            fullName = "Agile Outgoing Octopus February 2023 v1",
+            displayName = "Agile Outgoing Octopus",
+            description = "Outgoing Octopus Agile rate pays you for all your exported energy based on the day-ahead wholesale rate.",
+            features = listOf(ProductFeature.VARIABLE, ProductFeature.GREEN),
+            term = 12,
+            availability = Instant.parse("2023-02-27T00:00:00Z")..Instant.DISTANT_FUTURE,
+            brand = "BULB",
+        ),
+        ProductSummary(
+            code = "COOP-FIX-12M-24-05-04",
+            direction = ProductDirection.IMPORT,
+            fullName = "Co-op 12M Fixed May 2024 v1",
+            displayName = "Co-op 12M Fixed",
+            description = "This tariff features 100% renewable electricity and fixes your unit rates and standing charge for 12 months.",
+            features = listOf(),
+            term = 12,
+            availability = Instant.parse("2024-05-03T23:00:00Z")..Instant.DISTANT_FUTURE,
+            brand = "COOP_ENERGY",
+        ),
+    )
+
+    val productSummaryPage1 = ProductSummary(
+        code = "AGILE-24-04-03",
+        direction = ProductDirection.IMPORT,
+        fullName = "Agile Octopus April 2024 v1",
+        displayName = "Agile Octopus",
+        description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
+        features = listOf(ProductFeature.VARIABLE, ProductFeature.GREEN),
+        term = 12,
+        availability = Instant.parse("2024-04-02T23:00:00Z")..Instant.DISTANT_FUTURE,
+        brand = "OCTOPUS_ENERGY",
+    )
+
+    val productSummaryPage2 = ProductSummary(
+        code = "AGILE-BB-24-04-03",
+        direction = ProductDirection.IMPORT,
+        fullName = "Agile Octopus April 2024 v1",
+        displayName = "Agile Octopus",
+        description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
+        features = listOf(ProductFeature.VARIABLE, ProductFeature.GREEN),
+        term = 12,
+        availability = Instant.parse("2024-04-02T23:00:00Z")..Instant.DISTANT_FUTURE,
+        brand = "BULB",
+    )
+
+    val productSummaryTwoPages = listOf(
+        productSummaryPage1,
+        productSummaryPage2,
     )
 }
