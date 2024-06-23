@@ -99,10 +99,10 @@ class OctopusRestApiRepository(
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
-            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
-
             runCatching {
+                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
                 val combinedList = mutableListOf<Rate>()
                 var page: Int? = requestedPage
                 do {
@@ -132,10 +132,10 @@ class OctopusRestApiRepository(
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
-            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
-
             runCatching {
+                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
                 val combinedList = mutableListOf<Rate>()
                 var page: Int? = requestedPage
                 do {
@@ -163,10 +163,10 @@ class OctopusRestApiRepository(
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
-            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
-
             runCatching {
+                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
                 val combinedList = mutableListOf<Rate>()
                 var page: Int? = requestedPage
                 do {
@@ -194,10 +194,10 @@ class OctopusRestApiRepository(
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
-            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
-
             runCatching {
+                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
                 val combinedList = mutableListOf<Rate>()
                 var page: Int? = requestedPage
                 do {
