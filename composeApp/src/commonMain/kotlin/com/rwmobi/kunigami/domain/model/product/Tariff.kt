@@ -94,4 +94,6 @@ data class Tariff(
             }
         }
     }
+
+    fun isAgileProduct() = extractProductCode()?.contains("AGILE") == true
 }
