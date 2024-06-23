@@ -16,6 +16,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+@Suppress("TooManyFunctions")
 class TariffTest {
     private val tariffCode1125A = "E-1R-AGILE-FLEX-22-11-25-A"
     private val tariffCode0411C = "E-2R-OE-FIX-12M-24-04-11-C"
