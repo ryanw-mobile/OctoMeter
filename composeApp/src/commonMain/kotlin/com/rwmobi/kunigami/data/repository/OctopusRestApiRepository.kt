@@ -17,6 +17,7 @@ import com.rwmobi.kunigami.data.source.network.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except
+import com.rwmobi.kunigami.domain.extensions.toSystemDefaultLocalDate
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
@@ -29,6 +30,7 @@ import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -42,10 +44,10 @@ class OctopusRestApiRepository(
         tariffCode: String,
     ): Result<Tariff> {
         return withContext(dispatcher) {
-            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
-
             runCatching {
+                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
                 val apiResponse = productsEndpoint.getProduct(productCode = productCode)
                 apiResponse?.toTariff(tariffCode = tariffCode) ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
             }.except<CancellationException, _>()
@@ -97,10 +99,10 @@ class OctopusRestApiRepository(
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
-            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
-
             runCatching {
+                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
                 val combinedList = mutableListOf<Rate>()
                 var page: Int? = requestedPage
                 do {
@@ -130,10 +132,10 @@ class OctopusRestApiRepository(
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
-            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
-
             runCatching {
+                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
                 val combinedList = mutableListOf<Rate>()
                 var page: Int? = requestedPage
                 do {
@@ -161,10 +163,10 @@ class OctopusRestApiRepository(
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
-            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
-
             runCatching {
+                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
                 val combinedList = mutableListOf<Rate>()
                 var page: Int? = requestedPage
                 do {
@@ -192,10 +194,10 @@ class OctopusRestApiRepository(
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return withContext(dispatcher) {
-            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
-
             runCatching {
+                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+
                 val combinedList = mutableListOf<Rate>()
                 var page: Int? = requestedPage
                 do {
@@ -255,17 +257,28 @@ class OctopusRestApiRepository(
      * API can potentially return more than one property for a given account number.
      * We have no way to tell if this is the case, but for simplicity, we take the first property only.
      */
+    private var cachedProfile: Pair<Account, Instant>? = null
     override suspend fun getAccount(
         apiKey: String,
         accountNumber: String,
     ): Result<Account?> {
+        cachedProfile?.first?.let { account ->
+            if (account.accountNumber == accountNumber &&
+                Clock.System.now().toSystemDefaultLocalDate() == cachedProfile?.second?.toSystemDefaultLocalDate()
+            ) {
+                return Result.success(account)
+            }
+        }
+
         return withContext(dispatcher) {
             runCatching {
                 val apiResponse = accountEndpoint.getAccount(
                     apiKey = apiKey,
                     accountNumber = accountNumber,
                 )
-                apiResponse?.properties?.firstOrNull()?.toAccount(accountNumber = accountNumber)
+                apiResponse?.properties?.firstOrNull()?.toAccount(accountNumber = accountNumber)?.also {
+                    cachedProfile = Pair(it, Clock.System.now())
+                }
             }
         }.except<CancellationException, _>()
     }

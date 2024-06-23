@@ -11,6 +11,8 @@ import com.rwmobi.kunigami.data.source.network.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
 import com.rwmobi.kunigami.data.source.network.samples.GetAccountSampleData
+import com.rwmobi.kunigami.data.source.network.samples.GetProductsSampleData
+import com.rwmobi.kunigami.data.source.network.samples.GetTariffSampleData
 import com.rwmobi.kunigami.domain.exceptions.HttpException
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -28,11 +30,13 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /***
  * This can be an integration test.
- * We provide MockEngine to real Endpoints instead of mocking endpoints.
+ * We test Repository with endpoint as a unit.
+ * We provide MockEngine to real Endpoints instead of mocking endpoints just for the sake of strict unit tests.
  */
 @Suppress("TooManyFunctions")
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalSerializationApi::class)
@@ -43,6 +47,7 @@ class OctopusRestApiRepositoryTest {
     private val fakeBaseUrl = "https://some.fakeurl.com"
     private val fakeApiKey = "sk_live_xXxX1xx1xx1xx1XXxX1Xxx1x"
     private val fakeAccountNumber = "B-1234A1A1"
+    private val sampleTariffCode = "E-1R-AGILE-FLEX-22-11-25-A"
 
     private val mockEngineInternalServerError = MockEngine { _ ->
         respond(
@@ -58,6 +63,35 @@ class OctopusRestApiRepositoryTest {
             status = HttpStatusCode.NotFound,
             headers = headersOf(HttpHeaders.ContentType, "text/json"),
         )
+    }
+
+    private val mockEngineProductPaging = MockEngine { httpRequestData ->
+        val pageNumber = httpRequestData.url.parameters.get("page")
+        when (pageNumber) {
+            "1", null -> {
+                respond(
+                    content = ByteReadChannel(GetProductsSampleData.jsonPage1),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            }
+
+            "2" -> {
+                respond(
+                    content = ByteReadChannel(GetProductsSampleData.jsonPage2),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            }
+
+            else -> {
+                respond(
+                    content = ByteReadChannel("Internal Server Error"),
+                    status = HttpStatusCode.InternalServerError,
+                    headers = headersOf(HttpHeaders.ContentType, "text/html"),
+                )
+            }
+        }
     }
 
     private fun setUpRepository(engine: MockEngine) {
@@ -94,6 +128,130 @@ class OctopusRestApiRepositoryTest {
         )
     }
 
+    // 🗂 getTariff
+    @Test
+    fun `getTariff should return expected domain model`() = runTest {
+        setUpRepository(
+            engine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(GetTariffSampleData.json),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            },
+        )
+
+        val result = octopusRestApiRepository.getTariff(
+            tariffCode = sampleTariffCode,
+        )
+
+        assertTrue(result.isSuccess)
+        assertEquals(expected = GetTariffSampleData.tariff, actual = result.getOrNull())
+    }
+
+    @Test
+    fun `getTariff should return failure when product code cannot be resolved`() = runTest {
+        setUpRepository(
+            engine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(GetTariffSampleData.json),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            },
+        )
+
+        val result = octopusRestApiRepository.getTariff(
+            tariffCode = "invalid tariff code",
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun `getTariff should return failure when data source throws an exception`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+
+        val result = octopusRestApiRepository.getTariff(
+            tariffCode = sampleTariffCode,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is HttpException)
+    }
+
+    // 🗂 getProducts
+    @Test
+    fun `getProducts should return expected domain model`() = runTest {
+        setUpRepository(
+            engine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(GetProductsSampleData.json),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            },
+        )
+
+        val result = octopusRestApiRepository.getProducts()
+
+        assertTrue(result.isSuccess)
+        assertEquals(expected = GetProductsSampleData.productSummary, actual = result.getOrNull())
+    }
+
+    @Test
+    fun `getProducts should loop to get the entire data set when backend indicates request can be resumed`() = runTest {
+        setUpRepository(
+            engine = mockEngineProductPaging,
+        )
+
+        val result = octopusRestApiRepository.getProducts()
+
+        assertTrue(result.isSuccess)
+        assertEquals(expected = GetProductsSampleData.productSummaryTwoPages, actual = result.getOrNull())
+    }
+
+    @Test
+    fun `getProducts should return correct domain model when requestedPage is not null`() = runTest {
+        setUpRepository(
+            engine = mockEngineProductPaging,
+        )
+
+        val result = octopusRestApiRepository.getProducts(
+            requestedPage = 2,
+        )
+
+        assertTrue(result.isSuccess)
+        assertEquals(expected = listOf(GetProductsSampleData.productSummaryPage2), actual = result.getOrNull())
+    }
+
+    @Test
+    fun `getProducts should return failure when data source throws an exception`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+
+        val result = octopusRestApiRepository.getProducts()
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is HttpException)
+    }
+
+    // 🗂 getProductDetails
+
+    // 🗂 getStandardUnitRates
+
+    // 🗂 getStandingCharges
+
+    // 🗂 getDayUnitRates
+
+    // 🗂 getNightUnitRates
+
+    // 🗂 getConsumption
+
     // 🗂 getAccount
     @Test
     fun `getAccount should return expected domain model`() = runTest {
@@ -113,7 +271,7 @@ class OctopusRestApiRepositoryTest {
         )
 
         assertTrue(result.isSuccess)
-        assertEquals(result.getOrNull(), GetAccountSampleData.account)
+        assertEquals(expected = GetAccountSampleData.account, actual = result.getOrNull())
     }
 
     @Test
@@ -126,7 +284,7 @@ class OctopusRestApiRepositoryTest {
         )
 
         assertTrue(result.isSuccess)
-        assertEquals(result.getOrNull(), null)
+        assertNull(actual = result.getOrNull())
     }
 
     @Test
@@ -139,6 +297,43 @@ class OctopusRestApiRepositoryTest {
         )
 
         assertTrue(result.isFailure)
-        assertTrue(result.exceptionOrNull() is HttpException)
+        assertTrue(actual = result.exceptionOrNull() is HttpException)
+    }
+
+    @Test
+    fun `getAccount should return cached result when it hits the cache`() = runTest {
+        var shouldEndpointReturnError = false
+        setUpRepository(
+            engine = MockEngine { _ ->
+                if (!shouldEndpointReturnError) {
+                    respond(
+                        content = ByteReadChannel(GetAccountSampleData.json),
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                } else {
+                    respond(
+                        content = ByteReadChannel("Internal Server Error"),
+                        status = HttpStatusCode.InternalServerError,
+                        headers = headersOf(HttpHeaders.ContentType, "text/html"),
+                    )
+                }
+            },
+        )
+
+        val firstAccess = octopusRestApiRepository.getAccount(
+            apiKey = fakeApiKey,
+            accountNumber = fakeAccountNumber,
+        )
+        assertTrue(firstAccess.isSuccess)
+        assertEquals(expected = GetAccountSampleData.account, actual = firstAccess.getOrNull())
+
+        shouldEndpointReturnError = true
+        val secondAccess = octopusRestApiRepository.getAccount(
+            apiKey = fakeApiKey,
+            accountNumber = fakeAccountNumber,
+        )
+        assertTrue(secondAccess.isSuccess)
+        assertEquals(expected = GetAccountSampleData.account, actual = secondAccess.getOrNull())
     }
 }

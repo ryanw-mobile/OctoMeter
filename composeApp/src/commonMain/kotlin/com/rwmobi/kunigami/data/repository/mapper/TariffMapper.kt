@@ -44,27 +44,25 @@ fun SingleProductApiResponse.toTariff(
         else -> TariffPaymentTerm.UNKNOWN
     }
 
-    return with(rates) {
-        Tariff(
-            productCode = code,
-            fullName = fullName,
-            displayName = displayName,
-            description = description,
-            isVariable = isVariable,
-            availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
+    return Tariff(
+        productCode = code,
+        fullName = fullName,
+        displayName = displayName,
+        description = description,
+        isVariable = isVariable,
+        availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
 
-            tariffCode = code,
-            tariffActiveAt = tariffsActiveAt,
+        tariffCode = rates.code,
+        tariffActiveAt = tariffsActiveAt,
 
-            tariffPaymentTerm = tariffPaymentTerm,
-            vatInclusiveStandingCharge = standingChargeIncVat,
-            vatInclusiveOnlineDiscount = onlineDiscountIncVat,
-            vatInclusiveDualFuelDiscount = dualFuelDiscountIncVat,
-            exitFeesType = ExitFeesType.fromApiValue(value = exitFeesType),
-            vatInclusiveExitFees = exitFeesIncVat,
-            vatInclusiveStandardUnitRate = standardUnitRateIncVat,
-            vatInclusiveDayUnitRate = dayUnitRateIncVat,
-            vatInclusiveNightUnitRate = nightUnitRateIncVat,
-        )
-    }
+        tariffPaymentTerm = tariffPaymentTerm,
+        vatInclusiveStandingCharge = rates.standingChargeIncVat,
+        vatInclusiveOnlineDiscount = rates.onlineDiscountIncVat,
+        vatInclusiveDualFuelDiscount = rates.dualFuelDiscountIncVat,
+        exitFeesType = ExitFeesType.fromApiValue(value = rates.exitFeesType),
+        vatInclusiveExitFees = rates.exitFeesIncVat,
+        vatInclusiveStandardUnitRate = rates.standardUnitRateIncVat,
+        vatInclusiveDayUnitRate = rates.dayUnitRateIncVat,
+        vatInclusiveNightUnitRate = rates.nightUnitRateIncVat,
+    )
 }
