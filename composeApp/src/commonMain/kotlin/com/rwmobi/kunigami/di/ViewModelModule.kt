@@ -28,6 +28,7 @@ val viewModelModule = module {
 
     factory {
         AgileViewModel(
+            getLatestAgileProductUseCase = get(),
             getTariffUseCase = get(),
             syncUserProfileUseCase = get(),
             getTariffRatesUseCase = get(),

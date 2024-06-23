@@ -17,6 +17,7 @@ import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.rate.Rate
+import com.rwmobi.kunigami.domain.usecase.GetLatestAgileProductUseCase
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffUseCase
@@ -50,6 +51,7 @@ import kotlin.math.min
 import kotlin.time.Duration
 
 class AgileViewModel(
+    private val getLatestAgileProductUseCase: GetLatestAgileProductUseCase,
     private val getTariffUseCase: GetTariffUseCase,
     private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val getStandardUnitRateUseCase: GetStandardUnitRateUseCase,
@@ -59,8 +61,7 @@ class AgileViewModel(
     private val _uiState: MutableStateFlow<AgileUIState> = MutableStateFlow(AgileUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
-    // TODO: Low priority - not my business. Get Agile product code from user preferences.
-    private val agileProductCode = "AGILE-24-04-03"
+    private val fallBackAgileProductCode = "AGILE-24-04-03"
     private val demoRetailRegion = RetailRegion.EASTERN_ENGLAND
 
     fun errorShown(errorId: Long) {
@@ -86,9 +87,20 @@ class AgileViewModel(
                     )
                 }
                 val region = activeTariffSummary?.getRetailRegion() ?: demoRetailRegion
+                val productCode = if (activeTariffSummary?.isAgileProduct() == true) {
+                    activeTariffSummary.productCode
+                } else {
+                    getLatestAgileProductCode()
+                }
 
-                getAgileRates(region = region)
-                getAgileTariffAndStopLoading(region = region)
+                getAgileRates(
+                    productCode = productCode,
+                    region = region,
+                )
+                getAgileTariffAndStopLoading(
+                    productCode = productCode,
+                    region = region,
+                )
             }
         }
     }
@@ -135,13 +147,14 @@ class AgileViewModel(
     }
 
     private suspend fun getAgileRates(
+        productCode: String,
         region: RetailRegion,
     ) {
         val currentTime = Clock.System.now().atStartOfHour()
         val periodTo = currentTime.plus(duration = Duration.parse("1d"))
 
         getStandardUnitRateUseCase(
-            tariffCode = "E-1R-$agileProductCode-${region.code}",
+            tariffCode = "E-1R-$productCode-${region.code}",
             period = currentTime..periodTo,
         ).fold(
             onSuccess = { rates ->
@@ -193,10 +206,11 @@ class AgileViewModel(
     }
 
     private suspend fun getAgileTariffAndStopLoading(
+        productCode: String,
         region: RetailRegion,
     ) {
         getTariffRatesUseCase(
-            tariffCode = "E-1R-$agileProductCode-${region.code}",
+            tariffCode = "E-1R-$productCode-${region.code}",
         ).fold(
             onSuccess = { agileTariff ->
                 _uiState.update { currentUiState ->
@@ -247,6 +261,10 @@ class AgileViewModel(
             val timeRange = rate.validity.start.getLocalHHMMString() + validToString
             "$timeRange\n${rate.vatInclusivePrice.toString(precision = 2)}p"
         }
+    }
+
+    private suspend fun getLatestAgileProductCode(): String {
+        return getLatestAgileProductUseCase() ?: fallBackAgileProductCode
     }
 
     override fun onCleared() {
