@@ -23,6 +23,7 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import kotlin.math.ceil
 
 // Time-zone aware conversion utils
 
@@ -207,6 +208,25 @@ fun Instant.getLocalMonthYearString(): String {
         year()
     }
     return localDate.format(customFormat)
+}
+
+fun ClosedRange<Instant>.getHalfHourlyTimeSlotCount(): Int {
+    // adjust the start time to 00/30 minutes
+    val adjustedStartTime = adjustToNext00Or30(start.epochSeconds)
+
+    if (endInclusive.epochSeconds <= adjustedStartTime) return 0
+
+    val durationInSeconds = endInclusive.epochSeconds - adjustedStartTime
+    return ceil(durationInSeconds / 1800.0).toInt() + 1
+}
+
+private fun adjustToNext00Or30(epochSeconds: Long): Long {
+    val minutes = (epochSeconds / 60) % 60
+    val adjustment = when {
+        minutes < 30 -> 30 - minutes
+        else -> 60 - minutes
+    }
+    return epochSeconds + adjustment * 60
 }
 
 expect fun Instant.getLocalDateString(): String
