@@ -74,7 +74,7 @@ class ElectricityMeterPointsEndpointTest {
             mpan = fakeMpan,
             meterSerialNumber = fakeMeterSerialNumber,
         )
-        assertEquals(GetConsumptionSampleData.dto, result)
+        assertEquals(expected = GetConsumptionSampleData.dto, actual = result)
     }
 
     @Test

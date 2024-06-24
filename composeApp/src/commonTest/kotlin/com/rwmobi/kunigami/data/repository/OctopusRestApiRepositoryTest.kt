@@ -7,13 +7,18 @@
 
 package com.rwmobi.kunigami.data.repository
 
+import com.rwmobi.kunigami.data.source.local.database.FakeDataBaseDataSource
+import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
 import com.rwmobi.kunigami.data.source.network.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
 import com.rwmobi.kunigami.data.source.network.samples.GetAccountSampleData
+import com.rwmobi.kunigami.data.source.network.samples.GetConsumptionSampleData
 import com.rwmobi.kunigami.data.source.network.samples.GetProductsSampleData
 import com.rwmobi.kunigami.data.source.network.samples.GetTariffSampleData
 import com.rwmobi.kunigami.domain.exceptions.HttpException
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -26,12 +31,15 @@ import io.ktor.utils.io.ByteReadChannel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Duration
 
 /***
  * This can be an integration test.
@@ -47,7 +55,12 @@ class OctopusRestApiRepositoryTest {
     private val fakeBaseUrl = "https://some.fakeurl.com"
     private val fakeApiKey = "sk_live_xXxX1xx1xx1xx1XXxX1Xxx1x"
     private val fakeAccountNumber = "B-1234A1A1"
+    private val fakeMpan = "9900000999999"
+    private val fakeMeterSerialNumber = "99A9999999"
+    private val sampleProductCode = "AGILE-FLEX-22-11-25"
     private val sampleTariffCode = "E-1R-AGILE-FLEX-22-11-25-A"
+    private val now = Clock.System.now()
+    private lateinit var fakeDataBaseDataSource: FakeDataBaseDataSource
 
     private val mockEngineInternalServerError = MockEngine { _ ->
         respond(
@@ -108,6 +121,7 @@ class OctopusRestApiRepositoryTest {
             }
         }
 
+        fakeDataBaseDataSource = FakeDataBaseDataSource()
         octopusRestApiRepository = OctopusRestApiRepository(
             productsEndpoint = ProductsEndpoint(
                 baseUrl = fakeBaseUrl,
@@ -124,6 +138,7 @@ class OctopusRestApiRepositoryTest {
                 httpClient = client,
                 dispatcher = UnconfinedTestDispatcher(),
             ),
+            databaseDataSource = fakeDataBaseDataSource,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }
@@ -241,16 +256,313 @@ class OctopusRestApiRepositoryTest {
     }
 
     // 🗂 getProductDetails
+    @Test
+    fun `getProductDetails should return failure when data source throws an exception`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+
+        val result = octopusRestApiRepository.getProductDetails(
+            productCode = sampleProductCode,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is HttpException)
+    }
 
     // 🗂 getStandardUnitRates
+    @Test
+    fun `getStandardUnitRates should return failure when product code cannot be resolved`() = runTest {
+        setUpRepository(
+            engine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(GetTariffSampleData.json),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            },
+        )
+
+        val result = octopusRestApiRepository.getStandardUnitRates(
+            tariffCode = "invalid tariff code",
+            period = now..now,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun `getStandardUnitRates should return failure when data source throws an exception`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+
+        val result = octopusRestApiRepository.getStandardUnitRates(
+            tariffCode = sampleTariffCode,
+            period = now..now,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is HttpException)
+    }
 
     // 🗂 getStandingCharges
+    @Test
+    fun `getStandingCharges should return failure when product code cannot be resolved`() = runTest {
+        setUpRepository(
+            engine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(GetTariffSampleData.json),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            },
+        )
+
+        val result = octopusRestApiRepository.getStandingCharges(
+            tariffCode = "invalid tariff code",
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun `getStandingCharges should return failure when data source throws an exception`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+
+        val result = octopusRestApiRepository.getStandingCharges(
+            tariffCode = sampleTariffCode,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is HttpException)
+    }
 
     // 🗂 getDayUnitRates
+    @Test
+    fun `getDayUnitRates should return failure when product code cannot be resolved`() = runTest {
+        setUpRepository(
+            engine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(GetTariffSampleData.json),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            },
+        )
+
+        val result = octopusRestApiRepository.getDayUnitRates(
+            tariffCode = "invalid tariff code",
+            period = now..now,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun `getDayUnitRates should return failure when data source throws an exception`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+
+        val result = octopusRestApiRepository.getDayUnitRates(
+            tariffCode = sampleTariffCode,
+            period = now..now,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is HttpException)
+    }
 
     // 🗂 getNightUnitRates
+    @Test
+    fun `getNightUnitRates should return failure when product code cannot be resolved`() = runTest {
+        setUpRepository(
+            engine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(GetTariffSampleData.json),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            },
+        )
+
+        val result = octopusRestApiRepository.getNightUnitRates(
+            tariffCode = "invalid tariff code",
+            period = now..now,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun `getNightUnitRates should return failure when data source throws an exception`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+
+        val result = octopusRestApiRepository.getNightUnitRates(
+            tariffCode = sampleTariffCode,
+            period = now..now,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is HttpException)
+    }
 
     // 🗂 getConsumption
+    @Test
+    fun `getConsumption should return cached data when ConsumptionTimeFrame is HALF_HOURLY local database contains the required data set`() = runTest {
+        setUpRepository(
+            // Fail it if repository needs to reach the backend
+            engine = mockEngineInternalServerError,
+        )
+        fakeDataBaseDataSource.getConsumptionsResponse = listOf(
+            ConsumptionEntity(
+                meterSerial = fakeMeterSerialNumber,
+                kWhConsumed = 0.113,
+                intervalStart = Instant.parse("2024-05-06T23:30:00Z"),
+                intervalEnd = Instant.parse("2024-05-07T00:00:00Z"),
+            ),
+            ConsumptionEntity(
+                meterSerial = fakeMeterSerialNumber,
+                kWhConsumed = 0.58,
+                intervalStart = Instant.parse("2024-05-06T23:00:00Z"),
+                intervalEnd = Instant.parse("2024-05-06T23:30:00Z"),
+            ),
+            ConsumptionEntity(
+                meterSerial = fakeMeterSerialNumber,
+                kWhConsumed = 0.201,
+                intervalStart = Instant.parse("2024-05-06T22:30:00Z"),
+                intervalEnd = Instant.parse("2024-05-06T23:00:00Z"),
+            ),
+        )
+
+        val result = octopusRestApiRepository.getConsumption(
+            apiKey = fakeApiKey,
+            mpan = fakeMpan,
+            meterSerialNumber = fakeMeterSerialNumber,
+            period = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:59:59Z"),
+            orderBy = ConsumptionDataOrder.PERIOD,
+            groupBy = ConsumptionTimeFrame.HALF_HOURLY,
+        )
+
+        assertTrue(result.isSuccess)
+        assertEquals(expected = 3, actual = result.getOrNull()!!.size)
+    }
+
+    @Test
+    fun `getConsumption should get data from remote data source when ConsumptionTimeFrame is HALF_HOURLY local database contains incomplete data set`() = runTest {
+        setUpRepository(
+            engine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(GetConsumptionSampleData.json),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            },
+        )
+        fakeDataBaseDataSource.getConsumptionsResponse = listOf(
+            ConsumptionEntity(
+                meterSerial = fakeMeterSerialNumber,
+                kWhConsumed = 0.201,
+                intervalStart = Instant.parse("2024-05-06T21:30:00Z"),
+                intervalEnd = Instant.parse("2024-05-06T22:00:00Z"),
+            ),
+        )
+
+        val result = octopusRestApiRepository.getConsumption(
+            apiKey = fakeApiKey,
+            mpan = fakeMpan,
+            meterSerialNumber = fakeMeterSerialNumber,
+            period = Instant.parse("2024-05-06T21:30:00Z")..Instant.parse("2024-05-06T23:59:59Z"),
+            orderBy = ConsumptionDataOrder.PERIOD,
+            groupBy = ConsumptionTimeFrame.HALF_HOURLY,
+        )
+
+        assertTrue(result.isSuccess)
+        assertEquals(expected = GetConsumptionSampleData.consumption, actual = result.getOrNull())
+    }
+
+    @Test
+    fun `getConsumption should return failure when ConsumptionTimeFrame is HALF_HOURLY and local database returns an error`() = runTest {
+        setUpRepository(
+            engine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(GetConsumptionSampleData.json),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            },
+        )
+        fakeDataBaseDataSource.exception = RuntimeException()
+
+        val result = octopusRestApiRepository.getConsumption(
+            apiKey = fakeApiKey,
+            mpan = fakeMpan,
+            meterSerialNumber = fakeMeterSerialNumber,
+            period = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:59:59Z"),
+            orderBy = ConsumptionDataOrder.PERIOD,
+            groupBy = ConsumptionTimeFrame.HALF_HOURLY,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is RuntimeException)
+    }
+
+    @Test
+    fun `getConsumption should get data from remote data source without checking the cache when ConsumptionTimeFrame is not HALF_HOURLY`() = runTest {
+        setUpRepository(
+            engine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(GetConsumptionSampleData.json),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            },
+        )
+        fakeDataBaseDataSource.exception = RuntimeException()
+
+        listOf(ConsumptionTimeFrame.DAY, ConsumptionTimeFrame.WEEK, ConsumptionTimeFrame.MONTH, ConsumptionTimeFrame.QUARTER).forEach { timeFrame ->
+            val result = octopusRestApiRepository.getConsumption(
+                apiKey = fakeApiKey,
+                mpan = fakeMpan,
+                meterSerialNumber = fakeMeterSerialNumber,
+                period = Instant.parse("2024-05-06T21:30:00Z")..Instant.parse("2024-05-06T23:59:59Z"),
+                orderBy = ConsumptionDataOrder.PERIOD,
+                groupBy = timeFrame,
+            )
+
+            assertTrue(result.isSuccess)
+            assertEquals(expected = GetConsumptionSampleData.consumption, actual = result.getOrNull())
+        }
+    }
+
+    @Test
+    fun `getConsumption should return failure when remote data source throws an exception`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+
+        fakeDataBaseDataSource.getConsumptionsResponse = emptyList()
+        val result = octopusRestApiRepository.getConsumption(
+            apiKey = fakeApiKey,
+            mpan = fakeMpan,
+            meterSerialNumber = fakeMeterSerialNumber,
+            period = now..now.plus(Duration.parse("1d")),
+            orderBy = ConsumptionDataOrder.PERIOD,
+            groupBy = ConsumptionTimeFrame.HALF_HOURLY,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is HttpException)
+    }
 
     // 🗂 getAccount
     @Test

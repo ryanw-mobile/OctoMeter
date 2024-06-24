@@ -30,16 +30,19 @@ interface RestApiRepository {
 
     suspend fun getStandingCharges(
         tariffCode: String,
+        period: ClosedRange<Instant>? = null,
         requestedPage: Int? = null,
     ): Result<List<Rate>>
 
     suspend fun getDayUnitRates(
         tariffCode: String,
+        period: ClosedRange<Instant>?,
         requestedPage: Int? = null,
     ): Result<List<Rate>>
 
     suspend fun getNightUnitRates(
         tariffCode: String,
+        period: ClosedRange<Instant>?,
         requestedPage: Int? = null,
     ): Result<List<Rate>>
 

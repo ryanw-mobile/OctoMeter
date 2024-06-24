@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.domain.extensions
 
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -220,5 +221,20 @@ class InstantExtensionsKtTest {
         val actualEndOfDay = expectedEndOfDay.atEndOfDay()
 
         assertEquals(expectedEndOfDay, actualEndOfDay)
+    }
+
+    @Test
+    fun `getHalfHourlyTimeSlotCount should return correct slot count`() {
+        val oneHourRange = Instant.parse("2023-05-01T10:30:00Z")..Instant.parse("2023-05-01T11:30:00Z")
+        val oneHourRangeSlots = oneHourRange.getHalfHourlyTimeSlotCount()
+        assertEquals(expected = 2, actual = oneHourRangeSlots)
+
+        val fiftyMinutesRange = Instant.parse("2023-05-01T10:30:00Z")..Instant.parse("2023-05-01T11:20:00Z")
+        val fiftyMinutesRangeSlots = fiftyMinutesRange.getHalfHourlyTimeSlotCount()
+        assertEquals(expected = 2, actual = fiftyMinutesRangeSlots)
+
+        val oneDayRange = Instant.parse("2023-05-02T00:00:00Z")..Instant.parse("2023-05-02T23:59:59Z")
+        val oneDayRangeSlots = oneDayRange.getHalfHourlyTimeSlotCount()
+        assertEquals(expected = 48, actual = oneDayRangeSlots)
     }
 }

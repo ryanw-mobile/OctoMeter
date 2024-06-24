@@ -38,7 +38,6 @@ val dataSourceModule = module {
             .fallbackToDestructiveMigrationOnDowngrade(dropAllTables = true)
             .fallbackToDestructiveMigration(dropAllTables = true)
             .setDriver(BundledSQLiteDriver())
-            .setQueryCoroutineContext(get(named("IoDispatcher")))
             .build()
     }
 }

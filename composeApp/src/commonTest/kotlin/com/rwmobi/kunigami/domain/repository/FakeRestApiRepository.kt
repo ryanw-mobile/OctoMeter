@@ -48,6 +48,7 @@ class FakeRestApiRepository : RestApiRepository {
     var setStandingChargesResponse: Result<List<Rate>>? = null
     override suspend fun getStandingCharges(
         tariffCode: String,
+        period: ClosedRange<Instant>?,
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return setStandingChargesResponse ?: throw RuntimeException("Fake result setStandingChargesResponse not defined")
@@ -56,6 +57,7 @@ class FakeRestApiRepository : RestApiRepository {
     var setDayUnitRatesResponse: Result<List<Rate>>? = null
     override suspend fun getDayUnitRates(
         tariffCode: String,
+        period: ClosedRange<Instant>?,
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return setDayUnitRatesResponse ?: throw RuntimeException("Fake result setDayUnitRatesResponse not defined")
@@ -64,6 +66,7 @@ class FakeRestApiRepository : RestApiRepository {
     var setNightUnitRatesResponse: Result<List<Rate>>? = null
     override suspend fun getNightUnitRates(
         tariffCode: String,
+        period: ClosedRange<Instant>?,
         requestedPage: Int?,
     ): Result<List<Rate>> {
         return setNightUnitRatesResponse ?: throw RuntimeException("Fake result setNightUnitRatesResponse not defined")
