@@ -245,43 +245,59 @@ class OctopusRestApiRepository(
         return withContext(dispatcher) {
             runCatching {
                 // cache: if half-hourly, calculate the expected number of entries and see if the cache has them
-                if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
-                    val cachedEntries = databaseDataSource.getConsumptions(
-                        meterSerial = meterSerialNumber,
-                        interval = period,
-                    )
-                    if (cachedEntries.size == period.getHalfHourlyTimeSlotCount()) {
-                        return@runCatching cachedEntries.map { it.toConsumption() }
-                    }
-                }
+                getConsumptionsFromDatabase(
+                    meterSerialNumber = meterSerialNumber,
+                    period = period,
+                    groupBy = groupBy,
+                ) ?: run {
+                    val combinedList = mutableListOf<Consumption>()
+                    var page: Int? = requestedPage
+                    do {
+                        val apiResponse = electricityMeterPointsEndpoint.getConsumption(
+                            apiKey = apiKey,
+                            mpan = mpan,
+                            periodFrom = period.start,
+                            periodTo = period.endInclusive,
+                            meterSerialNumber = meterSerialNumber,
+                            orderBy = orderBy.apiValue,
+                            groupBy = groupBy.apiValue,
+                            page = page,
+                        )
+                        combinedList.addAll(apiResponse?.results?.map { it.toConsumption() } ?: emptyList())
 
-                val combinedList = mutableListOf<Consumption>()
-                var page: Int? = requestedPage
-                do {
-                    val apiResponse = electricityMeterPointsEndpoint.getConsumption(
-                        apiKey = apiKey,
-                        mpan = mpan,
-                        periodFrom = period.start,
-                        periodTo = period.endInclusive,
-                        meterSerialNumber = meterSerialNumber,
-                        orderBy = orderBy.apiValue,
-                        groupBy = groupBy.apiValue,
-                        page = page,
-                    )
-                    combinedList.addAll(apiResponse?.results?.map { it.toConsumption() } ?: emptyList())
-
-                    // cache the results - only for half-hourly
-                    if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
-                        apiResponse?.results?.map { it.toConsumptionEntity(meterSerial = meterSerialNumber) }?.let {
-                            databaseDataSource.insert(consumptionEntity = it)
+                        // cache the results - only for half-hourly
+                        if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
+                            apiResponse?.results?.map { it.toConsumptionEntity(meterSerial = meterSerialNumber) }?.let {
+                                databaseDataSource.insert(consumptionEntity = it)
+                            }
                         }
-                    }
 
-                    page = apiResponse?.getNextPageNumber()
-                } while (page != null)
+                        page = apiResponse?.getNextPageNumber()
+                    } while (page != null)
 
-                combinedList
+                    combinedList
+                }
             }.except<CancellationException, _>()
+        }
+    }
+
+    private suspend fun getConsumptionsFromDatabase(
+        meterSerialNumber: String,
+        period: ClosedRange<Instant>,
+        groupBy: ConsumptionTimeFrame,
+    ): List<Consumption>? {
+        if (groupBy != ConsumptionTimeFrame.HALF_HOURLY) {
+            return null
+        }
+
+        val cachedEntries = databaseDataSource.getConsumptions(
+            meterSerial = meterSerialNumber,
+            interval = period,
+        )
+        return if (cachedEntries.size == period.getHalfHourlyTimeSlotCount()) {
+            cachedEntries.map { it.toConsumption() }
+        } else {
+            null
         }
     }
 
