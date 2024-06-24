@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.data.repository
 
+import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.data.repository.mapper.toAccount
 import com.rwmobi.kunigami.data.repository.mapper.toConsumption
 import com.rwmobi.kunigami.data.repository.mapper.toConsumptionEntity
@@ -250,6 +251,7 @@ class OctopusRestApiRepository(
                     period = period,
                     groupBy = groupBy,
                 ) ?: run {
+                    Logger.v(tag = "getConsumption", messageString = "DB Cache misses for $period")
                     val combinedList = mutableListOf<Consumption>()
                     var page: Int? = requestedPage
                     do {
