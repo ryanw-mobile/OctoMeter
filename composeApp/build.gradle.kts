@@ -125,6 +125,9 @@ kotlin {
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
         }
+        desktopMain.kotlin {
+            srcDir("build/generated/ksp/metadata")
+        }
         desktopMain.dependencies {
             runtimeOnly("org.jetbrains.skiko:skiko-awt-runtime-$skikoTarget:$skikoVersion")
             implementation(compose.desktop.currentOs)
