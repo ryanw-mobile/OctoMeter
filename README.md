@@ -16,7 +16,7 @@ This app is designed for Octopus Energy customers in the UK who have a smart met
 
 ### It works for me
 
-**This is not a sample or demo app**. This is a fully functional app that I developed for myself, and I use it every day to monitor energy consumption and save money. While it should technically work for other Octopus Energy customers, I can’t guarantee it will handle all scenarios such as different tariffs or multiple meter installations. These may produce data that the app cannot process.
+This is a fully functional app that I developed for myself, and I use it every day to monitor energy consumption and save money. While it should technically work for other Octopus Energy customers, I can’t guarantee it will handle all scenarios such as different tariffs or multiple meter installations. These may produce data that the app cannot process.
 
 This is a dashboard-type app that runs on desktop (desktop-first), Android, and iOS. It supports an adaptive layout that works on mobile, tablet, and dynamic desktop window sizes. The app honours light and dark modes on all supported platforms.
 
@@ -32,7 +32,7 @@ For non-Octopus Energy customers, or non-UK residents, the demo mode will displa
 <p align="center"><img src="https://github.com/ryanw-mobile/OctoMeter/blob/main/screenshots/240603_agile_animation.gif" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 <br />
 
-The current release meets my daily needs. However, this project will continue to be maintained and improved as a way for me to gain real-world Kotlin Multiplatform development experience. For this reason, the app was intentionally built to reach production-level quality as much as possible.
+The current release meets my daily needs. However, this project will continue to be maintained and improved as a way for me to gain real-world hands-on Kotlin Multiplatform development experience. For this reason, the app was intentionally built to reach production-level quality as much as possible.
 
 If you like this app, consider giving me a star, [following me on Medium](https://medium.com/@callmeryan), or [connecting with me on LinkedIn](https://www.linkedin.com/in/ryanwmobile/). 
 
@@ -64,24 +64,13 @@ All downloadables are provided under the [Release Section](https://github.com/ry
 
 Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/OctoMeter/issues).
 
-### Current limitations
-
-There are the known issues to be sorted, since they are not affecting me, it will be queued to be
-improved later:
-
-* Dual-rate tariffs (day unit rate and night unit rates) are not fully-supported
-* Native iOS UI theming (reusing Android Material 3 components right now)
-* Some UI scaling issues on Windows
-* British Daylight Saving Time issues: We do not have sufficient test data yet.
+I have limited development budget. There are known issues which are not likely to be address for the time being due to shortage of funding.
 
 > [!IMPORTANT]  
 > **Regarding fixed charges, tariff rates, and cost estimation shown on the app:**
->This app applies the current direct debit tariff to estimate past usage costs. For flexible and Agile tariffs, the current rough calculations do not produce reliable estimations. There might be multiple tariffs covering a long period as well. We need to map the consumption against the exact tariff and rates by intervals and apply the rounding rules to approximate the actual billing amount. This limitation may be addressed in 2025 when I have enough personal data for verification, but it is the limitation we have for now.
-
+>This app has no access to your payment details, so by default it applies the direct debit tariff to estimate usage costs. The daily half-hourly cost should closely match the actual bill. For longer intervals, the app may not produce the exact billable amount. Please refer to your actual bills in that case.
 
 <br /><br />
-
-
 
 ## Some technical details
 
