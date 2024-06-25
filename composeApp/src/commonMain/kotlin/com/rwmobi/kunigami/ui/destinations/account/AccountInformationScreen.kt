@@ -43,12 +43,15 @@ import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.account_clear_cache
+import kunigami.composeapp.generated.resources.account_clear_credential_button_cta
 import kunigami.composeapp.generated.resources.account_clear_credential_title
 import kunigami.composeapp.generated.resources.account_error_account_empty
 import kunigami.composeapp.generated.resources.account_moved_in
 import kunigami.composeapp.generated.resources.account_moved_out
 import kunigami.composeapp.generated.resources.account_unknown_installation_address
 import kunigami.composeapp.generated.resources.account_update_api_key
+import kunigami.composeapp.generated.resources.database_remove_outline
 import kunigami.composeapp.generated.resources.key
 import kunigami.composeapp.generated.resources.retry
 import kunigami.composeapp.generated.resources.unlink
@@ -142,6 +145,14 @@ internal fun AccountInformationScreen(
             )
         }
 
+        SimpleTitleButtonCard(
+            modifier = Modifier.fillMaxWidth(),
+            title = stringResource(resource = Res.string.account_clear_cache),
+            buttonLabel = stringResource(resource = Res.string.account_clear_credential_button_cta),
+            buttonPainter = painterResource(resource = Res.drawable.database_remove_outline),
+            onButtonClicked = uiEvent.onClearCache,
+        )
+
         ClearCredentialSectionAdaptive(
             modifier = Modifier.fillMaxWidth(),
             onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
@@ -177,6 +188,7 @@ private fun Preview() {
                     onRefresh = {},
                     onMeterSerialNumberSelected = { _, _ -> },
                     onErrorShown = {},
+                    onClearCache = {},
                     onScrolledToTop = {},
                     onShowSnackbar = {},
                     onSpecialErrorScreenShown = {},
@@ -210,6 +222,7 @@ private fun ErrorPreview() {
                 onRefresh = {},
                 onMeterSerialNumberSelected = { _, _ -> },
                 onErrorShown = {},
+                onClearCache = {},
                 onScrolledToTop = {},
                 onShowSnackbar = {},
                 onSpecialErrorScreenShown = {},

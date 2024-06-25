@@ -17,6 +17,7 @@ data class AccountUIEvent(
     val onMeterSerialNumberSelected: (mpan: String, meterSerialNumber: String) -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
     val onSpecialErrorScreenShown: () -> Unit,
+    val onClearCache: () -> Unit,
     val onScrolledToTop: () -> Unit,
     val onShowSnackbar: suspend (message: String) -> Unit,
 )

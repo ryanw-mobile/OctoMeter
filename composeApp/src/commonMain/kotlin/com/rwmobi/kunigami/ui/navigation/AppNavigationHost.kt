@@ -176,6 +176,7 @@ fun AppNavigationHost(
                     onMeterSerialNumberSelected = viewModel::updateMeterSerialNumber,
                     onErrorShown = viewModel::errorShown,
                     onScrolledToTop = { onScrolledToTop(AppDestination.ACCOUNT) },
+                    onClearCache = viewModel::onClearCache,
                     onShowSnackbar = onShowSnackbar,
                     onSpecialErrorScreenShown = viewModel::onSpecialErrorScreenShown,
                 ),

@@ -60,4 +60,6 @@ interface RestApiRepository {
         apiKey: String,
         accountNumber: String,
     ): Result<Account?>
+
+    suspend fun clearCache()
 }

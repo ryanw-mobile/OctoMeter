@@ -31,32 +31,34 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 
 class DemoRestApiRepository : RestApiRepository {
+    private val defaultException = NotImplementedError("Disabled in demo mode")
+
     override suspend fun getTariff(tariffCode: String): Result<Tariff> {
-        throw NotImplementedError("Disabled in demo mode")
+        throw defaultException
     }
 
     override suspend fun getProducts(requestedPage: Int?): Result<List<ProductSummary>> {
-        throw NotImplementedError("Disabled in demo mode")
+        throw defaultException
     }
 
     override suspend fun getProductDetails(productCode: String): Result<ProductDetails> {
-        throw NotImplementedError("Disabled in demo mode")
+        throw defaultException
     }
 
     override suspend fun getStandardUnitRates(tariffCode: String, period: ClosedRange<Instant>, requestedPage: Int?): Result<List<Rate>> {
-        throw NotImplementedError("Disabled in demo mode")
+        throw defaultException
     }
 
     override suspend fun getStandingCharges(tariffCode: String, period: ClosedRange<Instant>?, requestedPage: Int?): Result<List<Rate>> {
-        throw NotImplementedError("Disabled in demo mode")
+        throw defaultException
     }
 
     override suspend fun getDayUnitRates(tariffCode: String, period: ClosedRange<Instant>?, requestedPage: Int?): Result<List<Rate>> {
-        throw NotImplementedError("Disabled in demo mode")
+        throw defaultException
     }
 
     override suspend fun getNightUnitRates(tariffCode: String, period: ClosedRange<Instant>?, requestedPage: Int?): Result<List<Rate>> {
-        throw NotImplementedError("Disabled in demo mode")
+        throw defaultException
     }
 
     /**
@@ -86,7 +88,7 @@ class DemoRestApiRepository : RestApiRepository {
                 ConsumptionTimeFrame.DAY -> intervalStart.plus(DateTimePeriod(days = 1), timeZone)
                 ConsumptionTimeFrame.WEEK -> intervalStart.plus(DateTimePeriod(days = 7), timeZone)
                 ConsumptionTimeFrame.MONTH -> intervalStart.plus(DateTimePeriod(months = 1), timeZone)
-                ConsumptionTimeFrame.QUARTER -> throw NotImplementedError("Disabled in demo mode")
+                ConsumptionTimeFrame.QUARTER -> throw defaultException
             }
 
             val intervalDurationMinutes = intervalStart.until(intervalEnd, DateTimeUnit.MINUTE)
@@ -115,6 +117,10 @@ class DemoRestApiRepository : RestApiRepository {
     }
 
     override suspend fun getAccount(apiKey: String, accountNumber: String): Result<Account?> {
-        throw NotImplementedError("Disabled in demo mode")
+        throw defaultException
+    }
+
+    override suspend fun clearCache() {
+        throw defaultException
     }
 }

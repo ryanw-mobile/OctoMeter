@@ -48,10 +48,10 @@ val viewModelModule = module {
     factory {
         AccountViewModel(
             userPreferencesRepository = get(),
-            getTariffUseCase = get(),
             initialiseAccountUseCase = get(),
             updateMeterPreferenceUseCase = get(),
             syncUserProfileUseCase = get(),
+            clearCacheUseCase = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
