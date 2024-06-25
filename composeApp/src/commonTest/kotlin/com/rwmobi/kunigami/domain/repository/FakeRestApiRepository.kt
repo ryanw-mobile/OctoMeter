@@ -92,4 +92,9 @@ class FakeRestApiRepository : RestApiRepository {
     ): Result<Account?> {
         return setAccountResponse ?: throw RuntimeException("Fake result setAccountResponse not defined")
     }
+
+    var setClearCacheException: Throwable? = null
+    override suspend fun clearCache() {
+        setClearCacheException?.let { throw it }
+    }
 }

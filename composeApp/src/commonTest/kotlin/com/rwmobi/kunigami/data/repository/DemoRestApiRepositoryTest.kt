@@ -107,6 +107,13 @@ class DemoRestApiRepositoryTest {
     }
 
     @Test
+    fun `clearCache should throw NotImplementedError`() = runTest {
+        assertFailsWith<NotImplementedError> {
+            demoRepository.clearCache()
+        }
+    }
+
+    @Test
     fun `getConsumption should generate random consumption data for HALF_HOURLY ConsumptionTimeFrame`() = runTest {
         val now = Clock.System.now()
         val start = now - Duration.parse("1d")
