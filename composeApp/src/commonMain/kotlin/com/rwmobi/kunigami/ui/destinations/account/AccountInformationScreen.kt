@@ -11,7 +11,6 @@ package com.rwmobi.kunigami.ui.destinations.account
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,7 +35,7 @@ import com.rwmobi.kunigami.ui.components.MessageActionScreen
 import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
 import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionAdaptive
 import com.rwmobi.kunigami.ui.destinations.account.components.ElectricityMeterPointCard
-import com.rwmobi.kunigami.ui.destinations.account.components.UpdateAPIKeyCard
+import com.rwmobi.kunigami.ui.destinations.account.components.SimpleTitleButtonCard
 import com.rwmobi.kunigami.ui.destinations.account.components.UpdateApiKeyDialog
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.previewsampledata.AccountSamples
@@ -44,13 +43,19 @@ import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.account_clear_cache
+import kunigami.composeapp.generated.resources.account_clear_credential_button_cta
 import kunigami.composeapp.generated.resources.account_clear_credential_title
 import kunigami.composeapp.generated.resources.account_error_account_empty
 import kunigami.composeapp.generated.resources.account_moved_in
 import kunigami.composeapp.generated.resources.account_moved_out
 import kunigami.composeapp.generated.resources.account_unknown_installation_address
+import kunigami.composeapp.generated.resources.account_update_api_key
+import kunigami.composeapp.generated.resources.database_remove_outline
+import kunigami.composeapp.generated.resources.key
 import kunigami.composeapp.generated.resources.retry
 import kunigami.composeapp.generated.resources.unlink
+import kunigami.composeapp.generated.resources.update
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -121,9 +126,12 @@ internal fun AccountInformationScreen(
         }
 
         var isUpdateAPIKeyDialogOpened by rememberSaveable { mutableStateOf(false) }
-        UpdateAPIKeyCard(
+        SimpleTitleButtonCard(
             modifier = Modifier.fillMaxWidth(),
-            onUpdateAPIKeyClicked = { isUpdateAPIKeyDialogOpened = true },
+            title = stringResource(resource = Res.string.account_update_api_key),
+            buttonLabel = stringResource(resource = Res.string.update),
+            buttonPainter = painterResource(resource = Res.drawable.key),
+            onButtonClicked = { isUpdateAPIKeyDialogOpened = true },
         )
 
         if (isUpdateAPIKeyDialogOpened && uiState.userProfile?.account?.accountNumber != null) {
@@ -137,13 +145,19 @@ internal fun AccountInformationScreen(
             )
         }
 
-        BoxWithConstraints {
-            ClearCredentialSectionAdaptive(
-                modifier = Modifier.fillMaxWidth(),
-                onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
-                useWideLayout = uiState.requestedLayout != AccountScreenLayout.Compact,
-            )
-        }
+        SimpleTitleButtonCard(
+            modifier = Modifier.fillMaxWidth(),
+            title = stringResource(resource = Res.string.account_clear_cache),
+            buttonLabel = stringResource(resource = Res.string.account_clear_credential_button_cta),
+            buttonPainter = painterResource(resource = Res.drawable.database_remove_outline),
+            onButtonClicked = uiEvent.onClearCache,
+        )
+
+        ClearCredentialSectionAdaptive(
+            modifier = Modifier.fillMaxWidth(),
+            onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
+            useWideLayout = uiState.requestedLayout != AccountScreenLayout.Compact,
+        )
 
         AppInfoFooter(modifier = Modifier.fillMaxWidth())
     }
@@ -174,6 +188,7 @@ private fun Preview() {
                     onRefresh = {},
                     onMeterSerialNumberSelected = { _, _ -> },
                     onErrorShown = {},
+                    onClearCache = {},
                     onScrolledToTop = {},
                     onShowSnackbar = {},
                     onSpecialErrorScreenShown = {},
@@ -207,6 +222,7 @@ private fun ErrorPreview() {
                 onRefresh = {},
                 onMeterSerialNumberSelected = { _, _ -> },
                 onErrorShown = {},
+                onClearCache = {},
                 onScrolledToTop = {},
                 onShowSnackbar = {},
                 onSpecialErrorScreenShown = {},

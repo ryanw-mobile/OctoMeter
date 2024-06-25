@@ -332,4 +332,9 @@ class OctopusRestApiRepository(
             }
         }.except<CancellationException, _>()
     }
+
+    override suspend fun clearCache() {
+        cachedProfile = null
+        databaseDataSource.clear()
+    }
 }

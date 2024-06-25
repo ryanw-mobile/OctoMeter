@@ -13,7 +13,7 @@ import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
-import com.rwmobi.kunigami.domain.usecase.GetTariffUseCase
+import com.rwmobi.kunigami.domain.usecase.ClearCacheUseCase
 import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
 import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
 import com.rwmobi.kunigami.domain.usecase.UpdateMeterPreferenceUseCase
@@ -26,6 +26,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.account_clear_cache_failed
+import kunigami.composeapp.generated.resources.account_clear_cache_success
 import kunigami.composeapp.generated.resources.account_error_load_account
 import kunigami.composeapp.generated.resources.account_error_update_credentials
 import org.jetbrains.compose.resources.getString
@@ -35,7 +37,7 @@ class AccountViewModel(
     private val initialiseAccountUseCase: InitialiseAccountUseCase,
     private val updateMeterPreferenceUseCase: UpdateMeterPreferenceUseCase,
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
-    private val getTariffUseCase: GetTariffUseCase,
+    private val clearCacheUseCase: ClearCacheUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<AccountUIState> = MutableStateFlow(AccountUIState(isLoading = true))
@@ -108,7 +110,7 @@ class AccountViewModel(
                     // There is no retry for this case.
                     Logger.e(getString(resource = Res.string.account_error_update_credentials), throwable = throwable, tag = "AccountViewModel")
                     _uiState.update { currentUiState ->
-                        currentUiState.handleErrorAndStopLoading(message = getString(resource = Res.string.account_error_update_credentials))
+                        currentUiState.handleMessageAndStopLoading(message = getString(resource = Res.string.account_error_update_credentials))
                     }
                 },
             )
@@ -146,6 +148,25 @@ class AccountViewModel(
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 requestScrollToTop = enabled,
+            )
+        }
+    }
+
+    fun onClearCache() {
+        startLoading()
+        viewModelScope.launch {
+            clearCacheUseCase().fold(
+                onSuccess = {
+                    _uiState.update { currentUiState ->
+                        currentUiState.handleMessageAndStopLoading(message = getString(resource = Res.string.account_clear_cache_success))
+                    }
+                },
+                onFailure = { throwable ->
+                    Logger.e(getString(resource = Res.string.account_clear_cache_failed), throwable = throwable, tag = "AccountViewModel")
+                    _uiState.update { currentUiState ->
+                        currentUiState.filterErrorAndStopLoading(throwable = throwable)
+                    }
+                },
             )
         }
     }

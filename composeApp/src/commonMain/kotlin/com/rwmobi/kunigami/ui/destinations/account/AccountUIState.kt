@@ -59,13 +59,13 @@ data class AccountUIState(
             }
 
             else -> {
-                handleErrorAndStopLoading(message = throwable.message ?: getString(resource = Res.string.tariffs_error_load_tariffs))
+                handleMessageAndStopLoading(message = throwable.message ?: getString(resource = Res.string.tariffs_error_load_tariffs))
             }
         }
     }
 
-    fun handleErrorAndStopLoading(message: String): AccountUIState {
-        val newErrorMessages = if (errorMessages.any { it.message == message }) {
+    fun handleMessageAndStopLoading(message: String): AccountUIState {
+        val newMessages = if (errorMessages.any { it.message == message }) {
             errorMessages
         } else {
             errorMessages + ErrorMessage(
@@ -74,7 +74,7 @@ data class AccountUIState(
             )
         }
         return copy(
-            errorMessages = newErrorMessages,
+            errorMessages = newMessages,
             isLoading = false,
         )
     }

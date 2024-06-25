@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
@@ -33,9 +34,12 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun UpdateAPIKeyCard(
+internal fun SimpleTitleButtonCard(
     modifier: Modifier = Modifier,
-    onUpdateAPIKeyClicked: () -> Unit,
+    title: String,
+    buttonLabel: String,
+    buttonPainter: Painter,
+    onButtonClicked: () -> Unit,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -51,15 +55,15 @@ internal fun UpdateAPIKeyCard(
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
-            text = stringResource(resource = Res.string.account_update_api_key),
+            text = title,
         )
 
         Spacer(modifier = Modifier.size(size = dimension.grid_4))
 
         IconTextButton(
-            icon = painterResource(resource = Res.drawable.key),
-            text = stringResource(resource = Res.string.update),
-            onClick = onUpdateAPIKeyClicked,
+            icon = buttonPainter,
+            text = buttonLabel,
+            onClick = onButtonClicked,
         )
     }
 }
@@ -68,9 +72,12 @@ internal fun UpdateAPIKeyCard(
 @Composable
 private fun Preview() {
     CommonPreviewSetup {
-        UpdateAPIKeyCard(
+        SimpleTitleButtonCard(
             modifier = Modifier.fillMaxWidth(),
-            onUpdateAPIKeyClicked = {},
+            title = stringResource(resource = Res.string.account_update_api_key),
+            buttonLabel = stringResource(resource = Res.string.update),
+            buttonPainter = painterResource(resource = Res.drawable.key),
+            onButtonClicked = {},
         )
     }
 }

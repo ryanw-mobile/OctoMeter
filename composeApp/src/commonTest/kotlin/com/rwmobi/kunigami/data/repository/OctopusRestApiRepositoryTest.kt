@@ -28,6 +28,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -37,6 +38,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration
@@ -647,5 +649,65 @@ class OctopusRestApiRepositoryTest {
         )
         assertTrue(secondAccess.isSuccess)
         assertEquals(expected = GetAccountSampleData.account, actual = secondAccess.getOrNull())
+    }
+
+    @Test
+    fun `clearCache should clear cached account`() = runTest {
+        var shouldEndpointReturnError = false
+        setUpRepository(
+            engine = MockEngine { _ ->
+                if (!shouldEndpointReturnError) {
+                    respond(
+                        content = ByteReadChannel(GetAccountSampleData.json),
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                } else {
+                    respond(
+                        content = ByteReadChannel("Internal Server Error"),
+                        status = HttpStatusCode.InternalServerError,
+                        headers = headersOf(HttpHeaders.ContentType, "text/html"),
+                    )
+                }
+            },
+        )
+
+        val firstAccess = octopusRestApiRepository.getAccount(
+            apiKey = fakeApiKey,
+            accountNumber = fakeAccountNumber,
+        )
+        assertTrue(firstAccess.isSuccess)
+        assertEquals(expected = GetAccountSampleData.account, actual = firstAccess.getOrNull())
+
+        octopusRestApiRepository.clearCache()
+
+        // Repository reach endpoint because of cache missed, and we set endpoint to return error
+        shouldEndpointReturnError = true
+        val secondAccess = octopusRestApiRepository.getAccount(
+            apiKey = fakeApiKey,
+            accountNumber = fakeAccountNumber,
+        )
+        assertTrue(secondAccess.isFailure)
+        assertTrue(actual = secondAccess.exceptionOrNull() is HttpException)
+    }
+
+    @Test
+    fun `clearCache should clear local database`() = runTest {
+        val errorMessage = "exception to test method triggered"
+        setUpRepository(
+            engine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(GetAccountSampleData.json),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            },
+        )
+        fakeDataBaseDataSource.exception = IOException(errorMessage)
+
+        val exception = assertFailsWith<IOException> {
+            octopusRestApiRepository.clearCache()
+        }
+        assertEquals(expected = errorMessage, actual = exception.message)
     }
 }
