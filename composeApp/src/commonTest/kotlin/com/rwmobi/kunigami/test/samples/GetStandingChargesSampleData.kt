@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.data.source.network.samples
+package com.rwmobi.kunigami.test.samples
 
 import com.rwmobi.kunigami.data.source.network.dto.prices.PricesApiResponse
 import com.rwmobi.kunigami.data.source.network.dto.prices.RateDto

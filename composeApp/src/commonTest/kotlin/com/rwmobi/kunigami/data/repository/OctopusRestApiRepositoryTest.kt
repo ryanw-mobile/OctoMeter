@@ -12,13 +12,13 @@ import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
 import com.rwmobi.kunigami.data.source.network.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
-import com.rwmobi.kunigami.data.source.network.samples.GetAccountSampleData
-import com.rwmobi.kunigami.data.source.network.samples.GetConsumptionSampleData
-import com.rwmobi.kunigami.data.source.network.samples.GetProductsSampleData
-import com.rwmobi.kunigami.data.source.network.samples.GetTariffSampleData
 import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
+import com.rwmobi.kunigami.test.samples.GetAccountSampleData
+import com.rwmobi.kunigami.test.samples.GetConsumptionSampleData
+import com.rwmobi.kunigami.test.samples.GetProductsSampleData
+import com.rwmobi.kunigami.test.samples.GetTariffSampleData
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond

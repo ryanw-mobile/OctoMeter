@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.domain.samples
+package com.rwmobi.kunigami.test.samples
 
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate

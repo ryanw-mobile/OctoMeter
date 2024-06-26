@@ -7,8 +7,8 @@
 
 package com.rwmobi.kunigami.data.source.network
 
-import com.rwmobi.kunigami.data.source.network.samples.GetConsumptionSampleData
 import com.rwmobi.kunigami.domain.exceptions.HttpException
+import com.rwmobi.kunigami.test.samples.GetConsumptionSampleData
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond

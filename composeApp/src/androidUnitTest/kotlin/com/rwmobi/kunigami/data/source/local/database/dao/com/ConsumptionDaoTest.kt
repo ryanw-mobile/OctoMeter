@@ -10,6 +10,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.rwmobi.kunigami.data.source.local.database.OctometerDatabase
+import com.rwmobi.kunigami.test.samples.ConsumptionEntitySampleData
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -46,31 +47,31 @@ internal class ConsumptionDaoTest {
 
     @Test
     fun insertAndRetrieveConsumptionEntity() = runBlocking {
-        val consumption = ConsumptionEntitySamples.sample1
+        val consumption = ConsumptionEntitySampleData.sample1
         database.consumptionDao.insert(consumption)
 
         val retrieved = database.consumptionDao.getConsumptions(
-            meterSerial = ConsumptionEntitySamples.sample1.meterSerial,
-            intervalStart = ConsumptionEntitySamples.sample1.intervalStart - Duration.parse("1h"),
-            intervalEnd = ConsumptionEntitySamples.sample1.intervalStart + Duration.parse("1h"),
+            meterSerial = ConsumptionEntitySampleData.sample1.meterSerial,
+            intervalStart = ConsumptionEntitySampleData.sample1.intervalStart - Duration.parse("1h"),
+            intervalEnd = ConsumptionEntitySampleData.sample1.intervalStart + Duration.parse("1h"),
         )
 
         assertEquals(1, retrieved.size)
-        assertEquals(ConsumptionEntitySamples.sample1, retrieved[0])
+        assertEquals(ConsumptionEntitySampleData.sample1, retrieved[0])
     }
 
     @Test
     fun insertAndRetrieveMultipleConsumptionEntities() = runBlocking {
         val consumptions = listOf(
-            ConsumptionEntitySamples.sample1,
-            ConsumptionEntitySamples.sample2,
+            ConsumptionEntitySampleData.sample1,
+            ConsumptionEntitySampleData.sample2,
         )
         database.consumptionDao.insert(consumptions)
 
         val retrieved = database.consumptionDao.getConsumptions(
-            meterSerial = ConsumptionEntitySamples.sample1.meterSerial,
-            intervalStart = ConsumptionEntitySamples.sample1.intervalStart - Duration.parse("1h"),
-            intervalEnd = ConsumptionEntitySamples.sample1.intervalStart + Duration.parse("1h"),
+            meterSerial = ConsumptionEntitySampleData.sample1.meterSerial,
+            intervalStart = ConsumptionEntitySampleData.sample1.intervalStart - Duration.parse("1h"),
+            intervalEnd = ConsumptionEntitySampleData.sample1.intervalStart + Duration.parse("1h"),
         )
 
         assertEquals(2, retrieved.size)
@@ -80,13 +81,13 @@ internal class ConsumptionDaoTest {
 
     @Test
     fun getConsumptions_ShouldReturnEmptyList_IfMeterSerialHasNoDataInDb() = runBlocking {
-        val consumption = ConsumptionEntitySamples.sample1
+        val consumption = ConsumptionEntitySampleData.sample1
         database.consumptionDao.insert(consumption)
 
         val retrieved = database.consumptionDao.getConsumptions(
             meterSerial = "invalid-serial",
-            intervalStart = ConsumptionEntitySamples.sample1.intervalStart,
-            intervalEnd = ConsumptionEntitySamples.sample1.intervalEnd,
+            intervalStart = ConsumptionEntitySampleData.sample1.intervalStart,
+            intervalEnd = ConsumptionEntitySampleData.sample1.intervalEnd,
         )
 
         assertTrue(retrieved.isEmpty())
@@ -94,13 +95,13 @@ internal class ConsumptionDaoTest {
 
     @Test
     fun getConsumptions_ShouldReturnEmptyList_IfMeterSerialHasDataButNotWithinRequestedRange() = runBlocking {
-        val consumption = ConsumptionEntitySamples.sample1
+        val consumption = ConsumptionEntitySampleData.sample1
         database.consumptionDao.insert(consumption)
 
         val retrieved = database.consumptionDao.getConsumptions(
-            meterSerial = ConsumptionEntitySamples.sample1.meterSerial,
-            intervalStart = ConsumptionEntitySamples.sample1.intervalEnd,
-            intervalEnd = ConsumptionEntitySamples.sample1.intervalEnd + Duration.parse("1h"),
+            meterSerial = ConsumptionEntitySampleData.sample1.meterSerial,
+            intervalStart = ConsumptionEntitySampleData.sample1.intervalEnd,
+            intervalEnd = ConsumptionEntitySampleData.sample1.intervalEnd + Duration.parse("1h"),
         )
 
         assertTrue(retrieved.isEmpty())
@@ -109,15 +110,15 @@ internal class ConsumptionDaoTest {
     @Test
     fun getConsumptions_ShouldReturnOneEntry_IfIntervalStartAndIntervalEndCoverOneOfThem() = runBlocking {
         val consumptions = listOf(
-            ConsumptionEntitySamples.sample1,
-            ConsumptionEntitySamples.sample2,
+            ConsumptionEntitySampleData.sample1,
+            ConsumptionEntitySampleData.sample2,
         )
         database.consumptionDao.insert(consumptions)
 
         val retrieved = database.consumptionDao.getConsumptions(
-            meterSerial = ConsumptionEntitySamples.sample1.meterSerial,
-            intervalStart = ConsumptionEntitySamples.sample1.intervalStart,
-            intervalEnd = ConsumptionEntitySamples.sample1.intervalEnd,
+            meterSerial = ConsumptionEntitySampleData.sample1.meterSerial,
+            intervalStart = ConsumptionEntitySampleData.sample1.intervalStart,
+            intervalEnd = ConsumptionEntitySampleData.sample1.intervalEnd,
         )
 
         assertEquals(1, retrieved.size)
@@ -126,14 +127,14 @@ internal class ConsumptionDaoTest {
 
     @Test
     fun clearConsumptionEntities() = runBlocking {
-        val consumption = ConsumptionEntitySamples.sample1
+        val consumption = ConsumptionEntitySampleData.sample1
         database.consumptionDao.insert(consumption)
 
         database.consumptionDao.clear()
         val retrieved = database.consumptionDao.getConsumptions(
-            meterSerial = ConsumptionEntitySamples.sample1.meterSerial,
-            intervalStart = ConsumptionEntitySamples.sample1.intervalStart - Duration.parse("1h"),
-            intervalEnd = ConsumptionEntitySamples.sample1.intervalStart + Duration.parse("1h"),
+            meterSerial = ConsumptionEntitySampleData.sample1.meterSerial,
+            intervalStart = ConsumptionEntitySampleData.sample1.intervalStart - Duration.parse("1h"),
+            intervalEnd = ConsumptionEntitySampleData.sample1.intervalStart + Duration.parse("1h"),
         )
 
         assertTrue(retrieved.isEmpty())

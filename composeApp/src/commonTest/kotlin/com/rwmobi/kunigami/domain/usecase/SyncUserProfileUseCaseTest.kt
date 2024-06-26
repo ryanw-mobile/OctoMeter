@@ -11,8 +11,8 @@ import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
-import com.rwmobi.kunigami.domain.samples.AccountSampleData
-import com.rwmobi.kunigami.domain.samples.TariffSampleData
+import com.rwmobi.kunigami.test.samples.AccountSampleData
+import com.rwmobi.kunigami.test.samples.TariffSampleData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest

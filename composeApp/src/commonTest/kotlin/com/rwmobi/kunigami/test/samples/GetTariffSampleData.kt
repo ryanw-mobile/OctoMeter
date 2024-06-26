@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.data.source.network.samples
+package com.rwmobi.kunigami.test.samples
 
 import com.rwmobi.kunigami.domain.model.product.ExitFeesType
 import com.rwmobi.kunigami.domain.model.product.Tariff
