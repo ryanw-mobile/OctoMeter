@@ -179,6 +179,7 @@ class OctopusRestApiRepository(
      */
     override suspend fun getStandingCharges(
         tariffCode: String,
+        paymentMethod: PaymentMethod,
         period: ClosedRange<Instant>?,
         requestedPage: Int?,
     ): Result<List<Rate>> {
@@ -191,7 +192,7 @@ class OctopusRestApiRepository(
                     tariffCode = tariffCode,
                     rateType = RateType.STANDING_CHARGE,
                     validity = period ?: Instant.DISTANT_PAST..Instant.DISTANT_FUTURE,
-                    paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
+                    paymentMethod = paymentMethod,
                 ) ?: run {
                     val combinedList = mutableListOf<Rate>()
                     var page: Int? = requestedPage

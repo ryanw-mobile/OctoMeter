@@ -14,6 +14,7 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.Tariff
+import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.datetime.DateTimePeriod
@@ -45,19 +46,36 @@ class DemoRestApiRepository : RestApiRepository {
         throw defaultException
     }
 
-    override suspend fun getStandardUnitRates(tariffCode: String, period: ClosedRange<Instant>, requestedPage: Int?): Result<List<Rate>> {
+    override suspend fun getStandardUnitRates(
+        tariffCode: String,
+        period: ClosedRange<Instant>,
+        requestedPage: Int?,
+    ): Result<List<Rate>> {
         throw defaultException
     }
 
-    override suspend fun getStandingCharges(tariffCode: String, period: ClosedRange<Instant>?, requestedPage: Int?): Result<List<Rate>> {
+    override suspend fun getStandingCharges(
+        tariffCode: String,
+        paymentMethod: PaymentMethod,
+        period: ClosedRange<Instant>?,
+        requestedPage: Int?,
+    ): Result<List<Rate>> {
         throw defaultException
     }
 
-    override suspend fun getDayUnitRates(tariffCode: String, period: ClosedRange<Instant>?, requestedPage: Int?): Result<List<Rate>> {
+    override suspend fun getDayUnitRates(
+        tariffCode: String,
+        period: ClosedRange<Instant>?,
+        requestedPage: Int?,
+    ): Result<List<Rate>> {
         throw defaultException
     }
 
-    override suspend fun getNightUnitRates(tariffCode: String, period: ClosedRange<Instant>?, requestedPage: Int?): Result<List<Rate>> {
+    override suspend fun getNightUnitRates(
+        tariffCode: String,
+        period: ClosedRange<Instant>?,
+        requestedPage: Int?,
+    ): Result<List<Rate>> {
         throw defaultException
     }
 
