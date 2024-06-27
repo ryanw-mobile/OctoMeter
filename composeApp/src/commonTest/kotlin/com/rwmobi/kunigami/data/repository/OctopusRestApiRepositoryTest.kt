@@ -299,6 +299,7 @@ class OctopusRestApiRepositoryTest {
         setUpRepository(
             engine = mockEngineInternalServerError,
         )
+        fakeDataBaseDataSource.getRatesResponse = emptyList()
 
         val result = octopusRestApiRepository.getStandardUnitRates(
             tariffCode = sampleTariffCode,
@@ -335,6 +336,7 @@ class OctopusRestApiRepositoryTest {
         setUpRepository(
             engine = mockEngineInternalServerError,
         )
+        fakeDataBaseDataSource.getRatesResponse = emptyList()
 
         val result = octopusRestApiRepository.getStandingCharges(
             tariffCode = sampleTariffCode,
@@ -371,6 +373,7 @@ class OctopusRestApiRepositoryTest {
         setUpRepository(
             engine = mockEngineInternalServerError,
         )
+        fakeDataBaseDataSource.getRatesResponse = emptyList()
 
         val result = octopusRestApiRepository.getDayUnitRates(
             tariffCode = sampleTariffCode,
@@ -408,6 +411,7 @@ class OctopusRestApiRepositoryTest {
         setUpRepository(
             engine = mockEngineInternalServerError,
         )
+        fakeDataBaseDataSource.getRatesResponse = emptyList()
 
         val result = octopusRestApiRepository.getNightUnitRates(
             tariffCode = sampleTariffCode,

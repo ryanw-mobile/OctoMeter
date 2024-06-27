@@ -14,8 +14,11 @@ import com.rwmobi.kunigami.data.repository.mapper.toConsumptionEntity
 import com.rwmobi.kunigami.data.repository.mapper.toProductDetails
 import com.rwmobi.kunigami.data.repository.mapper.toProductSummary
 import com.rwmobi.kunigami.data.repository.mapper.toRate
+import com.rwmobi.kunigami.data.repository.mapper.toRateEntity
 import com.rwmobi.kunigami.data.repository.mapper.toTariff
+import com.rwmobi.kunigami.data.source.local.database.entity.coversRange
 import com.rwmobi.kunigami.data.source.local.database.interfaces.DatabaseDataSource
+import com.rwmobi.kunigami.data.source.local.database.model.RateType
 import com.rwmobi.kunigami.data.source.network.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
@@ -29,6 +32,7 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.Tariff
+import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -108,22 +112,63 @@ class OctopusRestApiRepository(
                 val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
                 requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
 
-                val combinedList = mutableListOf<Rate>()
-                var page: Int? = requestedPage
-                do {
-                    val apiResponse = productsEndpoint.getStandardUnitRates(
-                        productCode = productCode,
-                        tariffCode = tariffCode,
-                        periodFrom = period.start,
-                        periodTo = period.endInclusive,
-                        page = page,
-                    )
-                    combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
-                    page = apiResponse?.getNextPageNumber()
-                } while (page != null)
+                getRatesFromDatabase(
+                    tariffCode = tariffCode,
+                    rateType = RateType.STANDARD_UNIT_RATE,
+                    validity = period,
+                    paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
+                ) ?: run {
+                    val combinedList = mutableListOf<Rate>()
+                    var page: Int? = requestedPage
+                    do {
+                        val apiResponse = productsEndpoint.getStandardUnitRates(
+                            productCode = productCode,
+                            tariffCode = tariffCode,
+                            periodFrom = period.start,
+                            periodTo = period.endInclusive,
+                            page = page,
+                        )
+                        combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
 
-                combinedList
+                        // cache the results
+                        apiResponse?.results?.map {
+                            it.toRateEntity(tariffCode = tariffCode, rateType = RateType.STANDARD_UNIT_RATE)
+                        }?.let {
+                            databaseDataSource.insertRates(rateEntity = it)
+                        }
+
+                        page = apiResponse?.getNextPageNumber()
+                    } while (page != null)
+
+                    combinedList
+                }
             }.except<CancellationException, _>()
+        }
+    }
+
+    /**
+     * Since rates do not necessary to be in half-hourly,
+     * we have to loop through the data set to see if it covers the entire range
+     */
+    private suspend fun getRatesFromDatabase(
+        tariffCode: String,
+        rateType: RateType,
+        validity: ClosedRange<Instant>,
+        paymentMethod: PaymentMethod,
+    ): List<Rate>? {
+        val cachedEntries = databaseDataSource.getRates(
+            tariffCode = tariffCode,
+            rateType = rateType,
+            validity = validity,
+            paymentMethod = paymentMethod,
+        )
+
+        val isCompleteDataSet = cachedEntries.coversRange(validFrom = validity.start, validTo = validity.endInclusive)
+
+        return if (isCompleteDataSet) {
+            cachedEntries.map { it.toRate() }
+        } else {
+            null
         }
     }
 
@@ -142,21 +187,36 @@ class OctopusRestApiRepository(
                 val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
                 requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
 
-                val combinedList = mutableListOf<Rate>()
-                var page: Int? = requestedPage
-                do {
-                    val apiResponse = productsEndpoint.getStandingCharges(
-                        productCode = productCode,
-                        tariffCode = tariffCode,
-                        periodFrom = period?.start,
-                        periodTo = period?.endInclusive,
-                        page = page,
-                    )
-                    combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
-                    page = apiResponse?.getNextPageNumber()
-                } while (page != null)
+                getRatesFromDatabase(
+                    tariffCode = tariffCode,
+                    rateType = RateType.STANDING_CHARGE,
+                    validity = period ?: Instant.DISTANT_PAST..Instant.DISTANT_FUTURE,
+                    paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
+                ) ?: run {
+                    val combinedList = mutableListOf<Rate>()
+                    var page: Int? = requestedPage
+                    do {
+                        val apiResponse = productsEndpoint.getStandingCharges(
+                            productCode = productCode,
+                            tariffCode = tariffCode,
+                            periodFrom = period?.start,
+                            periodTo = period?.endInclusive,
+                            page = page,
+                        )
+                        combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
 
-                combinedList
+                        // cache the results
+                        apiResponse?.results?.map {
+                            it.toRateEntity(tariffCode = tariffCode, rateType = RateType.STANDING_CHARGE)
+                        }?.let {
+                            databaseDataSource.insertRates(rateEntity = it)
+                        }
+
+                        page = apiResponse?.getNextPageNumber()
+                    } while (page != null)
+
+                    combinedList
+                }
             }.except<CancellationException, _>()
         }
     }
@@ -176,21 +236,36 @@ class OctopusRestApiRepository(
                 val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
                 requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
 
-                val combinedList = mutableListOf<Rate>()
-                var page: Int? = requestedPage
-                do {
-                    val apiResponse = productsEndpoint.getDayUnitRates(
-                        productCode = productCode,
-                        tariffCode = tariffCode,
-                        periodFrom = period?.start,
-                        periodTo = period?.endInclusive,
-                        page = page,
-                    )
-                    combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
-                    page = apiResponse?.getNextPageNumber()
-                } while (page != null)
+                getRatesFromDatabase(
+                    tariffCode = tariffCode,
+                    rateType = RateType.DAY_UNIT_RATE,
+                    validity = period ?: Instant.DISTANT_PAST..Instant.DISTANT_FUTURE,
+                    paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
+                ) ?: run {
+                    val combinedList = mutableListOf<Rate>()
+                    var page: Int? = requestedPage
+                    do {
+                        val apiResponse = productsEndpoint.getDayUnitRates(
+                            productCode = productCode,
+                            tariffCode = tariffCode,
+                            periodFrom = period?.start,
+                            periodTo = period?.endInclusive,
+                            page = page,
+                        )
+                        combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
 
-                combinedList
+                        // cache the results
+                        apiResponse?.results?.map {
+                            it.toRateEntity(tariffCode = tariffCode, rateType = RateType.DAY_UNIT_RATE)
+                        }?.let {
+                            databaseDataSource.insertRates(rateEntity = it)
+                        }
+
+                        page = apiResponse?.getNextPageNumber()
+                    } while (page != null)
+
+                    combinedList
+                }
             }.except<CancellationException, _>()
         }
     }
@@ -210,21 +285,37 @@ class OctopusRestApiRepository(
                 val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
                 requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
 
-                val combinedList = mutableListOf<Rate>()
-                var page: Int? = requestedPage
-                do {
-                    val apiResponse = productsEndpoint.getNightUnitRates(
-                        productCode = productCode,
-                        tariffCode = tariffCode,
-                        periodFrom = period?.start,
-                        periodTo = period?.endInclusive,
-                        page = page,
-                    )
-                    combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
-                    page = apiResponse?.getNextPageNumber()
-                } while (page != null)
+                getRatesFromDatabase(
+                    tariffCode = tariffCode,
+                    rateType = RateType.NIGHT_UNIT_RATE,
+                    validity = period ?: Instant.DISTANT_PAST..Instant.DISTANT_FUTURE,
+                    paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
+                ) ?: run {
+                    Logger.v(tag = "getConsumption", messageString = "DB Cache misses for $period")
+                    val combinedList = mutableListOf<Rate>()
+                    var page: Int? = requestedPage
+                    do {
+                        val apiResponse = productsEndpoint.getNightUnitRates(
+                            productCode = productCode,
+                            tariffCode = tariffCode,
+                            periodFrom = period?.start,
+                            periodTo = period?.endInclusive,
+                            page = page,
+                        )
+                        combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
 
-                combinedList
+                        // cache the results
+                        apiResponse?.results?.map {
+                            it.toRateEntity(tariffCode = tariffCode, rateType = RateType.NIGHT_UNIT_RATE)
+                        }?.let {
+                            databaseDataSource.insertRates(rateEntity = it)
+                        }
+
+                        page = apiResponse?.getNextPageNumber()
+                    } while (page != null)
+
+                    combinedList
+                }
             }.except<CancellationException, _>()
         }
     }
