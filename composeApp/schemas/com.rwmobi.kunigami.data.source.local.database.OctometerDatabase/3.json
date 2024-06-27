@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "807de70f35cee85f6e8c83b001a01ba8",
+    "identityHash": "d2b0a2162edcf96f758ceae007811413",
     "entities": [
       {
         "tableName": "consumption",
@@ -43,7 +43,7 @@
       },
       {
         "tableName": "rate",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tariff_code` TEXT NOT NULL, `rate_type` INTEGER NOT NULL, `payment_method` TEXT NOT NULL, `valid_from` INTEGER NOT NULL, `valid_to` INTEGER, `vat_Rate` REAL NOT NULL, PRIMARY KEY(`tariff_code`, `payment_method`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tariff_code` TEXT NOT NULL, `rate_type` INTEGER NOT NULL, `payment_method` TEXT NOT NULL, `valid_from` INTEGER NOT NULL, `valid_to` INTEGER, `vat_Rate` REAL NOT NULL, PRIMARY KEY(`tariff_code`, `rate_type`, `payment_method`, `valid_from`))",
         "fields": [
           {
             "fieldPath": "tariffCode",
@@ -85,14 +85,16 @@
           "autoGenerate": false,
           "columnNames": [
             "tariff_code",
-            "payment_method"
+            "rate_type",
+            "payment_method",
+            "valid_from"
           ]
         }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '807de70f35cee85f6e8c83b001a01ba8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd2b0a2162edcf96f758ceae007811413')"
     ]
   }
 }

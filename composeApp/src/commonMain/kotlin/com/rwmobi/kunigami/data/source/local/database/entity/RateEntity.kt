@@ -15,7 +15,7 @@ import kotlinx.datetime.Instant
 
 @Entity(
     tableName = "rate",
-    primaryKeys = ["tariff_code", "payment_method"],
+    primaryKeys = ["tariff_code", "rate_type", "payment_method", "valid_from"],
 )
 data class RateEntity(
     @ColumnInfo(name = "tariff_code")

@@ -42,7 +42,7 @@ interface RateDao {
         rateType: RateType,
         paymentMethod: PaymentMethod,
         validFrom: Instant,
-        validTo: Instant?,
+        validTo: Instant? = null,
     ): List<RateEntity>
 
     @Query("DELETE FROM rate")
