@@ -20,10 +20,10 @@ import com.rwmobi.kunigami.data.source.local.database.entity.RateEntity
         ConsumptionEntity::class,
         RateEntity::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = true,
 )
-@TypeConverters(InstantConverters::class)
+@TypeConverters(DatabaseTypeConverters::class)
 abstract class OctometerDatabase : RoomDatabase() {
     abstract val consumptionDao: ConsumptionDao
     abstract val rateDao: RateDao

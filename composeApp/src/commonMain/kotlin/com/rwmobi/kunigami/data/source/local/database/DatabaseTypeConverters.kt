@@ -9,9 +9,10 @@ package com.rwmobi.kunigami.data.source.local.database
 
 import androidx.room.TypeConverter
 import com.rwmobi.kunigami.data.source.local.database.model.RateType
+import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import kotlinx.datetime.Instant
 
-class InstantConverters {
+class DatabaseTypeConverters {
     @TypeConverter
     fun toInstant(value: Long?): Instant? {
         return value?.let { Instant.fromEpochMilliseconds(it) }
@@ -30,5 +31,15 @@ class InstantConverters {
     @TypeConverter
     fun toRateType(id: Int): RateType {
         return RateType.entries.first { it.id == id }
+    }
+
+    @TypeConverter
+    fun fromPaymentMethod(paymentMethod: PaymentMethod): String {
+        return paymentMethod.name
+    }
+
+    @TypeConverter
+    fun toPaymentMethod(value: String): PaymentMethod {
+        return PaymentMethod.fromValue(value = value)
     }
 }
