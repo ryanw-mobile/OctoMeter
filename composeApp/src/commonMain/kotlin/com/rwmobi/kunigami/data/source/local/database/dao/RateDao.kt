@@ -13,6 +13,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.rwmobi.kunigami.data.source.local.database.entity.RateEntity
 import com.rwmobi.kunigami.data.source.local.database.model.RateType
+import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import kotlinx.datetime.Instant
 
 @Dao
@@ -39,7 +40,7 @@ interface RateDao {
     suspend fun getRates(
         tariffCode: String,
         rateType: RateType,
-        paymentMethod: String,
+        paymentMethod: PaymentMethod,
         validFrom: Instant,
         validTo: Instant?,
     ): List<RateEntity>

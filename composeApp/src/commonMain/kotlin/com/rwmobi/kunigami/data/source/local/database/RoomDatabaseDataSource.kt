@@ -13,6 +13,7 @@ import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
 import com.rwmobi.kunigami.data.source.local.database.entity.RateEntity
 import com.rwmobi.kunigami.data.source.local.database.interfaces.DatabaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.model.RateType
+import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import kotlinx.datetime.Instant
 
 /***
@@ -54,7 +55,7 @@ class RoomDatabaseDataSource(
         tariffCode: String,
         rateType: RateType,
         validity: ClosedRange<Instant>,
-        paymentMethod: String,
+        paymentMethod: PaymentMethod,
     ): List<RateEntity> {
         return rateDao.getRates(
             tariffCode = tariffCode,

@@ -11,6 +11,7 @@ import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
 import com.rwmobi.kunigami.data.source.local.database.entity.RateEntity
 import com.rwmobi.kunigami.data.source.local.database.interfaces.DatabaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.model.RateType
+import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import kotlinx.datetime.Instant
 
 class FakeDataBaseDataSource : DatabaseDataSource {
@@ -25,7 +26,10 @@ class FakeDataBaseDataSource : DatabaseDataSource {
     }
 
     var getConsumptionsResponse: List<ConsumptionEntity>? = null
-    override suspend fun getConsumptions(meterSerial: String, interval: ClosedRange<Instant>): List<ConsumptionEntity> {
+    override suspend fun getConsumptions(
+        meterSerial: String,
+        interval: ClosedRange<Instant>,
+    ): List<ConsumptionEntity> {
         exception?.let { throw it }
         return getConsumptionsResponse ?: throw RuntimeException("Fake result getConsumptionsResponse not defined")
     }
@@ -39,7 +43,12 @@ class FakeDataBaseDataSource : DatabaseDataSource {
     }
 
     var getRatesResponse: List<RateEntity>? = null
-    override suspend fun getRates(tariffCode: String, rateType: RateType, validity: ClosedRange<Instant>, paymentMethod: String): List<RateEntity> {
+    override suspend fun getRates(
+        tariffCode: String,
+        rateType: RateType,
+        validity: ClosedRange<Instant>,
+        paymentMethod: PaymentMethod,
+    ): List<RateEntity> {
         exception?.let { throw it }
         return getRatesResponse ?: throw RuntimeException("Fake result getRatesResponse not defined")
     }
