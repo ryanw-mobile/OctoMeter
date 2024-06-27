@@ -31,3 +31,26 @@ data class RateEntity(
     @ColumnInfo(name = "vat_Rate")
     val vatRate: Double,
 )
+
+fun List<RateEntity>.coversRange(validFrom: Instant, validTo: Instant): Boolean {
+    val sortedRates = this.sortedBy { it.validFrom }
+
+    var currentEnd = validFrom
+
+    for (rate in sortedRates) {
+        if (rate.validFrom > currentEnd) {
+            // There's a gap between currentEnd and the next rate's validFrom
+            return false
+        }
+
+        currentEnd = rate.validTo ?: Instant.DISTANT_FUTURE
+
+        if (currentEnd >= validTo) {
+            // The range is covered up to or beyond the required validTo
+            return true
+        }
+    }
+
+    // After iterating all rates, we haven't covered the entire range
+    return false
+}
