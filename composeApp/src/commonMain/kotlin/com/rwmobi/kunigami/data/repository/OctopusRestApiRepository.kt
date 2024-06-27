@@ -270,7 +270,7 @@ class OctopusRestApiRepository(
                         // cache the results - only for half-hourly
                         if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
                             apiResponse?.results?.map { it.toConsumptionEntity(meterSerial = meterSerialNumber) }?.let {
-                                databaseDataSource.insert(consumptionEntity = it)
+                                databaseDataSource.insertConsumptions(consumptionEntity = it)
                             }
                         }
 

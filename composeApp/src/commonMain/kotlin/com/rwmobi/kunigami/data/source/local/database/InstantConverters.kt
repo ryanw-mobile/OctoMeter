@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.data.source.local.database
 
 import androidx.room.TypeConverter
+import com.rwmobi.kunigami.data.source.local.database.model.RateType
 import kotlinx.datetime.Instant
 
 class InstantConverters {
@@ -19,5 +20,15 @@ class InstantConverters {
     @TypeConverter
     fun fromInstant(instant: Instant?): Long? {
         return instant?.toEpochMilliseconds()
+    }
+
+    @TypeConverter
+    fun fromRateType(rateType: RateType): Int {
+        return rateType.id
+    }
+
+    @TypeConverter
+    fun toRateType(id: Int): RateType {
+        return RateType.entries.first { it.id == id }
     }
 }
