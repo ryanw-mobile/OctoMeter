@@ -14,7 +14,7 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class RateEntityTest {
+class RateEntityKtTest {
 
     @Test
     fun `coversRange should return true for consecutive overlapping rates covering the range`() {
