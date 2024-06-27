@@ -13,7 +13,6 @@ import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 
 fun RateDto.toRate() = Rate(
-    vatExclusivePrice = vatExclusivePrice,
     vatInclusivePrice = vatInclusivePrice,
     validity = validFrom..(validTo ?: Instant.DISTANT_FUTURE),
     paymentMethod = PaymentMethod.fromValue(paymentMethod),
