@@ -88,6 +88,7 @@
     <string name="tariffs_error_load_tariffs">Unable to retrieve tariffs</string>
     <string name="tariffs_tariff_effective">Rates effective %1$s</string>
     <string name="tariffs_variable_rate">Variable Unit Rate</string>
+    <string name="tariffs_variable">Variable</string>
 
     <!-- Retail Regions -->
     <string name="retail_region_eastern_england">Eastern England</string>

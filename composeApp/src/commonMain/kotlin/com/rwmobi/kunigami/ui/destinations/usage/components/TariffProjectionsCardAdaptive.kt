@@ -20,11 +20,10 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
+import com.rwmobi.kunigami.ui.components.TariffSummaryCard
 import com.rwmobi.kunigami.ui.model.consumption.Insights
 import com.rwmobi.kunigami.ui.previewsampledata.InsightsSamples
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
@@ -86,12 +85,10 @@ private fun TariffProjectionsCardLinear(
         verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
     ) {
         tariff?.let {
-            TariffSummaryCardAdaptive(
+            TariffSummaryCard(
                 modifier = Modifier.fillMaxWidth(),
-                layoutType = WindowWidthSizeClass.Compact,
                 heading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) } ?: stringResource(resource = Res.string.usage_current_tariff).uppercase(),
-                headingTextAlign = TextAlign.Center,
-                tariff = it,
+                tariffs = listOf(it),
             )
         }
 
@@ -141,12 +138,10 @@ private fun TariffProjectionsCardLTwoColumns(
         }
 
         tariff?.let {
-            TariffSummaryCardAdaptive(
+            TariffSummaryCard(
                 modifier = Modifier.weight(weight = 0.4f).fillMaxHeight(),
-                layoutType = WindowWidthSizeClass.Compact,
                 heading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) } ?: stringResource(resource = Res.string.usage_current_tariff).uppercase(),
-                headingTextAlign = TextAlign.Center,
-                tariff = it,
+                tariffs = listOf(it),
             )
         }
     }
@@ -167,12 +162,10 @@ private fun TariffProjectionsCardThreeColumns(
         horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
     ) {
         tariff?.let {
-            TariffSummaryCardAdaptive(
+            TariffSummaryCard(
                 modifier = Modifier.weight(weight = 1f).fillMaxHeight(),
-                layoutType = WindowWidthSizeClass.Compact,
                 heading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) } ?: stringResource(resource = Res.string.usage_current_tariff).uppercase(),
-                headingTextAlign = TextAlign.Center,
-                tariff = it,
+                tariffs = listOf(it),
             )
         }
 

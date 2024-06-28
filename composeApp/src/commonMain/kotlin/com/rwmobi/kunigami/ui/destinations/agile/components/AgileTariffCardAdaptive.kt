@@ -27,13 +27,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
+import com.rwmobi.kunigami.ui.components.TariffSummaryCard
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 import com.rwmobi.kunigami.ui.model.rate.RateGroup
@@ -200,12 +199,10 @@ private fun AgileTariffCardCompact(
         }
 
         secondaryTariff?.let {
-            TariffSummaryCardAdaptive(
+            TariffSummaryCard(
                 modifier = Modifier.fillMaxWidth(),
                 heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
-                headingTextAlign = TextAlign.Start,
-                tariff = it,
-                layoutType = WindowWidthSizeClass.Compact,
+                tariffs = listOf(it),
             )
         }
     }
@@ -253,14 +250,12 @@ private fun AgileTariffCardExpanded(
         )
 
         secondaryTariff?.let {
-            TariffSummaryCardAdaptive(
+            TariffSummaryCard(
                 modifier = Modifier
                     .weight(weight = 1f)
                     .fillMaxHeight(),
                 heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
-                headingTextAlign = TextAlign.Start,
-                tariff = it,
-                layoutType = WindowWidthSizeClass.Compact,
+                tariffs = listOf(it),
             )
         }
     }
