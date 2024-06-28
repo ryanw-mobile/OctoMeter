@@ -12,7 +12,6 @@ import kotlinx.datetime.Instant
 
 @Immutable
 data class Rate(
-    val vatExclusivePrice: Double,
     val vatInclusivePrice: Double,
     val validity: ClosedRange<Instant>, // Caller should end using Instant.DISTANT_FUTURE if API returns null
     val paymentMethod: PaymentMethod,

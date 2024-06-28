@@ -5,42 +5,42 @@
  *
  */
 
-package com.rwmobi.kunigami.data.source.network.samples
+package com.rwmobi.kunigami.test.samples
 
 import com.rwmobi.kunigami.data.source.network.dto.prices.PricesApiResponse
 import com.rwmobi.kunigami.data.source.network.dto.prices.RateDto
 import kotlinx.datetime.Instant
 
-object GetDayUnitRatesSampleData {
+object GetNightUnitRatesSampleData {
     val json = """{
   "count": 4,
   "next": null,
   "previous": null,
   "results": [
     {
-      "value_exc_vat": 30.008,
-      "value_inc_vat": 31.5084,
+      "value_exc_vat": 12.588,
+      "value_inc_vat": 13.2174,
       "valid_from": "2024-03-31T23:00:00Z",
       "valid_to": null,
       "payment_method": "DIRECT_DEBIT"
     },
     {
-      "value_exc_vat": 30.654,
-      "value_inc_vat": 32.1867,
+      "value_exc_vat": 12.859,
+      "value_inc_vat": 13.50195,
       "valid_from": "2024-03-31T23:00:00Z",
       "valid_to": null,
       "payment_method": "NON_DIRECT_DEBIT"
     },
     {
-      "value_exc_vat": 36.144,
-      "value_inc_vat": 37.9512,
+      "value_exc_vat": 15.527,
+      "value_inc_vat": 16.30335,
       "valid_from": "2024-01-01T00:00:00Z",
       "valid_to": "2024-03-31T23:00:00Z",
       "payment_method": "NON_DIRECT_DEBIT"
     },
     {
-      "value_exc_vat": 35.414,
-      "value_inc_vat": 37.1847,
+      "value_exc_vat": 14.856,
+      "value_inc_vat": 15.5988,
       "valid_from": "2024-01-01T00:00:00Z",
       "valid_to": "2024-03-31T23:00:00Z",
       "payment_method": "DIRECT_DEBIT"
@@ -55,29 +55,29 @@ object GetDayUnitRatesSampleData {
         previous = null,
         results = listOf(
             RateDto(
-                vatExclusivePrice = 30.008,
-                vatInclusivePrice = 31.5084,
+                vatExclusivePrice = 12.588,
+                vatInclusivePrice = 13.2174,
                 validFrom = Instant.parse("2024-03-31T23:00:00Z"),
                 validTo = null,
                 paymentMethod = "DIRECT_DEBIT",
             ),
             RateDto(
-                vatExclusivePrice = 30.654,
-                vatInclusivePrice = 32.1867,
+                vatExclusivePrice = 12.859,
+                vatInclusivePrice = 13.50195,
                 validFrom = Instant.parse("2024-03-31T23:00:00Z"),
                 validTo = null,
                 paymentMethod = "NON_DIRECT_DEBIT",
             ),
             RateDto(
-                vatExclusivePrice = 36.144,
-                vatInclusivePrice = 37.9512,
+                vatExclusivePrice = 15.527,
+                vatInclusivePrice = 16.30335,
                 validFrom = Instant.parse("2024-01-01T00:00:00Z"),
                 validTo = Instant.parse("2024-03-31T23:00:00Z"),
                 paymentMethod = "NON_DIRECT_DEBIT",
             ),
             RateDto(
-                vatExclusivePrice = 35.414,
-                vatInclusivePrice = 37.1847,
+                vatExclusivePrice = 14.856,
+                vatInclusivePrice = 15.5988,
                 validFrom = Instant.parse("2024-01-01T00:00:00Z"),
                 validTo = Instant.parse("2024-03-31T23:00:00Z"),
                 paymentMethod = "DIRECT_DEBIT",

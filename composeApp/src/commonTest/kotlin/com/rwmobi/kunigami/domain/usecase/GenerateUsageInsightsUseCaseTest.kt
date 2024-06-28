@@ -9,7 +9,7 @@ package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
-import com.rwmobi.kunigami.domain.samples.TariffSampleData
+import com.rwmobi.kunigami.test.samples.TariffSampleData
 import com.rwmobi.kunigami.ui.model.consumption.Insights
 import kotlinx.datetime.Instant
 import kotlin.test.Test

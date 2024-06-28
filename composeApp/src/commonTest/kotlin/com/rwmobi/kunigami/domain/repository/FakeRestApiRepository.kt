@@ -14,6 +14,7 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.Tariff
+import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 
@@ -48,6 +49,7 @@ class FakeRestApiRepository : RestApiRepository {
     var setStandingChargesResponse: Result<List<Rate>>? = null
     override suspend fun getStandingCharges(
         tariffCode: String,
+        paymentMethod: PaymentMethod,
         period: ClosedRange<Instant>?,
         requestedPage: Int?,
     ): Result<List<Rate>> {

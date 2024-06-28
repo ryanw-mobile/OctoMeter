@@ -5,12 +5,12 @@
  *
  */
 
-package com.rwmobi.kunigami.data.source.local.database.dao.com
+package com.rwmobi.kunigami.test.samples
 
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
 import kotlinx.datetime.Instant
 
-internal object ConsumptionEntitySamples {
+object ConsumptionEntitySampleData {
     val sample1 = ConsumptionEntity(
         meterSerial = "11A1234567",
         intervalStart = Instant.parse("2023-06-01T01:00:00Z"),

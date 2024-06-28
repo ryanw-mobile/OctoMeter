@@ -9,7 +9,7 @@ package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
-import com.rwmobi.kunigami.domain.samples.RateSampleData
+import com.rwmobi.kunigami.test.samples.RateSampleData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest

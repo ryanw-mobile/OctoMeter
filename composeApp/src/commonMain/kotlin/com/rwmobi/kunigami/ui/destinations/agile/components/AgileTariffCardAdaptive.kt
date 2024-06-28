@@ -286,7 +286,6 @@ private fun Preview() {
                     title = "Sample title",
                     rates = listOf(
                         Rate(
-                            vatExclusivePrice = 45.075,
                             vatInclusivePrice = 25.076,
                             validity = Clock.System.now()..Instant.DISTANT_FUTURE,
                             paymentMethod = PaymentMethod.UNKNOWN,

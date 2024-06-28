@@ -35,7 +35,6 @@ class RateGroupTest {
             second = 59,
         ).toInstant(londonZone)
         val rate = Rate(
-            vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
             validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
@@ -78,7 +77,6 @@ class RateGroupTest {
             second = 59,
         ).toInstant(londonZone)
         val rate = Rate(
-            vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
             validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
@@ -113,7 +111,6 @@ class RateGroupTest {
             minute = 0,
         ).toInstant(londonZone)
         val rate = Rate(
-            vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
             validity = validFrom..Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
@@ -148,7 +145,6 @@ class RateGroupTest {
             second = 59,
         ).toInstant(londonZone)
         val rate = Rate(
-            vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
             validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
@@ -183,13 +179,11 @@ class RateGroupTest {
             second = 59,
         ).toInstant(londonZone)
         val rate = Rate(
-            vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
             validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val nextRate = Rate(
-            vatExclusivePrice = 10.0,
             vatInclusivePrice = 15.0,
             validity = validTo.plus(Duration.parse("PT1S"))..Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
@@ -224,13 +218,11 @@ class RateGroupTest {
             second = 59,
         ).toInstant(londonZone)
         val rate = Rate(
-            vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
             validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val nextRate = Rate(
-            vatExclusivePrice = 10.0,
             vatInclusivePrice = 10.0,
             validity = validTo.plus(Duration.parse("PT1S"))..Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
@@ -265,13 +257,11 @@ class RateGroupTest {
             second = 59,
         ).toInstant(londonZone)
         val rate = Rate(
-            vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
             validity = validFrom..validTo,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,
         )
         val nextRate = Rate(
-            vatExclusivePrice = 10.0,
             vatInclusivePrice = 12.0,
             validity = validTo.plus(Duration.parse("PT1S"))..Instant.DISTANT_FUTURE,
             paymentMethod = PaymentMethod.DIRECT_DEBIT,

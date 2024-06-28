@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.domain.model.product
 
-import com.rwmobi.kunigami.domain.samples.TariffSampleData
+import com.rwmobi.kunigami.test.samples.TariffSampleData
 import com.rwmobi.kunigami.ui.model.product.RetailRegion
 import kotlinx.datetime.Instant
 import kotlin.test.Test

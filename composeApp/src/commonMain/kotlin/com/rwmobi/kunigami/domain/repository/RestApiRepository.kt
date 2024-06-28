@@ -14,6 +14,7 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.Tariff
+import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 
@@ -30,6 +31,7 @@ interface RestApiRepository {
 
     suspend fun getStandingCharges(
         tariffCode: String,
+        paymentMethod: PaymentMethod = PaymentMethod.UNKNOWN, // Fix and Agile are always unknown; Variable splits
         period: ClosedRange<Instant>? = null,
         requestedPage: Int? = null,
     ): Result<List<Rate>>

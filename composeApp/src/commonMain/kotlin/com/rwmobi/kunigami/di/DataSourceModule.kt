@@ -29,6 +29,7 @@ val dataSourceModule = module {
         val database: OctometerDatabase = get()
         RoomDatabaseDataSource(
             consumptionDao = database.consumptionDao,
+            rateDao = database.rateDao,
         )
     }
 

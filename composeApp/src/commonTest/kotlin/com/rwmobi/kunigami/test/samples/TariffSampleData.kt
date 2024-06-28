@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.domain.samples
+package com.rwmobi.kunigami.test.samples
 
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.product.ExitFeesType
@@ -14,7 +14,7 @@ import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
-internal object TariffSampleData {
+object TariffSampleData {
     val agileFlex221125 = Tariff(
         productCode = "AGILE-FLEX-22-11-25",
         tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
