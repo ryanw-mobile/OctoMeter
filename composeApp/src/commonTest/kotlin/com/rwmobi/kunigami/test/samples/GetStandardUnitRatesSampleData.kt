@@ -7,14 +7,18 @@
 
 package com.rwmobi.kunigami.test.samples
 
+import com.rwmobi.kunigami.data.source.local.database.entity.RateEntity
+import com.rwmobi.kunigami.data.source.local.database.model.RateType
 import com.rwmobi.kunigami.data.source.network.dto.prices.PricesApiResponse
 import com.rwmobi.kunigami.data.source.network.dto.prices.RateDto
+import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
+import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 
 object GetStandardUnitRatesSampleData {
     val json = """{
-  "count": 26588,
-  "next": "https://api.octopus.energy/v1/products/AGILE-FLEX-22-11-25/electricity-tariffs/E-1R-AGILE-FLEX-22-11-25-J/standard-unit-rates/?page=2",
+  "count": 5,
+  "next": null,
   "previous": null,
   "results": [
     {
@@ -57,8 +61,8 @@ object GetStandardUnitRatesSampleData {
     """.trimIndent()
 
     val dto = PricesApiResponse(
-        count = 26588,
-        next = "https://api.octopus.energy/v1/products/AGILE-FLEX-22-11-25/electricity-tariffs/E-1R-AGILE-FLEX-22-11-25-J/standard-unit-rates/?page=2",
+        count = 5,
+        next = null,
         previous = null,
         results = listOf(
             RateDto(
@@ -96,6 +100,77 @@ object GetStandardUnitRatesSampleData {
                 validTo = Instant.parse("2024-05-07T20:00:00Z"),
                 paymentMethod = null,
             ),
+        ),
+    )
+
+    val rateEntity = listOf(
+        RateEntity(
+            tariffCode = "E-1R-AGILE-FLEX-22-11-25-J",
+            rateType = RateType.STANDARD_UNIT_RATE,
+            vatRate = 18.291,
+            validFrom = Instant.parse("2024-05-07T21:30:00Z"),
+            validTo = Instant.parse("2024-05-07T22:00:00Z"),
+            paymentMethod = PaymentMethod.UNKNOWN,
+        ),
+        RateEntity(
+            tariffCode = "E-1R-AGILE-FLEX-22-11-25-J",
+            rateType = RateType.STANDARD_UNIT_RATE,
+            vatRate = 18.753,
+            validFrom = Instant.parse("2024-05-07T21:00:00Z"),
+            validTo = Instant.parse("2024-05-07T21:30:00Z"),
+            paymentMethod = PaymentMethod.UNKNOWN,
+        ),
+        RateEntity(
+            tariffCode = "E-1R-AGILE-FLEX-22-11-25-J",
+            rateType = RateType.STANDARD_UNIT_RATE,
+            vatRate = 18.291,
+            validFrom = Instant.parse("2024-05-07T20:30:00Z"),
+            validTo = Instant.parse("2024-05-07T21:00:00Z"),
+            paymentMethod = PaymentMethod.UNKNOWN,
+        ),
+        RateEntity(
+            tariffCode = "E-1R-AGILE-FLEX-22-11-25-J",
+            rateType = RateType.STANDARD_UNIT_RATE,
+            vatRate = 20.1915,
+            validFrom = Instant.parse("2024-05-07T20:00:00Z"),
+            validTo = Instant.parse("2024-05-07T20:30:00Z"),
+            paymentMethod = PaymentMethod.UNKNOWN,
+        ),
+        RateEntity(
+            tariffCode = "E-1R-AGILE-FLEX-22-11-25-J",
+            rateType = RateType.STANDARD_UNIT_RATE,
+            vatRate = 22.5435,
+            validFrom = Instant.parse("2024-05-07T19:30:00Z"),
+            validTo = Instant.parse("2024-05-07T20:00:00Z"),
+            paymentMethod = PaymentMethod.UNKNOWN,
+        ),
+    )
+
+    val rate = listOf(
+        Rate(
+            vatInclusivePrice = 18.291,
+            validity = Instant.parse("2024-05-07T21:30:00Z")..Instant.parse("2024-05-07T22:00:00Z"),
+            paymentMethod = PaymentMethod.UNKNOWN,
+        ),
+        Rate(
+            vatInclusivePrice = 18.753,
+            validity = Instant.parse("2024-05-07T21:00:00Z")..Instant.parse("2024-05-07T21:30:00Z"),
+            paymentMethod = PaymentMethod.UNKNOWN,
+        ),
+        Rate(
+            vatInclusivePrice = 18.291,
+            validity = Instant.parse("2024-05-07T20:30:00Z")..Instant.parse("2024-05-07T21:00:00Z"),
+            paymentMethod = PaymentMethod.UNKNOWN,
+        ),
+        Rate(
+            vatInclusivePrice = 20.1915,
+            validity = Instant.parse("2024-05-07T20:00:00Z")..Instant.parse("2024-05-07T20:30:00Z"),
+            paymentMethod = PaymentMethod.UNKNOWN,
+        ),
+        Rate(
+            vatInclusivePrice = 22.5435,
+            validity = Instant.parse("2024-05-07T19:30:00Z")..Instant.parse("2024-05-07T20:00:00Z"),
+            paymentMethod = PaymentMethod.UNKNOWN,
         ),
     )
 }

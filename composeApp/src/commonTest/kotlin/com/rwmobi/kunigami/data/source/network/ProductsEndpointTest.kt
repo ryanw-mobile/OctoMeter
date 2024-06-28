@@ -255,7 +255,7 @@ class ProductsEndpointTest {
             httpClient = setupEngine(
                 status = HttpStatusCode.OK,
                 contentType = "application/json",
-                payload = GetStandingChargesSampleData.json,
+                payload = GetStandingChargesSampleData.var221101Json,
             ),
         )
 
@@ -263,7 +263,7 @@ class ProductsEndpointTest {
             productCode = "fake-product-code",
             tariffCode = "fake-tariff-code",
         )
-        assertEquals(GetStandingChargesSampleData.dto, result)
+        assertEquals(GetStandingChargesSampleData.var221101Dto, result)
     }
 
     @Test

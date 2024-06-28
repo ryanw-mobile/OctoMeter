@@ -18,6 +18,8 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.test.samples.GetAccountSampleData
 import com.rwmobi.kunigami.test.samples.GetConsumptionSampleData
 import com.rwmobi.kunigami.test.samples.GetProductsSampleData
+import com.rwmobi.kunigami.test.samples.GetStandardUnitRatesSampleData
+import com.rwmobi.kunigami.test.samples.GetStandingChargesSampleData
 import com.rwmobi.kunigami.test.samples.GetTariffSampleData
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -278,7 +280,7 @@ class OctopusRestApiRepositoryTest {
         setUpRepository(
             engine = MockEngine { _ ->
                 respond(
-                    content = ByteReadChannel(GetTariffSampleData.json),
+                    content = ByteReadChannel(GetStandardUnitRatesSampleData.json),
                     status = HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )
@@ -292,6 +294,60 @@ class OctopusRestApiRepositoryTest {
 
         assertTrue(result.isFailure)
         assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun `getStandardUnitRates should return cached data when local database contains the required data set`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+        fakeDataBaseDataSource.getRatesResponse = GetStandardUnitRatesSampleData.rateEntity
+
+        val result = octopusRestApiRepository.getStandardUnitRates(
+            tariffCode = GetStandardUnitRatesSampleData.rateEntity[0].tariffCode,
+            period = Instant.parse("2024-05-07T20:30:00Z")..Instant.parse("2024-05-07T22:00:00Z"),
+        )
+
+        assertTrue(result.isSuccess)
+        assertEquals(expected = GetStandardUnitRatesSampleData.rate, actual = result.getOrNull())
+    }
+
+    @Test
+    fun `getStandardUnitRates should get data from remote data source when local database contains incomplete data set`() = runTest {
+        setUpRepository(
+            engine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(GetStandardUnitRatesSampleData.json),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            },
+        )
+        fakeDataBaseDataSource.getRatesResponse = listOf(GetStandardUnitRatesSampleData.rateEntity[0])
+
+        val result = octopusRestApiRepository.getStandardUnitRates(
+            tariffCode = GetStandardUnitRatesSampleData.rateEntity[0].tariffCode,
+            period = Instant.parse("2024-05-07T20:30:00Z")..Instant.parse("2024-05-07T22:00:00Z"),
+        )
+
+        assertTrue(result.isSuccess)
+        assertEquals(expected = GetStandardUnitRatesSampleData.rate, actual = result.getOrNull())
+    }
+
+    @Test
+    fun `getStandardUnitRates should return failure when local database returns an error`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+        fakeDataBaseDataSource.exception = RuntimeException()
+
+        val result = octopusRestApiRepository.getStandardUnitRates(
+            tariffCode = sampleTariffCode,
+            period = now..now,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is RuntimeException)
     }
 
     @Test
@@ -316,7 +372,7 @@ class OctopusRestApiRepositoryTest {
         setUpRepository(
             engine = MockEngine { _ ->
                 respond(
-                    content = ByteReadChannel(GetTariffSampleData.json),
+                    content = ByteReadChannel(GetStandingChargesSampleData.oeFix12M240628Json),
                     status = HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )
@@ -329,6 +385,60 @@ class OctopusRestApiRepositoryTest {
 
         assertTrue(result.isFailure)
         assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun `getStandingCharges should return cached data when local database contains the required data set`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+        fakeDataBaseDataSource.getRatesResponse = GetStandingChargesSampleData.oeFix12M240628RateEntity
+
+        val result = octopusRestApiRepository.getStandingCharges(
+            tariffCode = GetStandingChargesSampleData.oeFix12M240628RateEntity[0].tariffCode,
+            period = GetStandingChargesSampleData.oeFix12M240628RateEntity[0].validFrom..Instant.DISTANT_FUTURE,
+        )
+
+        assertTrue(result.isSuccess)
+        assertEquals(expected = GetStandingChargesSampleData.oeFix12M240628Rate, actual = result.getOrNull())
+    }
+
+    @Test
+    fun `getStandingCharges should get data from remote data source when local database contains incomplete data set`() = runTest {
+        setUpRepository(
+            engine = MockEngine { _ ->
+                respond(
+                    content = ByteReadChannel(GetStandingChargesSampleData.oeFix12M240628Json),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            },
+        )
+        fakeDataBaseDataSource.getRatesResponse = emptyList()
+
+        val result = octopusRestApiRepository.getStandingCharges(
+            tariffCode = GetStandingChargesSampleData.oeFix12M240628RateEntity[0].tariffCode,
+            period = GetStandingChargesSampleData.oeFix12M240628RateEntity[0].validFrom..Instant.DISTANT_FUTURE,
+        )
+
+        assertTrue(result.isSuccess)
+        assertEquals(expected = GetStandingChargesSampleData.oeFix12M240628Rate, actual = result.getOrNull())
+    }
+
+    @Test
+    fun `getStandingCharges should return failure when local database returns an error`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+        fakeDataBaseDataSource.exception = RuntimeException()
+
+        val result = octopusRestApiRepository.getStandingCharges(
+            tariffCode = sampleTariffCode,
+            period = now..now,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is RuntimeException)
     }
 
     @Test
@@ -368,6 +478,31 @@ class OctopusRestApiRepositoryTest {
         assertTrue(result.exceptionOrNull() is IllegalArgumentException)
     }
 
+    // We don't have test data for now
+//    @Test
+//    fun `getDayUnitRates should return cached data when local database contains the required data set`() = runTest {
+//    }
+//
+//    @Test
+//    fun `getDayUnitRates should get data from remote data source when local database contains incomplete data set`() = runTest {
+//    }
+
+    @Test
+    fun `getDayUnitRates should return failure when local database returns an error`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+        fakeDataBaseDataSource.exception = RuntimeException()
+
+        val result = octopusRestApiRepository.getDayUnitRates(
+            tariffCode = sampleTariffCode,
+            period = now..now,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is RuntimeException)
+    }
+
     @Test
     fun `getDayUnitRates should return failure when data source throws an exception`() = runTest {
         setUpRepository(
@@ -404,6 +539,31 @@ class OctopusRestApiRepositoryTest {
 
         assertTrue(result.isFailure)
         assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    // We don't have test data for now
+//    @Test
+//    fun `getNightUnitRates should return cached data when local database contains the required data set`() = runTest {
+//    }
+//
+//    @Test
+//    fun `getNightUnitRates should get data from remote data source when local database contains incomplete data set`() = runTest {
+//    }
+
+    @Test
+    fun `getNightUnitRates should return failure when local database returns an error`() = runTest {
+        setUpRepository(
+            engine = mockEngineInternalServerError,
+        )
+        fakeDataBaseDataSource.exception = RuntimeException()
+
+        val result = octopusRestApiRepository.getNightUnitRates(
+            tariffCode = sampleTariffCode,
+            period = now..now,
+        )
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is RuntimeException)
     }
 
     @Test

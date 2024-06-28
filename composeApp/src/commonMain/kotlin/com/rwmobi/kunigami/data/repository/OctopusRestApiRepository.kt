@@ -118,6 +118,7 @@ class OctopusRestApiRepository(
                     validity = period,
                     paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
                 ) ?: run {
+                    Logger.v(tag = "getStandardUnitRates", messageString = "DB Cache misses for $period")
                     val combinedList = mutableListOf<Rate>()
                     var page: Int? = requestedPage
                     do {
@@ -194,6 +195,7 @@ class OctopusRestApiRepository(
                     validity = period ?: Instant.DISTANT_PAST..Instant.DISTANT_FUTURE,
                     paymentMethod = paymentMethod,
                 ) ?: run {
+                    Logger.v(tag = "getStandingCharges", messageString = "DB Cache misses for $period")
                     val combinedList = mutableListOf<Rate>()
                     var page: Int? = requestedPage
                     do {
@@ -243,6 +245,7 @@ class OctopusRestApiRepository(
                     validity = period ?: Instant.DISTANT_PAST..Instant.DISTANT_FUTURE,
                     paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
                 ) ?: run {
+                    Logger.v(tag = "getDayUnitRates", messageString = "DB Cache misses for $period")
                     val combinedList = mutableListOf<Rate>()
                     var page: Int? = requestedPage
                     do {
@@ -292,7 +295,7 @@ class OctopusRestApiRepository(
                     validity = period ?: Instant.DISTANT_PAST..Instant.DISTANT_FUTURE,
                     paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
                 ) ?: run {
-                    Logger.v(tag = "getConsumption", messageString = "DB Cache misses for $period")
+                    Logger.v(tag = "getNightUnitRates", messageString = "DB Cache misses for $period")
                     val combinedList = mutableListOf<Rate>()
                     var page: Int? = requestedPage
                     do {
