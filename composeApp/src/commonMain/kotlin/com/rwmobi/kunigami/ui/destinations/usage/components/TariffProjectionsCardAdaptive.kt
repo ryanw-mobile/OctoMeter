@@ -101,10 +101,9 @@ private fun TariffProjectionsCardLinear(
                 insights = insights,
             )
 
-            AnnualProjectionCardAdaptive(
+            ProjectedConsumptionCard(
                 modifier = Modifier.fillMaxWidth(),
                 insights = insights,
-                layoutType = WindowWidthSizeClass.Expanded,
             )
         }
     }
@@ -134,10 +133,9 @@ private fun TariffProjectionsCardLTwoColumns(
                     insights = insights,
                 )
 
-                AnnualProjectionCardAdaptive(
+                ProjectedConsumptionCard(
                     modifier = Modifier.weight(weight = 1f).fillMaxWidth(),
                     insights = insights,
-                    layoutType = WindowWidthSizeClass.Compact,
                 )
             }
         }
@@ -164,7 +162,7 @@ private fun TariffProjectionsCardThreeColumns(
     val dimension = LocalDensity.current.getDimension()
 
     Row(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
             .height(intrinsicSize = IntrinsicSize.Min),
         horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
     ) {
@@ -184,10 +182,9 @@ private fun TariffProjectionsCardThreeColumns(
                 insights = insights,
             )
 
-            AnnualProjectionCardAdaptive(
+            ProjectedConsumptionCard(
                 modifier = Modifier.weight(weight = 1f).fillMaxHeight(),
                 insights = insights,
-                layoutType = WindowWidthSizeClass.Compact,
             )
         }
     }
