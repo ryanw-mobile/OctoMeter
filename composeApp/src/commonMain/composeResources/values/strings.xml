@@ -75,6 +75,7 @@
     <string name="agile_tariff_standing_charge_two_lines">Standing Charge:\n%1$d p/day</string>
     <string name="agile_tariff_standard_unit_rate">Unit Rate: %1$d p/kWh</string>
     <string name="agile_tariff_standing_charge">Standing Charge: %1$d p/day</string>
+    <string name="agile_current_rate">Current Rate</string>
 
     <!-- Tariffs -->
     <string name="tariffs_retail_region">Retail Region</string>

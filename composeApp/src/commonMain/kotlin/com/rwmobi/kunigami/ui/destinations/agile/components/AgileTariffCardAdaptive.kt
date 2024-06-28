@@ -62,7 +62,6 @@ internal fun AgileTariffCardAdaptive(
     rateRange: ClosedFloatingPointRange<Double>,
     rateGroupedCells: List<RateGroup>,
     requestedAdaptiveLayout: WindowWidthSizeClass,
-    agileTariff: Tariff?,
     secondaryTariff: Tariff?,
 ) {
     var activeRate by remember { mutableStateOf(rateGroupedCells.findActiveRate(referencePoint = Clock.System.now())) }
@@ -102,7 +101,6 @@ internal fun AgileTariffCardAdaptive(
         -> {
             AgileTariffCardCompact(
                 modifier = modifier,
-                agileTariff = agileTariff,
                 secondaryTariff = secondaryTariff,
                 targetPercentage = targetPercentage,
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
@@ -115,7 +113,6 @@ internal fun AgileTariffCardAdaptive(
         else -> {
             AgileTariffCardExpanded(
                 modifier = modifier,
-                agileTariff = agileTariff,
                 secondaryTariff = secondaryTariff,
                 targetPercentage = targetPercentage,
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
@@ -155,7 +152,6 @@ private fun AgileTariffCardCompact(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
     vatInclusivePrice: Double?,
-    agileTariff: Tariff?,
     secondaryTariff: Tariff?,
     countDownText: String?,
     rateTrend: RateTrend?,
@@ -173,15 +169,14 @@ private fun AgileTariffCardCompact(
                 .height(intrinsicSize = IntrinsicSize.Min),
             horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
         ) {
-            AgilePriceCard(
+            CurrentRateCard(
                 modifier = Modifier
                     .weight(weight = 1f)
                     .fillMaxHeight(),
                 vatInclusivePrice = vatInclusivePrice,
                 rateTrend = rateTrend,
                 rateTrendIconTint = rateTrendIconTint,
-                agileTariff = agileTariff,
-                textStyle = AgilePriceCardTextStyle(
+                textStyle = CurrentRateCardTextStyle(
                     standingChargeStyle = MaterialTheme.typography.bodyMedium,
                     agilePriceStyle = MaterialTheme.typography.headlineSmall,
                     agilePriceUnitStyle = MaterialTheme.typography.bodySmall,
@@ -212,7 +207,6 @@ private fun AgileTariffCardCompact(
 private fun AgileTariffCardExpanded(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
-    agileTariff: Tariff?,
     secondaryTariff: Tariff?,
     vatInclusivePrice: Double?,
     countDownText: String?,
@@ -225,15 +219,14 @@ private fun AgileTariffCardExpanded(
         modifier = modifier.height(intrinsicSize = IntrinsicSize.Min),
         horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
     ) {
-        AgilePriceCard(
+        CurrentRateCard(
             modifier = Modifier
                 .weight(weight = 1f)
                 .fillMaxHeight(),
             vatInclusivePrice = vatInclusivePrice,
             rateTrend = rateTrend,
             rateTrendIconTint = rateTrendIconTint,
-            agileTariff = agileTariff,
-            textStyle = AgilePriceCardTextStyle(
+            textStyle = CurrentRateCardTextStyle(
                 standingChargeStyle = MaterialTheme.typography.labelLarge,
                 agilePriceStyle = MaterialTheme.typography.headlineLarge,
                 agilePriceUnitStyle = MaterialTheme.typography.bodyLarge,
@@ -273,7 +266,6 @@ private fun Preview() {
                     end = dimension.grid_3,
                     top = dimension.grid_1,
                 ),
-            agileTariff = TariffSamples.agileFlex221125,
             secondaryTariff = TariffSamples.agileFlex221125,
             rateRange = 0.0..5.0,
             rateGroupedCells = listOf(
