@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.painter.Painter
 
 @Composable
-fun AnimatedTintedPainterResource(
+fun HorizontalAnimatedTintedPainterResource(
     modifier: Modifier = Modifier,
     painter: Painter,
     color: Color,
@@ -43,12 +43,12 @@ fun AnimatedTintedPainterResource(
     )
 
     Canvas(modifier = modifier) {
-        val clipHeight = size.height * clipProgress
+        val clipWidth = size.width * clipProgress
         clipRect(
             top = 0f,
-            bottom = clipHeight,
+            bottom = size.height,
             left = 0f,
-            right = size.width,
+            right = clipWidth,
         ) {
             with(painter) {
                 draw(

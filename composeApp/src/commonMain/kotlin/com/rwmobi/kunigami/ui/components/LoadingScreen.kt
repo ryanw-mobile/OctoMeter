@@ -66,7 +66,7 @@ fun LoadingScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            AnimatedTintedPainterResource(
+            VerticalAnimatedTintedPainterResource(
                 modifier = Modifier.size(size = 64.dp),
                 painter = painterResource(resource = Res.drawable.lightning_fill),
                 color = Color.Yellow,

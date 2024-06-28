@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,10 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
+import com.rwmobi.kunigami.ui.components.HorizontalAnimatedTintedPainterResource
+import com.rwmobi.kunigami.ui.components.VerticalAnimatedTintedPainterResource
 import com.rwmobi.kunigami.ui.components.WidgetCard
 import com.rwmobi.kunigami.ui.model.rate.RateTrend
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -74,12 +77,29 @@ internal fun CurrentRateCard(
                         horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
                     ) {
                         if (rateTrend != null && rateTrendIconTint != null) {
-                            Icon(
-                                modifier = Modifier.size(size = dimension.grid_4),
-                                tint = rateTrendIconTint,
-                                painter = painterResource(resource = rateTrend.drawableResource),
-                                contentDescription = rateTrend.name,
-                            )
+                            when (rateTrend) {
+                                RateTrend.UP, RateTrend.DOWN -> {
+                                    HorizontalAnimatedTintedPainterResource(
+                                        modifier = Modifier
+                                            .size(size = dimension.grid_4)
+                                            .semantics { contentDescription = rateTrend.name },
+                                        color = rateTrendIconTint,
+                                        painter = painterResource(resource = rateTrend.drawableResource),
+                                        durationMillis = 2_000,
+                                    )
+                                }
+
+                                RateTrend.STEADY -> {
+                                    VerticalAnimatedTintedPainterResource(
+                                        modifier = Modifier
+                                            .size(size = dimension.grid_4)
+                                            .semantics { contentDescription = rateTrend.name },
+                                        color = rateTrendIconTint,
+                                        painter = painterResource(resource = rateTrend.drawableResource),
+                                        durationMillis = 2_000,
+                                    )
+                                }
+                            }
                         }
 
                         Text(
