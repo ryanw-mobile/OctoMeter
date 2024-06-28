@@ -35,6 +35,7 @@ import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.destinations.usage.components.ConsumptionGroupCells
+import com.rwmobi.kunigami.ui.destinations.usage.components.NavigationOptionsBar
 import com.rwmobi.kunigami.ui.destinations.usage.components.RateGroupTitle
 import com.rwmobi.kunigami.ui.destinations.usage.components.TariffProjectionsCardAdaptive
 import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
@@ -122,6 +123,11 @@ fun UsageScreen(
                             onNavigateBack = { uiEvent.onPreviousTimeFrame(consumptionQueryFilter) },
                             onNavigateForward = { uiEvent.onNextTimeFrame(consumptionQueryFilter) },
                             onSwitchPresentationStyle = { presentationStyle -> uiEvent.onSwitchPresentationStyle(consumptionQueryFilter, presentationStyle) },
+                        )
+
+                        NavigationOptionsBar(
+                            modifier = Modifier.fillMaxWidth(),
+                            selectedMpan = uiState.userProfile?.selectedMpan,
                         )
                     }
 
