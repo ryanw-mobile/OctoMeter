@@ -188,7 +188,7 @@ private fun AgileTariffCardCompact(
                 ),
             )
 
-            DashboardWidgetCard(
+            RateGaugeCountdownCard(
                 modifier = Modifier
                     .weight(weight = 1f)
                     .fillMaxHeight(),
@@ -240,7 +240,7 @@ private fun AgileTariffCardExpanded(
             ),
         )
 
-        DashboardWidgetCard(
+        RateGaugeCountdownCard(
             modifier = Modifier
                 .weight(weight = 1f)
                 .fillMaxHeight(),
