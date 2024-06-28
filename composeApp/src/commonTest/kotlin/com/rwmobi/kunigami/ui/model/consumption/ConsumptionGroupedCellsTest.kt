@@ -12,13 +12,11 @@ class ConsumptionGroupedCellsTest {
     private val now = Clock.System.now()
     private val consumption1 = Consumption(
         kWhConsumed = 10.123,
-        intervalStart = now,
-        intervalEnd = now.plus(1, DateTimeUnit.HOUR),
+        interval = now..now.plus(1, DateTimeUnit.HOUR),
     )
     private val consumption2 = Consumption(
         kWhConsumed = 20.456,
-        intervalStart = now,
-        intervalEnd = now.plus(2, DateTimeUnit.HOUR),
+        interval = now..now.plus(2, DateTimeUnit.HOUR),
     )
     private val groupedCells = ConsumptionGroupedCells(
         title = "Test Group",

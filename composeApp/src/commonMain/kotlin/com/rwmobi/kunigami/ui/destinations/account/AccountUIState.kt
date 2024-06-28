@@ -12,7 +12,6 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.model.account.UserProfile
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.extensions.mapFromPlatform
 import com.rwmobi.kunigami.ui.model.ErrorMessage
@@ -28,7 +27,6 @@ data class AccountUIState(
     val requestedScreenType: AccountScreenType? = null,
     val requestedLayout: AccountScreenLayout = AccountScreenLayout.Compact,
     val userProfile: UserProfile? = null,
-    val tariffSummary: TariffSummary? = null,
     val requestScrollToTop: Boolean = false,
     val errorMessages: List<ErrorMessage> = emptyList(),
 ) {
@@ -61,13 +59,13 @@ data class AccountUIState(
             }
 
             else -> {
-                handleErrorAndStopLoading(message = throwable.message ?: getString(resource = Res.string.tariffs_error_load_tariffs))
+                handleMessageAndStopLoading(message = throwable.message ?: getString(resource = Res.string.tariffs_error_load_tariffs))
             }
         }
     }
 
-    fun handleErrorAndStopLoading(message: String): AccountUIState {
-        val newErrorMessages = if (errorMessages.any { it.message == message }) {
+    fun handleMessageAndStopLoading(message: String): AccountUIState {
+        val newMessages = if (errorMessages.any { it.message == message }) {
             errorMessages
         } else {
             errorMessages + ErrorMessage(
@@ -76,7 +74,7 @@ data class AccountUIState(
             )
         }
         return copy(
-            errorMessages = newErrorMessages,
+            errorMessages = newMessages,
             isLoading = false,
         )
     }

@@ -14,6 +14,7 @@ import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
+import kotlinx.datetime.Instant
 
 fun ProductDetailsDto.toProductSummary() = ProductSummary(
     code = code,
@@ -30,8 +31,7 @@ fun ProductDetailsDto.toProductSummary() = ProductSummary(
         if (isRestricted) add(ProductFeature.RESTRICTED)
     }.toList(),
     term = term,
-    availableFrom = availableFrom,
-    availableTo = availableTo,
+    availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
     brand = brand,
 )
 
@@ -51,20 +51,26 @@ fun SingleProductApiResponse.toProductDetails(): ProductDetails {
             if (isRestricted) add(ProductFeature.RESTRICTED)
         }.toList(),
         term = term,
-        availableFrom = availableFrom,
-        availableTo = availableTo,
+        availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
         electricityTariffType = when {
             singleRegisterElectricityTariffs.isNotEmpty() -> ElectricityTariffType.SINGLE_REGISTER
             dualRegisterElectricityTariffs.isNotEmpty() -> ElectricityTariffType.DUAL_REGISTER
             else -> ElectricityTariffType.UNKNOWN
         },
+        // TODO: This is not a very good implementation - Need to refactor when support dual rates
         electricityTariffs = when {
             singleRegisterElectricityTariffs.isNotEmpty() -> singleRegisterElectricityTariffs.mapNotNull { (key, value) ->
-                value.toTariffDetails()?.let { key to it }
+                val tariffCode = value.varying?.code ?: value.directDebitMonthly?.code
+                tariffCode?.let {
+                    key to toTariff(tariffCode = tariffCode)
+                }
             }.toMap()
 
             dualRegisterElectricityTariffs.isNotEmpty() -> dualRegisterElectricityTariffs.mapNotNull { (key, value) ->
-                value.toTariffDetails()?.let { key to it }
+                val tariffCode = value.varying?.code ?: value.directDebitMonthly?.code
+                tariffCode?.let {
+                    key to toTariff(tariffCode = tariffCode)
+                }
             }.toMap()
 
             else -> null

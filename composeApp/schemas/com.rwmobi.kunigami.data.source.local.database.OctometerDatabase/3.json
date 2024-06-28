@@ -1,0 +1,100 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "d2b0a2162edcf96f758ceae007811413",
+    "entities": [
+      {
+        "tableName": "consumption",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`meter_serial` TEXT NOT NULL, `interval_start` INTEGER NOT NULL, `interval_end` INTEGER NOT NULL, `kwh_consumed` REAL NOT NULL, PRIMARY KEY(`meter_serial`, `interval_start`))",
+        "fields": [
+          {
+            "fieldPath": "meterSerial",
+            "columnName": "meter_serial",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intervalStart",
+            "columnName": "interval_start",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intervalEnd",
+            "columnName": "interval_end",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kWhConsumed",
+            "columnName": "kwh_consumed",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "meter_serial",
+            "interval_start"
+          ]
+        }
+      },
+      {
+        "tableName": "rate",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tariff_code` TEXT NOT NULL, `rate_type` INTEGER NOT NULL, `payment_method` TEXT NOT NULL, `valid_from` INTEGER NOT NULL, `valid_to` INTEGER, `vat_Rate` REAL NOT NULL, PRIMARY KEY(`tariff_code`, `rate_type`, `payment_method`, `valid_from`))",
+        "fields": [
+          {
+            "fieldPath": "tariffCode",
+            "columnName": "tariff_code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rateType",
+            "columnName": "rate_type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paymentMethod",
+            "columnName": "payment_method",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "validFrom",
+            "columnName": "valid_from",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "validTo",
+            "columnName": "valid_to",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "vatRate",
+            "columnName": "vat_Rate",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "tariff_code",
+            "rate_type",
+            "payment_method",
+            "valid_from"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd2b0a2162edcf96f758ceae007811413')"
+    ]
+  }
+}

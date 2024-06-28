@@ -11,6 +11,7 @@ import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.UserProfile
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -70,16 +71,27 @@ class SyncUserProfileUseCase(
                             }
                         }
 
+                        val tariffs = mutableListOf<Tariff>()
+                        account?.getTariffHistory(mpan = selectedMpan)?.forEach { tariffCode ->
+                            val tariff = restApiRepository.getTariff(
+                                tariffCode = tariffCode,
+                            )
+                            tariff.getOrNull()?.let { tariffs.add(it) }
+                        }
+
                         // If any of the information is missing, we are not comfortable to proceed.
                         // Caller making use of UserProfile should consider activating demo mode.
                         if (selectedAccount != null &&
                             selectedMpan != null &&
-                            selectedMeterSerialNumber != null
+                            selectedMeterSerialNumber != null &&
+                            tariffs.isNotEmpty()
                         ) {
+                            // We merge tariffs here, so repository can safely cache the account object
                             UserProfile(
                                 selectedMpan = selectedMpan,
                                 selectedMeterSerialNumber = selectedMeterSerialNumber,
                                 account = selectedAccount,
+                                tariffs = tariffs,
                             )
                         } else {
                             null

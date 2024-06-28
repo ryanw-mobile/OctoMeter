@@ -142,6 +142,7 @@ private fun Preview() {
                     onRefresh = {},
                     onErrorShown = {},
                     onScrolledToTop = {},
+                    onClearCache = {},
                     onShowSnackbar = {},
                     onSpecialErrorScreenShown = {},
                 ),

@@ -4,6 +4,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
+@Suppress("TooManyFunctions")
 class RetailRegionTest {
 
     // Grouping tests for valid codes

@@ -7,22 +7,20 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration
 
+@Suppress("TooManyFunctions")
 class ElectricityMeterPointTest {
     private val now = Clock.System.now()
     private val agreement1 = Agreement(
         tariffCode = "TARIFF1",
-        validFrom = now.minus(Duration.parse("90d")),
-        validTo = now.minus(Duration.parse("60d")),
+        period = now.minus(Duration.parse("90d"))..now.minus(Duration.parse("60d")),
     )
     private val agreement2 = Agreement(
         tariffCode = "TARIFF2",
-        validFrom = now.minus(Duration.parse("60d")),
-        validTo = now.minus(Duration.parse("30d")),
+        period = now.minus(Duration.parse("60d"))..now.minus(Duration.parse("30d")),
     )
     private val agreement3 = Agreement(
         tariffCode = "TARIFF3",
-        validFrom = now.minus(Duration.parse("30d")),
-        validTo = now.plus(Duration.parse("30d")),
+        period = now.minus(Duration.parse("30d"))..now.plus(Duration.parse("30d")),
     )
     private val meterPoint = ElectricityMeterPoint(
         mpan = "MPAN1",
@@ -47,7 +45,7 @@ class ElectricityMeterPointTest {
     fun `lookupAgreements should return agreements in effect within given date range`() {
         val validFrom = now.minus(Duration.parse("60d"))
         val validTo = now
-        val agreements = meterPoint.lookupAgreements(validFrom, validTo)
+        val agreements = meterPoint.lookupAgreements(period = validFrom..validTo)
         assertEquals(listOf(agreement2, agreement3), agreements)
     }
 
@@ -55,7 +53,7 @@ class ElectricityMeterPointTest {
     fun `lookupAgreements should return empty list if no agreements in effect within given date range`() {
         val validFrom = now.plus(Duration.parse("50d"))
         val validTo = now.plus(Duration.parse("50d"))
-        val agreements = meterPoint.lookupAgreements(validFrom, validTo)
+        val agreements = meterPoint.lookupAgreements(period = validFrom..validTo)
         assertTrue(agreements.isEmpty())
     }
 

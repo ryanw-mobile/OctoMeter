@@ -13,6 +13,5 @@ import kotlinx.datetime.Instant
 @Immutable
 data class Agreement(
     val tariffCode: String,
-    val validFrom: Instant,
-    val validTo: Instant,
+    val period: ClosedRange<Instant>,
 )

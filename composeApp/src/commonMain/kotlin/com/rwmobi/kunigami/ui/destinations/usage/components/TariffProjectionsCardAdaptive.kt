@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
 import com.rwmobi.kunigami.ui.model.consumption.Insights
@@ -38,7 +38,7 @@ import org.jetbrains.compose.resources.stringResource
 internal fun TariffProjectionsCardAdaptive(
     modifier: Modifier = Modifier,
     mpan: String?,
-    tariffSummary: TariffSummary?,
+    tariff: Tariff?,
     insights: Insights?,
     layoutType: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
 ) {
@@ -47,7 +47,7 @@ internal fun TariffProjectionsCardAdaptive(
             TariffProjectionsCardLinear(
                 modifier = modifier,
                 mpan = mpan,
-                tariffSummary = tariffSummary,
+                tariff = tariff,
                 insights = insights,
             )
         }
@@ -56,7 +56,7 @@ internal fun TariffProjectionsCardAdaptive(
             TariffProjectionsCardLTwoColumns(
                 modifier = modifier,
                 mpan = mpan,
-                tariffSummary = tariffSummary,
+                tariff = tariff,
                 insights = insights,
             )
         }
@@ -65,7 +65,7 @@ internal fun TariffProjectionsCardAdaptive(
             TariffProjectionsCardThreeColumns(
                 modifier = modifier,
                 mpan = mpan,
-                tariffSummary = tariffSummary,
+                tariff = tariff,
                 insights = insights,
             )
         }
@@ -76,7 +76,7 @@ internal fun TariffProjectionsCardAdaptive(
 private fun TariffProjectionsCardLinear(
     modifier: Modifier = Modifier,
     mpan: String?,
-    tariffSummary: TariffSummary?,
+    tariff: Tariff?,
     insights: Insights?,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -85,13 +85,13 @@ private fun TariffProjectionsCardLinear(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
     ) {
-        tariffSummary?.let {
+        tariff?.let {
             TariffSummaryCardAdaptive(
                 modifier = Modifier.fillMaxWidth(),
                 layoutType = WindowWidthSizeClass.Compact,
                 heading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) } ?: stringResource(resource = Res.string.usage_current_tariff).uppercase(),
                 headingTextAlign = TextAlign.Center,
-                tariffSummary = it,
+                tariff = it,
             )
         }
 
@@ -114,7 +114,7 @@ private fun TariffProjectionsCardLinear(
 private fun TariffProjectionsCardLTwoColumns(
     modifier: Modifier = Modifier,
     mpan: String?,
-    tariffSummary: TariffSummary?,
+    tariff: Tariff?,
     insights: Insights?,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -142,13 +142,13 @@ private fun TariffProjectionsCardLTwoColumns(
             }
         }
 
-        tariffSummary?.let {
+        tariff?.let {
             TariffSummaryCardAdaptive(
                 modifier = Modifier.weight(weight = 0.4f).fillMaxHeight(),
                 layoutType = WindowWidthSizeClass.Compact,
                 heading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) } ?: stringResource(resource = Res.string.usage_current_tariff).uppercase(),
                 headingTextAlign = TextAlign.Center,
-                tariffSummary = it,
+                tariff = it,
             )
         }
     }
@@ -158,7 +158,7 @@ private fun TariffProjectionsCardLTwoColumns(
 private fun TariffProjectionsCardThreeColumns(
     modifier: Modifier = Modifier,
     mpan: String?,
-    tariffSummary: TariffSummary?,
+    tariff: Tariff?,
     insights: Insights?,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -168,13 +168,13 @@ private fun TariffProjectionsCardThreeColumns(
             .height(intrinsicSize = IntrinsicSize.Min),
         horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
     ) {
-        tariffSummary?.let {
+        tariff?.let {
             TariffSummaryCardAdaptive(
                 modifier = Modifier.weight(weight = 1f).fillMaxHeight(),
                 layoutType = WindowWidthSizeClass.Compact,
                 heading = mpan?.let { stringResource(resource = Res.string.account_mpan, mpan) } ?: stringResource(resource = Res.string.usage_current_tariff).uppercase(),
                 headingTextAlign = TextAlign.Center,
-                tariffSummary = it,
+                tariff = it,
             )
         }
 
@@ -199,7 +199,7 @@ private fun Preview() {
     CommonPreviewSetup {
         TariffProjectionsCardAdaptive(
             modifier = Modifier.padding(all = 16.dp),
-            tariffSummary = TariffSamples.agileFlex221125,
+            tariff = TariffSamples.agileFlex221125,
             insights = InsightsSamples.trueCost,
             layoutType = WindowWidthSizeClass.Expanded,
             mpan = "1200000123456",
@@ -207,7 +207,7 @@ private fun Preview() {
 
         TariffProjectionsCardAdaptive(
             modifier = Modifier.padding(all = 16.dp),
-            tariffSummary = TariffSamples.agileFlex221125,
+            tariff = TariffSamples.agileFlex221125,
             insights = InsightsSamples.trueCost,
             layoutType = WindowWidthSizeClass.Medium,
             mpan = "1200000123456",
@@ -215,7 +215,7 @@ private fun Preview() {
 
         TariffProjectionsCardAdaptive(
             modifier = Modifier.padding(all = 16.dp),
-            tariffSummary = TariffSamples.agileFlex221125,
+            tariff = TariffSamples.agileFlex221125,
             insights = InsightsSamples.trueCost,
             layoutType = WindowWidthSizeClass.Compact,
             mpan = "1200000123456",

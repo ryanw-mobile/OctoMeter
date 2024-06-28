@@ -37,6 +37,7 @@ class ElectricityMeterPointsEndpoint(
         apiKey: String,
         mpan: String,
         meterSerialNumber: String,
+        page: Int? = null,
         pageSize: Int? = null,
         periodFrom: Instant? = null,
         periodTo: Instant? = null,
@@ -46,6 +47,7 @@ class ElectricityMeterPointsEndpoint(
         return withContext(dispatcher) {
             val response = httpClient.get("$endpointUrl/$mpan/meters/$meterSerialNumber/consumption") {
                 header("Authorization", "Basic ${encodeApiKey(apiKey)}")
+                parameter("page", page)
                 parameter("page_size", pageSize)
                 parameter("period_from", periodFrom?.toIso8601WithoutSeconds())
                 parameter("period_to", periodTo?.toIso8601WithoutSeconds())

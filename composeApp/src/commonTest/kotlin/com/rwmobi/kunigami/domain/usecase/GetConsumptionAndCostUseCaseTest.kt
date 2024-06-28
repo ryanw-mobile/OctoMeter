@@ -11,7 +11,7 @@ import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
-import com.rwmobi.kunigami.domain.samples.AccountSampleData
+import com.rwmobi.kunigami.test.samples.AccountSampleData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -58,18 +58,15 @@ class GetConsumptionAndCostUseCaseTest {
         val expectedConsumption = listOf(
             Consumption(
                 kWhConsumed = 0.113,
-                intervalStart = Instant.parse("2024-05-06T23:30:00Z"),
-                intervalEnd = Instant.parse("2024-05-07T00:00:00Z"),
+                interval = Instant.parse("2024-05-06T23:30:00Z")..Instant.parse("2024-05-07T00:00:00Z"),
             ),
             Consumption(
                 kWhConsumed = 0.58,
-                intervalStart = Instant.parse("2024-05-06T23:00:00Z"),
-                intervalEnd = Instant.parse("2024-05-06T23:30:00Z"),
+                interval = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:30:00Z"),
             ),
             Consumption(
                 kWhConsumed = 0.201,
-                intervalStart = Instant.parse("2024-05-06T22:30:00Z"),
-                intervalEnd = Instant.parse("2024-05-06T23:00:00Z"),
+                interval = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:00:00Z"),
             ),
         )
 
@@ -82,13 +79,12 @@ class GetConsumptionAndCostUseCaseTest {
         fakeRestApiRepository.setConsumptionResponse = Result.success(expectedConsumption)
 
         val result = getConsumptionAndCostUseCase(
-            periodFrom = fakePeriodFrom,
-            periodTo = fakePeriodTo,
+            period = fakePeriodFrom..fakePeriodTo,
             groupBy = groupBy,
         )
 
         assertTrue(result.isSuccess)
-        assertEquals(expectedConsumption.sortedBy { it.intervalStart }, result.getOrNull()?.map { it.consumption })
+        assertEquals(expectedConsumption.sortedBy { it.interval.start }, result.getOrNull()?.map { it.consumption })
     }
 
     @Test
@@ -100,8 +96,7 @@ class GetConsumptionAndCostUseCaseTest {
 
         val exception = assertFailsWith<IllegalArgumentException> {
             getConsumptionAndCostUseCase(
-                periodFrom = fakePeriodFrom,
-                periodTo = fakePeriodTo,
+                period = fakePeriodFrom..fakePeriodTo,
                 groupBy = groupBy,
             ).getOrThrow()
         }
@@ -118,8 +113,7 @@ class GetConsumptionAndCostUseCaseTest {
 
         val exception = assertFailsWith<IllegalArgumentException> {
             getConsumptionAndCostUseCase(
-                periodFrom = fakePeriodFrom,
-                periodTo = fakePeriodTo,
+                period = fakePeriodFrom..fakePeriodTo,
                 groupBy = groupBy,
             ).getOrThrow()
         }
@@ -136,8 +130,7 @@ class GetConsumptionAndCostUseCaseTest {
 
         val exception = assertFailsWith<IllegalArgumentException> {
             getConsumptionAndCostUseCase(
-                periodFrom = fakePeriodFrom,
-                periodTo = fakePeriodTo,
+                period = fakePeriodFrom..fakePeriodTo,
                 groupBy = groupBy,
             ).getOrThrow()
         }
@@ -158,8 +151,7 @@ class GetConsumptionAndCostUseCaseTest {
 
         val exception = assertFailsWith<RuntimeException> {
             getConsumptionAndCostUseCase(
-                periodFrom = fakePeriodFrom,
-                periodTo = fakePeriodTo,
+                period = fakePeriodFrom..fakePeriodTo,
                 groupBy = groupBy,
             ).getOrThrow()
         }
@@ -173,18 +165,15 @@ class GetConsumptionAndCostUseCaseTest {
         val expectedConsumption = listOf(
             Consumption(
                 kWhConsumed = 0.113,
-                intervalStart = Instant.parse("2024-05-06T23:30:00Z"),
-                intervalEnd = Instant.parse("2024-05-07T00:00:00Z"),
+                interval = Instant.parse("2024-05-06T23:30:00Z")..Instant.parse("2024-05-07T00:00:00Z"),
             ),
             Consumption(
                 kWhConsumed = 0.58,
-                intervalStart = Instant.parse("2024-05-06T23:00:00Z"),
-                intervalEnd = Instant.parse("2024-05-06T23:30:00Z"),
+                interval = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:30:00Z"),
             ),
             Consumption(
                 kWhConsumed = 0.201,
-                intervalStart = Instant.parse("2024-05-06T22:30:00Z"),
-                intervalEnd = Instant.parse("2024-05-06T23:00:00Z"),
+                interval = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:00:00Z"),
             ),
         )
 
@@ -194,12 +183,11 @@ class GetConsumptionAndCostUseCaseTest {
         fakeDemoRestApiRepository.setConsumptionResponse = Result.success(expectedConsumption)
 
         val result = getConsumptionAndCostUseCase(
-            periodFrom = fakePeriodFrom,
-            periodTo = fakePeriodTo,
+            period = fakePeriodFrom..fakePeriodTo,
             groupBy = groupBy,
         )
 
         assertTrue(result.isSuccess)
-        assertEquals(expectedConsumption.sortedBy { it.intervalStart }, result.getOrNull()?.map { it.consumption })
+        assertEquals(expectedConsumption.sortedBy { it.interval.start }, result.getOrNull()?.map { it.consumption })
     }
 }

@@ -13,7 +13,8 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
+import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.datetime.DateTimePeriod
@@ -31,32 +32,51 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 
 class DemoRestApiRepository : RestApiRepository {
-    override suspend fun getSimpleProductTariff(productCode: String, tariffCode: String): Result<TariffSummary> {
-        throw NotImplementedError("Disabled in demo mode")
+    private val defaultException = NotImplementedError("Disabled in demo mode")
+
+    override suspend fun getTariff(tariffCode: String): Result<Tariff> {
+        throw defaultException
     }
 
-    override suspend fun getProducts(): Result<List<ProductSummary>> {
-        throw NotImplementedError("Disabled in demo mode")
+    override suspend fun getProducts(requestedPage: Int?): Result<List<ProductSummary>> {
+        throw defaultException
     }
 
     override suspend fun getProductDetails(productCode: String): Result<ProductDetails> {
-        throw NotImplementedError("Disabled in demo mode")
+        throw defaultException
     }
 
-    override suspend fun getStandardUnitRates(productCode: String, tariffCode: String, periodFrom: Instant?, periodTo: Instant?): Result<List<Rate>> {
-        throw NotImplementedError("Disabled in demo mode")
+    override suspend fun getStandardUnitRates(
+        tariffCode: String,
+        period: ClosedRange<Instant>,
+        requestedPage: Int?,
+    ): Result<List<Rate>> {
+        throw defaultException
     }
 
-    override suspend fun getStandingCharges(productCode: String, tariffCode: String): Result<List<Rate>> {
-        throw NotImplementedError("Disabled in demo mode")
+    override suspend fun getStandingCharges(
+        tariffCode: String,
+        paymentMethod: PaymentMethod,
+        period: ClosedRange<Instant>?,
+        requestedPage: Int?,
+    ): Result<List<Rate>> {
+        throw defaultException
     }
 
-    override suspend fun getDayUnitRates(productCode: String, tariffCode: String): Result<List<Rate>> {
-        throw NotImplementedError("Disabled in demo mode")
+    override suspend fun getDayUnitRates(
+        tariffCode: String,
+        period: ClosedRange<Instant>?,
+        requestedPage: Int?,
+    ): Result<List<Rate>> {
+        throw defaultException
     }
 
-    override suspend fun getNightUnitRates(productCode: String, tariffCode: String): Result<List<Rate>> {
-        throw NotImplementedError("Disabled in demo mode")
+    override suspend fun getNightUnitRates(
+        tariffCode: String,
+        period: ClosedRange<Instant>?,
+        requestedPage: Int?,
+    ): Result<List<Rate>> {
+        throw defaultException
     }
 
     /**
@@ -68,25 +88,25 @@ class DemoRestApiRepository : RestApiRepository {
         apiKey: String,
         mpan: String,
         meterSerialNumber: String,
-        periodFrom: Instant?,
-        periodTo: Instant?,
+        period: ClosedRange<Instant>,
         orderBy: ConsumptionDataOrder,
         groupBy: ConsumptionTimeFrame,
+        requestedPage: Int?,
     ): Result<List<Consumption>> {
         val consumptionList = mutableListOf<Consumption>()
-        var intervalStart = periodFrom!!
+        var intervalStart = period.start
         val mean = 0.2 // Midpoint of the range [0.110, 2.000]
         val standardDeviation = 0.2167 // Adjust to control the spread of values
         val timeZone = TimeZone.currentSystemDefault()
         val baseDurationMinutes = 30L // base duration in minutes for half-hourly intervals
 
-        while (intervalStart < periodTo!!) {
+        while (intervalStart < period.endInclusive) {
             val intervalEnd = when (groupBy) {
                 ConsumptionTimeFrame.HALF_HOURLY -> intervalStart.plus(DateTimePeriod(minutes = 30), timeZone)
                 ConsumptionTimeFrame.DAY -> intervalStart.plus(DateTimePeriod(days = 1), timeZone)
                 ConsumptionTimeFrame.WEEK -> intervalStart.plus(DateTimePeriod(days = 7), timeZone)
                 ConsumptionTimeFrame.MONTH -> intervalStart.plus(DateTimePeriod(months = 1), timeZone)
-                ConsumptionTimeFrame.QUARTER -> throw NotImplementedError("Disabled in demo mode")
+                ConsumptionTimeFrame.QUARTER -> throw defaultException
             }
 
             val intervalDurationMinutes = intervalStart.until(intervalEnd, DateTimeUnit.MINUTE)
@@ -94,7 +114,12 @@ class DemoRestApiRepository : RestApiRepository {
             var consumption = generateNormalDistribution(mean, standardDeviation)
             consumption = min(max(consumption, 0.05), 1.5) * intervalFactor
 
-            consumptionList.add(Consumption(consumption, intervalStart, intervalEnd))
+            consumptionList.add(
+                Consumption(
+                    kWhConsumed = consumption,
+                    interval = intervalStart..intervalEnd,
+                ),
+            )
             intervalStart = intervalEnd
         }
 
@@ -110,6 +135,10 @@ class DemoRestApiRepository : RestApiRepository {
     }
 
     override suspend fun getAccount(apiKey: String, accountNumber: String): Result<Account?> {
-        throw NotImplementedError("Disabled in demo mode")
+        throw defaultException
+    }
+
+    override suspend fun clearCache() {
+        throw defaultException
     }
 }

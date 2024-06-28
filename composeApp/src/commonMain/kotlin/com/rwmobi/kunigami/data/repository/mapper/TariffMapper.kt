@@ -8,16 +8,18 @@
 package com.rwmobi.kunigami.data.repository.mapper
 
 import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SingleProductApiResponse
-import com.rwmobi.kunigami.data.source.network.dto.singleproduct.TariffDetailsDto
 import com.rwmobi.kunigami.domain.exceptions.TariffNotFoundException
-import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.product.ExitFeesType
-import com.rwmobi.kunigami.domain.model.product.TariffDetails
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import kotlinx.datetime.Instant
 
-fun SingleProductApiResponse.toTariff(tariffCode: String): TariffSummary {
-    val tariffDetails = when {
+fun SingleProductApiResponse.toTariff(
+    tariffCode: String,
+): Tariff {
+    // SingleProductApiResponse comes with all retail regions
+    // We filter the one requested
+    val retailRegionTariff = when {
         tariffCode.startsWith("E-1R") -> {
             singleRegisterElectricityTariffs["_${tariffCode[tariffCode.lastIndex]}"]
         }
@@ -31,53 +33,36 @@ fun SingleProductApiResponse.toTariff(tariffCode: String): TariffSummary {
         }
     }
 
-    if (tariffDetails == null) {
+    if (retailRegionTariff == null) {
         throw IllegalArgumentException("$tariffCode not found in product $code")
     }
 
-    val rates = tariffDetails.varying ?: tariffDetails.directDebitMonthly ?: throw TariffNotFoundException(tariffCode)
+    val rates = retailRegionTariff.varying ?: retailRegionTariff.directDebitMonthly ?: throw TariffNotFoundException(tariffCode)
+    val tariffPaymentTerm = when {
+        retailRegionTariff.directDebitMonthly != null -> TariffPaymentTerm.DIRECT_DEBIT_MONTHLY
+        retailRegionTariff.varying != null -> TariffPaymentTerm.VARYING
+        else -> TariffPaymentTerm.UNKNOWN
+    }
 
-    return TariffSummary(
+    return Tariff(
         productCode = code,
         fullName = fullName,
         displayName = displayName,
         description = description,
         isVariable = isVariable,
-        availableFrom = availableFrom,
-        availableTo = availableTo,
+        availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
+
         tariffCode = rates.code,
-        vatInclusiveUnitRate = rates.standardUnitRateIncVat?.roundToTwoDecimalPlaces() ?: throw IllegalArgumentException("unit rate not found for tariff $tariffCode"),
-        vatInclusiveStandingCharge = rates.standingChargeIncVat.roundToTwoDecimalPlaces(),
+        tariffActiveAt = tariffsActiveAt,
+
+        tariffPaymentTerm = tariffPaymentTerm,
+        vatInclusiveStandingCharge = rates.standingChargeIncVat,
+        vatInclusiveOnlineDiscount = rates.onlineDiscountIncVat,
+        vatInclusiveDualFuelDiscount = rates.dualFuelDiscountIncVat,
+        exitFeesType = ExitFeesType.fromApiValue(value = rates.exitFeesType),
+        vatInclusiveExitFees = rates.exitFeesIncVat,
+        vatInclusiveStandardUnitRate = rates.standardUnitRateIncVat,
+        vatInclusiveDayUnitRate = rates.dayUnitRateIncVat,
+        vatInclusiveNightUnitRate = rates.nightUnitRateIncVat,
     )
-}
-
-fun TariffDetailsDto.toTariffDetails(): TariffDetails? {
-    val tariffPaymentTerm = when {
-        directDebitMonthly != null -> TariffPaymentTerm.DIRECT_DEBIT_MONTHLY
-        varying != null -> TariffPaymentTerm.VARYING
-        else -> TariffPaymentTerm.UNKNOWN
-    }
-
-    val activePaymentTerm = when (tariffPaymentTerm) {
-        TariffPaymentTerm.DIRECT_DEBIT_MONTHLY -> directDebitMonthly
-        TariffPaymentTerm.VARYING -> varying
-        else -> null
-    }
-
-    if (activePaymentTerm == null) return null
-
-    return with(activePaymentTerm) {
-        TariffDetails(
-            tariffPaymentTerm = tariffPaymentTerm,
-            tariffCode = code,
-            vatInclusiveStandingCharge = standingChargeIncVat,
-            vatInclusiveOnlineDiscount = onlineDiscountIncVat,
-            vatInclusiveDualFuelDiscount = dualFuelDiscountIncVat,
-            exitFeesType = ExitFeesType.fromApiValue(value = exitFeesType),
-            vatInclusiveExitFees = exitFeesIncVat,
-            vatInclusiveStandardUnitRate = standardUnitRateIncVat,
-            vatInclusiveDayUnitRate = dayUnitRateIncVat,
-            vatInclusiveNightUnitRate = nightUnitRateIncVat,
-        )
-    }
 }

@@ -7,6 +7,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+@Suppress("TooManyFunctions")
 class AccountTest {
 
     private val account = AccountSamples.account928

@@ -42,8 +42,7 @@ fun ElectricityMeterPointDto.toElectricityMeterPoint(): ElectricityMeterPoint {
 
 fun AgreementDto.toAgreement() = Agreement(
     tariffCode = tariffCode,
-    validFrom = validFrom,
-    validTo = validTo ?: Instant.DISTANT_FUTURE,
+    period = validFrom..(validTo ?: Instant.DISTANT_FUTURE),
 )
 
 fun List<AgreementDto>.toAgreement() = map {

@@ -13,22 +13,22 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
+import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 
 class FakeRestApiRepository : RestApiRepository {
 
-    var setSimpleProductTariffResponse: Result<TariffSummary>? = null
-    override suspend fun getSimpleProductTariff(
-        productCode: String,
+    var setSimpleProductTariffResponse: Result<Tariff>? = null
+    override suspend fun getTariff(
         tariffCode: String,
-    ): Result<TariffSummary> {
+    ): Result<Tariff> {
         return setSimpleProductTariffResponse ?: throw RuntimeException("Fake result setSimpleProductTariffResponse not defined")
     }
 
     var setProductsResponse: Result<List<ProductSummary>>? = null
-    override suspend fun getProducts(): Result<List<ProductSummary>> {
+    override suspend fun getProducts(requestedPage: Int?): Result<List<ProductSummary>> {
         return setProductsResponse ?: throw RuntimeException("Fake result setProductsResponse not defined")
     }
 
@@ -39,34 +39,37 @@ class FakeRestApiRepository : RestApiRepository {
 
     var setStandardUnitRatesResponse: Result<List<Rate>>? = null
     override suspend fun getStandardUnitRates(
-        productCode: String,
         tariffCode: String,
-        periodFrom: Instant?,
-        periodTo: Instant?,
+        period: ClosedRange<Instant>,
+        requestedPage: Int?,
     ): Result<List<Rate>> {
         return setStandardUnitRatesResponse ?: throw RuntimeException("Fake result setStandardUnitRatesResponse not defined")
     }
 
     var setStandingChargesResponse: Result<List<Rate>>? = null
     override suspend fun getStandingCharges(
-        productCode: String,
         tariffCode: String,
+        paymentMethod: PaymentMethod,
+        period: ClosedRange<Instant>?,
+        requestedPage: Int?,
     ): Result<List<Rate>> {
         return setStandingChargesResponse ?: throw RuntimeException("Fake result setStandingChargesResponse not defined")
     }
 
     var setDayUnitRatesResponse: Result<List<Rate>>? = null
     override suspend fun getDayUnitRates(
-        productCode: String,
         tariffCode: String,
+        period: ClosedRange<Instant>?,
+        requestedPage: Int?,
     ): Result<List<Rate>> {
         return setDayUnitRatesResponse ?: throw RuntimeException("Fake result setDayUnitRatesResponse not defined")
     }
 
     var setNightUnitRatesResponse: Result<List<Rate>>? = null
     override suspend fun getNightUnitRates(
-        productCode: String,
         tariffCode: String,
+        period: ClosedRange<Instant>?,
+        requestedPage: Int?,
     ): Result<List<Rate>> {
         return setNightUnitRatesResponse ?: throw RuntimeException("Fake result setNightUnitRatesResponse not defined")
     }
@@ -76,10 +79,10 @@ class FakeRestApiRepository : RestApiRepository {
         apiKey: String,
         mpan: String,
         meterSerialNumber: String,
-        periodFrom: Instant?,
-        periodTo: Instant?,
+        period: ClosedRange<Instant>,
         orderBy: ConsumptionDataOrder,
         groupBy: ConsumptionTimeFrame,
+        requestedPage: Int?,
     ): Result<List<Consumption>> {
         return setConsumptionResponse ?: throw RuntimeException("Fake result setConsumptionResponse not defined")
     }
@@ -90,5 +93,10 @@ class FakeRestApiRepository : RestApiRepository {
         accountNumber: String,
     ): Result<Account?> {
         return setAccountResponse ?: throw RuntimeException("Fake result setAccountResponse not defined")
+    }
+
+    var setClearCacheException: Throwable? = null
+    override suspend fun clearCache() {
+        setClearCacheException?.let { throw it }
     }
 }

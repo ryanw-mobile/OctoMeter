@@ -8,7 +8,7 @@
 package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.except
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.repository.RestApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -20,15 +20,11 @@ class GetTariffRatesUseCase(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(
-        productCode: String,
         tariffCode: String,
-    ): Result<TariffSummary> {
+    ): Result<Tariff> {
         return withContext(dispatcher) {
             runCatching {
-                restApiRepository.getSimpleProductTariff(
-                    productCode = productCode,
-                    tariffCode = tariffCode,
-                ).fold(
+                restApiRepository.getTariff(tariffCode = tariffCode).fold(
                     onSuccess = { tariff ->
                         tariff
                     },

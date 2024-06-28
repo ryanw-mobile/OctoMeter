@@ -31,7 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.rwmobi.kunigami.domain.model.product.TariffDetails
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.coroutines.launch
 import kunigami.composeapp.generated.resources.Res
@@ -43,7 +43,7 @@ import org.jetbrains.compose.resources.stringResource
 internal fun RegionSelectionBar(
     modifier: Modifier = Modifier,
     selectedRegion: String,
-    electricityTariffs: Map<String, TariffDetails>,
+    electricityTariffs: Map<String, Tariff>,
     onRegionSelected: (key: String) -> Unit,
 ) {
     val dimension = LocalDensity.current.getDimension()

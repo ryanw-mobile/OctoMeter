@@ -98,19 +98,19 @@ fun UsageScreen(
                             .fillMaxSize()
                             .conditionalBlur(enabled = uiState.isLoading),
                     ) {
-                        with(uiState.consumptionQueryFilter) {
+                        uiState.consumptionQueryFilter?.let { consumptionQueryFilter ->
                             TitleNavigationBar(
                                 modifier = Modifier
                                     .background(color = MaterialTheme.colorScheme.secondary)
                                     .fillMaxWidth()
                                     .height(height = dimension.minListItemHeight),
-                                currentPresentationStyle = presentationStyle,
-                                title = getConsumptionPeriodString(),
-                                canNavigateBack = canNavigateBackward(accountMoveInDate = uiState.userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST),
-                                canNavigateForward = canNavigateForward(),
-                                onNavigateBack = uiEvent.onPreviousTimeFrame,
-                                onNavigateForward = uiEvent.onNextTimeFrame,
-                                onSwitchPresentationStyle = { uiEvent.onSwitchPresentationStyle(it) },
+                                currentPresentationStyle = consumptionQueryFilter.presentationStyle,
+                                title = consumptionQueryFilter.getConsumptionPeriodString(),
+                                canNavigateBack = consumptionQueryFilter.canNavigateBackward(accountMoveInDate = uiState.userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST),
+                                canNavigateForward = consumptionQueryFilter.canNavigateForward(),
+                                onNavigateBack = { uiEvent.onPreviousTimeFrame(consumptionQueryFilter) },
+                                onNavigateForward = { uiEvent.onNextTimeFrame(consumptionQueryFilter) },
+                                onSwitchPresentationStyle = { presentationStyle -> uiEvent.onSwitchPresentationStyle(consumptionQueryFilter, presentationStyle) },
                             )
                         }
 
@@ -202,7 +202,7 @@ fun UsageScreen(
                                                 vertical = dimension.grid_1,
                                             ),
                                         layoutType = uiState.requestedAdaptiveLayout,
-                                        tariffSummary = uiState.tariffSummary,
+                                        tariff = uiState.tariff,
                                         insights = uiState.insights,
                                         mpan = uiState.userProfile?.selectedMpan,
                                     )
@@ -218,34 +218,36 @@ fun UsageScreen(
                                     )
                                 }
 
-                                consumptionGroupsWithPartitions.forEach { consumptionGroupWithPartitions ->
-                                    item(key = "${consumptionGroupWithPartitions.title}Title") {
-                                        RateGroupTitle(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(
-                                                    vertical = dimension.grid_2,
-                                                    horizontal = dimension.grid_4,
-                                                ),
-                                            consumptionGroupWithPartitions = consumptionGroupWithPartitions,
-                                        )
-                                    }
+                                if (uiState.consumptionQueryFilter != null) {
+                                    consumptionGroupsWithPartitions.forEach { consumptionGroupWithPartitions ->
+                                        item(key = "${consumptionGroupWithPartitions.title}Title") {
+                                            RateGroupTitle(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(
+                                                        vertical = dimension.grid_2,
+                                                        horizontal = dimension.grid_4,
+                                                    ),
+                                                consumptionGroupWithPartitions = consumptionGroupWithPartitions,
+                                            )
+                                        }
 
-                                    val maxRows = consumptionGroupWithPartitions.partitionedItems.maxOf { it.size }
-                                    items(maxRows) { rowIndex ->
-                                        ConsumptionGroupCells(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(
-                                                    horizontal = dimension.grid_4,
-                                                    vertical = dimension.grid_0_25,
-                                                ),
-                                            partitionedItems = consumptionGroupWithPartitions.partitionedItems,
-                                            shouldHideLastColumn = shouldHideLastConsumptionGroupColumn,
-                                            rowIndex = rowIndex,
-                                            consumptionRange = uiState.consumptionRange,
-                                            presentationStyle = uiState.consumptionQueryFilter.presentationStyle,
-                                        )
+                                        val maxRows = consumptionGroupWithPartitions.partitionedItems.maxOf { it.size }
+                                        items(maxRows) { rowIndex ->
+                                            ConsumptionGroupCells(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(
+                                                        horizontal = dimension.grid_4,
+                                                        vertical = dimension.grid_0_25,
+                                                    ),
+                                                partitionedItems = consumptionGroupWithPartitions.partitionedItems,
+                                                shouldHideLastColumn = shouldHideLastConsumptionGroupColumn,
+                                                rowIndex = rowIndex,
+                                                consumptionRange = uiState.consumptionRange,
+                                                presentationStyle = uiState.consumptionQueryFilter.presentationStyle,
+                                            )
+                                        }
                                     }
                                 }
                             }

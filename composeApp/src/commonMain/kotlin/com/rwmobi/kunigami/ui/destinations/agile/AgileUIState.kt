@@ -13,7 +13,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.model.account.UserProfile
-import com.rwmobi.kunigami.domain.model.product.TariffSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.extensions.getPlatformType
 import com.rwmobi.kunigami.ui.extensions.mapFromPlatform
@@ -39,8 +39,8 @@ data class AgileUIState(
     val requestedRateColumns: Int = 1,
     val requestedAdaptiveLayout: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     val userProfile: UserProfile? = null,
-    val activeTariffSummary: TariffSummary? = null,
-    val agileTariffSummary: TariffSummary? = null,
+    val activeTariff: Tariff? = null,
+    val agileTariff: Tariff? = null,
     val rateGroupedCells: List<RateGroup> = emptyList(),
     val rateRange: ClosedFloatingPointRange<Double> = 0.0..0.0,
     val barChartData: BarChartData? = null,
@@ -70,8 +70,8 @@ data class AgileUIState(
 
     fun isOnDifferentTariff() = (
         false == isDemoMode &&
-            activeTariffSummary != null &&
-            activeTariffSummary.tariffCode != agileTariffSummary?.tariffCode
+            activeTariff != null &&
+            activeTariff.tariffCode != agileTariff?.tariffCode
         )
 
     suspend fun filterErrorAndStopLoading(throwable: Throwable): AgileUIState {

@@ -9,7 +9,7 @@ package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
-import com.rwmobi.kunigami.domain.samples.TariffSampleData
+import com.rwmobi.kunigami.test.samples.TariffSampleData
 import com.rwmobi.kunigami.ui.model.consumption.Insights
 import kotlinx.datetime.Instant
 import kotlin.test.Test
@@ -18,21 +18,18 @@ import kotlin.test.assertNull
 
 class GenerateUsageInsightsUseCaseTest {
 
-    private val tariffSummary = TariffSampleData.var221101
+    private val tariff = TariffSampleData.var221101
     private val consumption1 = Consumption(
         kWhConsumed = 10.0,
-        intervalStart = Instant.parse("2023-03-30T01:00:00Z"),
-        intervalEnd = Instant.parse("2023-03-30T01:30:00Z"),
+        interval = Instant.parse("2023-03-30T01:00:00Z")..Instant.parse("2023-03-30T01:30:00Z"),
     )
     private val consumption2 = Consumption(
         kWhConsumed = 15.0,
-        intervalStart = Instant.parse("2023-03-30T01:30:00Z"),
-        intervalEnd = Instant.parse("2023-03-30T02:00:00Z"),
+        interval = Instant.parse("2023-03-30T01:30:00Z")..Instant.parse("2023-03-30T02:00:00Z"),
     )
     private val consumption3 = Consumption(
         kWhConsumed = 15.0,
-        intervalStart = Instant.parse("2023-03-30T02:00:00Z"),
-        intervalEnd = Instant.parse("2023-03-30T02:30:00Z"),
+        interval = Instant.parse("2023-03-30T02:00:00Z")..Instant.parse("2023-03-30T02:30:00Z"),
     )
     private val consumptionWithCost1 = ConsumptionWithCost(consumption = consumption1, vatInclusiveCost = 45.0)
     private val consumptionWithCost2 = ConsumptionWithCost(consumption = consumption2, vatInclusiveCost = 5.0)
@@ -40,9 +37,9 @@ class GenerateUsageInsightsUseCaseTest {
     private val generateUsageInsightsUseCase = GenerateUsageInsightsUseCase()
 
     @Test
-    fun `generateUsageInsightsUseCase should return null when tariffSummary is null`() {
+    fun `generateUsageInsightsUseCase should return null when tariff is null`() {
         val result = generateUsageInsightsUseCase(
-            tariffSummary = null,
+            tariff = null,
             consumptionWithCost = listOf(consumptionWithCost1),
         )
         assertNull(result)
@@ -51,7 +48,7 @@ class GenerateUsageInsightsUseCaseTest {
     @Test
     fun `generateUsageInsightsUseCase should return null when consumptionWithCost is null`() {
         val result = generateUsageInsightsUseCase(
-            tariffSummary = tariffSummary,
+            tariff = tariff,
             consumptionWithCost = null,
         )
         assertNull(result)
@@ -60,7 +57,7 @@ class GenerateUsageInsightsUseCaseTest {
     @Test
     fun `generateUsageInsightsUseCase should return null when consumptionWithCost is empty`() {
         val result = generateUsageInsightsUseCase(
-            tariffSummary = tariffSummary,
+            tariff = tariff,
             consumptionWithCost = emptyList(),
         )
         assertNull(result)
@@ -80,7 +77,7 @@ class GenerateUsageInsightsUseCaseTest {
             costAnnualProjection = 415.55,
         )
         val result = generateUsageInsightsUseCase(
-            tariffSummary = tariffSummary,
+            tariff = tariff,
             consumptionWithCost = listOf(consumptionWithCost1, consumptionWithCost2, consumptionWithCost3),
         )
         assertEquals(result, expectedInsights)
@@ -101,7 +98,7 @@ class GenerateUsageInsightsUseCaseTest {
             costAnnualProjection = 1096.28,
         )
         val result = generateUsageInsightsUseCase(
-            tariffSummary = tariffSummary,
+            tariff = tariff,
             consumptionWithCost = listOf(consumptionWithCostWithoutCost),
         )
         assertEquals(result, expectedInsights)

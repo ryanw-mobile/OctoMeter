@@ -27,6 +27,8 @@ plugins {
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.kotlinPowerAssert)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.androidxRoom)
 }
 
 val productName = "OctoMeter"
@@ -49,6 +51,7 @@ kotlin {
         framework {
             baseName = "composeApp"
             isStatic = true
+            binaryOption("bundleId", "composeApp.kunigami")
         }
     }
 
@@ -119,6 +122,11 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koalaplot.core)
             implementation(libs.multiplatform.settings)
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.sqlite.bundled)
+        }
+        desktopMain.kotlin {
+            srcDir("build/generated/ksp/metadata")
         }
         desktopMain.dependencies {
             runtimeOnly("org.jetbrains.skiko:skiko-awt-runtime-$skikoTarget:$skikoVersion")
@@ -127,10 +135,16 @@ kotlin {
             implementation(libs.koin.jvm)
             implementation(libs.koin.compose)
             implementation(libs.themedetector)
+            implementation(libs.slf4j)
         }
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
+        iosMain {
+            // Fixes RoomDB Unresolved reference 'instantiateImpl' in iosMain
+            kotlin.srcDir("build/generated/ksp/metadata")
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+            }
         }
+
         commonTest.dependencies {
             implementation(kotlin("test"))
             implementation(kotlin("test-common"))
@@ -276,6 +290,8 @@ android {
 
     dependencies {
         debugImplementation(libs.leakcanary.android)
+        testImplementation(libs.androidx.test.core.ktx)
+        testImplementation(libs.robolectric)
     }
 }
 
@@ -336,14 +352,10 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     }
     filter {
         exclude("**/BuildConfig.kt")
-        exclude("**/generated/**")
+        exclude { element -> element.file.path.contains("generated/") }
         exclude("**/MainViewController.kt")
         include("**/kotlin/**")
     }
-}
-
-tasks.named("preBuild") {
-    dependsOn(tasks.named("ktlintFormat"))
 }
 
 tasks.withType<Test> {
@@ -352,8 +364,17 @@ tasks.withType<Test> {
 }
 
 dependencies {
+    add("kspAndroid", libs.androidx.room.compiler) // For AndroidUnitTest
+    add("kspCommonMainMetadata", libs.androidx.room.compiler)
     implementation(libs.androidx.profileinstaller)
     "baselineProfile"(project(":baselineprofile"))
+}
+
+// https://github.com/JetBrains/compose-multiplatform/issues/4928
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().configureEach {
+    if (name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
 }
 
 buildConfig {
@@ -362,6 +383,10 @@ buildConfig {
     buildConfigField("VERSION_NAME", provider { libs.versions.versionName.get() })
     buildConfigField("VERSION_CODE", provider { libs.versions.versionCode.get() })
     buildConfigField("GITHUB_LINK", provider { "https://github.com/ryanw-mobile/OctoMeter" })
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -396,10 +421,8 @@ kover {
                         "$productNameSpace.App*",
                         "$productNameSpace.MainKt*",
                         "$productNameSpace.NavigationLayoutType",
-                        "$productNameSpace.data.repositor.DemoRestApiRepository",
                         "$productNameSpace.ui.extensions.WindowSizeClassExtensions*",
-                        "$productNameSpace..ui.extensions.ThrowableExtensions*",
-                        "$productNameSpace.ui.extensions.GenerateRandomLong*",
+                        "$productNameSpace.ui.extensions.ThrowableExtensions*",
                         "$productNameSpace.ui.extensions.GenerateRandomLong*",
                         "$productNameSpace.data.source.local.preferences.ProvideSettings*",
                         "$productNameSpace.data.source.local.preferences.MultiplatformPreferencesStore*",
@@ -423,9 +446,7 @@ kover {
                         "$productNameSpace.ui.theme",
                         "$productNameSpace.ui.previewsampledata",
                         "androidx",
-                        "dagger.hilt.internal.aggregatedroot.codegen",
-                        "hilt_aggregated_deps",
-                        "kunigami.composeapp.generated.resources",
+                        "kunigami.composeapp.generated.*",
                     ),
                 )
             }

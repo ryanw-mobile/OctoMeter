@@ -19,9 +19,8 @@ data class ProductDetails(
     val description: String,
     val features: List<ProductFeature>,
     val term: Int?,
-    val availableFrom: Instant,
-    val availableTo: Instant?,
+    val availability: ClosedRange<Instant>,
     val electricityTariffType: ElectricityTariffType,
-    val electricityTariffs: Map<String, TariffDetails>?,
+    val electricityTariffs: Map<String, Tariff>?,
     val brand: String,
 )

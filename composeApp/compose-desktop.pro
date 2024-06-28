@@ -87,3 +87,24 @@
 # Additional dontwarn rules for common issues
 -dontwarn java.awt.**
 -dontwarn javax.annotation.**
+
+# RoomDB
+# Room persistence library
+-keep class androidx.room.** { *; }
+-dontwarn androidx.room.**
+-keep class androidx.sqlite.db.** { *; }
+-dontwarn androidx.sqlite.db.**
+-keep class androidx.sqlite.** { *; }
+
+# Keep generated Room classes
+-keepclassmembers class * {
+    @androidx.room.* <fields>;
+    @androidx.room.* <methods>;
+}
+
+# Keep the implementation of the Room database
+-keep class * extends androidx.room.RoomDatabase { *; }
+
+# Keep the DAO classes
+-keep interface * extends androidx.room.RoomDatabase { *; }
+-keep class com.rwmobi.kunigami.data.source.local.database.dao.** { *; }

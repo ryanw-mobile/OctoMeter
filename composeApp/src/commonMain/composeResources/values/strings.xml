@@ -84,6 +84,8 @@
     <string name="tariffs_exit_fees">Exit Fees</string>
     <string name="tariffs_direct_debit_monthly">Direct Debit Monthly</string>
     <string name="tariffs_error_load_tariffs">Unable to retrieve tariffs</string>
+    <string name="tariffs_tariff_effective">Rates effective %1$s</string>
+    <string name="tariffs_variable_rate">Variable Unit Rate</string>
 
     <!-- Retail Regions -->
     <string name="retail_region_eastern_england">Eastern England</string>
@@ -115,7 +117,9 @@
     <string name="account_clear_credential_description">Removing your API token and any account-specific data from local storage. Under demo mode, the application will utilise simulated local data to replicate authenticated access. Additionally, it will default to Eastern England when retrieving tariffs.</string>
     <string name="account_clear_credential_button_cta">Clear</string>
     <string name="account_version_api_disclaimer">OctoMeter Version %1$s (Build %2$d)\n%3$s\n\nThe APIs are provided by Octopus Energy Ltd. Usage subject to their terms of service.</string>
-
+    <string name="account_clear_cache">Clear Cache</string>
+    <string name="account_clear_cache_success">Cache cleared.</string>
+    <string name="account_clear_cache_failed">Unable to clear the cache.</string>
     <string name="account_error_update_credentials">Access denied. Credentials not updated. Please check and try again.</string>
     <string name="account_error_load_account">Unable to retrieve your account details.</string>
     <string name="account_error_load_tariff">Unable to retrieve your tariff.</string>
@@ -130,9 +134,11 @@
     <string name="account_mpan">MPAN: %1$s</string>
     <string name="account_error_null_tariff">Unable to retrieve your tariff details.</string>
     <string name="account_tariff_start_date">Tariff starts on %1$s</string>
-    <string name="account_tariff_end_date">Tariff ends on %1$s</string>
-    <string name="account_tariff_unit_rate">Standard Unit Rate\n(p/kWh)</string>
-    <string name="account_tariff_standing_charge">Standing Charge\n(p/day)</string>
+    <string name="account_tariff_date_range">Tariff from %1$s to %2$s</string>
+    <string name="account_tariff_unit_rate">Standard Unit Rate (p/kWh)</string>
+    <string name="account_tariff_day_unit_rate">Day Unit Rate (p/kWh)</string>
+    <string name="account_tariff_night_unit_rate">Night Unit Rate (p/kWh)</string>
+    <string name="account_tariff_standing_charge">Standing Charge (p/day)</string>
     <string name="account_meter_serial">Meter: %1$s</string>
     <string name="account_meter_selected">SELECTED</string>
     <string name="account_meter_select">SELECT</string>

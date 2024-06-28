@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.domain.model
 
-import com.rwmobi.kunigami.domain.samples.RateSampleData
+import com.rwmobi.kunigami.test.samples.RateSampleData
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant

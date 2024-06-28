@@ -7,13 +7,13 @@
 
 package com.rwmobi.kunigami.data.source.network
 
-import com.rwmobi.kunigami.data.source.network.samples.GetDayUnitRatesSampleData
-import com.rwmobi.kunigami.data.source.network.samples.GetNightUnitRatesSampleData
-import com.rwmobi.kunigami.data.source.network.samples.GetProductSampleData
-import com.rwmobi.kunigami.data.source.network.samples.GetProductsSampleData
-import com.rwmobi.kunigami.data.source.network.samples.GetStandardUnitRatesSampleData
-import com.rwmobi.kunigami.data.source.network.samples.GetStandingChargesSampleData
 import com.rwmobi.kunigami.domain.exceptions.HttpException
+import com.rwmobi.kunigami.test.samples.GetDayUnitRatesSampleData
+import com.rwmobi.kunigami.test.samples.GetNightUnitRatesSampleData
+import com.rwmobi.kunigami.test.samples.GetProductSampleData
+import com.rwmobi.kunigami.test.samples.GetProductsSampleData
+import com.rwmobi.kunigami.test.samples.GetStandardUnitRatesSampleData
+import com.rwmobi.kunigami.test.samples.GetStandingChargesSampleData
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -255,7 +255,7 @@ class ProductsEndpointTest {
             httpClient = setupEngine(
                 status = HttpStatusCode.OK,
                 contentType = "application/json",
-                payload = GetStandingChargesSampleData.json,
+                payload = GetStandingChargesSampleData.var221101Json,
             ),
         )
 
@@ -263,7 +263,7 @@ class ProductsEndpointTest {
             productCode = "fake-product-code",
             tariffCode = "fake-tariff-code",
         )
-        assertEquals(GetStandingChargesSampleData.dto, result)
+        assertEquals(GetStandingChargesSampleData.var221101Dto, result)
     }
 
     @Test

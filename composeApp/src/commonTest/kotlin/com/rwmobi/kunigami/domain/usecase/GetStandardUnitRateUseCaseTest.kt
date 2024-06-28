@@ -9,7 +9,7 @@ package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
-import com.rwmobi.kunigami.domain.samples.RateSampleData
+import com.rwmobi.kunigami.test.samples.RateSampleData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -24,6 +24,8 @@ class GetStandardUnitRateUseCaseTest {
     private lateinit var getStandardUnitRateUseCase: GetStandardUnitRateUseCase
     private lateinit var fakeUserPreferenceRepository: FakeUserPreferencesRepository
     private lateinit var fakeRestApiRepository: FakeRestApiRepository
+    private val sampleTariffCode = "E-1R-SAMPLE-TARIFF-A"
+    private val samplePeriod = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-01-04T00:00:00Z")
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeTest
@@ -42,16 +44,14 @@ class GetStandardUnitRateUseCaseTest {
         fakeRestApiRepository.setStandardUnitRatesResponse = Result.success(rates)
 
         val result = getStandardUnitRateUseCase(
-            productCode = "testProduct",
-            tariffCode = "testTariff",
-            periodFrom = Instant.parse("2023-01-01T00:00:00Z"),
-            periodTo = Instant.parse("2023-01-04T00:00:00Z"),
+            tariffCode = sampleTariffCode,
+            period = samplePeriod,
         )
 
         assertTrue(result.isSuccess)
         val sortedRates = result.getOrThrow()
         assertEquals(rates.size, sortedRates.size)
-        assertEquals(rates.sortedBy { it.validFrom }, sortedRates)
+        assertEquals(rates.sortedBy { it.validity.start }, sortedRates)
     }
 
     @Test
@@ -60,10 +60,8 @@ class GetStandardUnitRateUseCaseTest {
         fakeRestApiRepository.setStandardUnitRatesResponse = Result.failure(RuntimeException(exceptionMessage))
 
         val result = getStandardUnitRateUseCase(
-            productCode = "testProduct",
-            tariffCode = "testTariff",
-            periodFrom = Instant.parse("2023-01-01T00:00:00Z"),
-            periodTo = Instant.parse("2023-01-04T00:00:00Z"),
+            tariffCode = sampleTariffCode,
+            period = samplePeriod,
         )
 
         assertTrue(result.isFailure)
@@ -75,10 +73,8 @@ class GetStandardUnitRateUseCaseTest {
         fakeRestApiRepository.setStandardUnitRatesResponse = Result.success(emptyList())
 
         val result = getStandardUnitRateUseCase(
-            productCode = "testProduct",
-            tariffCode = "testTariff",
-            periodFrom = Instant.parse("2023-01-01T00:00:00Z"),
-            periodTo = Instant.parse("2023-01-04T00:00:00Z"),
+            tariffCode = sampleTariffCode,
+            period = samplePeriod,
         )
 
         assertTrue(result.isSuccess)
