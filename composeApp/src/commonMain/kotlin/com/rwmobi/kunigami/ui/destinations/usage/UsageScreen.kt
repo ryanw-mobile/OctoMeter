@@ -94,9 +94,7 @@ fun UsageScreen(
                     lazyListState = lazyListState,
                 ) { contentModifier ->
                     Column(
-                        modifier = contentModifier
-                            .fillMaxSize()
-                            .conditionalBlur(enabled = uiState.isLoading),
+                        modifier = contentModifier.fillMaxSize(),
                     ) {
                         uiState.consumptionQueryFilter?.let { consumptionQueryFilter ->
                             TitleNavigationBar(
@@ -130,6 +128,7 @@ fun UsageScreen(
                         }
 
                         LazyColumn(
+                            modifier = Modifier.conditionalBlur(enabled = uiState.isLoading),
                             contentPadding = PaddingValues(bottom = dimension.grid_4),
                             state = lazyListState,
                         ) {
