@@ -265,7 +265,7 @@ class AgileViewModel(
     }
 
     private suspend fun getLatestAgileProductCode(): String {
-        return getLatestProductByKeywordUseCase() ?: fallBackAgileProductCode
+        return getLatestProductByKeywordUseCase(keyword = "AGILE") ?: fallBackAgileProductCode
     }
 
     override fun onCleared() {

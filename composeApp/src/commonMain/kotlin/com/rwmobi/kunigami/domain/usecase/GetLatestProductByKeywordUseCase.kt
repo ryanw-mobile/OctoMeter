@@ -17,7 +17,7 @@ class GetLatestProductByKeywordUseCase(
     private val restApiRepository: RestApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
-    suspend operator fun invoke(): String? {
+    suspend operator fun invoke(keyword: String): String? {
         return withContext(dispatcher) {
             val getProductsResult = restApiRepository.getProducts()
             getProductsResult.fold(
@@ -25,7 +25,7 @@ class GetLatestProductByKeywordUseCase(
                     val productCode = products.sortedByDescending {
                         it.availability.start
                     }.firstOrNull {
-                        it.code.contains("AGILE")
+                        it.code.contains(keyword)
                     }?.code
                     productCode
                 },
