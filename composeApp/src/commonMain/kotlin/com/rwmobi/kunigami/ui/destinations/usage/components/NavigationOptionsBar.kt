@@ -29,7 +29,6 @@ import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.IconTextButton
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.account_mpan
 import kunigami.composeapp.generated.resources.countdown_clock
 import kunigami.composeapp.generated.resources.dashboard
 import kunigami.composeapp.generated.resources.usage_latest
@@ -62,7 +61,7 @@ internal fun NavigationOptionsBar(
                 )
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = stringResource(resource = Res.string.account_mpan, mpan),
+                    text = mpan,
                 )
             }
 
