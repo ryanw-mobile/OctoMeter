@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
@@ -39,6 +42,10 @@ fun IconTextButton(
     modifier: Modifier = Modifier,
     icon: Painter,
     text: String,
+    colors: ButtonColors = ButtonDefaults.buttonColors().copy(
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+    ),
+    shape: Shape = ButtonDefaults.shape,
     onClick: () -> Unit,
 ) {
     val currentDensity = LocalDensity.current
@@ -49,6 +56,8 @@ fun IconTextButton(
 
         Button(
             modifier = modifier,
+            shape = shape,
+            colors = colors,
             onClick = onClick,
         ) {
             Row(
@@ -63,7 +72,7 @@ fun IconTextButton(
                         .fillMaxHeight()
                         .aspectRatio(ratio = 1f),
                     painter = icon,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    tint = colors.contentColor,
                     contentDescription = null,
                 )
 
@@ -72,7 +81,7 @@ fun IconTextButton(
                 Text(
                     modifier = Modifier.wrapContentHeight(),
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    color = colors.contentColor,
                     text = text,
                 )
             }
@@ -87,6 +96,20 @@ private fun Preview() {
         IconTextButton(
             icon = painterResource(resource = Res.drawable.coin),
             text = "Money Generator",
+            colors = ButtonDefaults.buttonColors().copy(
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            ),
+            onClick = {},
+        )
+
+        IconTextButton(
+            icon = painterResource(resource = Res.drawable.coin),
+            text = "Money Generator",
+            shape = MaterialTheme.shapes.large,
+            colors = ButtonDefaults.buttonColors().copy(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            ),
             onClick = {},
         )
     }
