@@ -16,6 +16,7 @@ import com.rwmobi.kunigami.data.repository.mapper.toProductSummary
 import com.rwmobi.kunigami.data.repository.mapper.toRate
 import com.rwmobi.kunigami.data.repository.mapper.toRateEntity
 import com.rwmobi.kunigami.data.repository.mapper.toTariff
+import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.local.database.entity.coversRange
 import com.rwmobi.kunigami.data.source.local.database.interfaces.DatabaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.model.RateType
@@ -24,7 +25,6 @@ import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.extensions.getHalfHourlyTimeSlotCount
-import com.rwmobi.kunigami.domain.extensions.toSystemDefaultLocalDate
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
@@ -46,6 +46,7 @@ class OctopusRestApiRepository(
     private val productsEndpoint: ProductsEndpoint,
     private val electricityMeterPointsEndpoint: ElectricityMeterPointsEndpoint,
     private val accountEndpoint: AccountEndpoint,
+    private val inMemoryCacheDataSource: InMemoryCacheDataSource,
     private val databaseDataSource: DatabaseDataSource,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : RestApiRepository {
@@ -402,18 +403,11 @@ class OctopusRestApiRepository(
      * API can potentially return more than one property for a given account number.
      * We have no way to tell if this is the case, but for simplicity, we take the first property only.
      */
-    private var cachedProfile: Pair<Account, Instant>? = null
     override suspend fun getAccount(
         apiKey: String,
         accountNumber: String,
     ): Result<Account?> {
-        cachedProfile?.first?.let { account ->
-            if (account.accountNumber == accountNumber &&
-                Clock.System.now().toSystemDefaultLocalDate() == cachedProfile?.second?.toSystemDefaultLocalDate()
-            ) {
-                return Result.success(account)
-            }
-        }
+        inMemoryCacheDataSource.getProfile(accountNumber = accountNumber)?.let { return Result.success(it) }
 
         return withContext(dispatcher) {
             runCatching {
@@ -422,14 +416,14 @@ class OctopusRestApiRepository(
                     accountNumber = accountNumber,
                 )
                 apiResponse?.properties?.firstOrNull()?.toAccount(accountNumber = accountNumber)?.also {
-                    cachedProfile = Pair(it, Clock.System.now())
+                    inMemoryCacheDataSource.cacheProfile(account = it, createdAt = Clock.System.now())
                 }
             }
         }.except<CancellationException, _>()
     }
 
     override suspend fun clearCache() {
-        cachedProfile = null
+        inMemoryCacheDataSource.clear()
         databaseDataSource.clear()
     }
 }
