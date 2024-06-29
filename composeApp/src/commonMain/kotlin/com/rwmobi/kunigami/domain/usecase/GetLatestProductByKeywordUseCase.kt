@@ -25,7 +25,8 @@ class GetLatestProductByKeywordUseCase(
                     val productCode = products.sortedByDescending {
                         it.availability.start
                     }.firstOrNull {
-                        it.code.contains(keyword)
+                        it.code.contains(keyword) &&
+                            it.brand == "OCTOPUS_ENERGY"
                     }?.code
                     productCode
                 },
