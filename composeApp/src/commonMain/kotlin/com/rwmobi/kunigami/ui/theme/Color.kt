@@ -73,3 +73,6 @@ val surfaceContainerLowDarkMediumContrast = Color(0xFF292A2A)
 val surfaceContainerDarkMediumContrast = Color(0xFF313233)
 val surfaceContainerHighDarkMediumContrast = Color(0xFF383939)
 val surfaceContainerHighestDarkMediumContrast = Color(0xFF3F4040)
+
+val cyanish = Color(0xFF00ACC1) // Cyan-ish
+val purpleish = Color(0xFF8E24AA) // Purple-ish

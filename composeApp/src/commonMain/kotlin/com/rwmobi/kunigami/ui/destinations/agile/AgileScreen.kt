@@ -47,7 +47,9 @@ import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.rate.RateGroupWithPartitions
+import com.rwmobi.kunigami.ui.theme.cyanish
 import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.purpleish
 import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.xygraph.HorizontalLineAnnotation
 import kotlinx.coroutines.delay
@@ -304,10 +306,10 @@ private fun LazyListScope.renderChart(
                         graphScope.HorizontalLineAnnotation(
                             location = fixedUnitRate,
                             lineStyle = LineStyle(
-                                brush = SolidColor(MaterialTheme.colorScheme.error),
-                                strokeWidth = dimension.grid_0_5,
-                                pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f),
-                                alpha = 0.5f,
+                                brush = SolidColor(purpleish),
+                                strokeWidth = dimension.grid_0_25,
+                                pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 16f), 0f),
+                                alpha = 0.8f,
                                 colorFilter = null, // No color filter
                                 blendMode = DrawScope.DefaultBlendMode,
                             ),
@@ -318,10 +320,10 @@ private fun LazyListScope.renderChart(
                         graphScope.HorizontalLineAnnotation(
                             location = flexibleUnitRate,
                             lineStyle = LineStyle(
-                                brush = SolidColor(MaterialTheme.colorScheme.error),
-                                strokeWidth = dimension.grid_0_5,
-                                pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f),
-                                alpha = 0.5f,
+                                brush = SolidColor(cyanish),
+                                strokeWidth = dimension.grid_0_25,
+                                pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 16f), 0f),
+                                alpha = 0.8f,
                                 colorFilter = null, // No color filter
                                 blendMode = DrawScope.DefaultBlendMode,
                             ),
