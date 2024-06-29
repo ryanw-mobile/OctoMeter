@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class GetLatestAgileProductUseCase(
+class GetLatestProductByKeywordUseCase(
     private val restApiRepository: RestApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
@@ -30,7 +30,7 @@ class GetLatestAgileProductUseCase(
                     productCode
                 },
                 onFailure = {
-                    Logger.e("GetLatestAgileProductUseCase", throwable = it)
+                    Logger.e("GetLatestProductByKeywordUseCase", throwable = it)
                     null
                 },
             )

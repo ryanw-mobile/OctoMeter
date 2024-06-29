@@ -16,8 +16,9 @@ import com.rwmobi.kunigami.domain.extensions.atStartOfHour
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.Rate
-import com.rwmobi.kunigami.domain.usecase.GetLatestAgileProductUseCase
+import com.rwmobi.kunigami.domain.usecase.GetLatestProductByKeywordUseCase
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffUseCase
@@ -264,7 +265,7 @@ class AgileViewModel(
     }
 
     private suspend fun getLatestAgileProductCode(): String {
-        return getLatestAgileProductUseCase() ?: fallBackAgileProductCode
+        return getLatestProductByKeywordUseCase() ?: fallBackAgileProductCode
     }
 
     override fun onCleared() {
