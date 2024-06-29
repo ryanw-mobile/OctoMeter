@@ -1,5 +1,5 @@
 PODS:
-  - composeApp (1.2.0)
+  - composeApp (1.3.0)
 
 DEPENDENCIES:
   - composeApp (from `../composeApp/`)
