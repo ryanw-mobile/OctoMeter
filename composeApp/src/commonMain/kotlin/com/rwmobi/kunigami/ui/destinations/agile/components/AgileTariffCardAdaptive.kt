@@ -12,10 +12,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -43,11 +45,11 @@ import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_different_tariff
 import kunigami.composeapp.generated.resources.agile_expire_time
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Duration
 
 private const val DELAY_ONE_SECOND = 1_000L
 private const val MILLIS_IN_MINUTE = 60_000
@@ -217,12 +219,10 @@ private fun AgileTariffCardExpanded(
 
     Row(
         modifier = modifier.height(intrinsicSize = IntrinsicSize.Min),
-        horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+        horizontalArrangement = Arrangement.Center,
     ) {
         CurrentRateCard(
-            modifier = Modifier
-                .weight(weight = 1f)
-                .fillMaxHeight(),
+            modifier = Modifier.fillMaxHeight(),
             vatInclusivePrice = vatInclusivePrice,
             rateTrend = rateTrend,
             rateTrendIconTint = rateTrendIconTint,
@@ -233,20 +233,20 @@ private fun AgileTariffCardExpanded(
             ),
         )
 
+        Spacer(modifier = Modifier.width(width = dimension.grid_1))
+
         RateGaugeCountdownCard(
-            modifier = Modifier
-                .weight(weight = 1f)
-                .fillMaxHeight(),
+            modifier = Modifier.fillMaxHeight(),
             countDownText = countDownText,
             targetPercentage = targetPercentage,
             colorPalette = RatePalette.getPositiveSpectrum(),
         )
 
+        Spacer(modifier = Modifier.width(width = dimension.grid_1))
+
         secondaryTariff?.let {
             TariffSummaryCard(
-                modifier = Modifier
-                    .weight(weight = 1f)
-                    .fillMaxHeight(),
+                modifier = Modifier.fillMaxHeight(),
                 heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
                 tariffs = listOf(it),
             )
@@ -256,7 +256,7 @@ private fun AgileTariffCardExpanded(
 
 @Preview
 @Composable
-private fun Preview() {
+private fun PreviewCompact() {
     CommonPreviewSetup { dimension ->
         AgileTariffCardAdaptive(
             modifier = Modifier
@@ -274,13 +274,44 @@ private fun Preview() {
                     rates = listOf(
                         Rate(
                             vatInclusivePrice = 25.076,
-                            validity = Clock.System.now()..Instant.DISTANT_FUTURE,
+                            validity = Clock.System.now()..Clock.System.now() + Duration.parse("30m"),
                             paymentMethod = PaymentMethod.UNKNOWN,
                         ),
                     ),
                 ),
             ),
             requestedAdaptiveLayout = WindowWidthSizeClass.Compact,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewExpanded() {
+    CommonPreviewSetup { dimension ->
+        AgileTariffCardAdaptive(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = dimension.grid_3,
+                    end = dimension.grid_3,
+                    top = dimension.grid_1,
+                ),
+            secondaryTariff = TariffSamples.agileFlex221125,
+            rateRange = 0.0..5.0,
+            rateGroupedCells = listOf(
+                RateGroup(
+                    title = "Sample title",
+                    rates = listOf(
+                        Rate(
+                            vatInclusivePrice = 25.076,
+                            validity = Clock.System.now()..Clock.System.now() + Duration.parse("30m"),
+                            paymentMethod = PaymentMethod.UNKNOWN,
+                        ),
+                    ),
+                ),
+            ),
+            requestedAdaptiveLayout = WindowWidthSizeClass.Expanded,
         )
     }
 }
