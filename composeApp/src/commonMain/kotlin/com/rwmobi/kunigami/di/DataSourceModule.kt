@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.di
 
 import androidx.room.RoomDatabase
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.local.database.OctometerDatabase
 import com.rwmobi.kunigami.data.source.local.database.RoomDatabaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.interfaces.DatabaseDataSource
@@ -40,5 +41,9 @@ val dataSourceModule = module {
             .fallbackToDestructiveMigration(dropAllTables = true)
             .setDriver(BundledSQLiteDriver())
             .build()
+    }
+
+    single<InMemoryCacheDataSource> {
+        InMemoryCacheDataSource()
     }
 }

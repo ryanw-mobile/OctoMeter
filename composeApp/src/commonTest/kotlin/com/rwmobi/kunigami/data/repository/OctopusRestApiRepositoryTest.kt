@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.data.repository
 
+import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.local.database.FakeDataBaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
 import com.rwmobi.kunigami.data.source.network.AccountEndpoint
@@ -142,6 +143,7 @@ class OctopusRestApiRepositoryTest {
                 httpClient = client,
                 dispatcher = UnconfinedTestDispatcher(),
             ),
+            inMemoryCacheDataSource = InMemoryCacheDataSource(),
             databaseDataSource = fakeDataBaseDataSource,
             dispatcher = UnconfinedTestDispatcher(),
         )
