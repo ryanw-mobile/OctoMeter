@@ -176,7 +176,8 @@ fun AgileScreen(
                                             end = dimension.grid_3,
                                             top = dimension.grid_1,
                                         ),
-                                    secondaryTariff = uiState.latestFixedTariff,
+                                    latestFixedTariff = uiState.latestFixedTariff,
+                                    latestFlexibleTariff = uiState.latestFlexibleTariff,
                                     rateRange = uiState.rateRange,
                                     rateGroupedCells = uiState.rateGroupedCells,
                                     requestedAdaptiveLayout = uiState.requestedAdaptiveLayout,
@@ -302,7 +303,7 @@ private fun LazyListScope.renderChart(
                     barChartData.tooltips[index]
                 },
                 backgroundPlot = { graphScope ->
-                    uiState.latestFixedTariff?.resolveUnitRate()?.let { fixedUnitRate ->
+                    uiState.latestFixedTariff?.vatInclusiveStandardUnitRate?.let { fixedUnitRate ->
                         graphScope.HorizontalLineAnnotation(
                             location = fixedUnitRate,
                             lineStyle = LineStyle(
@@ -316,7 +317,7 @@ private fun LazyListScope.renderChart(
                         )
                     }
 
-                    uiState.latestFlexibleTariff?.resolveUnitRate()?.let { flexibleUnitRate ->
+                    uiState.latestFlexibleTariff?.vatInclusiveStandardUnitRate?.let { flexibleUnitRate ->
                         graphScope.HorizontalLineAnnotation(
                             location = flexibleUnitRate,
                             lineStyle = LineStyle(

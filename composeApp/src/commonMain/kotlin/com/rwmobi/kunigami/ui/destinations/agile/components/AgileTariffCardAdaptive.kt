@@ -36,7 +36,6 @@ import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.components.TariffSummaryCard
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 import com.rwmobi.kunigami.ui.model.rate.RateGroup
@@ -44,11 +43,12 @@ import com.rwmobi.kunigami.ui.model.rate.RateTrend
 import com.rwmobi.kunigami.ui.model.rate.findActiveRate
 import com.rwmobi.kunigami.ui.model.rate.getRateTrend
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
+import com.rwmobi.kunigami.ui.theme.cyanish
 import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.purpleish
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.agile_different_tariff
 import kunigami.composeapp.generated.resources.agile_expire_time
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration
@@ -66,7 +66,8 @@ internal fun AgileTariffCardAdaptive(
     rateRange: ClosedFloatingPointRange<Double>,
     rateGroupedCells: List<RateGroup>,
     requestedAdaptiveLayout: WindowWidthSizeClass,
-    secondaryTariff: Tariff?,
+    latestFixedTariff: Tariff?,
+    latestFlexibleTariff: Tariff?,
 ) {
     var activeRate by remember { mutableStateOf(rateGroupedCells.findActiveRate(referencePoint = Clock.System.now())) }
     var rateTrend by remember { mutableStateOf(rateGroupedCells.getRateTrend(activeRate = activeRate)) }
@@ -105,24 +106,26 @@ internal fun AgileTariffCardAdaptive(
         -> {
             AgileTariffCardCompact(
                 modifier = modifier,
-                secondaryTariff = secondaryTariff,
                 targetPercentage = targetPercentage,
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
                 rateTrend = rateTrend,
                 rateTrendIconTint = rateTrendIconTint,
                 countDownText = countDownText,
+                latestFlexibleTariff = latestFlexibleTariff,
+                latestFixedTariff = latestFixedTariff,
             )
         }
 
         else -> {
             AgileTariffCardExpanded(
                 modifier = modifier,
-                secondaryTariff = secondaryTariff,
                 targetPercentage = targetPercentage,
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
                 rateTrend = rateTrend,
                 rateTrendIconTint = rateTrendIconTint,
                 countDownText = countDownText,
+                latestFlexibleTariff = latestFlexibleTariff,
+                latestFixedTariff = latestFixedTariff,
             )
         }
     }
@@ -156,10 +159,11 @@ private fun AgileTariffCardCompact(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
     vatInclusivePrice: Double?,
-    secondaryTariff: Tariff?,
     countDownText: String?,
     rateTrend: RateTrend?,
     rateTrendIconTint: Color? = null,
+    latestFixedTariff: Tariff?,
+    latestFlexibleTariff: Tariff?,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -197,11 +201,13 @@ private fun AgileTariffCardCompact(
             )
         }
 
-        secondaryTariff?.let {
-            TariffSummaryCard(
+        if (latestFixedTariff != null || latestFlexibleTariff != null) {
+            LatestTariffsCard(
                 modifier = Modifier.fillMaxWidth(),
-                heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
-                tariffs = listOf(it),
+                latestFlexibleTariff = latestFlexibleTariff,
+                latestFixedTariff = latestFixedTariff,
+                latestFlexibleTariffColor = cyanish,
+                latestFixedTariffColor = purpleish,
             )
         }
     }
@@ -211,19 +217,21 @@ private fun AgileTariffCardCompact(
 private fun AgileTariffCardExpanded(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
-    secondaryTariff: Tariff?,
     vatInclusivePrice: Double?,
     countDownText: String?,
     rateTrend: RateTrend?,
     rateTrendIconTint: Color? = null,
+    latestFixedTariff: Tariff?,
+    latestFlexibleTariff: Tariff?,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
     BoxWithConstraints(
         modifier = Modifier.fillMaxWidth(),
     ) {
+        val shouldShowLatestTariff = latestFixedTariff != null || latestFlexibleTariff != null
         val maxWidthAvailable = maxWidth
-        val cardCount = 2 + (if (secondaryTariff != null) 1 else 0) // Count the number of cards
+        val cardCount = 2 + (if (shouldShowLatestTariff) 1 else 0) // Count the number of cards
         val maxCardWidth = (maxWidthAvailable - (dimension.grid_1 * (cardCount - 1))) / cardCount
         val cardWidth = maxCardWidth.coerceIn(minimumValue = 0.dp, maximumValue = dimension.windowWidthCompact)
 
@@ -256,15 +264,16 @@ private fun AgileTariffCardExpanded(
                 colorPalette = RatePalette.getPositiveSpectrum(),
             )
 
-            secondaryTariff?.let {
+            if (shouldShowLatestTariff) {
                 Spacer(modifier = Modifier.width(width = dimension.grid_1))
-
-                TariffSummaryCard(
+                LatestTariffsCard(
                     modifier = Modifier
                         .width(width = cardWidth)
                         .fillMaxHeight(),
-                    heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
-                    tariffs = listOf(it),
+                    latestFlexibleTariff = latestFlexibleTariff,
+                    latestFixedTariff = latestFixedTariff,
+                    latestFlexibleTariffColor = cyanish,
+                    latestFixedTariffColor = purpleish,
                 )
             }
         }
@@ -283,7 +292,6 @@ private fun PreviewCompact() {
                     end = dimension.grid_3,
                     top = dimension.grid_1,
                 ),
-            secondaryTariff = TariffSamples.agileFlex221125,
             rateRange = 0.0..5.0,
             rateGroupedCells = listOf(
                 RateGroup(
@@ -297,6 +305,8 @@ private fun PreviewCompact() {
                     ),
                 ),
             ),
+            latestFlexibleTariff = TariffSamples.agileFlex221125,
+            latestFixedTariff = TariffSamples.fix12M240411,
             requestedAdaptiveLayout = WindowWidthSizeClass.Compact,
         )
     }
@@ -314,7 +324,6 @@ private fun PreviewExpanded() {
                     end = dimension.grid_3,
                     top = dimension.grid_1,
                 ),
-            secondaryTariff = TariffSamples.agileFlex221125,
             rateRange = 0.0..5.0,
             rateGroupedCells = listOf(
                 RateGroup(
@@ -329,6 +338,8 @@ private fun PreviewExpanded() {
                 ),
             ),
             requestedAdaptiveLayout = WindowWidthSizeClass.Expanded,
+            latestFlexibleTariff = TariffSamples.agileFlex221125,
+            latestFixedTariff = TariffSamples.fix12M240411,
         )
     }
 }
