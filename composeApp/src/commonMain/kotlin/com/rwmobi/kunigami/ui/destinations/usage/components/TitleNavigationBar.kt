@@ -76,7 +76,7 @@ internal fun TitleNavigationBar(
                 if (canNavigateBack) {
                     Icon(
                         modifier = Modifier.padding(all = dimension.grid_1),
-                        tint = MaterialTheme.colorScheme.onSecondary,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
                         painter = painterResource(resource = Res.drawable.chevron_left_circle),
                         contentDescription = stringResource(resource = Res.string.content_description_previous_period),
                     )
@@ -132,7 +132,7 @@ internal fun TitleNavigationBar(
                 if (canNavigateForward) {
                     Icon(
                         modifier = Modifier.padding(all = dimension.grid_1),
-                        tint = MaterialTheme.colorScheme.onSecondary,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
                         painter = painterResource(resource = Res.drawable.chevron_right_circle),
                         contentDescription = stringResource(resource = Res.string.content_description_previous_period),
                     )

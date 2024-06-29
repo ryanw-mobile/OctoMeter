@@ -47,7 +47,7 @@ data class TariffsUIState(
         }
     }
 
-    // Make it less instructive when hopping among products
+    // Make it less intrusive when hopping among products
     fun shouldShowLoadingScreen() = isLoading && productSummaries.isEmpty()
 
     fun updateLayoutType(screenSizeInfo: ScreenSizeInfo, windowSizeClass: WindowSizeClass): TariffsUIState {

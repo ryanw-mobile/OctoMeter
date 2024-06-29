@@ -9,7 +9,6 @@ package com.rwmobi.kunigami.ui.destinations.usage
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
@@ -18,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -35,12 +35,15 @@ import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.destinations.usage.components.ConsumptionGroupCells
+import com.rwmobi.kunigami.ui.destinations.usage.components.NavigationOptionsBar
 import com.rwmobi.kunigami.ui.destinations.usage.components.RateGroupTitle
 import com.rwmobi.kunigami.ui.destinations.usage.components.TariffProjectionsCardAdaptive
 import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
 import com.rwmobi.kunigami.ui.extensions.partitionList
+import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionGroupWithPartitions
+import com.rwmobi.kunigami.ui.model.consumption.ConsumptionQueryFilter
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
@@ -86,50 +89,55 @@ fun UsageScreen(
                 )
             }
 
-            // We need to retain the navigation bar even for no data
             UsageScreenType.Chart -> {
-                ScrollbarMultiplatform(
+                // TODO: Refactor - move this to ViewModel and UIState
+                // Pre-calculate the list of (rateGroup.title, partitionedItems)
+                val consumptionGroupsWithPartitions = remember(uiState.consumptionGroupedCells, uiState.requestedUsageColumns) {
+                    uiState.consumptionGroupedCells.map { rateGroup ->
+                        ConsumptionGroupWithPartitions(
+                            title = rateGroup.title,
+                            partitionedItems = rateGroup.consumptions.partitionList(columns = uiState.requestedUsageColumns),
+                        )
+                    }
+                }
+                val shouldHideLastConsumptionGroupColumn = remember(consumptionGroupsWithPartitions) {
+                    consumptionGroupsWithPartitions.all {
+                        it.partitionedItems.last().isEmpty()
+                    }
+                }
+
+                Column(
                     modifier = Modifier.fillMaxSize(),
-                    enabled = uiState.consumptionGroupedCells.isNotEmpty(),
-                    lazyListState = lazyListState,
-                ) { contentModifier ->
-                    Column(
-                        modifier = contentModifier
-                            .fillMaxSize()
-                            .conditionalBlur(enabled = uiState.isLoading),
-                    ) {
-                        uiState.consumptionQueryFilter?.let { consumptionQueryFilter ->
-                            TitleNavigationBar(
-                                modifier = Modifier
-                                    .background(color = MaterialTheme.colorScheme.secondary)
-                                    .fillMaxWidth()
-                                    .height(height = dimension.minListItemHeight),
-                                currentPresentationStyle = consumptionQueryFilter.presentationStyle,
-                                title = consumptionQueryFilter.getConsumptionPeriodString(),
-                                canNavigateBack = consumptionQueryFilter.canNavigateBackward(accountMoveInDate = uiState.userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST),
-                                canNavigateForward = consumptionQueryFilter.canNavigateForward(),
-                                onNavigateBack = { uiEvent.onPreviousTimeFrame(consumptionQueryFilter) },
-                                onNavigateForward = { uiEvent.onNextTimeFrame(consumptionQueryFilter) },
-                                onSwitchPresentationStyle = { presentationStyle -> uiEvent.onSwitchPresentationStyle(consumptionQueryFilter, presentationStyle) },
-                            )
-                        }
+                ) {
+                    // We need to retain the navigation bar even for no data
+                    uiState.consumptionQueryFilter?.let { consumptionQueryFilter ->
+                        TitleNavigationBar(
+                            modifier = Modifier
+                                .background(color = MaterialTheme.colorScheme.secondary)
+                                .fillMaxWidth()
+                                .height(height = dimension.minListItemHeight),
+                            currentPresentationStyle = consumptionQueryFilter.presentationStyle,
+                            title = consumptionQueryFilter.getConsumptionPeriodString(),
+                            canNavigateBack = consumptionQueryFilter.canNavigateBackward(accountMoveInDate = uiState.userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST),
+                            canNavigateForward = consumptionQueryFilter.canNavigateForward(),
+                            onNavigateBack = { uiEvent.onPreviousTimeFrame(consumptionQueryFilter) },
+                            onNavigateForward = { uiEvent.onNextTimeFrame(consumptionQueryFilter) },
+                            onSwitchPresentationStyle = { presentationStyle -> uiEvent.onSwitchPresentationStyle(consumptionQueryFilter, presentationStyle) },
+                        )
 
-                        // Pre-calculate the list of (rateGroup.title, partitionedItems)
-                        val consumptionGroupsWithPartitions = remember(uiState.consumptionGroupedCells, uiState.requestedUsageColumns) {
-                            uiState.consumptionGroupedCells.map { rateGroup ->
-                                ConsumptionGroupWithPartitions(
-                                    title = rateGroup.title,
-                                    partitionedItems = rateGroup.consumptions.partitionList(columns = uiState.requestedUsageColumns),
-                                )
-                            }
-                        }
-                        val shouldHideLastConsumptionGroupColumn = remember(consumptionGroupsWithPartitions) {
-                            consumptionGroupsWithPartitions.all {
-                                it.partitionedItems.last().isEmpty()
-                            }
-                        }
+                        NavigationOptionsBar(
+                            modifier = Modifier.fillMaxWidth(),
+                            selectedMpan = uiState.userProfile?.selectedMpan,
+                        )
+                    }
 
+                    ScrollbarMultiplatform(
+                        modifier = Modifier.fillMaxSize(),
+                        enabled = uiState.consumptionGroupedCells.isNotEmpty(),
+                        lazyListState = lazyListState,
+                    ) { contentModifier ->
                         LazyColumn(
+                            modifier = contentModifier.conditionalBlur(enabled = uiState.isLoading),
                             contentPadding = PaddingValues(bottom = dimension.grid_4),
                             state = lazyListState,
                         ) {
@@ -160,37 +168,10 @@ fun UsageScreen(
                                 }
                             } else {
                                 uiState.barChartData?.let { barChartData ->
-                                    item(key = "chart") {
-                                        BoxWithConstraints {
-                                            val constraintModifier = when (uiState.requestedChartLayout) {
-                                                is RequestedChartLayout.Portrait -> {
-                                                    Modifier
-                                                        .fillMaxWidth()
-                                                        .aspectRatio(4 / 3f)
-                                                }
-
-                                                is RequestedChartLayout.LandScape -> {
-                                                    Modifier
-                                                        .fillMaxWidth()
-                                                        .height(uiState.requestedChartLayout.requestedMaxHeight)
-                                                }
-                                            }
-
-                                            VerticalBarChart(
-                                                modifier = constraintModifier.padding(all = dimension.grid_2),
-                                                showToolTipOnClick = uiState.showToolTipOnClick,
-                                                entries = barChartData.verticalBarPlotEntries,
-                                                yAxisRange = uiState.consumptionRange,
-                                                yAxisTitle = stringResource(resource = Res.string.kwh),
-                                                labelGenerator = { index ->
-                                                    barChartData.labels[index]
-                                                },
-                                                tooltipGenerator = { index ->
-                                                    barChartData.tooltips[index]
-                                                },
-                                            )
-                                        }
-                                    }
+                                    consumptionBarChart(
+                                        uiState = uiState,
+                                        barChartData = barChartData,
+                                    )
                                 }
 
                                 item(key = "tariffAndProjections") {
@@ -204,7 +185,6 @@ fun UsageScreen(
                                         layoutType = uiState.requestedAdaptiveLayout,
                                         tariff = uiState.tariff,
                                         insights = uiState.insights,
-                                        mpan = uiState.userProfile?.selectedMpan,
                                     )
                                 }
 
@@ -219,36 +199,12 @@ fun UsageScreen(
                                 }
 
                                 if (uiState.consumptionQueryFilter != null) {
-                                    consumptionGroupsWithPartitions.forEach { consumptionGroupWithPartitions ->
-                                        item(key = "${consumptionGroupWithPartitions.title}Title") {
-                                            RateGroupTitle(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(
-                                                        vertical = dimension.grid_2,
-                                                        horizontal = dimension.grid_4,
-                                                    ),
-                                                consumptionGroupWithPartitions = consumptionGroupWithPartitions,
-                                            )
-                                        }
-
-                                        val maxRows = consumptionGroupWithPartitions.partitionedItems.maxOf { it.size }
-                                        items(maxRows) { rowIndex ->
-                                            ConsumptionGroupCells(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(
-                                                        horizontal = dimension.grid_4,
-                                                        vertical = dimension.grid_0_25,
-                                                    ),
-                                                partitionedItems = consumptionGroupWithPartitions.partitionedItems,
-                                                shouldHideLastColumn = shouldHideLastConsumptionGroupColumn,
-                                                rowIndex = rowIndex,
-                                                consumptionRange = uiState.consumptionRange,
-                                                presentationStyle = uiState.consumptionQueryFilter.presentationStyle,
-                                            )
-                                        }
-                                    }
+                                    consumptionBreakdown(
+                                        consumptionGroupsWithPartitions = consumptionGroupsWithPartitions,
+                                        shouldHideLastConsumptionGroupColumn = shouldHideLastConsumptionGroupColumn,
+                                        uiState = uiState,
+                                        consumptionQueryFilter = uiState.consumptionQueryFilter,
+                                    )
                                 }
                             }
                         }
@@ -274,6 +230,84 @@ fun UsageScreen(
         if (uiState.requestScrollToTop) {
             lazyListState.scrollToItem(index = 0)
             uiEvent.onScrolledToTop()
+        }
+    }
+}
+
+private fun LazyListScope.consumptionBarChart(
+    uiState: UsageUIState,
+    barChartData: BarChartData,
+) {
+    item(key = "chart") {
+        Box {
+            val dimension = LocalDensity.current.getDimension()
+            val constraintModifier = when (uiState.requestedChartLayout) {
+                is RequestedChartLayout.Portrait -> {
+                    Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(4 / 3f)
+                }
+
+                is RequestedChartLayout.LandScape -> {
+                    Modifier
+                        .fillMaxWidth()
+                        .height(uiState.requestedChartLayout.requestedMaxHeight)
+                }
+            }
+
+            VerticalBarChart(
+                modifier = constraintModifier.padding(all = dimension.grid_2),
+                showToolTipOnClick = uiState.showToolTipOnClick,
+                entries = barChartData.verticalBarPlotEntries,
+                yAxisRange = uiState.consumptionRange,
+                yAxisTitle = stringResource(resource = Res.string.kwh),
+                labelGenerator = { index ->
+                    barChartData.labels[index]
+                },
+                tooltipGenerator = { index ->
+                    barChartData.tooltips[index]
+                },
+            )
+        }
+    }
+}
+
+private fun LazyListScope.consumptionBreakdown(
+    consumptionGroupsWithPartitions: List<ConsumptionGroupWithPartitions>,
+    shouldHideLastConsumptionGroupColumn: Boolean,
+    uiState: UsageUIState,
+    consumptionQueryFilter: ConsumptionQueryFilter,
+) {
+    consumptionGroupsWithPartitions.forEach { consumptionGroupWithPartitions ->
+        item(key = "${consumptionGroupWithPartitions.title}Title") {
+            val dimension = LocalDensity.current.getDimension()
+            RateGroupTitle(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        vertical = dimension.grid_2,
+                        horizontal = dimension.grid_4,
+                    ),
+                consumptionGroupWithPartitions = consumptionGroupWithPartitions,
+            )
+        }
+
+        val maxRows = consumptionGroupWithPartitions.partitionedItems.maxOf { it.size }
+        items(maxRows) { rowIndex ->
+            val dimension = LocalDensity.current.getDimension()
+            ConsumptionGroupCells(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = dimension.grid_4,
+                        vertical = dimension.grid_0_25,
+                    ),
+                partitionedItems = consumptionGroupWithPartitions.partitionedItems,
+                shouldHideLastColumn = shouldHideLastConsumptionGroupColumn,
+                rowIndex = rowIndex,
+                consumptionRange = uiState.consumptionRange,
+                presentationStyle = consumptionQueryFilter.presentationStyle,
+            )
         }
     }
 }

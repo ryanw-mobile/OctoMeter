@@ -45,6 +45,7 @@
     <string name="grouping_label_month_weeks">Week Starting On</string>
     <string name="usage_chart_tooltip_spot_kwh">%1$s\n%2$s kWh</string>
     <string name="usage_chart_tooltip_range_kwh">%1$s - %2$s\n%3$s kWh</string>
+    <string name="usage_applied_tariff">Applied tariff</string>
     <string name="usage_current_tariff">Active tariff</string>
     <string name="usage_insights">Insights</string>
     <plurals name="usage_insights_consumption">
@@ -54,10 +55,12 @@
     <string name="usage_estimated_cost">estimated</string>
     <string name="usage_reference_cost">reference*</string>
     <string name="usage_estimated_daily">Daily average: %1$s kWh / £%2$s</string>
-    <string name="usage_annual_projection">Projected annual consumption</string>
+    <string name="usage_projected_consumption">Projected Consumption</string>
     <string name="usage_demo_introduction">Demo Mode: The consumption figures shown are randomly generated.</string>
     <string name="usage_consumption">Consumption</string>
     <string name="usage_standing_charge">Standing Charge</string>
+    <string name="usage_kwh_year">kWh / year</string>
+    <string name="usage_kwh_month">( %1$s kWh / month )</string>
 
     <!-- Agile -->
     <string name="agile_demo_introduction">Demo Mode: The Agile Tariff shown for Retail Region A may not be available to you.</string>
@@ -73,6 +76,7 @@
     <string name="agile_tariff_standing_charge_two_lines">Standing Charge:\n%1$d p/day</string>
     <string name="agile_tariff_standard_unit_rate">Unit Rate: %1$d p/kWh</string>
     <string name="agile_tariff_standing_charge">Standing Charge: %1$d p/day</string>
+    <string name="agile_current_rate">Current Rate</string>
 
     <!-- Tariffs -->
     <string name="tariffs_retail_region">Retail Region</string>
@@ -86,6 +90,7 @@
     <string name="tariffs_error_load_tariffs">Unable to retrieve tariffs</string>
     <string name="tariffs_tariff_effective">Rates effective %1$s</string>
     <string name="tariffs_variable_rate">Variable Unit Rate</string>
+    <string name="tariffs_variable">Variable</string>
 
     <!-- Retail Regions -->
     <string name="retail_region_eastern_england">Eastern England</string>

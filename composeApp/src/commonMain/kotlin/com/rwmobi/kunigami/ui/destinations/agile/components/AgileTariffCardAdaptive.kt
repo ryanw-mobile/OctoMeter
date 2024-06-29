@@ -9,13 +9,16 @@ package com.rwmobi.kunigami.ui.destinations.agile.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -27,13 +30,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.components.TariffSummaryCardAdaptive
+import com.rwmobi.kunigami.ui.components.TariffSummaryCard
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 import com.rwmobi.kunigami.ui.model.rate.RateGroup
@@ -44,11 +47,11 @@ import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_different_tariff
 import kunigami.composeapp.generated.resources.agile_expire_time
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Duration
 
 private const val DELAY_ONE_SECOND = 1_000L
 private const val MILLIS_IN_MINUTE = 60_000
@@ -63,7 +66,6 @@ internal fun AgileTariffCardAdaptive(
     rateRange: ClosedFloatingPointRange<Double>,
     rateGroupedCells: List<RateGroup>,
     requestedAdaptiveLayout: WindowWidthSizeClass,
-    agileTariff: Tariff?,
     secondaryTariff: Tariff?,
 ) {
     var activeRate by remember { mutableStateOf(rateGroupedCells.findActiveRate(referencePoint = Clock.System.now())) }
@@ -103,7 +105,6 @@ internal fun AgileTariffCardAdaptive(
         -> {
             AgileTariffCardCompact(
                 modifier = modifier,
-                agileTariff = agileTariff,
                 secondaryTariff = secondaryTariff,
                 targetPercentage = targetPercentage,
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
@@ -116,7 +117,6 @@ internal fun AgileTariffCardAdaptive(
         else -> {
             AgileTariffCardExpanded(
                 modifier = modifier,
-                agileTariff = agileTariff,
                 secondaryTariff = secondaryTariff,
                 targetPercentage = targetPercentage,
                 vatInclusivePrice = activeRate?.vatInclusivePrice,
@@ -156,7 +156,6 @@ private fun AgileTariffCardCompact(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
     vatInclusivePrice: Double?,
-    agileTariff: Tariff?,
     secondaryTariff: Tariff?,
     countDownText: String?,
     rateTrend: RateTrend?,
@@ -174,22 +173,21 @@ private fun AgileTariffCardCompact(
                 .height(intrinsicSize = IntrinsicSize.Min),
             horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
         ) {
-            AgilePriceCard(
+            CurrentRateCard(
                 modifier = Modifier
                     .weight(weight = 1f)
                     .fillMaxHeight(),
                 vatInclusivePrice = vatInclusivePrice,
                 rateTrend = rateTrend,
                 rateTrendIconTint = rateTrendIconTint,
-                agileTariff = agileTariff,
-                textStyle = AgilePriceCardTextStyle(
+                textStyle = CurrentRateCardTextStyle(
                     standingChargeStyle = MaterialTheme.typography.bodyMedium,
                     agilePriceStyle = MaterialTheme.typography.headlineSmall,
                     agilePriceUnitStyle = MaterialTheme.typography.bodySmall,
                 ),
             )
 
-            DashboardWidgetCard(
+            RateGaugeCountdownCard(
                 modifier = Modifier
                     .weight(weight = 1f)
                     .fillMaxHeight(),
@@ -200,12 +198,10 @@ private fun AgileTariffCardCompact(
         }
 
         secondaryTariff?.let {
-            TariffSummaryCardAdaptive(
+            TariffSummaryCard(
                 modifier = Modifier.fillMaxWidth(),
                 heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
-                headingTextAlign = TextAlign.Start,
-                tariff = it,
-                layoutType = WindowWidthSizeClass.Compact,
+                tariffs = listOf(it),
             )
         }
     }
@@ -215,7 +211,6 @@ private fun AgileTariffCardCompact(
 private fun AgileTariffCardExpanded(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
-    agileTariff: Tariff?,
     secondaryTariff: Tariff?,
     vatInclusivePrice: Double?,
     countDownText: String?,
@@ -224,51 +219,61 @@ private fun AgileTariffCardExpanded(
 ) {
     val dimension = LocalDensity.current.getDimension()
 
-    Row(
-        modifier = modifier.height(intrinsicSize = IntrinsicSize.Min),
-        horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxWidth(),
     ) {
-        AgilePriceCard(
-            modifier = Modifier
-                .weight(weight = 1f)
-                .fillMaxHeight(),
-            vatInclusivePrice = vatInclusivePrice,
-            rateTrend = rateTrend,
-            rateTrendIconTint = rateTrendIconTint,
-            agileTariff = agileTariff,
-            textStyle = AgilePriceCardTextStyle(
-                standingChargeStyle = MaterialTheme.typography.labelLarge,
-                agilePriceStyle = MaterialTheme.typography.headlineLarge,
-                agilePriceUnitStyle = MaterialTheme.typography.bodyLarge,
-            ),
-        )
+        val maxWidthAvailable = maxWidth
+        val cardCount = 2 + (if (secondaryTariff != null) 1 else 0) // Count the number of cards
+        val maxCardWidth = (maxWidthAvailable - (dimension.grid_1 * (cardCount - 1))) / cardCount
+        val cardWidth = maxCardWidth.coerceIn(minimumValue = 0.dp, maximumValue = dimension.windowWidthCompact)
 
-        DashboardWidgetCard(
-            modifier = Modifier
-                .weight(weight = 1f)
-                .fillMaxHeight(),
-            countDownText = countDownText,
-            targetPercentage = targetPercentage,
-            colorPalette = RatePalette.getPositiveSpectrum(),
-        )
-
-        secondaryTariff?.let {
-            TariffSummaryCardAdaptive(
+        Row(
+            modifier = modifier.height(intrinsicSize = IntrinsicSize.Min),
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            CurrentRateCard(
                 modifier = Modifier
-                    .weight(weight = 1f)
+                    .width(width = cardWidth)
                     .fillMaxHeight(),
-                heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
-                headingTextAlign = TextAlign.Start,
-                tariff = it,
-                layoutType = WindowWidthSizeClass.Compact,
+                vatInclusivePrice = vatInclusivePrice,
+                rateTrend = rateTrend,
+                rateTrendIconTint = rateTrendIconTint,
+                textStyle = CurrentRateCardTextStyle(
+                    standingChargeStyle = MaterialTheme.typography.labelLarge,
+                    agilePriceStyle = MaterialTheme.typography.headlineLarge,
+                    agilePriceUnitStyle = MaterialTheme.typography.bodyLarge,
+                ),
             )
+
+            Spacer(modifier = Modifier.width(width = dimension.grid_1))
+
+            RateGaugeCountdownCard(
+                modifier = Modifier
+                    .width(width = cardWidth)
+                    .fillMaxHeight(),
+                countDownText = countDownText,
+                targetPercentage = targetPercentage,
+                colorPalette = RatePalette.getPositiveSpectrum(),
+            )
+
+            secondaryTariff?.let {
+                Spacer(modifier = Modifier.width(width = dimension.grid_1))
+
+                TariffSummaryCard(
+                    modifier = Modifier
+                        .width(width = cardWidth)
+                        .fillMaxHeight(),
+                    heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+                    tariffs = listOf(it),
+                )
+            }
         }
     }
 }
 
 @Preview
 @Composable
-private fun Preview() {
+private fun PreviewCompact() {
     CommonPreviewSetup { dimension ->
         AgileTariffCardAdaptive(
             modifier = Modifier
@@ -278,7 +283,6 @@ private fun Preview() {
                     end = dimension.grid_3,
                     top = dimension.grid_1,
                 ),
-            agileTariff = TariffSamples.agileFlex221125,
             secondaryTariff = TariffSamples.agileFlex221125,
             rateRange = 0.0..5.0,
             rateGroupedCells = listOf(
@@ -287,13 +291,44 @@ private fun Preview() {
                     rates = listOf(
                         Rate(
                             vatInclusivePrice = 25.076,
-                            validity = Clock.System.now()..Instant.DISTANT_FUTURE,
+                            validity = Clock.System.now()..Clock.System.now() + Duration.parse("30m"),
                             paymentMethod = PaymentMethod.UNKNOWN,
                         ),
                     ),
                 ),
             ),
             requestedAdaptiveLayout = WindowWidthSizeClass.Compact,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewExpanded() {
+    CommonPreviewSetup { dimension ->
+        AgileTariffCardAdaptive(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = dimension.grid_3,
+                    end = dimension.grid_3,
+                    top = dimension.grid_1,
+                ),
+            secondaryTariff = TariffSamples.agileFlex221125,
+            rateRange = 0.0..5.0,
+            rateGroupedCells = listOf(
+                RateGroup(
+                    title = "Sample title",
+                    rates = listOf(
+                        Rate(
+                            vatInclusivePrice = 25.076,
+                            validity = Clock.System.now()..Clock.System.now() + Duration.parse("30m"),
+                            paymentMethod = PaymentMethod.UNKNOWN,
+                        ),
+                    ),
+                ),
+            ),
+            requestedAdaptiveLayout = WindowWidthSizeClass.Expanded,
         )
     }
 }

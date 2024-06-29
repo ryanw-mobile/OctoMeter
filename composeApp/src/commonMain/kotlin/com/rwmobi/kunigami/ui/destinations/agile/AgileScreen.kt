@@ -94,49 +94,51 @@ fun AgileScreen(
             }
 
             uiState.requestedScreenType == AgileScreenType.Chart && uiState.rateGroupedCells.isNotEmpty() -> {
-                ScrollbarMultiplatform(
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = uiState.rateGroupedCells.isNotEmpty(),
-                    lazyListState = lazyListState,
-                ) { contentModifier ->
-                    Column(
-                        modifier = contentModifier
-                            .fillMaxSize()
-                            .conditionalBlur(enabled = uiState.isLoading && uiState.barChartData == null),
-                    ) {
-                        val subtitle = uiState.agileTariff?.let { primaryTariff ->
-                            val regionCode = primaryTariff.getRetailRegion()?.stringResource
-                                ?.let { stringResource(it) }
-                                ?: stringResource(resource = Res.string.retail_region_unknown)
-
-                            stringResource(resource = Res.string.agile_product_code_retail_region, primaryTariff.productCode, regionCode)
-                        }
-
-                        DualTitleBar(
-                            modifier = Modifier
-                                .background(color = MaterialTheme.colorScheme.secondary)
-                                .fillMaxWidth()
-                                .height(height = dimension.minListItemHeight),
-                            title = uiState.agileTariff?.displayName ?: "",
-                            subtitle = subtitle,
+                // TODO: Refactor - move this to ViewModel and UIState
+                // Pre-calculate the list of (rateGroup.title, partitionedItems)
+                val rateGroupsWithPartitions = remember(uiState.rateGroupedCells, uiState.requestedRateColumns) {
+                    uiState.rateGroupedCells.map { rateGroup ->
+                        RateGroupWithPartitions(
+                            title = rateGroup.title,
+                            partitionedItems = rateGroup.rates.partitionList(columns = uiState.requestedRateColumns),
                         )
+                    }
+                }
+                val shouldHideLastRateGroupColumn = remember(rateGroupsWithPartitions) {
+                    rateGroupsWithPartitions.all {
+                        it.partitionedItems.last().isEmpty()
+                    }
+                }
 
-                        // Pre-calculate the list of (rateGroup.title, partitionedItems)
-                        val rateGroupsWithPartitions = remember(uiState.rateGroupedCells, uiState.requestedRateColumns) {
-                            uiState.rateGroupedCells.map { rateGroup ->
-                                RateGroupWithPartitions(
-                                    title = rateGroup.title,
-                                    partitionedItems = rateGroup.rates.partitionList(columns = uiState.requestedRateColumns),
-                                )
-                            }
-                        }
-                        val shouldHideLastRateGroupColumn = remember(rateGroupsWithPartitions) {
-                            rateGroupsWithPartitions.all {
-                                it.partitionedItems.last().isEmpty()
-                            }
-                        }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .conditionalBlur(enabled = uiState.isLoading && uiState.barChartData == null),
+                ) {
+                    val subtitle = uiState.agileTariff?.let { primaryTariff ->
+                        val regionCode = primaryTariff.getRetailRegion()?.stringResource
+                            ?.let { stringResource(it) }
+                            ?: stringResource(resource = Res.string.retail_region_unknown)
 
+                        stringResource(resource = Res.string.agile_product_code_retail_region, primaryTariff.productCode, regionCode)
+                    }
+
+                    DualTitleBar(
+                        modifier = Modifier
+                            .background(color = MaterialTheme.colorScheme.secondary)
+                            .fillMaxWidth()
+                            .height(height = dimension.minListItemHeight),
+                        title = uiState.agileTariff?.displayName ?: "",
+                        subtitle = subtitle,
+                    )
+
+                    ScrollbarMultiplatform(
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = uiState.rateGroupedCells.isNotEmpty(),
+                        lazyListState = lazyListState,
+                    ) { contentModifier ->
                         LazyColumn(
+                            modifier = contentModifier.conditionalBlur(enabled = uiState.isLoading),
                             contentPadding = PaddingValues(bottom = dimension.grid_4),
                             state = lazyListState,
                         ) {
@@ -221,7 +223,6 @@ fun AgileScreen(
                                             end = dimension.grid_3,
                                             top = dimension.grid_1,
                                         ),
-                                    agileTariff = uiState.agileTariff,
                                     secondaryTariff = if (uiState.agileTariff != null) secondaryTariff else null,
                                     rateRange = uiState.rateRange,
                                     rateGroupedCells = uiState.rateGroupedCells,
