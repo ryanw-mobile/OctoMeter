@@ -64,6 +64,8 @@ data class Tariff(
         fun isSingleRate(tariffCode: String): Boolean {
             return tariffCode.toCharArray().getOrNull(2)?.equals('1') == true
         }
+
+        fun isAgileProduct(tariffCode: String) = extractProductCode(tariffCode = tariffCode)?.contains("AGILE") == true
     }
 
     fun extractProductCode(): String? = extractProductCode(tariffCode = tariffCode)
