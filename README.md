@@ -171,9 +171,10 @@ Every tiny piece matters. This App contains the icons contributed by:
 * [Material Design Icons](https://github.com/material-icons/material-icons)
 
 **CC BY 4.0 License:**
-* [Solar Icons Set](https://www.figma.com/community/file/1166831539721848736)
-* [Font Awesome](https://github.com/FortAwesome/Font-Awesome)
 * [Basil Icons](https://www.figma.com/community/file/931906394678748246/basil-icons)
+* [Font Awesome](https://github.com/FortAwesome/Font-Awesome)
+* [Solar Icons Set](https://www.figma.com/community/file/1166831539721848736)
+* [Streamline](http://streamlinehq.com)
 
 **ISC License:**
 * [Lucide](https://github.com/lucide-icons/lucide)

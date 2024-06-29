@@ -278,7 +278,7 @@ fun AgileScreen(
                 }
             }
 
-            uiState.isLoading -> {
+            uiState.isLoading && uiState.barChartData == null -> {
                 LoadingScreen(
                     modifier = Modifier.fillMaxSize(),
                 )

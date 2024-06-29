@@ -45,6 +45,7 @@ import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionGroupWithPartitions
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionQueryFilter
 import com.rwmobi.kunigami.ui.theme.getDimension
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.bolt
@@ -128,6 +129,19 @@ fun UsageScreen(
                         NavigationOptionsBar(
                             modifier = Modifier.fillMaxWidth(),
                             selectedMpan = uiState.userProfile?.selectedMpan,
+                            onNavigateToLatest = {
+                                uiEvent.onSwitchPresentationStyle(
+                                    ConsumptionQueryFilter(
+                                        presentationStyle = uiState.consumptionQueryFilter.presentationStyle,
+                                        referencePoint = Clock.System.now(),
+                                        requestedPeriod = ConsumptionQueryFilter.calculateQueryPeriod(
+                                            referencePoint = Clock.System.now(),
+                                            presentationStyle = uiState.consumptionQueryFilter.presentationStyle,
+                                        ),
+                                    ),
+                                    uiState.consumptionQueryFilter.presentationStyle,
+                                )
+                            },
                         )
                     }
 
