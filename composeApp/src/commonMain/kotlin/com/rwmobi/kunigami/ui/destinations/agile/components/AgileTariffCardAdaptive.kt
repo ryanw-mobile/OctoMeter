@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.ui.destinations.agile.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
@@ -217,39 +219,54 @@ private fun AgileTariffCardExpanded(
 ) {
     val dimension = LocalDensity.current.getDimension()
 
-    Row(
-        modifier = modifier.height(intrinsicSize = IntrinsicSize.Min),
-        horizontalArrangement = Arrangement.Center,
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxWidth(),
     ) {
-        CurrentRateCard(
-            modifier = Modifier.fillMaxHeight(),
-            vatInclusivePrice = vatInclusivePrice,
-            rateTrend = rateTrend,
-            rateTrendIconTint = rateTrendIconTint,
-            textStyle = CurrentRateCardTextStyle(
-                standingChargeStyle = MaterialTheme.typography.labelLarge,
-                agilePriceStyle = MaterialTheme.typography.headlineLarge,
-                agilePriceUnitStyle = MaterialTheme.typography.bodyLarge,
-            ),
-        )
+        val maxWidthAvailable = maxWidth
+        val cardCount = 2 + (if (secondaryTariff != null) 1 else 0) // Count the number of cards
+        val maxCardWidth = (maxWidthAvailable - (dimension.grid_1 * (cardCount - 1))) / cardCount
+        val cardWidth = maxCardWidth.coerceIn(minimumValue = 0.dp, maximumValue = dimension.windowWidthCompact)
 
-        Spacer(modifier = Modifier.width(width = dimension.grid_1))
-
-        RateGaugeCountdownCard(
-            modifier = Modifier.fillMaxHeight(),
-            countDownText = countDownText,
-            targetPercentage = targetPercentage,
-            colorPalette = RatePalette.getPositiveSpectrum(),
-        )
-
-        Spacer(modifier = Modifier.width(width = dimension.grid_1))
-
-        secondaryTariff?.let {
-            TariffSummaryCard(
-                modifier = Modifier.fillMaxHeight(),
-                heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
-                tariffs = listOf(it),
+        Row(
+            modifier = modifier.height(intrinsicSize = IntrinsicSize.Min),
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            CurrentRateCard(
+                modifier = Modifier
+                    .width(width = cardWidth)
+                    .fillMaxHeight(),
+                vatInclusivePrice = vatInclusivePrice,
+                rateTrend = rateTrend,
+                rateTrendIconTint = rateTrendIconTint,
+                textStyle = CurrentRateCardTextStyle(
+                    standingChargeStyle = MaterialTheme.typography.labelLarge,
+                    agilePriceStyle = MaterialTheme.typography.headlineLarge,
+                    agilePriceUnitStyle = MaterialTheme.typography.bodyLarge,
+                ),
             )
+
+            Spacer(modifier = Modifier.width(width = dimension.grid_1))
+
+            RateGaugeCountdownCard(
+                modifier = Modifier
+                    .width(width = cardWidth)
+                    .fillMaxHeight(),
+                countDownText = countDownText,
+                targetPercentage = targetPercentage,
+                colorPalette = RatePalette.getPositiveSpectrum(),
+            )
+
+            secondaryTariff?.let {
+                Spacer(modifier = Modifier.width(width = dimension.grid_1))
+
+                TariffSummaryCard(
+                    modifier = Modifier
+                        .width(width = cardWidth)
+                        .fillMaxHeight(),
+                    heading = stringResource(resource = Res.string.agile_different_tariff).uppercase(),
+                    tariffs = listOf(it),
+                )
+            }
         }
     }
 }

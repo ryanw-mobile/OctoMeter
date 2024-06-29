@@ -37,7 +37,7 @@ fun WidgetCard(
         modifier = modifier
             .sizeIn(
                 minWidth = dimension.windowWidthMedium / 2,
-                maxWidth = dimension.windowHeightCompact,
+                maxWidth = dimension.windowWidthCompact,
             ),
     ) {
         Column(

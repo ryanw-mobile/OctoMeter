@@ -45,6 +45,7 @@
     <string name="grouping_label_month_weeks">Week Starting On</string>
     <string name="usage_chart_tooltip_spot_kwh">%1$s\n%2$s kWh</string>
     <string name="usage_chart_tooltip_range_kwh">%1$s - %2$s\n%3$s kWh</string>
+    <string name="usage_applied_tariff">Applied tariff</string>
     <string name="usage_current_tariff">Active tariff</string>
     <string name="usage_insights">Insights</string>
     <plurals name="usage_insights_consumption">

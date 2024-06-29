@@ -72,7 +72,6 @@ internal fun CurrentRateCard(
                 )
                 if (vatInclusivePrice != null) {
                     Row(
-                        modifier = modifier,
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
                     ) {
