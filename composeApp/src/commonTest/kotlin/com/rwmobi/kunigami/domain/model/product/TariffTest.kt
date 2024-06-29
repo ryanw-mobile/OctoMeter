@@ -142,12 +142,18 @@ class TariffTest {
     fun `isAgileProduct should return true when product code contains AGILE`() {
         val tariff = TariffSampleData.agileFlex221125
         assertTrue(tariff.isAgileProduct())
+
+        val tariffCodeResult = Tariff.isAgileProduct(tariffCode = TariffSampleData.agileFlex221125.tariffCode)
+        assertTrue(tariffCodeResult)
     }
 
     @Test
     fun `isAgileProduct should return false when product code does not contain AGILE`() {
         val tariff = TariffSampleData.var221101
         assertFalse(tariff.isAgileProduct())
+
+        val tariffCodeResult = Tariff.isAgileProduct(tariffCode = TariffSampleData.var221101.tariffCode)
+        assertFalse(tariffCodeResult)
     }
 
     @Test

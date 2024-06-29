@@ -14,22 +14,23 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetLatestAgileProductUseCaseTest {
+class GetLatestProductByKeywordUseCaseTest {
 
-    private lateinit var getLatestAgileProductUseCase: GetLatestAgileProductUseCase
+    private lateinit var getLatestProductByKeywordUseCase: GetLatestProductByKeywordUseCase
     private lateinit var fakeRestApiRepository: FakeRestApiRepository
+    private val keyword = "AGILE"
 
     @BeforeTest
     fun setupUseCase() {
         fakeRestApiRepository = FakeRestApiRepository()
-        getLatestAgileProductUseCase = GetLatestAgileProductUseCase(
+        getLatestProductByKeywordUseCase = GetLatestProductByKeywordUseCase(
             restApiRepository = fakeRestApiRepository,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }
 
     @Test
-    fun `GetLatestAgileProductUseCase should return tariff code successfully`() = runTest {
+    fun `GetLatestProductByKeywordUseCase should return tariff code successfully`() = runTest {
         val productSummaries = listOf(
             ProductSummary(
                 code = "GO-VAR-22-10-14",
@@ -68,7 +69,7 @@ class GetLatestAgileProductUseCaseTest {
 
         fakeRestApiRepository.setProductsResponse = Result.success(productSummaries)
 
-        val result = getLatestAgileProductUseCase()
+        val result = getLatestProductByKeywordUseCase(keyword = keyword)
 
         assertEquals(
             expected = "AGILE-24-04-03",
@@ -77,7 +78,7 @@ class GetLatestAgileProductUseCaseTest {
     }
 
     @Test
-    fun `GetLatestAgileProductUseCase should return latest tariff code if more than one Agile products exist`() = runTest {
+    fun `GetLatestProductByKeywordUseCase should return latest tariff code if more than one Agile products exist`() = runTest {
         val productSummaries = listOf(
             ProductSummary(
                 code = "AGILE-FLEX-22-11-25",
@@ -105,7 +106,7 @@ class GetLatestAgileProductUseCaseTest {
 
         fakeRestApiRepository.setProductsResponse = Result.success(productSummaries)
 
-        val result = getLatestAgileProductUseCase()
+        val result = getLatestProductByKeywordUseCase(keyword = keyword)
 
         assertEquals(
             expected = "AGILE-24-04-03",
@@ -114,17 +115,17 @@ class GetLatestAgileProductUseCaseTest {
     }
 
     @Test
-    fun `GetLatestAgileProductUseCase should return null when repository call fails`() = runTest {
+    fun `GetLatestProductByKeywordUseCase should return null when repository call fails`() = runTest {
         val errorMessage = "API Error"
         fakeRestApiRepository.setProductsResponse = Result.failure(RuntimeException(errorMessage))
 
-        val result = getLatestAgileProductUseCase()
+        val result = getLatestProductByKeywordUseCase(keyword = keyword)
 
         assertNull(result)
     }
 
     @Test
-    fun `GetLatestAgileProductUseCase should return null when no products match criteria`() = runTest {
+    fun `GetLatestProductByKeywordUseCase should return null when no products match criteria`() = runTest {
         val productSummaries = listOf(
             ProductSummary(
                 code = "1",
@@ -140,7 +141,7 @@ class GetLatestAgileProductUseCaseTest {
         )
         fakeRestApiRepository.setProductsResponse = Result.success(productSummaries)
 
-        val result = getLatestAgileProductUseCase()
+        val result = getLatestProductByKeywordUseCase(keyword = keyword)
 
         assertNull(result)
     }

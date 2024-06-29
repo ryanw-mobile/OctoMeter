@@ -10,7 +10,7 @@ package com.rwmobi.kunigami.di
 import com.rwmobi.kunigami.domain.usecase.ClearCacheUseCase
 import com.rwmobi.kunigami.domain.usecase.GetConsumptionAndCostUseCase
 import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
-import com.rwmobi.kunigami.domain.usecase.GetLatestAgileProductUseCase
+import com.rwmobi.kunigami.domain.usecase.GetLatestProductByKeywordUseCase
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffUseCase
@@ -82,7 +82,7 @@ val userCaseModule = module {
     }
 
     factory {
-        GetLatestAgileProductUseCase(
+        GetLatestProductByKeywordUseCase(
             restApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )

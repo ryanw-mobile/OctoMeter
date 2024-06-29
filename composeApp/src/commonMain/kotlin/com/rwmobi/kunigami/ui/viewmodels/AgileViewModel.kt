@@ -16,8 +16,9 @@ import com.rwmobi.kunigami.domain.extensions.atStartOfHour
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.Rate
-import com.rwmobi.kunigami.domain.usecase.GetLatestAgileProductUseCase
+import com.rwmobi.kunigami.domain.usecase.GetLatestProductByKeywordUseCase
 import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
 import com.rwmobi.kunigami.domain.usecase.GetTariffUseCase
@@ -51,7 +52,7 @@ import kotlin.math.min
 import kotlin.time.Duration
 
 class AgileViewModel(
-    private val getLatestAgileProductUseCase: GetLatestAgileProductUseCase,
+    private val getLatestProductByKeywordUseCase: GetLatestProductByKeywordUseCase,
     private val getTariffUseCase: GetTariffUseCase,
     private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val getStandardUnitRateUseCase: GetStandardUnitRateUseCase,
@@ -62,6 +63,8 @@ class AgileViewModel(
     val uiState = _uiState.asStateFlow()
 
     private val fallBackAgileProductCode = "AGILE-24-04-03"
+    private val fallBackFixedProductCode = "OE-FIX-12M-24-06-28"
+    private val fallBackFlexibleProductCode = "VAR-22-11-01"
     private val demoRetailRegion = RetailRegion.EASTERN_ENGLAND
 
     fun errorShown(errorId: Long) {
@@ -79,19 +82,11 @@ class AgileViewModel(
         viewModelScope.launch(dispatcher) {
             val currentUserProfile = getUserProfile()
             if (currentUserProfile != null || _uiState.value.isDemoMode == true) {
-                val tariffCode = currentUserProfile?.getSelectedElectricityMeterPoint()?.lookupAgreement(referencePoint = Clock.System.now())
-                val activeTariffSummary = tariffCode?.let { getTariffUseCase(tariffCode = it.tariffCode).getOrNull() }
-                _uiState.update { currentUiState ->
-                    currentUiState.copy(
-                        activeTariff = activeTariffSummary,
-                    )
-                }
-                val region = activeTariffSummary?.getRetailRegion() ?: demoRetailRegion
-                val productCode = if (activeTariffSummary?.isAgileProduct() == true) {
-                    activeTariffSummary.productCode
-                } else {
-                    getLatestAgileProductCode()
-                }
+                val currentAgreement = currentUserProfile?.getSelectedElectricityMeterPoint()?.lookupAgreement(referencePoint = Clock.System.now())
+                val region = currentAgreement?.tariffCode?.let { Tariff.getRetailRegion(tariffCode = it) } ?: demoRetailRegion
+                val productCode = getAgileProductCode(currentTariffCode = currentAgreement?.tariffCode)
+
+                fetchReferenceTariffs(region = region)
 
                 getAgileRates(
                     productCode = productCode,
@@ -144,6 +139,15 @@ class AgileViewModel(
                 return null
             },
         )
+    }
+
+    private suspend fun getAgileProductCode(currentTariffCode: String?): String {
+        if (currentTariffCode != null && Tariff.isAgileProduct(tariffCode = currentTariffCode)) {
+            val currentProductCode = Tariff.extractProductCode(tariffCode = currentTariffCode)
+            currentProductCode?.let { return it }
+        }
+
+        return getLatestAgileProductCode()
     }
 
     private suspend fun getAgileRates(
@@ -264,7 +268,54 @@ class AgileViewModel(
     }
 
     private suspend fun getLatestAgileProductCode(): String {
-        return getLatestAgileProductUseCase() ?: fallBackAgileProductCode
+        return getLatestProductByKeywordUseCase(keyword = "AGILE") ?: fallBackAgileProductCode
+    }
+
+    /**
+     * Best effort to fetch reference tariffs for comparison. No harm if it fails, so it won't stop loading.
+     */
+    private suspend fun fetchReferenceTariffs(region: RetailRegion) {
+        val fixedProductCode = getLatestProductByKeywordUseCase(keyword = "FIX-12M") ?: fallBackFixedProductCode
+        getTariffRatesUseCase(
+            tariffCode = "E-1R-$fixedProductCode-${region.code}",
+        ).fold(
+            onSuccess = { fixedTariff ->
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        latestFixedTariff = fixedTariff,
+                    )
+                }
+            },
+            onFailure = { throwable ->
+                Logger.e("AgileViewModel", throwable = throwable, message = { "Error when retrieving fixed tariff details" })
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        latestFixedTariff = null,
+                    )
+                }
+            },
+        )
+
+        val flexibleProductCode = getLatestProductByKeywordUseCase(keyword = "VAR-") ?: fallBackFlexibleProductCode
+        getTariffRatesUseCase(
+            tariffCode = "E-1R-$flexibleProductCode-${region.code}",
+        ).fold(
+            onSuccess = { flexibleTariff ->
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        latestFlexibleTariff = flexibleTariff,
+                    )
+                }
+            },
+            onFailure = { throwable ->
+                Logger.e("AgileViewModel", throwable = throwable, message = { "Error when retrieving flexible tariff details" })
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        latestFlexibleTariff = null,
+                    )
+                }
+            },
+        )
     }
 
     override fun onCleared() {
