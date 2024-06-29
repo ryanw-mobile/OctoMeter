@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -43,6 +44,7 @@ import com.rwmobi.kunigami.ui.destinations.agile.components.RateGroupCells
 import com.rwmobi.kunigami.ui.destinations.agile.components.RateGroupTitle
 import com.rwmobi.kunigami.ui.extensions.partitionList
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
+import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.rate.RateGroupWithPartitions
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -157,64 +159,13 @@ fun AgileScreen(
                             }
 
                             uiState.barChartData?.let { barChartData ->
-                                item(key = "chart") {
-                                    Box(
-                                        modifier = Modifier.padding(top = dimension.grid_1),
-                                    ) {
-                                        val constraintModifier = when (uiState.requestedChartLayout) {
-                                            is RequestedChartLayout.Portrait -> {
-                                                Modifier
-                                                    .fillMaxWidth()
-                                                    .aspectRatio(4 / 3f)
-                                            }
-
-                                            is RequestedChartLayout.LandScape -> {
-                                                Modifier
-                                                    .fillMaxWidth()
-                                                    .height(uiState.requestedChartLayout.requestedMaxHeight)
-                                            }
-                                        }
-
-                                        VerticalBarChart(
-                                            modifier = constraintModifier.padding(all = dimension.grid_2),
-                                            showToolTipOnClick = uiState.showToolTipOnClick,
-                                            entries = barChartData.verticalBarPlotEntries,
-                                            yAxisRange = uiState.rateRange,
-                                            yAxisTitle = stringResource(resource = Res.string.agile_vat_unit_rate),
-                                            labelGenerator = { index ->
-                                                barChartData.labels[index]
-                                            },
-                                            tooltipGenerator = { index ->
-                                                barChartData.tooltips[index]
-                                            },
-                                            backgroundPlot = { graphScope ->
-                                                // TODO: Implement assumes fixed rate. Needs dynamic rates lookup
-                                                val unitRate = uiState.activeTariff?.resolveUnitRate()
-                                                if (uiState.isOnDifferentTariff() &&
-                                                    unitRate != null
-                                                ) {
-                                                    graphScope.HorizontalLineAnnotation(
-                                                        location = unitRate,
-                                                        lineStyle = LineStyle(
-                                                            brush = SolidColor(MaterialTheme.colorScheme.error),
-                                                            strokeWidth = dimension.grid_0_5,
-                                                            pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f),
-                                                            alpha = 0.5f,
-                                                            colorFilter = null, // No color filter
-                                                            blendMode = DrawScope.DefaultBlendMode,
-                                                        ),
-                                                    )
-                                                }
-                                            },
-                                        )
-                                    }
-                                }
+                                renderChart(
+                                    uiState = uiState,
+                                    barChartData = barChartData,
+                                )
                             }
 
                             item(key = "tariffDetails") {
-                                val secondaryTariff = uiState.activeTariff
-                                    ?.takeUnless { it.isSameTariff(uiState.agileTariff?.tariffCode) }
-
                                 AgileTariffCardAdaptive(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -223,7 +174,7 @@ fun AgileScreen(
                                             end = dimension.grid_3,
                                             top = dimension.grid_1,
                                         ),
-                                    secondaryTariff = if (uiState.agileTariff != null) secondaryTariff else null,
+                                    secondaryTariff = uiState.latestFixedTariff,
                                     rateRange = uiState.rateRange,
                                     rateGroupedCells = uiState.rateGroupedCells,
                                     requestedAdaptiveLayout = uiState.requestedAdaptiveLayout,
@@ -309,6 +260,75 @@ fun AgileScreen(
         if (uiState.requestScrollToTop) {
             lazyListState.scrollToItem(index = 0)
             uiEvent.onScrolledToTop()
+        }
+    }
+}
+
+private fun LazyListScope.renderChart(
+    uiState: AgileUIState,
+    barChartData: BarChartData,
+) {
+    item(key = "chart") {
+        val dimension = LocalDensity.current.getDimension()
+        Box(
+            modifier = Modifier.padding(top = dimension.grid_1),
+        ) {
+            val constraintModifier = when (uiState.requestedChartLayout) {
+                is RequestedChartLayout.Portrait -> {
+                    Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(4 / 3f)
+                }
+
+                is RequestedChartLayout.LandScape -> {
+                    Modifier
+                        .fillMaxWidth()
+                        .height(uiState.requestedChartLayout.requestedMaxHeight)
+                }
+            }
+
+            VerticalBarChart(
+                modifier = constraintModifier.padding(all = dimension.grid_2),
+                showToolTipOnClick = uiState.showToolTipOnClick,
+                entries = barChartData.verticalBarPlotEntries,
+                yAxisRange = uiState.rateRange,
+                yAxisTitle = stringResource(resource = Res.string.agile_vat_unit_rate),
+                labelGenerator = { index ->
+                    barChartData.labels[index]
+                },
+                tooltipGenerator = { index ->
+                    barChartData.tooltips[index]
+                },
+                backgroundPlot = { graphScope ->
+                    uiState.latestFixedTariff?.resolveUnitRate()?.let { fixedUnitRate ->
+                        graphScope.HorizontalLineAnnotation(
+                            location = fixedUnitRate,
+                            lineStyle = LineStyle(
+                                brush = SolidColor(MaterialTheme.colorScheme.error),
+                                strokeWidth = dimension.grid_0_5,
+                                pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f),
+                                alpha = 0.5f,
+                                colorFilter = null, // No color filter
+                                blendMode = DrawScope.DefaultBlendMode,
+                            ),
+                        )
+                    }
+
+                    uiState.latestFlexibleTariff?.resolveUnitRate()?.let { flexibleUnitRate ->
+                        graphScope.HorizontalLineAnnotation(
+                            location = flexibleUnitRate,
+                            lineStyle = LineStyle(
+                                brush = SolidColor(MaterialTheme.colorScheme.error),
+                                strokeWidth = dimension.grid_0_5,
+                                pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f),
+                                alpha = 0.5f,
+                                colorFilter = null, // No color filter
+                                blendMode = DrawScope.DefaultBlendMode,
+                            ),
+                        )
+                    }
+                },
+            )
         }
     }
 }
