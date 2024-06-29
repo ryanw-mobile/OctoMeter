@@ -21,6 +21,7 @@ val repositoryModule = module {
             productsEndpoint = get(),
             electricityMeterPointsEndpoint = get(),
             accountEndpoint = get(),
+            inMemoryCacheDataSource = get(),
             databaseDataSource = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
