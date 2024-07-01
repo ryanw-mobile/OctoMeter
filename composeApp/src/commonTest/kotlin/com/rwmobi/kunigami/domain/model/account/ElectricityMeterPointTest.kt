@@ -69,4 +69,17 @@ class ElectricityMeterPointTest {
         val latestAgreement = emptyMeterPoint.getLatestAgreement()
         assertNull(latestAgreement)
     }
+
+    @Test
+    fun `getFirstTariffStartDate should return the date with the first validFrom date`() {
+        val firstTariffStartDate = meterPoint.getFirstTariffStartDate()
+        assertEquals(agreement1.period.start, firstTariffStartDate)
+    }
+
+    @Test
+    fun `getFirstTariffStartDate should return null if there are no agreements`() {
+        val emptyMeterPoint = ElectricityMeterPoint("MPAN1", listOf("METER1"), emptyList())
+        val firstTariffStartDate = emptyMeterPoint.getFirstTariffStartDate()
+        assertNull(firstTariffStartDate)
+    }
 }

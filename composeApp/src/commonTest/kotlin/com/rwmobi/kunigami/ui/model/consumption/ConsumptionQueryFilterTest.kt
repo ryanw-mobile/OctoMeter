@@ -179,7 +179,7 @@ class ConsumptionQueryFilterTest {
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, referencePoint = reference)
         val expected = Instant.parse("2012-03-24T00:00:00Z")
 
-        val newFilter = filter.navigateBackward(accountMoveInDate = Instant.DISTANT_PAST)
+        val newFilter = filter.navigateBackward(firstTariffStartDate = Instant.DISTANT_PAST)
 
         assertEquals(expected, newFilter!!.referencePoint)
     }
@@ -190,7 +190,7 @@ class ConsumptionQueryFilterTest {
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.WEEK_SEVEN_DAYS, referencePoint = reference)
         val expected = Instant.parse("2012-03-18T00:00:00Z")
 
-        val newFilter = filter.navigateBackward(accountMoveInDate = Instant.DISTANT_PAST)
+        val newFilter = filter.navigateBackward(firstTariffStartDate = Instant.DISTANT_PAST)
 
         assertEquals(expected, newFilter!!.referencePoint)
     }
@@ -201,7 +201,7 @@ class ConsumptionQueryFilterTest {
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.MONTH_WEEKS, referencePoint = reference)
         val expected = Instant.parse("2012-03-01T00:00:00Z")
 
-        val newFilter = filter.navigateBackward(accountMoveInDate = Instant.DISTANT_PAST)
+        val newFilter = filter.navigateBackward(firstTariffStartDate = Instant.DISTANT_PAST)
 
         assertEquals(expected, newFilter!!.referencePoint)
     }
@@ -212,7 +212,7 @@ class ConsumptionQueryFilterTest {
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.MONTH_THIRTY_DAYS, referencePoint = reference)
         val expected = Instant.parse("2012-03-01T00:00:00Z")
 
-        val newFilter = filter.navigateBackward(accountMoveInDate = Instant.DISTANT_PAST)
+        val newFilter = filter.navigateBackward(firstTariffStartDate = Instant.DISTANT_PAST)
 
         assertEquals(expected, newFilter!!.referencePoint)
     }
@@ -223,7 +223,7 @@ class ConsumptionQueryFilterTest {
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS, referencePoint = reference)
         val expected = Instant.parse("2011-12-31T00:00:00Z")
 
-        val newFilter = filter.navigateBackward(accountMoveInDate = Instant.DISTANT_PAST)
+        val newFilter = filter.navigateBackward(firstTariffStartDate = Instant.DISTANT_PAST)
 
         assertEquals(expected, newFilter!!.referencePoint)
     }

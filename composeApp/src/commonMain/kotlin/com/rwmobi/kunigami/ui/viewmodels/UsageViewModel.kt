@@ -89,7 +89,7 @@ class UsageViewModel(
                 )
 
                 // UIState comes with a default presentationStyle. We try to go backward 3 times hoping for some valid results
-                val accountMoveInDate = userProfile.account.movedInAt ?: Instant.DISTANT_PAST
+                val firstTariffStartDate = _uiState.value.userProfile?.getSelectedElectricityMeterPoint()?.getFirstTariffStartDate() ?: Instant.DISTANT_FUTURE
                 var remainingRetryAttempt = 4
                 do {
                     getConsumptionAndCostUseCase(
@@ -106,7 +106,7 @@ class UsageViewModel(
                                 )
                                 remainingRetryAttempt = 0 // Done
                             } else {
-                                newConsumptionQueryFilter.navigateBackward(accountMoveInDate = accountMoveInDate)?.let {
+                                newConsumptionQueryFilter.navigateBackward(firstTariffStartDate = firstTariffStartDate)?.let {
                                     newConsumptionQueryFilter = it
                                     remainingRetryAttempt -= 1 // Retry
                                 } ?: run {
@@ -204,10 +204,11 @@ class UsageViewModel(
 
     fun onPreviousTimeFrame(consumptionQueryFilter: ConsumptionQueryFilter) {
         viewModelScope.launch(dispatcher) {
-            val accountMoveInDate = _uiState.value.userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST
-            val newConsumptionQueryFilter = consumptionQueryFilter.navigateBackward(accountMoveInDate = accountMoveInDate)
+            // We force the operation to fail if the first tariff start date is not known
+            val firstTariffStartDate = _uiState.value.userProfile?.getSelectedElectricityMeterPoint()?.getFirstTariffStartDate() ?: Instant.DISTANT_FUTURE
+            val newConsumptionQueryFilter = consumptionQueryFilter.navigateBackward(firstTariffStartDate = firstTariffStartDate)
             if (newConsumptionQueryFilter == null) {
-                Logger.e("UsageViewModel", message = { "onNavigateForward request declined." })
+                Logger.e("UsageViewModel", message = { "navigateBackward request declined." })
                 _uiState.update { currentUiState ->
                     currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException(getString(resource = Res.string.usage_error_date_out_of_range)))
                 }
@@ -221,7 +222,7 @@ class UsageViewModel(
         viewModelScope.launch(dispatcher) {
             val newConsumptionQueryFilter = consumptionQueryFilter.navigateForward()
             if (newConsumptionQueryFilter == null) {
-                Logger.e("UsageViewModel", message = { "onNavigateForward request declined." })
+                Logger.e("UsageViewModel", message = { "navigateForward request declined." })
                 _uiState.update { currentUiState ->
                     currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException(getString(resource = Res.string.usage_error_date_out_of_range)))
                 }
