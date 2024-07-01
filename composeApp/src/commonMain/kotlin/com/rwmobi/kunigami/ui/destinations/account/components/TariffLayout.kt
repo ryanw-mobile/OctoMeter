@@ -124,9 +124,9 @@ internal fun TariffLayout(
         }
 
         when {
+            tariff.isVariable -> showVariableRate()
             tariff.isSingleRate() -> showSingleRate(tariff = tariff)
             tariff.hasDualRates() -> showDualRates(tariff = tariff)
-            tariff.isVariable -> showVariableRate()
         }
 
         if (showDivider) {
