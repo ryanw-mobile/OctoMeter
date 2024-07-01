@@ -41,6 +41,8 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_load_account
+import kunigami.composeapp.generated.resources.fallback_error_no_consumptions
+import kunigami.composeapp.generated.resources.usage_error_date_out_of_range
 import org.jetbrains.compose.resources.getString
 import kotlin.time.Duration
 
@@ -114,9 +116,10 @@ class UsageViewModel(
                             }
                         },
                         onFailure = { throwable ->
-                            Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+                            val fallbackErrorMessage = getString(resource = Res.string.fallback_error_no_consumptions)
+                            Logger.e("UsageViewModel", throwable = throwable, message = { fallbackErrorMessage })
                             _uiState.update { currentUiState ->
-                                currentUiState.filterErrorAndStopLoading(throwable = throwable, defaultMessage = "Error when retrieving consumptions")
+                                currentUiState.filterErrorAndStopLoading(throwable = throwable, defaultMessage = fallbackErrorMessage)
                             }
                             remainingRetryAttempt = 0 // API Error. Give up
                         },
@@ -164,12 +167,18 @@ class UsageViewModel(
                     )
                 },
                 onFailure = { throwable ->
-                    Logger.e("UsageViewModel", throwable = throwable, message = { "Error when retrieving consumptions" })
+                    val fallbackErrorMessage = getString(resource = Res.string.fallback_error_no_consumptions)
+                    Logger.e("UsageViewModel", throwable = throwable, message = { fallbackErrorMessage })
                     _uiState.update { currentUiState ->
-                        currentUiState.filterErrorAndStopLoading(throwable = throwable, defaultMessage = "Error when retrieving consumptions")
+                        currentUiState.filterErrorAndStopLoading(throwable = throwable, defaultMessage = getString(resource = Res.string.fallback_error_no_consumptions))
                     }
                 },
             )
+        } else {
+            _uiState.update { currentUiState ->
+                val errorMessage = getString(resource = Res.string.fallback_error_no_consumptions)
+                currentUiState.filterErrorAndStopLoading(throwable = IllegalStateException(errorMessage))
+            }
         }
     }
 
@@ -200,7 +209,7 @@ class UsageViewModel(
             if (newConsumptionQueryFilter == null) {
                 Logger.e("UsageViewModel", message = { "onNavigateForward request declined." })
                 _uiState.update { currentUiState ->
-                    currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException("Requested date is outside of the allowed range."))
+                    currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException(getString(resource = Res.string.usage_error_date_out_of_range)))
                 }
             } else {
                 refresh(consumptionQueryFilter = newConsumptionQueryFilter)
@@ -214,7 +223,7 @@ class UsageViewModel(
             if (newConsumptionQueryFilter == null) {
                 Logger.e("UsageViewModel", message = { "onNavigateForward request declined." })
                 _uiState.update { currentUiState ->
-                    currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException("Requested date is outside of the allowed range."))
+                    currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException(getString(resource = Res.string.usage_error_date_out_of_range)))
                 }
             } else {
                 refresh(consumptionQueryFilter = newConsumptionQueryFilter)

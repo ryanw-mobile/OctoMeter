@@ -62,6 +62,7 @@
     <string name="usage_kwh_year">kWh / year</string>
     <string name="usage_kwh_month">( %1$s kWh / month )</string>
     <string name="usage_latest">Latest</string>
+    <string name="usage_error_date_out_of_range">Requested date is outside of the allowed range.</string>
 
     <!-- Agile -->
     <string name="agile_demo_introduction">Demo Mode: The Agile Tariff shown for Retail Region A may not be available to you.</string>
@@ -189,4 +190,7 @@
     <string name="content_description_next_period">Navigate to the next period</string>
     <string name="content_description_dismiss_this_pane">Dismiss this pane</string>
     <string name="content_description_navigate_back">Navigate back</string>
+
+    <!-- Fallback Error message -->
+    <string name="fallback_error_no_consumptions">Error when retrieving consumptions</string>
 </resources>
