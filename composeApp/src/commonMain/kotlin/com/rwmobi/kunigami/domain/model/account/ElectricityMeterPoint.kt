@@ -46,8 +46,13 @@ data class ElectricityMeterPoint(
      * Returns null if the list is empty
      */
     fun getLatestAgreement(): Agreement? {
-        return agreements.maxByOrNull { agreement ->
-            agreement.period.endInclusive
-        }
+        return agreements.maxByOrNull { it.period.endInclusive }
+    }
+
+    /**
+     * Returns the start date of the first tariff for this MPAN
+     */
+    fun getFirstTariffStartDate(): Instant? {
+        return agreements.minByOrNull { it.period.start }?.period?.start
     }
 }

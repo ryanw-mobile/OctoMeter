@@ -112,6 +112,9 @@ fun UsageScreen(
                 ) {
                     // We need to retain the navigation bar even for no data
                     uiState.consumptionQueryFilter?.let { consumptionQueryFilter ->
+                        val firstTariffStartDate = uiState.userProfile?.getSelectedElectricityMeterPoint()?.getFirstTariffStartDate()
+                            ?: Instant.DISTANT_FUTURE
+
                         TitleNavigationBar(
                             modifier = Modifier
                                 .background(color = MaterialTheme.colorScheme.secondary)
@@ -119,7 +122,7 @@ fun UsageScreen(
                                 .height(height = dimension.minListItemHeight),
                             currentPresentationStyle = consumptionQueryFilter.presentationStyle,
                             title = consumptionQueryFilter.getConsumptionPeriodString(),
-                            canNavigateBack = consumptionQueryFilter.canNavigateBackward(accountMoveInDate = uiState.userProfile?.account?.movedInAt ?: Instant.DISTANT_PAST),
+                            canNavigateBack = consumptionQueryFilter.canNavigateBackward(firstTariffStartDate = firstTariffStartDate),
                             canNavigateForward = consumptionQueryFilter.canNavigateForward(),
                             onNavigateBack = { uiEvent.onPreviousTimeFrame(consumptionQueryFilter) },
                             onNavigateForward = { uiEvent.onNextTimeFrame(consumptionQueryFilter) },
