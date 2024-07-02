@@ -62,8 +62,7 @@ internal fun CurrentRateCard(
         heading = stringResource(resource = Res.string.agile_current_rate).uppercase(),
         contents = {
             Column(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
@@ -80,7 +79,7 @@ internal fun CurrentRateCard(
                                 RateTrend.UP, RateTrend.DOWN -> {
                                     HorizontalAnimatedTintedPainterResource(
                                         modifier = Modifier
-                                            .size(size = dimension.grid_4)
+                                            .size(size = dimension.grid_3)
                                             .semantics { contentDescription = rateTrend.name },
                                         color = rateTrendIconTint,
                                         painter = painterResource(resource = rateTrend.drawableResource),
@@ -91,7 +90,7 @@ internal fun CurrentRateCard(
                                 RateTrend.STEADY -> {
                                     VerticalAnimatedTintedPainterResource(
                                         modifier = Modifier
-                                            .size(size = dimension.grid_4)
+                                            .size(size = dimension.grid_3)
                                             .semantics { contentDescription = rateTrend.name },
                                         color = rateTrendIconTint,
                                         painter = painterResource(resource = rateTrend.drawableResource),
