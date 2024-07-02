@@ -9,7 +9,7 @@ package com.rwmobi.kunigami.ui.destinations.agile.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -27,10 +28,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
@@ -225,23 +226,23 @@ private fun AgileTariffCardExpanded(
     latestFlexibleTariff: Tariff?,
 ) {
     val dimension = LocalDensity.current.getDimension()
+    val shouldShowLatestTariff = latestFixedTariff != null || latestFlexibleTariff != null
+    val cardCount = 2 + (if (shouldShowLatestTariff) 1 else 0)
+    val maxRowWidth = dimension.windowWidthCompact * cardCount
 
-    BoxWithConstraints(
-        modifier = Modifier.fillMaxWidth(),
+    Box(
+        modifier = modifier,
     ) {
-        val shouldShowLatestTariff = latestFixedTariff != null || latestFlexibleTariff != null
-        val maxWidthAvailable = maxWidth
-        val cardCount = 2 + (if (shouldShowLatestTariff) 1 else 0) // Count the number of cards
-        val maxCardWidth = (maxWidthAvailable - (dimension.grid_1 * (cardCount - 1))) / cardCount
-        val cardWidth = maxCardWidth.coerceIn(minimumValue = 0.dp, maximumValue = dimension.windowWidthCompact)
-
         Row(
-            modifier = modifier.height(intrinsicSize = IntrinsicSize.Min),
+            modifier = Modifier
+                .height(intrinsicSize = IntrinsicSize.Min)
+                .widthIn(max = maxRowWidth)
+                .align(alignment = Alignment.Center),
             horizontalArrangement = Arrangement.Center,
         ) {
             CurrentRateCard(
                 modifier = Modifier
-                    .width(width = cardWidth)
+                    .weight(1f)
                     .fillMaxHeight(),
                 vatInclusivePrice = vatInclusivePrice,
                 rateTrend = rateTrend,
@@ -257,7 +258,7 @@ private fun AgileTariffCardExpanded(
 
             RateGaugeCountdownCard(
                 modifier = Modifier
-                    .width(width = cardWidth)
+                    .weight(1f)
                     .fillMaxHeight(),
                 countDownText = countDownText,
                 targetPercentage = targetPercentage,
@@ -268,7 +269,7 @@ private fun AgileTariffCardExpanded(
                 Spacer(modifier = Modifier.width(width = dimension.grid_1))
                 LatestTariffsCard(
                     modifier = Modifier
-                        .width(width = cardWidth)
+                        .weight(1f)
                         .fillMaxHeight(),
                     latestFlexibleTariff = latestFlexibleTariff,
                     latestFixedTariff = latestFixedTariff,

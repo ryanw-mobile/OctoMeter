@@ -9,7 +9,7 @@ package com.rwmobi.kunigami.ui.destinations.usage.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -19,8 +19,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -104,27 +106,23 @@ private fun TariffProjectionsCardThreeColumns(
     insights: Insights?,
 ) {
     val dimension = LocalDensity.current.getDimension()
+    val cardCount = 1 + (if (insights != null) 2 else 0)
+    val maxRowWidth = dimension.windowWidthCompact * cardCount
 
-    BoxWithConstraints(
-        modifier = Modifier.fillMaxWidth(),
+    Box(
+        modifier = modifier,
     ) {
-        val cardCount = 1 + (if (insights != null) 2 else 0)
-        val maxCardWidth = (maxWidth - (dimension.grid_1 * (cardCount - 1))) / cardCount
-        val cardWidth = maxCardWidth.coerceIn(
-            minimumValue = dimension.windowWidthCompactHalf,
-            maximumValue = dimension.windowWidthCompact,
-        )
-
         Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(intrinsicSize = IntrinsicSize.Min),
+            modifier = Modifier
+                .height(intrinsicSize = IntrinsicSize.Min)
+                .widthIn(max = maxRowWidth)
+                .align(alignment = Alignment.Center),
             horizontalArrangement = Arrangement.Center,
         ) {
             tariff?.let {
                 TariffSummaryCard(
                     modifier = Modifier
-                        .width(width = cardWidth)
+                        .weight(1f)
                         .fillMaxHeight(),
                     heading = stringResource(resource = Res.string.usage_applied_tariff).uppercase(),
                     tariffs = listOf(it),
@@ -136,7 +134,7 @@ private fun TariffProjectionsCardThreeColumns(
 
                 InsightsCard(
                     modifier = Modifier
-                        .width(width = cardWidth)
+                        .weight(1f)
                         .fillMaxHeight(),
                     insights = insights,
                 )
@@ -145,7 +143,7 @@ private fun TariffProjectionsCardThreeColumns(
 
                 ProjectedConsumptionCard(
                     modifier = Modifier
-                        .width(width = cardWidth)
+                        .weight(1f)
                         .fillMaxHeight(),
                     insights = insights,
                 )
