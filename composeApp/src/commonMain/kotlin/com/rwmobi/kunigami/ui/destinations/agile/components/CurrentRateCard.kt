@@ -79,7 +79,7 @@ internal fun CurrentRateCard(
                                 RateTrend.UP, RateTrend.DOWN -> {
                                     HorizontalAnimatedTintedPainterResource(
                                         modifier = Modifier
-                                            .size(size = dimension.grid_4)
+                                            .size(size = dimension.grid_3)
                                             .semantics { contentDescription = rateTrend.name },
                                         color = rateTrendIconTint,
                                         painter = painterResource(resource = rateTrend.drawableResource),
@@ -90,7 +90,7 @@ internal fun CurrentRateCard(
                                 RateTrend.STEADY -> {
                                     VerticalAnimatedTintedPainterResource(
                                         modifier = Modifier
-                                            .size(size = dimension.grid_4)
+                                            .size(size = dimension.grid_3)
                                             .semantics { contentDescription = rateTrend.name },
                                         color = rateTrendIconTint,
                                         painter = painterResource(resource = rateTrend.drawableResource),
