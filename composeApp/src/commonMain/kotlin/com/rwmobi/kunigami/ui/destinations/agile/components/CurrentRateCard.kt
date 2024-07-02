@@ -62,8 +62,7 @@ internal fun CurrentRateCard(
         heading = stringResource(resource = Res.string.agile_current_rate).uppercase(),
         contents = {
             Column(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {

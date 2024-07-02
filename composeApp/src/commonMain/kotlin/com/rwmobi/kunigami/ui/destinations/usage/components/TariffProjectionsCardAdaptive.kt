@@ -108,10 +108,12 @@ private fun TariffProjectionsCardThreeColumns(
     BoxWithConstraints(
         modifier = Modifier.fillMaxWidth(),
     ) {
-        val maxWidthAvailable = maxWidth
-        val cardCount = 1 + (if (insights != null) 2 else 0) // Count the number of cards
-        val maxCardWidth = (maxWidthAvailable - (dimension.grid_1 * (cardCount - 1))) / cardCount
-        val cardWidth = maxCardWidth.coerceIn(minimumValue = 0.dp, maximumValue = dimension.windowWidthCompact)
+        val cardCount = 1 + (if (insights != null) 2 else 0)
+        val maxCardWidth = (maxWidth - (dimension.grid_1 * (cardCount - 1))) / cardCount
+        val cardWidth = maxCardWidth.coerceIn(
+            minimumValue = dimension.windowWidthCompactHalf,
+            maximumValue = dimension.windowWidthCompact,
+        )
 
         Row(
             modifier = modifier
