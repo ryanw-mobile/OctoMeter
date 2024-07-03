@@ -163,9 +163,9 @@ class AgileViewModel(
         ).fold(
             onSuccess = { rates ->
                 val rateRange = if (rates.isEmpty()) {
-                    0.0..0.0 // Return a default range if the list is empty
+                    0.0..calculateMaxChartRange(vatIncludedUnitRate = 0.0) // Return a default range if the list is empty
                 } else {
-                    min(0.0, floor(rates.minOf { it.vatInclusivePrice } * 10) / 10.0)..ceil(rates.maxOf { it.vatInclusivePrice } * 10) / 10.0
+                    min(0.0, floor(rates.minOf { it.vatInclusivePrice } * 10) / 10.0)..calculateMaxChartRange(vatIncludedUnitRate = rates.maxOf { it.vatInclusivePrice })
                 }
 
                 val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
@@ -207,6 +207,19 @@ class AgileViewModel(
                 }
             },
         )
+    }
+
+    /***
+     * Return the max of flexible unit rate (if available), fixed unit rate (if available) and the given max rate supplied by the caller.
+     */
+    private fun calculateMaxChartRange(vatIncludedUnitRate: Double): Double {
+        return ceil(
+            maxOf(
+                _uiState.value.latestFixedTariff?.vatInclusiveStandardUnitRate ?: 0.0,
+                _uiState.value.latestFlexibleTariff?.vatInclusiveStandardUnitRate ?: 0.0,
+                vatIncludedUnitRate,
+            ) * 10,
+        ) / 10.0
     }
 
     private suspend fun getAgileTariffAndStopLoading(

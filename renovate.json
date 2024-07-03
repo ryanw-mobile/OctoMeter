@@ -30,6 +30,16 @@
         "com.google.devtools.ksp"
       ],
       "groupName": "kotlin"
+    },
+    {
+      "matchPackageNames": [
+        "org.jetbrains.androidx.navigation"
+      ],
+      "groupName": "androidx-navigation",
+      "automerge": false,
+      "labels": [
+        "requires-approval"
+      ]
     }
   ],
   "automerge": true,
