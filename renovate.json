@@ -33,7 +33,7 @@
     },
     {
       "matchPackageNames": [
-        "org.jetbrains.androidx.navigation"
+        "org.jetbrains.androidx.navigation:navigation-compose"
       ],
       "groupName": "androidx-navigation",
       "automerge": false,
