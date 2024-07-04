@@ -114,11 +114,7 @@ fun AgileScreen(
                     }
                 }
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .conditionalBlur(enabled = uiState.isLoading && uiState.barChartData == null),
-                ) {
+                Column(modifier = Modifier.fillMaxSize()) {
                     val subtitle = uiState.agileTariff?.let { primaryTariff ->
                         val regionCode = primaryTariff.getRetailRegion()?.stringResource
                             ?.let { stringResource(it) }
@@ -142,7 +138,7 @@ fun AgileScreen(
                         lazyListState = lazyListState,
                     ) { contentModifier ->
                         LazyColumn(
-                            modifier = contentModifier.conditionalBlur(enabled = uiState.isLoading),
+                            modifier = contentModifier.conditionalBlur(enabled = uiState.isLoading && uiState.barChartData == null),
                             contentPadding = PaddingValues(bottom = dimension.grid_4),
                             state = lazyListState,
                         ) {
@@ -233,9 +229,7 @@ fun AgileScreen(
             }
 
             uiState.isLoading && uiState.barChartData == null -> {
-                LoadingScreen(
-                    modifier = Modifier.fillMaxSize(),
-                )
+                LoadingScreen(modifier = Modifier.fillMaxSize())
             }
 
             else -> {
