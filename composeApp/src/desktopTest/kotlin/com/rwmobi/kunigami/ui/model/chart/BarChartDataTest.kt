@@ -18,6 +18,7 @@ import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Suppress("TooManyFunctions")
 class BarChartDataTest {
     // We intended to test BST in this case
     private val sampleRateList = listOf(
