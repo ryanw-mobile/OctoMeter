@@ -12,11 +12,7 @@ import com.rwmobi.kunigami.domain.extensions.endOfMonth
 import com.rwmobi.kunigami.domain.extensions.endOfWeek
 import com.rwmobi.kunigami.domain.extensions.getDayRange
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
-import com.rwmobi.kunigami.domain.extensions.getLocalDayMonthString
-import com.rwmobi.kunigami.domain.extensions.getLocalDayOfMonth
 import com.rwmobi.kunigami.domain.extensions.getLocalEnglishAbbreviatedDayOfWeekName
-import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
-import com.rwmobi.kunigami.domain.extensions.getLocalMonthString
 import com.rwmobi.kunigami.domain.extensions.getLocalMonthYearString
 import com.rwmobi.kunigami.domain.extensions.getLocalYear
 import com.rwmobi.kunigami.domain.extensions.getMonthRange
@@ -27,22 +23,16 @@ import com.rwmobi.kunigami.domain.extensions.startOfWeek
 import com.rwmobi.kunigami.domain.extensions.toSystemDefaultLocalDateTime
 import com.rwmobi.kunigami.domain.extensions.toSystemDefaultTimeZoneInstant
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import io.github.koalaplot.core.util.toString
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.grouping_label_month_weeks
 import kunigami.composeapp.generated.resources.presentation_style_week_seven_days
-import kunigami.composeapp.generated.resources.usage_chart_tooltip_range_kwh
-import kunigami.composeapp.generated.resources.usage_chart_tooltip_spot_kwh
 import org.jetbrains.compose.resources.getString
-import kotlin.time.Duration.Companion.nanoseconds
 
 @Immutable
 data class ConsumptionQueryFilter(
@@ -93,64 +83,6 @@ data class ConsumptionQueryFilter(
         }
     }
 
-    fun generateChartLabels(
-        consumptions: List<Consumption>,
-    ): Map<Int, String> {
-        return buildMap {
-            when (presentationStyle) {
-                ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
-                    var lastRateValue: Int? = null
-                    consumptions.forEachIndexed { index, consumption ->
-                        val currentTime = consumption.interval.start.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
-                        if (currentTime != lastRateValue && currentTime % 2 == 0) {
-                            put(
-                                key = index,
-                                value = currentTime.toString().padStart(length = 2, padChar = '0'),
-                            )
-                        }
-                        lastRateValue = currentTime
-                    }
-                }
-
-                ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
-                    consumptions.forEachIndexed { index, consumption ->
-                        put(
-                            key = index,
-                            value = consumption.interval.start.getLocalEnglishAbbreviatedDayOfWeekName(),
-                        )
-                    }
-                }
-
-                ConsumptionPresentationStyle.MONTH_WEEKS -> {
-                    consumptions.forEachIndexed { index, consumption ->
-                        put(
-                            key = index,
-                            value = consumption.interval.start.getLocalDayMonthString(),
-                        )
-                    }
-                }
-
-                ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
-                    consumptions.forEachIndexed { index, consumption ->
-                        put(
-                            key = index,
-                            value = consumption.interval.start.getLocalDayOfMonth().toString(),
-                        )
-                    }
-                }
-
-                ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
-                    consumptions.forEachIndexed { index, consumption ->
-                        put(
-                            key = index,
-                            value = consumption.interval.start.getLocalMonthString(),
-                        )
-                    }
-                }
-            }
-        }
-    }
-
     suspend fun groupChartCells(
         consumptions: List<Consumption>,
     ): List<ConsumptionGroupedCells> {
@@ -189,64 +121,6 @@ data class ConsumptionQueryFilter(
                 consumptions
                     .groupBy { it.interval.start.getLocalYear() }
                     .map { (date, items) -> ConsumptionGroupedCells(title = date.toString(), consumptions = items) }
-            }
-        }
-    }
-
-    suspend fun generateChartToolTips(
-        consumptions: List<Consumption>,
-    ): List<String> {
-        return when (presentationStyle) {
-            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
-                consumptions.map { consumption ->
-                    getString(
-                        resource = Res.string.usage_chart_tooltip_range_kwh,
-                        consumption.interval.start.getLocalHHMMString(),
-                        consumption.interval.start.getLocalHHMMString(),
-                        consumption.kWhConsumed.toString(precision = 2),
-                    )
-                }
-            }
-
-            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
-                consumptions.map { consumption ->
-                    getString(
-                        resource = Res.string.usage_chart_tooltip_spot_kwh,
-                        consumption.interval.start.getLocalDateString(),
-                        consumption.kWhConsumed.toString(precision = 2),
-                    )
-                }
-            }
-
-            ConsumptionPresentationStyle.MONTH_WEEKS -> {
-                consumptions.map { consumption ->
-                    getString(
-                        resource = Res.string.usage_chart_tooltip_range_kwh,
-                        consumption.interval.start.getLocalDayMonthString(),
-                        (consumption.interval.endInclusive - 1.nanoseconds).getLocalDayMonthString(),
-                        consumption.kWhConsumed.toString(precision = 2),
-                    )
-                }
-            }
-
-            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
-                consumptions.map { consumption ->
-                    getString(
-                        resource = Res.string.usage_chart_tooltip_spot_kwh,
-                        consumption.interval.start.getLocalDayMonthString(),
-                        consumption.kWhConsumed.toString(precision = 2),
-                    )
-                }
-            }
-
-            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
-                consumptions.map { consumption ->
-                    getString(
-                        resource = Res.string.usage_chart_tooltip_spot_kwh,
-                        consumption.interval.start.getLocalMonthYearString(),
-                        consumption.kWhConsumed.toString(precision = 2),
-                    )
-                }
             }
         }
     }

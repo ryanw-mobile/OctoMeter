@@ -28,9 +28,6 @@ import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionQueryFilter
 import com.rwmobi.kunigami.ui.previewsampledata.FakeDemoUserProfile
-import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
-import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
-import io.github.koalaplot.core.bar.VerticalBarPlotEntry
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -298,20 +295,7 @@ class UsageViewModel(
     ) {
         val consumptions = consumptionWithCost.map { it.consumption }
         val consumptionRange = consumptions.getConsumptionRange()
-        val labels = consumptionQueryFilter.generateChartLabels(consumptions = consumptions)
         val consumptionGroupedCells = consumptionQueryFilter.groupChartCells(consumptions = consumptions)
-        val toolTips = consumptionQueryFilter.generateChartToolTips(consumptions = consumptions)
-        val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
-            consumptions.forEachIndexed { index, consumption ->
-                add(
-                    element = DefaultVerticalBarPlotEntry(
-                        x = index,
-                        y = DefaultVerticalBarPosition(yMin = 0.0, yMax = consumption.kWhConsumed),
-                    ),
-                )
-            }
-        }
-
         val insights = generateUsageInsightsUseCase(
             tariff = tariff,
             consumptionWithCost = consumptionWithCost,
@@ -322,10 +306,9 @@ class UsageViewModel(
                 consumptionQueryFilter = consumptionQueryFilter,
                 consumptionGroupedCells = consumptionGroupedCells,
                 consumptionRange = consumptionRange,
-                barChartData = BarChartData(
-                    verticalBarPlotEntries = verticalBarPlotEntries,
-                    labels = labels,
-                    tooltips = toolTips,
+                barChartData = BarChartData.fromConsumptions(
+                    consumptions = consumptions,
+                    presentationStyle = consumptionQueryFilter.presentationStyle,
                 ),
                 requestedScreenType = UsageScreenType.Chart,
                 insights = insights,
