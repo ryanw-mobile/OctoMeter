@@ -14,7 +14,6 @@ import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.extensions.atStartOfHour
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
-import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.Rate
@@ -29,10 +28,6 @@ import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.product.RetailRegion
 import com.rwmobi.kunigami.ui.model.rate.RateGroup
-import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
-import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
-import io.github.koalaplot.core.bar.VerticalBarPlotEntry
-import io.github.koalaplot.core.util.toString
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,9 +35,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_load_account
 import org.jetbrains.compose.resources.getString
@@ -168,35 +160,13 @@ class AgileViewModel(
                     min(0.0, floor(rates.minOf { it.vatInclusivePrice } * 10) / 10.0)..calculateMaxChartRange(vatIncludedUnitRate = rates.maxOf { it.vatInclusivePrice })
                 }
 
-                val verticalBarPlotEntries: List<VerticalBarPlotEntry<Int, Double>> = buildList {
-                    rates.forEachIndexed { index, rate ->
-                        add(
-                            element = DefaultVerticalBarPlotEntry(
-                                x = index,
-                                y = if (rate.vatInclusivePrice >= 0) {
-                                    DefaultVerticalBarPosition(yMin = 0.0, yMax = rate.vatInclusivePrice)
-                                } else {
-                                    DefaultVerticalBarPosition(yMin = rate.vatInclusivePrice, yMax = 0.0)
-                                },
-                            ),
-                        )
-                    }
-                }
-
-                val labels = generateChartLabels(rates = rates)
                 val rateGroupedCells = groupChartCells(rates = rates)
-                val toolTips = generateChartToolTips(rates = rates)
-
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
                         requestedScreenType = AgileScreenType.Chart,
                         rateGroupedCells = rateGroupedCells,
                         rateRange = rateRange,
-                        barChartData = BarChartData(
-                            verticalBarPlotEntries = verticalBarPlotEntries,
-                            labels = labels,
-                            tooltips = toolTips,
-                        ),
+                        barChartData = BarChartData.fromRates(rates = rates),
                     )
                 }
             },
@@ -249,35 +219,10 @@ class AgileViewModel(
         )
     }
 
-    private fun generateChartLabels(rates: List<Rate>): Map<Int, String> {
-        return buildMap {
-            var lastRateValue: Int? = null
-            rates.forEachIndexed { index, rate ->
-                val currentTime = rate.validity.start.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
-                if (currentTime != lastRateValue) {
-                    put(key = index, value = currentTime.toString().padStart(2, '0'))
-                    lastRateValue = currentTime
-                }
-            }
-        }
-    }
-
     private fun groupChartCells(rates: List<Rate>): List<RateGroup> {
         return rates
             .groupBy { it.validity.start.getLocalDateString() }
             .map { (date, items) -> RateGroup(title = date, rates = items) }
-    }
-
-    private fun generateChartToolTips(rates: List<Rate>): List<String> {
-        return rates.map { rate ->
-            val validToString = if (rate.validity.endInclusive != Instant.DISTANT_FUTURE) {
-                "- ${rate.validity.endInclusive.getLocalHHMMString()}"
-            } else {
-                ""
-            }
-            val timeRange = rate.validity.start.getLocalHHMMString() + validToString
-            "$timeRange\n${rate.vatInclusivePrice.toString(precision = 2)}p"
-        }
     }
 
     private suspend fun getLatestAgileProductCode(): String {
