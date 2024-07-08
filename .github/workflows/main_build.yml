@@ -32,11 +32,14 @@ jobs:
           java-version: '17'
           cache: gradle
 
+      - name: Install Xvfb
+        run: sudo apt-get install -y xvfb
+
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
       - name: Gradle build
-        run: ./gradlew :composeApp:buildReleasePreBundle koverXmlReportRelease --no-daemon
+        run: xvfb-run ./gradlew :composeApp:buildReleasePreBundle koverXmlReportRelease --no-daemon
         env:
           CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
