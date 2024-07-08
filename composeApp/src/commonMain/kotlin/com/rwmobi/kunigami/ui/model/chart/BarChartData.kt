@@ -8,7 +8,6 @@
 package com.rwmobi.kunigami.ui.model.chart
 
 import androidx.compose.runtime.Immutable
-import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.extensions.getLocalDayMonthString
 import com.rwmobi.kunigami.domain.extensions.getLocalDayOfMonth
 import com.rwmobi.kunigami.domain.extensions.getLocalEnglishAbbreviatedDayOfWeekName
@@ -189,7 +188,7 @@ data class BarChartData(
                     consumptions.map { consumption ->
                         getString(
                             resource = Res.string.usage_chart_tooltip_spot_kwh,
-                            consumption.interval.start.getLocalDateString(),
+                            consumption.interval.start.getLocalDayMonthString(),
                             consumption.kWhConsumed.toString(precision = 2),
                         )
                     }

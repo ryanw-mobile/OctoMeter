@@ -200,9 +200,9 @@ class BarChartDataTest {
             createConsumption(kWhConsumed = 15.0, start = "2024-07-03T00:00:00Z", end = "2024-07-03T23:59:59Z"), // Wednesday
         )
         val expectedTooltips = listOf(
-            "1 Jul 2024\n5.00 kWh",
-            "2 Jul 2024\n10.00 kWh",
-            "3 Jul 2024\n15.00 kWh",
+            "01 Jul\n5.00 kWh",
+            "02 Jul\n10.00 kWh",
+            "03 Jul\n15.00 kWh",
         )
 
         val barChartData = BarChartData.fromConsumptions(
