@@ -41,10 +41,10 @@ jobs:
         env:
           BITRISE: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
-          
+
       - name: Upload test report
         if: failure()
         uses: actions/upload-artifact@v2
         with:
           name: test-report
-          path: composeApp/build/reports/tests/allTests/index.html
+          path: composeApp/build/reports/tests/

@@ -52,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test-report
-          path: composeApp/build/reports/tests/testReleaseUnitTest/index.html
+          path: composeApp/build/reports/tests/
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
