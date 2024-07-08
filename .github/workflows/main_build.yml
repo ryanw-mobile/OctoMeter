@@ -47,6 +47,13 @@ jobs:
           CI_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD: ${{ secrets.CIIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD }}
           CI_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.CIIO_ANDROID_KEYSTORE_PASSWORD }}
 
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: composeApp/build/reports/tests/testReleaseUnitTest/index.html
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
