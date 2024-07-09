@@ -4,9 +4,6 @@
  * Sponsored by RW MobiMedia UK Limited
  *
  */
-
-@file:OptIn(ExperimentalResourceApi::class)
-
 package com.rwmobi.kunigami.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
@@ -32,7 +29,6 @@ import com.rwmobi.kunigami.ui.navigation.AppDestination
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.content_description_navigation_bar
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -46,9 +42,7 @@ fun AppBottomNavigationBar(
 
     val navigationBarContentDescription = stringResource(Res.string.content_description_navigation_bar)
     NavigationBar(
-        modifier = modifier.semantics {
-            contentDescription = navigationBarContentDescription
-        },
+        modifier = modifier.semantics { contentDescription = navigationBarContentDescription },
         tonalElevation = 0.dp,
         containerColor = MaterialTheme.colorScheme.background,
     ) {
@@ -65,11 +59,7 @@ fun AppBottomNavigationBar(
                 onClick = {
                     if (!selected) {
                         navController.navigate(item.name) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) {
-                                    inclusive = true
-                                }
-                            }
+                            popUpTo(route = AppDestination.getStartDestination().name)
                             launchSingleTop = true
                         }
                     } else {

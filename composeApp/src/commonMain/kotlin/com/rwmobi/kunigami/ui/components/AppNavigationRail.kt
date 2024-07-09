@@ -4,9 +4,6 @@
  * Sponsored by RW MobiMedia UK Limited
  *
  */
-
-@file:OptIn(ExperimentalResourceApi::class)
-
 package com.rwmobi.kunigami.ui.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
@@ -33,7 +30,6 @@ import com.rwmobi.kunigami.ui.navigation.AppDestination
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.content_description_navigation_rail
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -45,9 +41,7 @@ fun AppNavigationRail(
 ) {
     val navigationRailContentDescription = stringResource(Res.string.content_description_navigation_rail)
     NavigationRail(
-        modifier = modifier.semantics {
-            contentDescription = navigationRailContentDescription
-        },
+        modifier = modifier.semantics { contentDescription = navigationRailContentDescription },
         containerColor = MaterialTheme.colorScheme.background,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -68,11 +62,7 @@ fun AppNavigationRail(
                 onClick = {
                     if (!selected) {
                         navController.navigate(item.name) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) {
-                                    inclusive = true
-                                }
-                            }
+                            popUpTo(route = AppDestination.getStartDestination().name)
                             launchSingleTop = true
                         }
                     } else {
