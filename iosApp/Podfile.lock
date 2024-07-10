@@ -1,5 +1,5 @@
 PODS:
-  - composeApp (1.3.0)
+  - composeApp (1.4.0)
 
 DEPENDENCIES:
   - composeApp (from `../composeApp/`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../composeApp/"
 
 SPEC CHECKSUMS:
-  composeApp: 3dac210d1dd2810229d8ce57289c832bb64f29e2
+  composeApp: 497f10ed600c89f1a0a4319fe2a8a1c95d61bc89
 
 PODFILE CHECKSUM: 132f4b88956762bee62e7893fe00dca16e0d8114
 
