@@ -16,7 +16,7 @@ This app is designed for Octopus Energy customers in the UK who have a smart met
 
 ### It works for me
 
-This is a fully functional app that I developed for myself, and I use it every day to monitor energy consumption and save money. While it should technically work for other Octopus Energy customers, I can’t guarantee it will handle all scenarios such as different tariffs or multiple meter installations. These may produce data that the app cannot process.
+This is a fully functional app that I developed for myself. **I use it every day** to monitor energy consumption and save money. While it should technically work for other Octopus Energy customers, I can’t guarantee it will handle all scenarios such as different tariffs or multiple meter installations. These may produce data that the app cannot process.
 
 This is a dashboard-type app that runs on desktop (desktop-first), Android, and iOS. It supports an adaptive layout that works on mobile, tablet, and dynamic desktop window sizes. The app honours light and dark modes on all supported platforms.
 
@@ -32,7 +32,7 @@ For non-Octopus Energy customers, or non-UK residents, the demo mode will displa
 <p align="center"><img src="https://github.com/ryanw-mobile/OctoMeter/blob/main/screenshots/240603_agile_animation.gif" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 <br />
 
-The current release meets my daily needs. However, this project will continue to be maintained and improved as a way for me to gain real-world hands-on Kotlin Multiplatform development experience. For this reason, the app was intentionally built to reach production-level quality as much as possible.
+The current release meets my daily needs. However, this project will continue to be maintained and improved slowly as a way for me to gain real-world hands-on Kotlin Multiplatform development experience. For this reason, the app was intentionally built to reach production-level quality as much as possible.
 
 If you like this app, consider giving me a star, [following me on Medium](https://medium.com/@callmeryan), or [connecting with me on LinkedIn](https://www.linkedin.com/in/ryanwmobile/). 
 
@@ -63,6 +63,8 @@ All downloadables are provided under the [Release Section](https://github.com/ry
 ## To-do lists
 
 Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/OctoMeter/issues).
+
+This project has entered the second development phase. The Ktor Rest API data layer is being rewritten to use GraphQL. [Version 1.4.0](https://github.com/ryanw-mobile/OctoMeter/tree/release/v1.4.0) is the last version it contains Ktor-RestAPI.
 
 I have limited development budget. There are known issues which are not likely to be address for the time being due to shortage of funding.
 
