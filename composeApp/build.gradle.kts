@@ -34,25 +34,18 @@ plugins {
 val productName = "OctoMeter"
 val productNameSpace = "com.rwmobi.kunigami"
 
+buildConfig {
+    packageName("composeapp.kunigami")
+    buildConfigField("PACKAGE_NAME", provider { "$productNameSpace" })
+    buildConfigField("VERSION_NAME", provider { libs.versions.versionName.get() })
+    buildConfigField("VERSION_CODE", provider { libs.versions.versionCode.get() })
+    buildConfigField("GITHUB_LINK", provider { "https://github.com/ryanw-mobile/OctoMeter" })
+}
+
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-        }
-    }
-
-    cocoapods {
-        version = libs.versions.versionName.get()
-        summary = "OctoMeter Kotlin/Native module"
-        homepage = "https://github.com/ryanw-mobile/OctoMeter/"
-        podfile = project.file("../iosApp/Podfile")
-
-        framework {
-            baseName = "composeApp"
-            isStatic = true
-            binaryOption("bundleId", "composeApp.kunigami")
-        }
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
     }
 
     jvm("desktop")
@@ -66,6 +59,19 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+        }
+    }
+
+    cocoapods {
+        version = libs.versions.versionName.get()
+        summary = "OctoMeter Kotlin/Native module"
+        homepage = "https://github.com/ryanw-mobile/OctoMeter/"
+        podfile = project.file("../iosApp/Podfile")
+
+        framework {
+            baseName = "composeApp"
+            isStatic = true
+            binaryOption("bundleId", "composeApp.kunigami")
         }
     }
 
@@ -88,21 +94,35 @@ kotlin {
     val skikoTarget = "$targetOs-$targetArch"
 
     sourceSets {
-        val desktopMain by getting
-
         androidMain.dependencies {
             // tooling.preview is causing crash
+            runtimeOnly(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.compose.ui.tooling)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.core.splashscreen)
-            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.security.crypto)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.koin.android)
         }
+
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(libs.androidx.test.core.ktx)
+                implementation(libs.robolectric)
+            }
+        }
+
+        // https://kotlinlang.org/docs/multiplatform-android-layout.html#adjust-the-implementation-of-android-flavors
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        invokeWhenCreated("androidDebug") {
+            dependencies {
+                implementation(libs.leakcanary.android)
+            }
+        }
+
         commonMain.dependencies {
-            implementation(compose.runtime)
+            runtimeOnly(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.ui)
@@ -125,18 +145,21 @@ kotlin {
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
         }
-        desktopMain.kotlin {
-            srcDir("build/generated/ksp/metadata")
+
+        val desktopMain by getting {
+            // Required by RoomDB
+            kotlin.srcDir("build/generated/ksp/metadata")
+            dependencies {
+                runtimeOnly("org.jetbrains.skiko:skiko-awt-runtime-$skikoTarget:$skikoVersion")
+                implementation(compose.desktop.currentOs)
+                implementation(libs.kotlinx.coroutines.swing)
+                implementation(libs.koin.jvm)
+                implementation(libs.koin.compose)
+                implementation(libs.themedetector)
+                implementation(libs.slf4j)
+            }
         }
-        desktopMain.dependencies {
-            runtimeOnly("org.jetbrains.skiko:skiko-awt-runtime-$skikoTarget:$skikoVersion")
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
-            implementation(libs.koin.jvm)
-            implementation(libs.koin.compose)
-            implementation(libs.themedetector)
-            implementation(libs.slf4j)
-        }
+
         iosMain {
             // Fixes RoomDB Unresolved reference 'instantiateImpl' in iosMain
             kotlin.srcDir("build/generated/ksp/metadata")
@@ -154,6 +177,13 @@ kotlin {
             implementation(libs.koin.test)
         }
     }
+}
+
+dependencies {
+    "kspAndroid"(libs.androidx.room.compiler) // For AndroidUnitTest
+    "kspCommonMainMetadata"(libs.androidx.room.compiler)
+    implementation(libs.androidx.profileinstaller)
+    "baselineProfile"(project(":baselineprofile"))
 }
 
 android {
@@ -219,9 +249,7 @@ android {
         resourceConfigurations += setOf("en")
 
         testInstrumentationRunner = "$productNameSpace.ui.test.CustomTestRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        vectorDrawables.useSupportLibrary = true
 
         // Bundle output filename
         val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
@@ -287,12 +315,6 @@ android {
             isReturnDefaultValues = true
         }
     }
-
-    dependencies {
-        debugImplementation(libs.leakcanary.android)
-        testImplementation(libs.androidx.test.core.ktx)
-        testImplementation(libs.robolectric)
-    }
 }
 
 compose.desktop {
@@ -341,6 +363,18 @@ compose.desktop {
     }
 }
 
+tasks.withType<Test> {
+    // Set the timezone to 'Europe/London' for all tests
+    jvmArgs("-Duser.timezone=Europe/London")
+}
+
+// https://github.com/JetBrains/compose-multiplatform/issues/4928
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().configureEach {
+    if (name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
+}
+
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     android.set(false)
     ignoreFailures.set(true)
@@ -358,33 +392,6 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     }
 }
 
-tasks.withType<Test> {
-    // Set the timezone to 'Europe/London' for all tests
-    jvmArgs("-Duser.timezone=Europe/London")
-}
-
-dependencies {
-    add("kspAndroid", libs.androidx.room.compiler) // For AndroidUnitTest
-    add("kspCommonMainMetadata", libs.androidx.room.compiler)
-    implementation(libs.androidx.profileinstaller)
-    "baselineProfile"(project(":baselineprofile"))
-}
-
-// https://github.com/JetBrains/compose-multiplatform/issues/4928
-tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().configureEach {
-    if (name != "kspCommonMainKotlinMetadata") {
-        dependsOn("kspCommonMainKotlinMetadata")
-    }
-}
-
-buildConfig {
-    packageName("composeapp.kunigami")
-    buildConfigField("PACKAGE_NAME", provider { "$productNameSpace" })
-    buildConfigField("VERSION_NAME", provider { libs.versions.versionName.get() })
-    buildConfigField("VERSION_CODE", provider { libs.versions.versionCode.get() })
-    buildConfigField("GITHUB_LINK", provider { "https://github.com/ryanw-mobile/OctoMeter" })
-}
-
 room {
     schemaDirectory("$projectDir/schemas")
 }
@@ -400,56 +407,49 @@ powerAssert {
     )
 }
 
-kover {
-    reports {
-        // common filters for all reports of all variants
-        filters {
-            // exclusions for reports
-            excludes {
-                // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
-                classes(
-                    listOf(
-                        "$productNameSpace.KunigamiApplication*",
-                        "$productNameSpace.MainActivity*",
-                        "$productNameSpace.*.*MembersInjector",
-                        "$productNameSpace.*.*Factory",
-                        "$productNameSpace.data.source.local.*_Impl*",
-                        "$productNameSpace.data.source.local.*Impl_Factory",
-                        "$productNameSpace.BR",
-                        "$productNameSpace.BuildConfig",
-                        "$productNameSpace.ComposableSingletons*",
-                        "$productNameSpace.App*",
-                        "$productNameSpace.MainKt*",
-                        "$productNameSpace.NavigationLayoutType",
-                        "$productNameSpace.ui.extensions.WindowSizeClassExtensions*",
-                        "$productNameSpace.ui.extensions.ThrowableExtensions*",
-                        "$productNameSpace.ui.extensions.GenerateRandomLong*",
-                        "$productNameSpace.data.source.local.preferences.ProvideSettings*",
-                        "$productNameSpace.data.source.local.preferences.MultiplatformPreferencesStore*",
-                        "*Fragment",
-                        "*Fragment\$*",
-                        "*Activity",
-                        "*Activity\$*",
-                        "*.BuildConfig",
-                        "*.DebugUtil",
-                    ),
-                )
-                // excludes all classes located in specified package and it subpackages, wildcards '*' and '?' are available
-                packages(
-                    listOf(
-                        "$productNameSpace.di",
-                        "$productNameSpace.ui.components",
-                        "$productNameSpace.ui.composehelper",
-                        "$productNameSpace.ui.destinations",
-                        "$productNameSpace.ui.navigation",
-                        "$productNameSpace.ui.previewparameter",
-                        "$productNameSpace.ui.theme",
-                        "$productNameSpace.ui.previewsampledata",
-                        "androidx",
-                        "kunigami.composeapp.generated.*",
-                    ),
-                )
-            }
-        }
-    }
+// common exclusion filters for all reports of all variants
+kover.reports.filters.excludes {
+    // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
+    classes(
+        listOf(
+            "$productNameSpace.KunigamiApplication*",
+            "$productNameSpace.MainActivity*",
+            "$productNameSpace.*.*MembersInjector",
+            "$productNameSpace.*.*Factory",
+            "$productNameSpace.data.source.local.*_Impl*",
+            "$productNameSpace.data.source.local.*Impl_Factory",
+            "$productNameSpace.BR",
+            "$productNameSpace.BuildConfig",
+            "$productNameSpace.ComposableSingletons*",
+            "$productNameSpace.App*",
+            "$productNameSpace.MainKt*",
+            "$productNameSpace.NavigationLayoutType",
+            "$productNameSpace.ui.extensions.WindowSizeClassExtensions*",
+            "$productNameSpace.ui.extensions.ThrowableExtensions*",
+            "$productNameSpace.ui.extensions.GenerateRandomLong*",
+            "$productNameSpace.data.source.local.preferences.ProvideSettings*",
+            "$productNameSpace.data.source.local.preferences.MultiplatformPreferencesStore*",
+            "*Fragment",
+            "*Fragment\$*",
+            "*Activity",
+            "*Activity\$*",
+            "*.BuildConfig",
+            "*.DebugUtil",
+        ),
+    )
+    // excludes all classes located in specified package and it subpackages, wildcards '*' and '?' are available
+    packages(
+        listOf(
+            "$productNameSpace.di",
+            "$productNameSpace.ui.components",
+            "$productNameSpace.ui.composehelper",
+            "$productNameSpace.ui.destinations",
+            "$productNameSpace.ui.navigation",
+            "$productNameSpace.ui.previewparameter",
+            "$productNameSpace.ui.theme",
+            "$productNameSpace.ui.previewsampledata",
+            "androidx",
+            "kunigami.composeapp.generated.*",
+        ),
+    )
 }
