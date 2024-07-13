@@ -29,6 +29,7 @@ plugins {
     alias(libs.plugins.kotlinPowerAssert)
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidxRoom)
+    alias(libs.plugins.apollographql)
 }
 
 val productName = "OctoMeter"
@@ -144,6 +145,7 @@ kotlin {
             implementation(libs.multiplatform.settings)
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
+            implementation(libs.apollo.runtime)
         }
 
         val desktopMain by getting {
@@ -389,6 +391,12 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         exclude { element -> element.file.path.contains("generated/") }
         exclude("**/MainViewController.kt")
         include("**/kotlin/**")
+    }
+}
+
+apollo {
+    service("service") {
+        packageName.set(productNameSpace)
     }
 }
 

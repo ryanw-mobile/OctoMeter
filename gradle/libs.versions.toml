@@ -36,6 +36,7 @@ room = "2.7.0-alpha05"
 ksp = "2.0.0-1.0.23"
 sqlite = "2.5.0-alpha05"
 slf4j = "2.0.13"
+apollographql = "4.0.0-rc.1"
 
 # App configurations, not dependencies
 versionCode = "9"
@@ -89,6 +90,7 @@ androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomato
 androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmarkMacroJunit4" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 slf4j = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
+apollo-runtime = { group = "com.apollographql.apollo", name = "apollo-runtime", version.ref = "apollographql" }
 # For Renovate only
 skiko-macos = { group = "org.jetbrains.skiko", name = "skiko-awt-runtime-macos-arm64", version.ref = "skiko" }
 skiko-windows = { group = "org.jetbrains.skiko", name = "skiko-awt-runtime-windows-x64", version.ref = "skiko" }
@@ -112,3 +114,4 @@ kotlinxKover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 gradleKtlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
+apollographql = { id = "com.apollographql.apollo", version.ref = "apollographql" }
