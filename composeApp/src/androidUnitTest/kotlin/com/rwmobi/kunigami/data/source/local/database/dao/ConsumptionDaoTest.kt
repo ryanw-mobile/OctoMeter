@@ -4,7 +4,7 @@
  * Sponsored by RW MobiMedia UK Limited
  *
  */
-package com.rwmobi.kunigami.data.source.local.database.dao.com
+package com.rwmobi.kunigami.data.source.local.database.dao
 
 import android.content.Context
 import androidx.room.Room
