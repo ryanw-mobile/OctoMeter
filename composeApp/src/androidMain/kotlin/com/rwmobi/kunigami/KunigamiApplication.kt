@@ -12,6 +12,7 @@ import co.touchlab.kermit.Logger
 import co.touchlab.kermit.koin.KermitKoinLogger
 import com.rwmobi.kunigami.di.dataSourceModule
 import com.rwmobi.kunigami.di.dispatcherModule
+import com.rwmobi.kunigami.di.graphQLModule
 import com.rwmobi.kunigami.di.ktorModule
 import com.rwmobi.kunigami.di.platformModule
 import com.rwmobi.kunigami.di.repositoryModule
@@ -37,6 +38,7 @@ class KunigamiApplication : Application() {
                 viewModelModule,
                 dataSourceModule,
                 userCaseModule,
+                graphQLModule,
                 ktorModule,
                 repositoryModule,
             )

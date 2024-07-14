@@ -23,6 +23,7 @@ fun initKoin() {
                 dispatcherModule,
                 viewModelModule,
                 userCaseModule,
+                graphQLModule,
                 ktorModule,
                 repositoryModule,
                 dataSourceModule,

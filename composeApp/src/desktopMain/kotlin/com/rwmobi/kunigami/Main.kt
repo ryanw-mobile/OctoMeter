@@ -16,6 +16,7 @@ import co.touchlab.kermit.Logger
 import co.touchlab.kermit.koin.KermitKoinLogger
 import com.rwmobi.kunigami.di.dataSourceModule
 import com.rwmobi.kunigami.di.dispatcherModule
+import com.rwmobi.kunigami.di.graphQLModule
 import com.rwmobi.kunigami.di.ktorModule
 import com.rwmobi.kunigami.di.platformModule
 import com.rwmobi.kunigami.di.repositoryModule
@@ -49,6 +50,7 @@ fun main() {
         message = aboutAppDescription.format(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, BuildConfig.GITHUB_LINK),
     )
 
+    // TODO: This looks strange but it works. Either later we don't use Koin or we improve it.
     koinApplication {
         printLogger(Level.ERROR)
         logger(KermitKoinLogger(Logger.withTag("koin")))
@@ -58,6 +60,7 @@ fun main() {
             viewModelModule,
             userCaseModule,
             ktorModule,
+            graphQLModule,
             repositoryModule,
             dataSourceModule,
         )
@@ -70,6 +73,7 @@ fun main() {
             viewModelModule,
             userCaseModule,
             ktorModule,
+            graphQLModule,
             repositoryModule,
             dataSourceModule,
         )
