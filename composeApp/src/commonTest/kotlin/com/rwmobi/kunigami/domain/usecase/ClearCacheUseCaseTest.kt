@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.domain.usecase
 
-import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
+import com.rwmobi.kunigami.domain.repository.FakeOctopusApiRepository
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -18,14 +18,14 @@ import kotlin.test.assertTrue
 
 class ClearCacheUseCaseTest {
     private lateinit var clearCacheUseCase: ClearCacheUseCase
-    private lateinit var fakeRestApiRepository: FakeRestApiRepository
+    private lateinit var fakeRestApiRepository: FakeOctopusApiRepository
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @BeforeTest
     fun setupUseCase() {
-        fakeRestApiRepository = FakeRestApiRepository()
+        fakeRestApiRepository = FakeOctopusApiRepository()
         clearCacheUseCase = ClearCacheUseCase(
-            restApiRepository = fakeRestApiRepository,
+            octopusApiRepository = fakeRestApiRepository,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }

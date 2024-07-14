@@ -16,7 +16,7 @@ import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.Rate
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import com.rwmobi.kunigami.ui.previewsampledata.FakeDemoUserProfile
 import kotlinx.coroutines.CoroutineDispatcher
@@ -27,8 +27,8 @@ import kotlin.coroutines.cancellation.CancellationException
 
 class GetConsumptionAndCostUseCase(
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val restApiRepository: RestApiRepository,
-    private val demoRestApiRepository: RestApiRepository,
+    private val octopusApiRepository: OctopusApiRepository,
+    private val demoOctopusApiRepository: OctopusApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     /***
@@ -64,7 +64,7 @@ class GetConsumptionAndCostUseCase(
                     var unitRates: List<Rate> = emptyList()
                     if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
                         // We need all the agreements covering the requested period to get the correct unit rates
-                        val account = restApiRepository.getAccount(
+                        val account = octopusApiRepository.getAccount(
                             apiKey = apiKey,
                             accountNumber = accountNumber,
                         ).getOrNull()
@@ -82,7 +82,7 @@ class GetConsumptionAndCostUseCase(
                         }
                     }
 
-                    restApiRepository.getConsumption(
+                    octopusApiRepository.getConsumption(
                         apiKey = apiKey,
                         mpan = mpan,
                         meterSerialNumber = meterSerialNumber,
@@ -119,7 +119,7 @@ class GetConsumptionAndCostUseCase(
             )
         } ?: emptyList()
 
-        return demoRestApiRepository.getConsumption(
+        return demoOctopusApiRepository.getConsumption(
             apiKey = "",
             mpan = "",
             meterSerialNumber = "",
@@ -161,7 +161,7 @@ class GetConsumptionAndCostUseCase(
             val productCode = Tariff.extractProductCode(tariffCode = agreement.tariffCode)
 
             unitRates.addAll(
-                restApiRepository.getStandardUnitRates(
+                octopusApiRepository.getStandardUnitRates(
                     tariffCode = agreement.tariffCode,
                     period = effectiveQueryStartDate..effectiveQueryEndDate,
                 ).getOrNull() ?: emptyList(),

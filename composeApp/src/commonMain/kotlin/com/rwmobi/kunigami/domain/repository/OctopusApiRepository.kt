@@ -18,7 +18,7 @@ import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 
-interface RestApiRepository {
+interface OctopusApiRepository {
     suspend fun getTariff(tariffCode: String): Result<Tariff>
     suspend fun getProducts(requestedPage: Int? = null): Result<List<ProductSummary>>
     suspend fun getProductDetails(productCode: String): Result<ProductDetails>

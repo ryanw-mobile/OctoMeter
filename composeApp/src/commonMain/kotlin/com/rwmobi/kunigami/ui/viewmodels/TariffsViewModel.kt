@@ -11,7 +11,7 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIState
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TariffsViewModel(
-    private val restApiRepository: RestApiRepository,
+    private val octopusApiRepository: OctopusApiRepository,
     private val getFilteredProductsUseCase: GetFilteredProductsUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
@@ -74,7 +74,7 @@ class TariffsViewModel(
     fun getProductDetails(productCode: String) {
         startLoading()
         viewModelScope.launch(dispatcher) {
-            val getProductDetailsResult = restApiRepository.getProductDetails(productCode)
+            val getProductDetailsResult = octopusApiRepository.getProductDetails(productCode)
             getProductDetailsResult.fold(
                 onSuccess = { product ->
                     _uiState.update { currentUiState ->

@@ -9,7 +9,7 @@ package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.NoValidMeterException
 import com.rwmobi.kunigami.domain.exceptions.except
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +18,7 @@ import kotlin.coroutines.cancellation.CancellationException
 
 class InitialiseAccountUseCase(
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val restApiRepository: RestApiRepository,
+    private val octopusApiRepository: OctopusApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(
@@ -27,7 +27,7 @@ class InitialiseAccountUseCase(
     ): Result<Unit> {
         return withContext(dispatcher) {
             runCatching {
-                restApiRepository.getAccount(
+                octopusApiRepository.getAccount(
                     apiKey = apiKey,
                     accountNumber = accountNumber,
                 ).fold(

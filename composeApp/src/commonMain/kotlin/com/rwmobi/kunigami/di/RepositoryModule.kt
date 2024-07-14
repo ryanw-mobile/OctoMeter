@@ -7,16 +7,16 @@
 
 package com.rwmobi.kunigami.di
 
-import com.rwmobi.kunigami.data.repository.DemoRestApiRepository
+import com.rwmobi.kunigami.data.repository.DemoOctopusApiRepository
 import com.rwmobi.kunigami.data.repository.OctopusRestApiRepository
 import com.rwmobi.kunigami.data.repository.OctopusUserPreferencesRepository
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<RestApiRepository>(named("production")) {
+    single<OctopusApiRepository>(named("production")) {
         OctopusRestApiRepository(
             productsEndpoint = get(),
             electricityMeterPointsEndpoint = get(),
@@ -27,12 +27,12 @@ val repositoryModule = module {
         )
     }
 
-    single<RestApiRepository>(named("demo")) {
-        DemoRestApiRepository()
+    single<OctopusApiRepository>(named("demo")) {
+        DemoOctopusApiRepository()
     }
 
     // Set the "production" instance as the default for RestApiRepository
-    single<RestApiRepository> { get(named("production")) }
+    single<OctopusApiRepository> { get(named("production")) }
 
     factory<UserPreferencesRepository> {
         OctopusUserPreferencesRepository(

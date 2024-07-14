@@ -8,7 +8,7 @@
 package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.NoValidMeterException
-import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
+import com.rwmobi.kunigami.domain.repository.FakeOctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import com.rwmobi.kunigami.test.samples.AccountSampleData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,7 +26,7 @@ class InitialiseAccountUseCaseTest {
 
     private lateinit var initialiseAccountUseCase: InitialiseAccountUseCase
     private lateinit var fakeUserPreferenceRepository: FakeUserPreferencesRepository
-    private lateinit var fakeRestApiRepository: FakeRestApiRepository
+    private lateinit var fakeRestApiRepository: FakeOctopusApiRepository
 
     private val fakeAccountNumber = "A1234A1B1"
     private val fakeApiKey = "test_api_key"
@@ -34,10 +34,10 @@ class InitialiseAccountUseCaseTest {
     @BeforeTest
     fun setupUseCase() {
         fakeUserPreferenceRepository = FakeUserPreferencesRepository()
-        fakeRestApiRepository = FakeRestApiRepository()
+        fakeRestApiRepository = FakeOctopusApiRepository()
         initialiseAccountUseCase = InitialiseAccountUseCase(
             userPreferencesRepository = fakeUserPreferenceRepository,
-            restApiRepository = fakeRestApiRepository,
+            octopusApiRepository = fakeRestApiRepository,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }

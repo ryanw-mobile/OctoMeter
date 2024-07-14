@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.domain.usecase
 
-import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
+import com.rwmobi.kunigami.domain.repository.FakeOctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import com.rwmobi.kunigami.test.samples.RateSampleData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,7 +23,7 @@ class GetStandardUnitRateUseCaseTest {
 
     private lateinit var getStandardUnitRateUseCase: GetStandardUnitRateUseCase
     private lateinit var fakeUserPreferenceRepository: FakeUserPreferencesRepository
-    private lateinit var fakeRestApiRepository: FakeRestApiRepository
+    private lateinit var fakeRestApiRepository: FakeOctopusApiRepository
     private val sampleTariffCode = "E-1R-SAMPLE-TARIFF-A"
     private val samplePeriod = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-01-04T00:00:00Z")
 
@@ -31,9 +31,9 @@ class GetStandardUnitRateUseCaseTest {
     @BeforeTest
     fun setupUseCase() {
         fakeUserPreferenceRepository = FakeUserPreferencesRepository()
-        fakeRestApiRepository = FakeRestApiRepository()
+        fakeRestApiRepository = FakeOctopusApiRepository()
         getStandardUnitRateUseCase = GetStandardUnitRateUseCase(
-            restApiRepository = fakeRestApiRepository,
+            octopusApiRepository = fakeRestApiRepository,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }

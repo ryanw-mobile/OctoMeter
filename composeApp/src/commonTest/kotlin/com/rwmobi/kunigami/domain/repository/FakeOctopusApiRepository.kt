@@ -18,7 +18,7 @@ import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import kotlinx.datetime.Instant
 
-class FakeRestApiRepository : RestApiRepository {
+class FakeOctopusApiRepository : OctopusApiRepository {
 
     var setSimpleProductTariffResponse: Result<Tariff>? = null
     override suspend fun getTariff(

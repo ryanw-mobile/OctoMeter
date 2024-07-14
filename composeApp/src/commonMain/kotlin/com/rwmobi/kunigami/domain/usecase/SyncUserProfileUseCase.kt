@@ -12,7 +12,7 @@ import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.product.Tariff
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +21,7 @@ import kotlin.coroutines.cancellation.CancellationException
 
 class SyncUserProfileUseCase(
     private val userPreferencesRepository: UserPreferencesRepository,
-    private val restApiRepository: RestApiRepository,
+    private val octopusApiRepository: OctopusApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(): Result<UserProfile?> {
@@ -38,7 +38,7 @@ class SyncUserProfileUseCase(
                 checkNotNull(value = apiKey, lazyMessage = { "Expect API Key but null" })
                 checkNotNull(value = accountNumber, lazyMessage = { "Expect Account Number but null" })
 
-                restApiRepository.getAccount(
+                octopusApiRepository.getAccount(
                     apiKey = apiKey,
                     accountNumber = accountNumber,
                 ).fold(
@@ -73,7 +73,7 @@ class SyncUserProfileUseCase(
 
                         val tariffs = mutableListOf<Tariff>()
                         account?.getTariffHistory(mpan = selectedMpan)?.forEach { tariffCode ->
-                            val tariff = restApiRepository.getTariff(
+                            val tariff = octopusApiRepository.getTariff(
                                 tariffCode = tariffCode,
                             )
                             tariff.getOrNull()?.let { tariffs.add(it) }
