@@ -1,0 +1,4 @@
+fragment PossibleErrorTypeFragment on PossibleErrorType {
+    message
+    code
+}

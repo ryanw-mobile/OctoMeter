@@ -1,0 +1,11 @@
+mutation ObtainKrakenToken($input: ObtainJSONWebTokenInput!) {
+    obtainKrakenToken(input: $input) {
+        possibleErrors {
+            ...PossibleErrorTypeFragment
+        }
+        token
+        payload
+        refreshToken
+        refreshExpiresIn
+    }
+}
