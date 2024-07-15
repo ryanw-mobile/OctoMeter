@@ -24,21 +24,80 @@ import kunigami.composeapp.generated.resources.retail_region_west_midlands
 import kunigami.composeapp.generated.resources.retail_region_yorkshire
 import org.jetbrains.compose.resources.StringResource
 
-enum class RetailRegion(val code: String, val stringResource: StringResource) {
-    EASTERN_ENGLAND("A", Res.string.retail_region_eastern_england),
-    EAST_MIDLANDS("B", Res.string.retail_region_east_midlands),
-    LONDON("C", Res.string.retail_region_london),
-    MERSEYSIDE_NORTHERN_WALES("D", Res.string.retail_region_merseyside_northern_wales),
-    WEST_MIDLANDS("E", Res.string.retail_region_west_midlands),
-    NORTH_EASTERN_ENGLAND("F", Res.string.retail_region_north_eastern_england),
-    NORTH_WESTERN_ENGLAND("G", Res.string.retail_region_north_western_england),
-    SOUTHERN_ENGLAND("H", Res.string.retail_region_southern_england),
-    SOUTH_EASTERN_ENGLAND("J", Res.string.retail_region_south_eastern_england),
-    SOUTHERN_WALES("K", Res.string.retail_region_southern_wales),
-    SOUTH_WESTERN_ENGLAND("L", Res.string.retail_region_south_western_england),
-    SOUTHERN_SCOTLAND("N", Res.string.retail_region_southern_scotland),
-    YORKSHIRE("M", Res.string.retail_region_yorkshire),
-    NORTHERN_SCOTLAND("P", Res.string.retail_region_northern_scotland),
+/***
+ * Retail Region with sampled postcode mapped to satisfy GraphQL queries
+ */
+enum class RetailRegion(val code: String, val postcode: String, val stringResource: StringResource) {
+    EASTERN_ENGLAND(
+        code = "A",
+        postcode = "NR1",
+        stringResource = Res.string.retail_region_eastern_england,
+    ),
+    EAST_MIDLANDS(
+        code = "B",
+        postcode = "NG1",
+        stringResource = Res.string.retail_region_east_midlands,
+    ),
+    LONDON(
+        code = "C",
+        postcode = "E5",
+        stringResource = Res.string.retail_region_london,
+    ),
+    MERSEYSIDE_NORTHERN_WALES(
+        code = "D",
+        postcode = "L1",
+        stringResource = Res.string.retail_region_merseyside_northern_wales,
+    ),
+    WEST_MIDLANDS(
+        code = "E",
+        postcode = "B5",
+        stringResource = Res.string.retail_region_west_midlands,
+    ),
+    NORTH_EASTERN_ENGLAND(
+        code = "F",
+        postcode = "NE1",
+        stringResource = Res.string.retail_region_north_eastern_england,
+    ),
+    NORTH_WESTERN_ENGLAND(
+        code = "G",
+        postcode = "M1",
+        stringResource = Res.string.retail_region_north_western_england,
+    ),
+    SOUTHERN_ENGLAND(
+        code = "H",
+        postcode = "SO14",
+        stringResource = Res.string.retail_region_southern_england,
+    ),
+    SOUTH_EASTERN_ENGLAND(
+        code = "J",
+        postcode = "BN1",
+        stringResource = Res.string.retail_region_south_eastern_england,
+    ),
+    SOUTHERN_WALES(
+        code = "K",
+        postcode = "CF10",
+        stringResource = Res.string.retail_region_southern_wales,
+    ),
+    SOUTH_WESTERN_ENGLAND(
+        code = "L",
+        postcode = "BS5",
+        stringResource = Res.string.retail_region_south_western_england,
+    ),
+    SOUTHERN_SCOTLAND(
+        code = "N",
+        postcode = "G1",
+        stringResource = Res.string.retail_region_southern_scotland,
+    ),
+    YORKSHIRE(
+        code = "M",
+        postcode = "LS5",
+        stringResource = Res.string.retail_region_yorkshire,
+    ),
+    NORTHERN_SCOTLAND(
+        code = "P",
+        postcode = "AB10",
+        stringResource = Res.string.retail_region_northern_scotland,
+    ),
     ;
 
     companion object {
