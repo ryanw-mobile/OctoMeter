@@ -22,7 +22,6 @@ query SingleEnergyProductQuery($productCode: String!, $postcode: String!) {
                         standingCharge
                         dayRate
                         nightRate
-                        productCode
                     }
                 }
             }

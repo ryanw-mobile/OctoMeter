@@ -12,6 +12,7 @@ import com.rwmobi.kunigami.domain.exceptions.TariffNotFoundException
 import com.rwmobi.kunigami.domain.model.product.ExitFeesType
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
+import com.rwmobi.kunigami.graphql.SingleEnergyProductQuery
 import kotlinx.datetime.Instant
 
 fun SingleProductApiResponse.toTariff(
@@ -61,4 +62,66 @@ fun SingleProductApiResponse.toTariff(
         vatInclusiveDayUnitRate = rates.dayUnitRateIncVat,
         vatInclusiveNightUnitRate = rates.nightUnitRateIncVat,
     )
+}
+
+fun SingleEnergyProductQuery.EnergyProduct.toTariff(
+    tariffCode: String,
+): Tariff? {
+    val tariffNode = tariffs?.edges?.firstOrNull {
+        tariffCode == tariffCode
+    }?.node
+
+    if (tariffNode == null) {
+        return null
+    }
+
+    // In GraphQL currently we default to direct debit
+    val tariffPaymentTerm = TariffPaymentTerm.DIRECT_DEBIT_MONTHLY
+
+    return when {
+        tariffNode.onStandardTariff != null -> {
+            Tariff(
+                productCode = code,
+                fullName = fullName,
+                displayName = displayName,
+                description = description,
+                isVariable = isVariable,
+                availability = Instant.parse(availableFrom.toString())..(availableTo?.let { Instant.parse(it.toString()) } ?: Instant.DISTANT_FUTURE),
+                exitFeesType = ExitFeesType.fromApiValue(value = exitFeesType),
+                vatInclusiveExitFees = exitFees?.toDouble() ?: 0.0,
+                tariffPaymentTerm = tariffPaymentTerm,
+
+                tariffCode = tariffCode,
+                vatInclusiveStandingCharge = tariffNode.onStandardTariff.standingCharge ?: 0.0,
+                vatInclusiveStandardUnitRate = tariffNode.onStandardTariff.unitRate ?: 0.0,
+                vatInclusiveDayUnitRate = null,
+                vatInclusiveNightUnitRate = null,
+            )
+        }
+
+        tariffNode.onDayNightTariff != null -> {
+            Tariff(
+                productCode = code,
+                fullName = fullName,
+                displayName = displayName,
+                description = description,
+                isVariable = isVariable,
+                availability = Instant.parse(availableFrom.toString())..(availableTo?.let { Instant.parse(it.toString()) } ?: Instant.DISTANT_FUTURE),
+                exitFeesType = ExitFeesType.fromApiValue(value = exitFeesType),
+                vatInclusiveExitFees = exitFees?.toDouble() ?: 0.0,
+                tariffPaymentTerm = tariffPaymentTerm,
+
+                tariffCode = tariffCode,
+                vatInclusiveStandingCharge = tariffNode.onDayNightTariff.standingCharge ?: 0.0,
+                vatInclusiveStandardUnitRate = null,
+                vatInclusiveDayUnitRate = tariffNode.onDayNightTariff.dayRate,
+                vatInclusiveNightUnitRate = tariffNode.onDayNightTariff.nightRate,
+            )
+        }
+
+        else -> {
+            // Currently we do not support other tariff types for simplicity
+            null
+        }
+    }
 }
