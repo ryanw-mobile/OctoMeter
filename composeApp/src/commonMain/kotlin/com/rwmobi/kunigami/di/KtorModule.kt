@@ -7,9 +7,9 @@
 
 package com.rwmobi.kunigami.di
 
-import com.rwmobi.kunigami.data.source.network.AccountEndpoint
-import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
-import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
+import com.rwmobi.kunigami.data.source.network.restapi.AccountEndpoint
+import com.rwmobi.kunigami.data.source.network.restapi.ElectricityMeterPointsEndpoint
+import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json

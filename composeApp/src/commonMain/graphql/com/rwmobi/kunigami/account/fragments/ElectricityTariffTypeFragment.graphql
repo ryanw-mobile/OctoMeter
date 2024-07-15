@@ -1,0 +1,55 @@
+fragment StandardTariffFragment on StandardTariff {
+    id
+    displayName
+    fullName
+    description
+    productCode
+    standingCharge
+    tariffCode
+    unitRate
+}
+
+fragment DayNightTariffFragment on DayNightTariff {
+    id
+    displayName
+    fullName
+    description
+    productCode
+    standingCharge
+    tariffCode
+    dayRate
+    nightRate
+}
+
+fragment ThreeRateTariffFragment on ThreeRateTariff {
+    id
+    displayName
+    fullName
+    description
+    productCode
+    standingCharge
+    dayRate
+    nightRate
+    offPeakRate
+}
+
+fragment HalfHourlyTariffFragment on HalfHourlyTariff {
+    id
+    displayName
+    fullName
+    description
+    productCode
+    standingCharge
+}
+
+fragment PrepayTariffFragment on ThreeRateTariff {
+    id
+    displayName
+    fullName
+    description
+    productCode
+    standingCharge
+    dayRate
+    nightRate
+    offPeakRate
+}

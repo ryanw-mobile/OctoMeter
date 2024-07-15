@@ -1,0 +1,30 @@
+query SingleEnergyProductQuery($productCode: String!, $postcode: String!) {
+    energyProduct(code: $productCode) {
+        code
+        fullName
+        displayName
+        description
+        isVariable
+        availableTo
+        availableFrom
+        exitFeesType
+        exitFees
+        tariffs(postcode: $postcode, first: 100) {
+            edges {
+                node {
+                    ... on StandardTariff {
+                        tariffCode
+                        standingCharge
+                        unitRate
+                    }
+                    ... on DayNightTariff {
+                        tariffCode
+                        standingCharge
+                        dayRate
+                        nightRate
+                    }
+                }
+            }
+        }
+    }
+}

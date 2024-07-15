@@ -25,7 +25,7 @@ import kotlin.time.Duration
 class DemoRestApiRepositoryTest {
 
     private val sampleTariffCode = "E-1R-SAMPLE-TARIFF-A"
-    private val demoRepository = DemoRestApiRepository()
+    private val demoRepository = DemoOctopusApiRepository()
 
     @Test
     fun `getSimpleProductTariff should throw NotImplementedError`() = runTest {

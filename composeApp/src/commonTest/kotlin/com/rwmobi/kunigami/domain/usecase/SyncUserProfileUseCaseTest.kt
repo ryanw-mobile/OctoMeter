@@ -9,7 +9,7 @@ package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.model.account.UserProfile
-import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
+import com.rwmobi.kunigami.domain.repository.FakeOctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import com.rwmobi.kunigami.test.samples.AccountSampleData
 import com.rwmobi.kunigami.test.samples.TariffSampleData
@@ -27,7 +27,7 @@ import kotlin.test.assertTrue
 class SyncUserProfileUseCaseTest {
     private lateinit var syncUserProfileUseCase: SyncUserProfileUseCase
     private lateinit var fakeUserPreferenceRepository: FakeUserPreferencesRepository
-    private lateinit var fakeRestApiRepository: FakeRestApiRepository
+    private lateinit var fakeRestApiRepository: FakeOctopusApiRepository
 
     // common values not affecting the test results
     private val fakeApiKey = "test_api_key"
@@ -39,10 +39,10 @@ class SyncUserProfileUseCaseTest {
     @BeforeTest
     fun setupUseCase() {
         fakeUserPreferenceRepository = FakeUserPreferencesRepository()
-        fakeRestApiRepository = FakeRestApiRepository()
+        fakeRestApiRepository = FakeOctopusApiRepository()
         syncUserProfileUseCase = SyncUserProfileUseCase(
             userPreferencesRepository = fakeUserPreferenceRepository,
-            restApiRepository = fakeRestApiRepository,
+            octopusApiRepository = fakeRestApiRepository,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }

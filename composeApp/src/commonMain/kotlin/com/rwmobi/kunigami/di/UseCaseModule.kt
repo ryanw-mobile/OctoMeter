@@ -23,14 +23,14 @@ import org.koin.dsl.module
 val userCaseModule = module {
     factory {
         GetFilteredProductsUseCase(
-            restApiRepository = get(),
+            octopusApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
 
     factory {
         GetStandardUnitRateUseCase(
-            restApiRepository = get(),
+            octopusApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
@@ -38,15 +38,15 @@ val userCaseModule = module {
     factory {
         GetConsumptionAndCostUseCase(
             userPreferencesRepository = get(),
-            restApiRepository = get(),
-            demoRestApiRepository = get(named("demo")),
+            octopusApiRepository = get(),
+            demoOctopusApiRepository = get(named("demo")),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
 
     factory {
         GetTariffRatesUseCase(
-            restApiRepository = get(),
+            octopusApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
@@ -54,7 +54,7 @@ val userCaseModule = module {
     factory {
         InitialiseAccountUseCase(
             userPreferencesRepository = get(),
-            restApiRepository = get(),
+            octopusApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
@@ -69,28 +69,28 @@ val userCaseModule = module {
     factory {
         SyncUserProfileUseCase(
             userPreferencesRepository = get(),
-            restApiRepository = get(),
+            octopusApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
 
     factory {
         GetTariffUseCase(
-            restApiRepository = get(),
+            octopusApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
 
     factory {
         GetLatestProductByKeywordUseCase(
-            restApiRepository = get(),
+            octopusApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
 
     factory {
         ClearCacheUseCase(
-            restApiRepository = get(),
+            octopusApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }

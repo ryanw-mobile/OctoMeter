@@ -20,9 +20,9 @@ import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.local.database.entity.coversRange
 import com.rwmobi.kunigami.data.source.local.database.interfaces.DatabaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.model.RateType
-import com.rwmobi.kunigami.data.source.network.AccountEndpoint
-import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
-import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
+import com.rwmobi.kunigami.data.source.network.restapi.AccountEndpoint
+import com.rwmobi.kunigami.data.source.network.restapi.ElectricityMeterPointsEndpoint
+import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.extensions.getHalfHourlyTimeSlotCount
 import com.rwmobi.kunigami.domain.model.account.Account
@@ -34,7 +34,7 @@ import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -49,7 +49,7 @@ class OctopusRestApiRepository(
     private val inMemoryCacheDataSource: InMemoryCacheDataSource,
     private val databaseDataSource: DatabaseDataSource,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
-) : RestApiRepository {
+) : OctopusApiRepository {
     override suspend fun getTariff(
         tariffCode: String,
     ): Result<Tariff> {

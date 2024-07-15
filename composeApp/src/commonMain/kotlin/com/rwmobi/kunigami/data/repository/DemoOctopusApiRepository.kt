@@ -16,7 +16,7 @@ import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import kotlinx.datetime.DateTimePeriod
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
@@ -31,7 +31,7 @@ import kotlin.math.min
 import kotlin.math.sqrt
 import kotlin.random.Random
 
-class DemoRestApiRepository : RestApiRepository {
+class DemoOctopusApiRepository : OctopusApiRepository {
     private val defaultException = NotImplementedError("Disabled in demo mode")
 
     override suspend fun getTariff(tariffCode: String): Result<Tariff> {

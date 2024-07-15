@@ -10,9 +10,9 @@ package com.rwmobi.kunigami.data.repository
 import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.local.database.FakeDataBaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
-import com.rwmobi.kunigami.data.source.network.AccountEndpoint
-import com.rwmobi.kunigami.data.source.network.ElectricityMeterPointsEndpoint
-import com.rwmobi.kunigami.data.source.network.ProductsEndpoint
+import com.rwmobi.kunigami.data.source.network.restapi.AccountEndpoint
+import com.rwmobi.kunigami.data.source.network.restapi.ElectricityMeterPointsEndpoint
+import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame

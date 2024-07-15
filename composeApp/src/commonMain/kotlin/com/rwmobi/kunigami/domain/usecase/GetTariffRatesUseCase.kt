@@ -9,14 +9,14 @@ package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.model.product.Tariff
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.cancellation.CancellationException
 
 class GetTariffRatesUseCase(
-    private val restApiRepository: RestApiRepository,
+    private val octopusApiRepository: OctopusApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(
@@ -24,7 +24,7 @@ class GetTariffRatesUseCase(
     ): Result<Tariff> {
         return withContext(dispatcher) {
             runCatching {
-                restApiRepository.getTariff(tariffCode = tariffCode).fold(
+                octopusApiRepository.getTariff(tariffCode = tariffCode).fold(
                     onSuccess = { tariff ->
                         tariff
                     },

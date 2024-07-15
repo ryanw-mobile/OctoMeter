@@ -3,7 +3,7 @@ package com.rwmobi.kunigami.domain.usecase
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
-import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
+import com.rwmobi.kunigami.domain.repository.FakeOctopusApiRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -17,14 +17,14 @@ import kotlin.test.assertNull
 class GetLatestProductByKeywordUseCaseTest {
 
     private lateinit var getLatestProductByKeywordUseCase: GetLatestProductByKeywordUseCase
-    private lateinit var fakeRestApiRepository: FakeRestApiRepository
+    private lateinit var fakeRestApiRepository: FakeOctopusApiRepository
     private val keyword = "AGILE"
 
     @BeforeTest
     fun setupUseCase() {
-        fakeRestApiRepository = FakeRestApiRepository()
+        fakeRestApiRepository = FakeOctopusApiRepository()
         getLatestProductByKeywordUseCase = GetLatestProductByKeywordUseCase(
-            restApiRepository = fakeRestApiRepository,
+            octopusApiRepository = fakeRestApiRepository,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }

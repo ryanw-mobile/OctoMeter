@@ -1,0 +1,13 @@
+fragment ElectricityAgreementTypeFragment on ElectricityAgreementType{
+    agreedFrom
+    agreedTo
+    validFrom
+    validTo
+    tariff {
+        ...StandardTariffFragment
+        ...DayNightTariffFragment
+        ...ThreeRateTariffFragment
+        ...HalfHourlyTariffFragment
+        ...PrepayTariffFragment
+    }
+}

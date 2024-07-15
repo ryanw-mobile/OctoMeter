@@ -7,6 +7,8 @@
 
 package com.rwmobi.kunigami.data.source.local.cache
 
+import com.rwmobi.kunigami.data.source.network.dto.auth.Token
+import com.rwmobi.kunigami.data.source.network.dto.auth.TokenState
 import com.rwmobi.kunigami.domain.extensions.toSystemDefaultLocalDate
 import com.rwmobi.kunigami.domain.model.account.Account
 import kotlinx.datetime.Clock
@@ -14,9 +16,14 @@ import kotlinx.datetime.Instant
 
 class InMemoryCacheDataSource {
     private var cachedProfile: Pair<Account, Instant>? = null
+    private var cachedToken: Pair<String, Token>? = null
 
     fun cacheProfile(account: Account, createdAt: Instant) {
         cachedProfile = Pair(account, createdAt)
+    }
+
+    fun cacheToken(apiKey: String, token: Token) {
+        cachedToken = Pair(apiKey, token)
     }
 
     /***
@@ -35,7 +42,21 @@ class InMemoryCacheDataSource {
         }
     }
 
+    fun getToken(apiKey: String): Token? {
+        with(cachedToken) {
+            return if (this == null ||
+                first != apiKey ||
+                second.getTokenState() == TokenState.EXPIRED
+            ) {
+                null
+            } else {
+                this.second
+            }
+        }
+    }
+
     fun clear() {
         cachedProfile = null
+        cachedToken = null
     }
 }

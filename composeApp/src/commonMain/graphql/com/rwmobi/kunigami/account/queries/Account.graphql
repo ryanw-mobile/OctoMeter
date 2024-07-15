@@ -1,0 +1,29 @@
+query Account($accountNumber: String!) {
+    account(accountNumber: $accountNumber) {
+        id
+        number
+        status
+        balance
+        billingAddress
+        createdAt
+#        properties {
+#            ...PropertyTypeFragment
+#        }
+        electricityAgreements {
+            ...ElectricityAgreementTypeFragment
+        }
+        canRenewTariff
+#        trackerTariffDailyPricing {
+#            ...TrackerTariffDailyPricingFragment
+#        }
+        cotReadingWindowDays
+        canBeWithdrawn
+        currentEstimatedSsd
+        earliestPossibleSsd
+        latestPossibleSsd
+#        operationsTeam {
+#            ...OperationsTeamTypeFragment
+#        }
+        canInputMeterReadingsViaIvr
+    }
+}

@@ -8,20 +8,20 @@
 package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.exceptions.except
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.cancellation.CancellationException
 
 class ClearCacheUseCase(
-    private val restApiRepository: RestApiRepository,
+    private val octopusApiRepository: OctopusApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(): Result<Unit> {
         return withContext(dispatcher) {
             runCatching {
-                restApiRepository.clearCache()
+                octopusApiRepository.clearCache()
             }.except<CancellationException, _>()
         }
     }

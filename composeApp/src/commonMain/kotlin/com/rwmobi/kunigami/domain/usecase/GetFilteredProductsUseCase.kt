@@ -10,18 +10,18 @@ package com.rwmobi.kunigami.domain.usecase
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class GetFilteredProductsUseCase(
-    private val restApiRepository: RestApiRepository,
+    private val octopusApiRepository: OctopusApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(): Result<List<ProductSummary>> {
         return withContext(dispatcher) {
-            val getProductsResult = restApiRepository.getProducts()
+            val getProductsResult = octopusApiRepository.getProducts()
             getProductsResult.fold(
                 onSuccess = {
                     getProductsResult.mapCatching { products ->

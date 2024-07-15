@@ -8,18 +8,18 @@
 package com.rwmobi.kunigami.domain.usecase
 
 import co.touchlab.kermit.Logger
-import com.rwmobi.kunigami.domain.repository.RestApiRepository
+import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class GetLatestProductByKeywordUseCase(
-    private val restApiRepository: RestApiRepository,
+    private val octopusApiRepository: OctopusApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(keyword: String): String? {
         return withContext(dispatcher) {
-            val getProductsResult = restApiRepository.getProducts()
+            val getProductsResult = octopusApiRepository.getProducts()
             getProductsResult.fold(
                 onSuccess = { products ->
                     val productCode = products.sortedByDescending {

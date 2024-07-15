@@ -9,7 +9,7 @@ package com.rwmobi.kunigami.domain.usecase
 
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
-import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
+import com.rwmobi.kunigami.domain.repository.FakeOctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import com.rwmobi.kunigami.test.samples.AccountSampleData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,8 +30,8 @@ class GetConsumptionAndCostUseCaseTest {
 
     private lateinit var getConsumptionAndCostUseCase: GetConsumptionAndCostUseCase
     private lateinit var fakeUserPreferenceRepository: FakeUserPreferencesRepository
-    private lateinit var fakeRestApiRepository: FakeRestApiRepository
-    private lateinit var fakeDemoRestApiRepository: FakeRestApiRepository
+    private lateinit var fakeRestApiRepository: FakeOctopusApiRepository
+    private lateinit var fakeDemoRestApiRepository: FakeOctopusApiRepository
 
     // common values not affecting the test results
     private val fakeApiKey = "test_api_key"
@@ -43,12 +43,12 @@ class GetConsumptionAndCostUseCaseTest {
     @BeforeTest
     fun setupUseCase() {
         fakeUserPreferenceRepository = FakeUserPreferencesRepository()
-        fakeRestApiRepository = FakeRestApiRepository()
-        fakeDemoRestApiRepository = FakeRestApiRepository()
+        fakeRestApiRepository = FakeOctopusApiRepository()
+        fakeDemoRestApiRepository = FakeOctopusApiRepository()
         getConsumptionAndCostUseCase = GetConsumptionAndCostUseCase(
             userPreferencesRepository = fakeUserPreferenceRepository,
-            restApiRepository = fakeRestApiRepository,
-            demoRestApiRepository = fakeDemoRestApiRepository,
+            octopusApiRepository = fakeRestApiRepository,
+            demoOctopusApiRepository = fakeDemoRestApiRepository,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }

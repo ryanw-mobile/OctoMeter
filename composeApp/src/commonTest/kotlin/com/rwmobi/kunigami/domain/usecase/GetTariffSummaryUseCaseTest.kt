@@ -1,6 +1,6 @@
 package com.rwmobi.kunigami.domain.usecase
 
-import com.rwmobi.kunigami.domain.repository.FakeRestApiRepository
+import com.rwmobi.kunigami.domain.repository.FakeOctopusApiRepository
 import com.rwmobi.kunigami.test.samples.TariffSampleData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -13,13 +13,13 @@ import kotlin.test.assertTrue
 @OptIn(ExperimentalCoroutinesApi::class)
 class GetTariffSummaryUseCaseTest {
     private lateinit var getTariffUseCase: GetTariffUseCase
-    private lateinit var fakeRestApiRepository: FakeRestApiRepository
+    private lateinit var fakeRestApiRepository: FakeOctopusApiRepository
 
     @BeforeTest
     fun setupUseCase() {
-        fakeRestApiRepository = FakeRestApiRepository()
+        fakeRestApiRepository = FakeOctopusApiRepository()
         getTariffUseCase = GetTariffUseCase(
-            restApiRepository = fakeRestApiRepository,
+            octopusApiRepository = fakeRestApiRepository,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }
