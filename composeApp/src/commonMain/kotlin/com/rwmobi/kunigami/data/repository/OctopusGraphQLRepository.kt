@@ -62,8 +62,15 @@ class OctopusGraphQLRepository(
                 val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
                 requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
 
-                val apiResponse = productsEndpoint.getProduct(productCode = productCode)
-                apiResponse?.toTariff(tariffCode = tariffCode) ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
+                val postcode = Tariff.getRetailRegion(tariffCode = tariffCode)?.postcode
+                requireNotNull(postcode) { "Unable to resolve retail region for $tariffCode" }
+
+                val response = graphQLEndpoint.getSingleEnergyProduct(
+                    productCode = productCode,
+                    postcode = postcode,
+                )
+
+                response?.energyProduct?.toTariff(tariffCode = tariffCode) ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
             }.except<CancellationException, _>()
         }
     }
