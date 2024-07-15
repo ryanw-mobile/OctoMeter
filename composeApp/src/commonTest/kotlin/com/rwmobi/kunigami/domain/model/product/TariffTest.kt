@@ -28,8 +28,6 @@ class TariffTest {
         tariffPaymentTerm = TariffPaymentTerm.DIRECT_DEBIT_MONTHLY,
         tariffCode = tariffCode,
         vatInclusiveStandingCharge = 100.0,
-        vatInclusiveOnlineDiscount = 5.0,
-        vatInclusiveDualFuelDiscount = 10.0,
         exitFeesType = ExitFeesType.NONE,
         vatInclusiveExitFees = 0.0,
         vatInclusiveStandardUnitRate = 20.0,
@@ -41,7 +39,6 @@ class TariffTest {
         description = "Octopus Go Green is our EV tariff exclusively available to Volkswagen Group EV drivers.",
         isVariable = true,
         availability = Instant.parse("2022-10-14T00:00:00+01:00")..Instant.DISTANT_FUTURE,
-        tariffActiveAt = Instant.parse("2024-06-22T16:54:27.330542Z"),
     )
 
     @Test

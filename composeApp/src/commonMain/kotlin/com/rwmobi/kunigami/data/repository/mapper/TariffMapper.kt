@@ -53,12 +53,8 @@ fun SingleProductApiResponse.toTariff(
         availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
 
         tariffCode = rates.code,
-        tariffActiveAt = tariffsActiveAt,
-
         tariffPaymentTerm = tariffPaymentTerm,
         vatInclusiveStandingCharge = rates.standingChargeIncVat,
-        vatInclusiveOnlineDiscount = rates.onlineDiscountIncVat,
-        vatInclusiveDualFuelDiscount = rates.dualFuelDiscountIncVat,
         exitFeesType = ExitFeesType.fromApiValue(value = rates.exitFeesType),
         vatInclusiveExitFees = rates.exitFeesIncVat,
         vatInclusiveStandardUnitRate = rates.standardUnitRateIncVat,

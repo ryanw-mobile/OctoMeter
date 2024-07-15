@@ -27,10 +27,7 @@ data class Tariff(
     val tariffPaymentTerm: TariffPaymentTerm,
     // The layered DTOs were flattened
     val tariffCode: String,
-    val tariffActiveAt: Instant,
     val vatInclusiveStandingCharge: Double,
-    val vatInclusiveOnlineDiscount: Double,
-    val vatInclusiveDualFuelDiscount: Double,
     val exitFeesType: ExitFeesType,
     val vatInclusiveExitFees: Double,
     val vatInclusiveStandardUnitRate: Double?,
