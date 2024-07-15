@@ -64,7 +64,9 @@ All downloadables are provided under the [Release Section](https://github.com/ry
 
 Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/OctoMeter/issues).
 
-This project has entered the second development phase. The Ktor Rest API data layer is being rewritten to use GraphQL. [Version 1.4.0](https://github.com/ryanw-mobile/OctoMeter/tree/release/v1.4.0) is the last version it contains Ktor-RestAPI.
+This project has entered the second development phase - Ktor RestAPI calls are being migrated to GraphQL.
+
+[Version 1.4.0](https://github.com/ryanw-mobile/OctoMeter/tree/release/v1.4.0) is the last version it contains Ktor-RestAPI.
 
 I have limited development budget. There are known issues which are not likely to be address for the time being due to shortage of funding.
 
@@ -113,8 +115,9 @@ I have limited development budget. There are known issues which are not likely t
 * [AndroidX UI Automator](https://developer.android.com/training/testing/ui-automator) - Apache 2.0 - UI automation testing framework
 * [AndroidX Benchmark](https://developer.android.com/jetpack/androidx/releases/benchmark) - Apache 2.0 - Benchmarking library
 * [AndroidX Profile Installer](https://developer.android.com/jetpack/androidx/releases/profileinstaller) - Apache 2.0 - Install profiles for faster startup
-* [SLF4J](http://www.slf4j.org/) - MIT - Simple facade for logging systems.
+* [SLF4J](http://www.slf4j.org/) - MIT - Simple facade for logging systems
 * [Skiko](https://github.com/JetBrains/skiko) - Apache 2.0 - Kotlin Multiplatform bindings to Skia
+* [Apollo GraphQL](https://www.apollographql.com/docs/android/) - MIT - A strongly-typed, caching GraphQL client for Android and Kotlin Multiplatform
 
 ### Plugins
 
@@ -133,6 +136,7 @@ I have limited development budget. There are known issues which are not likely t
 * [Serialization Plugin](https://github.com/Kotlin/kotlinx.serialization) - JetBrains - Plugin for Kotlin serialization
 * [BuildConfig Plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) - gmazzo - Plugin for generating BuildConfig classes
 * [Baseline Profile Plugin](https://developer.android.com/studio/profile/baselineprofile) - AndroidX - Plugin for generating baseline profiles
+* [Apollo GraphQL Plugin](https://www.apollographql.com/docs/android/advanced/gradle-plugin/) - Apollo GraphQL - Plugin for integrating Apollo GraphQL client with Android and Kotlin projects
 
 <br /><br />
 
