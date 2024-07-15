@@ -25,27 +25,35 @@ class GraphQLEndpoint(
 ) {
 
     suspend fun getAuthorizationToken(apiKey: String): Result<Token> {
-        return withContext(dispatcher) {
-            runCatching {
-                val input = ObtainJSONWebTokenInput(APIKey = Optional.present(apiKey))
-                val response = apolloClient.mutation(ObtainKrakenTokenMutation(input)).execute()
-
-                response.data?.obtainKrakenToken?.let {
-                    Token.fromObtainKrakenToken(obtainKrakenToken = it)
-                } ?: throw IllegalArgumentException("failed")
-            }
-        }.except<CancellationException, _>()
+        val input = ObtainJSONWebTokenInput(APIKey = Optional.present(apiKey))
+        return obtainKrakenToken(input = input)
     }
 
     suspend fun refreshAuthorizationToken(refreshToken: String): Result<Token> {
+        val input = ObtainJSONWebTokenInput(refreshToken = Optional.present(refreshToken))
+        return obtainKrakenToken(input = input)
+    }
+
+    private suspend fun obtainKrakenToken(input: ObtainJSONWebTokenInput): Result<Token> {
         return withContext(dispatcher) {
             runCatching {
-                val input = ObtainJSONWebTokenInput(refreshToken = Optional.present(refreshToken))
                 val response = apolloClient.mutation(ObtainKrakenTokenMutation(input)).execute()
 
                 response.data?.obtainKrakenToken?.let {
+                    // Handle (potentially partial) data
                     Token.fromObtainKrakenToken(obtainKrakenToken = it)
-                } ?: throw IllegalArgumentException("failed")
+                } ?: run {
+                    // Something wrong happened
+                    response.exception?.let {
+                        // Handle fetch errors
+                        it.printStackTrace()
+                        throw it
+                    } ?: run {
+                        // Handle GraphQL errors in response.errors
+                        val concatenatedMessages = response.errors?.joinToString(separator = ",") { it.message }
+                        throw IllegalStateException("Unhandled response errors: $concatenatedMessages")
+                    }
+                }
             }
         }.except<CancellationException, _>()
     }

@@ -91,7 +91,7 @@ class InMemoryCacheDataSourceTest {
             token = "test-token",
             expiresIn = Clock.System.now().epochSeconds + 3600,
             refreshToken = "test-refresh-token",
-            refreshExpiresIn = Clock.System.now().epochSeconds + 7200
+            refreshExpiresIn = Clock.System.now().epochSeconds + 7200,
         )
         cacheDataSource.cacheToken(apiKey, token)
 
@@ -106,7 +106,7 @@ class InMemoryCacheDataSourceTest {
             token = "test-token",
             expiresIn = Clock.System.now().epochSeconds - 3600,
             refreshToken = "test-refresh-token",
-            refreshExpiresIn = Clock.System.now().epochSeconds - 1800
+            refreshExpiresIn = Clock.System.now().epochSeconds - 1800,
         )
         cacheDataSource.cacheToken(apiKey, token)
 
@@ -121,7 +121,7 @@ class InMemoryCacheDataSourceTest {
             token = "test-token",
             expiresIn = Clock.System.now().epochSeconds + 3600,
             refreshToken = "test-refresh-token",
-            refreshExpiresIn = Clock.System.now().epochSeconds + 7200
+            refreshExpiresIn = Clock.System.now().epochSeconds + 7200,
         )
         cacheDataSource.cacheToken(apiKey, token)
 
@@ -136,7 +136,7 @@ class InMemoryCacheDataSourceTest {
             token = "test-token",
             expiresIn = Clock.System.now().epochSeconds - 3600,
             refreshToken = "test-refresh-token",
-            refreshExpiresIn = Clock.System.now().epochSeconds + 3600
+            refreshExpiresIn = Clock.System.now().epochSeconds + 3600,
         )
         cacheDataSource.cacheToken(apiKey, token)
 
