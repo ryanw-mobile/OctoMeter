@@ -396,7 +396,7 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
 
 apollo {
     service("service") {
-        packageName.set(productNameSpace)
+        packageName.set("$productNameSpace.graphql")
     }
 }
 
@@ -456,6 +456,7 @@ kover.reports.filters.excludes {
             "$productNameSpace.ui.previewparameter",
             "$productNameSpace.ui.theme",
             "$productNameSpace.ui.previewsampledata",
+            "$productNameSpace.graphql.*",
             "androidx",
             "kunigami.composeapp.generated.*",
         ),
