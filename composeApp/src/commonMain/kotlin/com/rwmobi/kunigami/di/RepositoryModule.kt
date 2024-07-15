@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.di
 
 import com.rwmobi.kunigami.data.repository.DemoOctopusApiRepository
+import com.rwmobi.kunigami.data.repository.OctopusGraphQLRepository
 import com.rwmobi.kunigami.data.repository.OctopusRestApiRepository
 import com.rwmobi.kunigami.data.repository.OctopusUserPreferencesRepository
 import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
@@ -27,12 +28,24 @@ val repositoryModule = module {
         )
     }
 
+    single<OctopusApiRepository>(named("graphql")) {
+        OctopusGraphQLRepository(
+            productsEndpoint = get(),
+            electricityMeterPointsEndpoint = get(),
+            accountEndpoint = get(),
+            inMemoryCacheDataSource = get(),
+            databaseDataSource = get(),
+            graphQLEndpoint = get(),
+            dispatcher = get(named("DefaultDispatcher")),
+        )
+    }
+
     single<OctopusApiRepository>(named("demo")) {
         DemoOctopusApiRepository()
     }
 
     // Set the "production" instance as the default for RestApiRepository
-    single<OctopusApiRepository> { get(named("production")) }
+    single<OctopusApiRepository> { get(named("graphql")) }
 
     factory<UserPreferencesRepository> {
         OctopusUserPreferencesRepository(

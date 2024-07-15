@@ -5,9 +5,8 @@
  *
  */
 
-package com.rwmobi.kunigami.data.source.network
+package com.rwmobi.kunigami.data.source.network.restapi
 
-import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.test.samples.GetDayUnitRatesSampleData
 import com.rwmobi.kunigami.test.samples.GetNightUnitRatesSampleData

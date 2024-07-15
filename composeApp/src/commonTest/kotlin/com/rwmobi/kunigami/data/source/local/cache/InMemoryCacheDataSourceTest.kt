@@ -7,6 +7,7 @@
 
 package com.rwmobi.kunigami.data.source.local.cache
 
+import com.rwmobi.kunigami.data.source.network.dto.auth.Token
 import com.rwmobi.kunigami.ui.previewsampledata.AccountSamples
 import kotlinx.datetime.Clock
 import kotlin.test.AfterTest
@@ -66,5 +67,80 @@ class InMemoryCacheDataSourceTest {
         cacheDataSource.clear()
         val cachedAccount = cacheDataSource.getProfile(accountNumber = AccountSamples.account928.accountNumber)
         assertNull(cachedAccount)
+    }
+
+    @Test
+    fun `cacheToken should cache the token`() {
+        val apiKey = "test-api-key"
+        val token = Token(
+            token = "test-token",
+            expiresIn = Clock.System.now().epochSeconds + 3600,
+            refreshToken = "test-refresh-token",
+            refreshExpiresIn = Clock.System.now().epochSeconds + 7200,
+        )
+        cacheDataSource.cacheToken(apiKey, token)
+
+        val cachedToken = cacheDataSource.getToken(apiKey)
+        assertEquals(expected = token, actual = cachedToken)
+    }
+
+    @Test
+    fun `getToken should return null if apiKey does not match`() {
+        val apiKey = "test-api-key"
+        val token = Token(
+            token = "test-token",
+            expiresIn = Clock.System.now().epochSeconds + 3600,
+            refreshToken = "test-refresh-token",
+            refreshExpiresIn = Clock.System.now().epochSeconds + 7200
+        )
+        cacheDataSource.cacheToken(apiKey, token)
+
+        val cachedToken = cacheDataSource.getToken("another-api-key")
+        assertNull(cachedToken)
+    }
+
+    @Test
+    fun `getToken should return null if token is expired`() {
+        val apiKey = "test-api-key"
+        val token = Token(
+            token = "test-token",
+            expiresIn = Clock.System.now().epochSeconds - 3600,
+            refreshToken = "test-refresh-token",
+            refreshExpiresIn = Clock.System.now().epochSeconds - 1800
+        )
+        cacheDataSource.cacheToken(apiKey, token)
+
+        val cachedToken = cacheDataSource.getToken(apiKey)
+        assertNull(cachedToken)
+    }
+
+    @Test
+    fun `getToken should return token if it is valid`() {
+        val apiKey = "test-api-key"
+        val token = Token(
+            token = "test-token",
+            expiresIn = Clock.System.now().epochSeconds + 3600,
+            refreshToken = "test-refresh-token",
+            refreshExpiresIn = Clock.System.now().epochSeconds + 7200
+        )
+        cacheDataSource.cacheToken(apiKey, token)
+
+        val cachedToken = cacheDataSource.getToken(apiKey)
+        assertEquals(expected = token, actual = cachedToken)
+    }
+
+    @Test
+    fun `getToken should return token if it is in refresh state`() {
+        val apiKey = "test-api-key"
+        val token = Token(
+            token = "test-token",
+            expiresIn = Clock.System.now().epochSeconds - 3600,
+            refreshToken = "test-refresh-token",
+            refreshExpiresIn = Clock.System.now().epochSeconds + 3600
+        )
+        cacheDataSource.cacheToken(apiKey, token)
+
+        val cachedToken = cacheDataSource.getToken(apiKey)
+        assertEquals(expected = token, actual = cachedToken)
     }
 }

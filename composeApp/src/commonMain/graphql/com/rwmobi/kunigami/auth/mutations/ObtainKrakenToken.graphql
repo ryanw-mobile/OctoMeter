@@ -4,7 +4,6 @@ mutation ObtainKrakenToken($input: ObtainJSONWebTokenInput!) {
             ...PossibleErrorTypeFragment
         }
         token
-        payload
         refreshToken
         refreshExpiresIn
     }
