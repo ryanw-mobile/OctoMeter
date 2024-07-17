@@ -1,4 +1,4 @@
-## _[Project Kunigami](https://maps.app.goo.gl/cdZWxxSgx8jM5QZC7)_ / <br/>OctoMeter: Empowering Smart Electricity Usage<br/>![Gradle Build](https://github.com/ryanw-mobile/OctoMeter/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/OctoMeter/graph/badge.svg?token=fGinpoyVUp)](https://codecov.io/gh/ryanw-mobile/OctoMeter) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+## _[Project Kunigami](https://maps.app.goo.gl/cdZWxxSgx8jM5QZC7)_ / <br/>OctoMeter: Empowering Smart Electricity Usage<br/>[![Pull request](https://img.shields.io/badge/PRs-welcome-success?style=flat)](https://github.com/ryanw-mobile/OctoMeter/pulls) ![GitHub Repo stars](https://img.shields.io/github/stars/ryanw-mobile/OctoMeter?style=flat) ![Gradle Build](https://github.com/ryanw-mobile/OctoMeter/actions/workflows/main_build.yml/badge.svg) [![codecov](https://codecov.io/gh/ryanw-mobile/OctoMeter/graph/badge.svg?token=fGinpoyVUp)](https://codecov.io/gh/ryanw-mobile/OctoMeter) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 ### Production-grade Kotlin Multiplatform App targeting Android, iOS, Desktop
 
@@ -8,7 +8,7 @@
 
 ### Made in the UK, For the UK.
 
-Complementary article: [Releasing my First True Kotlin Multiplatform App](https://medium.com/@callmeryan/releasing-my-first-true-kotlin-multiplatform-app-60d81e739eb0)
+> Complementary article: [Releasing my First True Kotlin Multiplatform App](https://medium.com/@callmeryan/releasing-my-first-true-kotlin-multiplatform-app-60d81e739eb0)
 
 This app is designed for Octopus Energy customers in the UK who have a smart meter installed. If you don’t have a smart meter, you can still try out the app. It runs in demo mode by default, showing fake user data when authentication is required.
 
@@ -76,6 +76,22 @@ I have limited development budget. There are known issues which are not likely t
 
 <br /><br />
 
+## Data Security and Privacy
+
+First thing first: This app can run under the demo mode without requiring any credentials.
+
+To pull real smart meter data from your Octopus Energy account, you need to generate an API key for
+your account
+at [https://octopus.energy/dashboard/new/accounts/personal-details/api-access](https://octopus.energy/dashboard/new/accounts/personal-details/api-access).
+This app never asks for your Octopus customer account password, and you can always generate a new
+API key to invalidate the old keys.
+
+This app stores your API key, account number, MPAN and meter serial number
+using `EncryptedSharedPreferences` on Android, or the Keychain on iOS. On desktop, these credentials
+are currently unencrypted, but expected to do so when the library we use supports it.
+
+<br /><br />
+
 ## Some technical details
 
 * `/composeApp` is for Kotlin code shared across the Compose Multiplatform application.
@@ -140,23 +156,7 @@ I have limited development budget. There are known issues which are not likely t
 
 <br /><br />
 
-## Data Security and Privacy
-
-First thing first: This app can run under the demo mode without requiring any credentials.
-
-To pull real smart meter data from your Octopus Energy account, you need to generate an API key for
-your account
-at [https://octopus.energy/dashboard/new/accounts/personal-details/api-access](https://octopus.energy/dashboard/new/accounts/personal-details/api-access).
-This app never asks for your Octopus customer account password, and you can always generate a new
-API key to invalidate the old keys.
-
-This app stores your API key, account number, MPAN and meter serial number
-using `EncryptedSharedPreferences` on Android, or the Keychain on iOS. On desktop, these credentials
-are currently unencrypted, but expected to do so when the library we use supports it.
-
-<br /><br />
-
-## License
+## Licenses
 
 This project is licensed under the Mozilla Public License Version 2.0 (MPL-2.0) with a non-commercial clause. See the [LICENSE](./LICENSE) file for details.
 
