@@ -6,15 +6,26 @@
 
 # Keep Ktor classes
 -keep class io.ktor.** { *; }
--dontwarn io.ktor.**
 -dontnote io.ktor.**
 
 # Keep all DTO classes in the package
 -keep class com.rwmobi.kunigami.data.source.network.dto.** { *; }
+-dontnote com.rwmobi.kunigami.data.source.network.dto.**
 -keep class com.rwmobi.kunigami.domain.model.** { *; }
+-dontnote com.rwmobi.kunigami.domain.model.**
+
+# Apollo workarounds
+-dontnote okio.**
+-keep class com.apollographql.apollo.** { *; }
+-dontnote com.apollographql.**
+-keep class okhttp3.** { *; }
+-keep class org.bouncycastle.** { *; }
+-dontnote okhttp3.internal.platform.**
+-dontwarn okhttp3.internal.platform.**
 
 # Keep the class and fields of kotlinx.datetime.Instant
 -keep class kotlinx.datetime.Instant { *; }
+-dontnote kotlinx.datetime.Instant
 
 # Kotlinx Serialization
 -keep class kotlinx.serialization.** { *; }
@@ -43,6 +54,7 @@
 
 # OSHI classes
 -keep class oshi.** { *; }
+-dontnote oshi.**
 
 # Keep the entire MacOSThemeDetector class and its nested classes
 -keep class com.jthemedetecor.** { *; }
@@ -91,10 +103,10 @@
 # RoomDB
 # Room persistence library
 -keep class androidx.room.** { *; }
--dontwarn androidx.room.**
+-dontnote androidx.room.**
 -keep class androidx.sqlite.db.** { *; }
--dontwarn androidx.sqlite.db.**
 -keep class androidx.sqlite.** { *; }
+-dontnote androidx.sqlite.db.**
 
 # Keep generated Room classes
 -keepclassmembers class * {
@@ -108,3 +120,4 @@
 # Keep the DAO classes
 -keep interface * extends androidx.room.RoomDatabase { *; }
 -keep class com.rwmobi.kunigami.data.source.local.database.dao.** { *; }
+-dontnote com.rwmobi.kunigami.data.source.local.database.dao.**
