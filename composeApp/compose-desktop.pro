@@ -11,7 +11,19 @@
 
 # Keep all DTO classes in the package
 -keep class com.rwmobi.kunigami.data.source.network.dto.** { *; }
+-dontnote com.rwmobi.kunigami.data.source.network.dto.**
 -keep class com.rwmobi.kunigami.domain.model.** { *; }
+-dontnote com.rwmobi.kunigami.domain.model.**
+
+# Apollo workarounds
+-dontnote okio.**
+# -keep class com.rwmobi.kunigami.graphql.** { *; }
+-keep class com.apollographql.apollo.** { *; }
+-dontnote com.apollographql.**
+-keep class okhttp3.** { *; }
+-keep class org.bouncycastle.** { *; }
+-dontwarn okhttp3.internal.platform.**
+-dontnote okhttp3.**
 
 # Keep the class and fields of kotlinx.datetime.Instant
 -keep class kotlinx.datetime.Instant { *; }
@@ -92,6 +104,7 @@
 # Room persistence library
 -keep class androidx.room.** { *; }
 -dontwarn androidx.room.**
+-dontnote androidx.room.**
 -keep class androidx.sqlite.db.** { *; }
 -dontwarn androidx.sqlite.db.**
 -keep class androidx.sqlite.** { *; }
@@ -108,3 +121,4 @@
 # Keep the DAO classes
 -keep interface * extends androidx.room.RoomDatabase { *; }
 -keep class com.rwmobi.kunigami.data.source.local.database.dao.** { *; }
+-dontnote com.rwmobi.kunigami.data.source.local.database.dao.**
