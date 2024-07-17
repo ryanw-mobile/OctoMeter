@@ -233,7 +233,7 @@ class AgileViewModel(
      * Best effort to fetch reference tariffs for comparison. No harm if it fails, so it won't stop loading.
      */
     private suspend fun fetchReferenceTariffs(region: RetailRegion) {
-        val fixedProductCode = getLatestProductByKeywordUseCase(keyword = "FIX-12M") ?: fallBackFixedProductCode
+        val fixedProductCode = getLatestProductByKeywordUseCase(keyword = "OE-FIX-12M") ?: fallBackFixedProductCode
         getTariffRatesUseCase(
             tariffCode = "E-1R-$fixedProductCode-${region.code}",
         ).fold(

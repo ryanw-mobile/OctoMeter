@@ -418,12 +418,13 @@ class OctopusGraphQLRepository(
         apiKey: String,
         accountNumber: String,
     ): Result<Account?> {
-        // inMemoryCacheDataSource.getProfile(accountNumber = accountNumber)?.let { return Result.success(it) }
+        inMemoryCacheDataSource.getProfile(accountNumber = accountNumber)?.let { return Result.success(it) }
 
         return withContext(dispatcher) {
             runCatching {
-                val token = getToken(apiKey = apiKey, forceRefresh = false)
-                Logger.v("Token = ${token?.token}, ${token?.getTokenState()}")
+                // Migration in progress but GraphQL isn't providing the contract history that we need. Put on hold
+//                val token = getToken(apiKey = apiKey, forceRefresh = false)
+//                Logger.v("Token = ${token?.token}, ${token?.getTokenState()}")
 
                 val apiResponse = accountEndpoint.getAccount(
                     apiKey = apiKey,
