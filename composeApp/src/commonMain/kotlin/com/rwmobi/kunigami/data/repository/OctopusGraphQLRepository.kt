@@ -453,8 +453,8 @@ class OctopusGraphQLRepository(
 
         return when {
             forceRefresh ||
-                    cachedToken == null ||
-                    (cachedToken.getTokenState() == TokenState.REFRESH && cachedToken.refreshToken == null)
+                cachedToken == null ||
+                (cachedToken.getTokenState() == TokenState.REFRESH && cachedToken.refreshToken == null)
             -> {
                 // We need a new token
                 Logger.v(tag = "getToken", messageString = "requesting a new token")
