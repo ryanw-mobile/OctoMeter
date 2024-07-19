@@ -1,21 +1,22 @@
-query EnergyProductsQuery($postcode: String!) {
+query EnergyProductsQuery($postcode: String!, $pageSize: Int!, $afterCursor: String) {
     energyProducts(
         postcode: $postcode
         availability: AVAILABLE
-        first: 100
+        first: $pageSize
         brand: "OCTOPUS_ENERGY"
         filterBy: DOMESTIC
+        after: $afterCursor
     ) {
         edges {
             node {
                 code
                 direction
-                fullName,
-                displayName,
-                description,
-                term,
-                availableTo,
-                availableFrom,
+                fullName
+                displayName
+                description
+                term
+                availableTo
+                availableFrom
                 isVariable
                 isChargedHalfHourly
                 isGreen
@@ -24,5 +25,9 @@ query EnergyProductsQuery($postcode: String!) {
             }
         }
         totalCount
+        pageInfo {
+            hasNextPage
+            endCursor
+        }
     }
 }
