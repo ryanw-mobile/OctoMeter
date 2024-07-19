@@ -1,0 +1,28 @@
+query EnergyProductsQuery($postcode: String!) {
+    energyProducts(
+        postcode: $postcode
+        availability: AVAILABLE
+        first: 100
+        brand: "OCTOPUS_ENERGY"
+        filterBy: DOMESTIC
+    ) {
+        edges {
+            node {
+                code
+                direction
+                fullName,
+                displayName,
+                description,
+                term,
+                availableTo,
+                availableFrom,
+                isVariable
+                isChargedHalfHourly
+                isGreen
+                isPrepay
+                isBusiness
+            }
+        }
+        totalCount
+    }
+}
