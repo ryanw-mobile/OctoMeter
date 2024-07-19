@@ -25,6 +25,7 @@ import kotlin.time.Duration
 class DemoRestApiRepositoryTest {
 
     private val sampleTariffCode = "E-1R-SAMPLE-TARIFF-A"
+    private val samplePostcode = "WC1X 0ND"
     private val demoRepository = DemoOctopusApiRepository()
 
     @Test
@@ -37,7 +38,7 @@ class DemoRestApiRepositoryTest {
     @Test
     fun `getProducts should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
-            demoRepository.getProducts(requestedPage = 1)
+            demoRepository.getProducts(postcode = samplePostcode)
         }
     }
 

@@ -70,12 +70,12 @@ class OctopusRestApiRepository(
      * Otherwise, this function will retrieve all possible data the backend can provide.
      */
     override suspend fun getProducts(
-        requestedPage: Int?,
+        postcode: String,
     ): Result<List<ProductSummary>> {
         return withContext(dispatcher) {
             runCatching {
                 val combinedList = mutableListOf<ProductSummary>()
-                var page: Int? = requestedPage
+                var page: Int? = null
                 do {
                     val apiResponse = productsEndpoint.getProducts(page = page)
                     combinedList.addAll(apiResponse?.results?.map { it.toProductSummary() } ?: emptyList())

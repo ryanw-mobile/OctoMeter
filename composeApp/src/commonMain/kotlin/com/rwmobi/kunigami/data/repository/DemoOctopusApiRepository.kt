@@ -38,7 +38,7 @@ class DemoOctopusApiRepository : OctopusApiRepository {
         throw defaultException
     }
 
-    override suspend fun getProducts(requestedPage: Int?): Result<List<ProductSummary>> {
+    override suspend fun getProducts(postcode: String): Result<List<ProductSummary>> {
         throw defaultException
     }
 

@@ -14,6 +14,7 @@ import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
+import com.rwmobi.kunigami.graphql.EnergyProductsQuery
 import kotlinx.datetime.Instant
 
 fun ProductDetailsDto.toProductSummary() = ProductSummary(
@@ -34,6 +35,27 @@ fun ProductDetailsDto.toProductSummary() = ProductSummary(
     availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
     brand = brand,
 )
+
+fun EnergyProductsQuery.Node.toProductSummary(): ProductSummary {
+    return ProductSummary(
+        code = code,
+        direction = ProductDirection.fromApiValue(direction?.rawValue),
+        fullName = fullName,
+        displayName = displayName,
+        description = description,
+        features = mutableListOf<ProductFeature>().apply {
+            if (isVariable) add(ProductFeature.VARIABLE)
+            if (isGreen) add(ProductFeature.GREEN)
+            // if (isTracker) add(ProductFeature.TRACKER)
+            if (isPrepay) add(ProductFeature.PREPAY)
+            if (isBusiness) add(ProductFeature.BUSINESS)
+            //  if (isRestricted) add(ProductFeature.RESTRICTED)
+        }.toList(),
+        term = term,
+        availability = Instant.parse(availableFrom.toString())..(availableTo?.let { Instant.parse(it.toString()) } ?: Instant.DISTANT_FUTURE),
+        brand = "OCTOPUS_ENERGY", // Filtered in GraphQL query
+    )
+}
 
 fun SingleProductApiResponse.toProductDetails(): ProductDetails {
     return ProductDetails(

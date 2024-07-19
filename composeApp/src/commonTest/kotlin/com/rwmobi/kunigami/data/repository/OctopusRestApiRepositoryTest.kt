@@ -57,6 +57,7 @@ class OctopusRestApiRepositoryTest {
 
     private lateinit var octopusRestApiRepository: OctopusRestApiRepository
 
+    private val samplePostcode = "WC1X 0ND"
     private val fakeBaseUrl = "https://some.fakeurl.com"
     private val fakeApiKey = "sk_live_xXxX1xx1xx1xx1XXxX1Xxx1x"
     private val fakeAccountNumber = "B-1234A1A1"
@@ -217,7 +218,7 @@ class OctopusRestApiRepositoryTest {
             },
         )
 
-        val result = octopusRestApiRepository.getProducts()
+        val result = octopusRestApiRepository.getProducts(postcode = samplePostcode)
 
         assertTrue(result.isSuccess)
         assertEquals(expected = GetProductsSampleData.productSummary, actual = result.getOrNull())
@@ -229,24 +230,10 @@ class OctopusRestApiRepositoryTest {
             engine = mockEngineProductPaging,
         )
 
-        val result = octopusRestApiRepository.getProducts()
+        val result = octopusRestApiRepository.getProducts(postcode = samplePostcode)
 
         assertTrue(result.isSuccess)
         assertEquals(expected = GetProductsSampleData.productSummaryTwoPages, actual = result.getOrNull())
-    }
-
-    @Test
-    fun `getProducts should return correct domain model when requestedPage is not null`() = runTest {
-        setUpRepository(
-            engine = mockEngineProductPaging,
-        )
-
-        val result = octopusRestApiRepository.getProducts(
-            requestedPage = 2,
-        )
-
-        assertTrue(result.isSuccess)
-        assertEquals(expected = listOf(GetProductsSampleData.productSummaryPage2), actual = result.getOrNull())
     }
 
     @Test
@@ -255,7 +242,7 @@ class OctopusRestApiRepositoryTest {
             engine = mockEngineInternalServerError,
         )
 
-        val result = octopusRestApiRepository.getProducts()
+        val result = octopusRestApiRepository.getProducts(postcode = samplePostcode)
 
         assertTrue(result.isFailure)
         assertTrue(result.exceptionOrNull() is HttpException)

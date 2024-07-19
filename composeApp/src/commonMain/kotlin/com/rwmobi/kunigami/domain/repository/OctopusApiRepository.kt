@@ -20,7 +20,7 @@ import kotlinx.datetime.Instant
 
 interface OctopusApiRepository {
     suspend fun getTariff(tariffCode: String): Result<Tariff>
-    suspend fun getProducts(requestedPage: Int? = null): Result<List<ProductSummary>>
+    suspend fun getProducts(postcode: String): Result<List<ProductSummary>>
     suspend fun getProductDetails(productCode: String): Result<ProductDetails>
 
     suspend fun getStandardUnitRates(

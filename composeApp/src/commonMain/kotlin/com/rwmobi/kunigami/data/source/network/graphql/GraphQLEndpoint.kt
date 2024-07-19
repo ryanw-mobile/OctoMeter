@@ -30,7 +30,7 @@ class GraphQLEndpoint(
 
     suspend fun getEnergyProducts(
         postcode: String,
-        afterCursor: String?,
+        afterCursor: String? = null,
         pageSize: Int = defaultPageSize,
     ): EnergyProductsQuery.Data {
         return withContext(dispatcher) {

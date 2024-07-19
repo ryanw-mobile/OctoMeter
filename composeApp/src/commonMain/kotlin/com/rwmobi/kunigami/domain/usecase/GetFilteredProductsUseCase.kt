@@ -21,7 +21,7 @@ class GetFilteredProductsUseCase(
 ) {
     suspend operator fun invoke(): Result<List<ProductSummary>> {
         return withContext(dispatcher) {
-            val getProductsResult = octopusApiRepository.getProducts()
+            val getProductsResult = octopusApiRepository.getProducts(postcode = "WC1X 0ND")
             getProductsResult.fold(
                 onSuccess = {
                     getProductsResult.mapCatching { products ->
