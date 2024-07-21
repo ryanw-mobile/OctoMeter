@@ -49,11 +49,15 @@ class TariffsViewModel(
     fun refresh() {
         startLoading()
         viewModelScope.launch(dispatcher) {
+            // TODO: Call use case and update UI State so we at least have a default postcode to start with.
+            val postcode = (_uiState.value.queryPostCode) ?: "WC1X 0ND"
+
             val filteredProducts = getFilteredProductsUseCase()
             filteredProducts.fold(
                 onSuccess = { products ->
                     _uiState.update { currentUiState ->
                         currentUiState.copy(
+                            queryPostCode = postcode,
                             requestedScreenType = null, // force recalculation
                             productSummaries = products,
                             productDetails = null,
@@ -69,6 +73,10 @@ class TariffsViewModel(
                 },
             )
         }
+    }
+
+    fun onQueryPostcode(postcode: String) {
+        // TODO: literally a refresh but with a given postcode
     }
 
     fun getProductDetails(productCode: String) {

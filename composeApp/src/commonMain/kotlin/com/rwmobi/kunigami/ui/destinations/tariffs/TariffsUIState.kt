@@ -30,6 +30,7 @@ import org.jetbrains.compose.resources.getString
 @Immutable
 data class TariffsUIState(
     val isLoading: Boolean = true,
+    val queryPostCode: String? = null,
     val productSummaries: List<ProductSummary> = emptyList(),
     val productDetails: ProductDetails? = null,
     val requestedScreenType: TariffsScreenType? = null,

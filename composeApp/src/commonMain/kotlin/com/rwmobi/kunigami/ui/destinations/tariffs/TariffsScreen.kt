@@ -39,6 +39,7 @@ import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.ButtonTitleBar
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.DetailsScreenWrapper
+import com.rwmobi.kunigami.ui.destinations.tariffs.components.PostcodeInputBar
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.ProductItemAdaptive
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.TariffBottomSheet
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
@@ -101,6 +102,13 @@ fun TariffsScreen(
                                     .fillMaxWidth()
                                     .height(height = dimension.minListItemHeight),
                                 title = stringResource(resource = Res.string.navigation_tariffs),
+                            )
+
+                            PostcodeInputBar(
+                                modifier = Modifier.fillMaxWidth(),
+                                postcode = uiState.queryPostCode,
+                                onUpdatePostcode = {
+                                },
                             )
 
                             LazyColumn(

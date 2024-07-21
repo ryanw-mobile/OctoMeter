@@ -12,6 +12,7 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class TariffsUIEvent(
     val onRefresh: () -> Unit,
+    val onQueryPostcode: (postcode: String) -> Unit,
     val onProductItemClick: (productCode: String) -> Unit,
     val onProductDetailsDismissed: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
