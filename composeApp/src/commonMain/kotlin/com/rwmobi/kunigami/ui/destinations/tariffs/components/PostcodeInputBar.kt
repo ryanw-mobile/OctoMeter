@@ -11,10 +11,10 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,30 +24,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.pulse
+import kunigami.composeapp.generated.resources.content_description_edit_postcode
+import kunigami.composeapp.generated.resources.settings_24_regular
+import kunigami.composeapp.generated.resources.tariffs_postcode
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun PostcodeInputBar(
     modifier: Modifier = Modifier,
-    postcode: String?,
-    onUpdatePostcode: () -> Unit,
+    postcode: String,
+    onUpdatePostcode: (String) -> Unit,
 ) {
     val dimension = LocalDensity.current.getDimension()
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val accountFocusRequester = FocusRequester()
-    var postcodeInput by rememberSaveable { mutableStateOf(postcode) }
-    var isFocused by remember { mutableStateOf(false) }
+    var showEditPostcodeDialog by remember { mutableStateOf(false) }
+
+    if (showEditPostcodeDialog) {
+        EditPostcodeDialog(
+            postcode = postcode,
+            onDismiss = { showEditPostcodeDialog = false },
+            onUpdatePostcode = { newPostcode ->
+                showEditPostcodeDialog = false
+                onUpdatePostcode(newPostcode)
+            },
+        )
+    }
 
     Column(modifier = modifier) {
         Row(
@@ -55,63 +63,28 @@ internal fun PostcodeInputBar(
                 .background(color = MaterialTheme.colorScheme.surfaceContainerLow)
                 .fillMaxWidth()
                 .height(height = dimension.minListItemHeight)
-                .padding(horizontal = dimension.grid_2),
+                .padding(start = dimension.grid_2),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val queryStatusString = postcode ?: "Provide a valid UK post code to proceed"
             Text(
+                modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.bodyMedium,
-                text = "Postcode: $queryStatusString",
+                text = stringResource(resource = Res.string.tariffs_postcode, postcode),
             )
 
             IconButton(
-                onClick = { },
+                modifier = Modifier.size(size = dimension.imageButtonSize),
+                onClick = { showEditPostcodeDialog = true },
             ) {
                 Icon(
-                    painter = painterResource(resource = Res.drawable.pulse),
-                    contentDescription = "update postcode",
+                    modifier = Modifier.padding(
+                        horizontal = dimension.grid_1,
+                        vertical = dimension.grid_0_5,
+                    ),
+                    painter = painterResource(resource = Res.drawable.settings_24_regular),
+                    contentDescription = stringResource(resource = Res.string.content_description_edit_postcode),
                 )
             }
-
-//            TextField(
-//                modifier = Modifier
-//                    .width(width = 320.dp)
-//                    .focusRequester(focusRequester = accountFocusRequester)
-//                    .onFocusChanged { focusState ->
-//                        isFocused = focusState.isFocused
-//                    },
-//                value = postcodeInput,
-//                onValueChange = { postcodeInput = it },
-//                label = {
-//                    Text(text = "Postcode")
-//                },
-//                placeholder = {
-//                    Text(text = stringResource(Res.string.onboarding_placeholder_account))
-//                },
-//                singleLine = true,
-//                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-//                keyboardActions = KeyboardActions(
-//                    onDone = {
-//                        keyboardController?.hide()
-//                        onUpdatePostcode()
-//                    },
-//                ),
-//                trailingIcon = {
-//                    if (isFocused) {
-//                        Icon(
-//                            modifier = Modifier.clickable {
-//                                keyboardController?.hide()
-//                                onUpdatePostcode()
-//                            },
-//                            painter = painterResource(resource = Res.drawable.countdown_clock),
-//                            tint = MaterialTheme.colorScheme.onSecondaryContainer,
-//                            contentDescription = null,
-//                        )
-//                    }
-//                },
-//            )
-
-            Spacer(modifier = Modifier.weight(1f))
         }
 
         HorizontalDivider(
@@ -128,8 +101,7 @@ private fun Preview() {
         PostcodeInputBar(
             modifier = Modifier.fillMaxWidth(),
             postcode = "WC1X 0ND",
-            onUpdatePostcode = { -> },
-
+            onUpdatePostcode = { _ -> },
         )
     }
 }

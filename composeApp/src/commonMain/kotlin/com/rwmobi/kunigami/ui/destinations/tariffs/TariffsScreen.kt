@@ -79,9 +79,7 @@ fun TariffsScreen(
                 ErrorScreenHandler(
                     modifier = Modifier.fillMaxSize(),
                     specialErrorScreen = uiState.requestedScreenType.specialErrorScreen,
-                    onRefresh = {
-                        uiEvent.onRefresh()
-                    },
+                    onRefresh = { uiEvent.onRefresh() },
                 )
             }
 
@@ -104,12 +102,13 @@ fun TariffsScreen(
                                 title = stringResource(resource = Res.string.navigation_tariffs),
                             )
 
-                            PostcodeInputBar(
-                                modifier = Modifier.fillMaxWidth(),
-                                postcode = uiState.queryPostCode,
-                                onUpdatePostcode = {
-                                },
-                            )
+                            uiState.queryPostCode?.let { postcode ->
+                                PostcodeInputBar(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    postcode = postcode,
+                                    onUpdatePostcode = { uiEvent.onQueryPostcode(it) },
+                                )
+                            }
 
                             LazyColumn(
                                 state = mainLazyListState,
