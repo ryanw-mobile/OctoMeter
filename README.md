@@ -170,6 +170,7 @@ Every tiny piece matters. This App contains the icons contributed by:
 * [Fluent UI System Icons](https://github.com/microsoft/fluentui-system-icons)
 * [Fluent UI React](https://github.com/microsoft/fluentui/tree/master/packages/react-icons-mdl2)
 * [Phosphor Icons](https://github.com/phosphor-icons/core)
+* [Tabler Icons](https://github.com/tabler/tabler-icons)
 * [akar-icons](https://github.com/artcoholic/akar-icons)
 
 **Apache 2.0 License:**

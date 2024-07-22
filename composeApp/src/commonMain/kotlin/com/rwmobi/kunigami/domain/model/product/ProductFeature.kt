@@ -16,11 +16,13 @@ import kunigami.composeapp.generated.resources.dashboard
 import kunigami.composeapp.generated.resources.lock
 import kunigami.composeapp.generated.resources.product_feature_business
 import kunigami.composeapp.generated.resources.product_feature_green
+import kunigami.composeapp.generated.resources.product_feature_halfhourly
 import kunigami.composeapp.generated.resources.product_feature_prepay
 import kunigami.composeapp.generated.resources.product_feature_restricted
 import kunigami.composeapp.generated.resources.product_feature_tracker
 import kunigami.composeapp.generated.resources.product_feature_variable
 import kunigami.composeapp.generated.resources.shuffle
+import kunigami.composeapp.generated.resources.time_duration_30
 import kunigami.composeapp.generated.resources.trees
 import kunigami.composeapp.generated.resources.wallet
 import org.jetbrains.compose.resources.DrawableResource
@@ -29,6 +31,7 @@ import org.jetbrains.compose.resources.StringResource
 
 enum class ProductFeature(val stringResource: StringResource, val iconResource: DrawableResource) {
     VARIABLE(stringResource = Res.string.product_feature_variable, iconResource = Res.drawable.shuffle),
+    CHARGEDHALFHOURLY(stringResource = Res.string.product_feature_halfhourly, iconResource = Res.drawable.time_duration_30),
     GREEN(stringResource = Res.string.product_feature_green, iconResource = Res.drawable.trees),
     TRACKER(stringResource = Res.string.product_feature_tracker, iconResource = Res.drawable.dashboard),
     PREPAY(stringResource = Res.string.product_feature_prepay, iconResource = Res.drawable.wallet),

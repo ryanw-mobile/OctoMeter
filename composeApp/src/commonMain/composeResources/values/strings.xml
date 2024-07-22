@@ -119,6 +119,7 @@
     <string name="product_feature_prepay">Prepay</string>
     <string name="product_feature_business">Business</string>
     <string name="product_feature_restricted">Restricted</string>
+    <string name="product_feature_halfhourly">Half-hourly</string>
 
     <!-- Account Screen -->
     <string name="account_clear_credential_title">Clear Credentials and Switch to Demo Mode</string>

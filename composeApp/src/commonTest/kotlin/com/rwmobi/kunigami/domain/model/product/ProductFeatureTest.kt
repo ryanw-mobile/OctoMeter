@@ -50,6 +50,13 @@ class ProductFeatureTest {
         assertEquals(ProductFeature.RESTRICTED, feature)
     }
 
+    // Note: Theoretically - GraphQL doesn't need this and RestAPI doesn't have this
+    @Test
+    fun `fromApiValue should return CHARGEDHALFHOURLY for restricted`() {
+        val feature = ProductFeature.fromApiValue("chargedhalfhourly")
+        assertEquals(ProductFeature.CHARGEDHALFHOURLY, feature)
+    }
+
     @Test
     fun `fromApiValue should return null for unknown value`() {
         val feature = ProductFeature.fromApiValue("some_unknown_value")

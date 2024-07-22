@@ -30,6 +30,7 @@ fun ProductDetailsDto.toProductSummary() = ProductSummary(
         if (isPrepay) add(ProductFeature.PREPAY)
         if (isBusiness) add(ProductFeature.BUSINESS)
         if (isRestricted) add(ProductFeature.RESTRICTED)
+        // if (isChargedHalfHourly) add(ProductFeature.CHARGEDHALFHOURLY))
     }.toList(),
     term = term,
     availability = availableFrom..(availableTo ?: Instant.DISTANT_FUTURE),
@@ -46,10 +47,11 @@ fun EnergyProductsQuery.Node.toProductSummary(): ProductSummary {
         features = mutableListOf<ProductFeature>().apply {
             if (isVariable) add(ProductFeature.VARIABLE)
             if (isGreen) add(ProductFeature.GREEN)
-            // if (isTracker) add(ProductFeature.TRACKER)
             if (isPrepay) add(ProductFeature.PREPAY)
             if (isBusiness) add(ProductFeature.BUSINESS)
-            //  if (isRestricted) add(ProductFeature.RESTRICTED)
+            if (isChargedHalfHourly) add(ProductFeature.CHARGEDHALFHOURLY)
+            // if (isTracker) add(ProductFeature.TRACKER)
+            // if (isRestricted) add(ProductFeature.RESTRICTED)
         }.toList(),
         term = term,
         availability = Instant.parse(availableFrom.toString())..(availableTo?.let { Instant.parse(it.toString()) } ?: Instant.DISTANT_FUTURE),
