@@ -51,32 +51,27 @@ class TariffsViewModel(
         viewModelScope.launch(dispatcher) {
             // TODO: Call use case and update UI State so we at least have a default postcode to start with.
             val postcode = (_uiState.value.queryPostCode) ?: "WC1X 0ND"
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    queryPostCode = postcode,
+                )
+            }
 
-            val filteredProducts = getFilteredProductsUseCase()
-            filteredProducts.fold(
-                onSuccess = { products ->
-                    _uiState.update { currentUiState ->
-                        currentUiState.copy(
-                            queryPostCode = postcode,
-                            requestedScreenType = null, // force recalculation
-                            productSummaries = products,
-                            productDetails = null,
-                            isLoading = false,
-                        ).updateScreenType()
-                    }
-                },
-                onFailure = { throwable ->
-                    Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
-                    _uiState.update { currentUiState ->
-                        currentUiState.filterErrorAndStopLoading(throwable)
-                    }
-                },
-            )
+            getFilteredProducts()
         }
     }
 
     fun onQueryPostcode(postcode: String) {
-        // TODO: literally a refresh but with a given postcode
+        startLoading()
+        viewModelScope.launch(dispatcher) {
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    queryPostCode = postcode,
+                )
+            }
+
+            getFilteredProducts()
+        }
     }
 
     fun getProductDetails(productCode: String) {
@@ -132,6 +127,32 @@ class TariffsViewModel(
                 isLoading = true,
             )
         }
+    }
+
+    private suspend fun getFilteredProducts() {
+        // TODO: Call use case and update UI State so we at least have a default postcode to start with.
+        val postcode = (_uiState.value.queryPostCode) ?: "WC1X 0ND"
+
+        val filteredProducts = getFilteredProductsUseCase(postcode = postcode)
+        filteredProducts.fold(
+            onSuccess = { products ->
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        queryPostCode = postcode,
+                        requestedScreenType = null, // force recalculation
+                        productSummaries = products,
+                        productDetails = null,
+                        isLoading = false,
+                    ).updateScreenType()
+                }
+            },
+            onFailure = { throwable ->
+                Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                _uiState.update { currentUiState ->
+                    currentUiState.filterErrorAndStopLoading(throwable)
+                }
+            },
+        )
     }
 
     override fun onCleared() {
