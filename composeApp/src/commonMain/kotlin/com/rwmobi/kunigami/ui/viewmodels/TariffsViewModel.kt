@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
-import com.rwmobi.kunigami.domain.usecase.GetDefaultPostcodeUseCase
-import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
+import com.rwmobi.kunigami.domain.usecase.account.GetDefaultPostcodeUseCase
+import com.rwmobi.kunigami.domain.usecase.product.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIState
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import kotlinx.coroutines.CoroutineDispatcher

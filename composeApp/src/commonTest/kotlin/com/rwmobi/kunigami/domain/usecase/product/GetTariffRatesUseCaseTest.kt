@@ -1,4 +1,11 @@
-package com.rwmobi.kunigami.domain.usecase
+/*
+ * Copyright (c) 2024. Ryan Wong
+ * https://github.com/ryanw-mobile
+ * Sponsored by RW MobiMedia UK Limited
+ *
+ */
+
+package com.rwmobi.kunigami.domain.usecase.product
 
 import com.rwmobi.kunigami.domain.repository.FakeOctopusApiRepository
 import com.rwmobi.kunigami.test.samples.TariffSampleData
@@ -11,38 +18,44 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetTariffSummaryUseCaseTest {
-    private lateinit var getTariffUseCase: GetTariffUseCase
+class GetTariffRatesUseCaseTest {
+
+    private lateinit var getTariffRatesUseCase: GetTariffRatesUseCase
     private lateinit var fakeRestApiRepository: FakeOctopusApiRepository
 
     @BeforeTest
     fun setupUseCase() {
         fakeRestApiRepository = FakeOctopusApiRepository()
-        getTariffUseCase = GetTariffUseCase(
+        getTariffRatesUseCase = GetTariffRatesUseCase(
             octopusApiRepository = fakeRestApiRepository,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }
 
     @Test
-    fun `invoke should return TariffSummary when repository returns success`() = runTest {
+    fun `invoke should return tariff successfully when valid data is provided`() = runTest {
+        val tariffCode = "E-1R-AGILE-FLEX-22-11-25-A"
         val expectedTariffSummary = TariffSampleData.agileFlex221125
-        val tariffCode = expectedTariffSummary.tariffCode
+
         fakeRestApiRepository.setSimpleProductTariffResponse = Result.success(expectedTariffSummary)
 
-        val result = getTariffUseCase(tariffCode = tariffCode)
+        val result = getTariffRatesUseCase(tariffCode = tariffCode)
 
         assertTrue(result.isSuccess)
         assertEquals(expectedTariffSummary, result.getOrNull())
     }
 
     @Test
-    fun `invoke should return failure when repository returns failure`() = runTest {
-        fakeRestApiRepository.setSimpleProductTariffResponse = Result.failure(Exception("Test Exception"))
+    fun `invoke should return failure result when repository call fails`() = runTest {
+        val tariffCode = "E-1R-AGILE-FLEX-22-11-25-A"
+        val errorMessage = "API Error"
 
-        val result = getTariffUseCase("test_tariff_code")
+        fakeRestApiRepository.setSimpleProductTariffResponse = Result.failure(RuntimeException(errorMessage))
+
+        val result = getTariffRatesUseCase(tariffCode = tariffCode)
 
         assertTrue(result.isFailure)
-        assertEquals("Test Exception", result.exceptionOrNull()?.message)
+        assertTrue(result.exceptionOrNull() is RuntimeException)
+        assertEquals(errorMessage, result.exceptionOrNull()?.message)
     }
 }

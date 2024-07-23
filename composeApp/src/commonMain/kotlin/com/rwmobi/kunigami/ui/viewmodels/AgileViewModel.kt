@@ -17,11 +17,11 @@ import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.Rate
-import com.rwmobi.kunigami.domain.usecase.GetLatestProductByKeywordUseCase
-import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
-import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
-import com.rwmobi.kunigami.domain.usecase.GetTariffUseCase
-import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
+import com.rwmobi.kunigami.domain.usecase.account.SyncUserProfileUseCase
+import com.rwmobi.kunigami.domain.usecase.product.GetLatestProductByKeywordUseCase
+import com.rwmobi.kunigami.domain.usecase.product.GetStandardUnitRateUseCase
+import com.rwmobi.kunigami.domain.usecase.product.GetTariffRatesUseCase
+import com.rwmobi.kunigami.domain.usecase.product.GetTariffUseCase
 import com.rwmobi.kunigami.ui.destinations.agile.AgileScreenType
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo

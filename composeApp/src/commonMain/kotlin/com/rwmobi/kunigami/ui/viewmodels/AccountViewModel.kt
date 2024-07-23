@@ -13,10 +13,10 @@ import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
-import com.rwmobi.kunigami.domain.usecase.ClearCacheUseCase
-import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
-import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
-import com.rwmobi.kunigami.domain.usecase.UpdateMeterPreferenceUseCase
+import com.rwmobi.kunigami.domain.usecase.account.ClearCacheUseCase
+import com.rwmobi.kunigami.domain.usecase.account.InitialiseAccountUseCase
+import com.rwmobi.kunigami.domain.usecase.account.SyncUserProfileUseCase
+import com.rwmobi.kunigami.domain.usecase.account.UpdateMeterPreferenceUseCase
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenType
 import com.rwmobi.kunigami.ui.destinations.account.AccountUIState
 import kotlinx.coroutines.CoroutineDispatcher

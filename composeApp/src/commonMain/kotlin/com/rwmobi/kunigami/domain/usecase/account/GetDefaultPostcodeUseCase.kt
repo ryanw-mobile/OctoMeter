@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.domain.usecase
+package com.rwmobi.kunigami.domain.usecase.account
 
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.OctopusApiRepository

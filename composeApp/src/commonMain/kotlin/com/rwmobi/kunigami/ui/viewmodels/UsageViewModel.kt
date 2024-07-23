@@ -17,10 +17,10 @@ import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.model.consumption.getConsumptionRange
 import com.rwmobi.kunigami.domain.model.product.Tariff
-import com.rwmobi.kunigami.domain.usecase.GenerateUsageInsightsUseCase
-import com.rwmobi.kunigami.domain.usecase.GetConsumptionAndCostUseCase
-import com.rwmobi.kunigami.domain.usecase.GetTariffUseCase
-import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
+import com.rwmobi.kunigami.domain.usecase.account.SyncUserProfileUseCase
+import com.rwmobi.kunigami.domain.usecase.consumption.GenerateUsageInsightsUseCase
+import com.rwmobi.kunigami.domain.usecase.consumption.GetConsumptionAndCostUseCase
+import com.rwmobi.kunigami.domain.usecase.product.GetTariffUseCase
 import com.rwmobi.kunigami.ui.destinations.usage.UsageScreenType
 import com.rwmobi.kunigami.ui.destinations.usage.UsageUIState
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo

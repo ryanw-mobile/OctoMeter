@@ -7,7 +7,7 @@
 
 package com.rwmobi.kunigami.di
 
-import com.rwmobi.kunigami.domain.usecase.GenerateUsageInsightsUseCase
+import com.rwmobi.kunigami.domain.usecase.consumption.GenerateUsageInsightsUseCase
 import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
 import com.rwmobi.kunigami.ui.viewmodels.AgileViewModel
 import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel
