@@ -161,6 +161,7 @@ object GetAccountSampleData {
         id = 1234567,
         accountNumber = "B-1234A1A1",
         fullAddress = "10 downing street\nLondon\nW1 1AA",
+        postcode = "W1 1AA",
         movedInAt = Instant.parse("2020-11-30T00:00:00Z"),
         movedOutAt = null,
         electricityMeterPoints = listOf(

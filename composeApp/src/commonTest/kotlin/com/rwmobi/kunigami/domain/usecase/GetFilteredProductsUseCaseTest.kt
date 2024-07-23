@@ -25,6 +25,7 @@ class GetFilteredProductsUseCaseTest {
 
     private lateinit var getFilteredProductsUseCase: GetFilteredProductsUseCase
     private lateinit var fakeRestApiRepository: FakeOctopusApiRepository
+    private val samplePostcode = "WC1X 0ND"
 
     @BeforeTest
     fun setupUseCase() {
@@ -86,7 +87,7 @@ class GetFilteredProductsUseCaseTest {
 
         fakeRestApiRepository.setProductsResponse = Result.success(productSummaries)
 
-        val result = getFilteredProductsUseCase()
+        val result = getFilteredProductsUseCase(postcode = samplePostcode)
 
         assertTrue(result.isSuccess)
         assertEquals(listOf(productSummaries[0]), result.getOrNull())
@@ -97,7 +98,7 @@ class GetFilteredProductsUseCaseTest {
         val errorMessage = "API Error"
         fakeRestApiRepository.setProductsResponse = Result.failure(RuntimeException(errorMessage))
 
-        val result = getFilteredProductsUseCase()
+        val result = getFilteredProductsUseCase(postcode = samplePostcode)
 
         assertTrue(result.isFailure)
         val exception = result.exceptionOrNull()
@@ -123,7 +124,7 @@ class GetFilteredProductsUseCaseTest {
 
         fakeRestApiRepository.setProductsResponse = Result.success(productSummaries)
 
-        val result = getFilteredProductsUseCase()
+        val result = getFilteredProductsUseCase(postcode = samplePostcode)
 
         assertTrue(result.isSuccess)
         assertEquals(emptyList<ProductSummary>(), result.getOrNull())

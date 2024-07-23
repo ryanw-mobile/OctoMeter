@@ -30,6 +30,7 @@ internal object AccountSamples {
         id = 928,
         accountNumber = "A-9009A9A9",
         fullAddress = "RW MobiMedia UK Limited\n2 Frederick Street\nKing's Cross\nLondon\nWC1X 0ND",
+        postcode = "WC1X 0ND",
         movedInAt = Instant.parse("2022-03-28T00:00:00Z"),
         movedOutAt = null,
         electricityMeterPoints = listOf(
@@ -47,7 +48,8 @@ internal object AccountSamples {
     val accountTwoElectricityMeterPoint = Account(
         id = 8638,
         accountNumber = "A-1234A1B1",
-        fullAddress = "Address line 1\nAddress line 2\nAddress line 3\nAddress line 4",
+        fullAddress = "RW MobiMedia UK Limited\n2 Frederick Street\nKing's Cross\nLondon\nWC1X 0ND",
+        postcode = "WC1X 0ND",
         movedInAt = Clock.System.now(),
         movedOutAt = null,
         electricityMeterPoints = listOf(

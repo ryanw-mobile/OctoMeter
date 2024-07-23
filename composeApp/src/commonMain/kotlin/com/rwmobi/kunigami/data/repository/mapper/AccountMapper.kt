@@ -29,6 +29,7 @@ fun PropertyDto.toAccount(accountNumber: String) = Account(
         county.capitalizeWords(),
         postcode.uppercase(),
     ),
+    postcode = postcode.uppercase(),
     electricityMeterPoints = electricityMeterPoints.map { it.toElectricityMeterPoint() },
 )
 

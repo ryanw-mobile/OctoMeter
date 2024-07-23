@@ -41,6 +41,7 @@ val viewModelModule = module {
         TariffsViewModel(
             octopusApiRepository = get(),
             getFilteredProductsUseCase = get(),
+            getDefaultPostcodeUseCase = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }

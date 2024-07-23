@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
+import com.rwmobi.kunigami.domain.usecase.GetDefaultPostcodeUseCase
 import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIState
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 class TariffsViewModel(
     private val octopusApiRepository: OctopusApiRepository,
     private val getFilteredProductsUseCase: GetFilteredProductsUseCase,
+    private val getDefaultPostcodeUseCase: GetDefaultPostcodeUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<TariffsUIState> = MutableStateFlow(TariffsUIState(isLoading = true))
@@ -49,14 +51,12 @@ class TariffsViewModel(
     fun refresh() {
         startLoading()
         viewModelScope.launch(dispatcher) {
-            // TODO: Call use case and update UI State so we at least have a default postcode to start with.
-            val postcode = (_uiState.value.queryPostCode) ?: "WC1X 0ND"
+            val postcode = getDefaultPostcodeUseCase()
             _uiState.update { currentUiState ->
                 currentUiState.copy(
                     queryPostCode = postcode,
                 )
             }
-
             getFilteredProducts()
         }
     }
