@@ -45,7 +45,7 @@ fun EditPostcodeDialog(
     onUpdatePostcode: (newPostcode: String) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    var editPostcode by remember { mutableStateOf(TextFieldValue(postcode)) }
+    var editPostcode by remember { mutableStateOf(TextFieldValue("")) }
     var isFocused by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val inputFocusRequester = FocusRequester()
@@ -65,6 +65,9 @@ fun EditPostcodeDialog(
                         Text(
                             text = stringResource(resource = Res.string.tariffs_postcode_dialog_label),
                         )
+                    },
+                    placeholder = {
+                        Text(text = postcode)
                     },
                     trailingIcon = {
                         if (editPostcode.text.isNotEmpty()) {
