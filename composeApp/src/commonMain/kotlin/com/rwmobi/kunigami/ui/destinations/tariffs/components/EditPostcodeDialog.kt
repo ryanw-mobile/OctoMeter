@@ -27,9 +27,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
-import com.rwmobi.kunigami.ui.extensions.polishPostcode
+import androidx.compose.ui.text.input.VisualTransformation
+import com.rwmobi.kunigami.ui.extensions.formatPostcode
+import com.rwmobi.kunigami.ui.extensions.isValidPostcodePattern
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.cancel
 import kunigami.composeapp.generated.resources.close_fill
@@ -59,7 +62,14 @@ fun EditPostcodeDialog(
                         .focusRequester(focusRequester = inputFocusRequester)
                         .onFocusChanged { focusState -> isFocused = focusState.isFocused },
                     value = editPostcode,
-                    onValueChange = { editPostcode = it.polishPostcode() },
+                    onValueChange = { newValue ->
+                        val cleanedText = newValue.text.filter { it.isLetterOrDigit() || it == ' ' }.uppercase()
+                        editPostcode = newValue.copy(
+                            text = cleanedText,
+                            selection = TextRange(cleanedText.length),
+                        )
+                    },
+                    visualTransformation = VisualTransformation.None,
                     singleLine = true,
                     label = {
                         Text(
@@ -88,7 +98,7 @@ fun EditPostcodeDialog(
                     keyboardActions = KeyboardActions(
                         onDone = {
                             keyboardController?.hide()
-                            onUpdatePostcode(editPostcode.text)
+                            onUpdatePostcode(editPostcode.text.formatPostcode())
                         },
                     ),
                 )
@@ -96,8 +106,8 @@ fun EditPostcodeDialog(
         },
         confirmButton = {
             TextButton(
-                onClick = { onUpdatePostcode(editPostcode.text) },
-                enabled = editPostcode.text.length == 8,
+                onClick = { onUpdatePostcode(editPostcode.text.formatPostcode()) },
+                enabled = editPostcode.text.isValidPostcodePattern(),
             ) {
                 Text(
                     text = stringResource(resource = Res.string.update),
