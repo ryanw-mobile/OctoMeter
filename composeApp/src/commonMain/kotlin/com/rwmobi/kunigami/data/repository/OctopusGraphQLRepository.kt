@@ -54,6 +54,12 @@ class OctopusGraphQLRepository(
     private val graphQLEndpoint: GraphQLEndpoint,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : OctopusApiRepository {
+
+    /***
+     * Get a single tariff.
+     * This API supports paging, but we expect only one record,
+     * so we do not follow the cursor even when it is available.
+     */
     override suspend fun getTariff(
         tariffCode: String,
     ): Result<Tariff> {

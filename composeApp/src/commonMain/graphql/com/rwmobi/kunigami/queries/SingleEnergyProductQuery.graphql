@@ -1,4 +1,4 @@
-query SingleEnergyProductQuery($productCode: String!, $postcode: String!) {
+query SingleEnergyProductQuery($productCode: String!, $postcode: String!, $pageSize: Int!, $afterCursor: String) {
     energyProduct(code: $productCode) {
         code
         fullName
@@ -9,7 +9,7 @@ query SingleEnergyProductQuery($productCode: String!, $postcode: String!) {
         availableFrom
         exitFeesType
         exitFees
-        tariffs(postcode: $postcode, first: 100) {
+        tariffs(postcode: $postcode, first: $pageSize, after: $afterCursor) {
             edges {
                 node {
                     ... on StandardTariff {
@@ -24,6 +24,11 @@ query SingleEnergyProductQuery($productCode: String!, $postcode: String!) {
                         nightRate
                     }
                 }
+            }
+            totalCount
+            pageInfo {
+                hasNextPage
+                endCursor
             }
         }
     }
