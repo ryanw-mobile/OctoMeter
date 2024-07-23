@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.domain.usecase
+package com.rwmobi.kunigami.domain.usecase.product
 
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
@@ -18,28 +18,29 @@ import kotlinx.datetime.Instant
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.assertNull
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetFilteredProductsUseCaseTest {
+class GetLatestProductByKeywordUseCaseTest {
 
-    private lateinit var getFilteredProductsUseCase: GetFilteredProductsUseCase
+    private lateinit var getLatestProductByKeywordUseCase: GetLatestProductByKeywordUseCase
     private lateinit var fakeRestApiRepository: FakeOctopusApiRepository
+    private val keyword = "AGILE"
 
     @BeforeTest
     fun setupUseCase() {
         fakeRestApiRepository = FakeOctopusApiRepository()
-        getFilteredProductsUseCase = GetFilteredProductsUseCase(
+        getLatestProductByKeywordUseCase = GetLatestProductByKeywordUseCase(
             octopusApiRepository = fakeRestApiRepository,
             dispatcher = UnconfinedTestDispatcher(),
         )
     }
 
     @Test
-    fun `invoke should return filtered products successfully`() = runTest {
+    fun `GetLatestProductByKeywordUseCase should return tariff code successfully`() = runTest {
         val productSummaries = listOf(
             ProductSummary(
-                code = "1",
+                code = "GO-VAR-22-10-14",
                 direction = ProductDirection.IMPORT,
                 fullName = "Product 1",
                 displayName = "Product 1",
@@ -50,7 +51,7 @@ class GetFilteredProductsUseCaseTest {
                 brand = "OCTOPUS_ENERGY",
             ),
             ProductSummary(
-                code = "2",
+                code = "AGILE-24-04-03",
                 direction = ProductDirection.EXPORT,
                 fullName = "Product 2",
                 displayName = "Product 2",
@@ -61,7 +62,7 @@ class GetFilteredProductsUseCaseTest {
                 brand = "OCTOPUS_ENERGY",
             ),
             ProductSummary(
-                code = "3",
+                code = "PREPAY-VAR-18-90-21",
                 direction = ProductDirection.IMPORT,
                 fullName = "Product 3",
                 displayName = "Product 3",
@@ -71,42 +72,67 @@ class GetFilteredProductsUseCaseTest {
                 availability = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-12-31T23:59:59Z"),
                 brand = "OCTOPUS_ENERGY",
             ),
+        )
+
+        fakeRestApiRepository.setProductsResponse = Result.success(productSummaries)
+
+        val result = getLatestProductByKeywordUseCase(keyword = keyword)
+
+        assertEquals(
+            expected = "AGILE-24-04-03",
+            actual = result,
+        )
+    }
+
+    @Test
+    fun `GetLatestProductByKeywordUseCase should return latest tariff code if more than one Agile products exist`() = runTest {
+        val productSummaries = listOf(
             ProductSummary(
-                code = "4",
-                direction = ProductDirection.IMPORT,
-                fullName = "Product 4",
-                displayName = "Product 4",
-                description = "Description 4",
-                features = listOf(ProductFeature.PREPAY),
+                code = "AGILE-FLEX-22-11-25",
+                direction = ProductDirection.EXPORT,
+                fullName = "Agile Octopus November 2022 v1",
+                displayName = "Agile Octopus",
+                description = "Sample description",
+                features = listOf(ProductFeature.VARIABLE),
                 term = 12,
-                availability = Instant.parse("2023-01-01T00:00:00Z")..Instant.parse("2023-12-31T23:59:59Z"),
-                brand = "OTHER_BRAND",
+                availability = Instant.parse("2022-11-25T00:00:00Z")..Instant.parse("2023-12-11T12:00:00Z"),
+                brand = "OCTOPUS_ENERGY",
+            ),
+            ProductSummary(
+                code = "AGILE-24-04-03",
+                direction = ProductDirection.EXPORT,
+                fullName = "Agile Octopus April 2024 v1",
+                displayName = "Agile Octopus",
+                description = "Sample description",
+                features = listOf(ProductFeature.VARIABLE),
+                term = 12,
+                availability = Instant.parse("2024-04-03T00:00:00+01:00")..Instant.DISTANT_FUTURE,
+                brand = "OCTOPUS_ENERGY",
             ),
         )
 
         fakeRestApiRepository.setProductsResponse = Result.success(productSummaries)
 
-        val result = getFilteredProductsUseCase()
+        val result = getLatestProductByKeywordUseCase(keyword = keyword)
 
-        assertTrue(result.isSuccess)
-        assertEquals(listOf(productSummaries[0]), result.getOrNull())
+        assertEquals(
+            expected = "AGILE-24-04-03",
+            actual = result,
+        )
     }
 
     @Test
-    fun `invoke should return failure result when repository call fails`() = runTest {
+    fun `GetLatestProductByKeywordUseCase should return null when repository call fails`() = runTest {
         val errorMessage = "API Error"
         fakeRestApiRepository.setProductsResponse = Result.failure(RuntimeException(errorMessage))
 
-        val result = getFilteredProductsUseCase()
+        val result = getLatestProductByKeywordUseCase(keyword = keyword)
 
-        assertTrue(result.isFailure)
-        val exception = result.exceptionOrNull()
-        assertTrue(exception is RuntimeException)
-        assertEquals(errorMessage, exception!!.message)
+        assertNull(result)
     }
 
     @Test
-    fun `invoke should return empty list when no products match criteria`() = runTest {
+    fun `GetLatestProductByKeywordUseCase should return null when no products match criteria`() = runTest {
         val productSummaries = listOf(
             ProductSummary(
                 code = "1",
@@ -120,12 +146,10 @@ class GetFilteredProductsUseCaseTest {
                 brand = "OTHER_BRAND",
             ),
         )
-
         fakeRestApiRepository.setProductsResponse = Result.success(productSummaries)
 
-        val result = getFilteredProductsUseCase()
+        val result = getLatestProductByKeywordUseCase(keyword = keyword)
 
-        assertTrue(result.isSuccess)
-        assertEquals(emptyList<ProductSummary>(), result.getOrNull())
+        assertNull(result)
     }
 }

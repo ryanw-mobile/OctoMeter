@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.domain.usecase
+package com.rwmobi.kunigami.domain.usecase.product
 
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
@@ -19,17 +19,17 @@ class GetFilteredProductsUseCase(
     private val octopusApiRepository: OctopusApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
-    suspend operator fun invoke(): Result<List<ProductSummary>> {
+    suspend operator fun invoke(postcode: String): Result<List<ProductSummary>> {
         return withContext(dispatcher) {
-            val getProductsResult = octopusApiRepository.getProducts()
+            val getProductsResult = octopusApiRepository.getProducts(postcode = postcode)
             getProductsResult.fold(
                 onSuccess = {
                     getProductsResult.mapCatching { products ->
                         products.filter {
                             it.direction == ProductDirection.IMPORT &&
-                                it.brand == "OCTOPUS_ENERGY" &&
                                 !it.features.contains(ProductFeature.BUSINESS) &&
-                                !it.features.contains(ProductFeature.RESTRICTED)
+                                it.brand == "OCTOPUS_ENERGY" && // TODO: Only for RestApi
+                                !it.features.contains(ProductFeature.RESTRICTED) // TODO: Only for RestApi
                         }
                     }
                 },

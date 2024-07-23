@@ -82,6 +82,7 @@
     <string name="agile_chart_tooltip_range_p">%1$s\n%2$sp</string>
 
     <!-- Tariffs -->
+    <string name="tariffs_postcode">Postcode: %1$s</string>
     <string name="tariffs_retail_region">Retail Region</string>
     <string name="tariffs_fixed_term_months">Fixed term %1$s months</string>
     <string name="tariffs_available_from">Available from %1$s %2$s</string>
@@ -94,6 +95,7 @@
     <string name="tariffs_tariff_effective">Rates effective %1$s</string>
     <string name="tariffs_variable_rate">Variable Unit Rate</string>
     <string name="tariffs_variable">Variable</string>
+    <string name="tariffs_postcode_dialog_label">Postcode</string>
 
     <!-- Retail Regions -->
     <string name="retail_region_eastern_england">Eastern England</string>
@@ -119,6 +121,7 @@
     <string name="product_feature_prepay">Prepay</string>
     <string name="product_feature_business">Business</string>
     <string name="product_feature_restricted">Restricted</string>
+    <string name="product_feature_halfhourly">Half-hourly</string>
 
     <!-- Account Screen -->
     <string name="account_clear_credential_title">Clear Credentials and Switch to Demo Mode</string>
@@ -191,6 +194,8 @@
     <string name="content_description_next_period">Navigate to the next period</string>
     <string name="content_description_dismiss_this_pane">Dismiss this pane</string>
     <string name="content_description_navigate_back">Navigate back</string>
+    <string name="content_description_edit_postcode">Edit postcode</string>
+    <string name="content_description_clear">Clear</string>
 
     <!-- Fallback Error message -->
     <string name="fallback_error_no_consumptions">Error when retrieving consumptions</string>

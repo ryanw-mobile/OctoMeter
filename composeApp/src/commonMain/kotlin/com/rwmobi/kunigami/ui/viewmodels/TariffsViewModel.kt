@@ -12,7 +12,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
-import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
+import com.rwmobi.kunigami.domain.usecase.account.GetDefaultPostcodeUseCase
+import com.rwmobi.kunigami.domain.usecase.product.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsUIState
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import kotlinx.coroutines.CoroutineDispatcher
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 class TariffsViewModel(
     private val octopusApiRepository: OctopusApiRepository,
     private val getFilteredProductsUseCase: GetFilteredProductsUseCase,
+    private val getDefaultPostcodeUseCase: GetDefaultPostcodeUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<TariffsUIState> = MutableStateFlow(TariffsUIState(isLoading = true))
@@ -49,25 +51,26 @@ class TariffsViewModel(
     fun refresh() {
         startLoading()
         viewModelScope.launch(dispatcher) {
-            val filteredProducts = getFilteredProductsUseCase()
-            filteredProducts.fold(
-                onSuccess = { products ->
-                    _uiState.update { currentUiState ->
-                        currentUiState.copy(
-                            requestedScreenType = null, // force recalculation
-                            productSummaries = products,
-                            productDetails = null,
-                            isLoading = false,
-                        ).updateScreenType()
-                    }
-                },
-                onFailure = { throwable ->
-                    Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
-                    _uiState.update { currentUiState ->
-                        currentUiState.filterErrorAndStopLoading(throwable)
-                    }
-                },
-            )
+            val postcode = getDefaultPostcodeUseCase()
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    queryPostCode = postcode,
+                )
+            }
+            getFilteredProducts()
+        }
+    }
+
+    fun onQueryPostcode(postcode: String) {
+        startLoading()
+        viewModelScope.launch(dispatcher) {
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    queryPostCode = postcode,
+                )
+            }
+
+            getFilteredProducts()
         }
     }
 
@@ -124,6 +127,32 @@ class TariffsViewModel(
                 isLoading = true,
             )
         }
+    }
+
+    private suspend fun getFilteredProducts() {
+        // TODO: Call use case and update UI State so we at least have a default postcode to start with.
+        val postcode = (_uiState.value.queryPostCode) ?: "WC1X 0ND"
+
+        val filteredProducts = getFilteredProductsUseCase(postcode = postcode)
+        filteredProducts.fold(
+            onSuccess = { products ->
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        queryPostCode = postcode,
+                        requestedScreenType = null, // force recalculation
+                        productSummaries = products,
+                        productDetails = null,
+                        isLoading = false,
+                    ).updateScreenType()
+                }
+            },
+            onFailure = { throwable ->
+                Logger.e("TariffsViewModel", throwable = throwable, message = { "Error when retrieving tariffs" })
+                _uiState.update { currentUiState ->
+                    currentUiState.filterErrorAndStopLoading(throwable)
+                }
+            },
+        )
     }
 
     override fun onCleared() {

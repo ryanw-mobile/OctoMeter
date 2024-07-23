@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.domain.usecase
+package com.rwmobi.kunigami.domain.usecase.consumption
 
 import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces

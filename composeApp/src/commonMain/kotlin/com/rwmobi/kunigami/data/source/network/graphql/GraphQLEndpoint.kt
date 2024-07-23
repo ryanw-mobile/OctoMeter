@@ -12,6 +12,7 @@ import com.apollographql.apollo.api.Optional
 import com.apollographql.apollo.api.Query
 import com.rwmobi.kunigami.data.source.network.dto.auth.Token
 import com.rwmobi.kunigami.domain.exceptions.except
+import com.rwmobi.kunigami.graphql.EnergyProductsQuery
 import com.rwmobi.kunigami.graphql.ObtainKrakenTokenMutation
 import com.rwmobi.kunigami.graphql.SingleEnergyProductQuery
 import com.rwmobi.kunigami.graphql.type.ObtainJSONWebTokenInput
@@ -25,7 +26,25 @@ class GraphQLEndpoint(
     private val apolloClient: ApolloClient,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) {
-    suspend fun getSingleEnergyProduct(productCode: String, postcode: String): SingleEnergyProductQuery.Data? {
+    private val defaultPageSize = 100
+
+    suspend fun getEnergyProducts(
+        postcode: String,
+        afterCursor: String? = null,
+        pageSize: Int = defaultPageSize,
+    ): EnergyProductsQuery.Data {
+        return withContext(dispatcher) {
+            runQuery(
+                query = EnergyProductsQuery(
+                    postcode = postcode,
+                    pageSize = pageSize,
+                    afterCursor = afterCursor?.let { Optional.present(it) } ?: Optional.absent(),
+                ),
+            )
+        }
+    }
+
+    suspend fun getSingleEnergyProduct(productCode: String, postcode: String): SingleEnergyProductQuery.Data {
         return withContext(dispatcher) {
             runQuery(query = SingleEnergyProductQuery(productCode = productCode, postcode = postcode))
         }

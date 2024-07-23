@@ -15,6 +15,7 @@ data class Account(
     val id: Int,
     val accountNumber: String,
     val fullAddress: String?,
+    val postcode: String?,
     val movedInAt: Instant?,
     val movedOutAt: Instant?,
     val electricityMeterPoints: List<ElectricityMeterPoint>,

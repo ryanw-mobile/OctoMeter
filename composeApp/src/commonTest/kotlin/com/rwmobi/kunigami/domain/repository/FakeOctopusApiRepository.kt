@@ -28,7 +28,7 @@ class FakeOctopusApiRepository : OctopusApiRepository {
     }
 
     var setProductsResponse: Result<List<ProductSummary>>? = null
-    override suspend fun getProducts(requestedPage: Int?): Result<List<ProductSummary>> {
+    override suspend fun getProducts(postcode: String): Result<List<ProductSummary>> {
         return setProductsResponse ?: throw RuntimeException("Fake result setProductsResponse not defined")
     }
 

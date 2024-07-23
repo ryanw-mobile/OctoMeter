@@ -106,12 +106,26 @@ private fun ProductItemCompact(
             Spacer(modifier = Modifier.size(size = dimension.grid_1))
         }
 
+        Spacer(modifier = Modifier.size(size = dimension.grid_1))
+
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            style = MaterialTheme.typography.bodyMedium,
+            text = productSummary.description,
+        )
+
+        Spacer(modifier = Modifier.size(size = dimension.grid_1))
+
         if (productSummary.features.isNotEmpty()) {
             val currentDensity = LocalDensity.current
             CompositionLocalProvider(
                 LocalDensity provides Density(currentDensity.density, fontScale = 1f),
             ) {
-                FlowRow(modifier = Modifier.padding(vertical = dimension.grid_1)) {
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = dimension.grid_1),
+                    verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+                    horizontalArrangement = Arrangement.End,
+                ) {
                     productSummary.features.forEach {
                         TagWithIcon(
                             modifier = Modifier.padding(end = dimension.grid_0_5),
@@ -122,14 +136,6 @@ private fun ProductItemCompact(
                 }
             }
         }
-
-        Spacer(modifier = Modifier.size(size = dimension.grid_1))
-
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.bodyMedium,
-            text = productSummary.description,
-        )
     }
 }
 
@@ -155,9 +161,7 @@ internal fun ProductItemWide(
                 .fillMaxHeight(),
         ) {
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
+                modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.ExtraBold,
                 text = productSummary.displayName,
@@ -165,9 +169,7 @@ internal fun ProductItemWide(
 
             if (productSummary.fullName != productSummary.displayName) {
                 Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
+                    modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.titleSmall,
                     text = productSummary.fullName,
                 )
@@ -184,6 +186,19 @@ internal fun ProductItemWide(
 
                 Spacer(modifier = Modifier.size(size = dimension.grid_1))
             }
+        }
+
+        Column(
+            modifier = Modifier
+                .weight(weight = 2f)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.bodyMedium,
+                text = productSummary.description,
+            )
 
             if (productSummary.features.isNotEmpty()) {
                 val currentDensity = LocalDensity.current
@@ -191,8 +206,9 @@ internal fun ProductItemWide(
                     LocalDensity provides Density(currentDensity.density, fontScale = 1f),
                 ) {
                     FlowRow(
-                        modifier = Modifier.padding(vertical = dimension.grid_1),
+                        modifier = Modifier.fillMaxWidth().padding(vertical = dimension.grid_1),
                         verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+                        horizontalArrangement = Arrangement.End,
                     ) {
                         productSummary.features.forEach {
                             TagWithIcon(
@@ -205,15 +221,6 @@ internal fun ProductItemWide(
                 }
             }
         }
-
-        Text(
-            modifier = Modifier
-                .weight(weight = 2f)
-                .fillMaxHeight()
-                .padding(all = dimension.grid_1),
-            style = MaterialTheme.typography.bodyMedium,
-            text = productSummary.description,
-        )
     }
 }
 

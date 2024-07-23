@@ -144,6 +144,7 @@ fun AppNavigationHost(
                 uiState = uiState,
                 uiEvent = TariffsUIEvent(
                     onRefresh = viewModel::refresh,
+                    onQueryPostcode = { viewModel.onQueryPostcode(it) },
                     onProductItemClick = { viewModel.getProductDetails(it) },
                     onErrorShown = viewModel::errorShown,
                     onScrolledToTop = { onScrolledToTop(AppDestination.TARIFFS) },

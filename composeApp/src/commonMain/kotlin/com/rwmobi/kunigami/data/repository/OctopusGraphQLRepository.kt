@@ -70,28 +70,37 @@ class OctopusGraphQLRepository(
                     postcode = postcode,
                 )
 
-                response?.energyProduct?.toTariff(tariffCode = tariffCode) ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
+                response.energyProduct?.toTariff(tariffCode = tariffCode) ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
             }.except<CancellationException, _>()
         }
     }
 
     /***
-     * This API supports paging. Every page contains at most 100 records.
-     * Supply `requestedPage` to specify a page.
-     * Otherwise, this function will retrieve all possible data the backend can provide.
+     * This API supports paging, and will retrieve all possible data the backend can provide.
      */
     override suspend fun getProducts(
-        requestedPage: Int?,
+        postcode: String,
     ): Result<List<ProductSummary>> {
         return withContext(dispatcher) {
             runCatching {
                 val combinedList = mutableListOf<ProductSummary>()
-                var page: Int? = requestedPage
+                var afterCursor: String? = null
                 do {
-                    val apiResponse = productsEndpoint.getProducts(page = page)
-                    combinedList.addAll(apiResponse?.results?.map { it.toProductSummary() } ?: emptyList())
-                    page = apiResponse?.getNextPageNumber()
-                } while (page != null)
+                    val response = graphQLEndpoint.getEnergyProducts(
+                        postcode = postcode,
+                        afterCursor = afterCursor,
+                    )
+                    combinedList.addAll(
+                        response.energyProducts?.edges?.mapNotNull { it?.node?.toProductSummary() }
+                            ?: emptyList(),
+                    )
+
+                    afterCursor = if (response.energyProducts?.pageInfo?.hasNextPage == true) {
+                        response.energyProducts.pageInfo.endCursor
+                    } else {
+                        null
+                    }
+                } while (afterCursor != null)
 
                 combinedList
             }.except<CancellationException, _>()

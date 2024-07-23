@@ -5,7 +5,7 @@
  *
  */
 
-package com.rwmobi.kunigami.domain.usecase
+package com.rwmobi.kunigami.domain.usecase.product
 
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
@@ -19,7 +19,7 @@ class GetLatestProductByKeywordUseCase(
 ) {
     suspend operator fun invoke(keyword: String): String? {
         return withContext(dispatcher) {
-            val getProductsResult = octopusApiRepository.getProducts()
+            val getProductsResult = octopusApiRepository.getProducts(postcode = "WC1X 0ND")
             getProductsResult.fold(
                 onSuccess = { products ->
                     val productCode = products.sortedByDescending {

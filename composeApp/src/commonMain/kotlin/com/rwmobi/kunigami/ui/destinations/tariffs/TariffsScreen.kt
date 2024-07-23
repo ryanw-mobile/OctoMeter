@@ -39,6 +39,7 @@ import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.ButtonTitleBar
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.DetailsScreenWrapper
+import com.rwmobi.kunigami.ui.destinations.tariffs.components.PostcodeInputBar
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.ProductItemAdaptive
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.TariffBottomSheet
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
@@ -78,13 +79,11 @@ fun TariffsScreen(
                 ErrorScreenHandler(
                     modifier = Modifier.fillMaxSize(),
                     specialErrorScreen = uiState.requestedScreenType.specialErrorScreen,
-                    onRefresh = {
-                        uiEvent.onRefresh()
-                    },
+                    onRefresh = { uiEvent.onRefresh() },
                 )
             }
 
-            uiState.requestedScreenType == TariffsScreenType.List && uiState.productSummaries.isNotEmpty() -> {
+            uiState.requestedScreenType == TariffsScreenType.List -> {
                 Row(
                     modifier = Modifier.fillMaxSize(),
                 ) {
@@ -103,26 +102,46 @@ fun TariffsScreen(
                                 title = stringResource(resource = Res.string.navigation_tariffs),
                             )
 
+                            uiState.queryPostCode?.let { postcode ->
+                                PostcodeInputBar(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    postcode = postcode,
+                                    onUpdatePostcode = { uiEvent.onQueryPostcode(it) },
+                                )
+                            }
+
                             LazyColumn(
                                 state = mainLazyListState,
                             ) {
-                                itemsIndexed(
-                                    items = uiState.productSummaries,
-                                    key = { _, product -> product.code },
-                                ) { index, product ->
-                                    ProductItemAdaptive(
-                                        modifier = Modifier
-                                            .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
-                                            .fillMaxWidth()
-                                            .padding(vertical = dimension.grid_1),
-                                        productSummary = product,
-                                        useWideLayout = uiState.requestedWideListLayout,
-                                    )
+                                if (uiState.productSummaries.isNotEmpty()) {
+                                    itemsIndexed(
+                                        items = uiState.productSummaries,
+                                        key = { _, product -> product.code },
+                                    ) { index, product ->
+                                        ProductItemAdaptive(
+                                            modifier = Modifier
+                                                .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
+                                                .fillMaxWidth()
+                                                .padding(vertical = dimension.grid_1),
+                                            productSummary = product,
+                                            useWideLayout = uiState.requestedWideListLayout,
+                                        )
 
-                                    if (index < uiState.productSummaries.lastIndex) {
-                                        HorizontalDivider(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                        if (index < uiState.productSummaries.lastIndex) {
+                                            HorizontalDivider(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                            )
+                                        }
+                                    }
+                                } else if (!uiState.isLoading) {
+                                    item {
+                                        ErrorScreenHandler(
+                                            modifier = Modifier.fillMaxSize(),
+                                            specialErrorScreen = SpecialErrorScreen.NoData,
+                                            onRefresh = {
+                                                uiEvent.onRefresh()
+                                            },
                                         )
                                     }
                                 }
@@ -189,16 +208,6 @@ fun TariffsScreen(
                         },
                     )
                 }
-            }
-
-            !uiState.isLoading && uiState.productSummaries.isEmpty() -> {
-                ErrorScreenHandler(
-                    modifier = Modifier.fillMaxSize(),
-                    specialErrorScreen = SpecialErrorScreen.NoData,
-                    onRefresh = {
-                        uiEvent.onRefresh()
-                    },
-                )
             }
         }
 

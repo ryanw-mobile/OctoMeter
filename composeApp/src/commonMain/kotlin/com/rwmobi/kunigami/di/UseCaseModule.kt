@@ -7,16 +7,17 @@
 
 package com.rwmobi.kunigami.di
 
-import com.rwmobi.kunigami.domain.usecase.ClearCacheUseCase
-import com.rwmobi.kunigami.domain.usecase.GetConsumptionAndCostUseCase
-import com.rwmobi.kunigami.domain.usecase.GetFilteredProductsUseCase
-import com.rwmobi.kunigami.domain.usecase.GetLatestProductByKeywordUseCase
-import com.rwmobi.kunigami.domain.usecase.GetStandardUnitRateUseCase
-import com.rwmobi.kunigami.domain.usecase.GetTariffRatesUseCase
-import com.rwmobi.kunigami.domain.usecase.GetTariffUseCase
-import com.rwmobi.kunigami.domain.usecase.InitialiseAccountUseCase
-import com.rwmobi.kunigami.domain.usecase.SyncUserProfileUseCase
-import com.rwmobi.kunigami.domain.usecase.UpdateMeterPreferenceUseCase
+import com.rwmobi.kunigami.domain.usecase.account.ClearCacheUseCase
+import com.rwmobi.kunigami.domain.usecase.account.GetDefaultPostcodeUseCase
+import com.rwmobi.kunigami.domain.usecase.account.InitialiseAccountUseCase
+import com.rwmobi.kunigami.domain.usecase.account.SyncUserProfileUseCase
+import com.rwmobi.kunigami.domain.usecase.account.UpdateMeterPreferenceUseCase
+import com.rwmobi.kunigami.domain.usecase.consumption.GetConsumptionAndCostUseCase
+import com.rwmobi.kunigami.domain.usecase.product.GetFilteredProductsUseCase
+import com.rwmobi.kunigami.domain.usecase.product.GetLatestProductByKeywordUseCase
+import com.rwmobi.kunigami.domain.usecase.product.GetStandardUnitRateUseCase
+import com.rwmobi.kunigami.domain.usecase.product.GetTariffRatesUseCase
+import com.rwmobi.kunigami.domain.usecase.product.GetTariffUseCase
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -90,6 +91,14 @@ val userCaseModule = module {
 
     factory {
         ClearCacheUseCase(
+            octopusApiRepository = get(),
+            dispatcher = get(named("DefaultDispatcher")),
+        )
+    }
+
+    factory {
+        GetDefaultPostcodeUseCase(
+            userPreferencesRepository = get(),
             octopusApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),
         )
