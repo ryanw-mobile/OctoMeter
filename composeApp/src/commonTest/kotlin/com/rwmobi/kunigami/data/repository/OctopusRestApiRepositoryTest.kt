@@ -257,6 +257,7 @@ class OctopusRestApiRepositoryTest {
 
         val result = octopusRestApiRepository.getProductDetails(
             productCode = sampleProductCode,
+            postcode = samplePostcode,
         )
 
         assertTrue(result.isFailure)

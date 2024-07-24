@@ -115,11 +115,16 @@ class OctopusGraphQLRepository(
 
     override suspend fun getProductDetails(
         productCode: String,
+        postcode: String,
     ): Result<ProductDetails> {
         return withContext(dispatcher) {
             runCatching {
-                val apiResponse = productsEndpoint.getProduct(productCode = productCode)
-                apiResponse?.toProductDetails() ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
+                val response = graphQLEndpoint.getSingleEnergyProduct(
+                    productCode = productCode,
+                    postcode = postcode,
+                )
+
+                response.energyProduct?.toProductDetails() ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
             }.except<CancellationException, _>()
         }
     }

@@ -74,10 +74,16 @@ class TariffsViewModel(
         }
     }
 
-    fun getProductDetails(productCode: String) {
+    fun getProductDetails(
+        productCode: String,
+        postcode: String,
+    ) {
         startLoading()
         viewModelScope.launch(dispatcher) {
-            val getProductDetailsResult = octopusApiRepository.getProductDetails(productCode)
+            val getProductDetailsResult = octopusApiRepository.getProductDetails(
+                productCode = productCode,
+                postcode = postcode,
+            )
             getProductDetailsResult.fold(
                 onSuccess = { product ->
                     _uiState.update { currentUiState ->

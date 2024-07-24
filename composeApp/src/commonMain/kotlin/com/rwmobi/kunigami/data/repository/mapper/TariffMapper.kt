@@ -67,9 +67,9 @@ fun SingleProductApiResponse.toTariff(
 fun SingleEnergyProductQuery.EnergyProduct.toTariff(
     tariffCode: String,
 ): Tariff? {
-    val tariffNode = tariffs?.edges?.firstOrNull {
-        tariffCode == tariffCode
-    }?.node
+    val tariffNode = tariffs?.edges
+        ?.firstOrNull { it?.node?.onStandardTariff?.tariffCode == tariffCode }
+        ?.node
 
     if (tariffNode == null) {
         return null

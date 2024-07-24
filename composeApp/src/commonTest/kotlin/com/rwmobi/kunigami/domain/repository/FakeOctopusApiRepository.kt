@@ -33,7 +33,7 @@ class FakeOctopusApiRepository : OctopusApiRepository {
     }
 
     var setProductDetailsResponse: Result<ProductDetails>? = null
-    override suspend fun getProductDetails(productCode: String): Result<ProductDetails> {
+    override suspend fun getProductDetails(productCode: String, postcode: String): Result<ProductDetails> {
         return setProductDetailsResponse ?: throw RuntimeException("Fake result setProductDetailsResponse not defined")
     }
 

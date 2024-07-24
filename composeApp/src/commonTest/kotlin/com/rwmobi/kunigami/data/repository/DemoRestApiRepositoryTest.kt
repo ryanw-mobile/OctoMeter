@@ -45,7 +45,10 @@ class DemoRestApiRepositoryTest {
     @Test
     fun `getProductDetails should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
-            demoRepository.getProductDetails(productCode = "productCode")
+            demoRepository.getProductDetails(
+                productCode = "productCode",
+                postcode = samplePostcode,
+            )
         }
     }
 

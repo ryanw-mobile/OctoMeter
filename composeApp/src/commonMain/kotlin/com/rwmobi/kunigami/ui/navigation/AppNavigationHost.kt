@@ -145,7 +145,7 @@ fun AppNavigationHost(
                 uiEvent = TariffsUIEvent(
                     onRefresh = viewModel::refresh,
                     onQueryPostcode = { viewModel.onQueryPostcode(it) },
-                    onProductItemClick = { viewModel.getProductDetails(it) },
+                    onProductItemClick = { productCode, postcode -> viewModel.getProductDetails(productCode = productCode, postcode = postcode) },
                     onErrorShown = viewModel::errorShown,
                     onScrolledToTop = { onScrolledToTop(AppDestination.TARIFFS) },
                     onShowSnackbar = onShowSnackbar,

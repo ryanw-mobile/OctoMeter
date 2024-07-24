@@ -21,7 +21,11 @@ import kotlinx.datetime.Instant
 interface OctopusApiRepository {
     suspend fun getTariff(tariffCode: String): Result<Tariff>
     suspend fun getProducts(postcode: String): Result<List<ProductSummary>>
-    suspend fun getProductDetails(productCode: String): Result<ProductDetails>
+
+    suspend fun getProductDetails(
+        productCode: String,
+        postcode: String,
+    ): Result<ProductDetails>
 
     suspend fun getStandardUnitRates(
         tariffCode: String,

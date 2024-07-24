@@ -120,7 +120,11 @@ fun TariffsScreen(
                                     ) { index, product ->
                                         ProductItemAdaptive(
                                             modifier = Modifier
-                                                .clickable(onClick = { uiEvent.onProductItemClick(product.code) })
+                                                .clickable(
+                                                    onClick = {
+                                                        uiState.queryPostCode?.let { uiEvent.onProductItemClick(product.code, it) }
+                                                    },
+                                                )
                                                 .fillMaxWidth()
                                                 .padding(vertical = dimension.grid_1),
                                             productSummary = product,

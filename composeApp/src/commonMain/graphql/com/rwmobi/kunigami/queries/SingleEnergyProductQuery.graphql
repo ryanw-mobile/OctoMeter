@@ -4,6 +4,7 @@ query SingleEnergyProductQuery($productCode: String!, $postcode: String!, $pageS
         fullName
         displayName
         description
+        term
         isVariable
         isChargedHalfHourly
         isGreen
@@ -20,6 +21,12 @@ query SingleEnergyProductQuery($productCode: String!, $postcode: String!, $pageS
                         tariffCode
                         standingCharge
                         unitRate
+                    }
+                    ... on DayNightTariff {
+                        tariffCode
+                        standingCharge
+                        dayRate
+                        nightRate
                     }
                 }
             }

@@ -89,6 +89,7 @@ class OctopusRestApiRepository(
 
     override suspend fun getProductDetails(
         productCode: String,
+        postcode: String,
     ): Result<ProductDetails> {
         return withContext(dispatcher) {
             runCatching {
