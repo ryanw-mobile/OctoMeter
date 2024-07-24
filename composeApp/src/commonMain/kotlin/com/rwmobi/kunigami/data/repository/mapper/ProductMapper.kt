@@ -17,6 +17,7 @@ import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.graphql.EnergyProductsQuery
 import kotlinx.datetime.Instant
 
+@Deprecated("RestAPI implementation")
 fun ProductDetailsDto.toProductSummary() = ProductSummary(
     code = code,
     direction = ProductDirection.fromApiValue(direction),
@@ -59,6 +60,7 @@ fun EnergyProductsQuery.Node.toProductSummary(): ProductSummary {
     )
 }
 
+@Deprecated("RestAPI implementation")
 fun SingleProductApiResponse.toProductDetails(): ProductDetails {
     return ProductDetails(
         code = code,
