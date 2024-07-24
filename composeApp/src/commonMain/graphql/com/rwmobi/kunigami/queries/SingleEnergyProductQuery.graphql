@@ -5,6 +5,10 @@ query SingleEnergyProductQuery($productCode: String!, $postcode: String!, $pageS
         displayName
         description
         isVariable
+        isChargedHalfHourly
+        isGreen
+        isPrepay
+        isBusiness
         availableTo
         availableFrom
         exitFeesType
@@ -16,12 +20,6 @@ query SingleEnergyProductQuery($productCode: String!, $postcode: String!, $pageS
                         tariffCode
                         standingCharge
                         unitRate
-                    }
-                    ... on DayNightTariff {
-                        tariffCode
-                        standingCharge
-                        dayRate
-                        nightRate
                     }
                 }
             }

@@ -99,26 +99,6 @@ fun SingleEnergyProductQuery.EnergyProduct.toTariff(
             )
         }
 
-        tariffNode.onDayNightTariff != null -> {
-            Tariff(
-                productCode = code,
-                fullName = fullName,
-                displayName = displayName,
-                description = description,
-                isVariable = isVariable,
-                availability = Instant.parse(availableFrom.toString())..(availableTo?.let { Instant.parse(it.toString()) } ?: Instant.DISTANT_FUTURE),
-                exitFeesType = ExitFeesType.fromApiValue(value = exitFeesType),
-                vatInclusiveExitFees = exitFees?.toDouble() ?: 0.0,
-                tariffPaymentTerm = tariffPaymentTerm,
-
-                tariffCode = tariffCode,
-                vatInclusiveStandingCharge = tariffNode.onDayNightTariff.standingCharge ?: 0.0,
-                vatInclusiveStandardUnitRate = null,
-                vatInclusiveDayUnitRate = tariffNode.onDayNightTariff.dayRate,
-                vatInclusiveNightUnitRate = tariffNode.onDayNightTariff.nightRate,
-            )
-        }
-
         else -> {
             // Currently we do not support other tariff types for simplicity
             null
