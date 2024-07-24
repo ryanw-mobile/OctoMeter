@@ -166,12 +166,12 @@ fun TariffsScreen(
                                         .fillMaxWidth()
                                         .height(height = dimension.minListItemHeight),
                                     title = productDetails.displayName,
-                                    color = MaterialTheme.colorScheme.onSecondary,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                                     rightButton = {
                                         IconButton(onClick = uiEvent.onProductDetailsDismissed) {
                                             Icon(
                                                 painter = painterResource(resource = Res.drawable.close_fill),
-                                                tint = MaterialTheme.colorScheme.onSecondary,
+                                                tint = MaterialTheme.colorScheme.onSecondaryContainer,
                                                 contentDescription = stringResource(resource = Res.string.content_description_dismiss_this_pane),
                                             )
                                         }
