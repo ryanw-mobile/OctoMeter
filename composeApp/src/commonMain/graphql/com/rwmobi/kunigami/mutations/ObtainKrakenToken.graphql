@@ -1,7 +1,8 @@
 mutation ObtainKrakenToken($input: ObtainJSONWebTokenInput!) {
     obtainKrakenToken(input: $input) {
         possibleErrors {
-            ...PossibleErrorTypeFragment
+            message
+            code
         }
         token
         refreshToken

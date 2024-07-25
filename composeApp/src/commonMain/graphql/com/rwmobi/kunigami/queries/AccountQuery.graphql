@@ -1,0 +1,65 @@
+query AccountQuery($accountNumber: String!) {
+    account(accountNumber: $accountNumber) {
+        id
+        number
+        status
+        balance
+        billingAddress
+        createdAt
+        electricityAgreements {
+            agreedFrom
+            agreedTo
+            validFrom
+            validTo
+            tariff {
+                ... on StandardTariff {
+                    id
+                    displayName
+                    fullName
+                    description
+                    productCode
+                    standingCharge
+                    tariffCode
+                    unitRate
+                }
+                ... on HalfHourlyTariff {
+                    id
+                    displayName
+                    fullName
+                    description
+                    productCode
+                    standingCharge
+                }
+                ... on DayNightTariff {
+                    id
+                    displayName
+                    fullName
+                    description
+                    productCode
+                    standingCharge
+                    tariffCode
+                    dayRate
+                    nightRate
+                }
+                ... on ThreeRateTariff {
+                    id
+                    displayName
+                    fullName
+                    description
+                    productCode
+                    standingCharge
+                    dayRate
+                    nightRate
+                    offPeakRate
+                }
+            }
+        }
+        canRenewTariff
+        cotReadingWindowDays
+        canBeWithdrawn
+        currentEstimatedSsd
+        earliestPossibleSsd
+        latestPossibleSsd
+        canInputMeterReadingsViaIvr
+    }
+}
