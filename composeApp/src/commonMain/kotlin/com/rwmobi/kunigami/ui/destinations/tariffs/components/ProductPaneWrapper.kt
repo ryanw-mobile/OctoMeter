@@ -21,7 +21,7 @@ import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.theme.getDimension
 
 @Composable
-internal fun DetailsScreenWrapper(
+internal fun ProductPaneWrapper(
     modifier: Modifier,
     productDetails: ProductDetails? = null,
     header: @Composable () -> Unit,
@@ -33,16 +33,12 @@ internal fun DetailsScreenWrapper(
         modifier = modifier,
         lazyListState = detailLazyListState,
     ) { contentModifier ->
-        Column(
-            modifier = contentModifier.fillMaxSize(),
-        ) {
+        Column(modifier = contentModifier.fillMaxSize()) {
             header()
 
-            LazyColumn(
-                state = detailLazyListState,
-            ) {
+            LazyColumn(state = detailLazyListState) {
                 productDetails?.let { product ->
-                    productDetailsLayout(
+                    productScreenLayout(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = dimension.grid_1),

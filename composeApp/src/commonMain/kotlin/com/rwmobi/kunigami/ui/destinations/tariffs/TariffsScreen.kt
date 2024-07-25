@@ -38,10 +38,10 @@ import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.ButtonTitleBar
-import com.rwmobi.kunigami.ui.destinations.tariffs.components.DetailsScreenWrapper
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.PostcodeInputBar
-import com.rwmobi.kunigami.ui.destinations.tariffs.components.ProductItemAdaptive
-import com.rwmobi.kunigami.ui.destinations.tariffs.components.TariffBottomSheet
+import com.rwmobi.kunigami.ui.destinations.tariffs.components.ProductBottomSheetWrapper
+import com.rwmobi.kunigami.ui.destinations.tariffs.components.ProductListItemAdaptive
+import com.rwmobi.kunigami.ui.destinations.tariffs.components.ProductPaneWrapper
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
@@ -118,7 +118,7 @@ fun TariffsScreen(
                                         items = uiState.productSummaries,
                                         key = { _, product -> product.code },
                                     ) { index, product ->
-                                        ProductItemAdaptive(
+                                        ProductListItemAdaptive(
                                             modifier = Modifier
                                                 .clickable(
                                                     onClick = {
@@ -153,13 +153,13 @@ fun TariffsScreen(
                         }
                     }
 
-                    if (uiState.requestedLayout == TariffScreenLayout.ListDetailPane) {
+                    if (uiState.requestedLayout == TariffScreenLayoutStyle.ListDetailPane) {
                         VerticalDivider(
                             modifier = Modifier.fillMaxHeight(),
                             color = MaterialTheme.colorScheme.surfaceContainerHighest,
                         )
 
-                        DetailsScreenWrapper(
+                        ProductPaneWrapper(
                             modifier = Modifier.weight(weight = 1f),
                             productDetails = uiState.productDetails,
                         ) {
@@ -188,7 +188,7 @@ fun TariffsScreen(
             }
 
             uiState.requestedScreenType == TariffsScreenType.FullScreenDetail -> {
-                DetailsScreenWrapper(
+                ProductPaneWrapper(
                     modifier = Modifier
                         .fillMaxSize()
                         .conditionalBlur(enabled = uiState.isLoading && uiState.productSummaries.isEmpty()),
@@ -224,10 +224,10 @@ fun TariffsScreen(
 
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
     if (bottomSheetState.isVisible &&
-        uiState.requestedLayout != TariffScreenLayout.ListDetailPane &&
+        uiState.requestedLayout != TariffScreenLayoutStyle.ListDetailPane &&
         uiState.requestedScreenType !is TariffsScreenType.Error
     ) {
-        TariffBottomSheet(
+        ProductBottomSheetWrapper(
             modifier = Modifier.fillMaxSize(),
             productDetails = uiState.productDetails,
             bottomSheetState = bottomSheetState,

@@ -102,8 +102,8 @@ fun AccountScreen(
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         val widthConstraintModifier = when (uiState.requestedLayout) {
-                                            is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
-                                            is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
+                                            is AccountScreenLayoutStyle.Compact -> Modifier.fillMaxWidth()
+                                            is AccountScreenLayoutStyle.Wide -> Modifier.fillMaxWidth()
                                             else -> Modifier.widthIn(max = dimension.windowWidthMedium)
                                         }
 
@@ -123,8 +123,8 @@ fun AccountScreen(
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         val widthConstraintModifier = when (uiState.requestedLayout) {
-                                            is AccountScreenLayout.Compact -> Modifier.fillMaxWidth()
-                                            is AccountScreenLayout.Wide -> Modifier.fillMaxWidth()
+                                            is AccountScreenLayoutStyle.Compact -> Modifier.fillMaxWidth()
+                                            is AccountScreenLayoutStyle.Wide -> Modifier.fillMaxWidth()
                                             else -> Modifier.widthIn(max = dimension.windowWidthMedium)
                                         }
 

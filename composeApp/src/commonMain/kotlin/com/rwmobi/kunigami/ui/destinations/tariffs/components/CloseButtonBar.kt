@@ -52,17 +52,13 @@ internal fun ButtonTitleBar(
         )
 
         leftButton?.let {
-            Box(
-                modifier = Modifier.align(alignment = Alignment.CenterStart),
-            ) {
+            Box(modifier = Modifier.align(alignment = Alignment.CenterStart)) {
                 it()
             }
         }
 
         rightButton?.let {
-            Box(
-                modifier = Modifier.align(alignment = Alignment.CenterEnd),
-            ) {
+            Box(modifier = Modifier.align(alignment = Alignment.CenterEnd)) {
                 it()
             }
         }

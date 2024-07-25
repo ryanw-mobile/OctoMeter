@@ -28,7 +28,7 @@ import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Instant
 
-internal fun LazyListScope.productDetailsLayout(
+internal fun LazyListScope.productScreenLayout(
     modifier: Modifier = Modifier,
     productDetails: ProductDetails,
 ) {
@@ -45,7 +45,7 @@ internal fun LazyListScope.productDetailsLayout(
             )
 
             productDetails.electricityTariff?.let { tariffDetails ->
-                RegionTariffDetails(
+                RegionTariff(
                     modifier = Modifier
                         .widthIn(max = dimension.windowWidthCompact)
                         .padding(all = dimension.grid_2),

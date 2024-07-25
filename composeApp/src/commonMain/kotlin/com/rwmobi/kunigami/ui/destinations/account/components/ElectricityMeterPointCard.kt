@@ -25,7 +25,7 @@ import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.components.IconTextButton
-import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayout
+import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayoutStyle
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_null_tariff
@@ -43,7 +43,7 @@ internal fun ElectricityMeterPointCard(
     selectedMeterSerialNumber: String?,
     meterPoint: ElectricityMeterPoint,
     tariffHistory: List<Tariff>,
-    requestedLayout: AccountScreenLayout,
+    requestedLayout: AccountScreenLayoutStyle,
     onReloadTariff: () -> Unit,
     onMeterSerialNumberSelected: (mpan: String, meterSerialNumber: String) -> Unit,
 ) {
@@ -113,7 +113,7 @@ internal fun ElectricityMeterPointCard(
                 }
             }
 
-            val meterSerialNumberTextStyle = if (requestedLayout is AccountScreenLayout.Compact) {
+            val meterSerialNumberTextStyle = if (requestedLayout is AccountScreenLayoutStyle.Compact) {
                 MaterialTheme.typography.labelMedium
             } else {
                 MaterialTheme.typography.titleMedium

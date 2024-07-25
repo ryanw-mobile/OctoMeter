@@ -36,6 +36,7 @@ import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.TagWithIcon
+import com.rwmobi.kunigami.ui.theme.Dimension
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
@@ -44,18 +45,18 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun ProductItemAdaptive(
+internal fun ProductListItemAdaptive(
     modifier: Modifier = Modifier,
     productSummary: ProductSummary,
     useWideLayout: Boolean = false,
 ) {
     if (useWideLayout) {
-        ProductItemWide(
+        ProductListItemWide(
             modifier = modifier,
             productSummary = productSummary,
         )
     } else {
-        ProductItemCompact(
+        ProductListItemCompact(
             modifier = modifier,
             productSummary = productSummary,
         )
@@ -63,7 +64,7 @@ internal fun ProductItemAdaptive(
 }
 
 @Composable
-private fun ProductItemCompact(
+private fun ProductListItemCompact(
     modifier: Modifier = Modifier,
     productSummary: ProductSummary,
 ) {
@@ -117,30 +118,16 @@ private fun ProductItemCompact(
         Spacer(modifier = Modifier.size(size = dimension.grid_1))
 
         if (productSummary.features.isNotEmpty()) {
-            val currentDensity = LocalDensity.current
-            CompositionLocalProvider(
-                LocalDensity provides Density(currentDensity.density, fontScale = 1f),
-            ) {
-                FlowRow(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = dimension.grid_1),
-                    verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
-                    horizontalArrangement = Arrangement.End,
-                ) {
-                    productSummary.features.forEach {
-                        TagWithIcon(
-                            modifier = Modifier.padding(end = dimension.grid_0_5),
-                            icon = painterResource(resource = it.iconResource),
-                            text = stringResource(resource = it.stringResource),
-                        )
-                    }
-                }
-            }
+            ProductFeaturesFlowRow(
+                dimension = dimension,
+                productSummary = productSummary,
+            )
         }
     }
 }
 
 @Composable
-internal fun ProductItemWide(
+internal fun ProductListItemWide(
     modifier: Modifier = Modifier,
     productSummary: ProductSummary,
 ) {
@@ -201,24 +188,36 @@ internal fun ProductItemWide(
             )
 
             if (productSummary.features.isNotEmpty()) {
-                val currentDensity = LocalDensity.current
-                CompositionLocalProvider(
-                    LocalDensity provides Density(currentDensity.density, fontScale = 1f),
-                ) {
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = dimension.grid_1),
-                        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
-                        horizontalArrangement = Arrangement.End,
-                    ) {
-                        productSummary.features.forEach {
-                            TagWithIcon(
-                                modifier = Modifier.padding(end = dimension.grid_0_5),
-                                icon = painterResource(resource = it.iconResource),
-                                text = stringResource(resource = it.stringResource),
-                            )
-                        }
-                    }
-                }
+                ProductFeaturesFlowRow(
+                    dimension = dimension,
+                    productSummary = productSummary,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProductFeaturesFlowRow(
+    modifier: Modifier = Modifier,
+    dimension: Dimension,
+    productSummary: ProductSummary,
+) {
+    val currentDensity = LocalDensity.current
+    CompositionLocalProvider(LocalDensity provides Density(currentDensity.density, fontScale = 1f)) {
+        FlowRow(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = dimension.grid_1),
+            verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+            horizontalArrangement = Arrangement.End,
+        ) {
+            productSummary.features.forEach {
+                TagWithIcon(
+                    modifier = Modifier.padding(end = dimension.grid_0_5),
+                    icon = painterResource(resource = it.iconResource),
+                    text = stringResource(resource = it.stringResource),
+                )
             }
         }
     }
@@ -226,9 +225,9 @@ internal fun ProductItemWide(
 
 @Preview
 @Composable
-private fun ProductItemPreview() {
+private fun Preview() {
     CommonPreviewSetup {
-        ProductItemAdaptive(
+        ProductListItemAdaptive(
             modifier = Modifier.fillMaxWidth(),
             useWideLayout = false,
             productSummary = ProductSummary(
@@ -244,7 +243,7 @@ private fun ProductItemPreview() {
             ),
         )
 
-        ProductItemAdaptive(
+        ProductListItemAdaptive(
             modifier = Modifier.fillMaxWidth(),
             useWideLayout = true,
             productSummary = ProductSummary(

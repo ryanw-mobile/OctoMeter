@@ -156,7 +156,7 @@ internal fun AccountInformationScreen(
         ClearCredentialSectionAdaptive(
             modifier = Modifier.fillMaxWidth(),
             onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
-            useWideLayout = uiState.requestedLayout != AccountScreenLayout.Compact,
+            useWideLayout = uiState.requestedLayout != AccountScreenLayoutStyle.Compact,
         )
 
         AppInfoFooter(modifier = Modifier.fillMaxWidth())
@@ -173,7 +173,7 @@ private fun Preview() {
                 uiState = AccountUIState(
                     isLoading = false,
                     requestedScreenType = AccountScreenType.Account,
-                    requestedLayout = AccountScreenLayout.WideWrapped,
+                    requestedLayout = AccountScreenLayoutStyle.WideWrapped,
                     userProfile = UserProfile(
                         selectedMpan = "1200000345678",
                         selectedMeterSerialNumber = "11A1234567",
@@ -207,7 +207,7 @@ private fun ErrorPreview() {
             uiState = AccountUIState(
                 isLoading = false,
                 requestedScreenType = AccountScreenType.Error(specialErrorScreen = SpecialErrorScreen.NetworkError),
-                requestedLayout = AccountScreenLayout.WideWrapped,
+                requestedLayout = AccountScreenLayoutStyle.WideWrapped,
                 userProfile = UserProfile(
                     selectedMpan = "1200000345678",
                     selectedMeterSerialNumber = "11A1234567",

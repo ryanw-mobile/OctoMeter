@@ -46,7 +46,7 @@ import kunigami.composeapp.generated.resources.unit_pound
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun RegionTariffDetails(
+internal fun RegionTariff(
     modifier: Modifier,
     tariff: Tariff,
 ) {
@@ -166,7 +166,7 @@ internal fun RegionTariffDetails(
 @Composable
 private fun Preview() {
     CommonPreviewSetup {
-        RegionTariffDetails(
+        RegionTariff(
             modifier = Modifier.fillMaxSize(),
             tariff = TariffSamples.agileFlex221125,
         )
