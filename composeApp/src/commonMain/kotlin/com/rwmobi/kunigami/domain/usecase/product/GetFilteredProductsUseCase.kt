@@ -25,12 +25,14 @@ class GetFilteredProductsUseCase(
             getProductsResult.fold(
                 onSuccess = {
                     getProductsResult.mapCatching { products ->
-                        products.filter {
-                            it.direction == ProductDirection.IMPORT &&
-                                !it.features.contains(ProductFeature.BUSINESS) &&
-                                it.brand == "OCTOPUS_ENERGY" && // TODO: Only for RestApi
-                                !it.features.contains(ProductFeature.RESTRICTED) // TODO: Only for RestApi
-                        }
+                        products
+                            .filter {
+                                it.direction == ProductDirection.IMPORT &&
+                                    !it.features.contains(ProductFeature.BUSINESS) &&
+                                    it.brand == "OCTOPUS_ENERGY" && // TODO: Only for RestApi
+                                    !it.features.contains(ProductFeature.RESTRICTED) // TODO: Only for RestApi
+                            }
+                            .sortedBy { it.displayName }
                     }
                 },
                 onFailure = {
