@@ -567,6 +567,45 @@ object GetTariffSampleData {
     }
     """.trimIndent()
 
+    val singleEnergyProductQueryResponse = """{
+  "data": {
+    "energyProduct": {
+      "code": "AGILE-FLEX-22-11-25",
+      "fullName": "Agile Octopus November 2022 v1",
+      "displayName": "Agile Octopus",
+      "description": "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
+      "term": null,
+      "isVariable": true,
+      "isChargedHalfHourly": true,
+      "isGreen": true,
+      "isPrepay": false,
+      "isBusiness": false,
+      "availableTo": "2023-12-11T12:00:00+00:00",
+      "availableFrom": "2022-11-25T00:00:00+00:00",
+      "exitFeesType": "NONE",
+      "exitFees": 0,
+      "tariffs": {
+        "edges": [
+          {
+            "node": {
+              "__typename": "StandardTariff",
+              "tariffCode": "E-1R-AGILE-FLEX-22-11-25-C",
+              "standingCharge": 31.51,
+              "unitRate": 30.66
+            }
+          }
+        ],
+        "totalCount": 1,
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "YXJyYXljb25uZWN0aW9uOjA="
+        }
+      }
+    }
+  }
+}
+    """.trimIndent()
+
     val tariff = Tariff(
         productCode = "AGILE-FLEX-22-11-25",
         fullName = "Agile Octopus November 2022 v1",
@@ -575,11 +614,11 @@ object GetTariffSampleData {
         isVariable = true,
         availability = Instant.parse("2022-11-25T00:00:00Z")..Instant.parse("2023-12-11T12:00:00Z"),
         tariffPaymentTerm = TariffPaymentTerm.DIRECT_DEBIT_MONTHLY,
-        tariffCode = "E-1R-AGILE-FLEX-22-11-25-A",
-        vatInclusiveStandingCharge = 37.296,
+        tariffCode = "E-1R-AGILE-FLEX-22-11-25-C",
+        vatInclusiveStandingCharge = 31.51,
         exitFeesType = ExitFeesType.NONE,
         vatInclusiveExitFees = 0.0,
-        vatInclusiveStandardUnitRate = 16.5795,
+        vatInclusiveStandardUnitRate = 30.66,
         vatInclusiveDayUnitRate = null,
         vatInclusiveNightUnitRate = null,
         vatInclusiveOffPeakRate = null,
