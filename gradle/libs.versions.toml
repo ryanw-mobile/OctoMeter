@@ -37,7 +37,7 @@ ksp = "2.0.0-1.0.23"
 sqlite = "2.5.0-alpha05"
 slf4j = "2.0.13"
 apollographql = "4.0.0-rc.2"
-apollographqlMockServer = "0.0.1"
+apollographqlMockServer = "0.0.3"
 
 # App configurations, not dependencies
 versionCode = "10"
