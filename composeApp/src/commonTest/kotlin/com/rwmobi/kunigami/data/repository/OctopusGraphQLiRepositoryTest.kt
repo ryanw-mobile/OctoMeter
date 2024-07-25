@@ -7,9 +7,13 @@
 
 package com.rwmobi.kunigami.data.repository
 
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.annotations.ApolloExperimental
+import com.apollographql.apollo.testing.QueueTestNetworkTransport
 import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.local.database.FakeDataBaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
+import com.rwmobi.kunigami.data.source.network.graphql.GraphQLEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
@@ -53,7 +57,7 @@ import kotlin.time.Duration
  */
 @Suppress("TooManyFunctions")
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalSerializationApi::class)
-class OctopusRestApiRepositoryTest {
+class OctopusGraphQLRepositoryTest {
 
     private lateinit var octopusGraphQLRepository: OctopusGraphQLRepository
 
@@ -113,6 +117,9 @@ class OctopusRestApiRepositoryTest {
         }
     }
 
+    private lateinit var apolloTestClient: ApolloClient
+
+    @OptIn(ApolloExperimental::class)
     private fun setUpRepository(engine: MockEngine) {
         val client = HttpClient(engine = engine) {
             install(ContentNegotiation) {
@@ -126,6 +133,10 @@ class OctopusRestApiRepositoryTest {
                 )
             }
         }
+
+        apolloTestClient = ApolloClient.Builder()
+            .networkTransport(QueueTestNetworkTransport())
+            .build()
 
         fakeDataBaseDataSource = FakeDataBaseDataSource()
         octopusGraphQLRepository = OctopusGraphQLRepository(
@@ -146,6 +157,7 @@ class OctopusRestApiRepositoryTest {
             ),
             inMemoryCacheDataSource = InMemoryCacheDataSource(),
             databaseDataSource = fakeDataBaseDataSource,
+            graphQLEndpoint = GraphQLEndpoint(apolloTestClient),
             dispatcher = UnconfinedTestDispatcher(),
         )
     }
