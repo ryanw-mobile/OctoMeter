@@ -9,7 +9,10 @@ package com.rwmobi.kunigami.data.repository
 
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.annotations.ApolloExperimental
-import com.apollographql.apollo.testing.QueueTestNetworkTransport
+import com.apollographql.apollo.exception.ApolloHttpException
+import com.apollographql.mockserver.MockResponse
+import com.apollographql.mockserver.MockServer
+import com.apollographql.mockserver.enqueueString
 import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.local.database.FakeDataBaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
@@ -43,6 +46,8 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -56,7 +61,7 @@ import kotlin.time.Duration
  * We provide MockEngine to real Endpoints instead of mocking endpoints just for the sake of strict unit tests.
  */
 @Suppress("TooManyFunctions")
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalSerializationApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, ExperimentalSerializationApi::class, ApolloExperimental::class)
 class OctopusGraphQLRepositoryTest {
 
     private lateinit var octopusGraphQLRepository: OctopusGraphQLRepository
@@ -68,8 +73,9 @@ class OctopusGraphQLRepositoryTest {
     private val fakeMpan = "9900000999999"
     private val fakeMeterSerialNumber = "99A9999999"
     private val sampleProductCode = "AGILE-FLEX-22-11-25"
-    private val sampleTariffCode = "E-1R-AGILE-FLEX-22-11-25-A"
+    private val sampleTariffCode = "E-1R-AGILE-FLEX-22-11-25-C"
     private val now = Clock.System.now()
+    private lateinit var mockServer: MockServer
     private lateinit var fakeDataBaseDataSource: FakeDataBaseDataSource
 
     private val mockEngineInternalServerError = MockEngine { _ ->
@@ -87,6 +93,13 @@ class OctopusGraphQLRepositoryTest {
             headers = headersOf(HttpHeaders.ContentType, "text/json"),
         )
     }
+
+    private val mockResponseInternalServerError = MockResponse.Builder()
+        .statusCode(statusCode = 500)
+        .headers(mapOf("Content-Length" to "0"))
+        .body(body = "Internal server error")
+        .delayMillis(0)
+        .build()
 
     private val mockEngineProductPaging = MockEngine { httpRequestData ->
         val pageNumber = httpRequestData.url.parameters.get("page")
@@ -117,10 +130,7 @@ class OctopusGraphQLRepositoryTest {
         }
     }
 
-    private lateinit var apolloTestClient: ApolloClient
-
-    @OptIn(ApolloExperimental::class)
-    private fun setUpRepository(engine: MockEngine) {
+    private suspend fun setUpRepository(engine: MockEngine) {
         val client = HttpClient(engine = engine) {
             install(ContentNegotiation) {
                 json(
@@ -133,38 +143,50 @@ class OctopusGraphQLRepositoryTest {
                 )
             }
         }
-
-        apolloTestClient = ApolloClient.Builder()
-            .networkTransport(QueueTestNetworkTransport())
-            .build()
+        val apolloClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
+        val dispatcher = UnconfinedTestDispatcher()
 
         fakeDataBaseDataSource = FakeDataBaseDataSource()
         octopusGraphQLRepository = OctopusGraphQLRepository(
             productsEndpoint = ProductsEndpoint(
                 baseUrl = fakeBaseUrl,
                 httpClient = client,
-                dispatcher = UnconfinedTestDispatcher(),
+                dispatcher = dispatcher,
             ),
             electricityMeterPointsEndpoint = ElectricityMeterPointsEndpoint(
                 baseUrl = fakeBaseUrl,
                 httpClient = client,
-                dispatcher = UnconfinedTestDispatcher(),
+                dispatcher = dispatcher,
             ),
             accountEndpoint = AccountEndpoint(
                 baseUrl = fakeBaseUrl,
                 httpClient = client,
-                dispatcher = UnconfinedTestDispatcher(),
+                dispatcher = dispatcher,
             ),
             inMemoryCacheDataSource = InMemoryCacheDataSource(),
             databaseDataSource = fakeDataBaseDataSource,
-            graphQLEndpoint = GraphQLEndpoint(apolloTestClient),
-            dispatcher = UnconfinedTestDispatcher(),
+            graphQLEndpoint = GraphQLEndpoint(
+                apolloClient = apolloClient,
+                dispatcher = dispatcher,
+            ),
+            dispatcher = dispatcher,
         )
+    }
+
+    @BeforeTest
+    fun setupMockServer() {
+        mockServer = MockServer()
+    }
+
+    @AfterTest
+    fun cleanupMockServer() {
+        mockServer.close()
     }
 
     // 🗂 getTariff
     @Test
     fun `getTariff should return expected domain model`() = runTest {
+        mockServer.enqueueString(GetTariffSampleData.singleEnergyProductQueryResponse)
         setUpRepository(
             engine = MockEngine { _ ->
                 respond(
@@ -205,6 +227,7 @@ class OctopusGraphQLRepositoryTest {
 
     @Test
     fun `getTariff should return failure when data source throws an exception`() = runTest {
+        mockServer.enqueue(mockResponse = mockResponseInternalServerError)
         setUpRepository(
             engine = mockEngineInternalServerError,
         )
@@ -214,12 +237,13 @@ class OctopusGraphQLRepositoryTest {
         )
 
         assertTrue(result.isFailure)
-        assertTrue(result.exceptionOrNull() is HttpException)
+        assertTrue(result.exceptionOrNull() is ApolloHttpException)
     }
 
     // 🗂 getProducts
     @Test
     fun `getProducts should return expected domain model`() = runTest {
+        mockServer.enqueueString(GetProductsSampleData.energyProductsQueryResponse)
         setUpRepository(
             engine = MockEngine { _ ->
                 respond(
@@ -238,6 +262,8 @@ class OctopusGraphQLRepositoryTest {
 
     @Test
     fun `getProducts should loop to get the entire data set when backend indicates request can be resumed`() = runTest {
+        mockServer.enqueueString(GetProductsSampleData.energyProductsQueryResponsePage1)
+        mockServer.enqueueString(GetProductsSampleData.energyProductsQueryResponsePage2)
         setUpRepository(
             engine = mockEngineProductPaging,
         )
@@ -250,6 +276,7 @@ class OctopusGraphQLRepositoryTest {
 
     @Test
     fun `getProducts should return failure when data source throws an exception`() = runTest {
+        mockServer.enqueue(mockResponse = mockResponseInternalServerError)
         setUpRepository(
             engine = mockEngineInternalServerError,
         )
@@ -257,12 +284,13 @@ class OctopusGraphQLRepositoryTest {
         val result = octopusGraphQLRepository.getProducts(postcode = samplePostcode)
 
         assertTrue(result.isFailure)
-        assertTrue(result.exceptionOrNull() is HttpException)
+        assertTrue(result.exceptionOrNull() is ApolloHttpException)
     }
 
     // 🗂 getProductDetails
     @Test
     fun `getProductDetails should return failure when data source throws an exception`() = runTest {
+        mockServer.enqueue(mockResponse = mockResponseInternalServerError)
         setUpRepository(
             engine = mockEngineInternalServerError,
         )
@@ -273,7 +301,7 @@ class OctopusGraphQLRepositoryTest {
         )
 
         assertTrue(result.isFailure)
-        assertTrue(result.exceptionOrNull() is HttpException)
+        assertTrue(result.exceptionOrNull() is ApolloHttpException)
     }
 
     // 🗂 getStandardUnitRates
