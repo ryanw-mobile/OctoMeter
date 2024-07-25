@@ -47,7 +47,7 @@ internal fun PostcodeInputBar(
     var showEditPostcodeDialog by remember { mutableStateOf(false) }
 
     if (showEditPostcodeDialog) {
-        EditPostcodeDialog(
+        PostcodeEditDialog(
             postcode = postcode,
             onDismiss = { showEditPostcodeDialog = false },
             onUpdatePostcode = { newPostcode ->

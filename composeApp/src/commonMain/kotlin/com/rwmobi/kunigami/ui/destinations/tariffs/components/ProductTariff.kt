@@ -34,6 +34,7 @@ import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.day_unit_rate
 import kunigami.composeapp.generated.resources.night_unit_rate
 import kunigami.composeapp.generated.resources.no
+import kunigami.composeapp.generated.resources.off_peak_rate
 import kunigami.composeapp.generated.resources.retail_region_unknown
 import kunigami.composeapp.generated.resources.standard_unit_rate
 import kunigami.composeapp.generated.resources.standing_charge
@@ -45,7 +46,7 @@ import kunigami.composeapp.generated.resources.unit_pound
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun RegionTariffDetails(
+internal fun RegionTariff(
     modifier: Modifier,
     tariff: Tariff,
 ) {
@@ -145,6 +146,18 @@ internal fun RegionTariffDetails(
                     ),
                 )
             }
+
+            vatInclusiveOffPeakRate?.let { unitRate ->
+                LabelValueRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    label = stringResource(resource = Res.string.off_peak_rate),
+                    value = stringResource(
+                        resource = Res.string.unit_p_kwh,
+                        unitRate.roundToTwoDecimalPlaces(),
+                    ),
+                )
+            }
         }
     }
 }
@@ -153,7 +166,7 @@ internal fun RegionTariffDetails(
 @Composable
 private fun Preview() {
     CommonPreviewSetup {
-        RegionTariffDetails(
+        RegionTariff(
             modifier = Modifier.fillMaxSize(),
             tariff = TariffSamples.agileFlex221125,
         )

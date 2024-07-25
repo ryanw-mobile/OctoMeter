@@ -36,6 +36,7 @@ import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_tariff_date_range
 import kunigami.composeapp.generated.resources.account_tariff_day_unit_rate
 import kunigami.composeapp.generated.resources.account_tariff_night_unit_rate
+import kunigami.composeapp.generated.resources.account_tariff_off_peak_unit_rate
 import kunigami.composeapp.generated.resources.account_tariff_standing_charge
 import kunigami.composeapp.generated.resources.account_tariff_start_date
 import kunigami.composeapp.generated.resources.account_tariff_unit_rate
@@ -123,10 +124,10 @@ internal fun TariffLayout(
             )
         }
 
-        when {
-            tariff.isVariable -> showVariableRate()
-            tariff.isSingleRate() -> showSingleRate(tariff = tariff)
-            tariff.hasDualRates() -> showDualRates(tariff = tariff)
+        if (tariff.isVariable) {
+            showVariableRate()
+        } else {
+            showRates(tariff = tariff)
         }
 
         if (showDivider) {
@@ -140,7 +141,7 @@ internal fun TariffLayout(
 }
 
 @Composable
-private fun showSingleRate(
+private fun showRates(
     tariff: Tariff,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -167,13 +168,6 @@ private fun showSingleRate(
             )
         }
     }
-}
-
-@Composable
-private fun showDualRates(
-    tariff: Tariff,
-) {
-    val dimension = LocalDensity.current.getDimension()
 
     tariff.vatInclusiveDayUnitRate?.let { rate ->
         Row(
@@ -210,6 +204,29 @@ private fun showDualRates(
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.End,
                 text = stringResource(resource = Res.string.account_tariff_night_unit_rate),
+            )
+
+            Spacer(modifier = Modifier.width(dimension.grid_2))
+
+            Text(
+                style = MaterialTheme.typography.titleLarge,
+                text = rate.toString(),
+            )
+        }
+    }
+
+    tariff.vatInclusiveOffPeakRate?.let { rate ->
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+        ) {
+            Text(
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.End,
+                text = stringResource(resource = Res.string.account_tariff_off_peak_unit_rate),
             )
 
             Spacer(modifier = Modifier.width(dimension.grid_2))

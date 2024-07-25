@@ -25,16 +25,16 @@ import org.jetbrains.compose.resources.getString
 data class AccountUIState(
     val isLoading: Boolean = true,
     val requestedScreenType: AccountScreenType? = null,
-    val requestedLayout: AccountScreenLayout = AccountScreenLayout.Compact,
+    val requestedLayout: AccountScreenLayoutStyle = AccountScreenLayoutStyle.Compact,
     val userProfile: UserProfile? = null,
     val requestScrollToTop: Boolean = false,
     val errorMessages: List<ErrorMessage> = emptyList(),
 ) {
     fun updateLayoutType(windowSizeClass: WindowSizeClass): AccountUIState {
         val requestedLayout = when (windowSizeClass.widthSizeClass) {
-            WindowWidthSizeClass.Expanded -> AccountScreenLayout.WideWrapped
-            WindowWidthSizeClass.Medium -> AccountScreenLayout.Wide
-            else -> AccountScreenLayout.Compact
+            WindowWidthSizeClass.Expanded -> AccountScreenLayoutStyle.WideWrapped
+            WindowWidthSizeClass.Medium -> AccountScreenLayoutStyle.Wide
+            else -> AccountScreenLayoutStyle.Compact
         }
 
         return copy(

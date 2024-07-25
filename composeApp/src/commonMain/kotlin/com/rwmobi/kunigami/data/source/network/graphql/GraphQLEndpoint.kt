@@ -44,9 +44,21 @@ class GraphQLEndpoint(
         }
     }
 
-    suspend fun getSingleEnergyProduct(productCode: String, postcode: String): SingleEnergyProductQuery.Data {
+    suspend fun getSingleEnergyProduct(
+        productCode: String,
+        postcode: String,
+        afterCursor: String? = null,
+        pageSize: Int = defaultPageSize,
+    ): SingleEnergyProductQuery.Data {
         return withContext(dispatcher) {
-            runQuery(query = SingleEnergyProductQuery(productCode = productCode, postcode = postcode))
+            runQuery(
+                query = SingleEnergyProductQuery(
+                    productCode = productCode,
+                    postcode = postcode,
+                    pageSize = pageSize,
+                    afterCursor = afterCursor?.let { Optional.present(it) } ?: Optional.absent(),
+                ),
+            )
         }
     }
 

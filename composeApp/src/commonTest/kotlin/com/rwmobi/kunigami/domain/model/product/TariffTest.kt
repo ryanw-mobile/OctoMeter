@@ -33,6 +33,7 @@ class TariffTest {
         vatInclusiveStandardUnitRate = 20.0,
         vatInclusiveDayUnitRate = null,
         vatInclusiveNightUnitRate = null,
+        vatInclusiveOffPeakRate = null,
         productCode = "GO-GREEN-VAR-22-10-14",
         fullName = "Octopus Go Green October 2022 v1",
         displayName = "Octopus Go Green",
@@ -62,15 +63,15 @@ class TariffTest {
     }
 
     @Test
-    fun `isSingleRate should return true for single rate tariff code`() {
+    fun `isSingleFuel should return true for single rate tariff code`() {
         val singleRateTariffCode = tariffCode1125A
-        assertTrue(Tariff.isSingleRate(singleRateTariffCode))
+        assertTrue(Tariff.isSingleFuel(singleRateTariffCode))
 
         val nonSingleRateTariffCode = tariffCode0411C
-        assertFalse(Tariff.isSingleRate(nonSingleRateTariffCode))
+        assertFalse(Tariff.isSingleFuel(nonSingleRateTariffCode))
 
         val invalidTariffCode = "E-R"
-        assertFalse(Tariff.isSingleRate(invalidTariffCode))
+        assertFalse(Tariff.isSingleFuel(invalidTariffCode))
     }
 
     @Test
@@ -86,53 +87,94 @@ class TariffTest {
     }
 
     @Test
-    fun `isSingleRate instance method should return true for single rate tariff code`() {
+    fun `isSingleFuel instance method should return true for single fuel tariff code`() {
         val tariff = TariffSampleData.agileFlex221125
-        assertTrue(tariff.isSingleRate())
+        assertTrue(tariff.isSingleFuel())
     }
 
     @Test
-    fun `hasStandardUnitRate should return true when standard unit rate is not null`() {
+    fun `getElectricityTariffType should return STANDARD when standard unit rate is not null`() {
         val tariff = sampleTariff
-        assertTrue(tariff.hasStandardUnitRate())
+        assertEquals(tariff.getElectricityTariffType(), ElectricityTariffType.STANDARD)
     }
 
     @Test
-    fun `hasStandardUnitRate should return false when standard unit rate is null`() {
+    fun `getElectricityTariffType should return UNKNOWN when all unit rates are null`() {
         val tariff = sampleTariff.copy(
             vatInclusiveStandardUnitRate = null,
+            vatInclusiveOffPeakRate = null,
+            vatInclusiveDayUnitRate = null,
+            vatInclusiveNightUnitRate = null,
         )
-        assertFalse(tariff.hasStandardUnitRate())
+        assertEquals(tariff.getElectricityTariffType(), ElectricityTariffType.UNKNOWN)
     }
 
     @Test
-    fun `hasDualRates should return true when both day and night unit rates are not null`() {
+    fun `getElectricityTariffType should return DAY_NIGHT when both day and night unit rates are not null`() {
         val tariff = sampleTariff.copy(
             vatInclusiveStandardUnitRate = null,
+            vatInclusiveOffPeakRate = null,
             vatInclusiveDayUnitRate = 20.0,
             vatInclusiveNightUnitRate = 15.0,
         )
-        assertTrue(tariff.hasDualRates())
+        assertEquals(tariff.getElectricityTariffType(), ElectricityTariffType.DAY_NIGHT)
     }
 
     @Test
-    fun `hasDualRates should return false when day unit rate is null`() {
-        val tariff = sampleTariff.copy(
-            vatInclusiveStandardUnitRate = 20.0,
+    fun `getElectricityTariffType should return UNKMOWN when either day or night unit rate is null`() {
+        val tariffDayNull = sampleTariff.copy(
+            vatInclusiveStandardUnitRate = null,
+            vatInclusiveOffPeakRate = null,
             vatInclusiveDayUnitRate = null,
             vatInclusiveNightUnitRate = 15.0,
         )
-        assertFalse(tariff.hasDualRates())
-    }
+        assertEquals(tariffDayNull.getElectricityTariffType(), ElectricityTariffType.UNKNOWN)
 
-    @Test
-    fun `hasDualRates should return false when night unit rate is null`() {
-        val tariff = sampleTariff.copy(
-            vatInclusiveStandardUnitRate = 20.0,
+        val tariffNightNull = sampleTariff.copy(
+            vatInclusiveStandardUnitRate = null,
+            vatInclusiveOffPeakRate = null,
             vatInclusiveDayUnitRate = 20.0,
             vatInclusiveNightUnitRate = null,
         )
-        assertFalse(tariff.hasDualRates())
+        assertEquals(tariffNightNull.getElectricityTariffType(), ElectricityTariffType.UNKNOWN)
+    }
+
+    @Test
+    fun `getElectricityTariffType should return THREE_RATE when day off-peak and night unit rates are not null`() {
+        val tariff = sampleTariff.copy(
+            vatInclusiveStandardUnitRate = null,
+            vatInclusiveDayUnitRate = 20.0,
+            vatInclusiveNightUnitRate = 15.0,
+            vatInclusiveOffPeakRate = 10.0,
+        )
+        assertEquals(tariff.getElectricityTariffType(), ElectricityTariffType.THREE_RATE)
+    }
+
+    @Test
+    fun `getElectricityTariffType should return UNKMOWN when off-peak is not null but either night or day is null`() {
+        val tariffDayNull = sampleTariff.copy(
+            vatInclusiveStandardUnitRate = null,
+            vatInclusiveDayUnitRate = null,
+            vatInclusiveNightUnitRate = 15.0,
+            vatInclusiveOffPeakRate = 10.0,
+        )
+        assertEquals(tariffDayNull.getElectricityTariffType(), ElectricityTariffType.UNKNOWN)
+
+        val tariffNightNull = sampleTariff.copy(
+            vatInclusiveStandardUnitRate = null,
+            vatInclusiveDayUnitRate = 20.0,
+            vatInclusiveNightUnitRate = null,
+            vatInclusiveOffPeakRate = 10.0,
+        )
+        assertEquals(tariffNightNull.getElectricityTariffType(), ElectricityTariffType.UNKNOWN)
+
+        val tariffDayNightNull = sampleTariff.copy(
+            vatInclusiveStandardUnitRate = null,
+            vatInclusiveDayUnitRate = null,
+            vatInclusiveNightUnitRate = null,
+            vatInclusiveOffPeakRate = 10.0,
+        )
+        assertEquals(tariffDayNightNull.getElectricityTariffType(), ElectricityTariffType.UNKNOWN)
     }
 
     @Test

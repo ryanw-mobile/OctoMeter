@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.domain.model.product
 
 enum class ElectricityTariffType {
     UNKNOWN,
-    SINGLE_REGISTER,
-    DUAL_REGISTER,
+    STANDARD,
+    DAY_NIGHT,
+    THREE_RATE,
 }

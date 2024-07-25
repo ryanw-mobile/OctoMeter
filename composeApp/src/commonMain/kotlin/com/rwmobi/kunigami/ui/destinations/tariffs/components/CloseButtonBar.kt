@@ -31,7 +31,7 @@ internal fun ButtonTitleBar(
         .fillMaxWidth()
         .height(height = 56.dp),
     title: String,
-    color: Color = MaterialTheme.colorScheme.onSecondary,
+    color: Color = MaterialTheme.colorScheme.onSecondaryContainer,
     leftButton: @Composable (() -> Unit)? = null,
     rightButton: @Composable (() -> Unit)? = null,
 ) {
@@ -52,17 +52,13 @@ internal fun ButtonTitleBar(
         )
 
         leftButton?.let {
-            Box(
-                modifier = Modifier.align(alignment = Alignment.CenterStart),
-            ) {
+            Box(modifier = Modifier.align(alignment = Alignment.CenterStart)) {
                 it()
             }
         }
 
         rightButton?.let {
-            Box(
-                modifier = Modifier.align(alignment = Alignment.CenterEnd),
-            ) {
+            Box(modifier = Modifier.align(alignment = Alignment.CenterEnd)) {
                 it()
             }
         }

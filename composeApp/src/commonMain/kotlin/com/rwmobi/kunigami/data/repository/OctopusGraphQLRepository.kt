@@ -54,6 +54,12 @@ class OctopusGraphQLRepository(
     private val graphQLEndpoint: GraphQLEndpoint,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : OctopusApiRepository {
+
+    /***
+     * Get a single tariff.
+     * This API supports paging, but we expect only one record,
+     * so we do not follow the cursor even when it is available.
+     */
     override suspend fun getTariff(
         tariffCode: String,
     ): Result<Tariff> {
@@ -109,11 +115,16 @@ class OctopusGraphQLRepository(
 
     override suspend fun getProductDetails(
         productCode: String,
+        postcode: String,
     ): Result<ProductDetails> {
         return withContext(dispatcher) {
             runCatching {
-                val apiResponse = productsEndpoint.getProduct(productCode = productCode)
-                apiResponse?.toProductDetails() ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
+                val response = graphQLEndpoint.getSingleEnergyProduct(
+                    productCode = productCode,
+                    postcode = postcode,
+                )
+
+                response.energyProduct?.toProductDetails() ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
             }.except<CancellationException, _>()
         }
     }

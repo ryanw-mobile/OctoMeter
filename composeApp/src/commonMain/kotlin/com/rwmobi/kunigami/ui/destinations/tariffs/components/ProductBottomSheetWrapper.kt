@@ -21,7 +21,7 @@ import com.rwmobi.kunigami.ui.theme.getDimension
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun TariffBottomSheet(
+internal fun ProductBottomSheetWrapper(
     modifier: Modifier = Modifier,
     productDetails: ProductDetails?,
     bottomSheetState: SheetState,
@@ -35,7 +35,7 @@ internal fun TariffBottomSheet(
     ) {
         LazyColumn {
             productDetails?.let {
-                productDetailsLayout(
+                productScreenLayout(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = dimension.grid_1),

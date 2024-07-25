@@ -42,7 +42,10 @@ class DemoOctopusApiRepository : OctopusApiRepository {
         throw defaultException
     }
 
-    override suspend fun getProductDetails(productCode: String): Result<ProductDetails> {
+    override suspend fun getProductDetails(
+        productCode: String,
+        postcode: String,
+    ): Result<ProductDetails> {
         throw defaultException
     }
 

@@ -34,7 +34,7 @@ data class TariffsUIState(
     val productSummaries: List<ProductSummary> = emptyList(),
     val productDetails: ProductDetails? = null,
     val requestedScreenType: TariffsScreenType? = null,
-    val requestedLayout: TariffScreenLayout = TariffScreenLayout.Compact(useBottomSheet = true),
+    val requestedLayout: TariffScreenLayoutStyle = TariffScreenLayoutStyle.Compact(useBottomSheet = true),
     val requestedWideListLayout: Boolean = false,
     val requestScrollToTop: Boolean = false,
     val errorMessages: List<ErrorMessage> = emptyList(),
@@ -43,8 +43,8 @@ data class TariffsUIState(
 
     fun shouldUseBottomSheet(): Boolean {
         return with(requestedLayout) {
-            (this is TariffScreenLayout.Wide && useBottomSheet) ||
-                (this is TariffScreenLayout.Compact && useBottomSheet)
+            (this is TariffScreenLayoutStyle.Wide && useBottomSheet) ||
+                (this is TariffScreenLayoutStyle.Compact && useBottomSheet)
         }
     }
 
@@ -54,9 +54,9 @@ data class TariffsUIState(
     fun updateLayoutType(screenSizeInfo: ScreenSizeInfo, windowSizeClass: WindowSizeClass): TariffsUIState {
         val platform = windowSizeClass.getPlatformType()
         val requestedLayout = when (windowSizeClass.widthSizeClass) {
-            WindowWidthSizeClass.Compact -> TariffScreenLayout.Compact(useBottomSheet = platform != PlatformType.DESKTOP)
-            WindowWidthSizeClass.Medium -> TariffScreenLayout.Wide(useBottomSheet = platform != PlatformType.DESKTOP)
-            else -> TariffScreenLayout.ListDetailPane
+            WindowWidthSizeClass.Compact -> TariffScreenLayoutStyle.Compact(useBottomSheet = platform != PlatformType.DESKTOP)
+            WindowWidthSizeClass.Medium -> TariffScreenLayoutStyle.Wide(useBottomSheet = platform != PlatformType.DESKTOP)
+            else -> TariffScreenLayoutStyle.ListDetailPane
         }
         val requestedWideListLayout = when {
             windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact -> false
@@ -122,9 +122,9 @@ data class TariffsUIState(
 
     private fun shouldShowTariffsList(): Boolean {
         return productDetails == null ||
-            requestedLayout is TariffScreenLayout.ListDetailPane ||
-            requestedLayout == TariffScreenLayout.Compact(useBottomSheet = true) ||
-            requestedLayout == TariffScreenLayout.Wide(useBottomSheet = true)
+            requestedLayout is TariffScreenLayoutStyle.ListDetailPane ||
+            requestedLayout == TariffScreenLayoutStyle.Compact(useBottomSheet = true) ||
+            requestedLayout == TariffScreenLayoutStyle.Wide(useBottomSheet = true)
     }
 
     private fun isErrorScreen(): Boolean {

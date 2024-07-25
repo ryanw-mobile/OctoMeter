@@ -1,29 +1,49 @@
-query SingleEnergyProductQuery($productCode: String!, $postcode: String!) {
+query SingleEnergyProductQuery($productCode: String!, $postcode: String!, $pageSize: Int!, $afterCursor: String) {
     energyProduct(code: $productCode) {
         code
         fullName
         displayName
         description
+        term
         isVariable
+        isChargedHalfHourly
+        isGreen
+        isPrepay
+        isBusiness
         availableTo
         availableFrom
         exitFeesType
         exitFees
-        tariffs(postcode: $postcode, first: 100) {
+        tariffs(postcode: $postcode, first: $pageSize, after: $afterCursor) {
             edges {
                 node {
                     ... on StandardTariff {
+                        __typename
                         tariffCode
                         standingCharge
                         unitRate
                     }
                     ... on DayNightTariff {
+                        __typename
                         tariffCode
                         standingCharge
                         dayRate
                         nightRate
                     }
+                    ... on ThreeRateTariff {
+                        __typename
+                        tariffCode
+                        standingCharge
+                        dayRate
+                        nightRate
+                        offPeakRate
+                    }
                 }
+            }
+            totalCount
+            pageInfo {
+                hasNextPage
+                endCursor
             }
         }
     }

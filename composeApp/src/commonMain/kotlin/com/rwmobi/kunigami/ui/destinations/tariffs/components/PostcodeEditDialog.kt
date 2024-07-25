@@ -43,7 +43,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun EditPostcodeDialog(
+fun PostcodeEditDialog(
     postcode: String,
     onUpdatePostcode: (newPostcode: String) -> Unit,
     onDismiss: () -> Unit,
@@ -71,14 +71,8 @@ fun EditPostcodeDialog(
                     },
                     visualTransformation = VisualTransformation.None,
                     singleLine = true,
-                    label = {
-                        Text(
-                            text = stringResource(resource = Res.string.tariffs_postcode_dialog_label),
-                        )
-                    },
-                    placeholder = {
-                        Text(text = postcode)
-                    },
+                    label = { Text(text = stringResource(resource = Res.string.tariffs_postcode_dialog_label)) },
+                    placeholder = { Text(text = postcode) },
                     trailingIcon = {
                         if (editPostcode.text.isNotEmpty()) {
                             IconButton(
@@ -109,18 +103,12 @@ fun EditPostcodeDialog(
                 onClick = { onUpdatePostcode(editPostcode.text.formatPostcode()) },
                 enabled = editPostcode.text.isValidPostcodePattern(),
             ) {
-                Text(
-                    text = stringResource(resource = Res.string.update),
-                )
+                Text(text = stringResource(resource = Res.string.update))
             }
         },
         dismissButton = {
-            TextButton(
-                onClick = onDismiss,
-            ) {
-                Text(
-                    text = stringResource(resource = Res.string.cancel),
-                )
+            TextButton(onClick = onDismiss) {
+                Text(text = stringResource(resource = Res.string.cancel))
             }
         },
     )
