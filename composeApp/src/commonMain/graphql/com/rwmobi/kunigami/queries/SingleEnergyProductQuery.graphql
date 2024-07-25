@@ -28,6 +28,13 @@ query SingleEnergyProductQuery($productCode: String!, $postcode: String!, $pageS
                         dayRate
                         nightRate
                     }
+                    ... on ThreeRateTariff {
+                        tariffCode
+                        standingCharge
+                        dayRate
+                        nightRate
+                        offPeakRate
+                    }
                 }
             }
             totalCount
