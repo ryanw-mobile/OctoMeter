@@ -18,17 +18,20 @@ query SingleEnergyProductQuery($productCode: String!, $postcode: String!, $pageS
             edges {
                 node {
                     ... on StandardTariff {
+                        __typename
                         tariffCode
                         standingCharge
                         unitRate
                     }
                     ... on DayNightTariff {
+                        __typename
                         tariffCode
                         standingCharge
                         dayRate
                         nightRate
                     }
                     ... on ThreeRateTariff {
+                        __typename
                         tariffCode
                         standingCharge
                         dayRate
