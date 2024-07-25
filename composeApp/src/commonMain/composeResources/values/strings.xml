@@ -26,6 +26,7 @@
     <string name="standard_unit_rate">Unit Rate</string>
     <string name="day_unit_rate">Day Unit Rate</string>
     <string name="night_unit_rate">Night Unit Rate</string>
+    <string name="off_peak_rate">Off Peak Unit Rate</string>
     <string name="unit_p_day">%1$d p/day</string>
     <string name="unit_p_kwh">%1$d p/kWh</string>
     <string name="unit_percent">%1$d %</string>
@@ -149,6 +150,7 @@
     <string name="account_tariff_unit_rate">Standard Unit Rate (p/kWh)</string>
     <string name="account_tariff_day_unit_rate">Day Unit Rate (p/kWh)</string>
     <string name="account_tariff_night_unit_rate">Night Unit Rate (p/kWh)</string>
+    <string name="account_tariff_off_peak_unit_rate">Off Peak Unit Rate (p/kWh)</string>
     <string name="account_tariff_standing_charge">Standing Charge (p/day)</string>
     <string name="account_meter_serial">Meter: %1$s</string>
     <string name="account_meter_selected">SELECTED</string>

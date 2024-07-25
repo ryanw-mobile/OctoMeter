@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import com.rwmobi.kunigami.domain.model.product.ElectricityTariffType
 import com.rwmobi.kunigami.domain.model.product.ExitFeesType
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
@@ -71,7 +70,6 @@ private fun ProductItemPreview() {
                 description = "With Agile Octopus, you get access to half-hourly energy prices, tied to wholesale prices and updated daily.  The unit rate is capped at 100p/kWh (including VAT).",
                 features = listOf(ProductFeature.VARIABLE, ProductFeature.GREEN),
                 term = 12,
-                electricityTariffType = ElectricityTariffType.SINGLE_REGISTER,
                 electricityTariff = Tariff(
                     productCode = "AGILE-24-04-03",
                     fullName = "Agile Octopus November 2022 v1",
@@ -87,6 +85,7 @@ private fun ProductItemPreview() {
                     vatInclusiveStandardUnitRate = 16.5795,
                     vatInclusiveDayUnitRate = null,
                     vatInclusiveNightUnitRate = null,
+                    vatInclusiveOffPeakRate = null,
                 ),
                 availability = Instant.parse("2024-03-31T23:00:00Z")..Instant.DISTANT_FUTURE,
                 brand = "OCTOPUS_ENERGY",

@@ -8,7 +8,6 @@
 package com.rwmobi.kunigami.data.repository.mapper
 
 import com.rwmobi.kunigami.data.source.network.dto.products.ProductDetailsDto
-import com.rwmobi.kunigami.domain.model.product.ElectricityTariffType
 import com.rwmobi.kunigami.domain.model.product.ExitFeesType
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
@@ -85,11 +84,6 @@ fun SingleEnergyProductQuery.EnergyProduct.toProductDetails(): ProductDetails {
         }.toList(),
         term = term,
         availability = Instant.parse(availableFrom.toString())..(availableTo?.let { Instant.parse(it.toString()) } ?: Instant.DISTANT_FUTURE),
-        electricityTariffType = if (tariffNode != null) {
-            ElectricityTariffType.SINGLE_REGISTER
-        } else {
-            ElectricityTariffType.UNKNOWN
-        },
         electricityTariff = when {
             tariffNode?.onStandardTariff?.tariffCode != null -> {
                 Tariff(
@@ -107,6 +101,7 @@ fun SingleEnergyProductQuery.EnergyProduct.toProductDetails(): ProductDetails {
                     vatInclusiveStandardUnitRate = tariffNode.onStandardTariff.unitRate ?: 0.0,
                     vatInclusiveDayUnitRate = null,
                     vatInclusiveNightUnitRate = null,
+                    vatInclusiveOffPeakRate = null,
                 )
             }
 
@@ -125,6 +120,27 @@ fun SingleEnergyProductQuery.EnergyProduct.toProductDetails(): ProductDetails {
                     vatInclusiveStandingCharge = tariffNode.onDayNightTariff.standingCharge ?: 0.0,
                     vatInclusiveDayUnitRate = tariffNode.onDayNightTariff.dayRate ?: 0.0,
                     vatInclusiveNightUnitRate = tariffNode.onDayNightTariff.nightRate ?: 0.0,
+                    vatInclusiveOffPeakRate = null,
+                    vatInclusiveStandardUnitRate = null,
+                )
+            }
+
+            tariffNode?.onThreeRateTariff?.tariffCode != null -> {
+                Tariff(
+                    productCode = code,
+                    fullName = fullName,
+                    displayName = displayName,
+                    description = description,
+                    isVariable = isVariable,
+                    availability = Instant.parse(availableFrom.toString())..(availableTo?.let { Instant.parse(it.toString()) } ?: Instant.DISTANT_FUTURE),
+                    exitFeesType = ExitFeesType.fromApiValue(value = exitFeesType),
+                    vatInclusiveExitFees = exitFees?.toDouble() ?: 0.0,
+                    tariffPaymentTerm = TariffPaymentTerm.DIRECT_DEBIT_MONTHLY,
+                    tariffCode = tariffNode.onThreeRateTariff.tariffCode,
+                    vatInclusiveStandingCharge = tariffNode.onThreeRateTariff.standingCharge ?: 0.0,
+                    vatInclusiveDayUnitRate = tariffNode.onThreeRateTariff.dayRate ?: 0.0,
+                    vatInclusiveNightUnitRate = tariffNode.onThreeRateTariff.nightRate ?: 0.0,
+                    vatInclusiveOffPeakRate = tariffNode.onThreeRateTariff.offPeakRate ?: 10.0,
                     vatInclusiveStandardUnitRate = null,
                 )
             }

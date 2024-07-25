@@ -64,13 +64,13 @@ class TariffTest {
     @Test
     fun `isSingleRate should return true for single rate tariff code`() {
         val singleRateTariffCode = tariffCode1125A
-        assertTrue(Tariff.isSingleRate(singleRateTariffCode))
+        assertTrue(Tariff.isSingleFuel(singleRateTariffCode))
 
         val nonSingleRateTariffCode = tariffCode0411C
-        assertFalse(Tariff.isSingleRate(nonSingleRateTariffCode))
+        assertFalse(Tariff.isSingleFuel(nonSingleRateTariffCode))
 
         val invalidTariffCode = "E-R"
-        assertFalse(Tariff.isSingleRate(invalidTariffCode))
+        assertFalse(Tariff.isSingleFuel(invalidTariffCode))
     }
 
     @Test
@@ -88,7 +88,7 @@ class TariffTest {
     @Test
     fun `isSingleRate instance method should return true for single rate tariff code`() {
         val tariff = TariffSampleData.agileFlex221125
-        assertTrue(tariff.isSingleRate())
+        assertTrue(tariff.isSingleFuel())
     }
 
     @Test

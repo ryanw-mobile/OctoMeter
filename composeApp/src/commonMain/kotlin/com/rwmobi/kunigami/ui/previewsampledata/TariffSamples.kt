@@ -30,6 +30,7 @@ internal object TariffSamples {
         vatInclusiveExitFees = 0.0,
         vatInclusiveDayUnitRate = null,
         vatInclusiveNightUnitRate = null,
+        vatInclusiveOffPeakRate = null,
     )
 
     val var221101 = Tariff(
@@ -47,6 +48,7 @@ internal object TariffSamples {
         vatInclusiveExitFees = 0.0,
         vatInclusiveDayUnitRate = null,
         vatInclusiveNightUnitRate = null,
+        vatInclusiveOffPeakRate = null,
     )
 
     val fix12M240411 = Tariff(
@@ -64,5 +66,6 @@ internal object TariffSamples {
         vatInclusiveExitFees = 0.0,
         vatInclusiveDayUnitRate = null,
         vatInclusiveNightUnitRate = null,
+        vatInclusiveOffPeakRate = null,
     )
 }

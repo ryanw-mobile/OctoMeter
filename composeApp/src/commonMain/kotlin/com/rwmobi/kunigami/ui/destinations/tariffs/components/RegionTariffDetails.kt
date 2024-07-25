@@ -34,6 +34,7 @@ import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.day_unit_rate
 import kunigami.composeapp.generated.resources.night_unit_rate
 import kunigami.composeapp.generated.resources.no
+import kunigami.composeapp.generated.resources.off_peak_rate
 import kunigami.composeapp.generated.resources.retail_region_unknown
 import kunigami.composeapp.generated.resources.standard_unit_rate
 import kunigami.composeapp.generated.resources.standing_charge
@@ -139,6 +140,18 @@ internal fun RegionTariffDetails(
                     modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.bodyMedium,
                     label = stringResource(resource = Res.string.night_unit_rate),
+                    value = stringResource(
+                        resource = Res.string.unit_p_kwh,
+                        unitRate.roundToTwoDecimalPlaces(),
+                    ),
+                )
+            }
+
+            vatInclusiveOffPeakRate?.let { unitRate ->
+                LabelValueRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    label = stringResource(resource = Res.string.off_peak_rate),
                     value = stringResource(
                         resource = Res.string.unit_p_kwh,
                         unitRate.roundToTwoDecimalPlaces(),

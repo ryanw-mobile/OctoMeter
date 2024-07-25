@@ -20,7 +20,6 @@ data class ProductDetails(
     val features: List<ProductFeature>,
     val term: Int?,
     val availability: ClosedRange<Instant>,
-    val electricityTariffType: ElectricityTariffType,
     val electricityTariff: Tariff?,
     val brand: String,
 )
