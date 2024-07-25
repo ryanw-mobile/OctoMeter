@@ -178,6 +178,7 @@ kotlin {
             implementation(libs.ktor.client.mock)
             implementation(libs.koin.test)
             implementation(libs.apollo.testing.support)
+            implementation(libs.apollo.mockserver)
         }
     }
 }

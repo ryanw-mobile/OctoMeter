@@ -37,6 +37,7 @@ ksp = "2.0.0-1.0.23"
 sqlite = "2.5.0-alpha05"
 slf4j = "2.0.13"
 apollographql = "4.0.0-rc.2"
+apollographqlMockServer = "0.0.1"
 
 # App configurations, not dependencies
 versionCode = "10"
@@ -92,6 +93,7 @@ androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profi
 slf4j = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
 apollo-runtime = { group = "com.apollographql.apollo", name = "apollo-runtime", version.ref = "apollographql" }
 apollo-testing-support = { group = "com.apollographql.apollo", name = "apollo-testing-support", version.ref = "apollographql" }
+apollo-mockserver = { group = "com.apollographql.mockserver", name = "apollo-mockserver", version.ref = "apollographqlMockServer" }
 # For Renovate only
 skiko-macos = { group = "org.jetbrains.skiko", name = "skiko-awt-runtime-macos-arm64", version.ref = "skiko" }
 skiko-windows = { group = "org.jetbrains.skiko", name = "skiko-awt-runtime-windows-x64", version.ref = "skiko" }
