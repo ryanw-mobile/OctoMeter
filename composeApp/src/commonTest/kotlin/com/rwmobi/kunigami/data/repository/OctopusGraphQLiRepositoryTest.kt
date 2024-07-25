@@ -55,7 +55,7 @@ import kotlin.time.Duration
 @OptIn(ExperimentalCoroutinesApi::class, ExperimentalSerializationApi::class)
 class OctopusRestApiRepositoryTest {
 
-    private lateinit var octopusRestApiRepository: OctopusRestApiRepository
+    private lateinit var octopusGraphQLRepository: OctopusGraphQLRepository
 
     private val samplePostcode = "WC1X 0ND"
     private val fakeBaseUrl = "https://some.fakeurl.com"
@@ -128,7 +128,7 @@ class OctopusRestApiRepositoryTest {
         }
 
         fakeDataBaseDataSource = FakeDataBaseDataSource()
-        octopusRestApiRepository = OctopusRestApiRepository(
+        octopusGraphQLRepository = OctopusGraphQLRepository(
             productsEndpoint = ProductsEndpoint(
                 baseUrl = fakeBaseUrl,
                 httpClient = client,
@@ -163,7 +163,7 @@ class OctopusRestApiRepositoryTest {
             },
         )
 
-        val result = octopusRestApiRepository.getTariff(
+        val result = octopusGraphQLRepository.getTariff(
             tariffCode = sampleTariffCode,
         )
 
@@ -183,7 +183,7 @@ class OctopusRestApiRepositoryTest {
             },
         )
 
-        val result = octopusRestApiRepository.getTariff(
+        val result = octopusGraphQLRepository.getTariff(
             tariffCode = "invalid tariff code",
         )
 
@@ -197,7 +197,7 @@ class OctopusRestApiRepositoryTest {
             engine = mockEngineInternalServerError,
         )
 
-        val result = octopusRestApiRepository.getTariff(
+        val result = octopusGraphQLRepository.getTariff(
             tariffCode = sampleTariffCode,
         )
 
@@ -218,7 +218,7 @@ class OctopusRestApiRepositoryTest {
             },
         )
 
-        val result = octopusRestApiRepository.getProducts(postcode = samplePostcode)
+        val result = octopusGraphQLRepository.getProducts(postcode = samplePostcode)
 
         assertTrue(result.isSuccess)
         assertEquals(expected = GetProductsSampleData.productSummary, actual = result.getOrNull())
@@ -230,7 +230,7 @@ class OctopusRestApiRepositoryTest {
             engine = mockEngineProductPaging,
         )
 
-        val result = octopusRestApiRepository.getProducts(postcode = samplePostcode)
+        val result = octopusGraphQLRepository.getProducts(postcode = samplePostcode)
 
         assertTrue(result.isSuccess)
         assertEquals(expected = GetProductsSampleData.productSummaryTwoPages, actual = result.getOrNull())
@@ -242,7 +242,7 @@ class OctopusRestApiRepositoryTest {
             engine = mockEngineInternalServerError,
         )
 
-        val result = octopusRestApiRepository.getProducts(postcode = samplePostcode)
+        val result = octopusGraphQLRepository.getProducts(postcode = samplePostcode)
 
         assertTrue(result.isFailure)
         assertTrue(result.exceptionOrNull() is HttpException)
@@ -255,7 +255,7 @@ class OctopusRestApiRepositoryTest {
             engine = mockEngineInternalServerError,
         )
 
-        val result = octopusRestApiRepository.getProductDetails(
+        val result = octopusGraphQLRepository.getProductDetails(
             productCode = sampleProductCode,
             postcode = samplePostcode,
         )
@@ -277,7 +277,7 @@ class OctopusRestApiRepositoryTest {
             },
         )
 
-        val result = octopusRestApiRepository.getStandardUnitRates(
+        val result = octopusGraphQLRepository.getStandardUnitRates(
             tariffCode = "invalid tariff code",
             period = now..now,
         )
@@ -293,7 +293,7 @@ class OctopusRestApiRepositoryTest {
         )
         fakeDataBaseDataSource.getRatesResponse = GetStandardUnitRatesSampleData.rateEntity
 
-        val result = octopusRestApiRepository.getStandardUnitRates(
+        val result = octopusGraphQLRepository.getStandardUnitRates(
             tariffCode = GetStandardUnitRatesSampleData.rateEntity[0].tariffCode,
             period = Instant.parse("2024-05-07T20:30:00Z")..Instant.parse("2024-05-07T22:00:00Z"),
         )
@@ -315,7 +315,7 @@ class OctopusRestApiRepositoryTest {
         )
         fakeDataBaseDataSource.getRatesResponse = listOf(GetStandardUnitRatesSampleData.rateEntity[0])
 
-        val result = octopusRestApiRepository.getStandardUnitRates(
+        val result = octopusGraphQLRepository.getStandardUnitRates(
             tariffCode = GetStandardUnitRatesSampleData.rateEntity[0].tariffCode,
             period = Instant.parse("2024-05-07T20:30:00Z")..Instant.parse("2024-05-07T22:00:00Z"),
         )
@@ -331,7 +331,7 @@ class OctopusRestApiRepositoryTest {
         )
         fakeDataBaseDataSource.exception = RuntimeException()
 
-        val result = octopusRestApiRepository.getStandardUnitRates(
+        val result = octopusGraphQLRepository.getStandardUnitRates(
             tariffCode = sampleTariffCode,
             period = now..now,
         )
@@ -347,7 +347,7 @@ class OctopusRestApiRepositoryTest {
         )
         fakeDataBaseDataSource.getRatesResponse = emptyList()
 
-        val result = octopusRestApiRepository.getStandardUnitRates(
+        val result = octopusGraphQLRepository.getStandardUnitRates(
             tariffCode = sampleTariffCode,
             period = now..now,
         )
@@ -369,7 +369,7 @@ class OctopusRestApiRepositoryTest {
             },
         )
 
-        val result = octopusRestApiRepository.getStandingCharges(
+        val result = octopusGraphQLRepository.getStandingCharges(
             tariffCode = "invalid tariff code",
         )
 
@@ -384,7 +384,7 @@ class OctopusRestApiRepositoryTest {
         )
         fakeDataBaseDataSource.getRatesResponse = GetStandingChargesSampleData.oeFix12M240628RateEntity
 
-        val result = octopusRestApiRepository.getStandingCharges(
+        val result = octopusGraphQLRepository.getStandingCharges(
             tariffCode = GetStandingChargesSampleData.oeFix12M240628RateEntity[0].tariffCode,
             period = GetStandingChargesSampleData.oeFix12M240628RateEntity[0].validFrom..Instant.DISTANT_FUTURE,
         )
@@ -406,7 +406,7 @@ class OctopusRestApiRepositoryTest {
         )
         fakeDataBaseDataSource.getRatesResponse = emptyList()
 
-        val result = octopusRestApiRepository.getStandingCharges(
+        val result = octopusGraphQLRepository.getStandingCharges(
             tariffCode = GetStandingChargesSampleData.oeFix12M240628RateEntity[0].tariffCode,
             period = GetStandingChargesSampleData.oeFix12M240628RateEntity[0].validFrom..Instant.DISTANT_FUTURE,
         )
@@ -422,7 +422,7 @@ class OctopusRestApiRepositoryTest {
         )
         fakeDataBaseDataSource.exception = RuntimeException()
 
-        val result = octopusRestApiRepository.getStandingCharges(
+        val result = octopusGraphQLRepository.getStandingCharges(
             tariffCode = sampleTariffCode,
             period = now..now,
         )
@@ -438,7 +438,7 @@ class OctopusRestApiRepositoryTest {
         )
         fakeDataBaseDataSource.getRatesResponse = emptyList()
 
-        val result = octopusRestApiRepository.getStandingCharges(
+        val result = octopusGraphQLRepository.getStandingCharges(
             tariffCode = sampleTariffCode,
         )
 
@@ -459,7 +459,7 @@ class OctopusRestApiRepositoryTest {
             },
         )
 
-        val result = octopusRestApiRepository.getDayUnitRates(
+        val result = octopusGraphQLRepository.getDayUnitRates(
             tariffCode = "invalid tariff code",
             period = now..now,
         )
@@ -484,7 +484,7 @@ class OctopusRestApiRepositoryTest {
         )
         fakeDataBaseDataSource.exception = RuntimeException()
 
-        val result = octopusRestApiRepository.getDayUnitRates(
+        val result = octopusGraphQLRepository.getDayUnitRates(
             tariffCode = sampleTariffCode,
             period = now..now,
         )
@@ -500,7 +500,7 @@ class OctopusRestApiRepositoryTest {
         )
         fakeDataBaseDataSource.getRatesResponse = emptyList()
 
-        val result = octopusRestApiRepository.getDayUnitRates(
+        val result = octopusGraphQLRepository.getDayUnitRates(
             tariffCode = sampleTariffCode,
             period = now..now,
         )
@@ -522,7 +522,7 @@ class OctopusRestApiRepositoryTest {
             },
         )
 
-        val result = octopusRestApiRepository.getNightUnitRates(
+        val result = octopusGraphQLRepository.getNightUnitRates(
             tariffCode = "invalid tariff code",
             period = now..now,
         )
@@ -547,7 +547,7 @@ class OctopusRestApiRepositoryTest {
         )
         fakeDataBaseDataSource.exception = RuntimeException()
 
-        val result = octopusRestApiRepository.getNightUnitRates(
+        val result = octopusGraphQLRepository.getNightUnitRates(
             tariffCode = sampleTariffCode,
             period = now..now,
         )
@@ -563,7 +563,7 @@ class OctopusRestApiRepositoryTest {
         )
         fakeDataBaseDataSource.getRatesResponse = emptyList()
 
-        val result = octopusRestApiRepository.getNightUnitRates(
+        val result = octopusGraphQLRepository.getNightUnitRates(
             tariffCode = sampleTariffCode,
             period = now..now,
         )
@@ -600,7 +600,7 @@ class OctopusRestApiRepositoryTest {
             ),
         )
 
-        val result = octopusRestApiRepository.getConsumption(
+        val result = octopusGraphQLRepository.getConsumption(
             apiKey = fakeApiKey,
             mpan = fakeMpan,
             meterSerialNumber = fakeMeterSerialNumber,
@@ -633,7 +633,7 @@ class OctopusRestApiRepositoryTest {
             ),
         )
 
-        val result = octopusRestApiRepository.getConsumption(
+        val result = octopusGraphQLRepository.getConsumption(
             apiKey = fakeApiKey,
             mpan = fakeMpan,
             meterSerialNumber = fakeMeterSerialNumber,
@@ -659,7 +659,7 @@ class OctopusRestApiRepositoryTest {
         )
         fakeDataBaseDataSource.exception = RuntimeException()
 
-        val result = octopusRestApiRepository.getConsumption(
+        val result = octopusGraphQLRepository.getConsumption(
             apiKey = fakeApiKey,
             mpan = fakeMpan,
             meterSerialNumber = fakeMeterSerialNumber,
@@ -686,7 +686,7 @@ class OctopusRestApiRepositoryTest {
         fakeDataBaseDataSource.exception = RuntimeException()
 
         listOf(ConsumptionTimeFrame.DAY, ConsumptionTimeFrame.WEEK, ConsumptionTimeFrame.MONTH, ConsumptionTimeFrame.QUARTER).forEach { timeFrame ->
-            val result = octopusRestApiRepository.getConsumption(
+            val result = octopusGraphQLRepository.getConsumption(
                 apiKey = fakeApiKey,
                 mpan = fakeMpan,
                 meterSerialNumber = fakeMeterSerialNumber,
@@ -707,7 +707,7 @@ class OctopusRestApiRepositoryTest {
         )
 
         fakeDataBaseDataSource.getConsumptionsResponse = emptyList()
-        val result = octopusRestApiRepository.getConsumption(
+        val result = octopusGraphQLRepository.getConsumption(
             apiKey = fakeApiKey,
             mpan = fakeMpan,
             meterSerialNumber = fakeMeterSerialNumber,
@@ -733,7 +733,7 @@ class OctopusRestApiRepositoryTest {
             },
         )
 
-        val result = octopusRestApiRepository.getAccount(
+        val result = octopusGraphQLRepository.getAccount(
             apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
@@ -746,7 +746,7 @@ class OctopusRestApiRepositoryTest {
     fun `getAccount should return Success-null when data source gives null response`() = runTest {
         setUpRepository(engine = mockEngineNotFound)
 
-        val result = octopusRestApiRepository.getAccount(
+        val result = octopusGraphQLRepository.getAccount(
             apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
@@ -759,7 +759,7 @@ class OctopusRestApiRepositoryTest {
     fun `getAccount should return Failure when data source throws an exception`() = runTest {
         setUpRepository(engine = mockEngineInternalServerError)
 
-        val result = octopusRestApiRepository.getAccount(
+        val result = octopusGraphQLRepository.getAccount(
             apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
@@ -789,7 +789,7 @@ class OctopusRestApiRepositoryTest {
             },
         )
 
-        val firstAccess = octopusRestApiRepository.getAccount(
+        val firstAccess = octopusGraphQLRepository.getAccount(
             apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
@@ -797,7 +797,7 @@ class OctopusRestApiRepositoryTest {
         assertEquals(expected = GetAccountSampleData.account, actual = firstAccess.getOrNull())
 
         shouldEndpointReturnError = true
-        val secondAccess = octopusRestApiRepository.getAccount(
+        val secondAccess = octopusGraphQLRepository.getAccount(
             apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
@@ -826,18 +826,18 @@ class OctopusRestApiRepositoryTest {
             },
         )
 
-        val firstAccess = octopusRestApiRepository.getAccount(
+        val firstAccess = octopusGraphQLRepository.getAccount(
             apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
         assertTrue(firstAccess.isSuccess)
         assertEquals(expected = GetAccountSampleData.account, actual = firstAccess.getOrNull())
 
-        octopusRestApiRepository.clearCache()
+        octopusGraphQLRepository.clearCache()
 
         // Repository reach endpoint because of cache missed, and we set endpoint to return error
         shouldEndpointReturnError = true
-        val secondAccess = octopusRestApiRepository.getAccount(
+        val secondAccess = octopusGraphQLRepository.getAccount(
             apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
@@ -860,7 +860,7 @@ class OctopusRestApiRepositoryTest {
         fakeDataBaseDataSource.exception = IOException(errorMessage)
 
         val exception = assertFailsWith<IOException> {
-            octopusRestApiRepository.clearCache()
+            octopusGraphQLRepository.clearCache()
         }
         assertEquals(expected = errorMessage, actual = exception.message)
     }
