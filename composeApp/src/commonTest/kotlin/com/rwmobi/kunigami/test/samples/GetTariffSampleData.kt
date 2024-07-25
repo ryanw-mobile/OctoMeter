@@ -582,5 +582,6 @@ object GetTariffSampleData {
         vatInclusiveStandardUnitRate = 16.5795,
         vatInclusiveDayUnitRate = null,
         vatInclusiveNightUnitRate = null,
+        vatInclusiveOffPeakRate = null,
     )
 }

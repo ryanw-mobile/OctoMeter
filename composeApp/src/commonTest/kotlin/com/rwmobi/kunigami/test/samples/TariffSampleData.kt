@@ -30,6 +30,7 @@ object TariffSampleData {
         vatInclusiveExitFees = 0.0,
         vatInclusiveDayUnitRate = null,
         vatInclusiveNightUnitRate = null,
+        vatInclusiveOffPeakRate = null,
     )
 
     val var221101 = Tariff(
@@ -47,5 +48,6 @@ object TariffSampleData {
         vatInclusiveExitFees = 0.0,
         vatInclusiveDayUnitRate = null,
         vatInclusiveNightUnitRate = null,
+        vatInclusiveOffPeakRate = null,
     )
 }

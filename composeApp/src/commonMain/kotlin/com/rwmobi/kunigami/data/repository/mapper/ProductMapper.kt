@@ -63,6 +63,9 @@ fun EnergyProductsQuery.Node.toProductSummary(): ProductSummary {
 }
 
 fun SingleEnergyProductQuery.EnergyProduct.toProductDetails(): ProductDetails {
+    // In GraphQL currently we default to direct debit
+    val tariffPaymentTerm = TariffPaymentTerm.DIRECT_DEBIT_MONTHLY
+
     val tariffNode = tariffs?.edges
         ?.firstOrNull()
         ?.node
@@ -95,10 +98,10 @@ fun SingleEnergyProductQuery.EnergyProduct.toProductDetails(): ProductDetails {
                     availability = Instant.parse(availableFrom.toString())..(availableTo?.let { Instant.parse(it.toString()) } ?: Instant.DISTANT_FUTURE),
                     exitFeesType = ExitFeesType.fromApiValue(value = exitFeesType),
                     vatInclusiveExitFees = exitFees?.toDouble() ?: 0.0,
-                    tariffPaymentTerm = TariffPaymentTerm.DIRECT_DEBIT_MONTHLY,
+                    tariffPaymentTerm = tariffPaymentTerm,
                     tariffCode = tariffNode.onStandardTariff.tariffCode,
                     vatInclusiveStandingCharge = tariffNode.onStandardTariff.standingCharge ?: 0.0,
-                    vatInclusiveStandardUnitRate = tariffNode.onStandardTariff.unitRate ?: 0.0,
+                    vatInclusiveStandardUnitRate = tariffNode.onStandardTariff.unitRate,
                     vatInclusiveDayUnitRate = null,
                     vatInclusiveNightUnitRate = null,
                     vatInclusiveOffPeakRate = null,
@@ -115,11 +118,11 @@ fun SingleEnergyProductQuery.EnergyProduct.toProductDetails(): ProductDetails {
                     availability = Instant.parse(availableFrom.toString())..(availableTo?.let { Instant.parse(it.toString()) } ?: Instant.DISTANT_FUTURE),
                     exitFeesType = ExitFeesType.fromApiValue(value = exitFeesType),
                     vatInclusiveExitFees = exitFees?.toDouble() ?: 0.0,
-                    tariffPaymentTerm = TariffPaymentTerm.DIRECT_DEBIT_MONTHLY,
+                    tariffPaymentTerm = tariffPaymentTerm,
                     tariffCode = tariffNode.onDayNightTariff.tariffCode,
                     vatInclusiveStandingCharge = tariffNode.onDayNightTariff.standingCharge ?: 0.0,
-                    vatInclusiveDayUnitRate = tariffNode.onDayNightTariff.dayRate ?: 0.0,
-                    vatInclusiveNightUnitRate = tariffNode.onDayNightTariff.nightRate ?: 0.0,
+                    vatInclusiveDayUnitRate = tariffNode.onDayNightTariff.dayRate,
+                    vatInclusiveNightUnitRate = tariffNode.onDayNightTariff.nightRate,
                     vatInclusiveOffPeakRate = null,
                     vatInclusiveStandardUnitRate = null,
                 )
@@ -135,18 +138,17 @@ fun SingleEnergyProductQuery.EnergyProduct.toProductDetails(): ProductDetails {
                     availability = Instant.parse(availableFrom.toString())..(availableTo?.let { Instant.parse(it.toString()) } ?: Instant.DISTANT_FUTURE),
                     exitFeesType = ExitFeesType.fromApiValue(value = exitFeesType),
                     vatInclusiveExitFees = exitFees?.toDouble() ?: 0.0,
-                    tariffPaymentTerm = TariffPaymentTerm.DIRECT_DEBIT_MONTHLY,
+                    tariffPaymentTerm = tariffPaymentTerm,
                     tariffCode = tariffNode.onThreeRateTariff.tariffCode,
                     vatInclusiveStandingCharge = tariffNode.onThreeRateTariff.standingCharge ?: 0.0,
-                    vatInclusiveDayUnitRate = tariffNode.onThreeRateTariff.dayRate ?: 0.0,
-                    vatInclusiveNightUnitRate = tariffNode.onThreeRateTariff.nightRate ?: 0.0,
-                    vatInclusiveOffPeakRate = tariffNode.onThreeRateTariff.offPeakRate ?: 10.0,
+                    vatInclusiveDayUnitRate = tariffNode.onThreeRateTariff.dayRate,
+                    vatInclusiveNightUnitRate = tariffNode.onThreeRateTariff.nightRate,
+                    vatInclusiveOffPeakRate = tariffNode.onThreeRateTariff.offPeakRate,
                     vatInclusiveStandardUnitRate = null,
                 )
             }
 
             else -> {
-                // Currently we do not support other tariff types for simplicity
                 null
             }
         },
