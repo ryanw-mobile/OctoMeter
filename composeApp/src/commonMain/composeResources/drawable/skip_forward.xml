@@ -1,0 +1,16 @@
+<!--
+  ~ Bootstrap Icons
+  - https://github.com/twbs/icons
+  ~ License: MIT
+  -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="16"
+    android:viewportHeight="16">
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M15.5,3.5a0.5,0.5 0,0 1,0.5 0.5v8a0.5,0.5 0,0 1,-1 0L15,8.752l-6.267,3.636c-0.52,0.302 -1.233,-0.043 -1.233,-0.696v-2.94l-6.267,3.636C0.713,12.69 0,12.345 0,11.692L0,4.308c0,-0.653 0.713,-0.998 1.233,-0.696L7.5,7.248v-2.94c0,-0.653 0.713,-0.998 1.233,-0.696L15,7.248L15,4a0.5,0.5 0,0 1,0.5 -0.5zM1,4.633v6.734L6.804,8L1,4.633zM8.5,4.633v6.734L14.304,8L8.5,4.633z" />
+
+</vector>

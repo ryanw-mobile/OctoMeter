@@ -165,6 +165,7 @@ This project is licensed under the Mozilla Public License Version 2.0 (MPL-2.0) 
 Every tiny piece matters. This App contains the icons contributed by:
 
 **MIT License:**
+* [Bootstrap Icons](https://github.com/twbs/icons)
 * [Eva Icons](https://github.com/akveo/eva-icons/)
 * [Lineicons](https://github.com/LineiconsHQ/Lineicons)
 * [Fluent UI System Icons](https://github.com/microsoft/fluentui-system-icons)

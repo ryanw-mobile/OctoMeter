@@ -74,8 +74,8 @@ fun TariffsScreen(
     val mainLazyListState = rememberLazyListState()
 
     Box(modifier = modifier) {
-        when {
-            uiState.requestedScreenType is TariffsScreenType.Error -> {
+        when (uiState.requestedScreenType) {
+            is TariffsScreenType.Error -> {
                 ErrorScreenHandler(
                     modifier = Modifier.fillMaxSize(),
                     specialErrorScreen = uiState.requestedScreenType.specialErrorScreen,
@@ -83,7 +83,7 @@ fun TariffsScreen(
                 )
             }
 
-            uiState.requestedScreenType == TariffsScreenType.List -> {
+            TariffsScreenType.List -> {
                 Row(
                     modifier = Modifier.fillMaxSize(),
                 ) {
@@ -187,7 +187,7 @@ fun TariffsScreen(
                 }
             }
 
-            uiState.requestedScreenType == TariffsScreenType.FullScreenDetail -> {
+            TariffsScreenType.FullScreenDetail -> {
                 ProductPaneWrapper(
                     modifier = Modifier
                         .fillMaxSize()
@@ -212,6 +212,10 @@ fun TariffsScreen(
                         },
                     )
                 }
+            }
+
+            null -> {
+                // Do nothing. Intended.
             }
         }
 
