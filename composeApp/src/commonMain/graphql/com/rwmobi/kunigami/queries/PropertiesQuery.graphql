@@ -34,21 +34,17 @@ query PropertiesQuery($accountNumber: String!) {
                 validTo
                 tariff {
                     ... on StandardTariff {
-                        id
                         displayName
                         fullName
                         description
-                        productCode
                         standingCharge
                         tariffCode
                         unitRate
                     }
                     ... on HalfHourlyTariff {
-                        id
                         displayName
                         fullName
                         description
-                        productCode
                         standingCharge
                         agileCalculationInfo {
                             priceCap
@@ -56,22 +52,18 @@ query PropertiesQuery($accountNumber: String!) {
                         tariffCode
                     }
                     ... on DayNightTariff {
-                        id
                         displayName
                         fullName
                         description
-                        productCode
                         standingCharge
                         tariffCode
                         dayRate
                         nightRate
                     }
                     ... on ThreeRateTariff {
-                        id
                         displayName
                         fullName
                         description
-                        productCode
                         standingCharge
                         dayRate
                         nightRate
@@ -79,11 +71,9 @@ query PropertiesQuery($accountNumber: String!) {
                         tariffCode
                     }
                     ... on PrepayTariff {
-                        id
                         tariffCode
                         unitRate
                         standingCharge
-                        productCode
                         fullName
                         displayName
                         description
