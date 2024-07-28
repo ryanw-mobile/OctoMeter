@@ -446,11 +446,11 @@ class OctopusGraphQLRepository(
 //                val token = getToken(apiKey = apiKey, forceRefresh = false)
 //                Logger.v("Token = ${token?.token}, ${token?.getTokenState()}")
 
-                val apiResponse = accountEndpoint.getAccount(
-                    apiKey = apiKey,
+                val response = graphQLEndpoint.getAccount(
                     accountNumber = accountNumber,
                 )
-                apiResponse?.properties?.firstOrNull()?.toAccount(accountNumber = accountNumber)?.also {
+
+                response.properties?.firstOrNull()?.toAccount(accountNumber = accountNumber)?.also {
                     inMemoryCacheDataSource.cacheProfile(account = it, createdAt = Clock.System.now())
                 }
             }

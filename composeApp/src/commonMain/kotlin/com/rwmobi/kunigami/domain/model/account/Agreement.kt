@@ -14,4 +14,14 @@ import kotlinx.datetime.Instant
 data class Agreement(
     val tariffCode: String,
     val period: ClosedRange<Instant>,
+    val fullName: String,
+    val displayName: String,
+    val description: String,
+    val isHalfHourlyTariff: Boolean,
+    val vatInclusiveStandingCharge: Double,
+    val vatInclusiveStandardUnitRate: Double?,
+    val vatInclusiveDayUnitRate: Double?,
+    val vatInclusiveNightUnitRate: Double?,
+    val vatInclusiveOffPeakRate: Double?,
+    val agilePriceCap: Double?,
 )

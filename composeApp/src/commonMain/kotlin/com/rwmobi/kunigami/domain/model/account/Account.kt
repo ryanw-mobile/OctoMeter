@@ -12,7 +12,6 @@ import kotlinx.datetime.Instant
 
 @Immutable
 data class Account(
-    val id: Int,
     val accountNumber: String,
     val fullAddress: String?,
     val postcode: String?,

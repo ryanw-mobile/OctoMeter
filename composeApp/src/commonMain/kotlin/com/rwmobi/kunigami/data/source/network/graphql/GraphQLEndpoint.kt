@@ -14,6 +14,7 @@ import com.rwmobi.kunigami.data.source.network.dto.auth.Token
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.graphql.EnergyProductsQuery
 import com.rwmobi.kunigami.graphql.ObtainKrakenTokenMutation
+import com.rwmobi.kunigami.graphql.PropertiesQuery
 import com.rwmobi.kunigami.graphql.SingleEnergyProductQuery
 import com.rwmobi.kunigami.graphql.type.ObtainJSONWebTokenInput
 import kotlinx.coroutines.CoroutineDispatcher
@@ -28,6 +29,9 @@ class GraphQLEndpoint(
 ) {
     private val defaultPageSize = 100
 
+    /***
+     * Authorization Token not required.
+     */
     suspend fun getEnergyProducts(
         postcode: String,
         afterCursor: String? = null,
@@ -44,6 +48,9 @@ class GraphQLEndpoint(
         }
     }
 
+    /***
+     * Authorization Token not required.
+     */
     suspend fun getSingleEnergyProduct(
         productCode: String,
         postcode: String,
@@ -57,6 +64,22 @@ class GraphQLEndpoint(
                     postcode = postcode,
                     pageSize = pageSize,
                     afterCursor = afterCursor?.let { Optional.present(it) } ?: Optional.absent(),
+                ),
+            )
+        }
+    }
+
+    /***
+     * The GraphQL Account query can't return everything we need. Underlying we call PropertiesQuery in this implementation.
+     * Authorization Token required.
+     */
+    suspend fun getAccount(
+        accountNumber: String,
+    ): PropertiesQuery.Data {
+        return withContext(dispatcher) {
+            runQuery(
+                query = PropertiesQuery(
+                    accountNumber = accountNumber,
                 ),
             )
         }

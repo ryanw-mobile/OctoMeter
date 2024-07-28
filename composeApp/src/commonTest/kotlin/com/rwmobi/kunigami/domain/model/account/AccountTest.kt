@@ -16,13 +16,13 @@ class AccountTest {
     @Test
     fun `getDefaultLatestTariffCode should return latest tariff code`() {
         val defaultTariffCode = account.getDefaultLatestTariffCode()
-        assertEquals(AccountSamples.agreementE1RVAR231101A.tariffCode, defaultTariffCode)
+        assertEquals(AccountSamples.agreementE1RVAR231101C.tariffCode, defaultTariffCode)
     }
 
     @Test
     fun `getDefaultLatestTariffCode should return tariff code for given MPAN`() {
         val tariffCode = account.getDefaultLatestTariffCode(firstMpan.mpan)
-        assertEquals(AccountSamples.agreementE1RVAR231101A.tariffCode, tariffCode)
+        assertEquals(AccountSamples.agreementE1RVAR231101C.tariffCode, tariffCode)
     }
 
     @Test
