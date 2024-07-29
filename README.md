@@ -16,7 +16,9 @@ This app is designed for Octopus Energy customers in the UK who have a smart met
 
 ### It works for me
 
-This is a fully functional app that I developed for myself. **I use it every day** to monitor energy consumption and save money. While it should technically work for some other Octopus Energy customers, I do not have enough sample data to cover all use cases.
+This is a fully functional app that I developed for myself. **I use it every day** to monitor energy consumption and save money. For this reason, the app was intentionally built to reach production-level quality as much as possible.
+
+While it should technically work for some other Octopus Energy customers, I do not have enough sample data to cover all use cases.
 
 This is a dashboard-type app that runs on desktop (desktop-first), Android, and iOS. It implements an adaptive layout that works on mobile, tablet, and dynamic desktop window sizes. The app honours light and dark modes on all available platforms.
 
@@ -31,8 +33,6 @@ For non-Octopus Energy customers, or non-UK residents, the demo mode will displa
 <br />
 <p align="center"><img src="https://github.com/ryanw-mobile/OctoMeter/blob/main/screenshots/240603_agile_animation.gif" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 <br />
-
-The current release meets my daily needs. However, this project will continue to be maintained and improved slowly as a way for me to gain real-world hands-on Kotlin Multiplatform development experience. For this reason, the app was intentionally built to reach production-level quality as much as possible.
 
 If you like this app, consider giving me a star, [following me on Medium](https://medium.com/@callmeryan), or [connecting with me on LinkedIn](https://www.linkedin.com/in/ryanwmobile/). 
 
@@ -62,9 +62,10 @@ All downloadables are provided under the [Release Section](https://github.com/ry
 
 Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/OctoMeter/issues).
 
-I am looking for my next Senior Android Developer role, and have limited development budget maintaining this at my own cost. There are known issues which are not likely to be address for the time being due to shortage of funding.
-
-I have submitted by CV to Octopus Energy and Kraken. Chances are that if I worked for them eventually, I would improve this project to cover more different customer use cases. Otherwise, it will enter maintenance mode when I am no longer being an Octopus Energy customer.
+> [!NOTE]
+> I am looking for my next Senior Android Developer role, and have limited development budget maintaining this at my own cost. There are known issues which are not likely to be address for the time being due to shortage of funding.
+>
+> Octopus Energy and Kraken HR have received my CV. Chances are that if I worked for them eventually, I would improve this project to cover more different customer use cases. Otherwise, it will enter maintenance mode when I am no longer being an Octopus Energy customer.
 
 ### RestAPI and GraphQL
 
