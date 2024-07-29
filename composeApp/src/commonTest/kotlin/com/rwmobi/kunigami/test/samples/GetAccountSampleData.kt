@@ -16,6 +16,7 @@ import com.rwmobi.kunigami.data.source.network.dto.account.PropertyDto
 import com.rwmobi.kunigami.data.source.network.dto.account.RegisterDto
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.account.ElectricityMeter
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import kotlinx.datetime.Instant
 
@@ -182,7 +183,7 @@ object GetAccountSampleData {
             "meters": [
               {
                 "serialNumber": "1111111111",
-                "makeAndType": "",
+                "makeAndType": "Sample Make 1",
                 "meterPoint": {
                   "meters": [
                     {
@@ -191,12 +192,12 @@ object GetAccountSampleData {
                         "edges": [
                           {
                             "node": {
-                              "readAt": "",
-                              "source": "",
-                              "readingSource": "",
+                              "readAt": "2024-07-21T00:00:00+00:00",
+                              "source": "SMART_METER",
+                              "readingSource": "Smart reading",
                               "registers": [
                                 {
-                                  "value": ""
+                                  "value": "1234.56"
                                 }
                               ]
                             }
@@ -209,7 +210,7 @@ object GetAccountSampleData {
               },
               {
                 "serialNumber": "2222222222",
-                "makeAndType": "",
+                "makeAndType": "Sample Make 2",
                 "meterPoint": {
                   "meters": [
                     {
@@ -218,12 +219,12 @@ object GetAccountSampleData {
                         "edges": [
                           {
                             "node": {
-                              "readAt": "",
-                              "source": "",
-                              "readingSource": "",
+                              "readAt": "2024-07-20T00:00:00+00:00",
+                              "source": "SMART_METER",
+                              "readingSource": "Smart reading",
                               "registers": [
                                 {
-                                  "value": ""
+                                  "value": "1234"
                                 }
                               ]
                             }
@@ -280,7 +281,22 @@ object GetAccountSampleData {
         electricityMeterPoints = listOf(
             ElectricityMeterPoint(
                 mpan = "1000000000000",
-                meterSerialNumbers = listOf("1111111111", "2222222222"),
+                meters = listOf(
+                    ElectricityMeter(
+                        serialNumber = "1111111111",
+                        makeAndType = "Sample Make 1",
+                        readingSource = "Smart reading",
+                        readAt = Instant.parse("2024-07-21T00:00:00+00:00"),
+                        value = 1234.56,
+                    ),
+                    ElectricityMeter(
+                        serialNumber = "2222222222",
+                        makeAndType = "Sample Make 2",
+                        readingSource = "Smart reading",
+                        readAt = Instant.parse("2024-07-20T00:00:00+00:00"),
+                        value = 1234.0,
+                    ),
+                ),
                 agreements = listOf(
                     Agreement(
                         tariffCode = "E-1R-VAR-22-11-01-C",

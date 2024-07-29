@@ -52,22 +52,50 @@ class ElectricityMeterPointTest {
         vatInclusiveOffPeakRate = null,
         agilePriceCap = null,
     )
-    private val meterPoint = ElectricityMeterPoint(
+    private val meterPointWithTwoMeters = ElectricityMeterPoint(
         mpan = "MPAN1",
-        meterSerialNumbers = listOf("METER1", "METER2"),
+        meters = listOf(
+            ElectricityMeter(
+                serialNumber = "METER1",
+                makeAndType = null,
+                readingSource = null,
+                readAt = null,
+                value = null,
+            ),
+            ElectricityMeter(
+                serialNumber = "METER2",
+                makeAndType = null,
+                readingSource = null,
+                readAt = null,
+                value = null,
+            ),
+        ),
         agreements = listOf(agreement1, agreement2, agreement3),
+    )
+    private val emptyMeterPoint = ElectricityMeterPoint(
+        mpan = "MPAN1",
+        meters = listOf(
+            ElectricityMeter(
+                serialNumber = "METER1",
+                makeAndType = null,
+                readingSource = null,
+                readAt = null,
+                value = null,
+            ),
+        ),
+        agreements = emptyList(),
     )
 
     @Test
     fun `lookupAgreement should return the agreement in effect at reference point`() {
-        val agreement = meterPoint.lookupAgreement(now)
+        val agreement = meterPointWithTwoMeters.lookupAgreement(now)
         assertEquals(agreement3, agreement)
     }
 
     @Test
     fun `lookupAgreement should return null if no agreement in effect at reference point`() {
         val referencePoint = now.minus(Duration.parse("100d"))
-        val agreement = meterPoint.lookupAgreement(referencePoint)
+        val agreement = meterPointWithTwoMeters.lookupAgreement(referencePoint)
         assertNull(agreement)
     }
 
@@ -75,7 +103,7 @@ class ElectricityMeterPointTest {
     fun `lookupAgreements should return agreements in effect within given date range`() {
         val validFrom = now.minus(Duration.parse("60d"))
         val validTo = now
-        val agreements = meterPoint.lookupAgreements(period = validFrom..validTo)
+        val agreements = meterPointWithTwoMeters.lookupAgreements(period = validFrom..validTo)
         assertEquals(listOf(agreement2, agreement3), agreements)
     }
 
@@ -83,33 +111,33 @@ class ElectricityMeterPointTest {
     fun `lookupAgreements should return empty list if no agreements in effect within given date range`() {
         val validFrom = now.plus(Duration.parse("50d"))
         val validTo = now.plus(Duration.parse("50d"))
-        val agreements = meterPoint.lookupAgreements(period = validFrom..validTo)
+        val agreements = meterPointWithTwoMeters.lookupAgreements(period = validFrom..validTo)
         assertTrue(agreements.isEmpty())
     }
 
     @Test
     fun `getLatestAgreement should return the agreement with the latest validTo date`() {
-        val latestAgreement = meterPoint.getLatestAgreement()
+        val latestAgreement = meterPointWithTwoMeters.getLatestAgreement()
         assertEquals(agreement3, latestAgreement)
     }
 
     @Test
     fun `getLatestAgreement should return null if there are no agreements`() {
-        val emptyMeterPoint = ElectricityMeterPoint("MPAN1", listOf("METER1"), emptyList())
-        val latestAgreement = emptyMeterPoint.getLatestAgreement()
+        val meterPoint = emptyMeterPoint
+        val latestAgreement = meterPoint.getLatestAgreement()
         assertNull(latestAgreement)
     }
 
     @Test
     fun `getFirstTariffStartDate should return the date with the first validFrom date`() {
-        val firstTariffStartDate = meterPoint.getFirstTariffStartDate()
+        val firstTariffStartDate = meterPointWithTwoMeters.getFirstTariffStartDate()
         assertEquals(agreement1.period.start, firstTariffStartDate)
     }
 
     @Test
     fun `getFirstTariffStartDate should return null if there are no agreements`() {
-        val emptyMeterPoint = ElectricityMeterPoint("MPAN1", listOf("METER1"), emptyList())
-        val firstTariffStartDate = emptyMeterPoint.getFirstTariffStartDate()
+        val meterPoint = emptyMeterPoint
+        val firstTariffStartDate = meterPoint.getFirstTariffStartDate()
         assertNull(firstTariffStartDate)
     }
 }

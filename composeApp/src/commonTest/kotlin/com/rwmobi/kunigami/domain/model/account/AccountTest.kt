@@ -52,14 +52,14 @@ class AccountTest {
     @Test
     fun `getDefaultMeterSerialNumber should return first meter serial number`() {
         val defaultMeterSerialNumber = account.getDefaultMeterSerialNumber()
-        assertEquals(firstMpan.meterSerialNumbers.first(), defaultMeterSerialNumber)
+        assertEquals(firstMpan.meters.first().serialNumber, defaultMeterSerialNumber)
     }
 
     @Test
     fun `containsMeterSerialNumber should return true for existing MPAN and serial number`() {
         val containsMeterSerialNumber = account.containsMeterSerialNumber(
             mpan = firstMpan.mpan,
-            serial = firstMpan.meterSerialNumbers.first(),
+            meterSerialNumber = firstMpan.meters.first().serialNumber,
         )
         assertTrue(containsMeterSerialNumber)
     }
@@ -68,7 +68,7 @@ class AccountTest {
     fun `containsMeterSerialNumber should return false for unknown MPAN`() {
         val containsMeterSerialNumber = account.containsMeterSerialNumber(
             mpan = "UNKNOWN_MPAN",
-            serial = firstMpan.meterSerialNumbers.first(),
+            meterSerialNumber = firstMpan.meters.first().serialNumber,
         )
         assertFalse(containsMeterSerialNumber)
     }
@@ -77,7 +77,7 @@ class AccountTest {
     fun `containsMeterSerialNumber should return false for unknown serial number`() {
         val containsMeterSerialNumber = account.containsMeterSerialNumber(
             mpan = firstMpan.mpan,
-            serial = "UNKNOWN_METER",
+            meterSerialNumber = "UNKNOWN_METER",
         )
         assertFalse(containsMeterSerialNumber)
     }

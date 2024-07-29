@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.data.repository.mapper
 
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.account.ElectricityMeter
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.graphql.PropertiesQuery
 import kotlinx.datetime.Instant
@@ -37,8 +38,20 @@ fun PropertiesQuery.Property.toAccount(accountNumber: String): Account {
 fun PropertiesQuery.ElectricityMeterPoint.toElectricityMeterPoint(): ElectricityMeterPoint {
     return ElectricityMeterPoint(
         mpan = mpan,
-        meterSerialNumbers = meters?.mapNotNull { it?.serialNumber } ?: emptyList(),
+        meters = meters?.mapNotNull { it?.toElectricityMeter() } ?: emptyList(),
         agreements = agreements?.filterNotNull()?.toAgreement()?.filterNotNull() ?: emptyList(),
+    )
+}
+
+fun PropertiesQuery.Meter.toElectricityMeter(): ElectricityMeter {
+    val reading = this.meterPoint.meters?.firstOrNull { it?.serialNumber == serialNumber }?.readings?.edges?.firstOrNull()?.node
+
+    return ElectricityMeter(
+        serialNumber = serialNumber,
+        makeAndType = makeAndType,
+        readingSource = reading?.readingSource,
+        readAt = reading?.readAt?.let { Instant.parse(it.toString()) },
+        value = reading?.registersFilterNotNull()?.firstOrNull()?.value?.toDoubleOrNull(),
     )
 }
 

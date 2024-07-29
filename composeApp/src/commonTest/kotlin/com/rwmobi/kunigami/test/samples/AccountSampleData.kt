@@ -9,6 +9,7 @@ package com.rwmobi.kunigami.test.samples
 
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.account.ElectricityMeter
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -24,7 +25,15 @@ object AccountSampleData {
         electricityMeterPoints = listOf(
             ElectricityMeterPoint(
                 mpan = "1200000345678",
-                meterSerialNumbers = listOf("11A1234567"),
+                meters = listOf(
+                    ElectricityMeter(
+                        serialNumber = "11A1234567",
+                        makeAndType = null,
+                        readingSource = null,
+                        readAt = null,
+                        value = null,
+                    ),
+                ),
                 agreements = listOf(
                     Agreement(
                         tariffCode = "E-1R-VAR-22-11-01-C",
@@ -54,7 +63,22 @@ object AccountSampleData {
         electricityMeterPoints = listOf(
             ElectricityMeterPoint(
                 mpan = "1000000000000",
-                meterSerialNumbers = listOf("1111111111", "2222222222"),
+                meters = listOf(
+                    ElectricityMeter(
+                        serialNumber = "1111111111",
+                        makeAndType = null,
+                        readingSource = null,
+                        readAt = null,
+                        value = null,
+                    ),
+                    ElectricityMeter(
+                        serialNumber = "2222222222",
+                        makeAndType = null,
+                        readingSource = null,
+                        readAt = null,
+                        value = null,
+                    ),
+                ),
                 agreements = listOf(
                     Agreement(
                         tariffCode = "E-1R-VAR-20-09-22-N",

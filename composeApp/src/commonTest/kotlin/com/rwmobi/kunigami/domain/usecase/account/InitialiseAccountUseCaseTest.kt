@@ -55,7 +55,7 @@ class InitialiseAccountUseCaseTest {
         assertEquals(apiKey, fakeUserPreferenceRepository.apiKey)
         assertEquals(accountNumber, fakeUserPreferenceRepository.accountNumber)
         assertEquals(AccountSampleData.accountA1234A1B1.electricityMeterPoints[0].mpan, fakeUserPreferenceRepository.mpan)
-        assertEquals(AccountSampleData.accountA1234A1B1.electricityMeterPoints[0].meterSerialNumbers[0], fakeUserPreferenceRepository.meterSerialNumber)
+        assertEquals(AccountSampleData.accountA1234A1B1.electricityMeterPoints[0].meters[0].serialNumber, fakeUserPreferenceRepository.meterSerialNumber)
     }
 
     @Test

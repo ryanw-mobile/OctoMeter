@@ -826,6 +826,8 @@ class OctopusGraphQLRepositoryTest {
         val firstAccess = octopusGraphQLRepository.getAccount(
             accountNumber = fakeAccountNumber,
         )
+
+        firstAccess.exceptionOrNull()?.printStackTrace()
         assertTrue(firstAccess.isSuccess)
         assertEquals(expected = GetAccountSampleData.account, actual = firstAccess.getOrNull())
 

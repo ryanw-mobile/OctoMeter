@@ -14,7 +14,7 @@ import kotlinx.datetime.Instant
 @Immutable
 data class ElectricityMeterPoint(
     val mpan: String,
-    val meterSerialNumbers: List<String>,
+    val meters: List<ElectricityMeter>,
     val agreements: List<Agreement>,
 ) {
     /**

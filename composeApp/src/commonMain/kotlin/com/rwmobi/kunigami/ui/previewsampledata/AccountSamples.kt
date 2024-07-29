@@ -7,8 +7,10 @@
 
 package com.rwmobi.kunigami.ui.previewsampledata
 
+import com.rwmobi.kunigami.domain.extensions.atStartOfDay
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.account.ElectricityMeter
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -55,7 +57,15 @@ internal object AccountSamples {
         electricityMeterPoints = listOf(
             ElectricityMeterPoint(
                 mpan = "9900000999999",
-                meterSerialNumbers = listOf("99A9999999"),
+                meters = listOf(
+                    ElectricityMeter(
+                        serialNumber = "99A9999999",
+                        makeAndType = "Sample Meter",
+                        readingSource = null,
+                        readAt = null,
+                        value = null,
+                    ),
+                ),
                 agreements = listOf(
                     agreementE1RVAR221101C,
                     agreementE1RVAR231101C,
@@ -73,7 +83,22 @@ internal object AccountSamples {
         electricityMeterPoints = listOf(
             ElectricityMeterPoint(
                 mpan = "1200000345678",
-                meterSerialNumbers = listOf("11A1234567", "11A12345A7"),
+                meters = listOf(
+                    ElectricityMeter(
+                        serialNumber = "11A1234567",
+                        makeAndType = "Landis & Gyr E470",
+                        readingSource = "Smart reading",
+                        readAt = Clock.System.now().atStartOfDay(),
+                        value = 12345.6789,
+                    ),
+                    ElectricityMeter(
+                        serialNumber = "11A12345A7",
+                        makeAndType = "Landis & Gyr E470",
+                        readingSource = "Smart reading",
+                        readAt = Clock.System.now().atStartOfDay(),
+                        value = 23456.789,
+                    ),
+                ),
                 agreements = listOf(
                     agreementE1RVAR221101C.copy(
                         period = Clock.System.now()..Clock.System.now().plus(Duration.parse("365d")),
@@ -82,7 +107,15 @@ internal object AccountSamples {
             ),
             ElectricityMeterPoint(
                 mpan = "1200000345670",
-                meterSerialNumbers = listOf("11A1234560"),
+                meters = listOf(
+                    ElectricityMeter(
+                        serialNumber = "11A1234560",
+                        makeAndType = "Landis & Gyr E470",
+                        readingSource = "Smart reading",
+                        readAt = Clock.System.now().atStartOfDay(),
+                        value = 10000.0,
+                    ),
+                ),
                 agreements = listOf(
                     agreementE1RVAR231101C.copy(
                         period = Clock.System.now()..Clock.System.now().plus(Duration.parse("365d")),

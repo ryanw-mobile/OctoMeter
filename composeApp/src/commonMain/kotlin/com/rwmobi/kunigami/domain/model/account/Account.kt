@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.domain.model.account
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.util.fastAny
 import kotlinx.datetime.Instant
 
 @Immutable
@@ -34,16 +35,6 @@ data class Account(
         }?.getLatestAgreement()?.tariffCode
     }
 
-    fun getTariffHistory(mpan: String?): List<String> {
-        if (mpan == null) return emptyList()
-
-        return electricityMeterPoints.find {
-            it.mpan == mpan
-        }?.agreements?.map {
-            it.tariffCode
-        } ?: emptyList()
-    }
-
     fun getDefaultMpan(): String? {
         return electricityMeterPoints.getOrNull(0)?.mpan
     }
@@ -62,22 +53,27 @@ data class Account(
 
     fun getElectricityMeterPoint(mpan: String, meterSerialNumber: String): ElectricityMeterPoint? {
         return electricityMeterPoints.firstOrNull {
-            it.mpan == mpan && it.meterSerialNumbers.contains(meterSerialNumber)
+            it.mpan == mpan && it.meters.fastAny { meter ->
+                meter.serialNumber == meterSerialNumber
+            }
         }
     }
 
     fun getDefaultMeterSerialNumber(): String? {
-        return electricityMeterPoints.getOrNull(0)?.meterSerialNumbers?.getOrNull(0)
+        return electricityMeterPoints.getOrNull(0)
+            ?.meters?.getOrNull(0)?.serialNumber
     }
 
-    fun containsMeterSerialNumber(mpan: String?, serial: String?): Boolean {
-        if (mpan == null || serial == null) {
+    fun containsMeterSerialNumber(mpan: String?, meterSerialNumber: String?): Boolean {
+        if (mpan == null || meterSerialNumber == null) {
             return false
         }
 
         return electricityMeterPoints.firstOrNull {
-            it.mpan == mpan
-        }?.meterSerialNumbers?.contains(serial) == true
+            it.mpan == mpan && it.meters.fastAny { meter ->
+                meter.serialNumber == meterSerialNumber
+            }
+        } != null
     }
 
     /***
@@ -86,6 +82,6 @@ data class Account(
      */
     fun hasValidMeter(): Boolean {
         return electricityMeterPoints.isNotEmpty() &&
-            electricityMeterPoints[0].meterSerialNumbers.isNotEmpty()
+            electricityMeterPoints[0].meters.isNotEmpty()
     }
 }

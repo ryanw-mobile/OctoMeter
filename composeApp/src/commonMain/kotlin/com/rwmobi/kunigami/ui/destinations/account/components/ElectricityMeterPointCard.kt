@@ -118,14 +118,14 @@ internal fun ElectricityMeterPointCard(
                     .padding(horizontal = dimension.grid_2),
                 verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
             ) {
-                meterPoint.meterSerialNumbers.forEach { meterSerialNumber ->
+                meterPoint.meters.forEach { meter ->
                     MeterSerialNumberEntry(
                         selectedMpan = selectedMpan,
                         selectedMeterSerialNumber = selectedMeterSerialNumber,
                         mpan = meterPoint.mpan,
-                        meterSerialNumber = meterSerialNumber,
+                        meterSerialNumber = meter.serialNumber,
                         meterSerialNumberTextStyle = meterSerialNumberTextStyle,
-                        onMeterSerialNumberSelected = { onMeterSerialNumberSelected(meterPoint.mpan, meterSerialNumber) },
+                        onMeterSerialNumberSelected = { onMeterSerialNumberSelected(meterPoint.mpan, meter.serialNumber) },
                     )
                 }
             }

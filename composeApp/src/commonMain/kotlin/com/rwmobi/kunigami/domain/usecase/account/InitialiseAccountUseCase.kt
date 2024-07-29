@@ -42,7 +42,7 @@ class InitialiseAccountUseCase(
 
                         userPreferencesRepository.setAccountNumber(accountNumber = accountNumber)
                         userPreferencesRepository.setMpan(mpan = account.electricityMeterPoints[0].mpan)
-                        userPreferencesRepository.setMeterSerialNumber(meterSerialNumber = account.electricityMeterPoints[0].meterSerialNumbers[0])
+                        userPreferencesRepository.setMeterSerialNumber(meterSerialNumber = account.electricityMeterPoints[0].meters[0].serialNumber)
                     },
                     onFailure = { throw it },
                 )
