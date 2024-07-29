@@ -40,8 +40,8 @@ apollographql = "4.0.0"
 apollographqlMockServer = "0.0.3"
 
 # App configurations, not dependencies
-versionCode = "10"
-versionName = "1.4.1"
+versionCode = "11"
+versionName = "2.0.0"
 android-minSdk = "26"
 android-targetSdk = "34"
 android-compileSdk = "34"
