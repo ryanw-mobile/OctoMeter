@@ -34,6 +34,7 @@ query PropertiesQuery($accountNumber: String!) {
                 validTo
                 tariff {
                     ... on StandardTariff {
+                        __typename
                         displayName
                         fullName
                         description
@@ -42,6 +43,7 @@ query PropertiesQuery($accountNumber: String!) {
                         unitRate
                     }
                     ... on HalfHourlyTariff {
+                        __typename
                         displayName
                         fullName
                         description
@@ -52,6 +54,7 @@ query PropertiesQuery($accountNumber: String!) {
                         tariffCode
                     }
                     ... on DayNightTariff {
+                        __typename
                         displayName
                         fullName
                         description
@@ -61,6 +64,7 @@ query PropertiesQuery($accountNumber: String!) {
                         nightRate
                     }
                     ... on ThreeRateTariff {
+                        __typename
                         displayName
                         fullName
                         description
@@ -71,6 +75,7 @@ query PropertiesQuery($accountNumber: String!) {
                         tariffCode
                     }
                     ... on PrepayTariff {
+                        __typename
                         tariffCode
                         unitRate
                         standingCharge
