@@ -123,7 +123,7 @@ internal fun ElectricityMeterPointCard(
                         selectedMpan = selectedMpan,
                         selectedMeterSerialNumber = selectedMeterSerialNumber,
                         mpan = meterPoint.mpan,
-                        meterSerialNumber = meter.serialNumber,
+                        meter = meter,
                         meterSerialNumberTextStyle = meterSerialNumberTextStyle,
                         onMeterSerialNumberSelected = { onMeterSerialNumberSelected(meterPoint.mpan, meter.serialNumber) },
                     )

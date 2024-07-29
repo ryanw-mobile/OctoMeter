@@ -27,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
@@ -48,6 +49,7 @@ import kunigami.composeapp.generated.resources.account_clear_credential_title
 import kunigami.composeapp.generated.resources.account_error_account_empty
 import kunigami.composeapp.generated.resources.account_moved_in
 import kunigami.composeapp.generated.resources.account_moved_out
+import kunigami.composeapp.generated.resources.account_number
 import kunigami.composeapp.generated.resources.account_unknown_installation_address
 import kunigami.composeapp.generated.resources.account_update_api_key
 import kunigami.composeapp.generated.resources.database_remove_outline
@@ -83,6 +85,13 @@ internal fun AccountInformationScreen(
             )
         } else {
             Spacer(modifier = Modifier.height(height = dimension.grid_2))
+
+            Text(
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                text = stringResource(resource = Res.string.account_number, uiState.userProfile.account.accountNumber),
+            )
 
             uiState.userProfile.account.fullAddress?.let {
                 Text(
