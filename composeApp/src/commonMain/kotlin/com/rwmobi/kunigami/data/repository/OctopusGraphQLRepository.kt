@@ -20,10 +20,7 @@ import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.local.database.entity.coversRange
 import com.rwmobi.kunigami.data.source.local.database.interfaces.DatabaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.model.RateType
-import com.rwmobi.kunigami.data.source.network.dto.auth.Token
-import com.rwmobi.kunigami.data.source.network.dto.auth.TokenState
 import com.rwmobi.kunigami.data.source.network.graphql.GraphQLEndpoint
-import com.rwmobi.kunigami.data.source.network.restapi.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except
@@ -48,7 +45,6 @@ import kotlin.coroutines.cancellation.CancellationException
 class OctopusGraphQLRepository(
     private val productsEndpoint: ProductsEndpoint,
     private val electricityMeterPointsEndpoint: ElectricityMeterPointsEndpoint,
-    private val accountEndpoint: AccountEndpoint,
     private val inMemoryCacheDataSource: InMemoryCacheDataSource,
     private val databaseDataSource: DatabaseDataSource,
     private val graphQLEndpoint: GraphQLEndpoint,
@@ -442,10 +438,6 @@ class OctopusGraphQLRepository(
 
         return withContext(dispatcher) {
             runCatching {
-                // Migration in progress but GraphQL isn't providing the contract history that we need. Put on hold
-//                val token = getToken(apiKey = apiKey, forceRefresh = false)
-//                Logger.v("Token = ${token?.token}, ${token?.getTokenState()}")
-
                 val response = graphQLEndpoint.getAccount(
                     accountNumber = accountNumber,
                 )
@@ -460,41 +452,5 @@ class OctopusGraphQLRepository(
     override suspend fun clearCache() {
         inMemoryCacheDataSource.clear()
         databaseDataSource.clear()
-    }
-
-    // Token Management
-
-    /**
-     * Get the cached token associated to the apiKey, or get a new one.
-     * If forceRefresh is true and still getting a null token, caller should fail the request.
-     */
-    private suspend fun getToken(apiKey: String, forceRefresh: Boolean): Token? {
-        val cachedToken = inMemoryCacheDataSource.getToken(apiKey = apiKey)
-
-        return when {
-            forceRefresh ||
-                cachedToken == null ||
-                (cachedToken.getTokenState() == TokenState.REFRESH && cachedToken.refreshToken == null)
-            -> {
-                // We need a new token
-                Logger.v(tag = "getToken", messageString = "requesting a new token")
-                return graphQLEndpoint.getAuthorizationToken(apiKey = apiKey).getOrNull()?.also {
-                    inMemoryCacheDataSource.cacheToken(apiKey = apiKey, token = it)
-                }
-            }
-
-            cachedToken.getTokenState() == TokenState.REFRESH && cachedToken.refreshToken != null -> {
-                Logger.v(tag = "getToken", messageString = "refreshing the token")
-                return graphQLEndpoint.refreshAuthorizationToken(refreshToken = cachedToken.refreshToken).getOrNull()?.also {
-                    inMemoryCacheDataSource.cacheToken(apiKey = apiKey, token = it)
-                }
-            }
-
-            else -> {
-                // Should be a valid token. If it doesn't work, caller should generate a new token
-                Logger.v(tag = "getToken", messageString = "returning the cached token")
-                cachedToken
-            }
-        }
     }
 }
