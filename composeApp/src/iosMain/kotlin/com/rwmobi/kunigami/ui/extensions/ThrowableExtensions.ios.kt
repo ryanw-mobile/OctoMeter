@@ -7,6 +7,8 @@
 
 package com.rwmobi.kunigami.ui.extensions
 
+import com.apollographql.apollo.exception.ApolloHttpException
+import com.apollographql.apollo.exception.ApolloNetworkException
 import com.rwmobi.kunigami.domain.exceptions.HttpException
 import io.ktor.client.engine.darwin.DarwinHttpRequestException
 import io.ktor.client.plugins.ClientRequestException
@@ -32,6 +34,14 @@ actual fun Throwable.mapFromPlatform(): Throwable {
 
         is ClientRequestException -> {
             HttpException(httpStatusCode = response.status.value)
+        }
+
+        is ApolloHttpException -> {
+            HttpException(httpStatusCode = statusCode)
+        }
+
+        is ApolloNetworkException -> {
+            UnresolvedAddressException()
         }
 
         else -> this
