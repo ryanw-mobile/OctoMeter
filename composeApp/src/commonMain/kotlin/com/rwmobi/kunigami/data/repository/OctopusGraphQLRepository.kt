@@ -431,7 +431,6 @@ class OctopusGraphQLRepository(
      * We have no way to tell if this is the case, but for simplicity, we take the first property only.
      */
     override suspend fun getAccount(
-        apiKey: String,
         accountNumber: String,
     ): Result<Account?> {
         inMemoryCacheDataSource.getProfile(accountNumber = accountNumber)?.let { return Result.success(it) }

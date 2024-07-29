@@ -17,7 +17,6 @@ import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.local.database.FakeDataBaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
 import com.rwmobi.kunigami.data.source.network.graphql.GraphQLEndpoint
-import com.rwmobi.kunigami.data.source.network.restapi.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.HttpException
@@ -154,11 +153,6 @@ class OctopusGraphQLRepositoryTest {
                 dispatcher = dispatcher,
             ),
             electricityMeterPointsEndpoint = ElectricityMeterPointsEndpoint(
-                baseUrl = fakeBaseUrl,
-                httpClient = client,
-                dispatcher = dispatcher,
-            ),
-            accountEndpoint = AccountEndpoint(
                 baseUrl = fakeBaseUrl,
                 httpClient = client,
                 dispatcher = dispatcher,
@@ -774,7 +768,6 @@ class OctopusGraphQLRepositoryTest {
         )
 
         val result = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
 
@@ -787,7 +780,6 @@ class OctopusGraphQLRepositoryTest {
         setUpRepository(engine = mockEngineNotFound)
 
         val result = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
 
@@ -800,7 +792,6 @@ class OctopusGraphQLRepositoryTest {
         setUpRepository(engine = mockEngineInternalServerError)
 
         val result = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
 
@@ -830,7 +821,6 @@ class OctopusGraphQLRepositoryTest {
         )
 
         val firstAccess = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
         assertTrue(firstAccess.isSuccess)
@@ -838,7 +828,6 @@ class OctopusGraphQLRepositoryTest {
 
         shouldEndpointReturnError = true
         val secondAccess = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
         assertTrue(secondAccess.isSuccess)
@@ -867,7 +856,6 @@ class OctopusGraphQLRepositoryTest {
         )
 
         val firstAccess = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
         assertTrue(firstAccess.isSuccess)
@@ -878,7 +866,6 @@ class OctopusGraphQLRepositoryTest {
         // Repository reach endpoint because of cache missed, and we set endpoint to return error
         shouldEndpointReturnError = true
         val secondAccess = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
         assertTrue(secondAccess.isFailure)

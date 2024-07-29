@@ -31,15 +31,12 @@ class GetDefaultPostcodeUseCase(
             if (userPreferencesRepository.isDemoMode()) {
                 defaultPostcode
             } else {
-                val apiKey = userPreferencesRepository.getApiKey()
                 val accountNumber = userPreferencesRepository.getAccountNumber()
 
                 // isDemoMode should have rejected null cases. This is to avoid using !! below
-                checkNotNull(value = apiKey, lazyMessage = { "Expect API Key but null" })
                 checkNotNull(value = accountNumber, lazyMessage = { "Expect Account Number but null" })
 
                 octopusApiRepository.getAccount(
-                    apiKey = apiKey,
                     accountNumber = accountNumber,
                 ).fold(
                     onFailure = { throwable ->

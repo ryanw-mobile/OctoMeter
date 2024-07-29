@@ -89,7 +89,6 @@ class FakeOctopusApiRepository : OctopusApiRepository {
 
     var setAccountResponse: Result<Account?>? = null
     override suspend fun getAccount(
-        apiKey: String,
         accountNumber: String,
     ): Result<Account?> {
         return setAccountResponse ?: throw RuntimeException("Fake result setAccountResponse not defined")

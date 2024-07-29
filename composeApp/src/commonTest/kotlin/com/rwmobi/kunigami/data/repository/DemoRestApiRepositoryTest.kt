@@ -104,7 +104,6 @@ class DemoRestApiRepositoryTest {
     fun `getAccount should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
             demoRepository.getAccount(
-                apiKey = "apiKey",
                 accountNumber = "accountNumber",
             )
         }
