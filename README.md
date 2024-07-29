@@ -63,9 +63,9 @@ All downloadables are provided under the [Release Section](https://github.com/ry
 Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/OctoMeter/issues).
 
 > [!NOTE]
-> I am looking for my next Senior Android Developer role, and have limited development budget maintaining this at my own cost. There are known issues which are not likely to be address for the time being due to shortage of funding.
+> I am looking for my next Senior Android Developer role and have a limited development budget, maintaining this at my own cost. There are known issues that are not likely to be addressed for the time being due to a shortage of funding.
 >
-> Octopus Energy and Kraken HR have received my CV. Chances are that if I worked for them eventually, I would improve this project to cover more different customer use cases. Otherwise, it will enter maintenance mode when I am no longer being an Octopus Energy customer.
+> Octopus Energy and Kraken HR have my CV on record. If I eventually work for them, I would improve this project to cover more diverse customer use cases. Otherwise, it will enter maintenance mode when I am no longer an Octopus Energy customer.
 
 ### RestAPI and GraphQL
 
