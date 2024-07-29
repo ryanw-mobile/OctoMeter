@@ -39,7 +39,6 @@ import com.rwmobi.kunigami.ui.destinations.account.components.SimpleTitleButtonC
 import com.rwmobi.kunigami.ui.destinations.account.components.UpdateApiKeyDialog
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.previewsampledata.AccountSamples
-import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
@@ -117,7 +116,6 @@ internal fun AccountInformationScreen(
                     selectedMpan = uiState.userProfile.selectedMpan,
                     selectedMeterSerialNumber = uiState.userProfile.selectedMeterSerialNumber,
                     meterPoint = meterPoint,
-                    tariffHistory = uiState.userProfile.tariffs,
                     requestedLayout = uiState.requestedLayout,
                     onMeterSerialNumberSelected = uiEvent.onMeterSerialNumberSelected,
                     onReloadTariff = uiEvent.onRefresh,
@@ -178,7 +176,6 @@ private fun Preview() {
                         selectedMpan = "1200000345678",
                         selectedMeterSerialNumber = "11A1234567",
                         account = AccountSamples.accountTwoElectricityMeterPoint,
-                        tariffs = listOf(TariffSamples.agileFlex221125),
                     ),
                     errorMessages = listOf(),
                 ),
@@ -212,7 +209,6 @@ private fun ErrorPreview() {
                     selectedMpan = "1200000345678",
                     selectedMeterSerialNumber = "11A1234567",
                     account = AccountSamples.account928,
-                    tariffs = listOf(TariffSamples.agileFlex221125),
                 ),
                 errorMessages = listOf(),
             ),

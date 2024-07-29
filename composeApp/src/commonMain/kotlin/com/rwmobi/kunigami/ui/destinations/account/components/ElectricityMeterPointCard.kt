@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
-import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.components.IconTextButton
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayoutStyle
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -42,7 +41,6 @@ internal fun ElectricityMeterPointCard(
     selectedMpan: String?,
     selectedMeterSerialNumber: String?,
     meterPoint: ElectricityMeterPoint,
-    tariffHistory: List<Tariff>,
     requestedLayout: AccountScreenLayoutStyle,
     onReloadTariff: () -> Unit,
     onMeterSerialNumberSelected: (mpan: String, meterSerialNumber: String) -> Unit,
@@ -73,22 +71,18 @@ internal fun ElectricityMeterPointCard(
                 meterPoint.agreements
                     .sortedByDescending { it.period.start }
                     .forEachIndexed { index, agreement ->
-                        val tariff = tariffHistory.firstOrNull { it.tariffCode == agreement.tariffCode }
-                        if (tariff != null) {
-                            TariffLayout(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        start = dimension.grid_2,
-                                        end = dimension.grid_2,
-                                        bottom = dimension.grid_1,
-                                    )
-                                    .wrapContentHeight(),
-                                tariff = tariff,
-                                agreement = agreement,
-                                showDivider = index < meterPoint.agreements.lastIndex,
-                            )
-                        }
+                        TariffLayout(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    start = dimension.grid_2,
+                                    end = dimension.grid_2,
+                                    bottom = dimension.grid_1,
+                                )
+                                .wrapContentHeight(),
+                            agreement = agreement,
+                            showDivider = index < meterPoint.agreements.lastIndex,
+                        )
                     }
             } else {
                 Column(
