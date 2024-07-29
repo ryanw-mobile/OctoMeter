@@ -137,7 +137,7 @@ class DemoOctopusApiRepository : OctopusApiRepository {
         return z0 * standardDeviation + mean
     }
 
-    override suspend fun getAccount(apiKey: String, accountNumber: String): Result<Account?> {
+    override suspend fun getAccount(accountNumber: String): Result<Account?> {
         throw defaultException
     }
 

@@ -12,11 +12,7 @@ import com.rwmobi.kunigami.domain.model.account.UserProfile
 internal object FakeDemoUserProfile {
     val flexibleOctopusRegionADirectDebit = UserProfile(
         selectedMpan = AccountSamples.account928.electricityMeterPoints[0].mpan,
-        selectedMeterSerialNumber = AccountSamples.account928.electricityMeterPoints[0].meterSerialNumbers[0],
+        selectedMeterSerialNumber = AccountSamples.account928.electricityMeterPoints[0].meters[0].serialNumber,
         account = AccountSamples.account928,
-        tariffs = listOf(
-            TariffSamples.fix12M240411,
-            TariffSamples.var221101,
-        ),
     )
 }

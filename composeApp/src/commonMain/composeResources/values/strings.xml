@@ -95,6 +95,8 @@
     <string name="tariffs_error_load_tariffs">Unable to retrieve tariffs</string>
     <string name="tariffs_tariff_effective">Rates effective %1$s</string>
     <string name="tariffs_variable_rate">Variable Unit Rate</string>
+    <string name="tariffs_half_hourly_rate">Half Hourly Unit Rate</string>
+    <string name="tariffs_agile_price_cap">Agile Price Cap</string>
     <string name="tariffs_variable">Variable</string>
     <string name="tariffs_postcode_dialog_label">Postcode</string>
 

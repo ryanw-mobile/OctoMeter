@@ -64,7 +64,7 @@ class SyncUserProfileUseCaseTest {
             apiKey = fakeApiKey
             accountNumber = fakeAccount.accountNumber
             mpan = fakeAccount.electricityMeterPoints.first().mpan
-            meterSerialNumber = fakeAccount.electricityMeterPoints.first().meterSerialNumbers.first()
+            meterSerialNumber = fakeAccount.electricityMeterPoints.first().meters.first().serialNumber
         }
         fakeRestApiRepository.setSimpleProductTariffResponse = Result.success(TariffSampleData.var221101)
         fakeRestApiRepository.setAccountResponse = Result.success(fakeAccount)
@@ -75,7 +75,7 @@ class SyncUserProfileUseCaseTest {
         val userProfile = result.getOrNull()
         assertIs<UserProfile>(userProfile)
         assertEquals(fakeAccount.electricityMeterPoints.first().mpan, userProfile.selectedMpan)
-        assertEquals(fakeAccount.electricityMeterPoints.first().meterSerialNumbers.first(), userProfile.selectedMeterSerialNumber)
+        assertEquals(fakeAccount.electricityMeterPoints.first().meters.first().serialNumber, userProfile.selectedMeterSerialNumber)
         assertEquals(fakeAccount, userProfile.account)
     }
 

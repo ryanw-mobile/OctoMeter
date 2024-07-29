@@ -27,8 +27,9 @@ class InitialiseAccountUseCase(
     ): Result<Unit> {
         return withContext(dispatcher) {
             runCatching {
+                userPreferencesRepository.setApiKey(apiKey = apiKey)
+
                 octopusApiRepository.getAccount(
-                    apiKey = apiKey,
                     accountNumber = accountNumber,
                 ).fold(
                     onSuccess = { account ->
@@ -39,10 +40,9 @@ class InitialiseAccountUseCase(
                             throw NoValidMeterException()
                         }
 
-                        userPreferencesRepository.setApiKey(apiKey = apiKey)
                         userPreferencesRepository.setAccountNumber(accountNumber = accountNumber)
                         userPreferencesRepository.setMpan(mpan = account.electricityMeterPoints[0].mpan)
-                        userPreferencesRepository.setMeterSerialNumber(meterSerialNumber = account.electricityMeterPoints[0].meterSerialNumbers[0])
+                        userPreferencesRepository.setMeterSerialNumber(meterSerialNumber = account.electricityMeterPoints[0].meters[0].serialNumber)
                     },
                     onFailure = { throw it },
                 )

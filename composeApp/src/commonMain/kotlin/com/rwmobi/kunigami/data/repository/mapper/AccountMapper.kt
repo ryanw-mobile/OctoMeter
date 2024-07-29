@@ -7,51 +7,200 @@
 
 package com.rwmobi.kunigami.data.repository.mapper
 
-import com.rwmobi.kunigami.data.source.network.dto.account.AgreementDto
-import com.rwmobi.kunigami.data.source.network.dto.account.ElectricityMeterPointDto
-import com.rwmobi.kunigami.data.source.network.dto.account.PropertyDto
-import com.rwmobi.kunigami.data.source.network.extensions.capitalizeWords
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.account.ElectricityMeter
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
+import com.rwmobi.kunigami.graphql.PropertiesQuery
 import kotlinx.datetime.Instant
 
-fun PropertyDto.toAccount(accountNumber: String) = Account(
-    id = id,
-    accountNumber = accountNumber,
-    movedInAt = movedInAt,
-    movedOutAt = movedOutAt,
-    fullAddress = mergeAddress(
-        addressLine1.capitalizeWords(),
-        addressLine2.capitalizeWords(),
-        addressLine3.capitalizeWords(),
-        town.capitalizeWords(),
-        county.capitalizeWords(),
-        postcode.uppercase(),
-    ),
-    postcode = postcode.uppercase(),
-    electricityMeterPoints = electricityMeterPoints.map { it.toElectricityMeterPoint() },
-)
+/***
+ * Throws: IllegalArgumentException - if the timestamp return from API is not parsable
+ */
+fun PropertiesQuery.Property.toAccount(accountNumber: String): Account {
+    // We decided to take the latest occupancy. This has no other side-effects other than a date showing on the screen.
+    val occupancyPeriod = occupancyPeriods?.maxByOrNull {
+        it?.effectiveFrom?.let { effectiveFrom ->
+            Instant.parse(effectiveFrom.toString())
+        } ?: Instant.DISTANT_PAST
+    }
 
-fun ElectricityMeterPointDto.toElectricityMeterPoint(): ElectricityMeterPoint {
-    return ElectricityMeterPoint(
-        mpan = mpan,
-        meterSerialNumbers = meters.map { it.serialNumber },
-        agreements = agreements.toAgreement(),
+    return Account(
+        accountNumber = accountNumber,
+        movedInAt = occupancyPeriod?.effectiveFrom?.let { Instant.parse(it.toString()) },
+        movedOutAt = occupancyPeriod?.effectiveTo?.let { Instant.parse(it.toString()) },
+        fullAddress = address,
+        postcode = postcode.uppercase(),
+        electricityMeterPoints = electricityMeterPoints?.mapNotNull { it?.toElectricityMeterPoint() } ?: emptyList(),
     )
 }
 
-fun AgreementDto.toAgreement() = Agreement(
-    tariffCode = tariffCode,
-    period = validFrom..(validTo ?: Instant.DISTANT_FUTURE),
-)
+fun PropertiesQuery.ElectricityMeterPoint.toElectricityMeterPoint(): ElectricityMeterPoint {
+    return ElectricityMeterPoint(
+        mpan = mpan,
+        meters = meters?.mapNotNull { it?.toElectricityMeter() } ?: emptyList(),
+        agreements = agreements?.filterNotNull()?.toAgreement()?.filterNotNull() ?: emptyList(),
+    )
+}
 
-fun List<AgreementDto>.toAgreement() = map {
+fun PropertiesQuery.Meter.toElectricityMeter(): ElectricityMeter {
+    val reading = this.meterPoint.meters?.firstOrNull { it?.serialNumber == serialNumber }?.readings?.edges?.firstOrNull()?.node
+
+    return ElectricityMeter(
+        serialNumber = serialNumber,
+        makeAndType = makeAndType,
+        readingSource = reading?.readingSource,
+        readAt = reading?.readAt?.let { Instant.parse(it.toString()) },
+        value = reading?.registersFilterNotNull()?.firstOrNull()?.value?.toDoubleOrNull(),
+    )
+}
+
+fun List<PropertiesQuery.Agreement>.toAgreement() = map {
     it.toAgreement()
 }
 
-private fun mergeAddress(vararg addressLines: String?): String? {
-    val filteredAddressLines = addressLines.toList().filterNotNull().filter { it.trim().isNotBlank() }
-    if (filteredAddressLines.isEmpty()) return null
-    return filteredAddressLines.joinToString(separator = "\n")
+fun PropertiesQuery.Agreement.toAgreement(): Agreement? {
+    val period = Instant.parse(validFrom.toString())..(validTo?.let { Instant.parse(it.toString()) } ?: Instant.DISTANT_FUTURE)
+
+    return when {
+        tariff?.onStandardTariff != null -> tariff.onStandardTariff.toAgreement(period = period)
+        tariff?.onHalfHourlyTariff != null -> tariff.onHalfHourlyTariff.toAgreement(period = period)
+        tariff?.onDayNightTariff != null -> tariff.onDayNightTariff.toAgreement(period = period)
+        tariff?.onThreeRateTariff != null -> tariff.onThreeRateTariff.toAgreement(period = period)
+        tariff?.onPrepayTariff != null -> tariff.onPrepayTariff.toAgreement(period = period)
+
+        else -> {
+            null
+        }
+    }
+}
+
+private fun PropertiesQuery.OnStandardTariff.toAgreement(period: ClosedRange<Instant>): Agreement? {
+    return if (tariffCode != null &&
+        fullName != null &&
+        displayName != null &&
+        description != null &&
+        standingCharge != null
+    ) {
+        Agreement(
+            tariffCode = tariffCode,
+            period = period,
+            fullName = fullName,
+            displayName = displayName,
+            description = description,
+            isHalfHourlyTariff = false,
+            vatInclusiveStandingCharge = standingCharge,
+            vatInclusiveStandardUnitRate = unitRate,
+            vatInclusiveDayUnitRate = null,
+            vatInclusiveNightUnitRate = null,
+            vatInclusiveOffPeakRate = null,
+            agilePriceCap = null,
+        )
+    } else {
+        null
+    }
+}
+
+private fun PropertiesQuery.OnHalfHourlyTariff.toAgreement(period: ClosedRange<Instant>): Agreement? {
+    return if (tariffCode != null &&
+        fullName != null &&
+        displayName != null &&
+        description != null &&
+        standingCharge != null
+    ) {
+        Agreement(
+            tariffCode = tariffCode,
+            period = period,
+            fullName = fullName,
+            displayName = displayName,
+            description = description,
+            isHalfHourlyTariff = true,
+            vatInclusiveStandingCharge = standingCharge,
+            vatInclusiveStandardUnitRate = null,
+            vatInclusiveDayUnitRate = null,
+            vatInclusiveNightUnitRate = null,
+            vatInclusiveOffPeakRate = null,
+            agilePriceCap = agileCalculationInfo?.priceCap,
+        )
+    } else {
+        null
+    }
+}
+
+private fun PropertiesQuery.OnDayNightTariff.toAgreement(period: ClosedRange<Instant>): Agreement? {
+    return if (tariffCode != null &&
+        fullName != null &&
+        displayName != null &&
+        description != null &&
+        standingCharge != null
+    ) {
+        Agreement(
+            tariffCode = tariffCode,
+            period = period,
+            fullName = fullName,
+            displayName = displayName,
+            description = description,
+            isHalfHourlyTariff = false,
+            vatInclusiveStandingCharge = standingCharge,
+            vatInclusiveStandardUnitRate = null,
+            vatInclusiveDayUnitRate = dayRate,
+            vatInclusiveNightUnitRate = nightRate,
+            vatInclusiveOffPeakRate = null,
+            agilePriceCap = null,
+        )
+    } else {
+        null
+    }
+}
+
+private fun PropertiesQuery.OnThreeRateTariff.toAgreement(period: ClosedRange<Instant>): Agreement? {
+    return if (tariffCode != null &&
+        fullName != null &&
+        displayName != null &&
+        description != null &&
+        standingCharge != null
+    ) {
+        Agreement(
+            tariffCode = tariffCode,
+            period = period,
+            fullName = fullName,
+            displayName = displayName,
+            description = description,
+            isHalfHourlyTariff = false,
+            vatInclusiveStandingCharge = standingCharge,
+            vatInclusiveStandardUnitRate = null,
+            vatInclusiveDayUnitRate = dayRate,
+            vatInclusiveNightUnitRate = nightRate,
+            vatInclusiveOffPeakRate = offPeakRate,
+            agilePriceCap = null,
+        )
+    } else {
+        null
+    }
+}
+
+private fun PropertiesQuery.OnPrepayTariff.toAgreement(period: ClosedRange<Instant>): Agreement? {
+    return if (tariffCode != null &&
+        fullName != null &&
+        displayName != null &&
+        description != null &&
+        standingCharge != null
+    ) {
+        Agreement(
+            tariffCode = tariffCode,
+            period = period,
+            fullName = fullName,
+            displayName = displayName,
+            description = description,
+            isHalfHourlyTariff = false,
+            vatInclusiveStandingCharge = standingCharge,
+            vatInclusiveStandardUnitRate = unitRate,
+            vatInclusiveDayUnitRate = null,
+            vatInclusiveNightUnitRate = null,
+            vatInclusiveOffPeakRate = null,
+            agilePriceCap = null,
+        )
+    } else {
+        null
+    }
 }

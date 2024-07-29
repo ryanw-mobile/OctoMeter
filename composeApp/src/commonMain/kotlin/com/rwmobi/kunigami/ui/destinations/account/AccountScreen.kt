@@ -25,8 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import com.rwmobi.kunigami.ui.components.DualTitleBar
 import com.rwmobi.kunigami.ui.components.ErrorScreenHandler
-import com.rwmobi.kunigami.ui.components.IconTitleBar
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
@@ -35,8 +35,8 @@ import com.rwmobi.kunigami.ui.previewsampledata.FakeDemoUserProfile
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.bulb
-import org.jetbrains.compose.resources.painterResource
+import kunigami.composeapp.generated.resources.navigation_account
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun AccountScreen(
@@ -80,13 +80,12 @@ fun AccountScreen(
                 ) {
                     val accountNumber = uiState.userProfile?.account?.accountNumber
                     if (accountNumber != null) {
-                        IconTitleBar(
+                        DualTitleBar(
                             modifier = Modifier
                                 .background(color = MaterialTheme.colorScheme.secondary)
                                 .fillMaxWidth()
                                 .height(height = dimension.minListItemHeight),
-                            accountNumber = accountNumber,
-                            iconPainter = painterResource(resource = Res.drawable.bulb),
+                            title = stringResource(resource = Res.string.navigation_account),
                         )
                     }
 

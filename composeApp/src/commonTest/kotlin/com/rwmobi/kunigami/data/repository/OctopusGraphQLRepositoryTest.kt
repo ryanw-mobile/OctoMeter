@@ -8,7 +8,6 @@
 package com.rwmobi.kunigami.data.repository
 
 import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.annotations.ApolloExperimental
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.mockserver.MockResponse
 import com.apollographql.mockserver.MockServer
@@ -17,7 +16,6 @@ import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.local.database.FakeDataBaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
 import com.rwmobi.kunigami.data.source.network.graphql.GraphQLEndpoint
-import com.rwmobi.kunigami.data.source.network.restapi.AccountEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.HttpException
@@ -61,7 +59,7 @@ import kotlin.time.Duration
  * We provide MockEngine to real Endpoints instead of mocking endpoints just for the sake of strict unit tests.
  */
 @Suppress("TooManyFunctions")
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalSerializationApi::class, ApolloExperimental::class)
+@OptIn(ExperimentalCoroutinesApi::class, ExperimentalSerializationApi::class)
 class OctopusGraphQLRepositoryTest {
 
     private lateinit var octopusGraphQLRepository: OctopusGraphQLRepository
@@ -154,11 +152,6 @@ class OctopusGraphQLRepositoryTest {
                 dispatcher = dispatcher,
             ),
             electricityMeterPointsEndpoint = ElectricityMeterPointsEndpoint(
-                baseUrl = fakeBaseUrl,
-                httpClient = client,
-                dispatcher = dispatcher,
-            ),
-            accountEndpoint = AccountEndpoint(
                 baseUrl = fakeBaseUrl,
                 httpClient = client,
                 dispatcher = dispatcher,
@@ -763,18 +756,12 @@ class OctopusGraphQLRepositoryTest {
     // 🗂 getAccount
     @Test
     fun `getAccount should return expected domain model`() = runTest {
+        mockServer.enqueueString(GetAccountSampleData.propertiesQueryResponse)
         setUpRepository(
-            engine = MockEngine { _ ->
-                respond(
-                    content = ByteReadChannel(GetAccountSampleData.json),
-                    status = HttpStatusCode.OK,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
-                )
-            },
+            engine = mockEngineInternalServerError,
         )
 
         val result = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
 
@@ -784,10 +771,10 @@ class OctopusGraphQLRepositoryTest {
 
     @Test
     fun `getAccount should return Success-null when data source gives null response`() = runTest {
+        mockServer.enqueueString(GetAccountSampleData.emptyPropertiesQueryResponse)
         setUpRepository(engine = mockEngineNotFound)
 
         val result = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
 
@@ -798,47 +785,31 @@ class OctopusGraphQLRepositoryTest {
     @Test
     fun `getAccount should return Failure when data source throws an exception`() = runTest {
         setUpRepository(engine = mockEngineInternalServerError)
+        mockServer.enqueue(mockResponse = mockResponseInternalServerError)
 
         val result = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
 
         assertTrue(result.isFailure)
-        assertTrue(actual = result.exceptionOrNull() is HttpException)
+        assertTrue(actual = result.exceptionOrNull() is ApolloHttpException)
     }
 
     @Test
     fun `getAccount should return cached result when it hits the cache`() = runTest {
-        var shouldEndpointReturnError = false
+        mockServer.enqueueString(GetAccountSampleData.propertiesQueryResponse)
         setUpRepository(
-            engine = MockEngine { _ ->
-                if (!shouldEndpointReturnError) {
-                    respond(
-                        content = ByteReadChannel(GetAccountSampleData.json),
-                        status = HttpStatusCode.OK,
-                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
-                    )
-                } else {
-                    respond(
-                        content = ByteReadChannel("Internal Server Error"),
-                        status = HttpStatusCode.InternalServerError,
-                        headers = headersOf(HttpHeaders.ContentType, "text/html"),
-                    )
-                }
-            },
+            engine = mockEngineInternalServerError,
         )
 
         val firstAccess = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
         assertTrue(firstAccess.isSuccess)
         assertEquals(expected = GetAccountSampleData.account, actual = firstAccess.getOrNull())
 
-        shouldEndpointReturnError = true
+        mockServer.enqueue(mockResponse = mockResponseInternalServerError)
         val secondAccess = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
         assertTrue(secondAccess.isSuccess)
@@ -847,42 +818,28 @@ class OctopusGraphQLRepositoryTest {
 
     @Test
     fun `clearCache should clear cached account`() = runTest {
-        var shouldEndpointReturnError = false
+        mockServer.enqueueString(GetAccountSampleData.propertiesQueryResponse)
         setUpRepository(
-            engine = MockEngine { _ ->
-                if (!shouldEndpointReturnError) {
-                    respond(
-                        content = ByteReadChannel(GetAccountSampleData.json),
-                        status = HttpStatusCode.OK,
-                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
-                    )
-                } else {
-                    respond(
-                        content = ByteReadChannel("Internal Server Error"),
-                        status = HttpStatusCode.InternalServerError,
-                        headers = headersOf(HttpHeaders.ContentType, "text/html"),
-                    )
-                }
-            },
+            engine = mockEngineInternalServerError,
         )
 
         val firstAccess = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
+
+        firstAccess.exceptionOrNull()?.printStackTrace()
         assertTrue(firstAccess.isSuccess)
         assertEquals(expected = GetAccountSampleData.account, actual = firstAccess.getOrNull())
 
         octopusGraphQLRepository.clearCache()
 
         // Repository reach endpoint because of cache missed, and we set endpoint to return error
-        shouldEndpointReturnError = true
+        mockServer.enqueue(mockResponse = mockResponseInternalServerError)
         val secondAccess = octopusGraphQLRepository.getAccount(
-            apiKey = fakeApiKey,
             accountNumber = fakeAccountNumber,
         )
         assertTrue(secondAccess.isFailure)
-        assertTrue(actual = secondAccess.exceptionOrNull() is HttpException)
+        assertTrue(actual = secondAccess.exceptionOrNull() is ApolloHttpException)
     }
 
     @Test

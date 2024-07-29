@@ -63,7 +63,6 @@ interface OctopusApiRepository {
     ): Result<List<Consumption>>
 
     suspend fun getAccount(
-        apiKey: String,
         accountNumber: String,
     ): Result<Account?>
 

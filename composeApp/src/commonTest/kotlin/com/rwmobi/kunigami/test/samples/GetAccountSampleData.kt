@@ -16,6 +16,7 @@ import com.rwmobi.kunigami.data.source.network.dto.account.PropertyDto
 import com.rwmobi.kunigami.data.source.network.dto.account.RegisterDto
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.Agreement
+import com.rwmobi.kunigami.domain.model.account.ElectricityMeter
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import kotlinx.datetime.Instant
 
@@ -157,21 +158,160 @@ object GetAccountSampleData {
         ),
     )
 
+    val emptyPropertiesQueryResponse = """{
+  "data": {
+    "properties": []
+  }
+}
+    """.trimIndent()
+
+    val propertiesQueryResponse = """{
+  "data": {
+    "properties": [
+      {
+        "address": "10 Downing Street, LONDON, W1 1AA",
+        "postcode": "W1 1AA",
+        "occupancyPeriods": [
+          {
+            "effectiveFrom": "2020-11-30T00:00:00Z",
+            "effectiveTo": null
+          }
+        ],
+        "electricityMeterPoints": [
+          {
+            "mpan": "1000000000000",
+            "meters": [
+              {
+                "serialNumber": "1111111111",
+                "makeAndType": "Sample Make 1",
+                "meterPoint": {
+                  "meters": [
+                    {
+                      "serialNumber": "1111111111",
+                      "readings": {
+                        "edges": [
+                          {
+                            "node": {
+                              "readAt": "2024-07-21T00:00:00+00:00",
+                              "source": "SMART_METER",
+                              "readingSource": "Smart reading",
+                              "registers": [
+                                {
+                                  "value": "1234.56"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "serialNumber": "2222222222",
+                "makeAndType": "Sample Make 2",
+                "meterPoint": {
+                  "meters": [
+                    {
+                      "serialNumber": "2222222222",
+                      "readings": {
+                        "edges": [
+                          {
+                            "node": {
+                              "readAt": "2024-07-20T00:00:00+00:00",
+                              "source": "SMART_METER",
+                              "readingSource": "Smart reading",
+                              "registers": [
+                                {
+                                  "value": "1234"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "agreements": [
+              {
+                "validFrom": "2021-12-17T00:00:00Z",
+                "validTo": "2023-04-01T00:00:00+01:00",
+                "tariff": {
+                  "__typename": "StandardTariff",
+                  "displayName": "Flexible Octopus October 2021 v2",
+                  "fullName": "Flexible Octopus October 2021 v2",
+                  "description": "Flexible Octopus offers great value and 100% renewable electricity. As a variable tariff, your prices can rise and fall with wholesale prices - but we'll always give you notice of a change, and you can switch to a fixed tariff at any time.",
+                  "standingCharge": null,
+                  "tariffCode": "E-1R-VAR-21-09-29-C",
+                  "unitRate": null
+                }
+              },
+              {
+                "validFrom": "2023-04-01T00:00:00+01:00",
+                "validTo": null,
+                "tariff": {
+                  "__typename": "StandardTariff",
+                  "displayName": "Flexible Octopus",
+                  "fullName": "Flexible Octopus",
+                  "description": "Flexible Octopus offers great value and 100% renewable electricity. As a variable tariff, your prices can rise and fall with wholesale prices - but we'll always give you notice of a change.",
+                  "standingCharge": 38.72,
+                  "tariffCode": "E-1R-VAR-22-11-01-C",
+                  "unitRate": 23.53
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+    """.trimIndent()
+
     val account = Account(
-        id = 1234567,
         accountNumber = "B-1234A1A1",
-        fullAddress = "10 downing street\nLondon\nW1 1AA",
+        fullAddress = "10 Downing Street, LONDON, W1 1AA",
         postcode = "W1 1AA",
         movedInAt = Instant.parse("2020-11-30T00:00:00Z"),
         movedOutAt = null,
         electricityMeterPoints = listOf(
             ElectricityMeterPoint(
                 mpan = "1000000000000",
-                meterSerialNumbers = listOf("1111111111", "2222222222"),
+                meters = listOf(
+                    ElectricityMeter(
+                        serialNumber = "1111111111",
+                        makeAndType = "Sample Make 1",
+                        readingSource = "Smart reading",
+                        readAt = Instant.parse("2024-07-21T00:00:00+00:00"),
+                        value = 1234.56,
+                    ),
+                    ElectricityMeter(
+                        serialNumber = "2222222222",
+                        makeAndType = "Sample Make 2",
+                        readingSource = "Smart reading",
+                        readAt = Instant.parse("2024-07-20T00:00:00+00:00"),
+                        value = 1234.0,
+                    ),
+                ),
                 agreements = listOf(
-                    Agreement(tariffCode = "E-1R-VAR-20-09-22-N", period = Instant.parse("2020-12-17T00:00:00Z")..Instant.parse("2021-12-17T00:00:00Z")),
-                    Agreement(tariffCode = "E-1R-VAR-21-09-29-N", period = Instant.parse("2021-12-17T00:00:00Z")..Instant.parse("2023-03-31T23:00:00Z")),
-                    Agreement(tariffCode = "E-1R-VAR-22-11-01-N", period = Instant.parse("2023-03-31T23:00:00Z")..Instant.DISTANT_FUTURE),
+                    Agreement(
+                        tariffCode = "E-1R-VAR-22-11-01-C",
+                        period = Instant.parse("2023-03-31T23:00:00Z")..Instant.parse("+100000-01-01T00:00:00Z"),
+                        fullName = "Flexible Octopus",
+                        displayName = "Flexible Octopus",
+                        description = "Flexible Octopus offers great value and 100% renewable electricity. As a variable tariff, your prices can rise and fall with wholesale prices - but we'll always give you notice of a change.",
+                        isHalfHourlyTariff = false,
+                        vatInclusiveStandingCharge = 38.72,
+                        vatInclusiveStandardUnitRate = 23.53,
+                        vatInclusiveDayUnitRate = null,
+                        vatInclusiveNightUnitRate = null,
+                        vatInclusiveOffPeakRate = null,
+                        agilePriceCap = null,
+                    ),
                 ),
             ),
         ),

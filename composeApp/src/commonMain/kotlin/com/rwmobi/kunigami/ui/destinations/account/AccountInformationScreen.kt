@@ -27,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
@@ -39,7 +40,6 @@ import com.rwmobi.kunigami.ui.destinations.account.components.SimpleTitleButtonC
 import com.rwmobi.kunigami.ui.destinations.account.components.UpdateApiKeyDialog
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.previewsampledata.AccountSamples
-import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
@@ -49,6 +49,7 @@ import kunigami.composeapp.generated.resources.account_clear_credential_title
 import kunigami.composeapp.generated.resources.account_error_account_empty
 import kunigami.composeapp.generated.resources.account_moved_in
 import kunigami.composeapp.generated.resources.account_moved_out
+import kunigami.composeapp.generated.resources.account_number
 import kunigami.composeapp.generated.resources.account_unknown_installation_address
 import kunigami.composeapp.generated.resources.account_update_api_key
 import kunigami.composeapp.generated.resources.database_remove_outline
@@ -85,6 +86,13 @@ internal fun AccountInformationScreen(
         } else {
             Spacer(modifier = Modifier.height(height = dimension.grid_2))
 
+            Text(
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                text = stringResource(resource = Res.string.account_number, uiState.userProfile.account.accountNumber),
+            )
+
             uiState.userProfile.account.fullAddress?.let {
                 Text(
                     style = MaterialTheme.typography.bodyLarge,
@@ -117,7 +125,6 @@ internal fun AccountInformationScreen(
                     selectedMpan = uiState.userProfile.selectedMpan,
                     selectedMeterSerialNumber = uiState.userProfile.selectedMeterSerialNumber,
                     meterPoint = meterPoint,
-                    tariffHistory = uiState.userProfile.tariffs,
                     requestedLayout = uiState.requestedLayout,
                     onMeterSerialNumberSelected = uiEvent.onMeterSerialNumberSelected,
                     onReloadTariff = uiEvent.onRefresh,
@@ -178,7 +185,6 @@ private fun Preview() {
                         selectedMpan = "1200000345678",
                         selectedMeterSerialNumber = "11A1234567",
                         account = AccountSamples.accountTwoElectricityMeterPoint,
-                        tariffs = listOf(TariffSamples.agileFlex221125),
                     ),
                     errorMessages = listOf(),
                 ),
@@ -212,7 +218,6 @@ private fun ErrorPreview() {
                     selectedMpan = "1200000345678",
                     selectedMeterSerialNumber = "11A1234567",
                     account = AccountSamples.account928,
-                    tariffs = listOf(TariffSamples.agileFlex221125),
                 ),
                 errorMessages = listOf(),
             ),

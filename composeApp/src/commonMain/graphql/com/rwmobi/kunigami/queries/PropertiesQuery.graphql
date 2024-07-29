@@ -1,0 +1,90 @@
+query PropertiesQuery($accountNumber: String!) {
+    properties(accountNumber: $accountNumber) {
+        address
+        postcode
+        occupancyPeriods {
+            effectiveFrom
+            effectiveTo
+        }
+        electricityMeterPoints {
+            mpan
+            meters {
+                serialNumber
+                makeAndType
+                meterPoint {
+                    meters {
+                        serialNumber
+                        readings(first: 1) {
+                            edges {
+                                node {
+                                    readAt
+                                    source
+                                    readingSource
+                                    registers {
+                                        value
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            agreements(includeInactive: true) {
+                validFrom
+                validTo
+                tariff {
+                    ... on StandardTariff {
+                        __typename
+                        displayName
+                        fullName
+                        description
+                        standingCharge
+                        tariffCode
+                        unitRate
+                    }
+                    ... on HalfHourlyTariff {
+                        __typename
+                        displayName
+                        fullName
+                        description
+                        standingCharge
+                        agileCalculationInfo {
+                            priceCap
+                        }
+                        tariffCode
+                    }
+                    ... on DayNightTariff {
+                        __typename
+                        displayName
+                        fullName
+                        description
+                        standingCharge
+                        tariffCode
+                        dayRate
+                        nightRate
+                    }
+                    ... on ThreeRateTariff {
+                        __typename
+                        displayName
+                        fullName
+                        description
+                        standingCharge
+                        dayRate
+                        nightRate
+                        offPeakRate
+                        tariffCode
+                    }
+                    ... on PrepayTariff {
+                        __typename
+                        tariffCode
+                        unitRate
+                        standingCharge
+                        fullName
+                        displayName
+                        description
+                    }
+                }
+            }
+        }
+    }
+}

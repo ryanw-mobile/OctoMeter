@@ -16,9 +16,11 @@ This app is designed for Octopus Energy customers in the UK who have a smart met
 
 ### It works for me
 
-This is a fully functional app that I developed for myself. **I use it every day** to monitor energy consumption and save money. While it should technically work for other Octopus Energy customers, I can’t guarantee it will handle all scenarios such as different tariffs or multiple meter installations. These may produce data that the app cannot process.
+This is a fully functional app that I developed for myself. **I use it every day** to monitor energy consumption and save money. For this reason, the app was intentionally built to reach production-level quality as much as possible.
 
-This is a dashboard-type app that runs on desktop (desktop-first), Android, and iOS. It supports an adaptive layout that works on mobile, tablet, and dynamic desktop window sizes. The app honours light and dark modes on all supported platforms.
+While it should technically work for some other Octopus Energy customers, I do not have enough sample data to cover all use cases.
+
+This is a dashboard-type app that runs on desktop (desktop-first), Android, and iOS. It implements an adaptive layout that works on mobile, tablet, and dynamic desktop window sizes. The app honours light and dark modes on all available platforms.
 
 The main purposes of this app are:
 
@@ -32,11 +34,7 @@ For non-Octopus Energy customers, or non-UK residents, the demo mode will displa
 <p align="center"><img src="https://github.com/ryanw-mobile/OctoMeter/blob/main/screenshots/240603_agile_animation.gif" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 <br />
 
-The current release meets my daily needs. However, this project will continue to be maintained and improved slowly as a way for me to gain real-world hands-on Kotlin Multiplatform development experience. For this reason, the app was intentionally built to reach production-level quality as much as possible.
-
 If you like this app, consider giving me a star, [following me on Medium](https://medium.com/@callmeryan), or [connecting with me on LinkedIn](https://www.linkedin.com/in/ryanwmobile/). 
-
-I am also looking for my next Senior Android Dev role, too.
 
 <br /><br />
 
@@ -64,15 +62,24 @@ All downloadables are provided under the [Release Section](https://github.com/ry
 
 Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/OctoMeter/issues).
 
-This project has entered the second development phase - Ktor RestAPI calls are being migrated to GraphQL.
+> [!NOTE]
+> I am looking for my next Senior Android Developer role and have a limited development budget, maintaining this at my own cost. There are known issues that are not likely to be addressed for the time being due to a shortage of funding.
+>
+> Octopus Energy and Kraken HR have my CV on record. If I eventually work for them, I would improve this project to cover more diverse customer use cases. Otherwise, it will enter maintenance mode when I am no longer an Octopus Energy customer.
 
-[Version 1.4.0](https://github.com/ryanw-mobile/OctoMeter/tree/release/v1.4.0) is the last version it contains Ktor-RestAPI.
+### RestAPI and GraphQL
 
-I have limited development budget. There are known issues which are not likely to be address for the time being due to shortage of funding.
+Octopus Energy and Kraken prefer GraphQL over REST API. Accordingly, the second phase of this project has migrated several REST APIs to GraphQL. Unfortunately, not every REST API currently has an equivalent GraphQL counterpart; therefore, this app has a mixed use of both for demonstration purposes
 
-> [!IMPORTANT]  
-> **Regarding fixed charges, tariff rates, and cost estimation shown on the app:**
->This app has no access to your payment details, so by default it applies the direct debit tariff to estimate usage costs. The daily half-hourly cost should closely match the actual bill. For longer intervals, the app may not produce the exact billable amount. Please refer to your actual bills in that case.
+| Features                      | Implementation |
+|-------------------------------|----------------|
+| Account and meters            | 🕸️ GraphQL |
+| Products Search (by postcode) | 🕸️ GraphQL |
+| Tariff details                | 🕸️ GraphQL |
+| Half-hourly tariff rates      | 😴 RestAPI (Needs access to tariffs not subscribed) |
+| Consumptions                  | 😴 RestAPI (Needs server to honour query end date) |
+
+[Version 1.4.0](https://github.com/ryanw-mobile/OctoMeter/tree/release/v1.4.0) is the last version it contains pure Ktor-RestAPI.
 
 <br /><br />
 

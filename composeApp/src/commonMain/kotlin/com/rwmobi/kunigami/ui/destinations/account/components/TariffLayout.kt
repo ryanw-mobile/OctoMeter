@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
+import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -41,7 +42,8 @@ import kunigami.composeapp.generated.resources.account_tariff_standing_charge
 import kunigami.composeapp.generated.resources.account_tariff_start_date
 import kunigami.composeapp.generated.resources.account_tariff_unit_rate
 import kunigami.composeapp.generated.resources.agile_product_code_retail_region
-import kunigami.composeapp.generated.resources.tariffs_variable_rate
+import kunigami.composeapp.generated.resources.tariffs_agile_price_cap
+import kunigami.composeapp.generated.resources.tariffs_half_hourly_rate
 import kunigami.composeapp.generated.resources.unknown
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -50,7 +52,6 @@ import org.jetbrains.compose.resources.stringResource
 internal fun TariffLayout(
     modifier: Modifier = Modifier,
     agreement: Agreement,
-    tariff: Tariff,
     showDivider: Boolean = false,
 ) {
     val dimension = LocalDensity.current.getDimension()
@@ -62,23 +63,23 @@ internal fun TariffLayout(
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            text = tariff.displayName,
+            text = agreement.displayName,
         )
 
         Text(
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.bodySmall,
-            text = tariff.fullName,
+            text = agreement.fullName,
         )
 
-        val regionCodeStringResource = tariff.getRetailRegion()?.let {
+        val regionCodeStringResource = Tariff.getRetailRegion(tariffCode = agreement.tariffCode)?.let {
             stringResource(it.stringResource)
         } ?: stringResource(resource = Res.string.unknown)
 
         Text(
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.bodySmall,
-            text = stringResource(resource = Res.string.agile_product_code_retail_region, tariff.productCode, regionCodeStringResource),
+            text = stringResource(resource = Res.string.agile_product_code_retail_region, agreement.tariffCode, regionCodeStringResource),
         )
 
         Spacer(modifier = Modifier.height(height = dimension.grid_2))
@@ -103,32 +104,16 @@ internal fun TariffLayout(
 
         Spacer(modifier = Modifier.height(height = dimension.grid_1))
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.End,
-                text = stringResource(resource = Res.string.account_tariff_standing_charge),
-            )
-
-            Spacer(modifier = Modifier.width(dimension.grid_2))
-
-            Text(
-                style = MaterialTheme.typography.titleLarge,
-                text = tariff.vatInclusiveStandingCharge.toString(),
-            )
+        if (agreement.isHalfHourlyTariff) {
+            showHalfHourlyRate()
         }
 
-        if (tariff.isVariable) {
-            showVariableRate()
-        } else {
-            showRates(tariff = tariff)
-        }
+        RateRow(
+            label = stringResource(resource = Res.string.account_tariff_standing_charge),
+            rate = agreement.vatInclusiveStandingCharge,
+        )
+
+        showRates(agreement = agreement)
 
         if (showDivider) {
             HorizontalDivider(
@@ -142,109 +127,60 @@ internal fun TariffLayout(
 
 @Composable
 private fun showRates(
-    tariff: Tariff,
+    agreement: Agreement,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val rateInfoList = listOf(
+        Res.string.account_tariff_unit_rate to agreement.vatInclusiveStandardUnitRate,
+        Res.string.account_tariff_day_unit_rate to agreement.vatInclusiveDayUnitRate,
+        Res.string.account_tariff_night_unit_rate to agreement.vatInclusiveNightUnitRate,
+        Res.string.account_tariff_off_peak_unit_rate to agreement.vatInclusiveOffPeakRate,
+        Res.string.tariffs_agile_price_cap to agreement.agilePriceCap,
+    )
 
-    tariff.vatInclusiveStandardUnitRate?.let { rate ->
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.End,
-                text = stringResource(resource = Res.string.account_tariff_unit_rate),
-            )
-
-            Spacer(modifier = Modifier.width(dimension.grid_2))
-
-            Text(
-                style = MaterialTheme.typography.titleLarge,
-                text = rate.toString(),
-            )
-        }
-    }
-
-    tariff.vatInclusiveDayUnitRate?.let { rate ->
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.End,
-                text = stringResource(resource = Res.string.account_tariff_day_unit_rate),
-            )
-
-            Spacer(modifier = Modifier.width(dimension.grid_2))
-
-            Text(
-                style = MaterialTheme.typography.titleLarge,
-                text = rate.toString(),
-            )
-        }
-    }
-
-    tariff.vatInclusiveNightUnitRate?.let { rate ->
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.End,
-                text = stringResource(resource = Res.string.account_tariff_night_unit_rate),
-            )
-
-            Spacer(modifier = Modifier.width(dimension.grid_2))
-
-            Text(
-                style = MaterialTheme.typography.titleLarge,
-                text = rate.toString(),
-            )
-        }
-    }
-
-    tariff.vatInclusiveOffPeakRate?.let { rate ->
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-        ) {
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.End,
-                text = stringResource(resource = Res.string.account_tariff_off_peak_unit_rate),
-            )
-
-            Spacer(modifier = Modifier.width(dimension.grid_2))
-
-            Text(
-                style = MaterialTheme.typography.titleLarge,
-                text = rate.toString(),
+    rateInfoList.forEach { (labelResource, rate) ->
+        rate?.let {
+            RateRow(
+                label = stringResource(resource = labelResource),
+                rate = rate,
             )
         }
     }
 }
 
 @Composable
-private fun showVariableRate() {
+private fun RateRow(
+    label: String,
+    rate: Double,
+) {
+    val dimension = LocalDensity.current.getDimension()
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+    ) {
+        Text(
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.End,
+            text = label,
+        )
+
+        Spacer(modifier = Modifier.width(dimension.grid_2))
+
+        Text(
+            style = MaterialTheme.typography.titleLarge,
+            text = rate.roundToTwoDecimalPlaces().toString(),
+        )
+    }
+}
+
+@Composable
+private fun showHalfHourlyRate() {
     Text(
         modifier = Modifier.fillMaxWidth(),
         style = MaterialTheme.typography.titleMedium,
         textAlign = TextAlign.End,
-        text = stringResource(resource = Res.string.tariffs_variable_rate),
+        text = stringResource(resource = Res.string.tariffs_half_hourly_rate),
     )
 }

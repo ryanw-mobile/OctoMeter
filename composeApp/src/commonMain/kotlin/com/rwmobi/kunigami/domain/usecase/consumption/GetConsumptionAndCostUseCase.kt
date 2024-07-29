@@ -65,7 +65,6 @@ class GetConsumptionAndCostUseCase(
                     if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
                         // We need all the agreements covering the requested period to get the correct unit rates
                         val account = octopusApiRepository.getAccount(
-                            apiKey = apiKey,
                             accountNumber = accountNumber,
                         ).getOrNull()
 
