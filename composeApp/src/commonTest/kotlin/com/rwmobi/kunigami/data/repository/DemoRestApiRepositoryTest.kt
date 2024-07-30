@@ -179,7 +179,7 @@ class DemoRestApiRepositoryTest {
     @Test
     fun `getConsumption should generate random consumption data for MONTH ConsumptionTimeFrame`() = runTest {
         val now = Clock.System.now()
-        val start = now - Duration.parse("365d")
+        val start = now - Duration.parse("364d")
 
         val result = demoRepository.getConsumption(
             apiKey = "apiKey",
