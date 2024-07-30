@@ -40,6 +40,16 @@
       "labels": [
         "requires-approval"
       ]
+    },
+    {
+      "matchPackageNames": [
+        "io.github.koalaplot:koalaplot-core"
+      ],
+      "groupName": "koalaplot-core",
+      "automerge": false,
+      "labels": [
+        "requires-approval"
+      ]
     }
   ],
   "automerge": true,
