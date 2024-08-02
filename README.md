@@ -48,6 +48,7 @@ If you like this app, consider giving me a star, [following me on Medium](https:
 ## Running the app
 
 I use Android Studio Koala to build the Android and Deskop apps. Xcode 15.4 for iOS.
+To those who don't like UI-sharing: this app was primarily design for desktop, and taking the advantage of CMP to deliver mobile versions. This do not imply I recommend Compose Multiplatform on iOS for all cases.
 
 All downloadables are provided under the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
 * MacOS Desktop App: We provide a DMG installer.
@@ -55,6 +56,10 @@ All downloadables are provided under the [Release Section](https://github.com/ry
 * Android: We provide signed APK and App Bundle.
 * iOS: Join as a tester at [Test Flight](https://testflight.apple.com/join/T6I940RE).
 * To build and run the Desktop app yourself, execute `./gradlew run`
+
+<br />
+<p align="center"><img src="testflight_qrcode.png" style="width: 100%; max-width: 1000px; height: auto;" alt="Testflight QR Code" style="width: 100%; max-width: 1000px; height: auto;"></p>
+<br />
 
 <br /><br />
 
