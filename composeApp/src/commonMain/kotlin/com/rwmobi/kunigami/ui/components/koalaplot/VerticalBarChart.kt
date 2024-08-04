@@ -5,10 +5,10 @@
  *
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.rwmobi.kunigami.ui.components.koalaplot
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.absolutePadding
@@ -17,9 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -35,6 +34,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -197,14 +197,7 @@ fun VerticalBarChart(
                                 )
                             },
                             hoverElement = {
-                                RichTooltip {
-                                    Text(
-                                        modifier = Modifier.padding(all = dimension.grid_0_25),
-                                        style = MaterialTheme.typography.labelMedium,
-                                        textAlign = TextAlign.Center,
-                                        text = tooltipGenerator(index),
-                                    )
-                                }
+                                HoverElement(text = tooltipGenerator(index))
                             },
                             border = null,
                         )
@@ -214,18 +207,44 @@ fun VerticalBarChart(
         }
 
         showTooltipIndex?.let { index ->
-            RichTooltip(
+            HoverElement(
                 modifier = Modifier
                     .align(alignment = Alignment.TopCenter)
                     .offset(y = dimension.grid_2),
-            ) {
-                Text(
-                    modifier = Modifier.padding(all = 4.dp),
-                    style = MaterialTheme.typography.labelMedium,
-                    textAlign = TextAlign.Center,
-                    text = tooltipGenerator(index),
-                )
-            }
+                text = tooltipGenerator(index),
+            )
         }
+    }
+}
+
+@Composable
+private fun HoverElement(
+    modifier: Modifier = Modifier,
+    text: String,
+) {
+    val dimension = LocalDensity.current.getDimension()
+
+    Text(
+        modifier = modifier
+            .clip(shape = MaterialTheme.shapes.small)
+            .background(color = MaterialTheme.colorScheme.inverseSurface)
+            .padding(
+                horizontal = dimension.grid_2,
+                vertical = dimension.grid_1,
+            ),
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.inverseOnSurface,
+        textAlign = TextAlign.Center,
+        text = text,
+    )
+}
+
+@Composable
+@Preview
+private fun HoverElementPreview() {
+    CommonPreviewSetup {
+        HoverElement(
+            text = "10:00 - 10:30\n12.24p",
+        )
     }
 }
