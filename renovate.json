@@ -33,16 +33,6 @@
     },
     {
       "matchPackageNames": [
-        "org.jetbrains.androidx.navigation:navigation-compose"
-      ],
-      "groupName": "androidx-navigation",
-      "automerge": false,
-      "labels": [
-        "requires-approval"
-      ]
-    },
-    {
-      "matchPackageNames": [
         "io.github.koalaplot:koalaplot-core"
       ],
       "groupName": "koalaplot-core",
