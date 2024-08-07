@@ -35,7 +35,7 @@ skiko = "0.8.11"
 room = "2.7.0-alpha05"
 ksp = "2.0.10-1.0.24"
 sqlite = "2.5.0-alpha05"
-slf4j = "2.0.13"
+slf4j = "2.0.14"
 apollographql = "4.0.0"
 apollographqlMockServer = "0.0.3"
 
