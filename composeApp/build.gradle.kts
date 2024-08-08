@@ -149,7 +149,7 @@ kotlin {
         }
 
         val desktopMain by getting {
-            // Required by RoomDB
+            // To provide RoomDB Ctor actual declaration
             kotlin.srcDir("build/generated/ksp/metadata")
             dependencies {
                 runtimeOnly("org.jetbrains.skiko:skiko-awt-runtime-$skikoTarget:$skikoVersion")
@@ -163,7 +163,7 @@ kotlin {
         }
 
         iosMain {
-            // Fixes RoomDB Unresolved reference 'instantiateImpl' in iosMain
+            // To provide RoomDB Ctor actual declaration
             kotlin.srcDir("build/generated/ksp/metadata")
             dependencies {
                 implementation(libs.ktor.client.darwin)
@@ -370,13 +370,6 @@ compose.desktop {
 tasks.withType<Test> {
     // Set the timezone to 'Europe/London' for all tests
     jvmArgs("-Duser.timezone=Europe/London")
-}
-
-// https://github.com/JetBrains/compose-multiplatform/issues/4928
-tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().configureEach {
-    if (name != "kspCommonMainKotlinMetadata") {
-        dependsOn("kspCommonMainKotlinMetadata")
-    }
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
