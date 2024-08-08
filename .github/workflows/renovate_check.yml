@@ -36,6 +36,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Prepare RoomDB actual declaration
+        run: ./gradlew :composeApp:kspCommonMainKotlinMetadata --no-daemon
+
       - name: Gradle Check
         run: xvfb-run ./gradlew check assembleDebug --no-daemon
         env:
