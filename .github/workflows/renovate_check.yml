@@ -38,6 +38,8 @@ jobs:
 
       - name: Prepare RoomDB actual declaration
         run: ./gradlew :composeApp:kspCommonMainKotlinMetadata --no-daemon
+        env:
+          KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
 
       - name: Gradle Check
         run: xvfb-run ./gradlew check assembleDebug --no-daemon
