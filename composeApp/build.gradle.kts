@@ -5,6 +5,7 @@
  *
  */
 
+import com.android.build.api.dsl.ManagedVirtualDevice
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -111,6 +112,16 @@ kotlin {
             dependencies {
                 implementation(libs.androidx.test.core.ktx)
                 implementation(libs.robolectric)
+            }
+        }
+
+        val androidInstrumentedTest by getting {
+            dependencies {
+                implementation(project.dependencies.platform(libs.compose.bom))
+                implementation(libs.androidx.junit)
+                implementation(libs.androidx.espresso.core)
+                implementation(libs.ui.test.junit4)
+                implementation(libs.androidx.test.rules)
             }
         }
 
@@ -252,7 +263,7 @@ android {
 
         resourceConfigurations += setOf("en")
 
-        testInstrumentationRunner = "$productNameSpace.ui.test.CustomTestRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
         // Bundle output filename
@@ -317,6 +328,16 @@ android {
         unitTests {
             isIncludeAndroidResources = true
             isReturnDefaultValues = true
+        }
+
+        managedDevices {
+            devices {
+                create<ManagedVirtualDevice>("pixel2Api34") {
+                    device = "Pixel 2"
+                    apiLevel = 34
+                    systemImageSource = "aosp-atd"
+                }
+            }
         }
     }
 }
