@@ -43,9 +43,9 @@ jobs:
         env:
           CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
-          CI_ANDROID_KEYSTORE_ALIAS: ${{ secrets.CIIO_ANDROID_KEYSTORE_ALIAS }}
-          CI_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD: ${{ secrets.CIIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD }}
-          CI_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.CIIO_ANDROID_KEYSTORE_PASSWORD }}
+          CI_ANDROID_KEYSTORE_ALIAS: ${{ secrets.BITRISEIO_ANDROID_KEYSTORE_ALIAS }}
+          CI_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD: ${{ secrets.BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD }}
+          CI_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.BITRISEIO_ANDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload test report
         if: failure()
