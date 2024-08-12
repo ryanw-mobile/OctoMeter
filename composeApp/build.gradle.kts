@@ -334,9 +334,9 @@ android {
 
         managedDevices {
             devices {
-                create<ManagedVirtualDevice>("pixel2Api34") {
+                create<ManagedVirtualDevice>("pixel2Api33") {
                     device = "Pixel 2"
-                    apiLevel = 34
+                    apiLevel = 33
                     systemImageSource = "aosp-atd"
                 }
             }
