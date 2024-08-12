@@ -118,10 +118,12 @@ kotlin {
         val androidInstrumentedTest by getting {
             dependencies {
                 implementation(project.dependencies.platform(libs.compose.bom))
+                implementation(libs.material3.windowsizeclass.multiplatform)
                 implementation(libs.androidx.junit)
                 implementation(libs.androidx.espresso.core)
                 implementation(libs.ui.test.junit4)
                 implementation(libs.androidx.test.rules)
+                implementation(libs.androidx.uiautomator)
             }
         }
 
