@@ -11,7 +11,7 @@ import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.network.dto.auth.Token
 import com.rwmobi.kunigami.data.source.network.dto.auth.TokenState
-import com.rwmobi.kunigami.data.source.network.graphql.GraphQLEndpoint
+import com.rwmobi.kunigami.data.source.network.graphql.interfaces.GraphQLEndpoint
 import com.rwmobi.kunigami.domain.repository.TokenRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 
