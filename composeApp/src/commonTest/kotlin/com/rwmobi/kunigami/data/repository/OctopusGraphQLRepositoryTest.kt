@@ -15,7 +15,7 @@ import com.apollographql.mockserver.enqueueString
 import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.local.database.FakeDataBaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
-import com.rwmobi.kunigami.data.source.network.graphql.GraphQLEndpoint
+import com.rwmobi.kunigami.data.source.network.graphql.ApolloGraphQLEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.HttpException
@@ -158,7 +158,7 @@ class OctopusGraphQLRepositoryTest {
             ),
             inMemoryCacheDataSource = InMemoryCacheDataSource(),
             databaseDataSource = fakeDataBaseDataSource,
-            graphQLEndpoint = GraphQLEndpoint(
+            graphQLEndpoint = ApolloGraphQLEndpoint(
                 apolloClient = apolloClient,
                 dispatcher = dispatcher,
             ),
