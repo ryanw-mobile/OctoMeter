@@ -11,7 +11,7 @@ import com.rwmobi.kunigami.data.repository.DemoOctopusApiRepository
 import com.rwmobi.kunigami.data.repository.GraphQLTokenRepository
 import com.rwmobi.kunigami.data.repository.OctopusGraphQLRepository
 import com.rwmobi.kunigami.data.repository.OctopusUserPreferencesRepository
-import com.rwmobi.kunigami.data.source.network.graphql.GraphQLEndpoint
+import com.rwmobi.kunigami.data.source.network.graphql.interfaces.GraphQLEndpoint
 import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.TokenRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository

@@ -20,7 +20,7 @@ import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.local.database.entity.coversRange
 import com.rwmobi.kunigami.data.source.local.database.interfaces.DatabaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.model.RateType
-import com.rwmobi.kunigami.data.source.network.graphql.GraphQLEndpoint
+import com.rwmobi.kunigami.data.source.network.graphql.interfaces.GraphQLEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except

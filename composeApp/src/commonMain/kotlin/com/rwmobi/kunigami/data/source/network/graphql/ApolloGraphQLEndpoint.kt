@@ -12,6 +12,7 @@ import com.apollographql.apollo.api.Optional
 import com.apollographql.apollo.api.Query
 import com.apollographql.apollo.exception.ApolloGraphQLException
 import com.rwmobi.kunigami.data.source.network.dto.auth.Token
+import com.rwmobi.kunigami.data.source.network.graphql.interfaces.GraphQLEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.graphql.EnergyProductsQuery
 import com.rwmobi.kunigami.graphql.ObtainKrakenTokenMutation
@@ -24,19 +25,17 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.cancellation.CancellationException
 
-class GraphQLEndpoint(
+class ApolloGraphQLEndpoint(
     private val apolloClient: ApolloClient,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-) {
-    private val defaultPageSize = 100
-
+) : GraphQLEndpoint {
     /***
      * Authorization Token not required.
      */
-    suspend fun getEnergyProducts(
+    override suspend fun getEnergyProducts(
         postcode: String,
-        afterCursor: String? = null,
-        pageSize: Int = defaultPageSize,
+        afterCursor: String?,
+        pageSize: Int,
     ): EnergyProductsQuery.Data {
         return withContext(dispatcher) {
             runQuery(
@@ -53,11 +52,11 @@ class GraphQLEndpoint(
     /***
      * Authorization Token not required.
      */
-    suspend fun getSingleEnergyProduct(
+    override suspend fun getSingleEnergyProduct(
         productCode: String,
         postcode: String,
-        afterCursor: String? = null,
-        pageSize: Int = defaultPageSize,
+        afterCursor: String?,
+        pageSize: Int,
     ): SingleEnergyProductQuery.Data {
         return withContext(dispatcher) {
             runQuery(
@@ -76,7 +75,7 @@ class GraphQLEndpoint(
      * The GraphQL Account query can't return everything we need. Underlying we call PropertiesQuery in this implementation.
      * Authorization Token required.
      */
-    suspend fun getAccount(
+    override suspend fun getAccount(
         accountNumber: String,
     ): PropertiesQuery.Data {
         return withContext(dispatcher) {
@@ -90,12 +89,12 @@ class GraphQLEndpoint(
     }
 
     //region Token Management
-    suspend fun getAuthorizationToken(apiKey: String): Result<Token> {
+    override suspend fun getAuthorizationToken(apiKey: String): Result<Token> {
         val input = ObtainJSONWebTokenInput(APIKey = Optional.present(apiKey))
         return obtainKrakenToken(input = input)
     }
 
-    suspend fun refreshAuthorizationToken(refreshToken: String): Result<Token> {
+    override suspend fun refreshAuthorizationToken(refreshToken: String): Result<Token> {
         val input = ObtainJSONWebTokenInput(refreshToken = Optional.present(refreshToken))
         return obtainKrakenToken(input = input)
     }
