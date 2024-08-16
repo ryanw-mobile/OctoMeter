@@ -9,8 +9,8 @@ package com.rwmobi.kunigami.di
 
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.network.http.HttpInterceptor
-import com.rwmobi.kunigami.data.source.network.graphql.AuthorisationInterceptor
 import com.rwmobi.kunigami.data.source.network.graphql.ApolloGraphQLEndpoint
+import com.rwmobi.kunigami.data.source.network.graphql.AuthorisationInterceptor
 import com.rwmobi.kunigami.data.source.network.graphql.interfaces.GraphQLEndpoint
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
