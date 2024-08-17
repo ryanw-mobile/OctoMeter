@@ -54,14 +54,6 @@ jobs:
           name: test-report
           path: composeApp/build/reports/tests/
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: composeApp/build/reports/kover/reportRelease.xml
-          fail_ci_if_error: true
-          verbose: false
-
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1.3.0
         with:
