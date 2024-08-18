@@ -38,7 +38,6 @@ import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.coin
 import org.jetbrains.compose.resources.painterResource
 
-@Preview
 @Composable
 internal fun SquareButton(
     modifier: Modifier = Modifier,
