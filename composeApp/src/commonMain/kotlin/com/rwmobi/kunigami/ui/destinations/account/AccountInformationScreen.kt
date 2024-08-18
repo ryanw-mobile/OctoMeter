@@ -12,11 +12,15 @@ package com.rwmobi.kunigami.ui.destinations.account
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -33,10 +38,10 @@ import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.MessageActionScreen
+import com.rwmobi.kunigami.ui.components.SquareButton
 import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
 import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionAdaptive
 import com.rwmobi.kunigami.ui.destinations.account.components.ElectricityMeterPointCard
-import com.rwmobi.kunigami.ui.destinations.account.components.SimpleTitleButtonCard
 import com.rwmobi.kunigami.ui.destinations.account.components.UpdateApiKeyDialog
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.previewsampledata.AccountSamples
@@ -44,7 +49,6 @@ import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_clear_cache
-import kunigami.composeapp.generated.resources.account_clear_credential_button_cta
 import kunigami.composeapp.generated.resources.account_clear_credential_title
 import kunigami.composeapp.generated.resources.account_error_account_empty
 import kunigami.composeapp.generated.resources.account_moved_in
@@ -56,7 +60,6 @@ import kunigami.composeapp.generated.resources.database_remove_outline
 import kunigami.composeapp.generated.resources.key
 import kunigami.composeapp.generated.resources.retry
 import kunigami.composeapp.generated.resources.unlink
-import kunigami.composeapp.generated.resources.update
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -133,14 +136,6 @@ internal fun AccountInformationScreen(
         }
 
         var isUpdateAPIKeyDialogOpened by rememberSaveable { mutableStateOf(false) }
-        SimpleTitleButtonCard(
-            modifier = Modifier.fillMaxWidth(),
-            title = stringResource(resource = Res.string.account_update_api_key),
-            buttonLabel = stringResource(resource = Res.string.update),
-            buttonPainter = painterResource(resource = Res.drawable.key),
-            onButtonClicked = { isUpdateAPIKeyDialogOpened = true },
-        )
-
         if (isUpdateAPIKeyDialogOpened && uiState.userProfile?.account?.accountNumber != null) {
             UpdateApiKeyDialog(
                 initialValue = "",
@@ -152,13 +147,40 @@ internal fun AccountInformationScreen(
             )
         }
 
-        SimpleTitleButtonCard(
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            title = stringResource(resource = Res.string.account_clear_cache),
-            buttonLabel = stringResource(resource = Res.string.account_clear_credential_button_cta),
-            buttonPainter = painterResource(resource = Res.drawable.database_remove_outline),
-            onButtonClicked = uiEvent.onClearCache,
-        )
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(
+                dimension.grid_4,
+                alignment = Alignment.CenterHorizontally,
+            ),
+        ) {
+            SquareButton(
+                modifier = Modifier
+                    .width(width = 80.dp)
+                    .wrapContentHeight(),
+                icon = painterResource(resource = Res.drawable.key),
+                text = stringResource(resource = Res.string.account_update_api_key),
+                colors = ButtonDefaults.buttonColors().copy(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                ),
+                onClick = { isUpdateAPIKeyDialogOpened = true },
+            )
+
+            SquareButton(
+                modifier = Modifier
+                    .width(width = 80.dp)
+                    .wrapContentHeight(),
+                icon = painterResource(resource = Res.drawable.database_remove_outline),
+                text = stringResource(resource = Res.string.account_clear_cache),
+                colors = ButtonDefaults.buttonColors().copy(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                ),
+                onClick = uiEvent.onClearCache,
+            )
+        }
 
         ClearCredentialSectionAdaptive(
             modifier = Modifier.fillMaxWidth(),

@@ -1,6 +1,6 @@
 ## _[Project Kunigami](https://maps.app.goo.gl/cdZWxxSgx8jM5QZC7)_ / <br/>OctoMeter: Empowering Smart Electricity Usage<br/>[![Pull request](https://img.shields.io/badge/PRs-welcome-success?style=flat)](https://github.com/ryanw-mobile/OctoMeter/pulls) ![GitHub Repo stars](https://img.shields.io/github/stars/ryanw-mobile/OctoMeter?style=flat) ![Gradle Build](https://github.com/ryanw-mobile/OctoMeter/actions/workflows/main_build.yml/badge.svg) [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage) [![Codacy Grade Badge](https://app.codacy.com/project/badge/Grade/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
-### Production-grade Kotlin Multiplatform App targeting Android, iOS, Desktop
+### Production-grade Kotlin Multiplatform App targeting Desktop, Android, iOS
 
 <br />
 <p align="center"><img src="app_banner_240518.webp" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
@@ -10,38 +10,46 @@
 
 > Complementary article: [Releasing my First True Kotlin Multiplatform App](https://medium.com/@callmeryan/releasing-my-first-true-kotlin-multiplatform-app-60d81e739eb0)
 
-This app is designed for Octopus Energy customers in the UK who have a smart meter installed. If you don’t have a smart meter, you can still try out the app. It runs in demo mode by default, showing fake user data when authentication is required.
-
 <p align="center"><img src="screenshots/240531_all_platforms_preview.webp" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 
 ### It works for me
 
-This is a fully functional app that I developed for myself. **I use it every day** to monitor energy consumption and save money. For this reason, the app was intentionally built to reach production-level quality as much as possible.
-
-While it should technically work for some other Octopus Energy customers, I do not have enough sample data to cover all use cases.
-
-This is a dashboard-type app that runs on desktop (desktop-first), Android, and iOS. It implements an adaptive layout that works on mobile, tablet, and dynamic desktop window sizes. The app honours light and dark modes on all available platforms.
+This is a dashboard-type app that runs on desktop (desktop-first), Android, and iOS. It implements
+an adaptive layout that works on mobile, tablet, and dynamic desktop window sizes. The app honours
+light and dark modes on all available platforms.
 
 The main purposes of this app are:
 
 * Compile smart meter electricity usage; estimate and project electricity usage and cost.
-* Track the Agile Octopus tariff unit rates for the coming 24 hours, with countdown and automatic refresh.
+* Track the Agile Octopus tariff unit rates for the coming 24 hours, with countdown and automatic
+  refresh.
 * Browse available Octopus Energy tariffs.
 
-For non-Octopus Energy customers, or non-UK residents, the demo mode will display random meter readings and default tariff rates to illustrate the app’s functionality.
+This is a fully functional app that I developed for myself. **I use it every day** to monitor energy
+consumption and save money. For this reason, the app was intentionally built to reach
+production-level quality as much as possible.
+
+* While it should technically work for some other Octopus Energy customers, I do not have enough
+  sample data to cover all use cases.
+* For non-Octopus Energy customers, or non-UK residents, the demo mode will display random meter
+  readings and default tariff rates to illustrate the app’s functionality.
 
 <br />
 <p align="center"><img src="https://github.com/ryanw-mobile/OctoMeter/blob/main/screenshots/240603_agile_animation.gif" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 <br />
 
-If you like this app, consider giving me a star, [following me on Medium](https://medium.com/@callmeryan), or [connecting with me on LinkedIn](https://www.linkedin.com/in/ryanwmobile/). 
+If you like this app, consider giving me a
+star, [following me on Medium](https://medium.com/@callmeryan),
+or [on LinkedIn](https://www.linkedin.com/in/ryanwmobile/).
 
 <br /><br />
 
 ## Switch to Octopus!
 
-* Learn more about the [Agile Octopus](https://octopus.energy/smart/agile/) smart tariff, or other available Octopus tariffs shown in this App.
-* Switch to Octopus Energy using [this link](https://share.octopus.energy/best-shell-168), both of us will get £50 (or £100 for business).
+* Learn more about the [Agile Octopus](https://octopus.energy/smart/agile/) smart tariff, or other
+  available Octopus tariffs shown in this App.
+* Switch to Octopus Energy using [this link](https://share.octopus.energy/best-shell-168), both of
+  us will get £50 (or £100 for business).
 
 <br /><br />
 
@@ -50,9 +58,16 @@ If you like this app, consider giving me a star, [following me on Medium](https:
 I use Android Studio Koala to build the Android and Deskop apps. Xcode 15.4 for iOS.
 
 > [!TIP]
-> To those (including Octopus Energy/Kraken) who don't prefer UI-sharing: this app was primarily designed for desktop, but taking the advantage of CMP to deliver mobile versions. This do not imply I recommend Compose Multiplatform on iOS for all use cases. I just do not have the budget to code in SwiftUI for this project.
+> Octopus Energy/Kraken don't prefer UI-sharing. While this app is primarily designed for desktop
+> use, it leverages CMP to provide mobile versions as well. This decision does not reflect my
+> personal
+> preferences; it simply reflects the budgetary constraints that prevent me from developing in
+> SwiftUI
+> for this project.
 
-All downloadables are provided under the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
+All downloadables are provided under
+the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
+
 * MacOS Desktop App: We provide a DMG installer.
 * Windows Desktop App: We provide both EXE and MSI installers.
 * Android: We provide signed APK and App Bundle.
@@ -70,29 +85,34 @@ All downloadables are provided under the [Release Section](https://github.com/ry
 Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/OctoMeter/issues).
 
 > [!NOTE]
-> I am looking for my next Senior Android Developer role and have a limited development budget, maintaining this at my own cost. There are known issues that are not likely to be addressed for the time being due to a shortage of funding.
->
-> Octopus Energy and Kraken HR have my CV on record. If I eventually work for them, I would improve this project to cover more diverse customer use cases. Otherwise, it will enter maintenance mode when I am no longer an Octopus Energy customer.
+> I am currently seeking my next Senior Android Developer role and maintaining this project at my
+> own expense with a limited budget. Octopus Energy and Kraken HR have my CV on file. If I end up
+> working with them, I plan to enhance this project to address a wider range of customer use cases.
+> Otherwise, it will transition to maintenance mode once I am no longer an Octopus Energy customer.
 
 ### RestAPI and GraphQL
 
-Octopus Energy and Kraken prefer GraphQL over REST API. Accordingly, the second phase of this project has migrated several REST APIs to GraphQL. Unfortunately, not every REST API currently has an equivalent GraphQL counterpart; therefore, this app has a mixed use of both for demonstration purposes
+Octopus Energy and Kraken prefer GraphQL over REST API. Accordingly, the second phase of this
+project has migrated several REST APIs to GraphQL. Unfortunately, not every REST API currently has
+an equivalent GraphQL counterpart; therefore, this app has a mixed use of both for demonstration
+purposes
 
-| Features                      | Implementation |
-|-------------------------------|----------------|
-| Account and meters            | 🕸️ GraphQL |
-| Products Search (by postcode) | 🕸️ GraphQL |
-| Tariff details                | 🕸️ GraphQL |
+| Features                      | Implementation                                      |
+|-------------------------------|-----------------------------------------------------|
+| Account and meters            | 🕸️ GraphQL                                         |
+| Products Search (by postcode) | 🕸️ GraphQL                                         |
+| Tariff details                | 🕸️ GraphQL                                         |
 | Half-hourly tariff rates      | 😴 RestAPI (Needs access to tariffs not subscribed) |
-| Consumptions                  | 😴 RestAPI (Needs server to honour query end date) |
+| Consumptions                  | 😴 RestAPI (Needs server to honour query end date)  |
 
-[Version 1.4.0](https://github.com/ryanw-mobile/OctoMeter/tree/release/v1.4.0) is the last version it contains pure Ktor-RestAPI.
+[Version 1.4.0](https://github.com/ryanw-mobile/OctoMeter/tree/release/v1.4.0) is the last version
+it contains pure Ktor-RestAPI.
 
 <br /><br />
 
 ## Data Security and Privacy
 
-First thing first: This app can run under the demo mode without requiring any credentials.
+> This app can run under the demo mode without requiring any credentials.
 
 To pull real smart meter data from your Octopus Energy account, you need to generate an API key for
 your account
@@ -172,13 +192,15 @@ are currently unencrypted, but expected to do so when the library we use support
 
 ## Licenses
 
-This project is licensed under the Mozilla Public License Version 2.0 (MPL-2.0) with a non-commercial clause. See the [LICENSE](./LICENSE) file for details.
+This project is licensed under the Mozilla Public License Version 2.0 (MPL-2.0) with a
+non-commercial clause. See the [LICENSE](./LICENSE) file for details.
 
 ### Icon licenses
 
 Every tiny piece matters. This App contains the icons contributed by:
 
 **MIT License:**
+
 * [Bootstrap Icons](https://github.com/twbs/icons)
 * [Eva Icons](https://github.com/akveo/eva-icons/)
 * [Lineicons](https://github.com/LineiconsHQ/Lineicons)
@@ -189,14 +211,17 @@ Every tiny piece matters. This App contains the icons contributed by:
 * [akar-icons](https://github.com/artcoholic/akar-icons)
 
 **Apache 2.0 License:**
+
 * [Material Design](https://github.com/Templarian/MaterialDesign)
 * [Material Design Icons](https://github.com/material-icons/material-icons)
 
 **CC BY 4.0 License:**
+
 * [Basil Icons](https://www.figma.com/community/file/931906394678748246/basil-icons)
 * [Font Awesome](https://github.com/FortAwesome/Font-Awesome)
 * [Solar Icons Set](https://www.figma.com/community/file/1166831539721848736)
 * [Streamline](http://streamlinehq.com)
 
 **ISC License:**
+
 * [Lucide](https://github.com/lucide-icons/lucide)
