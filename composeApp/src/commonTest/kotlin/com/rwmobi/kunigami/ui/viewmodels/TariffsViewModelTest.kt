@@ -5,8 +5,6 @@
  *
  */
 
-@file:OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.ui.geometry.Size
@@ -91,7 +89,10 @@ class TariffsViewModelTest {
                 widthDp = 1024.dp,
             ),
             windowSizeClass = WindowSizeClass.calculateFromSize(
-                size = Size(1280f, 1024f),
+                size = Size(
+                    width = 1280f,
+                    height = 1024f
+                ),
                 density = Density(density = 2.0f),
             ),
         )
