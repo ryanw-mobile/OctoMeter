@@ -2,7 +2,7 @@
 agp = "8.5.2"
 compose-bom = "2024.06.00"
 androidx-activityCompose = "1.9.1"
-compose-plugin = "1.7.0-alpha02"
+compose-plugin = "1.7.0-alpha03"
 composeUiTooling = "1.7.0-beta07"
 coreSplashscreen = "1.0.1"
 testCoreKtx = "1.6.1"
