@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_clear_cache_success
 import kunigami.composeapp.generated.resources.account_error_update_credentials
-import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.StringResource
 
 class AccountViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
@@ -73,6 +73,7 @@ class AccountViewModel(
                     if (throwable is IncompleteCredentialsException) {
                         _uiState.update { currentUiState ->
                             currentUiState.copy(
+                                userProfile = null,
                                 requestedScreenType = AccountScreenType.Onboarding,
                                 isLoading = false,
                             )
@@ -98,6 +99,7 @@ class AccountViewModel(
     fun submitCredentials(
         apiKey: String,
         accountNumber: String,
+        stringResolver: suspend (resId: StringResource) -> String,
     ) {
         startLoading()
         viewModelScope.launch {
@@ -108,7 +110,7 @@ class AccountViewModel(
                     // There is no retry for this case.
                     Logger.e("Access denied. Credentials not updated", throwable = throwable, tag = "AccountViewModel")
                     _uiState.update { currentUiState ->
-                        currentUiState.handleMessageAndStopLoading(message = getString(resource = Res.string.account_error_update_credentials))
+                        currentUiState.handleMessageAndStopLoading(message = stringResolver(Res.string.account_error_update_credentials))
                     }
                 },
             )
@@ -150,13 +152,15 @@ class AccountViewModel(
         }
     }
 
-    fun onClearCache() {
+    fun onClearCache(
+        stringResolver: suspend (resId: StringResource) -> String,
+    ) {
         startLoading()
         viewModelScope.launch {
             clearCacheUseCase().fold(
                 onSuccess = {
                     _uiState.update { currentUiState ->
-                        currentUiState.handleMessageAndStopLoading(message = getString(resource = Res.string.account_clear_cache_success))
+                        currentUiState.handleMessageAndStopLoading(message = stringResolver(Res.string.account_clear_cache_success))
                     }
                 },
                 onFailure = { throwable ->

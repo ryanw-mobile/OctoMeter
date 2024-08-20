@@ -45,13 +45,15 @@ import kunigami.composeapp.generated.resources.onboarding_label_your_api_key
 import kunigami.composeapp.generated.resources.onboarding_placeholder_account
 import kunigami.composeapp.generated.resources.onboarding_placeholder_api_key
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun CredentialsInputForm(
     modifier: Modifier = Modifier,
     isSubmitButtonEnabled: Boolean,
-    onSubmitCredentials: (apiKey: String, accountNumber: String) -> Unit,
+    onSubmitCredentials: (apiKey: String, accountNumber: String, stringResolver: suspend (resId: StringResource) -> String) -> Unit,
 ) {
     val dimension = LocalDensity.current.getDimension()
 
@@ -107,7 +109,7 @@ internal fun CredentialsInputForm(
             keyboardActions = KeyboardActions(
                 onDone = {
                     keyboardController?.hide()
-                    onSubmitCredentials(apiKey.trim(), account.trim())
+                    onSubmitCredentials(apiKey.trim(), account.trim(), { getString(resource = it) })
                 },
             ),
             modifier = Modifier
@@ -120,7 +122,7 @@ internal fun CredentialsInputForm(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
                 keyboardController?.hide()
-                onSubmitCredentials(apiKey.trim(), account.trim())
+                onSubmitCredentials(apiKey.trim(), account.trim(), { getString(resource = it) })
             },
             enabled = isSubmitButtonEnabled && apiKey.isNotBlank() && account.isNotBlank(),
         ) {
@@ -135,7 +137,7 @@ private fun Preview() {
     CommonPreviewSetup {
         CredentialsInputForm(
             isSubmitButtonEnabled = true,
-            onSubmitCredentials = { _, _ -> },
+            onSubmitCredentials = { _, _, _ -> },
         )
     }
 }

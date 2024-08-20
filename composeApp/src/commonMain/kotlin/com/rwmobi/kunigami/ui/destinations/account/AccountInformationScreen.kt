@@ -61,6 +61,7 @@ import kunigami.composeapp.generated.resources.key
 import kunigami.composeapp.generated.resources.retry
 import kunigami.composeapp.generated.resources.unlink
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -141,7 +142,7 @@ internal fun AccountInformationScreen(
                 initialValue = "",
                 onDismiss = { isUpdateAPIKeyDialogOpened = false },
                 onUpdateAPIKey = { newKey ->
-                    uiEvent.onSubmitCredentials(newKey, uiState.userProfile.account.accountNumber)
+                    uiEvent.onSubmitCredentials(newKey, uiState.userProfile.account.accountNumber, { getString(resource = it) })
                     isUpdateAPIKeyDialogOpened = false
                 },
             )
@@ -178,7 +179,7 @@ internal fun AccountInformationScreen(
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 ),
-                onClick = uiEvent.onClearCache,
+                onClick = { uiEvent.onClearCache { getString(resource = it) } },
             )
         }
 
@@ -212,7 +213,7 @@ private fun Preview() {
                 ),
                 uiEvent = AccountUIEvent(
                     onClearCredentialButtonClicked = {},
-                    onSubmitCredentials = { _, _ -> },
+                    onSubmitCredentials = { _, _, _ -> },
                     onRefresh = {},
                     onMeterSerialNumberSelected = { _, _ -> },
                     onErrorShown = {},
@@ -245,7 +246,7 @@ private fun ErrorPreview() {
             ),
             uiEvent = AccountUIEvent(
                 onClearCredentialButtonClicked = {},
-                onSubmitCredentials = { _, _ -> },
+                onSubmitCredentials = { _, _, _ -> },
                 onRefresh = {},
                 onMeterSerialNumberSelected = { _, _ -> },
                 onErrorShown = {},
