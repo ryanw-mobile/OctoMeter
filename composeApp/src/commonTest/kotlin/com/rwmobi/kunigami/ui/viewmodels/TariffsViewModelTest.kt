@@ -91,7 +91,7 @@ class TariffsViewModelTest {
             windowSizeClass = WindowSizeClass.calculateFromSize(
                 size = Size(
                     width = 1280f,
-                    height = 1024f
+                    height = 1024f,
                 ),
                 density = Density(density = 2.0f),
             ),
