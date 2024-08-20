@@ -19,7 +19,7 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
     var windowSize: DpSize? = null
 
     override suspend fun isDemoMode(): Boolean {
-        return demoMode ?: throw RuntimeException("Fake result not defined")
+        return demoMode ?: throw RuntimeException("isDemoMode not defined")
     }
 
     override suspend fun getApiKey(): String? {
@@ -59,6 +59,7 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
         accountNumber = null
         mpan = null
         meterSerialNumber = null
+        demoMode = true
     }
 
     override suspend fun clearStorage() {

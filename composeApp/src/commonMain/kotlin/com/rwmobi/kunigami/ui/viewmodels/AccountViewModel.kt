@@ -26,11 +26,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.account_clear_cache_failed
 import kunigami.composeapp.generated.resources.account_clear_cache_success
-import kunigami.composeapp.generated.resources.account_error_load_account
 import kunigami.composeapp.generated.resources.account_error_update_credentials
-import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.StringResource
 
 class AccountViewModel(
     private val userPreferencesRepository: UserPreferencesRepository,
@@ -75,12 +73,13 @@ class AccountViewModel(
                     if (throwable is IncompleteCredentialsException) {
                         _uiState.update { currentUiState ->
                             currentUiState.copy(
+                                userProfile = null,
                                 requestedScreenType = AccountScreenType.Onboarding,
                                 isLoading = false,
                             )
                         }
                     } else {
-                        Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                        Logger.e("Unable to retrieve account details", throwable = throwable, tag = "AccountViewModel")
                         _uiState.update { currentUiState ->
                             currentUiState.filterErrorAndStopLoading(throwable = throwable)
                         }
@@ -100,6 +99,7 @@ class AccountViewModel(
     fun submitCredentials(
         apiKey: String,
         accountNumber: String,
+        stringResolver: suspend (resId: StringResource) -> String,
     ) {
         startLoading()
         viewModelScope.launch {
@@ -108,9 +108,9 @@ class AccountViewModel(
                 onSuccess = { refresh() },
                 onFailure = { throwable ->
                     // There is no retry for this case.
-                    Logger.e(getString(resource = Res.string.account_error_update_credentials), throwable = throwable, tag = "AccountViewModel")
+                    Logger.e("Access denied. Credentials not updated", throwable = throwable, tag = "AccountViewModel")
                     _uiState.update { currentUiState ->
-                        currentUiState.handleMessageAndStopLoading(message = getString(resource = Res.string.account_error_update_credentials))
+                        currentUiState.handleMessageAndStopLoading(message = stringResolver(Res.string.account_error_update_credentials))
                     }
                 },
             )
@@ -127,7 +127,7 @@ class AccountViewModel(
             result.fold(
                 onSuccess = { refresh() },
                 onFailure = { throwable ->
-                    Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                    Logger.e("Unable to retrieve account details", throwable = throwable, tag = "AccountViewModel")
                     _uiState.update { currentUiState ->
                         currentUiState.filterErrorAndStopLoading(throwable = throwable)
                     }
@@ -152,17 +152,19 @@ class AccountViewModel(
         }
     }
 
-    fun onClearCache() {
+    fun onClearCache(
+        stringResolver: suspend (resId: StringResource) -> String,
+    ) {
         startLoading()
         viewModelScope.launch {
             clearCacheUseCase().fold(
                 onSuccess = {
                     _uiState.update { currentUiState ->
-                        currentUiState.handleMessageAndStopLoading(message = getString(resource = Res.string.account_clear_cache_success))
+                        currentUiState.handleMessageAndStopLoading(message = stringResolver(Res.string.account_clear_cache_success))
                     }
                 },
                 onFailure = { throwable ->
-                    Logger.e(getString(resource = Res.string.account_clear_cache_failed), throwable = throwable, tag = "AccountViewModel")
+                    Logger.e("Unable to clear the cache", throwable = throwable, tag = "AccountViewModel")
                     _uiState.update { currentUiState ->
                         currentUiState.filterErrorAndStopLoading(throwable = throwable)
                     }

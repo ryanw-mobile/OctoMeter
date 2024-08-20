@@ -58,11 +58,7 @@ internal fun OnboardingScreen(
         modifier = modifier
             .pointerInput(Unit) {
                 detectTapGestures(
-                    onTap = {
-                        focusManager.clearFocus()
-//                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//                    imm.hideSoftInputFromWindow(this@pointerInput.windowToken, 0)
-                    },
+                    onTap = { focusManager.clearFocus() },
                 )
             },
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -137,7 +133,7 @@ private fun Preview() {
                 ),
                 uiEvent = AccountUIEvent(
                     onClearCredentialButtonClicked = {},
-                    onSubmitCredentials = { _, _ -> },
+                    onSubmitCredentials = { _, _, _ -> },
                     onMeterSerialNumberSelected = { _, _ -> },
                     onRefresh = {},
                     onErrorShown = {},
