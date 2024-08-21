@@ -21,7 +21,6 @@ import com.rwmobi.kunigami.domain.usecase.account.SyncUserProfileUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetLatestProductByKeywordUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetTariffRatesUseCase
-import com.rwmobi.kunigami.domain.usecase.product.GetTariffUseCase
 import com.rwmobi.kunigami.ui.destinations.agile.AgileScreenType
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
@@ -45,7 +44,6 @@ import kotlin.time.Duration
 
 class AgileViewModel(
     private val getLatestProductByKeywordUseCase: GetLatestProductByKeywordUseCase,
-    private val getTariffUseCase: GetTariffUseCase,
     private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val getStandardUnitRateUseCase: GetStandardUnitRateUseCase,
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
