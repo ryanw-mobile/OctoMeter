@@ -34,9 +34,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.account_error_load_account
-import org.jetbrains.compose.resources.getString
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
@@ -121,7 +118,7 @@ class AgileViewModel(
                         )
                     }
                 } else {
-                    Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                    Logger.e("Unable to retrieve your account details", throwable = throwable, tag = "AccountViewModel")
                     _uiState.update { currentUiState ->
                         currentUiState.filterErrorAndStopLoading(throwable = throwable)
                     }
