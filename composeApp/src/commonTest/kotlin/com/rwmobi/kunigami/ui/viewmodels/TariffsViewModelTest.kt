@@ -168,15 +168,14 @@ class TariffsViewModelTest {
     @Test
     fun `errorShown should remove the error message with the given ID`() = runTest {
         userPreferencesRepository.demoMode = true
-        val productList = listOf(GetProductsSampleData.productSummaryPage1)
-        octopusApiRepository.setProductsResponse = Result.success(productList)
-        val errorId = 1L
+        octopusApiRepository.setProductsResponse = Result.failure(Exception("some error message"))
 
         tariffsViewModel.refresh() // Initialize with some state
-        tariffsViewModel.errorShown(errorId)
+        val errorMessage = tariffsViewModel.uiState.value.errorMessages.first()
+        tariffsViewModel.errorShown(errorMessage.id)
         val uiState = tariffsViewModel.uiState.value
 
-        assertTrue(uiState.errorMessages.none { it.id == errorId })
+        assertTrue(uiState.errorMessages.none { it.id == errorMessage.id })
     }
 
     @Test
