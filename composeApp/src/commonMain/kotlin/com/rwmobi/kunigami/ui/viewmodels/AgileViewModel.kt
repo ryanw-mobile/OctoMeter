@@ -27,6 +27,7 @@ import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.product.RetailRegion
 import com.rwmobi.kunigami.ui.model.rate.RateGroup
+import com.rwmobi.kunigami.ui.tools.interfaces.StringResourceProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,6 +45,7 @@ class AgileViewModel(
     private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val getStandardUnitRateUseCase: GetStandardUnitRateUseCase,
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
+    private val stringResourceProvider: StringResourceProvider,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<AgileUIState> = MutableStateFlow(AgileUIState(isLoading = true))
@@ -161,7 +163,10 @@ class AgileViewModel(
                         requestedScreenType = AgileScreenType.Chart,
                         rateGroupedCells = rateGroupedCells,
                         rateRange = rateRange,
-                        barChartData = BarChartData.fromRates(rates = rates),
+                        barChartData = BarChartData.fromRates(
+                            rates = rates,
+                            stringResourceProvider = stringResourceProvider,
+                        ),
                     )
                 }
             },
