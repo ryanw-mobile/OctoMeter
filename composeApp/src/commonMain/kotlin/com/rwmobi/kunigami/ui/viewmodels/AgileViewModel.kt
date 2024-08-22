@@ -21,13 +21,13 @@ import com.rwmobi.kunigami.domain.usecase.account.SyncUserProfileUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetLatestProductByKeywordUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetTariffRatesUseCase
-import com.rwmobi.kunigami.domain.usecase.product.GetTariffUseCase
 import com.rwmobi.kunigami.ui.destinations.agile.AgileScreenType
 import com.rwmobi.kunigami.ui.destinations.agile.AgileUIState
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.product.RetailRegion
 import com.rwmobi.kunigami.ui.model.rate.RateGroup
+import com.rwmobi.kunigami.ui.tools.interfaces.StringResourceProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,9 +35,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.account_error_load_account
-import org.jetbrains.compose.resources.getString
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
@@ -45,10 +42,10 @@ import kotlin.time.Duration
 
 class AgileViewModel(
     private val getLatestProductByKeywordUseCase: GetLatestProductByKeywordUseCase,
-    private val getTariffUseCase: GetTariffUseCase,
     private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val getStandardUnitRateUseCase: GetStandardUnitRateUseCase,
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
+    private val stringResourceProvider: StringResourceProvider,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<AgileUIState> = MutableStateFlow(AgileUIState(isLoading = true))
@@ -123,7 +120,7 @@ class AgileViewModel(
                         )
                     }
                 } else {
-                    Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                    Logger.e("Unable to retrieve your account details", throwable = throwable, tag = "AccountViewModel")
                     _uiState.update { currentUiState ->
                         currentUiState.filterErrorAndStopLoading(throwable = throwable)
                     }
@@ -166,7 +163,10 @@ class AgileViewModel(
                         requestedScreenType = AgileScreenType.Chart,
                         rateGroupedCells = rateGroupedCells,
                         rateRange = rateRange,
-                        barChartData = BarChartData.fromRates(rates = rates),
+                        barChartData = BarChartData.fromRates(
+                            rates = rates,
+                            stringResourceProvider = stringResourceProvider,
+                        ),
                     )
                 }
             },

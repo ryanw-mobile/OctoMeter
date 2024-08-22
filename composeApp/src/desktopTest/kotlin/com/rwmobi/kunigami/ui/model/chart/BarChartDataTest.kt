@@ -11,6 +11,7 @@ import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
+import com.rwmobi.kunigami.ui.tools.MultiplatformStringResourceProvider
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
 import kotlinx.coroutines.runBlocking
@@ -58,7 +59,10 @@ class BarChartDataTest {
             ),
         )
 
-        val barChartData = BarChartData.fromRates(rates)
+        val barChartData = BarChartData.fromRates(
+            rates = rates,
+            stringResourceProvider = MultiplatformStringResourceProvider(),
+        )
 
         assertEquals(expected = expectedEntries, actual = barChartData.verticalBarPlotEntries)
     }
@@ -72,7 +76,10 @@ class BarChartDataTest {
             2 to "13",
         )
 
-        val barChartData = BarChartData.fromRates(rates)
+        val barChartData = BarChartData.fromRates(
+            rates = rates,
+            stringResourceProvider = MultiplatformStringResourceProvider(),
+        )
 
         assertEquals(expected = expectedLabels, actual = barChartData.labels)
     }
@@ -86,7 +93,10 @@ class BarChartDataTest {
             "13:00\n15.0p",
         )
 
-        val barChartData = BarChartData.fromRates(rates)
+        val barChartData = BarChartData.fromRates(
+            rates = rates,
+            stringResourceProvider = MultiplatformStringResourceProvider(),
+        )
 
         assertEquals(expected = expectedTooltips, actual = barChartData.tooltips)
     }
@@ -125,6 +135,7 @@ class BarChartDataTest {
         val barChartData = BarChartData.fromConsumptions(
             presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
             consumptions = consumptions,
+            stringResourceProvider = MultiplatformStringResourceProvider(),
         )
 
         assertEquals(expectedEntries, barChartData.verticalBarPlotEntries)
@@ -145,6 +156,7 @@ class BarChartDataTest {
         val barChartData = BarChartData.fromConsumptions(
             presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
             consumptions = consumptions,
+            stringResourceProvider = MultiplatformStringResourceProvider(),
         )
 
         assertEquals(expected = expectedLabels, actual = barChartData.labels)
@@ -166,6 +178,7 @@ class BarChartDataTest {
         val barChartData = BarChartData.fromConsumptions(
             presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
             consumptions = consumptions,
+            stringResourceProvider = MultiplatformStringResourceProvider(),
         )
 
         assertEquals(expected = expectedTooltips, actual = barChartData.tooltips)
@@ -187,6 +200,7 @@ class BarChartDataTest {
         val barChartData = BarChartData.fromConsumptions(
             presentationStyle = ConsumptionPresentationStyle.WEEK_SEVEN_DAYS,
             consumptions = consumptions,
+            stringResourceProvider = MultiplatformStringResourceProvider(),
         )
 
         assertEquals(expected = expectedLabels, actual = barChartData.labels)
@@ -208,6 +222,7 @@ class BarChartDataTest {
         val barChartData = BarChartData.fromConsumptions(
             presentationStyle = ConsumptionPresentationStyle.WEEK_SEVEN_DAYS,
             consumptions = consumptions,
+            stringResourceProvider = MultiplatformStringResourceProvider(),
         )
 
         assertEquals(expected = expectedTooltips, actual = barChartData.tooltips)
@@ -229,6 +244,7 @@ class BarChartDataTest {
         val barChartData = BarChartData.fromConsumptions(
             presentationStyle = ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS,
             consumptions = consumptions,
+            stringResourceProvider = MultiplatformStringResourceProvider(),
         )
 
         assertEquals(expected = expectedLabels, actual = barChartData.labels)
@@ -250,6 +266,7 @@ class BarChartDataTest {
         val barChartData = BarChartData.fromConsumptions(
             presentationStyle = ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS,
             consumptions = consumptions,
+            stringResourceProvider = MultiplatformStringResourceProvider(),
         )
 
         assertEquals(expected = expectedTooltips, actual = barChartData.tooltips)

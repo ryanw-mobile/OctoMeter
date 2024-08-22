@@ -42,6 +42,7 @@ class PlatformMainViewModel(
     fun cachePreferredWindowSize(size: DpSize) {
         viewModelScope.launch(dispatcher) {
             userPreferencesRepository.setWindowSize(size = size)
+            _windowSize.value = size
         }
     }
 

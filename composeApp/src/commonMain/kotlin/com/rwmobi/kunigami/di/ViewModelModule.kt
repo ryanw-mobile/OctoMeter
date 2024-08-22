@@ -8,6 +8,7 @@
 package com.rwmobi.kunigami.di
 
 import com.rwmobi.kunigami.domain.usecase.consumption.GenerateUsageInsightsUseCase
+import com.rwmobi.kunigami.ui.tools.MultiplatformStringResourceProvider
 import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
 import com.rwmobi.kunigami.ui.viewmodels.AgileViewModel
 import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel
@@ -22,6 +23,7 @@ val viewModelModule = module {
             getConsumptionAndCostUseCase = get(),
             getTariffUseCase = get(),
             generateUsageInsightsUseCase = GenerateUsageInsightsUseCase(),
+            stringResourceProvider = MultiplatformStringResourceProvider(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }
@@ -29,10 +31,10 @@ val viewModelModule = module {
     factory {
         AgileViewModel(
             getLatestProductByKeywordUseCase = get(),
-            getTariffUseCase = get(),
             syncUserProfileUseCase = get(),
             getTariffRatesUseCase = get(),
             getStandardUnitRateUseCase = get(),
+            stringResourceProvider = MultiplatformStringResourceProvider(),
             dispatcher = get(named("DefaultDispatcher")),
         )
     }

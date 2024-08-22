@@ -28,6 +28,7 @@ import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionQueryFilter
 import com.rwmobi.kunigami.ui.previewsampledata.FakeDemoUserProfile
+import com.rwmobi.kunigami.ui.tools.interfaces.StringResourceProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,6 +49,7 @@ class UsageViewModel(
     private val getTariffUseCase: GetTariffUseCase,
     private val getConsumptionAndCostUseCase: GetConsumptionAndCostUseCase,
     private val generateUsageInsightsUseCase: GenerateUsageInsightsUseCase,
+    private val stringResourceProvider: StringResourceProvider,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UsageUIState> = MutableStateFlow(UsageUIState(isLoading = true))
@@ -309,6 +311,7 @@ class UsageViewModel(
                 barChartData = BarChartData.fromConsumptions(
                     consumptions = consumptions,
                     presentationStyle = consumptionQueryFilter.presentationStyle,
+                    stringResourceProvider = stringResourceProvider,
                 ),
                 requestedScreenType = UsageScreenType.Chart,
                 insights = insights,

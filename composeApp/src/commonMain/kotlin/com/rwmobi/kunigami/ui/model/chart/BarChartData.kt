@@ -18,6 +18,7 @@ import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
+import com.rwmobi.kunigami.ui.tools.interfaces.StringResourceProvider
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
 import io.github.koalaplot.core.bar.VerticalBarPlotEntry
@@ -29,7 +30,6 @@ import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_chart_tooltip_range_p
 import kunigami.composeapp.generated.resources.usage_chart_tooltip_range_kwh
 import kunigami.composeapp.generated.resources.usage_chart_tooltip_spot_kwh
-import org.jetbrains.compose.resources.getString
 import kotlin.time.Duration.Companion.nanoseconds
 
 @Immutable
@@ -39,16 +39,33 @@ data class BarChartData(
     val tooltips: List<String>,
 ) {
     companion object {
-        suspend fun fromRates(rates: List<Rate>) = BarChartData(
+        suspend fun fromRates(
+            rates: List<Rate>,
+            stringResourceProvider: StringResourceProvider,
+        ) = BarChartData(
             verticalBarPlotEntries = generateRateVerticalBarPlotEntries(rates = rates),
             labels = generateRateLabels(rates = rates),
-            tooltips = generateRateToolTips(rates = rates),
+            tooltips = generateRateToolTips(
+                rates = rates,
+                stringResourceProvider = stringResourceProvider,
+            ),
         )
 
-        suspend fun fromConsumptions(presentationStyle: ConsumptionPresentationStyle, consumptions: List<Consumption>) = BarChartData(
+        suspend fun fromConsumptions(
+            presentationStyle: ConsumptionPresentationStyle,
+            consumptions: List<Consumption>,
+            stringResourceProvider: StringResourceProvider,
+        ) = BarChartData(
             verticalBarPlotEntries = generateConsumptionVerticalBarPlotEntries(consumptions = consumptions),
-            labels = generateConsumptionLabels(presentationStyle = presentationStyle, consumptions = consumptions),
-            tooltips = generateConsumptionToolTips(presentationStyle = presentationStyle, consumptions = consumptions),
+            labels = generateConsumptionLabels(
+                presentationStyle = presentationStyle,
+                consumptions = consumptions,
+            ),
+            tooltips = generateConsumptionToolTips(
+                presentationStyle = presentationStyle,
+                consumptions = consumptions,
+                stringResourceProvider = stringResourceProvider,
+            ),
         )
 
         // Rate - Agile
@@ -80,7 +97,10 @@ data class BarChartData(
             }
         }
 
-        private suspend fun generateRateToolTips(rates: List<Rate>): List<String> {
+        private suspend fun generateRateToolTips(
+            rates: List<Rate>,
+            stringResourceProvider: StringResourceProvider,
+        ): List<String> {
             return rates.map { rate ->
                 val validToString = if (rate.validity.endInclusive != Instant.DISTANT_FUTURE) {
                     " - ${rate.validity.endInclusive.getLocalHHMMString()}"
@@ -89,7 +109,7 @@ data class BarChartData(
                 }
                 val timeRange = rate.validity.start.getLocalHHMMString() + validToString
 
-                getString(
+                stringResourceProvider.getString(
                     resource = Res.string.agile_chart_tooltip_range_p,
                     timeRange,
                     rate.vatInclusivePrice.roundToTwoDecimalPlaces(),
@@ -171,11 +191,12 @@ data class BarChartData(
         private suspend fun generateConsumptionToolTips(
             presentationStyle: ConsumptionPresentationStyle,
             consumptions: List<Consumption>,
+            stringResourceProvider: StringResourceProvider,
         ): List<String> {
             return when (presentationStyle) {
                 ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
                     consumptions.map { consumption ->
-                        getString(
+                        stringResourceProvider.getString(
                             resource = Res.string.usage_chart_tooltip_range_kwh,
                             consumption.interval.start.getLocalHHMMString(),
                             consumption.interval.endInclusive.getLocalHHMMString(),
@@ -186,7 +207,7 @@ data class BarChartData(
 
                 ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
                     consumptions.map { consumption ->
-                        getString(
+                        stringResourceProvider.getString(
                             resource = Res.string.usage_chart_tooltip_spot_kwh,
                             consumption.interval.start.getLocalDayMonthString(),
                             consumption.kWhConsumed.toString(precision = 2),
@@ -196,7 +217,7 @@ data class BarChartData(
 
                 ConsumptionPresentationStyle.MONTH_WEEKS -> {
                     consumptions.map { consumption ->
-                        getString(
+                        stringResourceProvider.getString(
                             resource = Res.string.usage_chart_tooltip_range_kwh,
                             consumption.interval.start.getLocalDayMonthString(),
                             (consumption.interval.endInclusive - 1.nanoseconds).getLocalDayMonthString(),
@@ -207,7 +228,7 @@ data class BarChartData(
 
                 ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
                     consumptions.map { consumption ->
-                        getString(
+                        stringResourceProvider.getString(
                             resource = Res.string.usage_chart_tooltip_spot_kwh,
                             consumption.interval.start.getLocalDayMonthString(),
                             consumption.kWhConsumed.toString(precision = 2),
@@ -217,7 +238,7 @@ data class BarChartData(
 
                 ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
                     consumptions.map { consumption ->
-                        getString(
+                        stringResourceProvider.getString(
                             resource = Res.string.usage_chart_tooltip_spot_kwh,
                             consumption.interval.start.getLocalMonthYearString(),
                             consumption.kWhConsumed.toString(precision = 2),
