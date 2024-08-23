@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class PostcodeExtensionsKtTest {
+class PostcodeStringExtensionsKtTest {
 
     @Test
     fun `isValidPostcodePattern should return true for valid A9 9AA format`() {
