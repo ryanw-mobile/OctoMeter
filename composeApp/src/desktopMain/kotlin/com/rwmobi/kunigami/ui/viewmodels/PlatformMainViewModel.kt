@@ -28,7 +28,7 @@ class PlatformMainViewModel(
     val windowSize = _windowSize.asStateFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             _windowSize.value = loadPreferredWindowSize()
         }
     }
