@@ -55,8 +55,15 @@ class PlatformMainViewModelTest {
 
     @Test
     fun `init should load preferred window size`() = runTest {
-        // ViewModel is set up with preferred size initialised
-        val windowSize = platformMainViewModel.windowSize.value
+        userPreferencesRepository.windowSize = preferredSize
+
+        // This ViewModel has init block. We have to set it up manually again
+        val preInitPlatformMainViewModel = PlatformMainViewModel(
+            userPreferencesRepository = userPreferencesRepository,
+            dispatcher = UnconfinedTestDispatcher(),
+        )
+
+        val windowSize = preInitPlatformMainViewModel.windowSize.value
         assertEquals(preferredSize, windowSize)
     }
 
