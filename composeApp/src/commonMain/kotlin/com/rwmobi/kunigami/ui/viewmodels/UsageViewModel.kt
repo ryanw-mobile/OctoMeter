@@ -41,7 +41,6 @@ import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_load_account
 import kunigami.composeapp.generated.resources.fallback_error_no_consumptions
 import kunigami.composeapp.generated.resources.usage_error_date_out_of_range
-import org.jetbrains.compose.resources.getString
 import kotlin.time.Duration
 
 class UsageViewModel(
@@ -115,7 +114,7 @@ class UsageViewModel(
                             }
                         },
                         onFailure = { throwable ->
-                            val fallbackErrorMessage = getString(resource = Res.string.fallback_error_no_consumptions)
+                            val fallbackErrorMessage = stringResourceProvider.getString(resource = Res.string.fallback_error_no_consumptions)
                             Logger.e("UsageViewModel", throwable = throwable, message = { fallbackErrorMessage })
                             _uiState.update { currentUiState ->
                                 currentUiState.filterErrorAndStopLoading(throwable = throwable, defaultMessage = fallbackErrorMessage)
@@ -166,16 +165,16 @@ class UsageViewModel(
                     )
                 },
                 onFailure = { throwable ->
-                    val fallbackErrorMessage = getString(resource = Res.string.fallback_error_no_consumptions)
+                    val fallbackErrorMessage = stringResourceProvider.getString(resource = Res.string.fallback_error_no_consumptions)
                     Logger.e("UsageViewModel", throwable = throwable, message = { fallbackErrorMessage })
                     _uiState.update { currentUiState ->
-                        currentUiState.filterErrorAndStopLoading(throwable = throwable, defaultMessage = getString(resource = Res.string.fallback_error_no_consumptions))
+                        currentUiState.filterErrorAndStopLoading(throwable = throwable, defaultMessage = stringResourceProvider.getString(resource = Res.string.fallback_error_no_consumptions))
                     }
                 },
             )
         } else {
             _uiState.update { currentUiState ->
-                val errorMessage = getString(resource = Res.string.fallback_error_no_consumptions)
+                val errorMessage = stringResourceProvider.getString(resource = Res.string.fallback_error_no_consumptions)
                 currentUiState.filterErrorAndStopLoading(throwable = IllegalStateException(errorMessage))
             }
         }
@@ -209,7 +208,7 @@ class UsageViewModel(
             if (newConsumptionQueryFilter == null) {
                 Logger.e("UsageViewModel", message = { "navigateBackward request declined." })
                 _uiState.update { currentUiState ->
-                    currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException(getString(resource = Res.string.usage_error_date_out_of_range)))
+                    currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException(stringResourceProvider.getString(resource = Res.string.usage_error_date_out_of_range)))
                 }
             } else {
                 refresh(consumptionQueryFilter = newConsumptionQueryFilter)
@@ -223,7 +222,7 @@ class UsageViewModel(
             if (newConsumptionQueryFilter == null) {
                 Logger.e("UsageViewModel", message = { "navigateForward request declined." })
                 _uiState.update { currentUiState ->
-                    currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException(getString(resource = Res.string.usage_error_date_out_of_range)))
+                    currentUiState.filterErrorAndStopLoading(throwable = IllegalArgumentException(stringResourceProvider.getString(resource = Res.string.usage_error_date_out_of_range)))
                 }
             } else {
                 refresh(consumptionQueryFilter = newConsumptionQueryFilter)
@@ -280,7 +279,7 @@ class UsageViewModel(
                     }
                     return fakeDemoUserProfile
                 } else {
-                    Logger.e(getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
+                    Logger.e(stringResourceProvider.getString(resource = Res.string.account_error_load_account), throwable = throwable, tag = "AccountViewModel")
                     _uiState.update { currentUiState ->
                         currentUiState.filterErrorAndStopLoading(throwable = throwable)
                     }
