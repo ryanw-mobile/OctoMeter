@@ -296,7 +296,10 @@ class UsageViewModel(
     ) {
         val consumptions = consumptionWithCost.map { it.consumption }
         val consumptionRange = consumptions.getConsumptionRange()
-        val consumptionGroupedCells = consumptionQueryFilter.groupChartCells(consumptions = consumptions)
+        val consumptionGroupedCells = consumptionQueryFilter.groupChartCells(
+            consumptions = consumptions,
+            stringResourceProvider = stringResourceProvider,
+        )
         val insights = generateUsageInsightsUseCase(
             tariff = tariff,
             consumptionWithCost = consumptionWithCost,
