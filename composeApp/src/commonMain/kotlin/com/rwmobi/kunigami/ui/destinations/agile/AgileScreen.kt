@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -166,11 +167,11 @@ fun AgileScreen(
                             item(key = "tariffDetails") {
                                 AgileTariffCardAdaptive(
                                     modifier = Modifier
+                                        .background(color = CardDefaults.cardColors().containerColor)
                                         .fillMaxWidth()
                                         .padding(
-                                            start = dimension.grid_3,
-                                            end = dimension.grid_3,
-                                            top = dimension.grid_1,
+                                            horizontal = dimension.grid_3,
+                                            vertical = dimension.grid_1,
                                         ),
                                     latestFixedTariff = uiState.latestFixedTariff,
                                     latestFlexibleTariff = uiState.latestFlexibleTariff,

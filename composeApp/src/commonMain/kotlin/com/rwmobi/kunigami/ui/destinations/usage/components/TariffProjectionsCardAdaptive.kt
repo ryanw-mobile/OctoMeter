@@ -13,18 +13,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
@@ -86,9 +88,19 @@ private fun TariffProjectionsCardLinear(
         }
 
         insights?.let { insights ->
+            HorizontalDivider(
+                modifier = Modifier.height(height = dimension.grid_1),
+                thickness = Dp.Hairline,
+            )
+
             InsightsCard(
                 modifier = Modifier.fillMaxWidth(),
                 insights = insights,
+            )
+
+            HorizontalDivider(
+                modifier = Modifier.height(height = dimension.grid_1),
+                thickness = Dp.Hairline,
             )
 
             ProjectedConsumptionCard(
@@ -130,7 +142,10 @@ private fun TariffProjectionsCardThreeColumns(
             }
 
             insights?.let { insights ->
-                Spacer(modifier = Modifier.width(width = dimension.grid_1))
+                VerticalDivider(
+                    modifier = Modifier.width(width = dimension.grid_1),
+                    thickness = Dp.Hairline,
+                )
 
                 InsightsCard(
                     modifier = Modifier
@@ -139,7 +154,10 @@ private fun TariffProjectionsCardThreeColumns(
                     insights = insights,
                 )
 
-                Spacer(modifier = Modifier.width(width = dimension.grid_1))
+                VerticalDivider(
+                    modifier = Modifier.width(width = dimension.grid_1),
+                    thickness = Dp.Hairline,
+                )
 
                 ProjectedConsumptionCard(
                     modifier = Modifier

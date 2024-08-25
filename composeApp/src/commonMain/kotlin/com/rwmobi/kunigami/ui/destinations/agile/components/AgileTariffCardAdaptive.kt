@@ -13,14 +13,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
@@ -203,6 +205,11 @@ private fun AgileTariffCardCompact(
         }
 
         if (latestFixedTariff != null || latestFlexibleTariff != null) {
+            HorizontalDivider(
+                modifier = Modifier.height(height = dimension.grid_1),
+                thickness = Dp.Hairline,
+            )
+
             LatestTariffsCard(
                 modifier = Modifier.fillMaxWidth(),
                 latestFlexibleTariff = latestFlexibleTariff,
@@ -254,7 +261,10 @@ private fun AgileTariffCardExpanded(
                 ),
             )
 
-            Spacer(modifier = Modifier.width(width = dimension.grid_1))
+            VerticalDivider(
+                modifier = Modifier.width(width = dimension.grid_1),
+                thickness = Dp.Hairline,
+            )
 
             RateGaugeCountdownCard(
                 modifier = Modifier
@@ -266,7 +276,11 @@ private fun AgileTariffCardExpanded(
             )
 
             if (shouldShowLatestTariff) {
-                Spacer(modifier = Modifier.width(width = dimension.grid_1))
+                VerticalDivider(
+                    modifier = Modifier.width(width = dimension.grid_1),
+                    thickness = Dp.Hairline,
+                )
+
                 LatestTariffsCard(
                     modifier = Modifier
                         .weight(1f)
