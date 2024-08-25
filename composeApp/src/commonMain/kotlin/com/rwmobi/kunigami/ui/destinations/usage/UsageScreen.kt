@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -194,6 +195,7 @@ fun UsageScreen(
                                 item(key = "tariffAndProjections") {
                                     TariffProjectionsCardAdaptive(
                                         modifier = Modifier
+                                            .background(color = CardDefaults.cardColors().containerColor)
                                             .fillMaxWidth()
                                             .padding(
                                                 horizontal = dimension.grid_3,
