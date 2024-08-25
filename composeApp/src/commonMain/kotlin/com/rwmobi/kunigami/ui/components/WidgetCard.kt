@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,37 +32,33 @@ fun WidgetCard(
 ) {
     val dimension = LocalDensity.current.getDimension()
 
-    Card(
+    Column(
         modifier = modifier
             .sizeIn(
                 minWidth = dimension.windowWidthMedium / 2,
                 maxWidth = dimension.windowWidthCompact,
-            ),
+            )
+            .fillMaxSize()
+            .padding(all = dimension.grid_2),
+        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(all = dimension.grid_2),
-            verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
-        ) {
-            heading?.let { headingText ->
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    text = headingText,
-                )
-            }
-
-            Spacer(modifier = Modifier.weight(weight = 1f))
-
-            contents()
-
-            Spacer(modifier = Modifier.weight(weight = 1f))
-
-            footer?.let { it() }
+        heading?.let { headingText ->
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                text = headingText,
+            )
         }
+
+        Spacer(modifier = Modifier.weight(weight = 1f))
+
+        contents()
+
+        Spacer(modifier = Modifier.weight(weight = 1f))
+
+        footer?.let { it() }
     }
 }
