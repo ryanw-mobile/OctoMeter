@@ -56,6 +56,9 @@ class AgileViewModel(
     private val fallBackFlexibleProductCode = "VAR-22-11-01"
     private val demoRetailRegion = RetailRegion.EASTERN_ENGLAND
 
+    private var cachedFixedProductCode: String? = null
+    private var cachedFlexibleProductCode: String? = null
+
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
             val errorMessages = currentUiState.errorMessages.filterNot { it.id == errorId }
@@ -233,7 +236,8 @@ class AgileViewModel(
      * Best effort to fetch reference tariffs for comparison. No harm if it fails, so it won't stop loading.
      */
     private suspend fun fetchReferenceTariffs(region: RetailRegion) {
-        val fixedProductCode = getLatestProductByKeywordUseCase(keyword = "OE-FIX-12M") ?: fallBackFixedProductCode
+        cachedFixedProductCode = cachedFixedProductCode ?: getLatestProductByKeywordUseCase(keyword = "OE-FIX-12M")
+        val fixedProductCode = cachedFixedProductCode ?: fallBackFixedProductCode
         getTariffRatesUseCase(
             tariffCode = "E-1R-$fixedProductCode-${region.code}",
         ).fold(
@@ -254,7 +258,8 @@ class AgileViewModel(
             },
         )
 
-        val flexibleProductCode = getLatestProductByKeywordUseCase(keyword = "VAR-") ?: fallBackFlexibleProductCode
+        cachedFlexibleProductCode = cachedFlexibleProductCode ?: getLatestProductByKeywordUseCase(keyword = "VAR-")
+        val flexibleProductCode = cachedFlexibleProductCode ?: fallBackFlexibleProductCode
         getTariffRatesUseCase(
             tariffCode = "E-1R-$flexibleProductCode-${region.code}",
         ).fold(
