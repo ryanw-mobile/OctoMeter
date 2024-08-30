@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.extensions.atStartOfHour
+import com.rwmobi.kunigami.domain.extensions.getAgileClosingTime
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.product.Tariff
@@ -38,7 +39,6 @@ import kotlinx.datetime.Clock
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
-import kotlin.time.Duration
 
 class AgileViewModel(
     private val getLatestProductByKeywordUseCase: GetLatestProductByKeywordUseCase,
@@ -147,7 +147,7 @@ class AgileViewModel(
         region: RetailRegion,
     ) {
         val currentTime = Clock.System.now().atStartOfHour()
-        val periodTo = currentTime.plus(duration = Duration.parse("1d"))
+        val periodTo = currentTime.getAgileClosingTime()
 
         getStandardUnitRateUseCase(
             tariffCode = "E-1R-$productCode-${region.code}",

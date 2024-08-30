@@ -14,6 +14,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.atTime
 import kotlinx.datetime.format
 import kotlinx.datetime.format.DayOfWeekNames
 import kotlinx.datetime.format.MonthNames
@@ -75,6 +76,24 @@ fun Instant.atEndOfDay(): Instant {
         .plus(period = DatePeriod(days = 1))
         .atStartOfDayIn(timeZone = TimeZone.currentSystemDefault())
         .minus(value = 1, unit = DateTimeUnit.NANOSECOND)
+}
+
+/***
+ * Agile Unit Rates up to 23:00 the next day are published around 16:00 every day.
+ * It is no use requesting anything we know it's not available.
+ */
+fun Instant.getAgileClosingTime(): Instant {
+    val londonTimeZone = TimeZone.of("Europe/London")
+    val londonDateTime = this.toLocalDateTime(londonTimeZone)
+    val fifteenOClockToday = londonDateTime.date.atTime(hour = 15, minute = 0)
+    val closingTimeToday = londonDateTime.date.atTime(hour = 23, minute = 0)
+
+    if (londonDateTime < fifteenOClockToday) {
+        return closingTimeToday.toInstant(londonTimeZone)
+    }
+
+    val closingTimeTomorrow = (londonDateTime.date + DatePeriod(days = 1)).atTime(23, 0)
+    return closingTimeTomorrow.toInstant(londonTimeZone)
 }
 
 fun Instant.getDayRange(): ClosedRange<Instant> = atStartOfDay()..atEndOfDay()

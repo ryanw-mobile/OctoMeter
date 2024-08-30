@@ -237,4 +237,56 @@ class InstantExtensionsKtTest {
         val oneDayRangeSlots = oneDayRange.getHalfHourlyTimeSlotCount()
         assertEquals(expected = 48, actual = oneDayRangeSlots)
     }
+
+    @Test
+    fun `getAgileClosingTime should return 23_00 today when current time is before 15_00`() {
+        // Current time is 2024-08-30T10:00:00 in London time
+        val currentTime = LocalDateTime(2024, 8, 30, 10, 0, 0).toInstant(londonZone)
+
+        // Expected result is 2024-08-30T23:00:00 in London time
+        val expectedClosingTime = LocalDateTime(2024, 8, 30, 23, 0, 0).toInstant(londonZone)
+
+        val actualClosingTime = currentTime.getAgileClosingTime()
+
+        assertEquals(expectedClosingTime, actualClosingTime)
+    }
+
+    @Test
+    fun `getAgileClosingTime should return 23_00 tomorrow when current time is after 15_00`() {
+        // Current time is 2024-08-30T16:00:00 in London time
+        val currentTime = LocalDateTime(2024, 8, 30, 16, 0, 0).toInstant(londonZone)
+
+        // Expected result is 2024-08-31T23:00:00 in London time
+        val expectedClosingTime = LocalDateTime(2024, 8, 31, 23, 0, 0).toInstant(londonZone)
+
+        val actualClosingTime = currentTime.getAgileClosingTime()
+
+        assertEquals(expectedClosingTime, actualClosingTime)
+    }
+
+    @Test
+    fun `getAgileClosingTime should handle the transition from GMT to BST correctly`() {
+        // Current time is 2024-03-30T14:00:00 in London time (before BST starts)
+        val currentTime = LocalDateTime(2024, 3, 30, 14, 0, 0).toInstant(londonZone)
+
+        // Expected result is 2024-03-30T23:00:00 in London time (still GMT)
+        val expectedClosingTime = LocalDateTime(2024, 3, 30, 23, 0, 0).toInstant(londonZone)
+
+        val actualClosingTime = currentTime.getAgileClosingTime()
+
+        assertEquals(expectedClosingTime, actualClosingTime)
+    }
+
+    @Test
+    fun `getAgileClosingTime should return correct time on the day after BST starts`() {
+        // Current time is 2024-03-31T16:00:00 in London time (after BST starts)
+        val currentTime = LocalDateTime(2024, 3, 31, 16, 0, 0).toInstant(londonZone)
+
+        // Expected result is 2024-04-01T23:00:00 in London time (BST)
+        val expectedClosingTime = LocalDateTime(2024, 4, 1, 23, 0, 0).toInstant(londonZone)
+
+        val actualClosingTime = currentTime.getAgileClosingTime()
+
+        assertEquals(expectedClosingTime, actualClosingTime)
+    }
 }
