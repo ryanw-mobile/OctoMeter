@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.domain.exceptions.IncompleteCredentialsException
 import com.rwmobi.kunigami.domain.extensions.atStartOfHour
+import com.rwmobi.kunigami.domain.extensions.getAgileClosingTime
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.product.Tariff
@@ -38,7 +39,6 @@ import kotlinx.datetime.Clock
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
-import kotlin.time.Duration
 
 class AgileViewModel(
     private val getLatestProductByKeywordUseCase: GetLatestProductByKeywordUseCase,
@@ -55,6 +55,9 @@ class AgileViewModel(
     private val fallBackFixedProductCode = "OE-FIX-12M-24-06-28"
     private val fallBackFlexibleProductCode = "VAR-22-11-01"
     private val demoRetailRegion = RetailRegion.EASTERN_ENGLAND
+
+    private var cachedFixedProductCode: String? = null
+    private var cachedFlexibleProductCode: String? = null
 
     fun errorShown(errorId: Long) {
         _uiState.update { currentUiState ->
@@ -144,7 +147,7 @@ class AgileViewModel(
         region: RetailRegion,
     ) {
         val currentTime = Clock.System.now().atStartOfHour()
-        val periodTo = currentTime.plus(duration = Duration.parse("1d"))
+        val periodTo = currentTime.getAgileClosingTime()
 
         getStandardUnitRateUseCase(
             tariffCode = "E-1R-$productCode-${region.code}",
@@ -233,7 +236,8 @@ class AgileViewModel(
      * Best effort to fetch reference tariffs for comparison. No harm if it fails, so it won't stop loading.
      */
     private suspend fun fetchReferenceTariffs(region: RetailRegion) {
-        val fixedProductCode = getLatestProductByKeywordUseCase(keyword = "OE-FIX-12M") ?: fallBackFixedProductCode
+        cachedFixedProductCode = cachedFixedProductCode ?: getLatestProductByKeywordUseCase(keyword = "OE-FIX-12M")
+        val fixedProductCode = cachedFixedProductCode ?: fallBackFixedProductCode
         getTariffRatesUseCase(
             tariffCode = "E-1R-$fixedProductCode-${region.code}",
         ).fold(
@@ -254,7 +258,8 @@ class AgileViewModel(
             },
         )
 
-        val flexibleProductCode = getLatestProductByKeywordUseCase(keyword = "VAR-") ?: fallBackFlexibleProductCode
+        cachedFlexibleProductCode = cachedFlexibleProductCode ?: getLatestProductByKeywordUseCase(keyword = "VAR-")
+        val flexibleProductCode = cachedFlexibleProductCode ?: fallBackFlexibleProductCode
         getTariffRatesUseCase(
             tariffCode = "E-1R-$flexibleProductCode-${region.code}",
         ).fold(
