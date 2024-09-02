@@ -28,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.components.WidgetCard
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.cyanish
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -48,42 +47,42 @@ internal fun LatestTariffsCard(
 ) {
     val dimension = LocalDensity.current.getDimension()
 
-    WidgetCard(
+    Column(
         modifier = modifier,
-        contents = {
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
-                verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
-            ) {
-                latestFlexibleTariff?.let { tariff ->
-                    tariff.vatInclusiveStandardUnitRate?.let { unitRate ->
-                        TariffEntry(
-                            modifier = Modifier
-                                .widthIn(min = dimension.windowWidthCompactOneThird)
-                                .weight(1f),
-                            tariff = tariff,
-                            unitRate = unitRate,
-                            indicatorColor = latestFlexibleTariffColor,
-                        )
-                    }
-                }
-
-                latestFixedTariff?.let { tariff ->
-                    tariff.vatInclusiveStandardUnitRate?.let { unitRate ->
-                        TariffEntry(
-                            modifier = Modifier
-                                .widthIn(min = dimension.windowWidthCompactOneThird)
-                                .weight(1f),
-                            tariff = tariff,
-                            unitRate = unitRate,
-                            indicatorColor = latestFixedTariffColor,
-                        )
-                    }
+        verticalArrangement = Arrangement.Center,
+    ) {
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+            verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+        ) {
+            latestFlexibleTariff?.let { tariff ->
+                tariff.vatInclusiveStandardUnitRate?.let { unitRate ->
+                    TariffEntry(
+                        modifier = Modifier
+                            .widthIn(min = dimension.windowWidthCompactOneThird)
+                            .weight(1f),
+                        tariff = tariff,
+                        unitRate = unitRate,
+                        indicatorColor = latestFlexibleTariffColor,
+                    )
                 }
             }
-        },
-    )
+
+            latestFixedTariff?.let { tariff ->
+                tariff.vatInclusiveStandardUnitRate?.let { unitRate ->
+                    TariffEntry(
+                        modifier = Modifier
+                            .widthIn(min = dimension.windowWidthCompactOneThird)
+                            .weight(1f),
+                        tariff = tariff,
+                        unitRate = unitRate,
+                        indicatorColor = latestFixedTariffColor,
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable
