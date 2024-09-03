@@ -211,7 +211,9 @@ private fun AgileTariffCardCompact(
             )
 
             LatestTariffsCard(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = dimension.grid_1),
                 latestFlexibleTariff = latestFlexibleTariff,
                 latestFixedTariff = latestFixedTariff,
                 latestFlexibleTariffColor = cyanish,
@@ -284,7 +286,8 @@ private fun AgileTariffCardExpanded(
                 LatestTariffsCard(
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxHeight(),
+                        .fillMaxHeight()
+                        .padding(horizontal = dimension.grid_1),
                     latestFlexibleTariff = latestFlexibleTariff,
                     latestFixedTariff = latestFixedTariff,
                     latestFlexibleTariffColor = cyanish,

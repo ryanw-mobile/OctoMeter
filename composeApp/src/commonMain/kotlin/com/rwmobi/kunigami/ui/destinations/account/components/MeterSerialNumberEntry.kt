@@ -33,7 +33,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
-import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeter
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -115,7 +114,7 @@ internal fun MeterSerialNumberEntry(
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             style = MaterialTheme.typography.bodySmall,
-                            text = "$readingSource: ${value.roundToTwoDecimalPlaces()} (${readAt.getLocalDateString()})",
+                            text = "$readingSource: ${value.toInt()} (${readAt.getLocalDateString()})",
                         )
                     }
                 }

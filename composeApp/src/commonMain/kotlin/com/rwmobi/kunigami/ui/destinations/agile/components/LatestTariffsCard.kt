@@ -21,14 +21,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.components.WidgetCard
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.cyanish
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -48,42 +47,42 @@ internal fun LatestTariffsCard(
 ) {
     val dimension = LocalDensity.current.getDimension()
 
-    WidgetCard(
+    Column(
         modifier = modifier,
-        contents = {
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
-                verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
-            ) {
-                latestFlexibleTariff?.let { tariff ->
-                    tariff.vatInclusiveStandardUnitRate?.let { unitRate ->
-                        TariffEntry(
-                            modifier = Modifier
-                                .widthIn(min = dimension.windowWidthCompactOneThird)
-                                .weight(1f),
-                            tariff = tariff,
-                            unitRate = unitRate,
-                            indicatorColor = latestFlexibleTariffColor,
-                        )
-                    }
-                }
-
-                latestFixedTariff?.let { tariff ->
-                    tariff.vatInclusiveStandardUnitRate?.let { unitRate ->
-                        TariffEntry(
-                            modifier = Modifier
-                                .widthIn(min = dimension.windowWidthCompactOneThird)
-                                .weight(1f),
-                            tariff = tariff,
-                            unitRate = unitRate,
-                            indicatorColor = latestFixedTariffColor,
-                        )
-                    }
+        verticalArrangement = Arrangement.Center,
+    ) {
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+            verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+        ) {
+            latestFlexibleTariff?.let { tariff ->
+                tariff.vatInclusiveStandardUnitRate?.let { unitRate ->
+                    TariffEntry(
+                        modifier = Modifier
+                            .widthIn(min = dimension.windowWidthCompactOneThird)
+                            .weight(1f),
+                        tariff = tariff,
+                        unitRate = unitRate,
+                        indicatorColor = latestFlexibleTariffColor,
+                    )
                 }
             }
-        },
-    )
+
+            latestFixedTariff?.let { tariff ->
+                tariff.vatInclusiveStandardUnitRate?.let { unitRate ->
+                    TariffEntry(
+                        modifier = Modifier
+                            .widthIn(min = dimension.windowWidthCompactOneThird)
+                            .weight(1f),
+                        tariff = tariff,
+                        unitRate = unitRate,
+                        indicatorColor = latestFixedTariffColor,
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -99,9 +98,10 @@ private fun TariffEntry(
             .fillMaxWidth()
             .drawBehind {
                 val width = dimension.grid_2.toPx()
-                drawRect(
+                drawCircle(
                     color = indicatorColor,
-                    size = Size(width, size.height),
+                    radius = width / 2f,
+                    center = Offset(x = width / 2f, y = size.height / 2f),
                 )
             }
             .padding(
