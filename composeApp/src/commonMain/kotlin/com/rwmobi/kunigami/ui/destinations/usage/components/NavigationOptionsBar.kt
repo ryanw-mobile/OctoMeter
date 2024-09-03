@@ -46,19 +46,19 @@ internal fun NavigationOptionsBar(
             modifier = Modifier
                 .background(color = MaterialTheme.colorScheme.surfaceContainerLow)
                 .fillMaxWidth()
-                .height(height = dimension.minListItemHeight)
-                .padding(horizontal = dimension.grid_2),
+                .height(height = dimension.minListItemHeight),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             selectedMpan?.let { mpan ->
                 Icon(
                     modifier = Modifier
                         .size(size = dimension.grid_4)
-                        .padding(end = dimension.grid_1),
+                        .padding(start = dimension.grid_2),
                     painter = painterResource(resource = Res.drawable.dashboard),
                     contentDescription = null,
                 )
                 Text(
+                    modifier = Modifier.padding(start = dimension.grid_1),
                     style = MaterialTheme.typography.bodyMedium,
                     text = mpan,
                 )
