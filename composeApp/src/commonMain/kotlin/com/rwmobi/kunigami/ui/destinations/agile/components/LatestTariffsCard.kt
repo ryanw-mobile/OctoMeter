@@ -21,7 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -98,9 +98,10 @@ private fun TariffEntry(
             .fillMaxWidth()
             .drawBehind {
                 val width = dimension.grid_2.toPx()
-                drawRect(
+                drawCircle(
                     color = indicatorColor,
-                    size = Size(width, size.height),
+                    radius = width / 2f,
+                    center = Offset(x = width / 2f, y = size.height / 2f),
                 )
             }
             .padding(
