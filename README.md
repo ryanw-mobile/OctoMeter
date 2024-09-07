@@ -1,4 +1,4 @@
-## _[Project Kunigami](https://maps.app.goo.gl/cdZWxxSgx8jM5QZC7)_ / <br/>OctoMeter: Empowering Smart Electricity Usage<br/>[![Pull request](https://img.shields.io/badge/PRs-welcome-success?style=flat)](https://github.com/ryanw-mobile/OctoMeter/pulls) ![GitHub Repo stars](https://img.shields.io/github/stars/ryanw-mobile/OctoMeter?style=flat) ![Gradle Build](https://github.com/ryanw-mobile/OctoMeter/actions/workflows/main_build.yml/badge.svg) [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage) [![Codacy Grade Badge](https://app.codacy.com/project/badge/Grade/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
+## OctoMeter: Empowering Smart Electricity Usage<br/>[![Pull request](https://img.shields.io/badge/PRs-welcome-success?style=flat)](https://github.com/ryanw-mobile/OctoMeter/pulls) ![GitHub Repo stars](https://img.shields.io/github/stars/ryanw-mobile/OctoMeter?style=flat) ![Gradle Build](https://github.com/ryanw-mobile/OctoMeter/actions/workflows/main_build.yml/badge.svg) [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage) [![Codacy Grade Badge](https://app.codacy.com/project/badge/Grade/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 
 ### Production-grade Kotlin Multiplatform App targeting Desktop, Android, iOS
 
@@ -25,8 +25,8 @@ The main purposes of this app are:
   refresh.
 * Browse available Octopus Energy tariffs.
 
-This is a fully functional app that I developed for myself. **I use it every day** to monitor energy
-consumption and save money. For this reason, the app was intentionally built to reach
+This is a fully functional app that I developed for myself. **I use it every day** and my energy
+expenses have reduced by more than 50%. For this reason, the app was intentionally built to reach
 production-level quality as much as possible.
 
 * While it should technically work for some other Octopus Energy customers, I do not have enough
@@ -55,15 +55,8 @@ or [on LinkedIn](https://www.linkedin.com/in/ryanwmobile/).
 
 ## Running the app
 
-I use Android Studio Koala to build the Android and Deskop apps. Xcode 15.4 for iOS.
-
-> [!TIP]
-> Octopus Energy/Kraken don't prefer UI-sharing. While this app is primarily designed for desktop
-> use, it leverages CMP to provide mobile versions as well. This decision does not reflect my
-> personal
-> preferences; it simply reflects the budgetary constraints that prevent me from developing in
-> SwiftUI
-> for this project.
+The project dependencies are maintained by Renovate. By default, the app builds on the latest Xcode 
+and Android Studio.
 
 All downloadables are provided under
 the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
@@ -85,10 +78,9 @@ the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
 Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/OctoMeter/issues).
 
 > [!NOTE]
-> I am currently seeking my next Senior Android Developer role and maintaining this project at my
-> own expense with a limited budget. Octopus Energy and Kraken HR have my CV on file. If I end up
-> working with them, I plan to enhance this project to address a wider range of customer use cases.
-> Otherwise, it will transition to maintenance mode once I am no longer an Octopus Energy customer.
+> I am actively seeking my next full-time Senior Android Developer role. Due to budget constraints, 
+> major feature development may be delayed. If you know of any suitable opportunities in the UK, 
+> I would greatly appreciate your referral.
 
 ### RestAPI and GraphQL
 
@@ -120,9 +112,7 @@ at [https://octopus.energy/dashboard/new/accounts/personal-details/api-access](h
 This app never asks for your Octopus customer account password, and you can always generate a new
 API key to invalidate the old keys.
 
-This app stores your API key, account number, MPAN and meter serial number
-using `EncryptedSharedPreferences` on Android, or the Keychain on iOS. On desktop, these credentials
-are currently unencrypted, but expected to do so when the library we use supports it.
+This app does not have write access to any of your customer data kept at Octopus Energy's systems.
 
 <br /><br />
 
