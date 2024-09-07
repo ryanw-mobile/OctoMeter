@@ -16,13 +16,6 @@
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import kotlinx.datetime.Instant
 
-/*
- * Copyright (c) 2024. Ryan Wong
- * https://github.com/ryanw-mobile
- * Sponsored by RW MobiMedia UK Limited
- *
- */
-
 object ConsumptionSampleData {
     val randomSample = listOf(
         Consumption(kWhConsumed = 0.165235958596004, interval = Instant.parse("2024-08-22T23:00:00Z")..Instant.parse("2024-08-22T23:30:00Z")),
