@@ -30,6 +30,12 @@
         "com.google.devtools.ksp"
       ],
       "groupName": "kotlin"
+    },
+    {
+      "matchManagers": ["gradle-wrapper"],
+      "groupName": "Gradle Wrapper",
+      "automerge": false,
+      "labels": ["requires-approval"]
     }
   ],
   "automerge": true,

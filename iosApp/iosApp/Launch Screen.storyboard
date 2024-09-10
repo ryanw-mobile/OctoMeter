@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="TransparentIcon" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ic0-SW-Bf6">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="LaunchScreenIcon" highlightedImage="LaunchScreenIcon" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ic0-SW-Bf6">
                                 <rect key="frame" x="76.666666666666686" y="306" width="240" height="240"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Ic0-SW-Bf6" secondAttribute="height" multiplier="1:1" id="cUS-z5-hfR"/>
@@ -49,9 +49,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="TransparentIcon" width="213.33332824707031" height="213.33332824707031"/>
+        <image name="LaunchScreenIcon" width="266.66665649414062" height="266.66665649414062"/>
         <namedColor name="LaunchScreenBackground">
-            <color red="0.84705882352941175" green="0.88627450980392153" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.84700000286102295" green="0.88599997758865356" blue="0.9100000262260437" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
