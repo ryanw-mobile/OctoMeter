@@ -59,6 +59,9 @@ class AgileViewModel(
     private val _uiState: MutableStateFlow<AgileUIState> = MutableStateFlow(AgileUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
+    private val agileTariffKeyword = "AGILE"
+    private val variableTariffKeyword = "VAR-"
+    private val fixedTariffKeyword = "OE-FIX-12M"
     private val fallBackAgileProductCode = "AGILE-24-04-03"
     private val fallBackFixedProductCode = "OE-FIX-12M-24-06-28"
     private val fallBackFlexibleProductCode = "VAR-22-11-01"
@@ -86,7 +89,10 @@ class AgileViewModel(
                 val region = currentAgreement?.tariffCode?.let { Tariff.getRetailRegion(tariffCode = it) } ?: demoRetailRegion
                 val productCode = getAgileProductCode(currentTariffCode = currentAgreement?.tariffCode)
 
-                fetchReferenceTariffs(region = region)
+                fetchReferenceTariffs(
+                    region = region,
+                    postcode = region.postcode,
+                )
 
                 getAgileRates(
                     productCode = productCode,
@@ -147,7 +153,9 @@ class AgileViewModel(
             currentProductCode?.let { return it }
         }
 
-        return getLatestAgileProductCode()
+        val postcode = currentTariffCode?.let { Tariff.getRetailRegion(it)?.postcode }
+            ?: demoRetailRegion.postcode
+        return getLatestAgileProductCode(postcode = postcode)
     }
 
     private suspend fun getAgileRates(
@@ -236,15 +244,15 @@ class AgileViewModel(
             .map { (date, items) -> RateGroup(title = date, rates = items) }
     }
 
-    private suspend fun getLatestAgileProductCode(): String {
-        return getLatestProductByKeywordUseCase(keyword = "AGILE") ?: fallBackAgileProductCode
+    private suspend fun getLatestAgileProductCode(postcode: String): String {
+        return getLatestProductByKeywordUseCase(keyword = agileTariffKeyword, postcode = postcode) ?: fallBackAgileProductCode
     }
 
     /**
      * Best effort to fetch reference tariffs for comparison. No harm if it fails, so it won't stop loading.
      */
-    private suspend fun fetchReferenceTariffs(region: RetailRegion) {
-        cachedFixedProductCode = cachedFixedProductCode ?: getLatestProductByKeywordUseCase(keyword = "OE-FIX-12M")
+    private suspend fun fetchReferenceTariffs(region: RetailRegion, postcode: String) {
+        cachedFixedProductCode = cachedFixedProductCode ?: getLatestProductByKeywordUseCase(keyword = fixedTariffKeyword, postcode = postcode)
         val fixedProductCode = cachedFixedProductCode ?: fallBackFixedProductCode
         getTariffRatesUseCase(
             tariffCode = "E-1R-$fixedProductCode-${region.code}",
@@ -266,7 +274,7 @@ class AgileViewModel(
             },
         )
 
-        cachedFlexibleProductCode = cachedFlexibleProductCode ?: getLatestProductByKeywordUseCase(keyword = "VAR-")
+        cachedFlexibleProductCode = cachedFlexibleProductCode ?: getLatestProductByKeywordUseCase(keyword = variableTariffKeyword, postcode = postcode)
         val flexibleProductCode = cachedFlexibleProductCode ?: fallBackFlexibleProductCode
         getTariffRatesUseCase(
             tariffCode = "E-1R-$flexibleProductCode-${region.code}",

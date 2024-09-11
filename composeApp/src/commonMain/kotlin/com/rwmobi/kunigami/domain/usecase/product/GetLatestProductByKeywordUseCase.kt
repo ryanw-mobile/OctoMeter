@@ -25,9 +25,9 @@ class GetLatestProductByKeywordUseCase(
     private val octopusApiRepository: OctopusApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
-    suspend operator fun invoke(keyword: String): String? {
+    suspend operator fun invoke(keyword: String, postcode: String): String? {
         return withContext(dispatcher) {
-            val getProductsResult = octopusApiRepository.getProducts(postcode = "WC1X 0ND")
+            val getProductsResult = octopusApiRepository.getProducts(postcode = postcode)
             getProductsResult.fold(
                 onSuccess = { products ->
                     val productCode = products.sortedByDescending {
