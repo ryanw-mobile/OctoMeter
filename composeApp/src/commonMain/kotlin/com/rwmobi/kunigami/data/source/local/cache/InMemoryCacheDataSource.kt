@@ -24,40 +24,40 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
 class InMemoryCacheDataSource {
-    private var cachedProfile: Pair<Account, Instant>? = null
-    private var cachedToken: Pair<String, Token>? = null
-    private var cachedProductSummary: Pair<String, List<ProductSummary>>? = null
+    private var profileCache: Pair<Account, Instant>? = null
+    private var tokenCache: Pair<String, Token>? = null
+    private var productSummaryCache: Pair<String, List<ProductSummary>>? = null
 
     fun cacheProfile(account: Account, createdAt: Instant) {
-        cachedProfile = Pair(account, createdAt)
+        profileCache = Pair(account, createdAt)
     }
 
     fun cacheToken(apiKey: String, token: Token) {
-        cachedToken = Pair(apiKey, token)
+        tokenCache = Pair(apiKey, token)
     }
 
     fun cacheProductSummary(postcode: String, productSummaries: List<ProductSummary>) {
-        cachedProductSummary = Pair(postcode, productSummaries)
+        productSummaryCache = Pair(postcode, productSummaries)
     }
 
     /***
      * Return cached profile, if there is an instance kept on the same day
      */
     fun getProfile(accountNumber: String): Account? {
-        return cachedProfile?.first?.let { account ->
+        return profileCache?.first?.let { account ->
             if (account.accountNumber == accountNumber &&
-                Clock.System.now().toSystemDefaultLocalDate() == cachedProfile?.second?.toSystemDefaultLocalDate()
+                Clock.System.now().toSystemDefaultLocalDate() == profileCache?.second?.toSystemDefaultLocalDate()
             ) {
                 account
             } else {
-                cachedProfile = null // clear the cache
+                profileCache = null // clear the cache
                 null
             }
         }
     }
 
     fun getToken(apiKey: String): Token? {
-        with(cachedToken) {
+        with(tokenCache) {
             return if (this == null ||
                 first != apiKey ||
                 second.getTokenState() == TokenState.EXPIRED
@@ -70,19 +70,20 @@ class InMemoryCacheDataSource {
     }
 
     fun getProductSummary(postcode: String): List<ProductSummary>? {
-        return cachedProductSummary?.let {
+        return productSummaryCache?.let {
             if (it.first == postcode) {
                 it.second
             } else {
                 // invalidate the cache to prevent the cached result staying for too long
-                cachedProductSummary = null
+                productSummaryCache = null
                 null
             }
         }
     }
 
     fun clear() {
-        cachedProfile = null
-        cachedToken = null
+        profileCache = null
+        tokenCache = null
+        productSummaryCache = null
     }
 }
