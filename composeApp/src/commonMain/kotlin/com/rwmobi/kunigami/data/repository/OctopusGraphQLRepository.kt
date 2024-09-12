@@ -67,6 +67,10 @@ class OctopusGraphQLRepository(
     override suspend fun getTariff(
         tariffCode: String,
     ): Result<Tariff> {
+        inMemoryCacheDataSource.getTariff(tariffCode)?.let {
+            return Result.success(it)
+        }
+
         return withContext(dispatcher) {
             runCatching {
                 val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
@@ -80,7 +84,10 @@ class OctopusGraphQLRepository(
                     postcode = postcode,
                 )
 
-                response.energyProduct?.toTariff(tariffCode = tariffCode) ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
+                val tariff = response.energyProduct?.toTariff(tariffCode = tariffCode) ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
+
+                inMemoryCacheDataSource.cacheTariff(tariffCode = tariffCode, tariff = tariff)
+                tariff
             }.except<CancellationException, _>()
         }
     }

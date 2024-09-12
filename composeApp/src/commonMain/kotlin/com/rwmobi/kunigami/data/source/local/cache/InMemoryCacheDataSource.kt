@@ -21,6 +21,7 @@ import com.rwmobi.kunigami.domain.extensions.toSystemDefaultLocalDate
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
+import com.rwmobi.kunigami.domain.model.product.Tariff
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
@@ -29,6 +30,7 @@ class InMemoryCacheDataSource {
     private var tokenCache: Pair<String, Token>? = null
     private var productSummaryCache: Pair<String, List<ProductSummary>>? = null
     private var productDetailsCache: MutableMap<Pair<String, String>, ProductDetails> = mutableMapOf()
+    private var tariffCache: MutableMap<String, Tariff> = mutableMapOf()
 
     fun cacheProfile(account: Account, createdAt: Instant) {
         profileCache = Pair(account, createdAt)
@@ -45,6 +47,10 @@ class InMemoryCacheDataSource {
     fun cacheProductDetails(postcode: String, productCode: String, productDetails: ProductDetails) {
         val key = Pair(postcode, productCode)
         productDetailsCache[key] = productDetails
+    }
+
+    fun cacheTariff(tariffCode: String, tariff: Tariff) {
+        tariffCache[tariffCode] = tariff
     }
 
     /***
@@ -93,10 +99,15 @@ class InMemoryCacheDataSource {
         return productDetailsCache[key]
     }
 
+    fun getTariff(tariffCode: String): Tariff? {
+        return tariffCache[tariffCode]
+    }
+
     fun clear() {
         profileCache = null
         tokenCache = null
         productSummaryCache = null
+        tariffCache.clear()
         productDetailsCache.clear()
     }
 }
