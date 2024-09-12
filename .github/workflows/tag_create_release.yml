@@ -134,7 +134,7 @@ jobs:
       - name: Prepare RoomDB actual declaration
         run: .\gradlew :composeApp:kspCommonMainKotlinMetadata
         env:
-          KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
+          CI: 'false'
 
       - name: Build and Package Project
         run: .\gradlew packageReleaseDistributionForCurrentOS
