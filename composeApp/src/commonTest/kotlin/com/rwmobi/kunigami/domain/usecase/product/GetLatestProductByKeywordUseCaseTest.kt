@@ -33,7 +33,8 @@ class GetLatestProductByKeywordUseCaseTest {
 
     private lateinit var getLatestProductByKeywordUseCase: GetLatestProductByKeywordUseCase
     private lateinit var fakeRestApiRepository: FakeOctopusApiRepository
-    private val keyword = "AGILE"
+    private val agileTariffKeyword = "AGILE"
+    private val samplePostcode = "WC1X 0ND"
 
     @BeforeTest
     fun setupUseCase() {
@@ -84,7 +85,10 @@ class GetLatestProductByKeywordUseCaseTest {
 
         fakeRestApiRepository.setProductsResponse = Result.success(productSummaries)
 
-        val result = getLatestProductByKeywordUseCase(keyword = keyword)
+        val result = getLatestProductByKeywordUseCase(
+            keyword = agileTariffKeyword,
+            postcode = samplePostcode,
+        )
 
         assertEquals(
             expected = "AGILE-24-04-03",
@@ -121,7 +125,10 @@ class GetLatestProductByKeywordUseCaseTest {
 
         fakeRestApiRepository.setProductsResponse = Result.success(productSummaries)
 
-        val result = getLatestProductByKeywordUseCase(keyword = keyword)
+        val result = getLatestProductByKeywordUseCase(
+            keyword = agileTariffKeyword,
+            postcode = samplePostcode,
+        )
 
         assertEquals(
             expected = "AGILE-24-04-03",
@@ -134,7 +141,10 @@ class GetLatestProductByKeywordUseCaseTest {
         val errorMessage = "API Error"
         fakeRestApiRepository.setProductsResponse = Result.failure(RuntimeException(errorMessage))
 
-        val result = getLatestProductByKeywordUseCase(keyword = keyword)
+        val result = getLatestProductByKeywordUseCase(
+            keyword = agileTariffKeyword,
+            postcode = samplePostcode,
+        )
 
         assertNull(result)
     }
@@ -156,7 +166,10 @@ class GetLatestProductByKeywordUseCaseTest {
         )
         fakeRestApiRepository.setProductsResponse = Result.success(productSummaries)
 
-        val result = getLatestProductByKeywordUseCase(keyword = keyword)
+        val result = getLatestProductByKeywordUseCase(
+            keyword = agileTariffKeyword,
+            postcode = samplePostcode,
+        )
 
         assertNull(result)
     }

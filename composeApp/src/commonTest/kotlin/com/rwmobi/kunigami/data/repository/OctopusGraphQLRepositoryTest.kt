@@ -276,6 +276,38 @@ class OctopusGraphQLRepositoryTest {
     }
 
     @Test
+    fun `getProducts should return the cached product list when available`() = runTest {
+        mockServer.enqueueString(GetProductsSampleData.energyProductsQueryResponsePage1)
+        mockServer.enqueueString(GetProductsSampleData.energyProductsQueryResponsePage2)
+        setUpRepository(
+            engine = mockEngineProductPaging,
+        )
+        octopusGraphQLRepository.getProducts(postcode = samplePostcode)
+        mockServer.enqueue(mockResponse = mockResponseInternalServerError)
+
+        val result = octopusGraphQLRepository.getProducts(postcode = samplePostcode)
+
+        assertTrue(result.isSuccess)
+        assertEquals(expected = GetProductsSampleData.productSummaryTwoPages, actual = result.getOrNull())
+    }
+
+    @Test
+    fun `getProducts should ignore the cached product list when requested postcode has changed`() = runTest {
+        mockServer.enqueueString(GetProductsSampleData.energyProductsQueryResponsePage1)
+        mockServer.enqueueString(GetProductsSampleData.energyProductsQueryResponsePage2)
+        setUpRepository(
+            engine = mockEngineProductPaging,
+        )
+        octopusGraphQLRepository.getProducts(postcode = samplePostcode)
+        mockServer.enqueue(mockResponse = mockResponseInternalServerError)
+
+        val result = octopusGraphQLRepository.getProducts(postcode = "some-other-postcode")
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is ApolloHttpException)
+    }
+
+    @Test
     fun `getProducts should return failure when data source throws an exception`() = runTest {
         mockServer.enqueue(mockResponse = mockResponseInternalServerError)
         setUpRepository(
