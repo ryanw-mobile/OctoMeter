@@ -87,10 +87,15 @@ class OctopusGraphQLRepository(
 
     /***
      * This API supports paging, and will retrieve all possible data the backend can provide.
+     * This call has in-memory caching tided to the last postcode provided.
      */
     override suspend fun getProducts(
         postcode: String,
     ): Result<List<ProductSummary>> {
+        inMemoryCacheDataSource.getProductSummary(postcode)?.let {
+            return Result.success(it)
+        }
+
         return withContext(dispatcher) {
             runCatching {
                 val combinedList = mutableListOf<ProductSummary>()
@@ -112,6 +117,10 @@ class OctopusGraphQLRepository(
                     }
                 } while (afterCursor != null)
 
+                inMemoryCacheDataSource.cacheProductSummary(
+                    postcode = postcode,
+                    productSummaries = combinedList,
+                )
                 combinedList
             }.except<CancellationException, _>()
         }

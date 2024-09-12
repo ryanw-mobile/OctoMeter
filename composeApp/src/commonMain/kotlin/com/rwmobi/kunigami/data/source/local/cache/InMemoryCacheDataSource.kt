@@ -19,12 +19,14 @@ import com.rwmobi.kunigami.data.source.network.dto.auth.Token
 import com.rwmobi.kunigami.data.source.network.dto.auth.TokenState
 import com.rwmobi.kunigami.domain.extensions.toSystemDefaultLocalDate
 import com.rwmobi.kunigami.domain.model.account.Account
+import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
 class InMemoryCacheDataSource {
     private var cachedProfile: Pair<Account, Instant>? = null
     private var cachedToken: Pair<String, Token>? = null
+    private var cachedProductSummary: Pair<String, List<ProductSummary>>? = null
 
     fun cacheProfile(account: Account, createdAt: Instant) {
         cachedProfile = Pair(account, createdAt)
@@ -32,6 +34,10 @@ class InMemoryCacheDataSource {
 
     fun cacheToken(apiKey: String, token: Token) {
         cachedToken = Pair(apiKey, token)
+    }
+
+    fun cacheProductSummary(postcode: String, productSummaries: List<ProductSummary>) {
+        cachedProductSummary = Pair(postcode, productSummaries)
     }
 
     /***
@@ -59,6 +65,18 @@ class InMemoryCacheDataSource {
                 null
             } else {
                 this.second
+            }
+        }
+    }
+
+    fun getProductSummary(postcode: String): List<ProductSummary>? {
+        return cachedProductSummary?.let {
+            if (it.first == postcode) {
+                it.second
+            } else {
+                // invalidate the cache to prevent the cached result staying for too long
+                cachedProductSummary = null
+                null
             }
         }
     }
