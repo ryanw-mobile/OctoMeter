@@ -130,6 +130,13 @@ class OctopusGraphQLRepository(
         productCode: String,
         postcode: String,
     ): Result<ProductDetails> {
+        inMemoryCacheDataSource.getProductDetails(
+            postcode = postcode,
+            productCode = productCode,
+        )?.let {
+            return Result.success(it)
+        }
+
         return withContext(dispatcher) {
             runCatching {
                 val response = graphQLEndpoint.getSingleEnergyProduct(
@@ -137,7 +144,14 @@ class OctopusGraphQLRepository(
                     postcode = postcode,
                 )
 
-                response.energyProduct?.toProductDetails() ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
+                val productDetails = response.energyProduct?.toProductDetails() ?: throw IllegalArgumentException("Unable to retrieve base product $productCode")
+
+                inMemoryCacheDataSource.cacheProductDetails(
+                    postcode = postcode,
+                    productCode = productCode,
+                    productDetails = productDetails,
+                )
+                productDetails
             }.except<CancellationException, _>()
         }
     }
