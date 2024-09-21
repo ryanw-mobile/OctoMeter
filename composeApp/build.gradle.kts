@@ -425,6 +425,15 @@ detekt {
     parallel = true
 }
 
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    exclude { element -> element.file.path.contains("generated/") }
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+    // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
+    exclude { element -> element.file.path.contains("generated/") }
+}
+
 apollo {
     service("service") {
         packageName.set("$productNameSpace.graphql")
