@@ -5,6 +5,7 @@ androidx-activityCompose = "1.9.2"
 compose-plugin = "1.7.0-rc01+build1844-release-1.7"
 composeUiTooling = "1.7.2"
 coreSplashscreen = "1.0.1"
+detekt = "1.23.7"
 testCoreKtx = "1.6.1"
 coroutines = "1.9.0"
 kermit = "2.0.4"
@@ -123,3 +124,4 @@ gradleKtlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
 apollographql = { id = "com.apollographql.apollo", version.ref = "apollographql" }
+detekt = { id="io.gitlab.arturbosch.detekt", version.ref="detekt"}

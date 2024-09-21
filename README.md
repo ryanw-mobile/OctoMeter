@@ -177,6 +177,7 @@ This app does not have write access to any of your customer data kept at Octopus
 * [BuildConfig Plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) - gmazzo - Plugin for generating BuildConfig classes
 * [Baseline Profile Plugin](https://developer.android.com/studio/profile/baselineprofile) - AndroidX - Plugin for generating baseline profiles
 * [Apollo GraphQL Plugin](https://www.apollographql.com/docs/android/advanced/gradle-plugin/) - Apollo GraphQL - Plugin for integrating Apollo GraphQL client with Android and Kotlin projects
+* [Detekt Plugin](https://detekt.dev/) - Artur Bosch - A static code analysis tool for Kotlin projects
 
 <br /><br />
 

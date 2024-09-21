@@ -39,6 +39,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidxRoom)
     alias(libs.plugins.apollographql)
+    alias(libs.plugins.detekt)
 }
 
 val productName = "OctoMeter"
@@ -418,6 +419,19 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         exclude("**/MainViewController.kt")
         include("**/kotlin/**")
     }
+}
+
+detekt {
+    parallel = true
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    exclude { element -> element.file.path.contains("generated/") }
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+    // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
+    exclude { element -> element.file.path.contains("generated/") }
 }
 
 apollo {
