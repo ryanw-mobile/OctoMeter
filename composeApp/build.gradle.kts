@@ -39,6 +39,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidxRoom)
     alias(libs.plugins.apollographql)
+    alias(libs.plugins.detekt)
 }
 
 val productName = "OctoMeter"
@@ -418,6 +419,10 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         exclude("**/MainViewController.kt")
         include("**/kotlin/**")
     }
+}
+
+detekt {
+    parallel = true
 }
 
 apollo {
