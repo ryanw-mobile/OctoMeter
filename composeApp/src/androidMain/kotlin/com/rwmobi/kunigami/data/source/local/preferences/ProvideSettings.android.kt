@@ -22,6 +22,7 @@ import com.russhwolf.settings.Settings
 import com.russhwolf.settings.SharedPreferencesSettings
 import javax.crypto.AEADBadTagException
 
+@Suppress("SwallowedException")
 fun provideSettings(context: Context): Settings {
     val masterKey = MasterKey.Builder(context)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
