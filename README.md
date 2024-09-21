@@ -179,8 +179,6 @@ This app does not have write access to any of your customer data kept at Octopus
 * [Apollo GraphQL Plugin](https://www.apollographql.com/docs/android/advanced/gradle-plugin/) - Apollo GraphQL - Plugin for integrating Apollo GraphQL client with Android and Kotlin projects
 * [Detekt Plugin](https://detekt.dev/) - Artur Bosch - A static code analysis tool for Kotlin projects
 
-This includes the addition of `detekt` while keeping the same format.
-
 <br /><br />
 
 ## Licenses
