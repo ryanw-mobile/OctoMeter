@@ -61,9 +61,9 @@ class AgileViewModel(
 
     private val agileTariffKeyword = "AGILE"
     private val variableTariffKeyword = "VAR-"
-    private val fixedTariffKeyword = "OE-FIX-12M"
+    private val fixedTariffKeyword = "OE-FIX-"
     private val fallBackAgileProductCode = "AGILE-24-04-03"
-    private val fallBackFixedProductCode = "OE-FIX-12M-24-06-28"
+    private val fallBackFixedProductCode = "OE-FIX-15M-24-09-24"
     private val fallBackFlexibleProductCode = "VAR-22-11-01"
     private val demoRetailRegion = RetailRegion.EASTERN_ENGLAND
 
