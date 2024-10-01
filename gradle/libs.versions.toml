@@ -38,7 +38,7 @@ room = "2.7.0-alpha08"
 ksp = "2.0.20-1.0.25"
 sqlite = "2.5.0-alpha08"
 slf4j = "2.0.16"
-apollographql = "4.0.0"
+apollographql = "4.0.1"
 apollographqlMockServer = "0.0.3"
 testRules = "1.6.1"
 
