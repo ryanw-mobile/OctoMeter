@@ -30,10 +30,9 @@ import androidx.core.view.WindowCompat
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
-
         super.onCreate(savedInstanceState)
-
         enableEdgeToEdge()
+
         setContent {
             App(
                 androidStatusBarSideEffect = { statusBarColor, isDarkTheme ->
@@ -54,6 +53,6 @@ class MainActivity : ComponentActivity() {
 
 @Preview
 @Composable
-fun AppAndroidPreview() {
+private fun AppAndroidPreview() {
     App()
 }
