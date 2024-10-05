@@ -29,10 +29,14 @@ This is a fully functional app that I developed for myself. **I use it every day
 expenses have reduced by more than 50%. For this reason, the app was intentionally built to reach
 production-level quality as much as possible.
 
-* While it should technically work for some other Octopus Energy customers, I do not have enough
-  sample data to cover all use cases.
-* For non-Octopus Energy customers, or non-UK residents, the demo mode will display random meter
-  readings and default tariff rates to illustrate the app’s functionality.
+> [!NOTE]
+> **Octopus Energy customers:** You are invited to collaborate, if this app is not working correctly
+> for your account. [Report an issue](https://github.com/ryanw-mobile/OctoMeter/issues) to start a conversation.
+> 
+> * While it should technically work for some other Octopus Energy customers, I do not have enough
+>  sample data to cover all use cases.
+> * For non-Octopus Energy customers, or non-UK residents, the demo mode will display random meter
+>  readings and default tariff rates to illustrate the app’s functionality.
 
 <br />
 <p align="center"><img src="https://github.com/ryanw-mobile/OctoMeter/blob/main/screenshots/240603_agile_animation.gif" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
