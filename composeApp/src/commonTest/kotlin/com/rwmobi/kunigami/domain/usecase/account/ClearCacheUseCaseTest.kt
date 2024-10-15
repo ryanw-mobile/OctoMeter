@@ -16,10 +16,10 @@
 package com.rwmobi.kunigami.domain.usecase.account
 
 import com.rwmobi.kunigami.domain.repository.FakeOctopusApiRepository
-import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import kotlinx.io.IOException
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
