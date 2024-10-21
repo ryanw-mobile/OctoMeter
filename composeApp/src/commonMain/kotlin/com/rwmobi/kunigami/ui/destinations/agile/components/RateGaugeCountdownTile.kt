@@ -15,37 +15,47 @@
 
 package com.rwmobi.kunigami.ui.destinations.agile.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import com.rwmobi.kunigami.ui.components.WidgetCard
+import androidx.compose.ui.platform.LocalDensity
+import com.rwmobi.kunigami.ui.theme.getDimension
 
 @Composable
-internal fun RateGaugeCountdownCard(
+internal fun RateGaugeCountdownTile(
     modifier: Modifier = Modifier,
     countDownText: String?,
     targetPercentage: Float,
     colorPalette: List<Color>,
 ) {
-    WidgetCard(
-        modifier = modifier,
-        contents = {
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                DashboardWidget(
-                    modifier = Modifier,
-                    colorPalette = colorPalette,
-                    percentage = targetPercentage,
-                    countDownText = countDownText,
-                )
-            }
-        },
-    )
+    val dimension = LocalDensity.current.getDimension()
+    Column(
+        modifier = modifier
+            .clip(shape = MaterialTheme.shapes.large)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .padding(dimension.grid_2),
+        verticalArrangement = Arrangement.Top,
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            GaugeWidget(
+                modifier = Modifier,
+                colorPalette = colorPalette,
+                percentage = targetPercentage,
+                countDownText = countDownText,
+            )
+        }
+    }
 }

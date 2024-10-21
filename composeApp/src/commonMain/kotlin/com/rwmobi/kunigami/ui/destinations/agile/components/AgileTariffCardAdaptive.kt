@@ -17,19 +17,16 @@ package com.rwmobi.kunigami.ui.destinations.agile.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,11 +34,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Dp
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
@@ -77,8 +72,8 @@ internal fun AgileTariffCardAdaptive(
     rateRange: ClosedFloatingPointRange<Double>,
     rateGroupedCells: List<RateGroup>,
     requestedAdaptiveLayout: WindowWidthSizeClass,
-    latestFixedTariff: Tariff?,
-    latestFlexibleTariff: Tariff?,
+    latestFixedTariff: Tariff? = null,
+    latestFlexibleTariff: Tariff? = null,
 ) {
     var activeRate by remember { mutableStateOf(rateGroupedCells.findActiveRate(referencePoint = Clock.System.now())) }
     var rateTrend by remember { mutableStateOf(rateGroupedCells.getRateTrend(activeRate = activeRate)) }
@@ -169,140 +164,120 @@ internal fun AgileTariffCardAdaptive(
 private fun AgileTariffCardCompact(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
-    vatInclusivePrice: Double?,
-    countDownText: String?,
-    rateTrend: RateTrend?,
+    vatInclusivePrice: Double? = null,
+    countDownText: String? = null,
+    rateTrend: RateTrend? = null,
     rateTrendIconTint: Color? = null,
-    latestFixedTariff: Tariff?,
-    latestFlexibleTariff: Tariff?,
+    latestFixedTariff: Tariff? = null,
+    latestFlexibleTariff: Tariff? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
-
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+        verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
     ) {
+        val tileModifier = Modifier
+            .weight(1f)
+            .height(dimension.widgetHeight)
+
         Row(
+            horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(intrinsicSize = IntrinsicSize.Min),
-            horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
         ) {
-            CurrentRateCard(
-                modifier = Modifier
-                    .weight(weight = 1f)
-                    .fillMaxHeight(),
+            CurrentRateTile(
+                modifier = tileModifier,
                 vatInclusivePrice = vatInclusivePrice,
                 rateTrend = rateTrend,
                 rateTrendIconTint = rateTrendIconTint,
-                textStyle = CurrentRateCardTextStyle(
-                    standingChargeStyle = MaterialTheme.typography.bodyMedium,
-                    agilePriceStyle = MaterialTheme.typography.headlineSmall,
-                    agilePriceUnitStyle = MaterialTheme.typography.bodySmall,
-                ),
             )
 
-            RateGaugeCountdownCard(
-                modifier = Modifier
-                    .weight(weight = 1f)
-                    .fillMaxHeight(),
+            RateGaugeCountdownTile(
+                modifier = tileModifier,
                 countDownText = countDownText,
                 targetPercentage = targetPercentage,
                 colorPalette = RatePalette.getPositiveSpectrum(),
             )
         }
 
-        if (latestFixedTariff != null || latestFlexibleTariff != null) {
-            HorizontalDivider(
-                modifier = Modifier.height(height = dimension.grid_1),
-                thickness = Dp.Hairline,
-            )
-
-            LatestTariffsCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = dimension.grid_1),
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
+        ) {
+            ReferenceTariffTiles(
+                modifier = tileModifier,
                 latestFlexibleTariff = latestFlexibleTariff,
                 latestFixedTariff = latestFixedTariff,
-                latestFlexibleTariffColor = cyanish,
-                latestFixedTariffColor = purpleish,
             )
         }
     }
 }
 
 @Composable
+private fun ReferenceTariffTiles(
+    modifier: Modifier = Modifier,
+    latestFlexibleTariff: Tariff? = null,
+    latestFixedTariff: Tariff? = null,
+) {
+    latestFlexibleTariff?.let { tariff ->
+        ReferenceTariffTile(
+            modifier = modifier,
+            tariff = tariff,
+            indicatorColor = cyanish,
+        )
+    }
+
+    latestFixedTariff?.let { tariff ->
+        ReferenceTariffTile(
+            modifier = modifier,
+            tariff = tariff,
+            indicatorColor = purpleish,
+        )
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
 private fun AgileTariffCardExpanded(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
-    vatInclusivePrice: Double?,
-    countDownText: String?,
-    rateTrend: RateTrend?,
+    vatInclusivePrice: Double? = null,
+    countDownText: String? = null,
+    rateTrend: RateTrend? = null,
     rateTrendIconTint: Color? = null,
-    latestFixedTariff: Tariff?,
-    latestFlexibleTariff: Tariff?,
+    latestFixedTariff: Tariff? = null,
+    latestFlexibleTariff: Tariff? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
-    val shouldShowLatestTariff = latestFixedTariff != null || latestFlexibleTariff != null
-    val cardCount = 2 + (if (shouldShowLatestTariff) 1 else 0)
-    val maxRowWidth = dimension.windowWidthCompact * cardCount
-
-    Box(
-        modifier = modifier,
+    FlowRow(
+        modifier = modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
     ) {
-        Row(
-            modifier = Modifier
-                .height(intrinsicSize = IntrinsicSize.Min)
-                .widthIn(max = maxRowWidth)
-                .align(alignment = Alignment.Center),
-            horizontalArrangement = Arrangement.Center,
-        ) {
-            CurrentRateCard(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-                vatInclusivePrice = vatInclusivePrice,
-                rateTrend = rateTrend,
-                rateTrendIconTint = rateTrendIconTint,
-                textStyle = CurrentRateCardTextStyle(
-                    standingChargeStyle = MaterialTheme.typography.labelLarge,
-                    agilePriceStyle = MaterialTheme.typography.headlineLarge,
-                    agilePriceUnitStyle = MaterialTheme.typography.bodyLarge,
-                ),
-            )
+        val tileModifier = Modifier
+            .width(dimension.widgetWidthFull)
+            .height(dimension.widgetHeight)
+            .padding(horizontal = dimension.grid_0_5)
 
-            VerticalDivider(
-                modifier = Modifier.width(width = dimension.grid_1),
-                thickness = Dp.Hairline,
-            )
+        CurrentRateTile(
+            modifier = tileModifier,
+            vatInclusivePrice = vatInclusivePrice,
+            rateTrend = rateTrend,
+            rateTrendIconTint = rateTrendIconTint,
+        )
 
-            RateGaugeCountdownCard(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-                countDownText = countDownText,
-                targetPercentage = targetPercentage,
-                colorPalette = RatePalette.getPositiveSpectrum(),
-            )
+        RateGaugeCountdownTile(
+            modifier = tileModifier,
+            countDownText = countDownText,
+            targetPercentage = targetPercentage,
+            colorPalette = RatePalette.getPositiveSpectrum(),
+        )
 
-            if (shouldShowLatestTariff) {
-                VerticalDivider(
-                    modifier = Modifier.width(width = dimension.grid_1),
-                    thickness = Dp.Hairline,
-                )
-
-                LatestTariffsCard(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .padding(horizontal = dimension.grid_1),
-                    latestFlexibleTariff = latestFlexibleTariff,
-                    latestFixedTariff = latestFixedTariff,
-                    latestFlexibleTariffColor = cyanish,
-                    latestFixedTariffColor = purpleish,
-                )
-            }
-        }
+        ReferenceTariffTiles(
+            modifier = tileModifier,
+            latestFlexibleTariff = latestFlexibleTariff,
+            latestFixedTariff = latestFixedTariff,
+        )
     }
 }
 
