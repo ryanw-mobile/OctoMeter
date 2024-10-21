@@ -52,6 +52,9 @@ class Dimension(
     val windowWidthMedium: Dp = 839.dp,
     val windowHeightCompact: Dp = 379.dp,
     val windowHeightMedium: Dp = 900.dp,
+    val widgetWidthHalf: Dp = 150.dp,
+    val widgetWidthFull: Dp = 299.dp,
+    val widgetHeight: Dp = 150.dp,
 )
 
 val smallDimension = Dimension(
