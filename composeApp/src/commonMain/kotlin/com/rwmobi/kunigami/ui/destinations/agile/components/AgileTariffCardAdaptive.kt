@@ -173,7 +173,6 @@ private fun AgileTariffCardCompact(
     latestFlexibleTariff: Tariff?,
 ) {
     val dimension = LocalDensity.current.getDimension()
-
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
@@ -200,7 +199,7 @@ private fun AgileTariffCardCompact(
                 ),
             )
 
-            RateGaugeCountdownCard(
+            RateGaugeCountdownTile(
                 modifier = tileModifier,
                 countDownText = countDownText,
                 targetPercentage = targetPercentage,
@@ -256,17 +255,18 @@ private fun AgileTariffCardExpanded(
     latestFlexibleTariff: Tariff?,
 ) {
     val dimension = LocalDensity.current.getDimension()
-
     FlowRow(
         modifier = modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
     ) {
+        val tileModifier = Modifier
+            .width(dimension.widgetWidthFull)
+            .height(dimension.widgetHeight)
+            .padding(horizontal = dimension.grid_0_5)
+
         CurrentRateCard(
-            modifier = Modifier
-                .width(dimension.widgetWidthFull)
-                .height(dimension.widgetHeight)
-                .padding(horizontal = dimension.grid_0_5),
+            modifier = tileModifier,
             vatInclusivePrice = vatInclusivePrice,
             rateTrend = rateTrend,
             rateTrendIconTint = rateTrendIconTint,
@@ -277,21 +277,15 @@ private fun AgileTariffCardExpanded(
             ),
         )
 
-        RateGaugeCountdownCard(
-            modifier = Modifier
-                .width(dimension.widgetWidthFull)
-                .height(dimension.widgetHeight)
-                .padding(horizontal = dimension.grid_0_5),
+        RateGaugeCountdownTile(
+            modifier = tileModifier,
             countDownText = countDownText,
             targetPercentage = targetPercentage,
             colorPalette = RatePalette.getPositiveSpectrum(),
         )
 
         ReferenceTariffTiles(
-            modifier = Modifier
-                .width(dimension.widgetWidthFull)
-                .height(dimension.widgetHeight)
-                .padding(horizontal = dimension.grid_0_5),
+            modifier = tileModifier,
             latestFlexibleTariff = latestFlexibleTariff,
             latestFixedTariff = latestFixedTariff,
         )

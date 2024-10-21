@@ -59,7 +59,7 @@ import org.jetbrains.compose.resources.stringResource
  * percentage: can be negative
  */
 @Composable
-internal fun DashboardWidget(
+internal fun GaugeWidget(
     modifier: Modifier,
     percentage: Float,
     countDownText: String?,
@@ -174,7 +174,7 @@ internal fun DashboardWidget(
 @Composable
 private fun Preview() {
     CommonPreviewSetup {
-        DashboardWidget(
+        GaugeWidget(
             modifier = Modifier.aspectRatio(ratio = 2f),
             colorPalette = generateGYRHueSpectrum(),
             countDownText = "33:33",

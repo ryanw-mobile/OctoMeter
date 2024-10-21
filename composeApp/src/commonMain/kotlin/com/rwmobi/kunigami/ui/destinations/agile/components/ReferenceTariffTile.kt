@@ -102,7 +102,7 @@ internal fun ReferenceTariffTile(
 
 @Preview
 @Composable
-private fun ReferenceTariffTilePreview() {
+private fun Preview() {
     CommonPreviewSetup {
         ReferenceTariffTile(
             modifier = Modifier.fillMaxWidth(),
