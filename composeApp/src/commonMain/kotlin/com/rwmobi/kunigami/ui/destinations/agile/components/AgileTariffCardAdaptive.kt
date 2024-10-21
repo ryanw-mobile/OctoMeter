@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -73,8 +72,8 @@ internal fun AgileTariffCardAdaptive(
     rateRange: ClosedFloatingPointRange<Double>,
     rateGroupedCells: List<RateGroup>,
     requestedAdaptiveLayout: WindowWidthSizeClass,
-    latestFixedTariff: Tariff?,
-    latestFlexibleTariff: Tariff?,
+    latestFixedTariff: Tariff? = null,
+    latestFlexibleTariff: Tariff? = null,
 ) {
     var activeRate by remember { mutableStateOf(rateGroupedCells.findActiveRate(referencePoint = Clock.System.now())) }
     var rateTrend by remember { mutableStateOf(rateGroupedCells.getRateTrend(activeRate = activeRate)) }
@@ -165,12 +164,12 @@ internal fun AgileTariffCardAdaptive(
 private fun AgileTariffCardCompact(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
-    vatInclusivePrice: Double?,
-    countDownText: String?,
-    rateTrend: RateTrend?,
+    vatInclusivePrice: Double? = null,
+    countDownText: String? = null,
+    rateTrend: RateTrend? = null,
     rateTrendIconTint: Color? = null,
-    latestFixedTariff: Tariff?,
-    latestFlexibleTariff: Tariff?,
+    latestFixedTariff: Tariff? = null,
+    latestFlexibleTariff: Tariff? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
     Column(
@@ -187,16 +186,11 @@ private fun AgileTariffCardCompact(
                 .fillMaxWidth()
                 .height(intrinsicSize = IntrinsicSize.Min),
         ) {
-            CurrentRateCard(
+            CurrentRateTile(
                 modifier = tileModifier,
                 vatInclusivePrice = vatInclusivePrice,
                 rateTrend = rateTrend,
                 rateTrendIconTint = rateTrendIconTint,
-                textStyle = CurrentRateCardTextStyle(
-                    standingChargeStyle = MaterialTheme.typography.bodyMedium,
-                    agilePriceStyle = MaterialTheme.typography.headlineSmall,
-                    agilePriceUnitStyle = MaterialTheme.typography.bodySmall,
-                ),
             )
 
             RateGaugeCountdownTile(
@@ -247,12 +241,12 @@ private fun ReferenceTariffTiles(
 private fun AgileTariffCardExpanded(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
-    vatInclusivePrice: Double?,
-    countDownText: String?,
-    rateTrend: RateTrend?,
+    vatInclusivePrice: Double? = null,
+    countDownText: String? = null,
+    rateTrend: RateTrend? = null,
     rateTrendIconTint: Color? = null,
-    latestFixedTariff: Tariff?,
-    latestFlexibleTariff: Tariff?,
+    latestFixedTariff: Tariff? = null,
+    latestFlexibleTariff: Tariff? = null,
 ) {
     val dimension = LocalDensity.current.getDimension()
     FlowRow(
@@ -265,16 +259,11 @@ private fun AgileTariffCardExpanded(
             .height(dimension.widgetHeight)
             .padding(horizontal = dimension.grid_0_5)
 
-        CurrentRateCard(
+        CurrentRateTile(
             modifier = tileModifier,
             vatInclusivePrice = vatInclusivePrice,
             rateTrend = rateTrend,
             rateTrendIconTint = rateTrendIconTint,
-            textStyle = CurrentRateCardTextStyle(
-                standingChargeStyle = MaterialTheme.typography.labelLarge,
-                agilePriceStyle = MaterialTheme.typography.headlineLarge,
-                agilePriceUnitStyle = MaterialTheme.typography.bodyLarge,
-            ),
         )
 
         RateGaugeCountdownTile(
