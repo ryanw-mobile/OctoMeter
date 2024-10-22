@@ -106,13 +106,10 @@ private fun TariffProjectionsCardLinear(
                 insights = insights,
             )
 
-            HorizontalDivider(
-                modifier = Modifier.height(height = dimension.grid_1),
-                thickness = Dp.Hairline,
-            )
-
-            ProjectedConsumptionCard(
-                modifier = Modifier.fillMaxWidth(),
+            ProjectedConsumptionTile(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(dimension.widgetHeight),
                 insights = insights,
             )
         }
@@ -162,15 +159,10 @@ private fun TariffProjectionsCardThreeColumns(
                     insights = insights,
                 )
 
-                VerticalDivider(
-                    modifier = Modifier.width(width = dimension.grid_1),
-                    thickness = Dp.Hairline,
-                )
-
-                ProjectedConsumptionCard(
+                ProjectedConsumptionTile(
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
+                        .width(dimension.widgetWidthFull)
+                        .height(dimension.widgetHeight),
                     insights = insights,
                 )
             }

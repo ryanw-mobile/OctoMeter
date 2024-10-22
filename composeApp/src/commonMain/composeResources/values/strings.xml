@@ -69,7 +69,7 @@
     <string name="usage_consumption">Consumption</string>
     <string name="usage_standing_charge">Standing Charge</string>
     <string name="usage_kwh_year">kWh / year</string>
-    <string name="usage_kwh_month">( %1$s kWh / month )</string>
+    <string name="usage_kwh_month">kWh / month</string>
     <string name="usage_latest">Latest</string>
     <string name="usage_error_date_out_of_range">Requested date is outside of the allowed range.</string>
 
