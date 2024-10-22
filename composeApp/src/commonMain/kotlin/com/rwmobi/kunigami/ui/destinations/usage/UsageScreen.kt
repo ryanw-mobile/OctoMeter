@@ -46,7 +46,7 @@ import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
 import com.rwmobi.kunigami.ui.destinations.usage.components.ConsumptionGroupCells
 import com.rwmobi.kunigami.ui.destinations.usage.components.NavigationOptionsBar
 import com.rwmobi.kunigami.ui.destinations.usage.components.RateGroupTitle
-import com.rwmobi.kunigami.ui.destinations.usage.components.TariffProjectionsCardAdaptive
+import com.rwmobi.kunigami.ui.destinations.usage.components.TariffProjectionTilesAdaptive
 import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
 import com.rwmobi.kunigami.ui.extensions.partitionList
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
@@ -201,7 +201,7 @@ fun UsageScreen(
                                 }
 
                                 item(key = "tariffAndProjections") {
-                                    TariffProjectionsCardAdaptive(
+                                    TariffProjectionTilesAdaptive(
                                         modifier = Modifier
                                             .background(color = CardDefaults.cardColors().containerColor)
                                             .fillMaxWidth()

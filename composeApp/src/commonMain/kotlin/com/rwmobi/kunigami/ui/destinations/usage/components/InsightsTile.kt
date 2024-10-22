@@ -46,7 +46,7 @@ import kunigami.composeapp.generated.resources.usage_reference_cost
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun InsightsCard(
+internal fun InsightsTile(
     modifier: Modifier = Modifier,
     insights: Insights,
 ) {
@@ -110,7 +110,7 @@ internal fun InsightsCard(
 @Composable
 private fun Preview() {
     CommonPreviewSetup { dimension ->
-        InsightsCard(
+        InsightsTile(
             modifier = Modifier
                 .width(dimension.widgetWidthFull)
                 .height(dimension.widgetHeight),

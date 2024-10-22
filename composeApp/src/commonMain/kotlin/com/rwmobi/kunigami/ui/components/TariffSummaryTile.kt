@@ -49,7 +49,7 @@ import kunigami.composeapp.generated.resources.usage_applied_tariff
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun TariffSummaryCard(
+internal fun TariffSummaryTile(
     modifier: Modifier = Modifier,
     tariff: Tariff,
 ) {
@@ -142,14 +142,14 @@ private fun Preview() {
         Column(
             verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
         ) {
-            TariffSummaryCard(
+            TariffSummaryTile(
                 modifier = Modifier
                     .width(dimension.widgetWidthFull)
                     .height(dimension.widgetHeight),
                 tariff = TariffSamples.var221101,
             )
 
-            TariffSummaryCard(
+            TariffSummaryTile(
                 modifier = Modifier
                     .width(dimension.widgetWidthFull)
                     .height(dimension.widgetHeight),
