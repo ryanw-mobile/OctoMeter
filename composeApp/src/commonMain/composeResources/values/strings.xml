@@ -54,22 +54,22 @@
     <string name="grouping_label_month_weeks">Week Starting On</string>
     <string name="usage_chart_tooltip_spot_kwh">%1$s\n%2$s kWh</string>
     <string name="usage_chart_tooltip_range_kwh">%1$s - %2$s\n%3$s kWh</string>
-    <string name="usage_applied_tariff">Applied tariff</string>
-    <string name="usage_current_tariff">Active tariff</string>
+    <string name="usage_applied_tariff">Applied Tariff</string>
+    <string name="usage_current_tariff">Active Tariff</string>
     <string name="usage_insights">Insights</string>
     <plurals name="usage_insights_consumption">
-        <item quantity="one">%1$s kWh USED THIS DAY</item>
-        <item quantity="other">%1$s kWh USED OVER %2$s DAYS</item>
+        <item quantity="one">Consumed This Day</item>
+        <item quantity="other">Consumed Over %1$s Days</item>
     </plurals>
     <string name="usage_estimated_cost">estimated</string>
     <string name="usage_reference_cost">reference*</string>
-    <string name="usage_estimated_daily">Daily average: %1$s kWh / £%2$s</string>
-    <string name="usage_projected_consumption">Projected Consumption</string>
+    <string name="usage_estimated_daily">Daily Average</string>
+    <string name="usage_projected_consumption">Projected</string>
     <string name="usage_demo_introduction">Demo Mode: The consumption figures shown are randomly generated.</string>
     <string name="usage_consumption">Consumption</string>
     <string name="usage_standing_charge">Standing Charge</string>
-    <string name="usage_kwh_year">kWh / year</string>
-    <string name="usage_kwh_month">( %1$s kWh / month )</string>
+    <string name="usage_kwh_year">yearly</string>
+    <string name="usage_kwh_month">monthly</string>
     <string name="usage_latest">Latest</string>
     <string name="usage_error_date_out_of_range">Requested date is outside of the allowed range.</string>
 

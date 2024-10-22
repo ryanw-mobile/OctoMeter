@@ -17,38 +17,30 @@ package com.rwmobi.kunigami.ui.destinations.usage.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.components.TariffSummaryCard
+import com.rwmobi.kunigami.ui.components.TariffSummaryTile
 import com.rwmobi.kunigami.ui.model.consumption.Insights
 import com.rwmobi.kunigami.ui.previewsampledata.InsightsSamples
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
-import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.usage_applied_tariff
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun TariffProjectionsCardAdaptive(
+internal fun TariffProjectionTilesAdaptive(
     modifier: Modifier = Modifier,
     tariff: Tariff?,
     insights: Insights?,
@@ -58,7 +50,7 @@ internal fun TariffProjectionsCardAdaptive(
         WindowWidthSizeClass.Compact,
         WindowWidthSizeClass.Medium,
         -> {
-            TariffProjectionsCardLinear(
+            TariffProjectionsTileFLinear(
                 modifier = modifier,
                 tariff = tariff,
                 insights = insights,
@@ -66,7 +58,7 @@ internal fun TariffProjectionsCardAdaptive(
         }
 
         else -> {
-            TariffProjectionsCardThreeColumns(
+            TariffProjectionsTileFlowRow(
                 modifier = modifier,
                 tariff = tariff,
                 insights = insights,
@@ -76,104 +68,126 @@ internal fun TariffProjectionsCardAdaptive(
 }
 
 @Composable
-private fun TariffProjectionsCardLinear(
+private fun TariffProjectionsTileFLinear(
     modifier: Modifier = Modifier,
     tariff: Tariff?,
     insights: Insights?,
 ) {
     val dimension = LocalDensity.current.getDimension()
-
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
     ) {
+        val fullWidthModifier = Modifier
+            .fillMaxWidth()
+            .height(dimension.widgetHeight)
+
         tariff?.let {
-            TariffSummaryCard(
-                modifier = Modifier.fillMaxWidth(),
-                heading = stringResource(resource = Res.string.usage_applied_tariff).uppercase(),
-                tariffs = listOf(it),
+            TariffSummaryTile(
+                modifier = fullWidthModifier,
+                tariff = it,
             )
         }
 
         insights?.let { insights ->
-            HorizontalDivider(
-                modifier = Modifier.height(height = dimension.grid_1),
-                thickness = Dp.Hairline,
-            )
-
-            InsightsCard(
-                modifier = Modifier.fillMaxWidth(),
+            InsightsTile(
+                modifier = fullWidthModifier,
                 insights = insights,
             )
 
-            HorizontalDivider(
-                modifier = Modifier.height(height = dimension.grid_1),
-                thickness = Dp.Hairline,
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
+            ) {
+                val halfWidthModifier = Modifier
+                    .weight(1f)
+                    .height(dimension.widgetHeight)
 
-            ProjectedConsumptionCard(
-                modifier = Modifier.fillMaxWidth(),
-                insights = insights,
-            )
+                if (insights.consumptionTimeSpan > 1) {
+                    ConsumptionTile(
+                        modifier = halfWidthModifier,
+                        insights = insights,
+                    )
+
+                    DailyAverageTile(
+                        modifier = halfWidthModifier,
+                        insights = insights,
+                    )
+                } else {
+                    ConsumptionTile(
+                        modifier = halfWidthModifier,
+                        insights = insights,
+                    )
+
+                    ProjectedConsumptionTile(
+                        modifier = halfWidthModifier,
+                        insights = insights,
+                    )
+                }
+            }
+
+            if (insights.consumptionTimeSpan > 1) {
+                ProjectedConsumptionTile(
+                    modifier = fullWidthModifier,
+                    insights = insights,
+                )
+            }
         }
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun TariffProjectionsCardThreeColumns(
+private fun TariffProjectionsTileFlowRow(
     modifier: Modifier = Modifier,
     tariff: Tariff?,
     insights: Insights?,
 ) {
     val dimension = LocalDensity.current.getDimension()
-    val cardCount = 1 + (if (insights != null) 2 else 0)
-    val maxRowWidth = dimension.windowWidthCompact * cardCount
+    val halfWidthModifier = Modifier
+        .width(dimension.widgetWidthHalf)
+        .height(dimension.widgetHeight)
+        .padding(horizontal = dimension.grid_0_5)
 
-    Box(
-        modifier = modifier,
+    val fullWidthModifier = Modifier
+        .width(dimension.widgetWidthFull)
+        .height(dimension.widgetHeight)
+        .padding(horizontal = dimension.grid_0_5)
+
+    FlowRow(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
     ) {
-        Row(
-            modifier = Modifier
-                .height(intrinsicSize = IntrinsicSize.Min)
-                .widthIn(max = maxRowWidth)
-                .align(alignment = Alignment.Center),
-            horizontalArrangement = Arrangement.Center,
-        ) {
-            tariff?.let {
-                TariffSummaryCard(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
-                    heading = stringResource(resource = Res.string.usage_applied_tariff).uppercase(),
-                    tariffs = listOf(it),
-                )
-            }
+        tariff?.let {
+            TariffSummaryTile(
+                modifier = fullWidthModifier,
+                tariff = it,
+            )
+        }
 
-            insights?.let { insights ->
-                VerticalDivider(
-                    modifier = Modifier.width(width = dimension.grid_1),
-                    thickness = Dp.Hairline,
-                )
+        insights?.let { insights ->
+            InsightsTile(
+                modifier = fullWidthModifier,
+                insights = insights,
+            )
 
-                InsightsCard(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
-                    insights = insights,
-                )
+            ConsumptionTile(
+                modifier = halfWidthModifier,
+                insights = insights,
+            )
 
-                VerticalDivider(
-                    modifier = Modifier.width(width = dimension.grid_1),
-                    thickness = Dp.Hairline,
-                )
-
-                ProjectedConsumptionCard(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
+            if (insights.consumptionTimeSpan > 1) {
+                DailyAverageTile(
+                    modifier = halfWidthModifier,
                     insights = insights,
                 )
             }
+
+            ProjectedConsumptionTile(
+                modifier = halfWidthModifier,
+                insights = insights,
+            )
         }
     }
 }
@@ -182,14 +196,14 @@ private fun TariffProjectionsCardThreeColumns(
 @Composable
 private fun Preview() {
     CommonPreviewSetup {
-        TariffProjectionsCardAdaptive(
+        TariffProjectionTilesAdaptive(
             modifier = Modifier.padding(all = 16.dp),
             tariff = TariffSamples.agileFlex221125,
             insights = InsightsSamples.trueCost,
             layoutType = WindowWidthSizeClass.Expanded,
         )
 
-        TariffProjectionsCardAdaptive(
+        TariffProjectionTilesAdaptive(
             modifier = Modifier.padding(all = 16.dp),
             tariff = TariffSamples.agileFlex221125,
             insights = InsightsSamples.trueCost,
