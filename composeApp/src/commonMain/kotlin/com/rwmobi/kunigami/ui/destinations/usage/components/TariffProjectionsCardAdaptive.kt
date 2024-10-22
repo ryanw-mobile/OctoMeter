@@ -106,12 +106,25 @@ private fun TariffProjectionsCardLinear(
                 insights = insights,
             )
 
-            ProjectedConsumptionTile(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(dimension.widgetHeight),
-                insights = insights,
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
+            ) {
+                if (insights.consumptionTimeSpan > 1) {
+                    DailyAverageTile(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(dimension.widgetHeight),
+                        insights = insights,
+                    )
+                }
+
+                ProjectedConsumptionTile(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(dimension.widgetHeight),
+                    insights = insights,
+                )
+            }
         }
     }
 }
@@ -159,9 +172,18 @@ private fun TariffProjectionsCardThreeColumns(
                     insights = insights,
                 )
 
+                if (insights.consumptionTimeSpan > 1) {
+                    DailyAverageTile(
+                        modifier = Modifier
+                            .width(dimension.widgetWidthHalf)
+                            .height(dimension.widgetHeight),
+                        insights = insights,
+                    )
+                }
+
                 ProjectedConsumptionTile(
                     modifier = Modifier
-                        .width(dimension.widgetWidthFull)
+                        .width(dimension.widgetWidthHalf)
                         .height(dimension.widgetHeight),
                     insights = insights,
                 )

@@ -20,7 +20,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,14 +39,13 @@ import com.rwmobi.kunigami.ui.model.consumption.Insights
 import com.rwmobi.kunigami.ui.previewsampledata.InsightsSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
-import kunigami.composeapp.generated.resources.kwh
 import kunigami.composeapp.generated.resources.usage_kwh_month
 import kunigami.composeapp.generated.resources.usage_kwh_year
 import kunigami.composeapp.generated.resources.usage_projected_consumption
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun ProjectedConsumptionTile(
+internal fun ConsumptionTile(
     modifier: Modifier = Modifier,
     insights: Insights,
 ) {
@@ -57,21 +55,45 @@ internal fun ProjectedConsumptionTile(
             .clip(shape = MaterialTheme.shapes.large)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(dimension.grid_2),
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.SpaceBetween,
     ) {
-        UsageBlock(
-            usage = insights.consumptionAnnualProjection.roundToTwoDecimalPlaces().toString(),
-            period = stringResource(resource = Res.string.usage_kwh_year),
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
+        ) {
+            Text(
+                modifier = Modifier.wrapContentWidth(),
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+                text = insights.consumptionAnnualProjection.roundToTwoDecimalPlaces().toString(),
+            )
 
-        Spacer(modifier = Modifier.weight(1f))
+            Text(
+                modifier = Modifier.wrapContentWidth(),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                text = stringResource(resource = Res.string.usage_kwh_year),
+            )
+        }
 
-        UsageBlock(
-            usage = (insights.consumptionAnnualProjection / 12.0).roundToTwoDecimalPlaces().toString(),
-            period = stringResource(resource = Res.string.usage_kwh_month),
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
+        ) {
+            Text(
+                modifier = Modifier.wrapContentWidth(),
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+                text = (insights.consumptionAnnualProjection / 12.0).roundToTwoDecimalPlaces().toString(),
+            )
 
-        Spacer(modifier = Modifier.weight(1f))
+            Text(
+                modifier = Modifier.wrapContentWidth(),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                text = stringResource(resource = Res.string.usage_kwh_month),
+            )
+        }
 
         Text(
             modifier = Modifier.fillMaxWidth(),
@@ -82,48 +104,13 @@ internal fun ProjectedConsumptionTile(
     }
 }
 
-@Composable
-private fun UsageBlock(
-    usage: String,
-    period: String,
-) {
-    val dimension = LocalDensity.current.getDimension()
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
-    ) {
-        Text(
-            modifier = Modifier.wrapContentWidth(),
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            text = usage,
-        )
-
-        Text(
-            modifier = Modifier.wrapContentWidth(),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            text = stringResource(resource = Res.string.kwh),
-        )
-    }
-
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        style = MaterialTheme.typography.labelMedium,
-        color = MaterialTheme.colorScheme.onSurface.copy(
-            alpha = 0.5f,
-        ),
-        text = period,
-    )
-}
-
 @Preview
 @Composable
 private fun Preview() {
     CommonPreviewSetup { dimension ->
-        ProjectedConsumptionTile(
+        ConsumptionTile(
             modifier = Modifier.height(dimension.widgetHeight)
-                .width(dimension.widgetWidthHalf),
+                .width(dimension.widgetWidthFull),
             insights = InsightsSamples.trueCost,
         )
     }

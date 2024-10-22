@@ -44,7 +44,6 @@ import kunigami.composeapp.generated.resources.standing_charge
 import kunigami.composeapp.generated.resources.unit_pound
 import kunigami.composeapp.generated.resources.usage_consumption
 import kunigami.composeapp.generated.resources.usage_estimated_cost
-import kunigami.composeapp.generated.resources.usage_estimated_daily
 import kunigami.composeapp.generated.resources.usage_insights_consumption
 import kunigami.composeapp.generated.resources.usage_reference_cost
 import org.jetbrains.compose.resources.pluralStringResource
@@ -90,20 +89,6 @@ internal fun InsightsCard(
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Left,
                     text = costLabel,
-                )
-            }
-
-            if (insights.consumptionTimeSpan > 1) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.Center,
-                    text = stringResource(
-                        resource = Res.string.usage_estimated_daily,
-                        insights.consumptionDailyAverage,
-                        insights.costDailyAverage.toString(precision = 2),
-                    ),
                 )
             }
         },

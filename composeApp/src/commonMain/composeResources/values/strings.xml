@@ -63,13 +63,13 @@
     </plurals>
     <string name="usage_estimated_cost">estimated</string>
     <string name="usage_reference_cost">reference*</string>
-    <string name="usage_estimated_daily">Daily average: %1$s kWh / £%2$s</string>
-    <string name="usage_projected_consumption">Projected Consumption</string>
+    <string name="usage_estimated_daily">Daily Average</string>
+    <string name="usage_projected_consumption">Projected</string>
     <string name="usage_demo_introduction">Demo Mode: The consumption figures shown are randomly generated.</string>
     <string name="usage_consumption">Consumption</string>
     <string name="usage_standing_charge">Standing Charge</string>
-    <string name="usage_kwh_year">kWh / year</string>
-    <string name="usage_kwh_month">kWh / month</string>
+    <string name="usage_kwh_year">yearly</string>
+    <string name="usage_kwh_month">monthly</string>
     <string name="usage_latest">Latest</string>
     <string name="usage_error_date_out_of_range">Requested date is outside of the allowed range.</string>
 

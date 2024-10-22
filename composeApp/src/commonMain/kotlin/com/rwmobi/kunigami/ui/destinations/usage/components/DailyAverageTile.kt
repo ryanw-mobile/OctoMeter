@@ -41,13 +41,12 @@ import com.rwmobi.kunigami.ui.previewsampledata.InsightsSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.kwh
-import kunigami.composeapp.generated.resources.usage_kwh_month
-import kunigami.composeapp.generated.resources.usage_kwh_year
-import kunigami.composeapp.generated.resources.usage_projected_consumption
+import kunigami.composeapp.generated.resources.unit_pound
+import kunigami.composeapp.generated.resources.usage_estimated_daily
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun ProjectedConsumptionTile(
+internal fun DailyAverageTile(
     modifier: Modifier = Modifier,
     insights: Insights,
 ) {
@@ -59,69 +58,48 @@ internal fun ProjectedConsumptionTile(
             .padding(dimension.grid_2),
         verticalArrangement = Arrangement.Top,
     ) {
-        UsageBlock(
-            usage = insights.consumptionAnnualProjection.roundToTwoDecimalPlaces().toString(),
-            period = stringResource(resource = Res.string.usage_kwh_year),
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
+        ) {
+            Text(
+                modifier = Modifier.wrapContentWidth(),
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                text = insights.consumptionDailyAverage.roundToTwoDecimalPlaces().toString(),
+            )
 
-        Spacer(modifier = Modifier.weight(1f))
+            Text(
+                modifier = Modifier.wrapContentWidth(),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                text = stringResource(resource = Res.string.kwh),
+            )
+        }
 
-        UsageBlock(
-            usage = (insights.consumptionAnnualProjection / 12.0).roundToTwoDecimalPlaces().toString(),
-            period = stringResource(resource = Res.string.usage_kwh_month),
+        Text(
+            modifier = Modifier.wrapContentWidth(),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            text = stringResource(resource = Res.string.unit_pound, insights.costDailyAverage.roundToTwoDecimalPlaces().toString()),
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(resource = Res.string.usage_projected_consumption),
+            text = stringResource(resource = Res.string.usage_estimated_daily),
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Normal,
         )
     }
 }
 
-@Composable
-private fun UsageBlock(
-    usage: String,
-    period: String,
-) {
-    val dimension = LocalDensity.current.getDimension()
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
-    ) {
-        Text(
-            modifier = Modifier.wrapContentWidth(),
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            text = usage,
-        )
-
-        Text(
-            modifier = Modifier.wrapContentWidth(),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            text = stringResource(resource = Res.string.kwh),
-        )
-    }
-
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        style = MaterialTheme.typography.labelMedium,
-        color = MaterialTheme.colorScheme.onSurface.copy(
-            alpha = 0.5f,
-        ),
-        text = period,
-    )
-}
-
 @Preview
 @Composable
 private fun Preview() {
     CommonPreviewSetup { dimension ->
-        ProjectedConsumptionTile(
+        DailyAverageTile(
             modifier = Modifier.height(dimension.widgetHeight)
                 .width(dimension.widgetWidthHalf),
             insights = InsightsSamples.trueCost,
