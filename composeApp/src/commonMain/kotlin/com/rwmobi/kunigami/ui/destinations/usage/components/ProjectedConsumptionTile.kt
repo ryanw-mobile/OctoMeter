@@ -26,11 +26,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -64,7 +66,11 @@ internal fun ProjectedConsumptionTile(
             period = stringResource(resource = Res.string.usage_kwh_year),
         )
 
-        Spacer(modifier = Modifier.weight(1f))
+        HorizontalDivider(
+            modifier = Modifier
+                .padding(vertical = dimension.grid_1)
+                .alpha(0.5f),
+        )
 
         UsageBlock(
             usage = (insights.consumptionAnnualProjection / 12.0).roundToTwoDecimalPlaces().toString(),
@@ -94,7 +100,7 @@ private fun UsageBlock(
     ) {
         Text(
             modifier = Modifier.wrapContentWidth(),
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             text = usage,
         )
