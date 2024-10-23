@@ -135,6 +135,7 @@
     <string name="product_feature_halfhourly">Half-hourly</string>
 
     <!-- Account Screen -->
+    <string name="account_demo_mode">Switch to Demo Mode</string>
     <string name="account_clear_credential_title">Clear Credentials and Switch to Demo Mode</string>
     <string name="account_clear_credential_description">Removing your API token and any account-specific data from local storage. Under demo mode, the application will utilise simulated local data to replicate authenticated access. Additionally, it will default to Eastern England when retrieving tariffs.</string>
     <string name="account_clear_credential_button_cta">Clear</string>

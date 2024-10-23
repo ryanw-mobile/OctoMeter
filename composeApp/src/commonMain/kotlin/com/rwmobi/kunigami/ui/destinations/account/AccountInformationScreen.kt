@@ -48,7 +48,7 @@ import com.rwmobi.kunigami.ui.components.MessageActionScreen
 import com.rwmobi.kunigami.ui.components.SquareButton
 import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
-import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionAdaptive
+import com.rwmobi.kunigami.ui.destinations.account.components.DemoModeConfirmDialog
 import com.rwmobi.kunigami.ui.destinations.account.components.ElectricityMeterPointCard
 import com.rwmobi.kunigami.ui.destinations.account.components.UpdateApiKeyDialog
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
@@ -58,6 +58,7 @@ import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_clear_cache
 import kunigami.composeapp.generated.resources.account_clear_credential_title
+import kunigami.composeapp.generated.resources.account_demo_mode
 import kunigami.composeapp.generated.resources.account_error_account_empty
 import kunigami.composeapp.generated.resources.account_moved_in
 import kunigami.composeapp.generated.resources.account_moved_out
@@ -65,6 +66,7 @@ import kunigami.composeapp.generated.resources.account_number
 import kunigami.composeapp.generated.resources.account_unknown_installation_address
 import kunigami.composeapp.generated.resources.account_update_api_key
 import kunigami.composeapp.generated.resources.database_remove_outline
+import kunigami.composeapp.generated.resources.eraser
 import kunigami.composeapp.generated.resources.key
 import kunigami.composeapp.generated.resources.retry
 import kunigami.composeapp.generated.resources.unlink
@@ -156,6 +158,7 @@ internal fun AccountInformationScreen(
             )
         }
 
+        var shouldShowDemoModeConfirmDialog by rememberSaveable { mutableStateOf(false) }
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.Top,
@@ -189,13 +192,27 @@ internal fun AccountInformationScreen(
                 ),
                 onClick = { uiEvent.onClearCache { getString(resource = it) } },
             )
+
+            SquareButton(
+                modifier = Modifier
+                    .width(width = 80.dp)
+                    .wrapContentHeight(),
+                icon = painterResource(resource = Res.drawable.eraser),
+                text = stringResource(resource = Res.string.account_demo_mode),
+                colors = ButtonDefaults.buttonColors().copy(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                ),
+                onClick = { shouldShowDemoModeConfirmDialog = true },
+            )
         }
 
-        ClearCredentialSectionAdaptive(
-            modifier = Modifier.fillMaxWidth(),
-            onClearCredentialButtonClicked = uiEvent.onClearCredentialButtonClicked,
-            useWideLayout = uiState.requestedLayout != AccountScreenLayoutStyle.Compact,
-        )
+        if (shouldShowDemoModeConfirmDialog) {
+            DemoModeConfirmDialog(
+                onSwitchToDemoMode = uiEvent.onClearCredentialButtonClicked,
+                onCancel = { shouldShowDemoModeConfirmDialog = false },
+            )
+        }
 
         AppInfoFooter(modifier = Modifier.fillMaxWidth())
     }
