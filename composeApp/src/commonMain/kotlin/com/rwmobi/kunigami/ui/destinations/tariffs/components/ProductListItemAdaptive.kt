@@ -44,6 +44,7 @@ import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.TagWithIcon
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.Dimension
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Instant
@@ -76,7 +77,7 @@ private fun ProductListItemCompact(
     modifier: Modifier = Modifier,
     productSummary: ProductSummary,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
 
     Column(
         modifier = modifier.padding(
@@ -139,7 +140,7 @@ internal fun ProductListItemWide(
     modifier: Modifier = Modifier,
     productSummary: ProductSummary,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
 
     Row(
         modifier = modifier

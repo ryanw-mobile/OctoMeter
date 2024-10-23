@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.extensions.getLocalDayMonthString
 import com.rwmobi.kunigami.domain.extensions.getLocalDayOfMonth
 import com.rwmobi.kunigami.domain.extensions.getLocalDayOfWeekAndDayString
@@ -28,6 +27,7 @@ import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.extensions.getLocalMonthString
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
@@ -43,7 +43,7 @@ internal fun ConsumptionGroupCells(
     consumptionRange: ClosedFloatingPointRange<Double>,
     presentationStyle: ConsumptionPresentationStyle,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_3),

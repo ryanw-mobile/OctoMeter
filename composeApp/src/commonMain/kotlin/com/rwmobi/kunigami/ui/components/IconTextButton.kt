@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.coin
@@ -60,8 +61,7 @@ fun IconTextButton(
     CompositionLocalProvider(
         LocalDensity provides Density(currentDensity.density, fontScale = 1f),
     ) {
-        val dimension = currentDensity.getDimension()
-
+        val dimension = getScreenSizeInfo().getDimension()
         Button(
             modifier = modifier,
             shape = shape,

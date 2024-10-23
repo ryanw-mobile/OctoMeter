@@ -34,7 +34,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.ui.components.DemoModeCtaAdaptive
 import com.rwmobi.kunigami.ui.components.ErrorScreenHandler
 import com.rwmobi.kunigami.ui.components.LargeTitleWithIcon
@@ -43,10 +42,11 @@ import com.rwmobi.kunigami.ui.components.MessageActionScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.destinations.usage.components.ConsumptionGroupCells
 import com.rwmobi.kunigami.ui.destinations.usage.components.NavigationOptionsBar
 import com.rwmobi.kunigami.ui.destinations.usage.components.RateGroupTitle
-import com.rwmobi.kunigami.ui.destinations.usage.components.TariffProjectionsCardAdaptive
+import com.rwmobi.kunigami.ui.destinations.usage.components.TariffProjectionTilesAdaptive
 import com.rwmobi.kunigami.ui.destinations.usage.components.TitleNavigationBar
 import com.rwmobi.kunigami.ui.extensions.partitionList
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
@@ -84,7 +84,7 @@ fun UsageScreen(
         }
     }
 
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
     val lazyListState = rememberLazyListState()
 
     Box(modifier = modifier) {
@@ -201,7 +201,7 @@ fun UsageScreen(
                                 }
 
                                 item(key = "tariffAndProjections") {
-                                    TariffProjectionsCardAdaptive(
+                                    TariffProjectionTilesAdaptive(
                                         modifier = Modifier
                                             .background(color = CardDefaults.cardColors().containerColor)
                                             .fillMaxWidth()
@@ -267,7 +267,7 @@ private fun LazyListScope.consumptionBarChart(
 ) {
     item(key = "chart") {
         Box {
-            val dimension = LocalDensity.current.getDimension()
+            val dimension = getScreenSizeInfo().getDimension()
             val constraintModifier = when (uiState.requestedChartLayout) {
                 is RequestedChartLayout.Portrait -> {
                     Modifier
@@ -307,7 +307,7 @@ private fun LazyListScope.consumptionBreakdown(
 ) {
     consumptionGroupsWithPartitions.forEach { consumptionGroupWithPartitions ->
         item(key = "${consumptionGroupWithPartitions.title}Title") {
-            val dimension = LocalDensity.current.getDimension()
+            val dimension = getScreenSizeInfo().getDimension()
             RateGroupTitle(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -321,7 +321,7 @@ private fun LazyListScope.consumptionBreakdown(
 
         val maxRows = consumptionGroupWithPartitions.partitionedItems.maxOf { it.size }
         items(maxRows) { rowIndex ->
-            val dimension = LocalDensity.current.getDimension()
+            val dimension = getScreenSizeInfo().getDimension()
             ConsumptionGroupCells(
                 modifier = Modifier
                     .fillMaxWidth()

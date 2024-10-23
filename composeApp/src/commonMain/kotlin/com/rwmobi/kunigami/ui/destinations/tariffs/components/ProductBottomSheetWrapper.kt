@@ -23,8 +23,8 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,7 +35,7 @@ internal fun ProductBottomSheetWrapper(
     bottomSheetState: SheetState,
     onDismissRequest: () -> Unit,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
     ModalBottomSheet(
         modifier = modifier,
         onDismissRequest = onDismissRequest,
