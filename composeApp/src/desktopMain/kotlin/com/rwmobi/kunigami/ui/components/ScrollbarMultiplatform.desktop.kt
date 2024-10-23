@@ -45,6 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.coroutines.delay
@@ -101,7 +102,7 @@ private fun ScrollbarMultiplatform(
     scrollbarAdapter: ScrollbarAdapter,
     content: @Composable (contentModifier: Modifier) -> Unit,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
     val density = LocalDensity.current
 
     var isScrollbarVisible by remember { mutableStateOf(false) }

@@ -16,10 +16,9 @@
 package com.rwmobi.kunigami.ui.theme
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
+import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 
 /**
  * Source: https://proandroiddev.com/supporting-different-screen-sizes-on-android-with-jetpack-compose-f215c13081bd
@@ -90,7 +89,6 @@ val sw360Dimension = Dimension(
 )
 
 @Composable
-fun Density.getDimension(): Dimension {
-    val screenSizeInfo = getScreenSizeInfo()
-    return if (screenSizeInfo.widthDp <= 360.dp) smallDimension else sw360Dimension
+fun ScreenSizeInfo.getDimension(): Dimension {
+    return if (widthDp <= 360.dp) smallDimension else sw360Dimension
 }

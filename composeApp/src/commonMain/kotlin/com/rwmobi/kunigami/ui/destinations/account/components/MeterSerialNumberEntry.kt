@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.Density
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeter
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
@@ -61,7 +62,7 @@ internal fun MeterSerialNumberEntry(
     onMeterSerialNumberSelected: () -> Unit,
 ) {
     val currentDensity = LocalDensity.current
-    val dimension = currentDensity.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
     CompositionLocalProvider(
         LocalDensity provides Density(currentDensity.density, fontScale = 1f),
     ) {

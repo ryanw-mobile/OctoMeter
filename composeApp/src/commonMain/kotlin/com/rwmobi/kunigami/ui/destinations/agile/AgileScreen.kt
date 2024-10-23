@@ -38,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.ui.components.DemoModeCtaAdaptive
 import com.rwmobi.kunigami.ui.components.DualTitleBar
@@ -48,6 +47,7 @@ import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.destinations.agile.components.AgileTariffCardAdaptive
 import com.rwmobi.kunigami.ui.destinations.agile.components.RateGroupCells
 import com.rwmobi.kunigami.ui.destinations.agile.components.RateGroupTitle
@@ -91,7 +91,7 @@ fun AgileScreen(
         }
     }
 
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
     val lazyListState = rememberLazyListState()
 
     Box(modifier = modifier) {
@@ -275,7 +275,7 @@ private fun LazyListScope.renderChart(
     barChartData: BarChartData,
 ) {
     item(key = "chart") {
-        val dimension = LocalDensity.current.getDimension()
+        val dimension = getScreenSizeInfo().getDimension()
         Box(
             modifier = Modifier.padding(top = dimension.grid_1),
         ) {

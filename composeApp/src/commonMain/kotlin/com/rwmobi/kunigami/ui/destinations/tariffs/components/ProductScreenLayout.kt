@@ -25,7 +25,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.model.product.ExitFeesType
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
@@ -33,6 +32,7 @@ import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Instant
 
@@ -41,7 +41,7 @@ internal fun LazyListScope.productScreenLayout(
     productDetails: ProductDetails,
 ) {
     item(key = "productFacts") {
-        val dimension = LocalDensity.current.getDimension()
+        val dimension = getScreenSizeInfo().getDimension()
         Column(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
