@@ -41,6 +41,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.coin
@@ -61,8 +62,7 @@ internal fun SquareButton(
     CompositionLocalProvider(
         LocalDensity provides Density(currentDensity.density, fontScale = 1f),
     ) {
-        val dimension = currentDensity.getDimension()
-
+        val dimension = getScreenSizeInfo().getDimension()
         Column(
             modifier = modifier
                 .wrapContentHeight()

@@ -26,9 +26,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
 
 @Composable
@@ -38,7 +38,7 @@ fun WidgetCard(
     contents: @Composable () -> Unit,
     footer: @Composable (() -> Unit)? = null,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
 
     Column(
         modifier = modifier

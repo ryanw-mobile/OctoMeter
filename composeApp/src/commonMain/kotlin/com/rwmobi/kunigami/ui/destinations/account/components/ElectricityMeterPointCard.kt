@@ -29,9 +29,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.ui.components.IconTextButton
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayoutStyle
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
@@ -53,7 +53,7 @@ internal fun ElectricityMeterPointCard(
     onReloadTariff: () -> Unit,
     onMeterSerialNumberSelected: (mpan: String, meterSerialNumber: String) -> Unit,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
 
     Card(modifier = modifier) {
         Column(

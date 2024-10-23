@@ -23,9 +23,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
 
 @Composable
@@ -34,7 +34,7 @@ internal fun ProductPaneWrapper(
     productDetails: ProductDetails? = null,
     header: @Composable () -> Unit,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
 
     val detailLazyListState = rememberLazyListState()
     ScrollbarMultiplatform(

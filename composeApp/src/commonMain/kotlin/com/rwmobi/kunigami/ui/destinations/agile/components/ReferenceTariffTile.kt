@@ -30,11 +30,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.cyanish
 import com.rwmobi.kunigami.ui.theme.getDimension
@@ -48,7 +48,7 @@ internal fun ReferenceTariffTile(
     tariff: Tariff,
     indicatorColor: Color,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
     Column(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.large)

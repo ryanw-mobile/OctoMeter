@@ -36,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.HorizontalAnimatedTintedPainterResource
 import com.rwmobi.kunigami.ui.components.VerticalAnimatedTintedPainterResource
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.rate.RateTrend
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
@@ -60,7 +60,7 @@ internal fun CurrentRateTile(
     rateTrend: RateTrend?,
     rateTrendIconTint: Color? = null,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
     Column(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.large)

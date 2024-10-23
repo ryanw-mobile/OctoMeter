@@ -36,12 +36,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 import com.rwmobi.kunigami.ui.model.rate.RateGroup
@@ -171,7 +171,7 @@ private fun AgileTariffCardCompact(
     latestFixedTariff: Tariff? = null,
     latestFlexibleTariff: Tariff? = null,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
@@ -248,7 +248,7 @@ private fun AgileTariffCardExpanded(
     latestFixedTariff: Tariff? = null,
     latestFlexibleTariff: Tariff? = null,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
     FlowRow(
         modifier = modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,

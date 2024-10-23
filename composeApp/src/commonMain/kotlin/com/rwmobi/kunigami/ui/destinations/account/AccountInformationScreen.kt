@@ -39,7 +39,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
@@ -47,6 +46,7 @@ import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.MessageActionScreen
 import com.rwmobi.kunigami.ui.components.SquareButton
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
 import com.rwmobi.kunigami.ui.destinations.account.components.ClearCredentialSectionAdaptive
 import com.rwmobi.kunigami.ui.destinations.account.components.ElectricityMeterPointCard
@@ -79,7 +79,7 @@ internal fun AccountInformationScreen(
     uiState: AccountUIState,
     uiEvent: AccountUIEvent,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
 
     Column(
         modifier = modifier,

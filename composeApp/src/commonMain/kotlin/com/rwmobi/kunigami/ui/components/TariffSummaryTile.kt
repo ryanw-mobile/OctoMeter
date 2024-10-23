@@ -34,9 +34,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.model.product.Tariff
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
@@ -53,7 +53,7 @@ internal fun TariffSummaryTile(
     modifier: Modifier = Modifier,
     tariff: Tariff,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
     Column(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.large)

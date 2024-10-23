@@ -21,9 +21,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
 
 @Composable
@@ -33,7 +33,7 @@ internal fun LabelValueRow(
     label: String?,
     value: String?,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),

@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.Density
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.ui.components.TagWithIcon
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
@@ -50,7 +51,7 @@ internal fun ProductFacts(
     modifier: Modifier = Modifier,
     productDetails: ProductDetails,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
 
     Column(
         modifier = modifier.padding(

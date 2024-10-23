@@ -38,12 +38,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.onboarding_button_connect
@@ -63,7 +63,7 @@ internal fun CredentialsInputForm(
     isSubmitButtonEnabled: Boolean,
     onSubmitCredentials: (apiKey: String, accountNumber: String, stringResolver: suspend (resId: StringResource) -> String) -> Unit,
 ) {
-    val dimension = LocalDensity.current.getDimension()
+    val dimension = getScreenSizeInfo().getDimension()
 
     Column(
         modifier = modifier
