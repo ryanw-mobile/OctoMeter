@@ -43,8 +43,8 @@ apollographqlMockServer = "0.1.0"
 testRules = "1.6.1"
 
 # App configurations, not dependencies
-versionCode = "12"
-versionName = "2.1.0"
+versionCode = "13"
+versionName = "2.2.0"
 android-minSdk = "26"
 android-targetSdk = "34"
 android-compileSdk = "34"
