@@ -228,6 +228,7 @@ fun AgileScreen(
                                         partitionedItems = rateGroupsWithPartitions.partitionedItems,
                                         shouldHideLastColumn = shouldHideLastRateGroupColumn,
                                         rateRange = uiState.rateRange,
+                                        minimumVatInclusivePrice = uiState.minimumVatInclusivePrice,
                                         rowIndex = rowIndex,
                                     )
                                 }
