@@ -51,6 +51,7 @@ data class AgileUIState(
     val latestFixedTariff: Tariff? = null,
     val latestFlexibleTariff: Tariff? = null,
     val rateGroupedCells: List<RateGroup> = emptyList(),
+    val minimumVatInclusivePrice: Double = 0.0,
     val rateRange: ClosedFloatingPointRange<Double> = 0.0..0.0,
     val barChartData: BarChartData? = null,
     val requestScrollToTop: Boolean = false,

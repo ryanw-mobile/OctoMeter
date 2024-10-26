@@ -106,12 +106,10 @@ internal fun AgileTariffCardAdaptive(
         null
     }
 
-    val isCurrentRateOverpriced: Boolean = vatInclusivePrice?.let {
-        it >= minOf(
-            latestFixedTariff?.vatInclusiveStandardUnitRate ?: Double.MAX_VALUE,
-            latestFlexibleTariff?.vatInclusiveStandardUnitRate ?: Double.MAX_VALUE,
-        )
-    } ?: false
+    val isCurrentRateOverpriced: Boolean = vatInclusivePrice >= minOf(
+        latestFixedTariff?.vatInclusiveStandardUnitRate ?: Double.MAX_VALUE,
+        latestFlexibleTariff?.vatInclusiveStandardUnitRate ?: Double.MAX_VALUE,
+    )
 
     when (requestedAdaptiveLayout) {
         WindowWidthSizeClass.Compact,

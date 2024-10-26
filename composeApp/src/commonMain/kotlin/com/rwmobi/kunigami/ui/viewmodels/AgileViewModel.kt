@@ -174,10 +174,12 @@ class AgileViewModel(
                 }
 
                 val rateGroupedCells = groupChartCells(rates = rates)
+                val minimumVatInclusivePrice = getMinimumVatInclusivePrice(rateGroupedCells)
                 _uiState.update { currentUiState ->
                     currentUiState.copy(
                         requestedScreenType = AgileScreenType.Chart,
                         rateGroupedCells = rateGroupedCells,
+                        minimumVatInclusivePrice = minimumVatInclusivePrice,
                         rateRange = rateRange,
                         barChartData = BarChartData.fromRates(
                             rates = rates,
@@ -298,6 +300,13 @@ class AgileViewModel(
                 }
             },
         )
+    }
+
+    private fun getMinimumVatInclusivePrice(rateGroupedCells: List<RateGroup>): Double {
+        return rateGroupedCells
+            .flatMap { it.rates }
+            .map { it.vatInclusivePrice }
+            .minOrNull() ?: 0.0
     }
 
     override fun onCleared() {
