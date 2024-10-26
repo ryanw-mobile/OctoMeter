@@ -123,17 +123,16 @@ internal fun CurrentRateTile(
             }
         }
 
-        // Launch a coroutine to toggle visibility
-        var isVisible by remember { mutableStateOf(isCurrentRateOverpriced) }
-        LaunchedEffect(Unit) {
+        var isOverpricedTagVisible by remember { mutableStateOf(isCurrentRateOverpriced) }
+        LaunchedEffect(isCurrentRateOverpriced) {
             if (isCurrentRateOverpriced) {
                 while (true) {
-                    isVisible = !isVisible // Toggle visibility
-                    delay(500) // Blink duration
+                    isOverpricedTagVisible = !isOverpricedTagVisible
+                    delay(500)
                 }
             } else {
                 // Clean up if we move on to a cheaper slot
-                isVisible = false
+                isOverpricedTagVisible = false
             }
         }
         Row(
@@ -148,7 +147,7 @@ internal fun CurrentRateTile(
             )
 
             AnimatedVisibility(
-                visible = isVisible,
+                visible = isOverpricedTagVisible,
                 enter = fadeIn(),
                 exit = fadeOut(),
             ) {
