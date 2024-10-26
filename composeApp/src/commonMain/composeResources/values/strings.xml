@@ -89,6 +89,7 @@
     <string name="agile_tariff_standing_charge">Standing Charge: %1$d p/day</string>
     <string name="agile_current_rate">Current Rate</string>
     <string name="agile_chart_tooltip_range_p">%1$s\n%2$sp</string>
+    <string name="overpriced">Overpriced</string>
 
     <!-- Tariffs -->
     <string name="tariffs_postcode">Postcode: %1$s</string>

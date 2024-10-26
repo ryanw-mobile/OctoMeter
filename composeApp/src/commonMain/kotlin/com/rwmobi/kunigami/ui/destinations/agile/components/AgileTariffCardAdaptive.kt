@@ -106,6 +106,13 @@ internal fun AgileTariffCardAdaptive(
         null
     }
 
+    val isCurrentRateOverpriced: Boolean = vatInclusivePrice?.let {
+        it >= minOf(
+            latestFixedTariff?.vatInclusiveStandardUnitRate ?: Double.MAX_VALUE,
+            latestFlexibleTariff?.vatInclusiveStandardUnitRate ?: Double.MAX_VALUE,
+        )
+    } ?: false
+
     when (requestedAdaptiveLayout) {
         WindowWidthSizeClass.Compact,
         WindowWidthSizeClass.Medium,
@@ -119,6 +126,7 @@ internal fun AgileTariffCardAdaptive(
                 countDownText = countDownText,
                 latestFlexibleTariff = latestFlexibleTariff,
                 latestFixedTariff = latestFixedTariff,
+                isCurrentRateOverpriced = isCurrentRateOverpriced,
             )
         }
 
@@ -132,6 +140,7 @@ internal fun AgileTariffCardAdaptive(
                 countDownText = countDownText,
                 latestFlexibleTariff = latestFlexibleTariff,
                 latestFixedTariff = latestFixedTariff,
+                isCurrentRateOverpriced = isCurrentRateOverpriced,
             )
         }
     }
@@ -164,6 +173,7 @@ internal fun AgileTariffCardAdaptive(
 private fun AgileTariffCardCompact(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
+    isCurrentRateOverpriced: Boolean,
     vatInclusivePrice: Double? = null,
     countDownText: String? = null,
     rateTrend: RateTrend? = null,
@@ -188,6 +198,7 @@ private fun AgileTariffCardCompact(
         ) {
             CurrentRateTile(
                 modifier = tileModifier,
+                isCurrentRateOverpriced = isCurrentRateOverpriced,
                 vatInclusivePrice = vatInclusivePrice,
                 rateTrend = rateTrend,
                 rateTrendIconTint = rateTrendIconTint,
@@ -241,6 +252,7 @@ private fun ReferenceTariffTiles(
 private fun AgileTariffCardExpanded(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
+    isCurrentRateOverpriced: Boolean,
     vatInclusivePrice: Double? = null,
     countDownText: String? = null,
     rateTrend: RateTrend? = null,
@@ -261,6 +273,7 @@ private fun AgileTariffCardExpanded(
 
         CurrentRateTile(
             modifier = tileModifier,
+            isCurrentRateOverpriced = isCurrentRateOverpriced,
             vatInclusivePrice = vatInclusivePrice,
             rateTrend = rateTrend,
             rateTrendIconTint = rateTrendIconTint,

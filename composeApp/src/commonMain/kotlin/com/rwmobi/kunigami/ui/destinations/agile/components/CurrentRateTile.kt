@@ -15,7 +15,10 @@
 
 package com.rwmobi.kunigami.ui.destinations.agile.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +34,11 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,8 +54,10 @@ import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.rate.RateTrend
 import com.rwmobi.kunigami.ui.theme.getDimension
 import io.github.koalaplot.core.util.toString
+import kotlinx.coroutines.delay
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_current_rate
+import kunigami.composeapp.generated.resources.overpriced
 import kunigami.composeapp.generated.resources.p_kwh
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -56,6 +65,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 internal fun CurrentRateTile(
     modifier: Modifier = Modifier,
+    isCurrentRateOverpriced: Boolean,
     vatInclusivePrice: Double?,
     rateTrend: RateTrend?,
     rateTrendIconTint: Color? = null,
@@ -113,12 +123,46 @@ internal fun CurrentRateTile(
             }
         }
 
-        Text(
+        // Launch a coroutine to toggle visibility
+        var isVisible by remember { mutableStateOf(isCurrentRateOverpriced) }
+        LaunchedEffect(Unit) {
+            if (isCurrentRateOverpriced) {
+                while (true) {
+                    isVisible = !isVisible // Toggle visibility
+                    delay(500) // Blink duration
+                }
+            } else {
+                // Clean up if we move on to a cheaper slot
+                isVisible = false
+            }
+        }
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-            text = stringResource(resource = Res.string.p_kwh),
-        )
+            horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+                text = stringResource(resource = Res.string.p_kwh),
+            )
+
+            AnimatedVisibility(
+                visible = isVisible,
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                Text(
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.errorContainer)
+                        .padding(horizontal = dimension.grid_1),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onErrorContainer,
+                    fontWeight = FontWeight.Bold,
+                    text = stringResource(resource = Res.string.overpriced).uppercase(),
+                )
+            }
+        }
 
         Spacer(modifier.weight(1f))
 
@@ -138,6 +182,7 @@ private fun Preview() {
             modifier = Modifier
                 .width(dimension.widgetWidthFull)
                 .height(dimension.widgetHeight),
+            isCurrentRateOverpriced = true,
             rateTrendIconTint = Color.Red,
             rateTrend = RateTrend.DOWN,
             vatInclusivePrice = 25.08,
