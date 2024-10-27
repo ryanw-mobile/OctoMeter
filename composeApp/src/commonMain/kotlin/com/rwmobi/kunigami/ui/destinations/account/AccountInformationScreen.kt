@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -34,6 +35,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
@@ -86,39 +88,62 @@ internal fun AccountInformationScreen(
                 onSecondaryButtonClicked = uiEvent.onClearCredentialButtonClicked,
             )
         } else {
-            Spacer(modifier = Modifier.height(height = dimension.grid_2))
+            Spacer(modifier = Modifier.height(height = dimension.grid_1))
 
-            Text(
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                text = stringResource(resource = Res.string.account_number, uiState.userProfile.account.accountNumber),
-            )
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(dimension.grid_2),
+                    verticalArrangement = Arrangement.spacedBy(dimension.grid_2),
+                ) {
+                    Column {
+                        Text(
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            text = "Welcome back ${uiState.userProfile.account.preferredName}!",
+                        )
 
-            uiState.userProfile.account.fullAddress?.let {
-                Text(
-                    style = MaterialTheme.typography.bodyLarge,
-                    text = it,
-                )
-            } ?: run {
-                Text(
-                    style = MaterialTheme.typography.bodyLarge,
-                    text = stringResource(resource = Res.string.account_unknown_installation_address),
-                )
-            }
+                        Text(
+                            modifier = Modifier.alpha(0.5f),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            text = stringResource(resource = Res.string.account_number, uiState.userProfile.account.accountNumber),
+                        )
+                    }
 
-            uiState.userProfile.account.movedInAt?.let {
-                Text(
-                    style = MaterialTheme.typography.bodyMedium,
-                    text = stringResource(resource = Res.string.account_moved_in, it.getLocalDateString()),
-                )
-            }
+                    uiState.userProfile.account.fullAddress?.let {
+                        Text(
+                            style = MaterialTheme.typography.bodyLarge,
+                            text = it,
+                        )
+                    } ?: run {
+                        Text(
+                            style = MaterialTheme.typography.bodyLarge,
+                            text = stringResource(resource = Res.string.account_unknown_installation_address),
+                        )
+                    }
 
-            uiState.userProfile.account.movedOutAt?.let {
-                Text(
-                    style = MaterialTheme.typography.bodyMedium,
-                    text = stringResource(resource = Res.string.account_moved_out, it.getLocalDateString()),
-                )
+                    Column {
+                        uiState.userProfile.account.movedInAt?.let {
+                            Text(
+                                style = MaterialTheme.typography.bodyMedium,
+                                text = stringResource(resource = Res.string.account_moved_in, it.getLocalDateString()),
+                            )
+                        }
+
+                        uiState.userProfile.account.movedOutAt?.let {
+                            Text(
+                                style = MaterialTheme.typography.bodyMedium,
+                                text = stringResource(resource = Res.string.account_moved_out, it.getLocalDateString()),
+                            )
+                        }
+                    }
+                }
             }
 
             uiState.userProfile.account.electricityMeterPoints.forEach { meterPoint ->

@@ -25,7 +25,7 @@ import kotlinx.datetime.Instant
 /***
  * Throws: IllegalArgumentException - if the timestamp return from API is not parsable
  */
-fun PropertiesQuery.Property.toAccount(accountNumber: String): Account {
+fun PropertiesQuery.Property.toAccount(accountNumber: String, preferredName: String?): Account {
     // We decided to take the latest occupancy. This has no other side-effects other than a date showing on the screen.
     val occupancyPeriod = occupancyPeriods?.maxByOrNull {
         it?.effectiveFrom?.let { effectiveFrom ->
@@ -35,6 +35,7 @@ fun PropertiesQuery.Property.toAccount(accountNumber: String): Account {
 
     return Account(
         accountNumber = accountNumber,
+        preferredName = preferredName,
         movedInAt = occupancyPeriod?.effectiveFrom?.let { Instant.parse(it.toString()) },
         movedOutAt = occupancyPeriod?.effectiveTo?.let { Instant.parse(it.toString()) },
         fullAddress = address,

@@ -58,6 +58,7 @@ internal object AccountSamples {
     // This account is used in demo mode - usage. Needs to have sensible values.
     val account928 = Account(
         accountNumber = "A-9009A9A9",
+        preferredName = "Ryan",
         fullAddress = "RW MobiMedia UK Limited\n2 Frederick Street\nKing's Cross\nLondon\nWC1X 0ND",
         postcode = "WC1X 0ND",
         movedInAt = Instant.parse("2022-03-28T00:00:00Z"),
@@ -84,6 +85,7 @@ internal object AccountSamples {
 
     val accountTwoElectricityMeterPoint = Account(
         accountNumber = "A-1234A1B1",
+        preferredName = "Ryan",
         fullAddress = "RW MobiMedia UK Limited\n2 Frederick Street\nKing's Cross\nLondon\nWC1X 0ND",
         postcode = "WC1X 0ND",
         movedInAt = Clock.System.now(),

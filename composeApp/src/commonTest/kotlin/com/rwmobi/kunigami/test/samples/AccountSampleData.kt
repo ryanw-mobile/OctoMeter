@@ -26,6 +26,7 @@ import kotlin.time.Duration
 object AccountSampleData {
     val accountA1234A1B1 = Account(
         accountNumber = "A-1234A1B1",
+        preferredName = "Ryan",
         fullAddress = "RW MobiMedia UK Limited\n2 Frederick Street\nKing's Cross\nLondon\nWC1X 0ND",
         postcode = "WC1X 0ND",
         movedInAt = Clock.System.now(),
@@ -64,6 +65,7 @@ object AccountSampleData {
 
     val accountB1234A1A1 = Account(
         accountNumber = "B-1234A1A1",
+        preferredName = "Ryan",
         fullAddress = "10 downing street\nLondon\nW1 1AA",
         postcode = "W1 1AA",
         movedInAt = Instant.parse("2020-11-30T00:00:00Z"),
