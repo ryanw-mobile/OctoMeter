@@ -479,9 +479,14 @@ class OctopusGraphQLRepository(
                     accountNumber = accountNumber,
                 )
 
-                response.properties?.firstOrNull()?.toAccount(accountNumber = accountNumber)?.also {
-                    inMemoryCacheDataSource.cacheProfile(account = it, createdAt = Clock.System.now())
-                }
+                val preferredName = response.account?.users?.firstOrNull()?.preferredName
+                response.properties?.firstOrNull()?.toAccount(
+                    accountNumber = accountNumber,
+                    preferredName = preferredName,
+                )
+                    ?.also {
+                        inMemoryCacheDataSource.cacheProfile(account = it, createdAt = Clock.System.now())
+                    }
             }
         }.except<CancellationException, _>()
     }

@@ -18,6 +18,7 @@ package com.rwmobi.kunigami.ui.destinations.tariffs.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -38,6 +39,7 @@ internal fun ProductBottomSheetWrapper(
     val dimension = getScreenSizeInfo().getDimension()
     ModalBottomSheet(
         modifier = modifier,
+        containerColor = CardDefaults.cardColors().containerColor,
         onDismissRequest = onDismissRequest,
         sheetState = bottomSheetState,
     ) {

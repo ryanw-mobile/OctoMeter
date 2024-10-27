@@ -46,7 +46,7 @@ import kunigami.composeapp.generated.resources.presentation_style_week_seven_day
 data class ConsumptionQueryFilter(
     val presentationStyle: ConsumptionPresentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
     val referencePoint: Instant = Clock.System.now(),
-    val requestedPeriod: ClosedRange<Instant> = calculateQueryPeriod(referencePoint = Clock.System.now(), ConsumptionPresentationStyle.DAY_HALF_HOURLY),
+    val requestedPeriod: ClosedRange<Instant> = calculateQueryPeriod(referencePoint = referencePoint, ConsumptionPresentationStyle.DAY_HALF_HOURLY),
 ) {
     companion object {
         fun calculateQueryPeriod(referencePoint: Instant, presentationStyle: ConsumptionPresentationStyle): ClosedRange<Instant> {

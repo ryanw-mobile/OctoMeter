@@ -87,4 +87,9 @@ query PropertiesQuery($accountNumber: String!) {
             }
         }
     }
+    account(accountNumber: $accountNumber) {
+        users {
+          preferredName
+        }
+    }
 }

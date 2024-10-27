@@ -36,6 +36,7 @@ import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.model.StubStringResourceProvider
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
+import com.rwmobi.kunigami.ui.model.consumption.ConsumptionQueryFilter
 import com.rwmobi.kunigami.ui.previewsampledata.AccountSamples
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import io.ktor.util.network.UnresolvedAddressException
@@ -287,7 +288,11 @@ class UsageViewModelTest {
         usageViewModel.initialLoad()
         advanceUntilIdle()
 
-        val currentFilter = usageViewModel.uiState.value.consumptionQueryFilter!!
+        // Make sure it must be able to navigate forward
+        val currentFilter = ConsumptionQueryFilter(
+            presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY,
+            referencePoint = Clock.System.now() - Duration.parse("2d"),
+        )
         usageViewModel.onNextTimeFrame(consumptionQueryFilter = currentFilter)
         advanceUntilIdle()
 

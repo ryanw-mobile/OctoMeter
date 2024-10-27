@@ -24,11 +24,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.ui.components.IconTextButton
 import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
@@ -113,6 +115,14 @@ internal fun ElectricityMeterPointCard(
                         onClick = onReloadTariff,
                     )
                 }
+            }
+
+            if (meterPoint.meters.isNotEmpty()) {
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(horizontal = dimension.grid_2, vertical = dimension.grid_1)
+                        .alpha(0.5f),
+                )
             }
 
             val meterSerialNumberTextStyle = if (requestedLayout is AccountScreenLayoutStyle.Compact) {

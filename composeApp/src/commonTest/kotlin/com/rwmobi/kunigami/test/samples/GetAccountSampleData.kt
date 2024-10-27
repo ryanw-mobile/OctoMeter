@@ -275,13 +275,21 @@ object GetAccountSampleData {
           }
         ]
       }
-    ]
+    ],
+    "account": {
+      "users": [
+        {
+          "preferredName": "Ryan"
+        }
+      ]
+    }
   }
 }
     """.trimIndent()
 
     val account = Account(
         accountNumber = "B-1234A1A1",
+        preferredName = "Ryan",
         fullAddress = "10 Downing Street, LONDON, W1 1AA",
         postcode = "W1 1AA",
         movedInAt = Instant.parse("2020-11-30T00:00:00Z"),
