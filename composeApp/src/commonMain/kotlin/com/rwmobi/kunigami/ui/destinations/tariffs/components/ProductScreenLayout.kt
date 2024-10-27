@@ -16,15 +16,18 @@
 package com.rwmobi.kunigami.ui.destinations.tariffs.components
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import com.rwmobi.kunigami.domain.model.product.ExitFeesType
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
@@ -43,22 +46,31 @@ internal fun LazyListScope.productScreenLayout(
     item(key = "productFacts") {
         val dimension = getScreenSizeInfo().getDimension()
         Column(
-            modifier = modifier,
+            modifier = modifier.padding(horizontal = dimension.grid_2),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
         ) {
-            ProductFacts(
-                modifier = Modifier.widthIn(max = dimension.windowWidthCompact),
-                productDetails = productDetails,
-            )
+            val blockModifier = Modifier
+                .clip(shape = MaterialTheme.shapes.large)
+                .background(MaterialTheme.colorScheme.surfaceContainer)
+                .padding(dimension.grid_1)
 
-            productDetails.electricityTariff?.let { tariffDetails ->
-                RegionTariff(
-                    modifier = Modifier
-                        .widthIn(max = dimension.windowWidthCompact)
-                        .padding(all = dimension.grid_2),
-                    tariff = tariffDetails,
+            Column(modifier = blockModifier) {
+                ProductFacts(
+                    modifier = Modifier.widthIn(max = dimension.windowWidthCompact),
+                    productDetails = productDetails,
                 )
+            }
+
+            Column(modifier = blockModifier) {
+                productDetails.electricityTariff?.let { tariffDetails ->
+                    RegionTariff(
+                        modifier = Modifier
+                            .widthIn(max = dimension.windowWidthCompact)
+                            .padding(all = dimension.grid_2),
+                        tariff = tariffDetails,
+                    )
+                }
             }
         }
     }
