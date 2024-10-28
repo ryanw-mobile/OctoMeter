@@ -174,7 +174,7 @@ internal fun AccountInformationScreen(
         AccountOperationButtonBar(
             onUpdateApiKey = { isUpdateAPIKeyDialogOpened = true },
             onClearCache = { uiEvent.onClearCache { getString(resource = it) } },
-            onSwitchToDemoMode = { uiEvent.onClearCredentialButtonClicked },
+            onSwitchToDemoMode = { uiEvent.onClearCredentialButtonClicked() },
         )
 
         AppInfoFooter(modifier = Modifier.fillMaxWidth())
