@@ -1,29 +1,30 @@
 ## OctoMeter: Empowering Smart Electricity Usage<br/>[![Pull request](https://img.shields.io/badge/PRs-welcome-success?style=flat)](https://github.com/ryanw-mobile/OctoMeter/pulls) ![GitHub Repo stars](https://img.shields.io/github/stars/ryanw-mobile/OctoMeter?style=flat) ![Gradle Build](https://github.com/ryanw-mobile/OctoMeter/actions/workflows/main_build.yml/badge.svg) [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage) [![Codacy Grade Badge](https://app.codacy.com/project/badge/Grade/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 
-### Production-grade Kotlin Multiplatform App targeting Desktop, Android, iOS
+### Production-grade Kotlin Multiplatform App targeting Desktop, Android, iOS<BR />🇬🇧 Made in the UK, For the UK.
+> 📝 Complementary article: [Releasing my First True Kotlin Multiplatform App](https://medium.com/@callmeryan/releasing-my-first-true-kotlin-multiplatform-app-60d81e739eb0)<br/>⭐️ If you like this app, consider to star this repository.
 
 <br />
 <p align="center"><img src="app_banner_240518.webp" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 <br />
-
-### Made in the UK, For the UK.
-
-> Complementary article: [Releasing my First True Kotlin Multiplatform App](https://medium.com/@callmeryan/releasing-my-first-true-kotlin-multiplatform-app-60d81e739eb0)
 
 <p align="center"><img src="screenshots/240531_all_platforms_preview.webp" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 
 ### It works for me
 
 This is a dashboard-type app that runs on desktop (desktop-first), Android, and iOS. It implements
-an adaptive layout that works on mobile, tablet, and dynamic desktop window sizes. The app honours
+an adaptive layout that works on different window sizes. The app honours
 light and dark modes on all available platforms.
 
 The main purposes of this app are:
 
-* Compile smart meter electricity usage; estimate and project electricity usage and cost.
 * Track the Agile Octopus tariff unit rates for the coming 24 hours, with countdown and automatic
   refresh.
+* Compile smart meter electricity usage; estimate and project electricity usage and cost.
 * Browse available Octopus Energy tariffs.
+
+<br />
+<p align="center"><img src="https://github.com/ryanw-mobile/OctoMeter/blob/main/screenshots/240603_agile_animation.gif" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
+<br />
 
 This is a fully functional app that I developed for myself. **I use it every day** and my energy
 expenses have reduced by more than 50%. For this reason, the app was intentionally built to reach
@@ -37,14 +38,6 @@ production-level quality as much as possible.
 >  sample data to cover all use cases.
 > * For non-Octopus Energy customers, or non-UK residents, the demo mode will display random meter
 >  readings and default tariff rates to illustrate the app’s functionality.
-
-<br />
-<p align="center"><img src="https://github.com/ryanw-mobile/OctoMeter/blob/main/screenshots/240603_agile_animation.gif" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
-<br />
-
-If you like this app, consider giving me a
-star, [following me on Medium](https://medium.com/@callmeryan),
-or [on LinkedIn](https://www.linkedin.com/in/ryanwmobile/).
 
 <br /><br />
 
@@ -80,11 +73,6 @@ the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
 ## To-do lists
 
 Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/OctoMeter/issues).
-
-> [!NOTE]
-> I am actively seeking my next full-time Senior Android Developer role. Due to budget constraints, 
-> major feature development may be delayed. If you know of any suitable opportunities in the UK, 
-> I would greatly appreciate your referral.
 
 ### RestAPI and GraphQL
 
