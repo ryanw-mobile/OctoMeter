@@ -16,7 +16,7 @@
 package com.rwmobi.kunigami.ui.model.consumption
 
 import androidx.compose.runtime.Immutable
-import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
+import com.rwmobi.kunigami.domain.extensions.roundConsumptionToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 
 @Immutable
@@ -43,7 +43,7 @@ data class ConsumptionGroupedCells(
 fun List<ConsumptionGroupedCells>.getAggregateConsumption(rounded: Boolean): Double {
     return sumOf { it.getAggregateConsumption() }.run {
         if (rounded) {
-            roundToNearestEvenHundredth()
+            roundConsumptionToNearestEvenHundredth()
         } else {
             this
         }
