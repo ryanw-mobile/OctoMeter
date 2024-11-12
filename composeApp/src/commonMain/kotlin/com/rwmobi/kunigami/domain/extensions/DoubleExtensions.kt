@@ -24,7 +24,7 @@ import kotlin.math.roundToLong
  * The rounding method used is rounding half to even, where numbers ending in 5 are rounded up or down, towards the nearest even hundredth decimal place.
  * As a result, 0.015 would be rounded up to 0.02, while 0.025 is rounded down to 0.02.
  */
-fun Double.roundToNearestEvenHundredth(): Double {
+fun Double.roundConsumptionToNearestEvenHundredth(): Double {
     val scaled = this * 100
     val rounded = if (scaled % 1.0 == 0.5) {
         if (scaled.toLong() % 2 == 0L) {

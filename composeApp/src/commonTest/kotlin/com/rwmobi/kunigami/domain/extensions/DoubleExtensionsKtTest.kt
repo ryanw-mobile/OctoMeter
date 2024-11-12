@@ -13,7 +13,7 @@
  * Please refer to the LICENSE file for the full terms and conditions.
  */
 
-import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
+import com.rwmobi.kunigami.domain.extensions.roundConsumptionToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -25,7 +25,7 @@ class DoubleExtensionsKtTest {
     fun `roundToNearestEvenHundredth should round 0_015 to 0_02`() {
         val input = 0.015
         val expected = 0.02
-        val result = input.roundToNearestEvenHundredth()
+        val result = input.roundConsumptionToNearestEvenHundredth()
         assertEquals(expected, result)
     }
 
@@ -33,7 +33,7 @@ class DoubleExtensionsKtTest {
     fun `roundToNearestEvenHundredth should round 0_025 to 0_02`() {
         val input = 0.025
         val expected = 0.02
-        val result = input.roundToNearestEvenHundredth()
+        val result = input.roundConsumptionToNearestEvenHundredth()
         assertEquals(expected, result)
     }
 
@@ -41,7 +41,7 @@ class DoubleExtensionsKtTest {
     fun `roundToNearestEvenHundredth should round 0_045 to 0_04`() {
         val input = 0.045
         val expected = 0.04
-        val result = input.roundToNearestEvenHundredth()
+        val result = input.roundConsumptionToNearestEvenHundredth()
         assertEquals(expected, result)
     }
 
@@ -49,7 +49,7 @@ class DoubleExtensionsKtTest {
     fun `roundToNearestEvenHundredth should round 0_055 to 0_06`() {
         val input = 0.055
         val expected = 0.06
-        val result = input.roundToNearestEvenHundredth()
+        val result = input.roundConsumptionToNearestEvenHundredth()
         assertEquals(expected, result)
     }
 

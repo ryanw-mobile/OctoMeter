@@ -15,7 +15,7 @@
 
 package com.rwmobi.kunigami.domain.usecase.consumption
 
-import com.rwmobi.kunigami.domain.extensions.roundToNearestEvenHundredth
+import com.rwmobi.kunigami.domain.extensions.roundConsumptionToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.model.consumption.getConsumptionDaySpan
@@ -50,14 +50,14 @@ class GenerateUsageInsightsUseCase {
             val costAnnualProjection = (tariff.vatInclusiveStandingCharge * 365 + consumptionAnnualProjection * consumptionCharge / consumptionAggregateRounded) / 100.0
 
             Insights(
-                consumptionAggregateRounded = consumptionAggregateRounded.roundToNearestEvenHundredth(),
+                consumptionAggregateRounded = consumptionAggregateRounded.roundConsumptionToNearestEvenHundredth(),
                 consumptionTimeSpan = consumptionTimeSpan,
                 consumptionChargeRatio = consumptionChargeRatio.roundToTwoDecimalPlaces(),
                 costWithCharges = costWithCharges.roundToTwoDecimalPlaces(),
                 isTrueCost = isTrueCost,
-                consumptionDailyAverage = consumptionDailyAverage.roundToNearestEvenHundredth(),
+                consumptionDailyAverage = consumptionDailyAverage.roundConsumptionToNearestEvenHundredth(),
                 costDailyAverage = costDailyAverage.roundToTwoDecimalPlaces(),
-                consumptionAnnualProjection = consumptionAnnualProjection.roundToNearestEvenHundredth(),
+                consumptionAnnualProjection = consumptionAnnualProjection.roundConsumptionToNearestEvenHundredth(),
                 costAnnualProjection = costAnnualProjection.roundToTwoDecimalPlaces(),
             )
         }
