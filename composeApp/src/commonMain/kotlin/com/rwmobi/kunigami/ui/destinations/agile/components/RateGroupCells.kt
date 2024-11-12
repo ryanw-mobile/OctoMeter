@@ -37,8 +37,10 @@ internal fun RateGroupCells(
     shouldHideLastColumn: Boolean,
     rateRange: ClosedFloatingPointRange<Double>,
     minimumVatInclusivePrice: Double,
+    blinkingAlpha: Float = 1f,
 ) {
     val dimension = getScreenSizeInfo().getDimension()
+
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_3),
@@ -64,7 +66,7 @@ internal fun RateGroupCells(
                     ),
                     label = item.validity.start.getLocalHHMMString(),
                     value = roundedVatInclusivePriceString,
-                    shouldBlinkValue = shouldBlinkValue,
+                    blinkingAlpha = if (shouldBlinkValue) blinkingAlpha else 1f,
                 )
             } else {
                 Spacer(modifier = Modifier.weight(1f))

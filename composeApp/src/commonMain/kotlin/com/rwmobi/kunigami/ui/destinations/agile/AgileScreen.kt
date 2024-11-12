@@ -15,6 +15,7 @@
 
 package com.rwmobi.kunigami.ui.destinations.agile
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,7 +34,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.SolidColor
@@ -146,6 +150,16 @@ fun AgileScreen(
                         enabled = uiState.rateGroupedCells.isNotEmpty(),
                         lazyListState = lazyListState,
                     ) { contentModifier ->
+                        // All eligible rate group cell is sharing the same blinking alpha properties
+                        var isBlinkingTextVisible by remember { mutableStateOf(true) }
+                        val blinkingAlpha by animateFloatAsState(if (isBlinkingTextVisible) 1f else 0f)
+                        LaunchedEffect(Unit) {
+                            while (true) {
+                                isBlinkingTextVisible = !isBlinkingTextVisible
+                                delay(if (isBlinkingTextVisible) 1000 else 500)
+                            }
+                        }
+
                         LazyColumn(
                             modifier = contentModifier.conditionalBlur(enabled = uiState.isLoading && uiState.barChartData == null),
                             contentPadding = PaddingValues(bottom = dimension.grid_4),
@@ -230,6 +244,7 @@ fun AgileScreen(
                                         rateRange = uiState.rateRange,
                                         minimumVatInclusivePrice = uiState.minimumVatInclusivePrice,
                                         rowIndex = rowIndex,
+                                        blinkingAlpha = blinkingAlpha,
                                     )
                                 }
                             }

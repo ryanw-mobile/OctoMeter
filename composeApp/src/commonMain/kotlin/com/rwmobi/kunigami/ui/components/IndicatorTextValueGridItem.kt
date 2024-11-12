@@ -15,7 +15,6 @@
 
 package com.rwmobi.kunigami.ui.components
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,11 +29,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -47,7 +41,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
-import kotlinx.coroutines.delay
 
 @Composable
 fun IndicatorTextValueGridItem(
@@ -55,22 +48,9 @@ fun IndicatorTextValueGridItem(
     indicatorColor: Color,
     label: String,
     value: String,
-    shouldBlinkValue: Boolean = false,
+    blinkingAlpha: Float = 1f,
 ) {
     val dimension = getScreenSizeInfo().getDimension()
-    var isBlinkingTextVisible by remember { mutableStateOf(true) }
-    val blinkingAlpha by animateFloatAsState(if (isBlinkingTextVisible) 1f else 0f)
-    LaunchedEffect(shouldBlinkValue) {
-        if (shouldBlinkValue) {
-            while (true) {
-                isBlinkingTextVisible = !isBlinkingTextVisible
-                delay(if (isBlinkingTextVisible) 1000 else 500)
-            }
-        } else {
-            // Clean up
-            isBlinkingTextVisible = true
-        }
-    }
 
     Row(
         modifier = modifier.fillMaxWidth()
@@ -138,6 +118,7 @@ private fun Preview() {
             indicatorColor = Color.Red,
             label = "03:30",
             value = "0.05",
+            blinkingAlpha = 1f,
         )
     }
 }
