@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
-import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
 import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
@@ -53,7 +52,7 @@ internal fun RateGroupCells(
         for (columnIndex in columnRangeToRender) {
             val item = partitionedItems.getOrNull(columnIndex)?.getOrNull(rowIndex)
             if (item != null) {
-                val value = item.vatInclusivePrice.roundToTwoDecimalPlaces().toString(precision = 2)
+                val roundedVatInclusivePriceString = item.vatInclusivePrice.toString(precision = 2)
                 val shouldBlinkValue = item.vatInclusivePrice == minimumVatInclusivePrice
 
                 IndicatorTextValueGridItem(
@@ -64,7 +63,7 @@ internal fun RateGroupCells(
                         shouldUseDarkTheme = shouldUseDarkTheme(),
                     ),
                     label = item.validity.start.getLocalHHMMString(),
-                    value = value,
+                    value = roundedVatInclusivePriceString,
                     shouldBlinkValue = shouldBlinkValue,
                 )
             } else {
