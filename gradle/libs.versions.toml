@@ -1,6 +1,6 @@
 [versions]
 agp = "8.7.2"
-compose-bom = "2024.10.01"
+compose-bom = "2024.11.00"
 androidx-activityCompose = "1.9.3"
 compose-plugin = "1.7.1"
 composeUiTooling = "1.7.5"
