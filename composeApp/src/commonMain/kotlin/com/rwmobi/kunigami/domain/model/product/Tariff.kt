@@ -88,7 +88,28 @@ data class Tariff(
         }
     }
 
-    // TODO: WIP - We do not support dual rates and don't know how it works for now
+    fun containsValidUnitRate(): Boolean {
+        return when (getElectricityTariffType()) {
+            ElectricityTariffType.STANDARD -> {
+                vatInclusiveStandardUnitRate != null || isVariable
+            }
+
+            ElectricityTariffType.DAY_NIGHT -> {
+                vatInclusiveDayUnitRate != null &&
+                    vatInclusiveNightUnitRate != null
+            }
+
+            ElectricityTariffType.THREE_RATE -> {
+                vatInclusiveDayUnitRate != null &&
+                    vatInclusiveNightUnitRate != null &&
+                    vatInclusiveOffPeakRate != null
+            }
+
+            else -> false
+        }
+    }
+
+    // TODO: This function will be removed once we have migrated to get billing data from GraphQL
     fun resolveUnitRate(referencePoint: Instant? = null): Double? {
         return when (getElectricityTariffType()) {
             ElectricityTariffType.STANDARD -> {

@@ -35,11 +35,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
+import com.rwmobi.kunigami.domain.model.product.ElectricityTariffType
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
 import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
+import kunigami.composeapp.generated.resources.day_unit_rate
+import kunigami.composeapp.generated.resources.night_unit_rate
+import kunigami.composeapp.generated.resources.off_peak_rate
 import kunigami.composeapp.generated.resources.standard_unit_rate
 import kunigami.composeapp.generated.resources.standing_charge
 import kunigami.composeapp.generated.resources.tariffs_variable
@@ -90,38 +95,11 @@ internal fun TariffSummaryTile(
             )
         }
 
-        val resolvedUnitRate = tariff.resolveUnitRate()
-        val rateString = when {
-            tariff.isVariable -> stringResource(resource = Res.string.tariffs_variable)
-            resolvedUnitRate != null -> stringResource(resource = Res.string.unit_p_kwh, resolvedUnitRate)
-            else -> null
-        }
-
-        if (rateString != null) {
-            HorizontalDivider(
-                modifier = Modifier
-                    .padding(vertical = dimension.grid_1)
-                    .alpha(0.5f),
+        val shouldShowUnitRate = tariff.containsValidUnitRate()
+        if (shouldShowUnitRate) {
+            UnitRateLayout(
+                tariff = tariff,
             )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
-            ) {
-                Text(
-                    modifier = Modifier.weight(weight = 1f),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    text = stringResource(resource = Res.string.standard_unit_rate),
-                )
-                Text(
-                    modifier = Modifier.wrapContentWidth(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    text = rateString,
-                )
-            }
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -132,6 +110,115 @@ internal fun TariffSummaryTile(
             fontWeight = FontWeight.Normal,
             text = stringResource(resource = Res.string.usage_applied_tariff),
         )
+    }
+}
+
+@Composable
+private fun UnitRateLayout(
+    modifier: Modifier = Modifier,
+    tariff: Tariff,
+) {
+    val dimension = getScreenSizeInfo().getDimension()
+    HorizontalDivider(
+        modifier = Modifier
+            .padding(vertical = dimension.grid_1)
+            .alpha(0.5f),
+    )
+
+    when (tariff.getElectricityTariffType()) {
+        ElectricityTariffType.STANDARD -> {
+            val rateString = when {
+                tariff.isVariable -> stringResource(resource = Res.string.tariffs_variable)
+                tariff.vatInclusiveStandardUnitRate != null -> stringResource(resource = Res.string.unit_p_kwh, tariff.vatInclusiveStandardUnitRate)
+                else -> null
+            }
+
+            rateString?.let {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
+                ) {
+                    Text(
+                        modifier = Modifier.weight(weight = 1f),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = stringResource(resource = Res.string.standard_unit_rate),
+                    )
+                    Text(
+                        modifier = Modifier.wrapContentWidth(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = rateString,
+                    )
+                }
+            }
+        }
+
+        else -> {
+            tariff.vatInclusiveDayUnitRate?.let { rate ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
+                ) {
+                    Text(
+                        modifier = Modifier.weight(weight = 1f),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = stringResource(resource = Res.string.day_unit_rate),
+                    )
+                    Text(
+                        modifier = Modifier.wrapContentWidth(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = stringResource(resource = Res.string.unit_p_kwh, rate.roundToTwoDecimalPlaces()),
+                    )
+                }
+            }
+
+            tariff.vatInclusiveNightUnitRate?.let { rate ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
+                ) {
+                    Text(
+                        modifier = Modifier.weight(weight = 1f),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = stringResource(resource = Res.string.night_unit_rate),
+                    )
+                    Text(
+                        modifier = Modifier.wrapContentWidth(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = stringResource(resource = Res.string.unit_p_kwh, rate.roundToTwoDecimalPlaces()),
+                    )
+                }
+            }
+
+            tariff.vatInclusiveOffPeakRate?.let { rate ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
+                ) {
+                    Text(
+                        modifier = Modifier.weight(weight = 1f),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = stringResource(resource = Res.string.off_peak_rate),
+                    )
+                    Text(
+                        modifier = Modifier.wrapContentWidth(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        text = stringResource(resource = Res.string.unit_p_kwh, rate.roundToTwoDecimalPlaces()),
+                    )
+                }
+            }
+        }
     }
 }
 
