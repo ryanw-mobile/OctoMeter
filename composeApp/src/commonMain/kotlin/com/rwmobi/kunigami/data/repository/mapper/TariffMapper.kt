@@ -25,7 +25,11 @@ fun SingleEnergyProductQuery.EnergyProduct.toTariff(
     tariffCode: String,
 ): Tariff? {
     val tariffNode = tariffs?.edges
-        ?.firstOrNull { it?.node?.onStandardTariff?.tariffCode == tariffCode }
+        ?.firstOrNull {
+            it?.node?.onStandardTariff?.tariffCode == tariffCode ||
+                it?.node?.onDayNightTariff?.tariffCode == tariffCode ||
+                it?.node?.onThreeRateTariff?.tariffCode == tariffCode
+        }
         ?.node
 
     if (tariffNode == null) {
