@@ -11,6 +11,10 @@ query PropertiesQuery($accountNumber: String!) {
             meters {
                 serialNumber
                 makeAndType
+                smartImportElectricityMeter {
+                    deviceId
+                    __typename
+                }
                 meterPoint {
                     meters {
                         serialNumber
