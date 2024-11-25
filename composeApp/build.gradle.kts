@@ -437,6 +437,7 @@ tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configure
 apollo {
     service("service") {
         packageName.set("$productNameSpace.graphql")
+        mapScalarToKotlinDouble("Decimal")
     }
 }
 
