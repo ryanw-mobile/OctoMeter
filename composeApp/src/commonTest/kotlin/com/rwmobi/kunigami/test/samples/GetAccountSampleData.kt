@@ -192,6 +192,10 @@ object GetAccountSampleData {
               {
                 "serialNumber": "1111111111",
                 "makeAndType": "Sample Make 1",
+                "smartImportElectricityMeter": {
+                  "deviceId": "FF-FF-FF-FF-FF-FF-FF-01",
+                  "__typename": "SmartMeterDeviceType"
+                },
                 "meterPoint": {
                   "meters": [
                     {
@@ -219,6 +223,10 @@ object GetAccountSampleData {
               {
                 "serialNumber": "2222222222",
                 "makeAndType": "Sample Make 2",
+                "smartImportElectricityMeter": {
+                  "deviceId": "FF-FF-FF-FF-FF-FF-FF-02",
+                  "__typename": "SmartMeterDeviceType"
+                },
                 "meterPoint": {
                   "meters": [
                     {
@@ -300,6 +308,7 @@ object GetAccountSampleData {
                 meters = listOf(
                     ElectricityMeter(
                         serialNumber = "1111111111",
+                        deviceId = "FF-FF-FF-FF-FF-FF-FF-01",
                         makeAndType = "Sample Make 1",
                         readingSource = "Smart reading",
                         readAt = Instant.parse("2024-07-21T00:00:00+00:00"),
@@ -307,6 +316,7 @@ object GetAccountSampleData {
                     ),
                     ElectricityMeter(
                         serialNumber = "2222222222",
+                        deviceId = "FF-FF-FF-FF-FF-FF-FF-02",
                         makeAndType = "Sample Make 2",
                         readingSource = "Smart reading",
                         readAt = Instant.parse("2024-07-20T00:00:00+00:00"),

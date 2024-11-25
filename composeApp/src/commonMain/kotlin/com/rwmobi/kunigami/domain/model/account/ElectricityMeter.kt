@@ -21,6 +21,7 @@ import kotlinx.datetime.Instant
 @Immutable
 data class ElectricityMeter(
     val serialNumber: String,
+    val deviceId: String?,
     val makeAndType: String?,
     val readingSource: String?,
     val readAt: Instant?,

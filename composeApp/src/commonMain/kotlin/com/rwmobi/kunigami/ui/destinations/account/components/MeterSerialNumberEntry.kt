@@ -148,6 +148,7 @@ private fun Preview() {
             meter = ElectricityMeter(
                 serialNumber = "11A1234567",
                 makeAndType = "Landis & Gyr E470",
+                deviceId = "FF-FF-FF-FF-FF-FF-FF-FF",
                 readingSource = "Smart reading",
                 readAt = Instant.parse("2024-07-21T00:00:00+00:00"),
                 value = 2480.10,

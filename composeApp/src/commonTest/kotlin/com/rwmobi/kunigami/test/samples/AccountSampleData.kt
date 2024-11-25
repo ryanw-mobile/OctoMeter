@@ -37,6 +37,7 @@ object AccountSampleData {
                 meters = listOf(
                     ElectricityMeter(
                         serialNumber = "11A1234567",
+                        deviceId = "FF-FF-FF-FF-FF-FF-FF-FF",
                         makeAndType = null,
                         readingSource = null,
                         readAt = null,
@@ -76,6 +77,7 @@ object AccountSampleData {
                 meters = listOf(
                     ElectricityMeter(
                         serialNumber = "1111111111",
+                        deviceId = "FF-FF-FF-FF-FF-FF-FF-01",
                         makeAndType = null,
                         readingSource = null,
                         readAt = null,
@@ -83,6 +85,7 @@ object AccountSampleData {
                     ),
                     ElectricityMeter(
                         serialNumber = "2222222222",
+                        deviceId = "FF-FF-FF-FF-FF-FF-FF-02",
                         makeAndType = null,
                         readingSource = null,
                         readAt = null,
