@@ -33,6 +33,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -282,6 +283,13 @@ fun AgileScreen(
         if (uiState.requestScrollToTop) {
             lazyListState.scrollToItem(index = 0)
             uiEvent.onScrolledToTop()
+        }
+    }
+
+    DisposableEffect(Unit) {
+        uiEvent.onStopLiveConsumptionUpdates()
+        onDispose {
+            uiEvent.onStopLiveConsumptionUpdates()
         }
     }
 }

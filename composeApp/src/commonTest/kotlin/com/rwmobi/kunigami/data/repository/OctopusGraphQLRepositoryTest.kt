@@ -15,6 +15,7 @@
 
 package com.rwmobi.kunigami.data.repository
 
+import com.apollographql.adapter.datetime.KotlinxInstantAdapter
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.mockserver.MockResponse
@@ -29,6 +30,7 @@ import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
+import com.rwmobi.kunigami.graphql.type.DateTime
 import com.rwmobi.kunigami.test.samples.GetAccountSampleData
 import com.rwmobi.kunigami.test.samples.GetConsumptionSampleData
 import com.rwmobi.kunigami.test.samples.GetProductsSampleData
@@ -149,7 +151,10 @@ class OctopusGraphQLRepositoryTest {
                 )
             }
         }
-        val apolloClient = ApolloClient.Builder().serverUrl(mockServer.url()).build()
+        val apolloClient = ApolloClient.Builder()
+            .serverUrl(mockServer.url())
+            .addCustomScalarAdapter(DateTime.type, KotlinxInstantAdapter)
+            .build()
         val dispatcher = UnconfinedTestDispatcher()
 
         fakeDataBaseDataSource = FakeDataBaseDataSource()

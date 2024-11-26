@@ -42,6 +42,7 @@ val viewModelModule = module {
             syncUserProfileUseCase = get(),
             getTariffRatesUseCase = get(),
             getStandardUnitRateUseCase = get(),
+            getLiveConsumptionUseCase = get(),
             stringResourceProvider = MultiplatformStringResourceProvider(),
             dispatcher = get(named("DefaultDispatcher")),
         )

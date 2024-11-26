@@ -20,6 +20,8 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class AgileUIEvent(
     val onRefresh: () -> Unit,
+    val onStartLiveConsumptionUpdates: () -> Unit,
+    val onStopLiveConsumptionUpdates: () -> Unit,
     val onErrorShown: (errorId: Long) -> Unit,
     val onScrolledToTop: () -> Unit,
     val onNavigateToAccountTab: () -> Unit,

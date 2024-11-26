@@ -26,6 +26,7 @@ import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.repository.FakeOctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import com.rwmobi.kunigami.domain.usecase.account.SyncUserProfileUseCase
+import com.rwmobi.kunigami.domain.usecase.consumption.GetLiveConsumptionUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetLatestProductByKeywordUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetTariffRatesUseCase
@@ -92,6 +93,11 @@ class AgileViewModelTest {
                 dispatcher = dispatcher,
             ),
             syncUserProfileUseCase = SyncUserProfileUseCase(
+                userPreferencesRepository = userPreferencesRepository,
+                octopusApiRepository = octopusApiRepository,
+                dispatcher = dispatcher,
+            ),
+            getLiveConsumptionUseCase = GetLiveConsumptionUseCase(
                 userPreferencesRepository = userPreferencesRepository,
                 octopusApiRepository = octopusApiRepository,
                 dispatcher = dispatcher,

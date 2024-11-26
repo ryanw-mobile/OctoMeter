@@ -122,6 +122,8 @@ fun AppNavigationHost(
                 uiState = uiState,
                 uiEvent = AgileUIEvent(
                     onRefresh = viewModel::refresh,
+                    onStartLiveConsumptionUpdates = viewModel::startLiveConsumptionUpdates,
+                    onStopLiveConsumptionUpdates = viewModel::stopLiveConsumptionUpdates,
                     onErrorShown = viewModel::errorShown,
                     onScrolledToTop = { onScrolledToTop(AppDestination.AGILE) },
                     onShowSnackbar = onShowSnackbar,

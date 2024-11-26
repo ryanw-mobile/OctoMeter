@@ -27,6 +27,7 @@ import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.usecase.account.SyncUserProfileUseCase
+import com.rwmobi.kunigami.domain.usecase.consumption.GetLiveConsumptionUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetLatestProductByKeywordUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetStandardUnitRateUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetTariffRatesUseCase
@@ -39,25 +40,34 @@ import com.rwmobi.kunigami.ui.model.rate.RateGroup
 import com.rwmobi.kunigami.ui.tools.interfaces.StringResourceProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
+import kotlin.time.Duration.Companion.seconds
 
 class AgileViewModel(
     private val getLatestProductByKeywordUseCase: GetLatestProductByKeywordUseCase,
     private val getTariffRatesUseCase: GetTariffRatesUseCase,
     private val getStandardUnitRateUseCase: GetStandardUnitRateUseCase,
     private val syncUserProfileUseCase: SyncUserProfileUseCase,
+    private val getLiveConsumptionUseCase: GetLiveConsumptionUseCase,
     private val stringResourceProvider: StringResourceProvider,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<AgileUIState> = MutableStateFlow(AgileUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
+
+    private val _meterDeviceId = MutableStateFlow<String?>(null)
+    private var liveConsumptionJob: Job? = null
 
     private val agileTariffKeyword = "AGILE"
     private val variableTariffKeyword = "VAR-"
@@ -81,6 +91,11 @@ class AgileViewModel(
 
         viewModelScope.launch(dispatcher) {
             val currentUserProfile = getUserProfile()
+            _meterDeviceId.value = currentUserProfile?.getSelectedElectricityMeterPoint()
+                ?.meters?.firstOrNull {
+                    it.serialNumber == currentUserProfile.selectedMeterSerialNumber
+                }?.deviceId
+
             if (currentUserProfile != null || _uiState.value.isDemoMode == true) {
                 val currentAgreement = currentUserProfile?.getSelectedElectricityMeterPoint()?.lookupAgreement(referencePoint = Clock.System.now())
                 val region = currentAgreement?.tariffCode?.let { Tariff.getRetailRegion(tariffCode = it) } ?: demoRetailRegion
@@ -95,12 +110,46 @@ class AgileViewModel(
                     productCode = productCode,
                     region = region,
                 )
+
                 getAgileTariffAndStopLoading(
                     productCode = productCode,
                     region = region,
                 )
             }
         }
+    }
+
+    fun startLiveConsumptionUpdates() {
+        liveConsumptionJob?.cancel()
+        liveConsumptionJob = viewModelScope.launch(dispatcher) {
+            _meterDeviceId.collectLatest { meterDeviceId ->
+                if (meterDeviceId != null) {
+                    liveConsumptionFlow(meterDeviceId).collect { result ->
+                        result.fold(
+                            onSuccess = { liveConsumption ->
+                                _uiState.update { currentUiState ->
+                                    currentUiState.copy(liveConsumption = liveConsumption)
+                                }
+                            },
+                            onFailure = {
+                                _uiState.update { currentUiState ->
+                                    currentUiState.copy(liveConsumption = null)
+                                }
+                            },
+                        )
+                    }
+                } else {
+                    _uiState.update { currentUiState ->
+                        currentUiState.copy(liveConsumption = null)
+                    }
+                }
+            }
+        }
+    }
+
+    fun stopLiveConsumptionUpdates() {
+        liveConsumptionJob?.cancel()
+        liveConsumptionJob = null
     }
 
     fun notifyScreenSizeChanged(screenSizeInfo: ScreenSizeInfo, windowSizeClass: WindowSizeClass) {
@@ -112,6 +161,13 @@ class AgileViewModel(
     fun requestScrollToTop(enabled: Boolean) {
         _uiState.update { currentUiState ->
             currentUiState.copy(requestScrollToTop = enabled)
+        }
+    }
+
+    private fun liveConsumptionFlow(meterDeviceId: String) = flow {
+        while (true) {
+            emit(getLiveConsumptionUseCase(meterDeviceId))
+            delay(10.seconds)
         }
     }
 
