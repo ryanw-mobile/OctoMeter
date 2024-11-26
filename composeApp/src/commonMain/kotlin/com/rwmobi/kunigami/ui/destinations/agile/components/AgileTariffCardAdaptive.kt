@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.rwmobi.kunigami.domain.extensions.getNextHalfHourCountdownMillis
+import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
@@ -72,6 +73,7 @@ internal fun AgileTariffCardAdaptive(
     rateRange: ClosedFloatingPointRange<Double>,
     rateGroupedCells: List<RateGroup>,
     requestedAdaptiveLayout: WindowWidthSizeClass,
+    liveConsumption: LiveConsumption? = null,
     latestFixedTariff: Tariff? = null,
     latestFlexibleTariff: Tariff? = null,
 ) {
@@ -125,6 +127,7 @@ internal fun AgileTariffCardAdaptive(
                 latestFlexibleTariff = latestFlexibleTariff,
                 latestFixedTariff = latestFixedTariff,
                 isCurrentRateOverpriced = isCurrentRateOverpriced,
+                liveConsumption = liveConsumption,
             )
         }
 
@@ -139,6 +142,7 @@ internal fun AgileTariffCardAdaptive(
                 latestFlexibleTariff = latestFlexibleTariff,
                 latestFixedTariff = latestFixedTariff,
                 isCurrentRateOverpriced = isCurrentRateOverpriced,
+                liveConsumption = liveConsumption,
             )
         }
     }
@@ -172,6 +176,7 @@ private fun AgileTariffCardCompact(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
     isCurrentRateOverpriced: Boolean,
+    liveConsumption: LiveConsumption? = null,
     vatInclusivePrice: Double? = null,
     countDownText: String? = null,
     rateTrend: RateTrend? = null,
@@ -219,6 +224,15 @@ private fun AgileTariffCardCompact(
                 latestFixedTariff = latestFixedTariff,
             )
         }
+
+        Row {
+            if (liveConsumption != null) {
+                LiveConsumptionTile(
+                    modifier = tileModifier,
+                    liveConsumption = liveConsumption,
+                )
+            }
+        }
     }
 }
 
@@ -251,6 +265,7 @@ private fun AgileTariffCardExpanded(
     modifier: Modifier = Modifier,
     targetPercentage: Float,
     isCurrentRateOverpriced: Boolean,
+    liveConsumption: LiveConsumption? = null,
     vatInclusivePrice: Double? = null,
     countDownText: String? = null,
     rateTrend: RateTrend? = null,
@@ -289,6 +304,13 @@ private fun AgileTariffCardExpanded(
             latestFlexibleTariff = latestFlexibleTariff,
             latestFixedTariff = latestFixedTariff,
         )
+
+        if (liveConsumption != null) {
+            LiveConsumptionTile(
+                modifier = tileModifier,
+                liveConsumption = liveConsumption,
+            )
+        }
     }
 }
 
@@ -316,6 +338,10 @@ private fun PreviewCompact() {
                         ),
                     ),
                 ),
+            ),
+            liveConsumption = LiveConsumption(
+                readAt = Clock.System.now(),
+                demand = 560,
             ),
             latestFlexibleTariff = TariffSamples.agileFlex221125,
             latestFixedTariff = TariffSamples.fix12M240411,
@@ -348,6 +374,10 @@ private fun PreviewExpanded() {
                         ),
                     ),
                 ),
+            ),
+            liveConsumption = LiveConsumption(
+                readAt = Clock.System.now(),
+                demand = 560,
             ),
             requestedAdaptiveLayout = WindowWidthSizeClass.Expanded,
             latestFlexibleTariff = TariffSamples.agileFlex221125,

@@ -21,6 +21,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.model.account.UserProfile
+import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.extensions.generateRandomLong
 import com.rwmobi.kunigami.ui.extensions.getPlatformType
@@ -50,6 +51,7 @@ data class AgileUIState(
     val agileTariff: Tariff? = null,
     val latestFixedTariff: Tariff? = null,
     val latestFlexibleTariff: Tariff? = null,
+    val liveConsumption: LiveConsumption? = null,
     val rateGroupedCells: List<RateGroup> = emptyList(),
     val minimumVatInclusivePrice: Double = 0.0,
     val rateRange: ClosedFloatingPointRange<Double> = 0.0..0.0,

@@ -35,6 +35,7 @@
     <string name="day_unit_rate">Day Unit Rate</string>
     <string name="night_unit_rate">Night Unit Rate</string>
     <string name="off_peak_rate">Off Peak Unit Rate</string>
+    <string name="w">W</string>
     <string name="unit_p_day">%1$d p/day</string>
     <string name="unit_p_kwh">%1$d p/kWh</string>
     <string name="unit_percent">%1$d %</string>
@@ -90,6 +91,7 @@
     <string name="agile_current_rate">Current Rate</string>
     <string name="agile_chart_tooltip_range_p">%1$s\n%2$sp</string>
     <string name="overpriced">Overpriced</string>
+    <string name="agile_live_consumption">Live Consumption</string>
 
     <!-- Tariffs -->
     <string name="tariffs_postcode">Postcode: %1$s</string>

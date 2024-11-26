@@ -168,6 +168,7 @@ kotlin {
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
             implementation(libs.apollo.runtime)
+            implementation(libs.apollo.adapters.kotlinx.datetime)
         }
 
         val desktopMain by getting {
@@ -210,6 +211,7 @@ dependencies {
     "kspCommonMainMetadata"(libs.androidx.room.compiler)
     implementation(libs.androidx.profileinstaller)
     "baselineProfile"(project(":baselineprofile"))
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
 
 android {
@@ -312,6 +314,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+
+        // Kotlinx DateTime backward compatibility
+        isCoreLibraryDesugaringEnabled = true
     }
 
     buildFeatures {
@@ -437,6 +442,8 @@ tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configure
 apollo {
     service("service") {
         packageName.set("$productNameSpace.graphql")
+        mapScalarToKotlinDouble(graphQLName = "Decimal")
+        mapScalar(graphQLName = "DateTime", "kotlinx.datetime.Instant")
     }
 }
 

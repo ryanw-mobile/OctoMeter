@@ -13,17 +13,18 @@
  * Please refer to the LICENSE file for the full terms and conditions.
  */
 
-package com.rwmobi.kunigami.domain.model.account
+package com.rwmobi.kunigami.data.repository.mapper
 
-import androidx.compose.runtime.Immutable
+import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
+import com.rwmobi.kunigami.graphql.SmartMeterTelemetryQuery
 import kotlinx.datetime.Instant
+import kotlin.math.roundToInt
 
-@Immutable
-data class ElectricityMeter(
-    val serialNumber: String,
-    val deviceId: String?,
-    val makeAndType: String?,
-    val readingSource: String?,
-    val readAt: Instant?,
-    val value: Double?,
-)
+fun SmartMeterTelemetryQuery.SmartMeterTelemetry.toLiveConsumption(): LiveConsumption? {
+    if (readAt == null || demand == null) return null
+
+    return LiveConsumption(
+        readAt = Instant.parse(readAt.toString()),
+        demand = demand.roundToInt(),
+    )
+}

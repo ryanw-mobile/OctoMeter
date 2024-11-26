@@ -19,6 +19,7 @@ import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
+import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.Tariff
@@ -143,6 +144,11 @@ class DemoOctopusApiRepository : OctopusApiRepository {
         val u2 = Random.nextDouble()
         val z0 = sqrt(-2.0 * ln(u1)) * cos(2.0 * PI * u2)
         return z0 * standardDeviation + mean
+    }
+
+    override suspend fun getSmartMeterLiveConsumption(meterDeviceId: String, start: Instant, end: Instant): Result<List<LiveConsumption>> {
+        // Demo mode does not come with meter reading simulation
+        throw defaultException
     }
 
     override suspend fun getAccount(accountNumber: String): Result<Account?> {

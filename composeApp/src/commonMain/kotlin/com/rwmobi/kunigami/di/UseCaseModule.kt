@@ -21,6 +21,7 @@ import com.rwmobi.kunigami.domain.usecase.account.InitialiseAccountUseCase
 import com.rwmobi.kunigami.domain.usecase.account.SyncUserProfileUseCase
 import com.rwmobi.kunigami.domain.usecase.account.UpdateMeterPreferenceUseCase
 import com.rwmobi.kunigami.domain.usecase.consumption.GetConsumptionAndCostUseCase
+import com.rwmobi.kunigami.domain.usecase.consumption.GetLiveConsumptionUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetFilteredProductsUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetLatestProductByKeywordUseCase
 import com.rwmobi.kunigami.domain.usecase.product.GetStandardUnitRateUseCase
@@ -106,6 +107,14 @@ val userCaseModule = module {
 
     factory {
         GetDefaultPostcodeUseCase(
+            userPreferencesRepository = get(),
+            octopusApiRepository = get(),
+            dispatcher = get(named("DefaultDispatcher")),
+        )
+    }
+
+    factory {
+        GetLiveConsumptionUseCase(
             userPreferencesRepository = get(),
             octopusApiRepository = get(),
             dispatcher = get(named("DefaultDispatcher")),

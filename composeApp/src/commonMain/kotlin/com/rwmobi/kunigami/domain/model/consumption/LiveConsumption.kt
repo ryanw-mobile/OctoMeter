@@ -13,17 +13,13 @@
  * Please refer to the LICENSE file for the full terms and conditions.
  */
 
-package com.rwmobi.kunigami.domain.model.account
+package com.rwmobi.kunigami.domain.model.consumption
 
 import androidx.compose.runtime.Immutable
 import kotlinx.datetime.Instant
 
 @Immutable
-data class ElectricityMeter(
-    val serialNumber: String,
-    val deviceId: String?,
-    val makeAndType: String?,
-    val readingSource: String?,
-    val readAt: Instant?,
-    val value: Double?,
+data class LiveConsumption(
+    val readAt: Instant,
+    val demand: Int,
 )

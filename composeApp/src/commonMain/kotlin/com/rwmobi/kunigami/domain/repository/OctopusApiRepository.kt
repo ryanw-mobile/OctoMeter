@@ -19,6 +19,7 @@ import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
+import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.Tariff
@@ -73,6 +74,12 @@ interface OctopusApiRepository {
     suspend fun getAccount(
         accountNumber: String,
     ): Result<Account?>
+
+    suspend fun getSmartMeterLiveConsumption(
+        meterDeviceId: String,
+        start: Instant,
+        end: Instant,
+    ): Result<List<LiveConsumption>>
 
     suspend fun clearCache()
 }

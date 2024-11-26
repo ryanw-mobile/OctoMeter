@@ -26,11 +26,14 @@ import com.rwmobi.kunigami.graphql.EnergyProductsQuery
 import com.rwmobi.kunigami.graphql.ObtainKrakenTokenMutation
 import com.rwmobi.kunigami.graphql.PropertiesQuery
 import com.rwmobi.kunigami.graphql.SingleEnergyProductQuery
+import com.rwmobi.kunigami.graphql.SmartMeterTelemetryQuery
 import com.rwmobi.kunigami.graphql.type.ObtainJSONWebTokenInput
+import com.rwmobi.kunigami.graphql.type.TelemetryGrouping
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Instant
 import kotlin.coroutines.cancellation.CancellationException
 
 class ApolloGraphQLEndpoint(
@@ -90,6 +93,24 @@ class ApolloGraphQLEndpoint(
             runQuery(
                 query = PropertiesQuery(
                     accountNumber = accountNumber,
+                ),
+                requireAuthentication = true,
+            )
+        }
+    }
+
+    override suspend fun getSmartMeterTelemetry(
+        meterDeviceId: String,
+        start: Instant,
+        end: Instant,
+    ): SmartMeterTelemetryQuery.Data {
+        return withContext(dispatcher) {
+            runQuery(
+                query = SmartMeterTelemetryQuery(
+                    meterDeviceId = meterDeviceId,
+                    start = Optional.present(start),
+                    end = Optional.present(end),
+                    grouping = Optional.present(TelemetryGrouping.TEN_SECONDS),
                 ),
                 requireAuthentication = true,
             )

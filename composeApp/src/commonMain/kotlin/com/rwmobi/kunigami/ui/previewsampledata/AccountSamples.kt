@@ -69,6 +69,7 @@ internal object AccountSamples {
                 meters = listOf(
                     ElectricityMeter(
                         serialNumber = "99A9999999",
+                        deviceId = "FF-FF-FF-FF-FF-FF-FF-FF",
                         makeAndType = "Sample Meter",
                         readingSource = null,
                         readAt = null,
@@ -96,6 +97,7 @@ internal object AccountSamples {
                 meters = listOf(
                     ElectricityMeter(
                         serialNumber = "11A1234567",
+                        deviceId = "FF-FF-FF-FF-FF-FF-FF-FF",
                         makeAndType = "Landis & Gyr E470",
                         readingSource = "Smart reading",
                         readAt = Clock.System.now().atStartOfDay(),
@@ -103,6 +105,7 @@ internal object AccountSamples {
                     ),
                     ElectricityMeter(
                         serialNumber = "11A12345A7",
+                        deviceId = "FF-FF-FF-FF-FF-FF-FF-FF",
                         makeAndType = "Landis & Gyr E470",
                         readingSource = "Smart reading",
                         readAt = Clock.System.now().atStartOfDay(),
@@ -120,6 +123,7 @@ internal object AccountSamples {
                 meters = listOf(
                     ElectricityMeter(
                         serialNumber = "11A1234560",
+                        deviceId = "FF-FF-FF-FF-FF-FF-FF-FF",
                         makeAndType = "Landis & Gyr E470",
                         readingSource = "Smart reading",
                         readAt = Clock.System.now().atStartOfDay(),

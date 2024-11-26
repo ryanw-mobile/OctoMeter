@@ -70,7 +70,9 @@ fun AppNavigationRail(
                 onClick = {
                     if (!selected) {
                         navController.navigate(item.name) {
-                            popUpTo(route = AppDestination.getStartDestination().name)
+                            popUpTo(route = AppDestination.getStartDestination().name) {
+                                inclusive = true
+                            }
                             launchSingleTop = true
                         }
                     } else {

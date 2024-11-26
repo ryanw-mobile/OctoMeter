@@ -53,11 +53,18 @@ fun PropertiesQuery.ElectricityMeterPoint.toElectricityMeterPoint(): Electricity
 }
 
 fun PropertiesQuery.Meter.toElectricityMeter(): ElectricityMeter {
-    val reading = this.meterPoint.meters?.firstOrNull { it?.serialNumber == serialNumber }?.readings?.edges?.firstOrNull()?.node
+    val reading = this.meterPoint.meters
+        ?.firstOrNull {
+            it?.serialNumber == serialNumber
+        }?.readings
+        ?.edges
+        ?.firstOrNull()
+        ?.node
 
     return ElectricityMeter(
         serialNumber = serialNumber,
         makeAndType = makeAndType,
+        deviceId = smartImportElectricityMeter?.deviceId,
         readingSource = reading?.readingSource,
         readAt = reading?.readAt?.let { Instant.parse(it.toString()) },
         value = reading?.registersFilterNotNull()?.firstOrNull()?.value?.toDoubleOrNull(),

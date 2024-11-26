@@ -72,6 +72,7 @@ class ElectricityMeterPointTest {
         meters = listOf(
             ElectricityMeter(
                 serialNumber = "METER1",
+                deviceId = "FF-FF-FF-FF-FF-FF-FF-01",
                 makeAndType = null,
                 readingSource = null,
                 readAt = null,
@@ -79,6 +80,7 @@ class ElectricityMeterPointTest {
             ),
             ElectricityMeter(
                 serialNumber = "METER2",
+                deviceId = "FF-FF-FF-FF-FF-FF-FF-02",
                 makeAndType = null,
                 readingSource = null,
                 readAt = null,
@@ -92,6 +94,7 @@ class ElectricityMeterPointTest {
         meters = listOf(
             ElectricityMeter(
                 serialNumber = "METER1",
+                deviceId = "FF-FF-FF-FF-FF-FF-FF-01",
                 makeAndType = null,
                 readingSource = null,
                 readAt = null,
