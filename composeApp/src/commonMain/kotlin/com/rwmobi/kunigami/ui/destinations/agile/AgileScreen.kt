@@ -198,6 +198,7 @@ fun AgileScreen(
                                         ),
                                     latestFixedTariff = uiState.latestFixedTariff,
                                     latestFlexibleTariff = uiState.latestFlexibleTariff,
+                                    liveConsumption = uiState.liveConsumption,
                                     rateRange = uiState.rateRange,
                                     rateGroupedCells = uiState.rateGroupedCells,
                                     requestedAdaptiveLayout = uiState.requestedAdaptiveLayout,
@@ -287,7 +288,7 @@ fun AgileScreen(
     }
 
     DisposableEffect(Unit) {
-        uiEvent.onStopLiveConsumptionUpdates()
+        uiEvent.onStartLiveConsumptionUpdates()
         onDispose {
             uiEvent.onStopLiveConsumptionUpdates()
         }
