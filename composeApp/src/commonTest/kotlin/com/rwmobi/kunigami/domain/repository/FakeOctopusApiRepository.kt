@@ -19,6 +19,7 @@ import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
+import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.Tariff
@@ -100,6 +101,11 @@ class FakeOctopusApiRepository : OctopusApiRepository {
         accountNumber: String,
     ): Result<Account?> {
         return setAccountResponse ?: throw RuntimeException("Fake result setAccountResponse not defined")
+    }
+
+    var setSmartMeterLiveConsumptionResponse: Result<List<LiveConsumption>>? = null
+    override suspend fun getSmartMeterLiveConsumption(meterDeviceId: String, start: Instant, end: Instant): Result<List<LiveConsumption>> {
+        return setSmartMeterLiveConsumptionResponse ?: throw RuntimeException("Fake result setSmartMeterLiveConsumptionResponse not defined")
     }
 
     var setClearCacheException: Throwable? = null

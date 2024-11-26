@@ -19,6 +19,7 @@ import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.data.repository.mapper.toAccount
 import com.rwmobi.kunigami.data.repository.mapper.toConsumption
 import com.rwmobi.kunigami.data.repository.mapper.toConsumptionEntity
+import com.rwmobi.kunigami.data.repository.mapper.toLiveConsumption
 import com.rwmobi.kunigami.data.repository.mapper.toProductDetails
 import com.rwmobi.kunigami.data.repository.mapper.toProductSummary
 import com.rwmobi.kunigami.data.repository.mapper.toRate
@@ -37,6 +38,7 @@ import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
+import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.Tariff
@@ -487,6 +489,32 @@ class OctopusGraphQLRepository(
                     ?.also {
                         inMemoryCacheDataSource.cacheProfile(account = it, createdAt = Clock.System.now())
                     }
+            }
+        }.except<CancellationException, _>()
+    }
+
+    /**
+     * Unofficial real-time meter reading through Octopus Mini
+     * Not for billing purpose therefore disposable
+     * The results are not cached
+     */
+    override suspend fun getSmartMeterLiveConsumption(
+        meterDeviceId: String,
+        start: Instant,
+        end: Instant,
+    ): Result<List<LiveConsumption>> {
+        return withContext(dispatcher) {
+            runCatching {
+                val response = graphQLEndpoint.getSmartMeterTelemetry(
+                    meterDeviceId = meterDeviceId,
+                    start = start,
+                    end = end,
+                )
+
+                response.smartMeterTelemetry
+                    ?.filterNotNull()
+                    ?.mapNotNull { it.toLiveConsumption() }
+                    ?: emptyList()
             }
         }.except<CancellationException, _>()
     }
