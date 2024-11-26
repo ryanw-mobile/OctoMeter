@@ -5,6 +5,7 @@ androidx-activityCompose = "1.9.3"
 compose-plugin = "1.7.1"
 composeUiTooling = "1.7.5"
 coreSplashscreen = "1.0.1"
+desugar_jdk_libs = "2.1.3"
 detekt = "1.23.7"
 testCoreKtx = "1.6.1"
 coroutines = "1.9.0"
@@ -40,6 +41,7 @@ sqlite = "2.5.0-alpha11"
 slf4j = "2.0.16"
 apollographql = "4.1.0"
 apollographqlMockServer = "0.1.0"
+apollographqlKotlinxDateTime = "0.0.4"
 testRules = "1.6.1"
 
 # App configurations, not dependencies
@@ -52,6 +54,7 @@ android-compileSdk = "34"
 
 [libraries]
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 kermit-koin = { group = "co.touchlab", name = "kermit-koin", version.ref = "kermit" }
 koalaplot-core = { group = "io.github.koalaplot", name = "koalaplot-core", version.ref = "koalaplotCore" }
@@ -96,6 +99,7 @@ androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchm
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 slf4j = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
 apollo-runtime = { group = "com.apollographql.apollo", name = "apollo-runtime", version.ref = "apollographql" }
+apollo-adapters-kotlinx-datetime = { group = "com.apollographql.adapters", name = "apollo-adapters-kotlinx-datetime", version.ref = "apollographqlKotlinxDateTime" }
 apollo-testing-support = { group = "com.apollographql.apollo", name = "apollo-testing-support", version.ref = "apollographql" }
 apollo-mockserver = { group = "com.apollographql.mockserver", name = "apollo-mockserver", version.ref = "apollographqlMockServer" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
@@ -124,4 +128,4 @@ gradleKtlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
 apollographql = { id = "com.apollographql.apollo", version.ref = "apollographql" }
-detekt = { id="io.gitlab.arturbosch.detekt", version.ref="detekt"}
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
