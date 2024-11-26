@@ -20,6 +20,8 @@ import com.rwmobi.kunigami.data.source.network.graphql.interfaces.GraphQLEndpoin
 import com.rwmobi.kunigami.graphql.EnergyProductsQuery
 import com.rwmobi.kunigami.graphql.PropertiesQuery
 import com.rwmobi.kunigami.graphql.SingleEnergyProductQuery
+import com.rwmobi.kunigami.graphql.SmartMeterTelemetryQuery
+import kotlinx.datetime.Instant
 
 interface GraphQLEndpoint {
     object Constants {
@@ -44,6 +46,12 @@ interface GraphQLEndpoint {
         afterCursor: String? = null,
         pageSize: Int = DEFAULT_PAGE_SIZE,
     ): SingleEnergyProductQuery.Data
+
+    suspend fun getSmartMeterTelemetry(
+        meterDeviceId: String,
+        start: Instant,
+        end: Instant,
+    ): SmartMeterTelemetryQuery.Data
 
     /***
      * The GraphQL Account query can't return everything we need. Underlying we call PropertiesQuery in this implementation.

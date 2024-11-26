@@ -1,0 +1,13 @@
+query SmartMeterTelemetryQuery($meterDeviceId: String!, $start: DateTime, $end: DateTime, $grouping: TelemetryGrouping) {
+    smartMeterTelemetry(
+        deviceId: $meterDeviceId
+        start: $start
+        end: $end
+        grouping: $grouping
+    ) {
+        __typename
+        readAt
+        demand
+        consumption
+    }
+}

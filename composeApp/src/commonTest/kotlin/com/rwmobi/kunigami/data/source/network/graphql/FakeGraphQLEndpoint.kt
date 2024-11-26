@@ -20,7 +20,9 @@ import com.rwmobi.kunigami.data.source.network.graphql.interfaces.GraphQLEndpoin
 import com.rwmobi.kunigami.graphql.EnergyProductsQuery
 import com.rwmobi.kunigami.graphql.PropertiesQuery
 import com.rwmobi.kunigami.graphql.SingleEnergyProductQuery
+import com.rwmobi.kunigami.graphql.SmartMeterTelemetryQuery
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 class FakeGraphQLEndpoint : GraphQLEndpoint {
     override suspend fun getEnergyProducts(postcode: String, afterCursor: String?, pageSize: Int): EnergyProductsQuery.Data {
@@ -55,5 +57,9 @@ class FakeGraphQLEndpoint : GraphQLEndpoint {
                 refreshExpiresIn = Clock.System.now().epochSeconds + 7200,
             ),
         )
+    }
+
+    override suspend fun getSmartMeterTelemetry(meterDeviceId: String, start: Instant, end: Instant): SmartMeterTelemetryQuery.Data {
+        TODO("Not yet implemented")
     }
 }
