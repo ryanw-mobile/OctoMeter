@@ -30,6 +30,13 @@
         "com.google.devtools.ksp"
       ],
       "groupName": "kotlin"
+    },
+    {
+      "matchPackagePatterns": [
+        "org.jetbrains.compose.*"
+      ],
+      "allowedVersions": "1.*.*",
+      "groupName": "compose"
     }
   ],
   "automerge": true,
