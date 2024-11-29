@@ -26,27 +26,24 @@ The main purposes of this app are:
 <p align="center"><img src="https://github.com/ryanw-mobile/OctoMeter/blob/main/screenshots/240603_agile_animation.gif" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 <br />
 
-This is a fully functional app that I developed for myself. **I use it every day** and my energy
-expenses have reduced by more than 50%. For this reason, the app was intentionally built to reach
-production-level quality as much as possible.
+This is a fully functional app that I developed and **tested by myself every day** to see my energy
+expenses reduced by more than 50%. 
+
+At the time of development, this project is an independent third-party product that accesses Octopus 
+Energy’s public APIs, with no official affiliation with Octopus Energy Ltd. I am not an employee 
+of Octopus Energy or any of its related businesses.
 
 > [!NOTE]
-> **Octopus Energy customers:** You are invited to collaborate, if this app is not working correctly
+> This project is **incubating** - an experimental product sponsored by and sublicensed to RW MobiMedia UK
+> * It aims to reach production level, as a general release distributable on Google Play/ App Stores.
+> * However, it is currently not mature yet - while it should technically work for some
+> other Octopus Energy customers, I do not have enough sample data to cover all use cases.
+> 
+> **Octopus Energy customers:** You are invited to collaborate. If this app is not working correctly
 > for your account. [Report an issue](https://github.com/ryanw-mobile/OctoMeter/issues) to start a conversation.
 > 
-> * While it should technically work for some other Octopus Energy customers, I do not have enough
->  sample data to cover all use cases.
 > * For non-Octopus Energy customers, or non-UK residents, the demo mode will display random meter
 >  readings and default tariff rates to illustrate the app’s functionality.
-
-<br /><br />
-
-## Switch to Octopus!
-
-* Learn more about the [Agile Octopus](https://octopus.energy/smart/agile/) smart tariff, or other
-  available Octopus tariffs shown in this App.
-* Switch to Octopus Energy using [this link](https://share.octopus.energy/best-shell-168), both of
-  us will get £50 (or £100 for business).
 
 <br /><br />
 
@@ -79,18 +76,18 @@ Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/Octo
 Octopus Energy and Kraken prefer GraphQL over REST API. Accordingly, the second phase of this
 project has migrated several REST APIs to GraphQL. Unfortunately, not every REST API currently has
 an equivalent GraphQL counterpart; therefore, this app has a mixed use of both for demonstration
-purposes
+purposes. I am working on identifying the GraphQL implentation for the existing RestAPI calls.
 
 | Features                      | Implementation                                      |
 |-------------------------------|-----------------------------------------------------|
 | Account and meters            | 🕸️ GraphQL                                         |
 | Products Search (by postcode) | 🕸️ GraphQL                                         |
 | Tariff details                | 🕸️ GraphQL                                         |
+| Consumptions                  | 😴 RestAPI (Pending migration)                     |
 | Half-hourly tariff rates      | 😴 RestAPI (Needs access to tariffs not subscribed) |
-| Consumptions                  | 😴 RestAPI (Needs server to honour query end date)  |
 
 [Version 1.4.0](https://github.com/ryanw-mobile/OctoMeter/tree/release/v1.4.0) is the last version
-it contains pure Ktor-RestAPI.
+it contains pure Ktor-RestAPI implementation.
 
 <br /><br />
 
