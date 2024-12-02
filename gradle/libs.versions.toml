@@ -1,5 +1,5 @@
 [versions]
-agp = "8.7.2"
+agp = "8.7.3"
 compose-bom = "2024.11.00"
 androidx-activityCompose = "1.9.3"
 compose-plugin = "1.7.1"
