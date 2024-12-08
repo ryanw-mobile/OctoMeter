@@ -52,7 +52,7 @@ import kotlinx.datetime.Clock
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.minutes
 
 class AgileViewModel(
     private val getLatestProductByKeywordUseCase: GetLatestProductByKeywordUseCase,
@@ -167,7 +167,7 @@ class AgileViewModel(
     private fun liveConsumptionFlow(meterDeviceId: String) = flow {
         while (true) {
             emit(getLiveConsumptionUseCase(meterDeviceId))
-            delay(10.seconds)
+            delay(1.minutes)
         }
     }
 

@@ -54,9 +54,9 @@ class GetLiveConsumptionUseCase(
                         end = end,
                     ).fold(
                         onSuccess = { consumption ->
-                            consumption.sortedByDescending {
+                            consumption.maxByOrNull {
                                 it.readAt
-                            }.firstOrNull()
+                            }
                         },
                         onFailure = { throw it },
                     )

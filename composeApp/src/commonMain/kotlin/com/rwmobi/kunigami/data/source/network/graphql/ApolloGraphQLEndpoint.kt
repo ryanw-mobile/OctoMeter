@@ -110,7 +110,7 @@ class ApolloGraphQLEndpoint(
                     meterDeviceId = meterDeviceId,
                     start = Optional.present(start),
                     end = Optional.present(end),
-                    grouping = Optional.present(TelemetryGrouping.TEN_SECONDS),
+                    grouping = Optional.present(TelemetryGrouping.ONE_MINUTE),
                 ),
                 requireAuthentication = true,
             )
