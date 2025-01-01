@@ -28,8 +28,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.product.Tariff
@@ -53,15 +53,20 @@ internal fun ReferenceTariffTile(
         modifier = modifier
             .clip(shape = MaterialTheme.shapes.large)
             .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(dimension.grid_2)
             .drawBehind {
-                val width = dimension.grid_2.toPx()
-                drawCircle(
+                val triangleSize = dimension.grid_1_5.toPx() * 2
+                val path = Path().apply {
+                    moveTo(size.width, 0f)
+                    lineTo(size.width - triangleSize, 0f) // Top edge
+                    lineTo(size.width, triangleSize) // Right edge
+                    close()
+                }
+                drawPath(
+                    path = path,
                     color = indicatorColor,
-                    radius = width / 2f,
-                    center = Offset(x = size.width, y = 0f),
                 )
-            },
+            }
+            .padding(dimension.grid_2),
         verticalArrangement = Arrangement.Top,
     ) {
         tariff.vatInclusiveStandardUnitRate?.let { unitRate ->
