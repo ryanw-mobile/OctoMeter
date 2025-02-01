@@ -367,7 +367,7 @@ compose.desktop {
             packageName = productName
             packageVersion = libs.versions.versionName.get()
             description = "OctoMeter: Empowering Smart Electricity Usage"
-            copyright = "© 2024 RW MobiMedia UK Limited. All rights reserved."
+            copyright = "© 2024-2025 RW MobiMedia UK Limited. All rights reserved."
             vendor = "RW MobiMedia UK Limited"
             licenseFile.set(project.file("../LICENSE"))
             includeAllModules = true
