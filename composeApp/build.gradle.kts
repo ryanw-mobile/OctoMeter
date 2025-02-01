@@ -14,15 +14,15 @@
  */
 
 import com.android.build.api.dsl.ManagedVirtualDevice
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Properties
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -55,7 +55,6 @@ buildConfig {
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
     }
 
@@ -86,7 +85,7 @@ kotlin {
         }
     }
 
-    // https://github.com/JetBrains/compose-multiplatform/issues/3123
+    // https://youtrack.jetbrains.com/issue/CMP-3123
     val osName = System.getProperty("os.name")
     val targetOs = when {
         osName == "Mac OS X" -> "macos"
@@ -274,7 +273,9 @@ android {
         versionCode = libs.versions.versionCode.get().toInt()
         versionName = libs.versions.versionName.get()
 
-        resourceConfigurations += setOf("en")
+        androidResources {
+            localeFilters.add("en")
+        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -460,6 +461,10 @@ powerAssert {
         "kotlin.test.assertNull",
         "kotlin.require",
     )
+}
+
+kover {
+    useJacoco()
 }
 
 // common exclusion filters for all reports of all variants
