@@ -1,9 +1,0 @@
-source 'https://cdn.cocoapods.org/'
-
-use_frameworks!
-
-platform :ios, '15.3'
-
-target 'OctoMeter' do
-    pod 'composeApp', :path => '../composeApp/'
-end
