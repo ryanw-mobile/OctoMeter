@@ -23,18 +23,23 @@ import com.rwmobi.kunigami.data.source.network.dto.auth.Token
 import com.rwmobi.kunigami.data.source.network.graphql.interfaces.GraphQLEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.graphql.EnergyProductsQuery
+import com.rwmobi.kunigami.graphql.GetMeasurementsQuery
 import com.rwmobi.kunigami.graphql.ObtainKrakenTokenMutation
 import com.rwmobi.kunigami.graphql.PropertiesQuery
 import com.rwmobi.kunigami.graphql.SingleEnergyProductQuery
 import com.rwmobi.kunigami.graphql.SmartMeterTelemetryQuery
+import com.rwmobi.kunigami.graphql.type.ElectricityFiltersInput
 import com.rwmobi.kunigami.graphql.type.ObtainJSONWebTokenInput
+import com.rwmobi.kunigami.graphql.type.ReadingDirectionType
+import com.rwmobi.kunigami.graphql.type.ReadingFrequencyType
 import com.rwmobi.kunigami.graphql.type.TelemetryGrouping
+import com.rwmobi.kunigami.graphql.type.UtilityFiltersInput
+import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Instant
-import kotlin.coroutines.cancellation.CancellationException
 
 class ApolloGraphQLEndpoint(
     private val apolloClient: ApolloClient,
@@ -111,6 +116,43 @@ class ApolloGraphQLEndpoint(
                     start = Optional.present(start),
                     end = Optional.present(end),
                     grouping = Optional.present(TelemetryGrouping.ONE_MINUTE),
+                ),
+                requireAuthentication = true,
+            )
+        }
+    }
+
+    override suspend fun getMeasurements(
+        accountNumber: String,
+        deviceId: String,
+        marketSupplyPointId: String,
+        start: Instant,
+        end: Instant,
+        readingFrequencyType: String,
+        pageSize: Int,
+    ): GetMeasurementsQuery.Data {
+        return withContext(dispatcher) {
+            runQuery(
+                query = GetMeasurementsQuery(
+                    accountNumber = accountNumber,
+                    startAt = Optional.present(start),
+                    endAt = Optional.present(end),
+                    first = pageSize,
+                    timezone = Optional.present("Europe/London"),
+                    utilityFilters = Optional.present(
+                        listOf(
+                            UtilityFiltersInput(
+                                electricityFilters = Optional.present(
+                                    ElectricityFiltersInput(
+                                        deviceId = Optional.present(deviceId),
+                                        marketSupplyPointId = Optional.present(marketSupplyPointId),
+                                        readingDirection = Optional.present(ReadingDirectionType.CONSUMPTION),
+                                        readingFrequencyType = Optional.present(ReadingFrequencyType.valueOf(readingFrequencyType)),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
                 ),
                 requireAuthentication = true,
             )
