@@ -33,7 +33,6 @@ plugins {
     alias(libs.plugins.gradleKtlint)
     alias(libs.plugins.serialization)
     alias(libs.plugins.buildConfig)
-    alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.kotlinPowerAssert)
     alias(libs.plugins.ksp)
@@ -69,19 +68,6 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
-        }
-    }
-
-    cocoapods {
-        version = libs.versions.versionName.get()
-        summary = "OctoMeter Kotlin/Native module"
-        homepage = "https://github.com/ryanw-mobile/OctoMeter/"
-        podfile = project.file("../iosApp/Podfile")
-
-        framework {
-            baseName = "composeApp"
-            isStatic = true
-            binaryOption("bundleId", "composeApp.kunigami")
         }
     }
 
