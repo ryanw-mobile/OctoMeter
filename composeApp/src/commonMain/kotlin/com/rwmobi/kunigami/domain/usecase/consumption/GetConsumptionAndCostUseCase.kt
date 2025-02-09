@@ -18,8 +18,8 @@ package com.rwmobi.kunigami.domain.usecase.consumption
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
+import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.model.product.Tariff
@@ -47,6 +47,7 @@ class GetConsumptionAndCostUseCase(
      * it will still return the consumption but with null costs.
      */
     suspend operator fun invoke(
+        userProfile: UserProfile,
         period: ClosedRange<Instant>,
         groupBy: ConsumptionTimeFrame,
     ): Result<List<ConsumptionWithCost>> {
@@ -63,11 +64,16 @@ class GetConsumptionAndCostUseCase(
                     val mpan = userPreferencesRepository.getMpan()
                     val meterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
                     val accountNumber = userPreferencesRepository.getAccountNumber()
+                    val deviceId = userProfile.getSelectedElectricityMeterPoint()
+                        ?.meters?.firstOrNull {
+                            it.serialNumber == userProfile.selectedMeterSerialNumber
+                        }?.deviceId
 
                     requireNotNull(value = apiKey, lazyMessage = { "Assertion failed: API Key is null" })
                     requireNotNull(value = mpan, lazyMessage = { "Assertion failed: MPAN is null" })
                     requireNotNull(value = meterSerialNumber, lazyMessage = { "Assertion failed: Meter Serial Number is null" })
                     requireNotNull(value = accountNumber, lazyMessage = { "Assertion failed: Account is null" })
+                    requireNotNull(value = deviceId, lazyMessage = { "Assertion failed: deviceId is null" })
 
                     var unitRates: List<Rate> = emptyList()
                     if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
@@ -90,11 +96,11 @@ class GetConsumptionAndCostUseCase(
                     }
 
                     octopusApiRepository.getConsumption(
-                        apiKey = apiKey,
-                        mpan = mpan,
+                        accountNumber = accountNumber,
                         meterSerialNumber = meterSerialNumber,
+                        deviceId = deviceId,
+                        mpan = mpan,
                         period = period,
-                        orderBy = ConsumptionDataOrder.PERIOD,
                         groupBy = groupBy,
                     ).fold(
                         onSuccess = { consumption ->
@@ -127,11 +133,11 @@ class GetConsumptionAndCostUseCase(
         } ?: emptyList()
 
         return demoOctopusApiRepository.getConsumption(
-            apiKey = "",
-            mpan = "",
+            accountNumber = "",
             meterSerialNumber = "",
+            deviceId = "",
+            mpan = "",
             period = period,
-            orderBy = ConsumptionDataOrder.PERIOD,
             groupBy = groupBy,
         ).fold(
             onSuccess = { consumption ->
