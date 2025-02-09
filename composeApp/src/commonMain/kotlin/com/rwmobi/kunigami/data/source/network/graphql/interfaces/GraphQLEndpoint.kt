@@ -17,6 +17,7 @@ package com.rwmobi.kunigami.data.source.network.graphql.interfaces
 
 import com.rwmobi.kunigami.data.source.network.dto.auth.Token
 import com.rwmobi.kunigami.data.source.network.graphql.interfaces.GraphQLEndpoint.Constants.DEFAULT_PAGE_SIZE
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.graphql.EnergyProductsQuery
 import com.rwmobi.kunigami.graphql.GetMeasurementsQuery
 import com.rwmobi.kunigami.graphql.PropertiesQuery
@@ -68,8 +69,9 @@ interface GraphQLEndpoint {
         marketSupplyPointId: String,
         start: Instant,
         end: Instant,
-        readingFrequencyType: String,
-        pageSize: Int,
+        readingFrequencyType: ConsumptionTimeFrame,
+        afterCursor: String? = null,
+        pageSize: Int = DEFAULT_PAGE_SIZE,
     ): GetMeasurementsQuery.Data
 
     //region Token Management

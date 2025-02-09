@@ -15,11 +15,12 @@
 
 package com.rwmobi.kunigami.domain.model.consumption
 
-enum class ConsumptionTimeFrame(val apiValue: String?) {
+enum class ConsumptionTimeFrame(val apiValue: String) {
+    // String mapped from GraphQL ReadingFrequencyType
     // This aggregates half hours into days based on the local time, not the UTC time, so there will be one fewer hour included on the daylight savings in the spring.
-    HALF_HOURLY(apiValue = null),
-    DAY(apiValue = "day"),
-    WEEK(apiValue = "week"),
-    MONTH(apiValue = "month"),
-    QUARTER(apiValue = "quarter"),
+    HALF_HOURLY(apiValue = "THIRTY_MIN_INTERVAL"),
+    DAY(apiValue = "DAY_INTERVAL"),
+    WEEK(apiValue = "WEEK_INTERVAL"),
+    MONTH(apiValue = "MONTH_INTERVAL"),
+    QUARTER(apiValue = "QUARTER_INTERVAL"),
 }

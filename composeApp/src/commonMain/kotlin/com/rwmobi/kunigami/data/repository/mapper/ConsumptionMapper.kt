@@ -16,23 +16,35 @@
 package com.rwmobi.kunigami.data.repository.mapper
 
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
-import com.rwmobi.kunigami.data.source.network.dto.consumption.ConsumptionDto
 import com.rwmobi.kunigami.domain.extensions.roundConsumptionToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-
-fun ConsumptionDto.toConsumption() = Consumption(
-    kWhConsumed = consumption.roundConsumptionToNearestEvenHundredth(),
-    interval = intervalStart..intervalEnd,
-)
-
-fun ConsumptionDto.toConsumptionEntity(meterSerial: String) = ConsumptionEntity(
-    meterSerial = meterSerial,
-    intervalStart = intervalStart,
-    intervalEnd = intervalEnd,
-    kWhConsumed = consumption, // keep raw figures - caller do rounding
-)
+import com.rwmobi.kunigami.graphql.GetMeasurementsQuery
 
 fun ConsumptionEntity.toConsumption() = Consumption(
     kWhConsumed = kWhConsumed.roundConsumptionToNearestEvenHundredth(),
     interval = intervalStart..intervalEnd,
 )
+
+fun GetMeasurementsQuery.Node.toConsumption(): Consumption? {
+    return if (onIntervalMeasurementType == null) {
+        null
+    } else {
+        Consumption(
+            kWhConsumed = value,
+            interval = onIntervalMeasurementType.startAt..onIntervalMeasurementType.endAt,
+        )
+    }
+}
+
+fun GetMeasurementsQuery.Node.toConsumptionEntity(meterSerial: String): ConsumptionEntity? {
+    return if (onIntervalMeasurementType == null) {
+        null
+    } else {
+        ConsumptionEntity(
+            meterSerial = meterSerial,
+            intervalStart = onIntervalMeasurementType.startAt,
+            intervalEnd = onIntervalMeasurementType.endAt,
+            kWhConsumed = value,
+        )
+    }
+}

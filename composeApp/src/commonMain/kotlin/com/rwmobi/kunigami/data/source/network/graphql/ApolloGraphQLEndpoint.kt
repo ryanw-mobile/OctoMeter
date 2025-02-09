@@ -22,6 +22,7 @@ import com.apollographql.apollo.exception.ApolloGraphQLException
 import com.rwmobi.kunigami.data.source.network.dto.auth.Token
 import com.rwmobi.kunigami.data.source.network.graphql.interfaces.GraphQLEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.graphql.EnergyProductsQuery
 import com.rwmobi.kunigami.graphql.GetMeasurementsQuery
 import com.rwmobi.kunigami.graphql.ObtainKrakenTokenMutation
@@ -34,12 +35,12 @@ import com.rwmobi.kunigami.graphql.type.ReadingDirectionType
 import com.rwmobi.kunigami.graphql.type.ReadingFrequencyType
 import com.rwmobi.kunigami.graphql.type.TelemetryGrouping
 import com.rwmobi.kunigami.graphql.type.UtilityFiltersInput
-import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Instant
+import kotlin.coroutines.cancellation.CancellationException
 
 class ApolloGraphQLEndpoint(
     private val apolloClient: ApolloClient,
@@ -128,7 +129,8 @@ class ApolloGraphQLEndpoint(
         marketSupplyPointId: String,
         start: Instant,
         end: Instant,
-        readingFrequencyType: String,
+        readingFrequencyType: ConsumptionTimeFrame,
+        afterCursor: String?,
         pageSize: Int,
     ): GetMeasurementsQuery.Data {
         return withContext(dispatcher) {
@@ -139,6 +141,7 @@ class ApolloGraphQLEndpoint(
                     endAt = Optional.present(end),
                     first = pageSize,
                     timezone = Optional.present("Europe/London"),
+                    afterCursor = afterCursor?.let { Optional.present(it) } ?: Optional.absent(),
                     utilityFilters = Optional.present(
                         listOf(
                             UtilityFiltersInput(
@@ -147,7 +150,7 @@ class ApolloGraphQLEndpoint(
                                         deviceId = Optional.present(deviceId),
                                         marketSupplyPointId = Optional.present(marketSupplyPointId),
                                         readingDirection = Optional.present(ReadingDirectionType.CONSUMPTION),
-                                        readingFrequencyType = Optional.present(ReadingFrequencyType.valueOf(readingFrequencyType)),
+                                        readingFrequencyType = Optional.present(ReadingFrequencyType.valueOf(readingFrequencyType.apiValue)),
                                     ),
                                 ),
                             ),

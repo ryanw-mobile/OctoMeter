@@ -36,7 +36,6 @@ import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.extensions.getHalfHourlyTimeSlotCount
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
@@ -393,18 +392,15 @@ class OctopusGraphQLRepository(
     }
 
     /***
-     * This API supports paging. Every page contains at most 100 records.
-     * Supply `requestedPage` to specify a page.
-     * Otherwise, this function will retrieve all possible data the backend can provide.
+     * This API supports paging, and will retrieve all possible data the backend can provide.
      */
     override suspend fun getConsumption(
-        apiKey: String,
-        mpan: String,
+        accountNumber: String,
         meterSerialNumber: String,
+        deviceId: String,
+        mpan: String,
         period: ClosedRange<Instant>,
-        orderBy: ConsumptionDataOrder,
         groupBy: ConsumptionTimeFrame,
-        requestedPage: Int?,
     ): Result<List<Consumption>> {
         return withContext(dispatcher) {
             runCatching {
@@ -416,29 +412,39 @@ class OctopusGraphQLRepository(
                 ) ?: run {
                     Logger.v(tag = "getConsumption", messageString = "DB Cache misses for $period")
                     val combinedList = mutableListOf<Consumption>()
-                    var page: Int? = requestedPage
+                    var afterCursor: String? = null
                     do {
-                        val apiResponse = electricityMeterPointsEndpoint.getConsumption(
-                            apiKey = apiKey,
-                            mpan = mpan,
-                            periodFrom = period.start,
-                            periodTo = period.endInclusive,
-                            meterSerialNumber = meterSerialNumber,
-                            orderBy = orderBy.apiValue,
-                            groupBy = groupBy.apiValue,
-                            page = page,
+                        val response = graphQLEndpoint.getMeasurements(
+                            accountNumber = accountNumber,
+                            deviceId = deviceId,
+                            marketSupplyPointId = mpan,
+                            start = period.start,
+                            end = period.endInclusive,
+                            readingFrequencyType = groupBy,
+                            afterCursor = afterCursor,
                         )
-                        combinedList.addAll(apiResponse?.results?.map { it.toConsumption() } ?: emptyList())
+
+                        combinedList.addAll(
+                            response.account?.properties?.firstOrNull()?.measurements?.edges?.mapNotNull {
+                                it?.node?.toConsumption()
+                            } ?: emptyList(),
+                        )
 
                         // cache the results - only for half-hourly
                         if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
-                            apiResponse?.results?.map { it.toConsumptionEntity(meterSerial = meterSerialNumber) }?.let {
+                            response.account?.properties?.firstOrNull()?.measurements?.edges?.mapNotNull {
+                                it?.node?.toConsumptionEntity(meterSerial = meterSerialNumber)
+                            }?.let {
                                 databaseDataSource.insertConsumptions(consumptionEntity = it)
                             }
                         }
 
-                        page = apiResponse?.getNextPageNumber()
-                    } while (page != null)
+                        afterCursor = if (response.account?.properties?.firstOrNull()?.measurements?.pageInfo?.hasNextPage == true) {
+                            response.account.properties.firstOrNull()?.measurements?.pageInfo?.endCursor
+                        } else {
+                            null
+                        }
+                    } while (afterCursor != null)
 
                     combinedList
                 }

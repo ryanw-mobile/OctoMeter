@@ -17,7 +17,6 @@ package com.rwmobi.kunigami.data.repository
 
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
@@ -97,13 +96,12 @@ class DemoOctopusApiRepository : OctopusApiRepository {
      * Since this piece of code has no practical value, we take it as iss - until it breaks.
      */
     override suspend fun getConsumption(
-        apiKey: String,
-        mpan: String,
+        accountNumber: String,
         meterSerialNumber: String,
+        deviceId: String,
+        mpan: String,
         period: ClosedRange<Instant>,
-        orderBy: ConsumptionDataOrder,
         groupBy: ConsumptionTimeFrame,
-        requestedPage: Int?,
     ): Result<List<Consumption>> {
         val consumptionList = mutableListOf<Consumption>()
         var intervalStart = period.start

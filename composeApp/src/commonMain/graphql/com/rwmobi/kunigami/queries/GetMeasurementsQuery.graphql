@@ -1,16 +1,14 @@
-query GetMeasurementsQuery($accountNumber: String!, $first: Int!, $utilityFilters: [UtilityFiltersInput!], $startOn: Date, $endOn: Date, $startAt: DateTime, $endAt: DateTime, $timezone: String, $cursor: String) {
+query GetMeasurementsQuery($accountNumber: String!, $first: Int!, $utilityFilters: [UtilityFiltersInput!], $startAt: DateTime, $endAt: DateTime, $timezone: String, $afterCursor: String) {
     account(accountNumber: $accountNumber) {
         properties {
             id
             measurements(
                 first: $first
                 utilityFilters: $utilityFilters
-                startOn: $startOn
-                endOn: $endOn
                 startAt: $startAt
                 endAt: $endAt
                 timezone: $timezone
-                after: $cursor
+                after: $afterCursor
             ) {
                 edges {
                     node {
@@ -28,9 +26,6 @@ query GetMeasurementsQuery($accountNumber: String!, $first: Int!, $utilityFilter
                                     estimatedAmount
                                     __typename
                                 }
-                                value
-                                description
-                                label
                                 type
                                 __typename
                             }
@@ -42,8 +37,6 @@ query GetMeasurementsQuery($accountNumber: String!, $first: Int!, $utilityFilter
                 }
                 pageInfo {
                     hasNextPage
-                    hasPreviousPage
-                    startCursor
                     endCursor
                     __typename
                 }
