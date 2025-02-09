@@ -25,10 +25,8 @@ import com.rwmobi.kunigami.data.source.local.cache.InMemoryCacheDataSource
 import com.rwmobi.kunigami.data.source.local.database.FakeDataBaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
 import com.rwmobi.kunigami.data.source.network.graphql.ApolloGraphQLEndpoint
-import com.rwmobi.kunigami.data.source.network.restapi.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.HttpException
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.graphql.type.DateTime
 import com.rwmobi.kunigami.test.samples.GetAccountSampleData
@@ -76,9 +74,9 @@ class OctopusGraphQLRepositoryTest {
 
     private val samplePostcode = "WC1X 0ND"
     private val fakeBaseUrl = "https://some.fakeurl.com"
-    private val fakeApiKey = "sk_live_xXxX1xx1xx1xx1XXxX1Xxx1x"
     private val fakeAccountNumber = "B-1234A1A1"
     private val fakeMpan = "9900000999999"
+    private val fakeDeviceId = "00-00-00-00-00-00-00-00"
     private val fakeMeterSerialNumber = "99A9999999"
     private val sampleProductCode = "AGILE-FLEX-22-11-25"
     private val sampleTariffCode = "E-1R-AGILE-FLEX-22-11-25-C"
@@ -160,11 +158,6 @@ class OctopusGraphQLRepositoryTest {
         fakeDataBaseDataSource = FakeDataBaseDataSource()
         octopusGraphQLRepository = OctopusGraphQLRepository(
             productsEndpoint = ProductsEndpoint(
-                baseUrl = fakeBaseUrl,
-                httpClient = client,
-                dispatcher = dispatcher,
-            ),
-            electricityMeterPointsEndpoint = ElectricityMeterPointsEndpoint(
                 baseUrl = fakeBaseUrl,
                 httpClient = client,
                 dispatcher = dispatcher,
@@ -679,12 +672,12 @@ class OctopusGraphQLRepositoryTest {
         )
 
         val result = octopusGraphQLRepository.getConsumption(
-            apiKey = fakeApiKey,
             mpan = fakeMpan,
             meterSerialNumber = fakeMeterSerialNumber,
             period = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:59:59Z"),
-            orderBy = ConsumptionDataOrder.PERIOD,
             groupBy = ConsumptionTimeFrame.HALF_HOURLY,
+            accountNumber = fakeAccountNumber,
+            deviceId = fakeDeviceId,
         )
 
         assertTrue(result.isSuccess)
@@ -692,15 +685,10 @@ class OctopusGraphQLRepositoryTest {
     }
 
     @Test
-    fun `getConsumption should get data from remote data source when ConsumptionTimeFrame is HALF_HOURLY local database contains incomplete data set`() = runTest {
+    fun `getConsumption should get data from remote data source when ConsumptionTimeFrame is HALF_HOURLY and local database contains incomplete data set`() = runTest {
+        mockServer.enqueueString(GetConsumptionSampleData.getMeasurementsQueryResponse)
         setUpRepository(
-            engine = MockEngine { _ ->
-                respond(
-                    content = ByteReadChannel(GetConsumptionSampleData.json),
-                    status = HttpStatusCode.OK,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
-                )
-            },
+            engine = mockEngineInternalServerError,
         )
         fakeDataBaseDataSource.getConsumptionsResponse = listOf(
             ConsumptionEntity(
@@ -712,12 +700,12 @@ class OctopusGraphQLRepositoryTest {
         )
 
         val result = octopusGraphQLRepository.getConsumption(
-            apiKey = fakeApiKey,
             mpan = fakeMpan,
             meterSerialNumber = fakeMeterSerialNumber,
             period = Instant.parse("2024-05-06T21:30:00Z")..Instant.parse("2024-05-06T23:59:59Z"),
-            orderBy = ConsumptionDataOrder.PERIOD,
             groupBy = ConsumptionTimeFrame.HALF_HOURLY,
+            accountNumber = fakeAccountNumber,
+            deviceId = fakeDeviceId,
         )
 
         assertTrue(result.isSuccess)
@@ -727,23 +715,17 @@ class OctopusGraphQLRepositoryTest {
     @Test
     fun `getConsumption should return failure when ConsumptionTimeFrame is HALF_HOURLY and local database returns an error`() = runTest {
         setUpRepository(
-            engine = MockEngine { _ ->
-                respond(
-                    content = ByteReadChannel(GetConsumptionSampleData.json),
-                    status = HttpStatusCode.OK,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
-                )
-            },
+            engine = mockEngineInternalServerError,
         )
         fakeDataBaseDataSource.exception = RuntimeException()
 
         val result = octopusGraphQLRepository.getConsumption(
-            apiKey = fakeApiKey,
             mpan = fakeMpan,
             meterSerialNumber = fakeMeterSerialNumber,
             period = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:59:59Z"),
-            orderBy = ConsumptionDataOrder.PERIOD,
             groupBy = ConsumptionTimeFrame.HALF_HOURLY,
+            accountNumber = fakeAccountNumber,
+            deviceId = fakeDeviceId,
         )
 
         assertTrue(result.isFailure)
@@ -753,24 +735,19 @@ class OctopusGraphQLRepositoryTest {
     @Test
     fun `getConsumption should get data from remote data source without checking the cache when ConsumptionTimeFrame is not HALF_HOURLY`() = runTest {
         setUpRepository(
-            engine = MockEngine { _ ->
-                respond(
-                    content = ByteReadChannel(GetConsumptionSampleData.json),
-                    status = HttpStatusCode.OK,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json"),
-                )
-            },
+            engine = mockEngineInternalServerError,
         )
         fakeDataBaseDataSource.exception = RuntimeException()
 
         listOf(ConsumptionTimeFrame.DAY, ConsumptionTimeFrame.WEEK, ConsumptionTimeFrame.MONTH, ConsumptionTimeFrame.QUARTER).forEach { timeFrame ->
+            mockServer.enqueueString(GetConsumptionSampleData.getMeasurementsQueryResponse)
             val result = octopusGraphQLRepository.getConsumption(
-                apiKey = fakeApiKey,
                 mpan = fakeMpan,
                 meterSerialNumber = fakeMeterSerialNumber,
                 period = Instant.parse("2024-05-06T21:30:00Z")..Instant.parse("2024-05-06T23:59:59Z"),
-                orderBy = ConsumptionDataOrder.PERIOD,
                 groupBy = timeFrame,
+                accountNumber = fakeAccountNumber,
+                deviceId = fakeDeviceId,
             )
 
             assertTrue(result.isSuccess)
@@ -780,22 +757,23 @@ class OctopusGraphQLRepositoryTest {
 
     @Test
     fun `getConsumption should return failure when remote data source throws an exception`() = runTest {
+        mockServer.enqueue(mockResponse = mockResponseInternalServerError)
         setUpRepository(
             engine = mockEngineInternalServerError,
         )
 
         fakeDataBaseDataSource.getConsumptionsResponse = emptyList()
         val result = octopusGraphQLRepository.getConsumption(
-            apiKey = fakeApiKey,
             mpan = fakeMpan,
             meterSerialNumber = fakeMeterSerialNumber,
             period = now..now.plus(Duration.parse("1d")),
-            orderBy = ConsumptionDataOrder.PERIOD,
             groupBy = ConsumptionTimeFrame.HALF_HOURLY,
+            accountNumber = fakeAccountNumber,
+            deviceId = fakeDeviceId,
         )
 
         assertTrue(result.isFailure)
-        assertTrue(result.exceptionOrNull() is HttpException)
+        assertTrue(result.exceptionOrNull() is ApolloHttpException)
     }
 
     // 🗂 getAccount

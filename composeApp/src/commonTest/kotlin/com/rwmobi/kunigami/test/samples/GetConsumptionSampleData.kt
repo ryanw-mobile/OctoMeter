@@ -90,7 +90,7 @@ object GetConsumptionSampleData {
 
     val consumption = listOf(
         Consumption(
-            kWhConsumed = 0.11,
+            kWhConsumed = 0.113,
             interval = Instant.parse("2024-05-06T23:30:00Z")..Instant.parse("2024-05-07T00:00:00Z"),
         ),
         Consumption(
@@ -98,16 +98,206 @@ object GetConsumptionSampleData {
             interval = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:30:00Z"),
         ),
         Consumption(
-            kWhConsumed = 0.2,
+            kWhConsumed = 0.201,
             interval = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:00:00Z"),
         ),
         Consumption(
-            kWhConsumed = 0.45,
+            kWhConsumed = 0.451,
             interval = Instant.parse("2024-05-06T22:00:00Z")..Instant.parse("2024-05-06T22:30:00Z"),
         ),
         Consumption(
-            kWhConsumed = 0.51,
+            kWhConsumed = 0.512,
             interval = Instant.parse("2024-05-06T21:30:00Z")..Instant.parse("2024-05-06T22:00:00Z"),
         ),
     )
+
+    val getMeasurementsQueryResponse = """{
+  "data": {
+    "account": {
+      "properties": [
+        {
+          "id": "1234567",
+          "measurements": {
+            "edges": [
+              {
+                "node": {
+                  "value": "0.113",
+                  "unit": "kwh",
+                  "startAt": "2024-05-07T00:30:00+01:00",
+                  "endAt": "2024-05-07T01:00:00+01:00",
+                  "__typename": "IntervalMeasurementType",
+                  "metaData": {
+                    "statistics": [
+                      {
+                        "costInclTax": {
+                          "costCurrency": "GBP",
+                          "estimatedAmount": "0.06",
+                          "__typename": "EstimatedMoneyType"
+                        },
+                        "type": "STANDING_CHARGE_COST",
+                        "__typename": "StatisticOutput"
+                      },
+                      {
+                        "costInclTax": {
+                          "costCurrency": "GBP",
+                          "estimatedAmount": "9.80",
+                          "__typename": "EstimatedMoneyType"
+                        },
+                        "type": "CONSUMPTION_COST",
+                        "__typename": "StatisticOutput"
+                      }
+                    ],
+                    "__typename": "MeasurementsMetadataOutput"
+                  }
+                },
+                "__typename": "MeasurementEdge"
+              },
+              {
+                "node": {
+                  "value": "0.58",
+                  "unit": "kwh",
+                  "startAt": "2024-05-07T00:00:00+01:00",
+                  "endAt": "2024-05-07T00:30:00+01:00",
+                  "__typename": "IntervalMeasurementType",
+                  "metaData": {
+                    "statistics": [
+                      {
+                        "costInclTax": {
+                          "costCurrency": "GBP",
+                          "estimatedAmount": "0.06",
+                          "__typename": "EstimatedMoneyType"
+                        },
+                        "type": "STANDING_CHARGE_COST",
+                        "__typename": "StatisticOutput"
+                      },
+                      {
+                        "costInclTax": {
+                          "costCurrency": "GBP",
+                          "estimatedAmount": "9.80",
+                          "__typename": "EstimatedMoneyType"
+                        },
+                        "type": "CONSUMPTION_COST",
+                        "__typename": "StatisticOutput"
+                      }
+                    ],
+                    "__typename": "MeasurementsMetadataOutput"
+                  }
+                },
+                "__typename": "MeasurementEdge"
+              },              
+              {
+                "node": {
+                  "value": "0.201",
+                  "unit": "kwh",
+                  "startAt": "2024-05-06T23:30:00+01:00",
+                  "endAt": "2024-05-07T00:00:00+01:00",
+                  "__typename": "IntervalMeasurementType",
+                  "metaData": {
+                    "statistics": [
+                      {
+                        "costInclTax": {
+                          "costCurrency": "GBP",
+                          "estimatedAmount": "0.06",
+                          "__typename": "EstimatedMoneyType"
+                        },
+                        "type": "STANDING_CHARGE_COST",
+                        "__typename": "StatisticOutput"
+                      },
+                      {
+                        "costInclTax": {
+                          "costCurrency": "GBP",
+                          "estimatedAmount": "9.80",
+                          "__typename": "EstimatedMoneyType"
+                        },
+                        "type": "CONSUMPTION_COST",
+                        "__typename": "StatisticOutput"
+                      }
+                    ],
+                    "__typename": "MeasurementsMetadataOutput"
+                  }
+                },
+                "__typename": "MeasurementEdge"
+              },
+              {
+                "node": {
+                  "value": "0.451",
+                  "unit": "kwh",
+                  "startAt": "2024-05-06T23:00:00+01:00",
+                  "endAt": "2024-05-06T23:30:00+01:00",
+                  "__typename": "IntervalMeasurementType",
+                  "metaData": {
+                    "statistics": [
+                      {
+                        "costInclTax": {
+                          "costCurrency": "GBP",
+                          "estimatedAmount": "0.06",
+                          "__typename": "EstimatedMoneyType"
+                        },
+                        "type": "STANDING_CHARGE_COST",
+                        "__typename": "StatisticOutput"
+                      },
+                      {
+                        "costInclTax": {
+                          "costCurrency": "GBP",
+                          "estimatedAmount": "9.80",
+                          "__typename": "EstimatedMoneyType"
+                        },
+                        "type": "CONSUMPTION_COST",
+                        "__typename": "StatisticOutput"
+                      }
+                    ],
+                    "__typename": "MeasurementsMetadataOutput"
+                  }
+                },
+                "__typename": "MeasurementEdge"
+              },
+              {
+                "node": {
+                  "value": "0.512",
+                  "unit": "kwh",
+                  "startAt": "2024-05-06T22:30:00+01:00",
+                  "endAt": "2024-05-06T23:00:00+01:00",
+                  "__typename": "IntervalMeasurementType",
+                  "metaData": {
+                    "statistics": [
+                      {
+                        "costInclTax": {
+                          "costCurrency": "GBP",
+                          "estimatedAmount": "0.06",
+                          "__typename": "EstimatedMoneyType"
+                        },
+                        "type": "STANDING_CHARGE_COST",
+                        "__typename": "StatisticOutput"
+                      },
+                      {
+                        "costInclTax": {
+                          "costCurrency": "GBP",
+                          "estimatedAmount": "9.80",
+                          "__typename": "EstimatedMoneyType"
+                        },
+                        "type": "CONSUMPTION_COST",
+                        "__typename": "StatisticOutput"
+                      }
+                    ],
+                    "__typename": "MeasurementsMetadataOutput"
+                  }
+                },
+                "__typename": "MeasurementEdge"
+              }
+            ],
+            "pageInfo": {
+              "hasNextPage": false,
+              "endCursor": "end-cursor",
+              "__typename": "PageInfo"
+            },
+            "__typename": "MeasurementConnection"
+          },
+          "__typename": "PropertyType"
+        }
+      ],
+      "__typename": "AccountType"
+    }
+  }
+}
+    """.trimIndent()
 }

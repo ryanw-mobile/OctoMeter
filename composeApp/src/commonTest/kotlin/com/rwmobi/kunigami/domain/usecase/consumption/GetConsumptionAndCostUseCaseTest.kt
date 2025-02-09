@@ -15,11 +15,13 @@
 
 package com.rwmobi.kunigami.domain.usecase.consumption
 
+import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.repository.FakeOctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import com.rwmobi.kunigami.test.samples.AccountSampleData
+import com.rwmobi.kunigami.ui.previewsampledata.AccountSamples
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -47,6 +49,11 @@ class GetConsumptionAndCostUseCaseTest {
     private val fakeMpan = "9900000999999"
     private val fakeMeterSerialNumber = "99A9999999"
     private val fakeAccount = AccountSampleData.accountA1234A1B1
+    private val sampleUserProfile = UserProfile(
+        selectedMpan = AccountSamples.account928.electricityMeterPoints[0].mpan,
+        selectedMeterSerialNumber = AccountSamples.account928.electricityMeterPoints[0].meters[0].serialNumber,
+        account = AccountSamples.account928,
+    )
 
     @BeforeTest
     fun setupUseCase() {
@@ -89,6 +96,7 @@ class GetConsumptionAndCostUseCaseTest {
         val result = getConsumptionAndCostUseCase(
             period = fakePeriodFrom..fakePeriodTo,
             groupBy = groupBy,
+            userProfile = sampleUserProfile,
         )
 
         assertTrue(result.isSuccess)
@@ -106,6 +114,7 @@ class GetConsumptionAndCostUseCaseTest {
             getConsumptionAndCostUseCase(
                 period = fakePeriodFrom..fakePeriodTo,
                 groupBy = groupBy,
+                userProfile = sampleUserProfile,
             ).getOrThrow()
         }
 
@@ -123,6 +132,7 @@ class GetConsumptionAndCostUseCaseTest {
             getConsumptionAndCostUseCase(
                 period = fakePeriodFrom..fakePeriodTo,
                 groupBy = groupBy,
+                userProfile = sampleUserProfile,
             ).getOrThrow()
         }
 
@@ -140,6 +150,7 @@ class GetConsumptionAndCostUseCaseTest {
             getConsumptionAndCostUseCase(
                 period = fakePeriodFrom..fakePeriodTo,
                 groupBy = groupBy,
+                userProfile = sampleUserProfile,
             ).getOrThrow()
         }
 
@@ -161,6 +172,7 @@ class GetConsumptionAndCostUseCaseTest {
             getConsumptionAndCostUseCase(
                 period = fakePeriodFrom..fakePeriodTo,
                 groupBy = groupBy,
+                userProfile = sampleUserProfile,
             ).getOrThrow()
         }
 
@@ -193,6 +205,7 @@ class GetConsumptionAndCostUseCaseTest {
         val result = getConsumptionAndCostUseCase(
             period = fakePeriodFrom..fakePeriodTo,
             groupBy = groupBy,
+            userProfile = sampleUserProfile,
         )
 
         assertTrue(result.isSuccess)
