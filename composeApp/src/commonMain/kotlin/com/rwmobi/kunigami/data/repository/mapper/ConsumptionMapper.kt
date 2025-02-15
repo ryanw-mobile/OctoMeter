@@ -15,36 +15,60 @@
 
 package com.rwmobi.kunigami.data.repository.mapper
 
+import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
 import com.rwmobi.kunigami.domain.extensions.roundConsumptionToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.graphql.GetMeasurementsQuery
+import com.rwmobi.kunigami.graphql.type.ReadingStatisticTypeEnum
 
-fun ConsumptionEntity.toConsumption() = Consumption(
-    kWhConsumed = kWhConsumed.roundConsumptionToNearestEvenHundredth(),
-    interval = intervalStart..intervalEnd,
+fun ConsumptionEntity.toConsumptionWithCost() = ConsumptionWithCost(
+    consumption = Consumption(
+        kWhConsumed = kWhConsumed.roundConsumptionToNearestEvenHundredth(),
+        interval = intervalStart..intervalEnd,
+    ),
+    vatInclusiveCost = consumptionCost,
 )
 
-fun GetMeasurementsQuery.Node.toConsumption(): Consumption? {
+fun GetMeasurementsQuery.Node.toConsumptionWithCost(): ConsumptionWithCost? {
+    Logger.v(tag = "toConsumptionWithCost", messageString = "metaData = $metaData")
+
+    val estimatedAmount = metaData?.statistics?.firstOrNull {
+        it?.type == ReadingStatisticTypeEnum.TOU_BUCKET_COST ||
+            it?.type == ReadingStatisticTypeEnum.CONSUMPTION_COST
+    }?.costInclTax?.estimatedAmount
+
+    Logger.v(tag = "toConsumptionWithCost", messageString = "amount = $estimatedAmount")
+
     return if (onIntervalMeasurementType == null) {
         null
     } else {
-        Consumption(
-            kWhConsumed = value,
-            interval = onIntervalMeasurementType.startAt..onIntervalMeasurementType.endAt,
+        ConsumptionWithCost(
+            consumption = Consumption(
+                kWhConsumed = value,
+                interval = onIntervalMeasurementType.startAt..onIntervalMeasurementType.endAt,
+            ),
+            vatInclusiveCost = estimatedAmount,
         )
     }
 }
 
-fun GetMeasurementsQuery.Node.toConsumptionEntity(meterSerial: String): ConsumptionEntity? {
-    return if (onIntervalMeasurementType == null) {
+fun GetMeasurementsQuery.Node.toConsumptionEntity(deviceId: String): ConsumptionEntity? {
+    val estimatedAmount = metaData?.statistics?.firstOrNull {
+        it?.type == ReadingStatisticTypeEnum.TOU_BUCKET_COST ||
+            it?.type == ReadingStatisticTypeEnum.CONSUMPTION_COST
+    }?.costInclTax?.estimatedAmount
+
+    return if (onIntervalMeasurementType == null || estimatedAmount == null) {
         null
     } else {
         ConsumptionEntity(
-            meterSerial = meterSerial,
+            deviceId = deviceId,
             intervalStart = onIntervalMeasurementType.startAt,
             intervalEnd = onIntervalMeasurementType.endAt,
             kWhConsumed = value,
+            consumptionCost = estimatedAmount,
         )
     }
 }

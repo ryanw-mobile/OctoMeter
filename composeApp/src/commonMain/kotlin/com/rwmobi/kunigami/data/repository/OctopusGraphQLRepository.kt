@@ -17,8 +17,8 @@ package com.rwmobi.kunigami.data.repository
 
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.data.repository.mapper.toAccount
-import com.rwmobi.kunigami.data.repository.mapper.toConsumption
 import com.rwmobi.kunigami.data.repository.mapper.toConsumptionEntity
+import com.rwmobi.kunigami.data.repository.mapper.toConsumptionWithCost
 import com.rwmobi.kunigami.data.repository.mapper.toLiveConsumption
 import com.rwmobi.kunigami.data.repository.mapper.toProductDetails
 import com.rwmobi.kunigami.data.repository.mapper.toProductSummary
@@ -34,8 +34,8 @@ import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.extensions.getHalfHourlyTimeSlotCount
 import com.rwmobi.kunigami.domain.model.account.Account
-import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
@@ -394,22 +394,21 @@ class OctopusGraphQLRepository(
      */
     override suspend fun getConsumption(
         accountNumber: String,
-        meterSerialNumber: String,
         deviceId: String,
         mpan: String,
         period: ClosedRange<Instant>,
         groupBy: ConsumptionTimeFrame,
-    ): Result<List<Consumption>> {
+    ): Result<List<ConsumptionWithCost>> {
         return withContext(dispatcher) {
             runCatching {
                 // cache: if half-hourly, calculate the expected number of entries and see if the cache has them
                 getConsumptionsFromDatabase(
-                    meterSerialNumber = meterSerialNumber,
+                    deviceId = deviceId,
                     period = period,
                     groupBy = groupBy,
                 ) ?: run {
                     Logger.v(tag = "getConsumption", messageString = "DB Cache misses for $period")
-                    val combinedList = mutableListOf<Consumption>()
+                    val combinedList = mutableListOf<ConsumptionWithCost>()
                     var afterCursor: String? = null
                     do {
                         val response = graphQLEndpoint.getMeasurements(
@@ -424,14 +423,14 @@ class OctopusGraphQLRepository(
 
                         combinedList.addAll(
                             response.account?.properties?.firstOrNull()?.measurements?.edges?.mapNotNull {
-                                it?.node?.toConsumption()
+                                it?.node?.toConsumptionWithCost()
                             } ?: emptyList(),
                         )
 
                         // cache the results - only for half-hourly
                         if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
                             response.account?.properties?.firstOrNull()?.measurements?.edges?.mapNotNull {
-                                it?.node?.toConsumptionEntity(meterSerial = meterSerialNumber)
+                                it?.node?.toConsumptionEntity(deviceId = deviceId)
                             }?.let {
                                 databaseDataSource.insertConsumptions(consumptionEntity = it)
                             }
@@ -450,21 +449,24 @@ class OctopusGraphQLRepository(
         }
     }
 
+    /***
+     * Consumption data without proper cost are considered incomplete and aren't cached in DB
+     */
     private suspend fun getConsumptionsFromDatabase(
-        meterSerialNumber: String,
+        deviceId: String,
         period: ClosedRange<Instant>,
         groupBy: ConsumptionTimeFrame,
-    ): List<Consumption>? {
+    ): List<ConsumptionWithCost>? {
         if (groupBy != ConsumptionTimeFrame.HALF_HOURLY) {
             return null
         }
 
         val cachedEntries = databaseDataSource.getConsumptions(
-            meterSerial = meterSerialNumber,
+            deviceId = deviceId,
             interval = period,
         )
         return if (cachedEntries.size == period.getHalfHourlyTimeSlotCount()) {
-            cachedEntries.map { it.toConsumption() }
+            cachedEntries.map { it.toConsumptionWithCost() }
         } else {
             null
         }
