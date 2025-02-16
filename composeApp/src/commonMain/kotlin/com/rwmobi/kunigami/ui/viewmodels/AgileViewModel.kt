@@ -38,6 +38,10 @@ import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.product.RetailRegion
 import com.rwmobi.kunigami.ui.model.rate.RateGroup
 import com.rwmobi.kunigami.ui.tools.interfaces.StringResourceProvider
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.min
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -49,10 +53,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import kotlin.math.ceil
-import kotlin.math.floor
-import kotlin.math.min
-import kotlin.time.Duration.Companion.minutes
 
 class AgileViewModel(
     private val getLatestProductByKeywordUseCase: GetLatestProductByKeywordUseCase,
@@ -66,7 +66,7 @@ class AgileViewModel(
     private val _uiState: MutableStateFlow<AgileUIState> = MutableStateFlow(AgileUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
-    private val _meterDeviceId = MutableStateFlow<String?>(null)
+    private val meterDeviceId = MutableStateFlow<String?>(null)
     private var liveConsumptionJob: Job? = null
 
     private val agileTariffKeyword = "AGILE"
@@ -91,7 +91,7 @@ class AgileViewModel(
 
         viewModelScope.launch(dispatcher) {
             val currentUserProfile = getUserProfile()
-            _meterDeviceId.value = currentUserProfile?.getSelectedElectricityMeterPoint()
+            meterDeviceId.value = currentUserProfile?.getSelectedElectricityMeterPoint()
                 ?.meters?.firstOrNull {
                     it.serialNumber == currentUserProfile.selectedMeterSerialNumber
                 }?.deviceId
@@ -122,7 +122,7 @@ class AgileViewModel(
     fun startLiveConsumptionUpdates() {
         liveConsumptionJob?.cancel()
         liveConsumptionJob = viewModelScope.launch(dispatcher) {
-            _meterDeviceId.collectLatest { meterDeviceId ->
+            meterDeviceId.collectLatest { meterDeviceId ->
                 if (meterDeviceId != null) {
                     liveConsumptionFlow(meterDeviceId).collect { result ->
                         result.fold(
