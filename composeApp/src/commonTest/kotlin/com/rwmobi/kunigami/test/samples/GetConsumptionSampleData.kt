@@ -18,6 +18,7 @@ package com.rwmobi.kunigami.test.samples
 import com.rwmobi.kunigami.data.source.network.dto.consumption.ConsumptionApiResponse
 import com.rwmobi.kunigami.data.source.network.dto.consumption.ConsumptionDto
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import kotlinx.datetime.Instant
 
 object GetConsumptionSampleData {
@@ -88,26 +89,46 @@ object GetConsumptionSampleData {
         ),
     )
 
-    val consumption = listOf(
-        Consumption(
-            kWhConsumed = 0.113,
-            interval = Instant.parse("2024-05-06T23:30:00Z")..Instant.parse("2024-05-07T00:00:00Z"),
+    val consumptionWithCost = listOf(
+        ConsumptionWithCost(
+            consumption = Consumption(
+                kWhConsumed = 0.113,
+                interval = Instant.parse("2024-05-06T23:30:00Z")..Instant.parse("2024-05-07T00:00:00Z"),
+            ),
+            vatInclusiveCost = 9.4,
+            vatInclusiveStandingCharge = 0.06,
         ),
-        Consumption(
-            kWhConsumed = 0.58,
-            interval = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:30:00Z"),
+        ConsumptionWithCost(
+            consumption = Consumption(
+                kWhConsumed = 0.58,
+                interval = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:30:00Z"),
+            ),
+            vatInclusiveCost = 9.5,
+            vatInclusiveStandingCharge = 0.06,
         ),
-        Consumption(
-            kWhConsumed = 0.201,
-            interval = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:00:00Z"),
+        ConsumptionWithCost(
+            consumption = Consumption(
+                kWhConsumed = 0.201,
+                interval = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:00:00Z"),
+            ),
+            vatInclusiveCost = 9.6,
+            vatInclusiveStandingCharge = 0.06,
         ),
-        Consumption(
-            kWhConsumed = 0.451,
-            interval = Instant.parse("2024-05-06T22:00:00Z")..Instant.parse("2024-05-06T22:30:00Z"),
+        ConsumptionWithCost(
+            consumption = Consumption(
+                kWhConsumed = 0.451,
+                interval = Instant.parse("2024-05-06T22:00:00Z")..Instant.parse("2024-05-06T22:30:00Z"),
+            ),
+            vatInclusiveCost = 9.7,
+            vatInclusiveStandingCharge = 0.06,
         ),
-        Consumption(
-            kWhConsumed = 0.512,
-            interval = Instant.parse("2024-05-06T21:30:00Z")..Instant.parse("2024-05-06T22:00:00Z"),
+        ConsumptionWithCost(
+            consumption = Consumption(
+                kWhConsumed = 0.512,
+                interval = Instant.parse("2024-05-06T21:30:00Z")..Instant.parse("2024-05-06T22:00:00Z"),
+            ),
+            vatInclusiveCost = 9.8,
+            vatInclusiveStandingCharge = 0.06,
         ),
     )
 
@@ -140,7 +161,7 @@ object GetConsumptionSampleData {
                       {
                         "costInclTax": {
                           "costCurrency": "GBP",
-                          "estimatedAmount": "9.80",
+                          "estimatedAmount": "9.40",
                           "__typename": "EstimatedMoneyType"
                         },
                         "type": "CONSUMPTION_COST",
@@ -173,7 +194,7 @@ object GetConsumptionSampleData {
                       {
                         "costInclTax": {
                           "costCurrency": "GBP",
-                          "estimatedAmount": "9.80",
+                          "estimatedAmount": "9.50",
                           "__typename": "EstimatedMoneyType"
                         },
                         "type": "CONSUMPTION_COST",
@@ -206,7 +227,7 @@ object GetConsumptionSampleData {
                       {
                         "costInclTax": {
                           "costCurrency": "GBP",
-                          "estimatedAmount": "9.80",
+                          "estimatedAmount": "9.60",
                           "__typename": "EstimatedMoneyType"
                         },
                         "type": "CONSUMPTION_COST",
@@ -239,7 +260,7 @@ object GetConsumptionSampleData {
                       {
                         "costInclTax": {
                           "costCurrency": "GBP",
-                          "estimatedAmount": "9.80",
+                          "estimatedAmount": "9.70",
                           "__typename": "EstimatedMoneyType"
                         },
                         "type": "CONSUMPTION_COST",

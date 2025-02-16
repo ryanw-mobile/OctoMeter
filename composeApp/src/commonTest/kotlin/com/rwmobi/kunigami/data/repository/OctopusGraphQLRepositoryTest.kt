@@ -652,28 +652,33 @@ class OctopusGraphQLRepositoryTest {
         )
         fakeDataBaseDataSource.getConsumptionsResponse = listOf(
             ConsumptionEntity(
-                meterSerial = fakeMeterSerialNumber,
+                deviceId = fakeDeviceId,
                 kWhConsumed = 0.113,
                 intervalStart = Instant.parse("2024-05-06T23:30:00Z"),
                 intervalEnd = Instant.parse("2024-05-07T00:00:00Z"),
+                consumptionCost = 0.0,
+                standingCharge = 0.0,
             ),
             ConsumptionEntity(
-                meterSerial = fakeMeterSerialNumber,
+                deviceId = fakeDeviceId,
                 kWhConsumed = 0.58,
                 intervalStart = Instant.parse("2024-05-06T23:00:00Z"),
                 intervalEnd = Instant.parse("2024-05-06T23:30:00Z"),
+                consumptionCost = 0.0,
+                standingCharge = 0.0,
             ),
             ConsumptionEntity(
-                meterSerial = fakeMeterSerialNumber,
+                deviceId = fakeDeviceId,
                 kWhConsumed = 0.201,
                 intervalStart = Instant.parse("2024-05-06T22:30:00Z"),
                 intervalEnd = Instant.parse("2024-05-06T23:00:00Z"),
+                consumptionCost = 0.0,
+                standingCharge = 0.0,
             ),
         )
 
         val result = octopusGraphQLRepository.getConsumption(
             mpan = fakeMpan,
-            meterSerialNumber = fakeMeterSerialNumber,
             period = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:59:59Z"),
             groupBy = ConsumptionTimeFrame.HALF_HOURLY,
             accountNumber = fakeAccountNumber,
@@ -692,16 +697,17 @@ class OctopusGraphQLRepositoryTest {
         )
         fakeDataBaseDataSource.getConsumptionsResponse = listOf(
             ConsumptionEntity(
-                meterSerial = fakeMeterSerialNumber,
+                deviceId = fakeDeviceId,
                 kWhConsumed = 0.201,
                 intervalStart = Instant.parse("2024-05-06T21:30:00Z"),
                 intervalEnd = Instant.parse("2024-05-06T22:00:00Z"),
+                consumptionCost = 0.0,
+                standingCharge = 0.0,
             ),
         )
 
         val result = octopusGraphQLRepository.getConsumption(
             mpan = fakeMpan,
-            meterSerialNumber = fakeMeterSerialNumber,
             period = Instant.parse("2024-05-06T21:30:00Z")..Instant.parse("2024-05-06T23:59:59Z"),
             groupBy = ConsumptionTimeFrame.HALF_HOURLY,
             accountNumber = fakeAccountNumber,
@@ -709,7 +715,7 @@ class OctopusGraphQLRepositoryTest {
         )
 
         assertTrue(result.isSuccess)
-        assertEquals(expected = GetConsumptionSampleData.consumption, actual = result.getOrNull())
+        assertEquals(expected = GetConsumptionSampleData.consumptionWithCost, actual = result.getOrNull())
     }
 
     @Test
@@ -721,7 +727,6 @@ class OctopusGraphQLRepositoryTest {
 
         val result = octopusGraphQLRepository.getConsumption(
             mpan = fakeMpan,
-            meterSerialNumber = fakeMeterSerialNumber,
             period = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:59:59Z"),
             groupBy = ConsumptionTimeFrame.HALF_HOURLY,
             accountNumber = fakeAccountNumber,
@@ -743,7 +748,6 @@ class OctopusGraphQLRepositoryTest {
             mockServer.enqueueString(GetConsumptionSampleData.getMeasurementsQueryResponse)
             val result = octopusGraphQLRepository.getConsumption(
                 mpan = fakeMpan,
-                meterSerialNumber = fakeMeterSerialNumber,
                 period = Instant.parse("2024-05-06T21:30:00Z")..Instant.parse("2024-05-06T23:59:59Z"),
                 groupBy = timeFrame,
                 accountNumber = fakeAccountNumber,
@@ -751,7 +755,7 @@ class OctopusGraphQLRepositoryTest {
             )
 
             assertTrue(result.isSuccess)
-            assertEquals(expected = GetConsumptionSampleData.consumption, actual = result.getOrNull())
+            assertEquals(expected = GetConsumptionSampleData.consumptionWithCost, actual = result.getOrNull())
         }
     }
 
@@ -765,7 +769,6 @@ class OctopusGraphQLRepositoryTest {
         fakeDataBaseDataSource.getConsumptionsResponse = emptyList()
         val result = octopusGraphQLRepository.getConsumption(
             mpan = fakeMpan,
-            meterSerialNumber = fakeMeterSerialNumber,
             period = now..now.plus(Duration.parse("1d")),
             groupBy = ConsumptionTimeFrame.HALF_HOURLY,
             accountNumber = fakeAccountNumber,

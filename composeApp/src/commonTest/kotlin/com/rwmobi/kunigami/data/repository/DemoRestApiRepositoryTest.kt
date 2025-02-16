@@ -134,7 +134,6 @@ class DemoRestApiRepositoryTest {
 
         val result = demoRepository.getConsumption(
             mpan = fakeMpan,
-            meterSerialNumber = fakeMeterSerialNumber,
             period = start..now,
             groupBy = ConsumptionTimeFrame.HALF_HOURLY,
             accountNumber = fakeAccountNumber,
@@ -153,7 +152,6 @@ class DemoRestApiRepositoryTest {
 
         val result = demoRepository.getConsumption(
             mpan = fakeMpan,
-            meterSerialNumber = fakeMeterSerialNumber,
             period = start..now,
             groupBy = ConsumptionTimeFrame.DAY,
             accountNumber = fakeAccountNumber,
@@ -172,7 +170,6 @@ class DemoRestApiRepositoryTest {
 
         val result = demoRepository.getConsumption(
             mpan = fakeMpan,
-            meterSerialNumber = fakeMeterSerialNumber,
             period = start..now,
             groupBy = ConsumptionTimeFrame.WEEK,
             accountNumber = fakeAccountNumber,
@@ -191,7 +188,6 @@ class DemoRestApiRepositoryTest {
 
         val result = demoRepository.getConsumption(
             mpan = fakeMpan,
-            meterSerialNumber = fakeMeterSerialNumber,
             period = start..now,
             groupBy = ConsumptionTimeFrame.MONTH,
             accountNumber = fakeAccountNumber,
@@ -214,7 +210,6 @@ class DemoRestApiRepositoryTest {
         assertFailsWith<NotImplementedError> {
             demoRepository.getConsumption(
                 mpan = fakeMpan,
-                meterSerialNumber = fakeMeterSerialNumber,
                 period = start..now,
                 groupBy = ConsumptionTimeFrame.QUARTER,
                 accountNumber = fakeAccountNumber,

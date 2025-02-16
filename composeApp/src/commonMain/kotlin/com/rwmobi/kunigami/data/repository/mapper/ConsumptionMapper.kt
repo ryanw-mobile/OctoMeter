@@ -71,7 +71,9 @@ private fun GetMeasurementsQuery.Node.getEstimatedAmount(): Double? {
                 it?.type == ReadingStatisticTypeEnum.CONSUMPTION_COST
             ) {
                 it.costInclTax?.estimatedAmount
-            } else null
+            } else {
+                null
+            }
         }
         ?.takeIf { it.isNotEmpty() } // Ensures null if no valid values exist
         ?.sum()
@@ -82,7 +84,9 @@ private fun GetMeasurementsQuery.Node.getStandingCharge(): Double? {
         ?.mapNotNull {
             if (it?.type == ReadingStatisticTypeEnum.STANDING_CHARGE_COST) {
                 it.costInclTax?.estimatedAmount
-            } else null
+            } else {
+                null
+            }
         }
         ?.takeIf { it.isNotEmpty() } // Ensures null if no valid values exist
         ?.sum()

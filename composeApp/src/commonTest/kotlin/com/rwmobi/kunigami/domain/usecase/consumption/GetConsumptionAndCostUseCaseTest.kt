@@ -18,6 +18,7 @@ package com.rwmobi.kunigami.domain.usecase.consumption
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.repository.FakeOctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.FakeUserPreferencesRepository
 import com.rwmobi.kunigami.test.samples.AccountSampleData
@@ -71,17 +72,29 @@ class GetConsumptionAndCostUseCaseTest {
     @Test
     fun `invoke should return consumption successfully when valid data is provided`() = runTest {
         val expectedConsumption = listOf(
-            Consumption(
-                kWhConsumed = 0.113,
-                interval = Instant.parse("2024-05-06T23:30:00Z")..Instant.parse("2024-05-07T00:00:00Z"),
+            ConsumptionWithCost(
+                consumption = Consumption(
+                    kWhConsumed = 0.113,
+                    interval = Instant.parse("2024-05-06T23:30:00Z")..Instant.parse("2024-05-07T00:00:00Z"),
+                ),
+                vatInclusiveCost = 0.0,
+                vatInclusiveStandingCharge = 0.0,
             ),
-            Consumption(
-                kWhConsumed = 0.58,
-                interval = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:30:00Z"),
+            ConsumptionWithCost(
+                consumption = Consumption(
+                    kWhConsumed = 0.58,
+                    interval = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:30:00Z"),
+                ),
+                vatInclusiveCost = 0.0,
+                vatInclusiveStandingCharge = 0.0,
             ),
-            Consumption(
-                kWhConsumed = 0.201,
-                interval = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:00:00Z"),
+            ConsumptionWithCost(
+                consumption = Consumption(
+                    kWhConsumed = 0.201,
+                    interval = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:00:00Z"),
+                ),
+                vatInclusiveCost = 0.0,
+                vatInclusiveStandingCharge = 0.0,
             ),
         )
 
@@ -100,7 +113,7 @@ class GetConsumptionAndCostUseCaseTest {
         )
 
         assertTrue(result.isSuccess)
-        assertEquals(expectedConsumption.sortedBy { it.interval.start }, result.getOrNull()?.map { it.consumption })
+        assertEquals(expectedConsumption.sortedBy { it.consumption.interval.start }, result.getOrNull())
     }
 
     @Test
@@ -122,39 +135,24 @@ class GetConsumptionAndCostUseCaseTest {
     }
 
     @Test
-    fun `invoke should throw exception when MPAN is missing`() = runTest {
-        fakeUserPreferenceRepository.demoMode = false
-        fakeUserPreferenceRepository.apiKey = fakeApiKey
-        fakeUserPreferenceRepository.mpan = null
-        fakeUserPreferenceRepository.meterSerialNumber = fakeMeterSerialNumber
-
-        val exception = assertFailsWith<IllegalArgumentException> {
-            getConsumptionAndCostUseCase(
-                period = fakePeriodFrom..fakePeriodTo,
-                groupBy = groupBy,
-                userProfile = sampleUserProfile,
-            ).getOrThrow()
-        }
-
-        assertEquals("Assertion failed: MPAN is null", exception.message)
-    }
-
-    @Test
-    fun `invoke should throw exception when meter serial number is missing`() = runTest {
+    fun `invoke should throw exception when device Id is missing`() = runTest {
         fakeUserPreferenceRepository.demoMode = false
         fakeUserPreferenceRepository.apiKey = fakeApiKey
         fakeUserPreferenceRepository.mpan = fakeMpan
         fakeUserPreferenceRepository.meterSerialNumber = null
+        val userProfileWithNonExistentSelectedMeterSerialNumber = sampleUserProfile.copy(
+            selectedMeterSerialNumber = "invalid-serial-number",
+        )
 
         val exception = assertFailsWith<IllegalArgumentException> {
             getConsumptionAndCostUseCase(
                 period = fakePeriodFrom..fakePeriodTo,
                 groupBy = groupBy,
-                userProfile = sampleUserProfile,
+                userProfile = userProfileWithNonExistentSelectedMeterSerialNumber,
             ).getOrThrow()
         }
 
-        assertEquals("Assertion failed: Meter Serial Number is null", exception.message)
+        assertEquals("Assertion failed: deviceId is null", exception.message)
     }
 
     @Test
@@ -183,17 +181,29 @@ class GetConsumptionAndCostUseCaseTest {
     @Test
     fun `invoke should return consumption from fakeDemoRestApiRepository when under demoMode`() = runTest {
         val expectedConsumption = listOf(
-            Consumption(
-                kWhConsumed = 0.113,
-                interval = Instant.parse("2024-05-06T23:30:00Z")..Instant.parse("2024-05-07T00:00:00Z"),
+            ConsumptionWithCost(
+                consumption = Consumption(
+                    kWhConsumed = 0.113,
+                    interval = Instant.parse("2024-05-06T23:30:00Z")..Instant.parse("2024-05-07T00:00:00Z"),
+                ),
+                vatInclusiveCost = 1.0,
+                vatInclusiveStandingCharge = 0.054,
             ),
-            Consumption(
-                kWhConsumed = 0.58,
-                interval = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:30:00Z"),
+            ConsumptionWithCost(
+                consumption = Consumption(
+                    kWhConsumed = 0.58,
+                    interval = Instant.parse("2024-05-06T23:00:00Z")..Instant.parse("2024-05-06T23:30:00Z"),
+                ),
+                vatInclusiveCost = 2.0,
+                vatInclusiveStandingCharge = 0.054,
             ),
-            Consumption(
-                kWhConsumed = 0.201,
-                interval = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:00:00Z"),
+            ConsumptionWithCost(
+                consumption = Consumption(
+                    kWhConsumed = 0.201,
+                    interval = Instant.parse("2024-05-06T22:30:00Z")..Instant.parse("2024-05-06T23:00:00Z"),
+                ),
+                vatInclusiveCost = 3.0,
+                vatInclusiveStandingCharge = 0.054,
             ),
         )
 
@@ -209,6 +219,6 @@ class GetConsumptionAndCostUseCaseTest {
         )
 
         assertTrue(result.isSuccess)
-        assertEquals(expectedConsumption.sortedBy { it.interval.start }, result.getOrNull()?.map { it.consumption })
+        assertEquals(expectedConsumption.sortedBy { it.consumption.interval.start }, result.getOrNull())
     }
 }

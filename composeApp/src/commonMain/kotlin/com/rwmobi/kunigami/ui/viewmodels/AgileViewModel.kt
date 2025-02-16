@@ -38,10 +38,6 @@ import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.product.RetailRegion
 import com.rwmobi.kunigami.ui.model.rate.RateGroup
 import com.rwmobi.kunigami.ui.tools.interfaces.StringResourceProvider
-import kotlin.math.ceil
-import kotlin.math.floor
-import kotlin.math.min
-import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -53,6 +49,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.min
+import kotlin.time.Duration.Companion.minutes
 
 class AgileViewModel(
     private val getLatestProductByKeywordUseCase: GetLatestProductByKeywordUseCase,

@@ -48,7 +48,7 @@ class RoomDatabaseDataSourceTest {
         dataSource.insertConsumption(consumption)
 
         val result = consumptionDao.getConsumptions(
-            meterSerial = consumption.meterSerial,
+            deviceId = consumption.deviceId,
             intervalStart = consumption.intervalStart,
             intervalEnd = consumption.intervalEnd,
         )
@@ -62,7 +62,7 @@ class RoomDatabaseDataSourceTest {
         dataSource.insertConsumptions(consumptions)
 
         val result = consumptionDao.getConsumptions(
-            meterSerial = consumptions[0].meterSerial,
+            deviceId = consumptions[0].deviceId,
             intervalStart = consumptions[0].intervalStart,
             intervalEnd = consumptions[1].intervalEnd,
         )
@@ -104,13 +104,13 @@ class RoomDatabaseDataSourceTest {
 
     @Test
     fun `getConsumptions should return the correct consumptions`() = runBlocking {
-        val meterSerial = "11A1234567"
+        val deviceId = "01-02-03-04-05-06-07-08"
         val interval = Instant.parse("2023-06-01T01:00:00Z")..Instant.parse("2023-06-01T02:00:00Z")
         val expectedConsumptions = listOf(ConsumptionEntitySampleData.sample1, ConsumptionEntitySampleData.sample2)
 
         consumptionDao.insert(expectedConsumptions)
 
-        val result = dataSource.getConsumptions(meterSerial, interval)
+        val result = dataSource.getConsumptions(deviceId, interval)
         assertEquals(expected = expectedConsumptions, actual = result)
     }
 
@@ -142,7 +142,7 @@ class RoomDatabaseDataSourceTest {
 
         assertTrue(
             consumptionDao.getConsumptions(
-                meterSerial = ConsumptionEntitySampleData.sample1.meterSerial,
+                deviceId = ConsumptionEntitySampleData.sample1.deviceId,
                 intervalStart = Instant.DISTANT_PAST,
                 intervalEnd = Instant.DISTANT_FUTURE,
             ).isEmpty(),

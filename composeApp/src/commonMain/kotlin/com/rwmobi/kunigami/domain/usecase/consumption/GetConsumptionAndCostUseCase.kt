@@ -16,17 +16,11 @@
 package com.rwmobi.kunigami.domain.usecase.consumption
 
 import com.rwmobi.kunigami.domain.exceptions.except
-import com.rwmobi.kunigami.domain.model.account.Agreement
-import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.domain.model.account.UserProfile
-import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
-import com.rwmobi.kunigami.domain.model.product.Tariff
-import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
-import com.rwmobi.kunigami.ui.previewsampledata.FakeDemoUserProfile
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -91,14 +85,6 @@ class GetConsumptionAndCostUseCase(
     }
 
     private suspend fun generateDemoResponse(period: ClosedRange<Instant>, groupBy: ConsumptionTimeFrame): List<ConsumptionWithCost> {
-        // Since the user profile is completely fake, we are able to assign a variable tariff covering the entire period for cost calculations
-        val unitRates = FakeDemoUserProfile.flexibleOctopusRegionADirectDebit.getSelectedElectricityMeterPoint()?.agreements?.let { agreements ->
-            getUnitRates(
-                agreements = agreements,
-                period = period,
-            )
-        } ?: emptyList()
-
         return demoOctopusApiRepository.getConsumption(
             accountNumber = "",
             deviceId = "",
@@ -109,60 +95,9 @@ class GetConsumptionAndCostUseCase(
             onSuccess = { consumption ->
                 consumption.sortedBy {
                     it.consumption.interval.start
-                }.map {
-                    it.copy(
-                        vatInclusiveCost = calculateConsumptionCost(
-                            consumption = it.consumption,
-                            unitRates = unitRates,
-                        ),
-                    )
                 }
             },
             onFailure = { throw it },
         )
-    }
-
-    private fun getAgreements(electricityMeterPoint: ElectricityMeterPoint?, period: ClosedRange<Instant>): List<Agreement> {
-        return electricityMeterPoint?.lookupAgreements(period = period) ?: emptyList()
-    }
-
-    /***
-     * To simplify processing, we assume tariffs do not overlap
-     * It is not possible in the real world, plus the current implementation,
-     * We only deal with half-hourly won't even have more than one tariffs.
-     */
-    @Deprecated("Demo only. Production data comes with vatInclusive costs now")
-    private suspend fun getUnitRates(agreements: List<Agreement>, period: ClosedRange<Instant>): List<Rate> {
-        val unitRates = mutableListOf<Rate>()
-        agreements.forEach { agreement ->
-            val effectiveQueryStartDate = maxOf(agreement.period.start, period.start)
-            val effectiveQueryEndDate = minOf(agreement.period.endInclusive, period.endInclusive)
-            val productCode = Tariff.extractProductCode(tariffCode = agreement.tariffCode)
-
-            unitRates.addAll(
-                octopusApiRepository.getStandardUnitRates(
-                    tariffCode = agreement.tariffCode,
-                    period = effectiveQueryStartDate..effectiveQueryEndDate,
-                ).getOrNull() ?: emptyList(),
-            )
-        }
-        return unitRates
-    }
-
-    @Deprecated("Demo only. Production data comes with vatInclusive costs now")
-    private fun calculateConsumptionCost(
-        consumption: Consumption,
-        unitRates: List<Rate>,
-    ): Double? {
-        if (unitRates.isEmpty()) return null
-
-        val effectiveUnitRate = unitRates.firstOrNull {
-            it.validity.start <= consumption.interval.start &&
-                it.validity.endInclusive >= consumption.interval.endInclusive
-        }
-
-        return effectiveUnitRate?.let { rate ->
-            rate.vatInclusivePrice * consumption.kWhConsumed
-        }
     }
 }

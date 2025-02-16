@@ -29,9 +29,9 @@ class FakeConsumptionDao : ConsumptionDao {
         consumptions.addAll(consumptionEntity)
     }
 
-    override suspend fun getConsumptions(meterSerial: String, intervalStart: Instant, intervalEnd: Instant): List<ConsumptionEntity> {
+    override suspend fun getConsumptions(deviceId: String, intervalStart: Instant, intervalEnd: Instant): List<ConsumptionEntity> {
         return consumptions.filter {
-            it.meterSerial == meterSerial && it.intervalStart >= intervalStart && it.intervalStart < intervalEnd
+            it.deviceId == deviceId && it.intervalStart >= intervalStart && it.intervalStart < intervalEnd
         }
     }
 
