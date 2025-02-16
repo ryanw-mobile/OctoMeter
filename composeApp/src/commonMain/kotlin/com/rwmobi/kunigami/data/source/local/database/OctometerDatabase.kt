@@ -33,7 +33,7 @@ expect object OctometerDatabaseCtor : RoomDatabaseConstructor<OctometerDatabase>
         ConsumptionEntity::class,
         RateEntity::class,
     ],
-    version = 4,
+    version = 5,
     exportSchema = true,
 )
 @TypeConverters(DatabaseTypeConverters::class)

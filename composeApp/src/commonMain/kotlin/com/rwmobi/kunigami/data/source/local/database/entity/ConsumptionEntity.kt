@@ -34,4 +34,6 @@ data class ConsumptionEntity(
     val kWhConsumed: Double,
     @ColumnInfo(name = "consumption_cost")
     val consumptionCost: Double,
+    @ColumnInfo(name = "standing_charge")
+    val standingCharge: Double,
 )

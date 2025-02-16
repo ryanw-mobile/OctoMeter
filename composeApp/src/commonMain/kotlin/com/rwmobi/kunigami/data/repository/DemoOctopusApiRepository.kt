@@ -26,12 +26,6 @@ import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
-import kotlinx.datetime.DateTimePeriod
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.plus
-import kotlinx.datetime.until
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.ln
@@ -39,6 +33,12 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
 import kotlin.random.Random
+import kotlinx.datetime.DateTimePeriod
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.plus
+import kotlinx.datetime.until
 
 class DemoOctopusApiRepository : OctopusApiRepository {
     private val defaultException = NotImplementedError("Disabled in demo mode")
@@ -131,6 +131,7 @@ class DemoOctopusApiRepository : OctopusApiRepository {
                         interval = intervalStart..intervalEnd,
                     ),
                     vatInclusiveCost = consumption * Random.nextDouble(0.0, 25.0),
+                    vatInclusiveStandingCharge = null, // TODO: need some fake data
                 ),
             )
 

@@ -28,6 +28,7 @@ fun ConsumptionEntity.toConsumptionWithCost() = ConsumptionWithCost(
         interval = intervalStart..intervalEnd,
     ),
     vatInclusiveCost = consumptionCost,
+    vatInclusiveStandingCharge = standingCharge,
 )
 
 fun GetMeasurementsQuery.Node.toConsumptionWithCost(): ConsumptionWithCost? {
@@ -40,14 +41,16 @@ fun GetMeasurementsQuery.Node.toConsumptionWithCost(): ConsumptionWithCost? {
                 interval = onIntervalMeasurementType.startAt..onIntervalMeasurementType.endAt,
             ),
             vatInclusiveCost = getEstimatedAmount(),
+            vatInclusiveStandingCharge = getStandingCharge(),
         )
     }
 }
 
 fun GetMeasurementsQuery.Node.toConsumptionEntity(deviceId: String): ConsumptionEntity? {
     val estimatedAmount = getEstimatedAmount()
+    val standingCharge = getStandingCharge()
 
-    return if (onIntervalMeasurementType == null || estimatedAmount == null) {
+    return if (onIntervalMeasurementType == null || estimatedAmount == null || standingCharge == null) {
         null
     } else {
         ConsumptionEntity(
@@ -56,6 +59,7 @@ fun GetMeasurementsQuery.Node.toConsumptionEntity(deviceId: String): Consumption
             intervalEnd = onIntervalMeasurementType.endAt,
             kWhConsumed = value,
             consumptionCost = estimatedAmount,
+            standingCharge = standingCharge,
         )
     }
 }
@@ -66,6 +70,17 @@ private fun GetMeasurementsQuery.Node.getEstimatedAmount(): Double? {
             if (it?.type == ReadingStatisticTypeEnum.TOU_BUCKET_COST ||
                 it?.type == ReadingStatisticTypeEnum.CONSUMPTION_COST
             ) {
+                it.costInclTax?.estimatedAmount
+            } else null
+        }
+        ?.takeIf { it.isNotEmpty() } // Ensures null if no valid values exist
+        ?.sum()
+}
+
+private fun GetMeasurementsQuery.Node.getStandingCharge(): Double? {
+    return metaData?.statistics
+        ?.mapNotNull {
+            if (it?.type == ReadingStatisticTypeEnum.STANDING_CHARGE_COST) {
                 it.costInclTax?.estimatedAmount
             } else null
         }
