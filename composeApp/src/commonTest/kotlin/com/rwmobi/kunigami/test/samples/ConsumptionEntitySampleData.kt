@@ -20,16 +20,20 @@ import kotlinx.datetime.Instant
 
 object ConsumptionEntitySampleData {
     val sample1 = ConsumptionEntity(
-        meterSerial = "11A1234567",
+        deviceId = "01-02-03-04-05-06-07-08",
         intervalStart = Instant.parse("2023-06-01T01:00:00Z"),
         intervalEnd = Instant.parse("2023-06-01T01:30:00Z"),
         kWhConsumed = 1.25,
+        consumptionCost = 2.50,
+        standingCharge = 1.16,
     )
 
     val sample2 = ConsumptionEntity(
-        meterSerial = "11A1234567",
+        deviceId = "01-02-03-04-05-06-07-08",
         intervalStart = Instant.parse("2023-06-01T01:30:00Z"),
         intervalEnd = Instant.parse("2023-06-01T02:00:00Z"),
         kWhConsumed = 2.54,
+        consumptionCost = 5.08,
+        standingCharge = 1.16,
     )
 }

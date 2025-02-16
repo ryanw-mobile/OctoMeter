@@ -16,17 +16,11 @@
 package com.rwmobi.kunigami.domain.usecase.consumption
 
 import com.rwmobi.kunigami.domain.exceptions.except
-import com.rwmobi.kunigami.domain.model.account.Agreement
-import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
-import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
+import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
-import com.rwmobi.kunigami.domain.model.product.Tariff
-import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
-import com.rwmobi.kunigami.ui.previewsampledata.FakeDemoUserProfile
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -47,6 +41,7 @@ class GetConsumptionAndCostUseCase(
      * it will still return the consumption but with null costs.
      */
     suspend operator fun invoke(
+        userProfile: UserProfile,
         period: ClosedRange<Instant>,
         groupBy: ConsumptionTimeFrame,
     ): Result<List<ConsumptionWithCost>> {
@@ -60,54 +55,26 @@ class GetConsumptionAndCostUseCase(
                     )
                 } else {
                     val apiKey = userPreferencesRepository.getApiKey()
-                    val mpan = userPreferencesRepository.getMpan()
-                    val meterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
-                    val accountNumber = userPreferencesRepository.getAccountNumber()
+                    val mpan = userProfile.selectedMpan
+                    val accountNumber = userProfile.account.accountNumber
+                    val deviceId = userProfile.getSelectedElectricityMeterPoint()
+                        ?.meters?.firstOrNull {
+                            it.serialNumber == userProfile.selectedMeterSerialNumber
+                        }?.deviceId
 
                     requireNotNull(value = apiKey, lazyMessage = { "Assertion failed: API Key is null" })
-                    requireNotNull(value = mpan, lazyMessage = { "Assertion failed: MPAN is null" })
-                    requireNotNull(value = meterSerialNumber, lazyMessage = { "Assertion failed: Meter Serial Number is null" })
-                    requireNotNull(value = accountNumber, lazyMessage = { "Assertion failed: Account is null" })
-
-                    var unitRates: List<Rate> = emptyList()
-                    if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
-                        // We need all the agreements covering the requested period to get the correct unit rates
-                        val account = octopusApiRepository.getAccount(
-                            accountNumber = accountNumber,
-                        ).getOrNull()
-
-                        if (account != null) {
-                            // find the tariffs in the requested period
-                            val agreements = getAgreements(
-                                electricityMeterPoint = account.getElectricityMeterPoint(mpan = mpan),
-                                period = period,
-                            )
-                            unitRates = getUnitRates(
-                                agreements = agreements,
-                                period = period,
-                            )
-                        }
-                    }
+                    requireNotNull(value = deviceId, lazyMessage = { "Assertion failed: deviceId is null" })
 
                     octopusApiRepository.getConsumption(
-                        apiKey = apiKey,
+                        accountNumber = accountNumber,
+                        deviceId = deviceId,
                         mpan = mpan,
-                        meterSerialNumber = meterSerialNumber,
                         period = period,
-                        orderBy = ConsumptionDataOrder.PERIOD,
                         groupBy = groupBy,
                     ).fold(
-                        onSuccess = { consumption ->
-                            consumption.sortedBy {
-                                it.interval.start
-                            }.map {
-                                ConsumptionWithCost(
-                                    consumption = it,
-                                    vatInclusiveCost = calculateConsumptionCost(
-                                        consumption = it,
-                                        unitRates = unitRates,
-                                    ),
-                                )
+                        onSuccess = { consumptionWithCost ->
+                            consumptionWithCost.sortedBy {
+                                it.consumption.interval.start
                             }
                         },
                         onFailure = { throw it },
@@ -118,78 +85,19 @@ class GetConsumptionAndCostUseCase(
     }
 
     private suspend fun generateDemoResponse(period: ClosedRange<Instant>, groupBy: ConsumptionTimeFrame): List<ConsumptionWithCost> {
-        // Since the user profile is completely fake, we are able to assign a variable tariff covering the entire period for cost calculations
-        val unitRates = FakeDemoUserProfile.flexibleOctopusRegionADirectDebit.getSelectedElectricityMeterPoint()?.agreements?.let { agreements ->
-            getUnitRates(
-                agreements = agreements,
-                period = period,
-            )
-        } ?: emptyList()
-
         return demoOctopusApiRepository.getConsumption(
-            apiKey = "",
+            accountNumber = "",
+            deviceId = "",
             mpan = "",
-            meterSerialNumber = "",
             period = period,
-            orderBy = ConsumptionDataOrder.PERIOD,
             groupBy = groupBy,
         ).fold(
             onSuccess = { consumption ->
                 consumption.sortedBy {
-                    it.interval.start
-                }.map {
-                    ConsumptionWithCost(
-                        consumption = it,
-                        vatInclusiveCost = calculateConsumptionCost(
-                            consumption = it,
-                            unitRates = unitRates,
-                        ),
-                    )
+                    it.consumption.interval.start
                 }
             },
             onFailure = { throw it },
         )
-    }
-
-    private fun getAgreements(electricityMeterPoint: ElectricityMeterPoint?, period: ClosedRange<Instant>): List<Agreement> {
-        return electricityMeterPoint?.lookupAgreements(period = period) ?: emptyList()
-    }
-
-    /***
-     * To simplify processing, we assume tariffs do not overlap
-     * It is not possible in the real world, plus the current implementation,
-     * We only deal with half-hourly won't even have more than one tariffs.
-     */
-    private suspend fun getUnitRates(agreements: List<Agreement>, period: ClosedRange<Instant>): List<Rate> {
-        val unitRates = mutableListOf<Rate>()
-        agreements.forEach { agreement ->
-            val effectiveQueryStartDate = maxOf(agreement.period.start, period.start)
-            val effectiveQueryEndDate = minOf(agreement.period.endInclusive, period.endInclusive)
-            val productCode = Tariff.extractProductCode(tariffCode = agreement.tariffCode)
-
-            unitRates.addAll(
-                octopusApiRepository.getStandardUnitRates(
-                    tariffCode = agreement.tariffCode,
-                    period = effectiveQueryStartDate..effectiveQueryEndDate,
-                ).getOrNull() ?: emptyList(),
-            )
-        }
-        return unitRates
-    }
-
-    private fun calculateConsumptionCost(
-        consumption: Consumption,
-        unitRates: List<Rate>,
-    ): Double? {
-        if (unitRates.isEmpty()) return null
-
-        val effectiveUnitRate = unitRates.firstOrNull {
-            it.validity.start <= consumption.interval.start &&
-                it.validity.endInclusive >= consumption.interval.endInclusive
-        }
-
-        return effectiveUnitRate?.let { rate ->
-            rate.vatInclusivePrice * consumption.kWhConsumed
-        }
     }
 }

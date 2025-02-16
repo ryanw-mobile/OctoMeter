@@ -17,8 +17,8 @@ package com.rwmobi.kunigami.data.repository
 
 import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
@@ -97,15 +97,13 @@ class DemoOctopusApiRepository : OctopusApiRepository {
      * Since this piece of code has no practical value, we take it as iss - until it breaks.
      */
     override suspend fun getConsumption(
-        apiKey: String,
+        accountNumber: String,
+        deviceId: String,
         mpan: String,
-        meterSerialNumber: String,
         period: ClosedRange<Instant>,
-        orderBy: ConsumptionDataOrder,
         groupBy: ConsumptionTimeFrame,
-        requestedPage: Int?,
-    ): Result<List<Consumption>> {
-        val consumptionList = mutableListOf<Consumption>()
+    ): Result<List<ConsumptionWithCost>> {
+        val consumptionList = mutableListOf<ConsumptionWithCost>()
         var intervalStart = period.start
         val mean = 0.2 // Midpoint of the range [0.110, 2.000]
         val standardDeviation = 0.2167 // Adjust to control the spread of values
@@ -127,11 +125,16 @@ class DemoOctopusApiRepository : OctopusApiRepository {
             consumption = min(max(consumption, 0.05), 1.5) * intervalFactor
 
             consumptionList.add(
-                Consumption(
-                    kWhConsumed = consumption,
-                    interval = intervalStart..intervalEnd,
+                ConsumptionWithCost(
+                    consumption = Consumption(
+                        kWhConsumed = consumption,
+                        interval = intervalStart..intervalEnd,
+                    ),
+                    vatInclusiveCost = consumption * Random.nextDouble(0.0, 25.0),
+                    vatInclusiveStandingCharge = null, // TODO: need some fake data
                 ),
             )
+
             intervalStart = intervalEnd
         }
 

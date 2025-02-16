@@ -59,7 +59,7 @@ internal class ConsumptionDaoTest {
         database.consumptionDao.insert(consumption)
 
         val retrieved = database.consumptionDao.getConsumptions(
-            meterSerial = ConsumptionEntitySampleData.sample1.meterSerial,
+            deviceId = ConsumptionEntitySampleData.sample1.deviceId,
             intervalStart = ConsumptionEntitySampleData.sample1.intervalStart - Duration.parse("1h"),
             intervalEnd = ConsumptionEntitySampleData.sample1.intervalStart + Duration.parse("1h"),
         )
@@ -77,7 +77,7 @@ internal class ConsumptionDaoTest {
         database.consumptionDao.insert(consumptions)
 
         val retrieved = database.consumptionDao.getConsumptions(
-            meterSerial = ConsumptionEntitySampleData.sample1.meterSerial,
+            deviceId = ConsumptionEntitySampleData.sample1.deviceId,
             intervalStart = ConsumptionEntitySampleData.sample1.intervalStart - Duration.parse("1h"),
             intervalEnd = ConsumptionEntitySampleData.sample1.intervalStart + Duration.parse("1h"),
         )
@@ -93,7 +93,7 @@ internal class ConsumptionDaoTest {
         database.consumptionDao.insert(consumption)
 
         val retrieved = database.consumptionDao.getConsumptions(
-            meterSerial = "invalid-serial",
+            deviceId = "invalid-device-id",
             intervalStart = ConsumptionEntitySampleData.sample1.intervalStart,
             intervalEnd = ConsumptionEntitySampleData.sample1.intervalEnd,
         )
@@ -107,7 +107,7 @@ internal class ConsumptionDaoTest {
         database.consumptionDao.insert(consumption)
 
         val retrieved = database.consumptionDao.getConsumptions(
-            meterSerial = ConsumptionEntitySampleData.sample1.meterSerial,
+            deviceId = ConsumptionEntitySampleData.sample1.deviceId,
             intervalStart = ConsumptionEntitySampleData.sample1.intervalEnd,
             intervalEnd = ConsumptionEntitySampleData.sample1.intervalEnd + Duration.parse("1h"),
         )
@@ -124,7 +124,7 @@ internal class ConsumptionDaoTest {
         database.consumptionDao.insert(consumptions)
 
         val retrieved = database.consumptionDao.getConsumptions(
-            meterSerial = ConsumptionEntitySampleData.sample1.meterSerial,
+            deviceId = ConsumptionEntitySampleData.sample1.deviceId,
             intervalStart = ConsumptionEntitySampleData.sample1.intervalStart,
             intervalEnd = ConsumptionEntitySampleData.sample1.intervalEnd,
         )
@@ -140,7 +140,7 @@ internal class ConsumptionDaoTest {
 
         database.consumptionDao.clear()
         val retrieved = database.consumptionDao.getConsumptions(
-            meterSerial = ConsumptionEntitySampleData.sample1.meterSerial,
+            deviceId = ConsumptionEntitySampleData.sample1.deviceId,
             intervalStart = ConsumptionEntitySampleData.sample1.intervalStart - Duration.parse("1h"),
             intervalEnd = ConsumptionEntitySampleData.sample1.intervalStart + Duration.parse("1h"),
         )

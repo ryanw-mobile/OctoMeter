@@ -25,7 +25,7 @@ interface DatabaseDataSource {
     suspend fun insertConsumption(consumptionEntity: ConsumptionEntity)
     suspend fun insertConsumptions(consumptionEntity: List<ConsumptionEntity>)
     suspend fun getConsumptions(
-        meterSerial: String,
+        deviceId: String,
         interval: ClosedRange<Instant>,
     ): List<ConsumptionEntity>
 

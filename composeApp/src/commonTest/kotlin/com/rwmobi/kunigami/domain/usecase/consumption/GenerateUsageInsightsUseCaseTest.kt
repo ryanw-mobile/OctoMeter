@@ -39,9 +39,9 @@ class GenerateUsageInsightsUseCaseTest {
         kWhConsumed = 15.0,
         interval = Instant.parse("2023-03-30T02:00:00Z")..Instant.parse("2023-03-30T02:30:00Z"),
     )
-    private val consumptionWithCost1 = ConsumptionWithCost(consumption = consumption1, vatInclusiveCost = 45.0)
-    private val consumptionWithCost2 = ConsumptionWithCost(consumption = consumption2, vatInclusiveCost = 5.0)
-    private val consumptionWithCost3 = ConsumptionWithCost(consumption = consumption3, vatInclusiveCost = 16.0)
+    private val consumptionWithCost1 = ConsumptionWithCost(consumption = consumption1, vatInclusiveCost = 45.0, vatInclusiveStandingCharge = 65.0)
+    private val consumptionWithCost2 = ConsumptionWithCost(consumption = consumption2, vatInclusiveCost = 5.0, vatInclusiveStandingCharge = 65.0)
+    private val consumptionWithCost3 = ConsumptionWithCost(consumption = consumption3, vatInclusiveCost = 16.0, vatInclusiveStandingCharge = 65.0)
     private val generateUsageInsightsUseCase = GenerateUsageInsightsUseCase()
 
     @Test
@@ -80,7 +80,7 @@ class GenerateUsageInsightsUseCaseTest {
             costWithCharges = 1.14,
             isTrueCost = true,
             consumptionDailyAverage = 40.0,
-            costDailyAverage = 10.58,
+            costDailyAverage = 1.14,
             consumptionAnnualProjection = 14600.0,
             costAnnualProjection = 415.55,
         )
@@ -88,12 +88,12 @@ class GenerateUsageInsightsUseCaseTest {
             tariff = tariff,
             consumptionWithCost = listOf(consumptionWithCost1, consumptionWithCost2, consumptionWithCost3),
         )
-        assertEquals(result, expectedInsights)
+        assertEquals(expectedInsights, result)
     }
 
     @Test
     fun `generateUsageInsightsUseCase should return correct Insights when isTrueCost is false`() {
-        val consumptionWithCostWithoutCost = ConsumptionWithCost(consumption = consumption1, vatInclusiveCost = null)
+        val consumptionWithCostWithoutCost = ConsumptionWithCost(consumption = consumption1, vatInclusiveCost = null, vatInclusiveStandingCharge = null)
         val expectedInsights = Insights(
             consumptionAggregateRounded = 10.0,
             consumptionTimeSpan = 1,
@@ -109,6 +109,6 @@ class GenerateUsageInsightsUseCaseTest {
             tariff = tariff,
             consumptionWithCost = listOf(consumptionWithCostWithoutCost),
         )
-        assertEquals(result, expectedInsights)
+        assertEquals(expectedInsights, result)
     }
 }

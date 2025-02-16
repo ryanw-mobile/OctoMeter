@@ -74,16 +74,15 @@ Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/Octo
 ### RestAPI and GraphQL
 
 Octopus Energy and Kraken prefer GraphQL over REST API. Accordingly, the second phase of this
-project has migrated several REST APIs to GraphQL. Unfortunately, not every REST API currently has
-an equivalent GraphQL counterpart; therefore, this app has a mixed use of both for demonstration
-purposes. I am working on identifying the GraphQL implentation for the existing RestAPI calls.
+project has migrated most REST APIs to GraphQL. Currently, this app has a mixed use of both, while
+the migration is in progress.
 
 | Features                      | Implementation                                      |
 |-------------------------------|-----------------------------------------------------|
 | Account and meters            | 🕸️ GraphQL                                         |
 | Products Search (by postcode) | 🕸️ GraphQL                                         |
 | Tariff details                | 🕸️ GraphQL                                         |
-| Consumptions                  | 😴 RestAPI (Pending migration)                     |
+| Consumptions                  | 🕸️ GraphQL                                         |
 | Half-hourly tariff rates      | 😴 RestAPI (Needs access to tariffs not subscribed) |
 
 [Version 1.4.0](https://github.com/ryanw-mobile/OctoMeter/tree/release/v1.4.0) is the last version

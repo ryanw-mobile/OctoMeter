@@ -1,0 +1,49 @@
+query GetMeasurementsQuery($accountNumber: String!, $first: Int!, $utilityFilters: [UtilityFiltersInput!], $startAt: DateTime, $endAt: DateTime, $timezone: String, $afterCursor: String) {
+    account(accountNumber: $accountNumber) {
+        properties {
+            id
+            measurements(
+                first: $first
+                utilityFilters: $utilityFilters
+                startAt: $startAt
+                endAt: $endAt
+                timezone: $timezone
+                after: $afterCursor
+            ) {
+                edges {
+                    node {
+                        value
+                        unit
+                        ... on IntervalMeasurementType {
+                            startAt
+                            endAt
+                            __typename
+                        }
+                        metaData {
+                            statistics {
+                                costInclTax {
+                                    costCurrency
+                                    estimatedAmount
+                                    __typename
+                                }
+                                type
+                                __typename
+                            }
+                            __typename
+                        }
+                        __typename
+                    }
+                    __typename
+                }
+                pageInfo {
+                    hasNextPage
+                    endCursor
+                    __typename
+                }
+                __typename
+            }
+            __typename
+        }
+        __typename
+    }
+}

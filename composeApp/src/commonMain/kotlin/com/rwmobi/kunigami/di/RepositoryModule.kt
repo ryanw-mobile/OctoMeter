@@ -30,7 +30,6 @@ val repositoryModule = module {
     single<OctopusApiRepository>(named("graphql")) {
         OctopusGraphQLRepository(
             productsEndpoint = get(),
-            electricityMeterPointsEndpoint = get(),
             inMemoryCacheDataSource = get(),
             databaseDataSource = get(),
             graphQLEndpoint = get(),

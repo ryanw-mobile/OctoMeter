@@ -16,7 +16,6 @@
 package com.rwmobi.kunigami.di
 
 import com.rwmobi.kunigami.data.source.network.restapi.AccountEndpoint
-import com.rwmobi.kunigami.data.source.network.restapi.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -47,14 +46,6 @@ val ktorModule = module {
 
     factory {
         ProductsEndpoint(
-            baseUrl = BASE_URL,
-            httpClient = get(),
-            dispatcher = get(named("IoDispatcher")),
-        )
-    }
-
-    factory {
-        ElectricityMeterPointsEndpoint(
             baseUrl = BASE_URL,
             httpClient = get(),
             dispatcher = get(named("IoDispatcher")),

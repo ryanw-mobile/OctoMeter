@@ -21,4 +21,5 @@ import androidx.compose.runtime.Immutable
 data class ConsumptionWithCost(
     val consumption: Consumption,
     val vatInclusiveCost: Double?,
+    val vatInclusiveStandingCharge: Double?,
 )

@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 3,
-    "identityHash": "fb17e1f0469ca28055908e40b4f1bc61",
+    "version": 4,
+    "identityHash": "b75ef57b01cb2b5040976cb47858a5d8",
     "entities": [
       {
         "tableName": "consumption",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`device_id` TEXT NOT NULL, `interval_start` INTEGER NOT NULL, `interval_end` INTEGER NOT NULL, `kwh_consumed` REAL NOT NULL, `consumption_cost` REAL NOT NULL, PRIMARY KEY(`device_id`, `interval_start`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`device_id` TEXT NOT NULL, `interval_start` INTEGER NOT NULL, `interval_end` INTEGER NOT NULL, `kwh_consumed` REAL NOT NULL, `consumption_cost` REAL NOT NULL, `standing_charge` REAL NOT NULL, PRIMARY KEY(`device_id`, `interval_start`))",
         "fields": [
           {
             "fieldPath": "deviceId",
@@ -35,6 +35,12 @@
           {
             "fieldPath": "consumptionCost",
             "columnName": "consumption_cost",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "standingCharge",
+            "columnName": "standing_charge",
             "affinity": "REAL",
             "notNull": true
           }
@@ -100,7 +106,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fb17e1f0469ca28055908e40b4f1bc61')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b75ef57b01cb2b5040976cb47858a5d8')"
     ]
   }
 }

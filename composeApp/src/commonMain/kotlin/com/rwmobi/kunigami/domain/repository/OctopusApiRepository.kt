@@ -16,9 +16,8 @@
 package com.rwmobi.kunigami.domain.repository
 
 import com.rwmobi.kunigami.domain.model.account.Account
-import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
@@ -62,14 +61,12 @@ interface OctopusApiRepository {
     ): Result<List<Rate>>
 
     suspend fun getConsumption(
-        apiKey: String,
+        accountNumber: String,
+        deviceId: String,
         mpan: String,
-        meterSerialNumber: String,
         period: ClosedRange<Instant>,
-        orderBy: ConsumptionDataOrder = ConsumptionDataOrder.LATEST_FIRST,
         groupBy: ConsumptionTimeFrame = ConsumptionTimeFrame.HALF_HOURLY,
-        requestedPage: Int? = null,
-    ): Result<List<Consumption>>
+    ): Result<List<ConsumptionWithCost>>
 
     suspend fun getAccount(
         accountNumber: String,

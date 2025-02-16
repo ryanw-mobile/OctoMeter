@@ -99,6 +99,7 @@ class UsageViewModel(
                 var remainingRetryAttempt = 4
                 do {
                     getConsumptionAndCostUseCase(
+                        userProfile = userProfile,
                         period = newConsumptionQueryFilter.requestedPeriod,
                         groupBy = newConsumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
                     ).fold(
@@ -162,6 +163,7 @@ class UsageViewModel(
             }
 
             getConsumptionAndCostUseCase(
+                userProfile = userProfile,
                 period = consumptionQueryFilter.requestedPeriod,
                 groupBy = consumptionQueryFilter.presentationStyle.getConsumptionDataGroup(),
             ).fold(

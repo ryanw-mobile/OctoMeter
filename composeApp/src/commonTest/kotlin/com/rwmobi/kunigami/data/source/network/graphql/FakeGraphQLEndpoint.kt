@@ -17,7 +17,9 @@ package com.rwmobi.kunigami.data.source.network.graphql
 
 import com.rwmobi.kunigami.data.source.network.dto.auth.Token
 import com.rwmobi.kunigami.data.source.network.graphql.interfaces.GraphQLEndpoint
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import com.rwmobi.kunigami.graphql.EnergyProductsQuery
+import com.rwmobi.kunigami.graphql.GetMeasurementsQuery
 import com.rwmobi.kunigami.graphql.PropertiesQuery
 import com.rwmobi.kunigami.graphql.SingleEnergyProductQuery
 import com.rwmobi.kunigami.graphql.SmartMeterTelemetryQuery
@@ -34,6 +36,10 @@ class FakeGraphQLEndpoint : GraphQLEndpoint {
     }
 
     override suspend fun getAccount(accountNumber: String): PropertiesQuery.Data {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getMeasurements(accountNumber: String, deviceId: String, marketSupplyPointId: String, start: Instant, end: Instant, readingFrequencyType: ConsumptionTimeFrame, afterCursor: String?, pageSize: Int): GetMeasurementsQuery.Data {
         TODO("Not yet implemented")
     }
 

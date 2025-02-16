@@ -66,7 +66,7 @@ class AgileViewModel(
     private val _uiState: MutableStateFlow<AgileUIState> = MutableStateFlow(AgileUIState(isLoading = true))
     val uiState = _uiState.asStateFlow()
 
-    private val _meterDeviceId = MutableStateFlow<String?>(null)
+    private val meterDeviceId = MutableStateFlow<String?>(null)
     private var liveConsumptionJob: Job? = null
 
     private val agileTariffKeyword = "AGILE"
@@ -91,7 +91,7 @@ class AgileViewModel(
 
         viewModelScope.launch(dispatcher) {
             val currentUserProfile = getUserProfile()
-            _meterDeviceId.value = currentUserProfile?.getSelectedElectricityMeterPoint()
+            meterDeviceId.value = currentUserProfile?.getSelectedElectricityMeterPoint()
                 ?.meters?.firstOrNull {
                     it.serialNumber == currentUserProfile.selectedMeterSerialNumber
                 }?.deviceId
@@ -122,7 +122,7 @@ class AgileViewModel(
     fun startLiveConsumptionUpdates() {
         liveConsumptionJob?.cancel()
         liveConsumptionJob = viewModelScope.launch(dispatcher) {
-            _meterDeviceId.collectLatest { meterDeviceId ->
+            meterDeviceId.collectLatest { meterDeviceId ->
                 if (meterDeviceId != null) {
                     liveConsumptionFlow(meterDeviceId).collect { result ->
                         result.fold(

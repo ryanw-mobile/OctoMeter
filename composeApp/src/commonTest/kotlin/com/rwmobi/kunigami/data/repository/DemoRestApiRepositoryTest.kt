@@ -15,7 +15,6 @@
 
 package com.rwmobi.kunigami.data.repository
 
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
@@ -34,6 +33,10 @@ class DemoRestApiRepositoryTest {
 
     private val sampleTariffCode = "E-1R-SAMPLE-TARIFF-A"
     private val samplePostcode = "WC1X 0ND"
+    private val fakeMpan = "mpan"
+    private val fakeMeterSerialNumber = "meterSerialNumber"
+    private val fakeAccountNumber = "B-1234A1A1"
+    private val fakeDeviceId = "00-00-00-00-00-00-00-00"
     private val demoRepository = DemoOctopusApiRepository()
 
     @Test
@@ -112,7 +115,7 @@ class DemoRestApiRepositoryTest {
     fun `getAccount should throw NotImplementedError`() = runTest {
         assertFailsWith<NotImplementedError> {
             demoRepository.getAccount(
-                accountNumber = "accountNumber",
+                accountNumber = fakeAccountNumber,
             )
         }
     }
@@ -130,13 +133,11 @@ class DemoRestApiRepositoryTest {
         val start = now - Duration.parse("1d")
 
         val result = demoRepository.getConsumption(
-            apiKey = "apiKey",
-            mpan = "mpan",
-            meterSerialNumber = "meterSerialNumber",
+            mpan = fakeMpan,
             period = start..now,
-            orderBy = ConsumptionDataOrder.PERIOD,
             groupBy = ConsumptionTimeFrame.HALF_HOURLY,
-            requestedPage = 1,
+            accountNumber = fakeAccountNumber,
+            deviceId = fakeDeviceId,
         )
 
         assertTrue(result.isSuccess)
@@ -150,13 +151,11 @@ class DemoRestApiRepositoryTest {
         val start = now - Duration.parse("30d")
 
         val result = demoRepository.getConsumption(
-            apiKey = "apiKey",
-            mpan = "mpan",
-            meterSerialNumber = "meterSerialNumber",
+            mpan = fakeMpan,
             period = start..now,
-            orderBy = ConsumptionDataOrder.PERIOD,
             groupBy = ConsumptionTimeFrame.DAY,
-            requestedPage = 1,
+            accountNumber = fakeAccountNumber,
+            deviceId = fakeDeviceId,
         )
 
         assertTrue(result.isSuccess)
@@ -170,13 +169,11 @@ class DemoRestApiRepositoryTest {
         val start = now - Duration.parse("7d")
 
         val result = demoRepository.getConsumption(
-            apiKey = "apiKey",
-            mpan = "mpan",
-            meterSerialNumber = "meterSerialNumber",
+            mpan = fakeMpan,
             period = start..now,
-            orderBy = ConsumptionDataOrder.PERIOD,
             groupBy = ConsumptionTimeFrame.WEEK,
-            requestedPage = 1,
+            accountNumber = fakeAccountNumber,
+            deviceId = fakeDeviceId,
         )
 
         assertTrue(result.isSuccess)
@@ -190,13 +187,11 @@ class DemoRestApiRepositoryTest {
         val start = now - Duration.parse("364d")
 
         val result = demoRepository.getConsumption(
-            apiKey = "apiKey",
-            mpan = "mpan",
-            meterSerialNumber = "meterSerialNumber",
+            mpan = fakeMpan,
             period = start..now,
-            orderBy = ConsumptionDataOrder.PERIOD,
             groupBy = ConsumptionTimeFrame.MONTH,
-            requestedPage = 1,
+            accountNumber = fakeAccountNumber,
+            deviceId = fakeDeviceId,
         )
 
         assertTrue(result.isSuccess)
@@ -214,13 +209,11 @@ class DemoRestApiRepositoryTest {
 
         assertFailsWith<NotImplementedError> {
             demoRepository.getConsumption(
-                apiKey = "apiKey",
-                mpan = "mpan",
-                meterSerialNumber = "meterSerialNumber",
+                mpan = fakeMpan,
                 period = start..now,
-                orderBy = ConsumptionDataOrder.PERIOD,
                 groupBy = ConsumptionTimeFrame.QUARTER,
-                requestedPage = 1,
+                accountNumber = fakeAccountNumber,
+                deviceId = fakeDeviceId,
             )
         }
     }

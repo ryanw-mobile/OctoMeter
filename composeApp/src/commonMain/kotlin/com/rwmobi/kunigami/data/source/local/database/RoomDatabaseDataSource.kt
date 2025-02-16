@@ -49,11 +49,11 @@ class RoomDatabaseDataSource(
     }
 
     override suspend fun getConsumptions(
-        meterSerial: String,
+        deviceId: String,
         interval: ClosedRange<Instant>,
     ): List<ConsumptionEntity> {
         return consumptionDao.getConsumptions(
-            meterSerial = meterSerial,
+            deviceId = deviceId,
             intervalStart = interval.start,
             intervalEnd = interval.endInclusive,
         )

@@ -35,13 +35,13 @@ interface ConsumptionDao {
     SELECT * 
     FROM consumption 
     WHERE 
-        meter_serial = :meterSerial
+        device_id = :deviceId
         AND interval_start >= :intervalStart 
         AND interval_start < :intervalEnd 
     ORDER BY interval_start ASC
         """,
     )
-    suspend fun getConsumptions(meterSerial: String, intervalStart: Instant, intervalEnd: Instant): List<ConsumptionEntity>
+    suspend fun getConsumptions(deviceId: String, intervalStart: Instant, intervalEnd: Instant): List<ConsumptionEntity>
 
     @Query("DELETE FROM consumption")
     suspend fun clear()

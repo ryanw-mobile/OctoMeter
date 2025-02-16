@@ -17,8 +17,8 @@ package com.rwmobi.kunigami.data.repository
 
 import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.data.repository.mapper.toAccount
-import com.rwmobi.kunigami.data.repository.mapper.toConsumption
 import com.rwmobi.kunigami.data.repository.mapper.toConsumptionEntity
+import com.rwmobi.kunigami.data.repository.mapper.toConsumptionWithCost
 import com.rwmobi.kunigami.data.repository.mapper.toLiveConsumption
 import com.rwmobi.kunigami.data.repository.mapper.toProductDetails
 import com.rwmobi.kunigami.data.repository.mapper.toProductSummary
@@ -30,14 +30,12 @@ import com.rwmobi.kunigami.data.source.local.database.entity.coversRange
 import com.rwmobi.kunigami.data.source.local.database.interfaces.DatabaseDataSource
 import com.rwmobi.kunigami.data.source.local.database.model.RateType
 import com.rwmobi.kunigami.data.source.network.graphql.interfaces.GraphQLEndpoint
-import com.rwmobi.kunigami.data.source.network.restapi.ElectricityMeterPointsEndpoint
 import com.rwmobi.kunigami.data.source.network.restapi.ProductsEndpoint
 import com.rwmobi.kunigami.domain.exceptions.except
 import com.rwmobi.kunigami.domain.extensions.getHalfHourlyTimeSlotCount
 import com.rwmobi.kunigami.domain.model.account.Account
-import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import com.rwmobi.kunigami.domain.model.consumption.ConsumptionDataOrder
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
+import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
@@ -54,7 +52,6 @@ import kotlin.coroutines.cancellation.CancellationException
 
 class OctopusGraphQLRepository(
     private val productsEndpoint: ProductsEndpoint,
-    private val electricityMeterPointsEndpoint: ElectricityMeterPointsEndpoint,
     private val inMemoryCacheDataSource: InMemoryCacheDataSource,
     private val databaseDataSource: DatabaseDataSource,
     private val graphQLEndpoint: GraphQLEndpoint,
@@ -393,52 +390,58 @@ class OctopusGraphQLRepository(
     }
 
     /***
-     * This API supports paging. Every page contains at most 100 records.
-     * Supply `requestedPage` to specify a page.
-     * Otherwise, this function will retrieve all possible data the backend can provide.
+     * This API supports paging, and will retrieve all possible data the backend can provide.
      */
     override suspend fun getConsumption(
-        apiKey: String,
+        accountNumber: String,
+        deviceId: String,
         mpan: String,
-        meterSerialNumber: String,
         period: ClosedRange<Instant>,
-        orderBy: ConsumptionDataOrder,
         groupBy: ConsumptionTimeFrame,
-        requestedPage: Int?,
-    ): Result<List<Consumption>> {
+    ): Result<List<ConsumptionWithCost>> {
         return withContext(dispatcher) {
             runCatching {
                 // cache: if half-hourly, calculate the expected number of entries and see if the cache has them
                 getConsumptionsFromDatabase(
-                    meterSerialNumber = meterSerialNumber,
+                    deviceId = deviceId,
                     period = period,
                     groupBy = groupBy,
                 ) ?: run {
                     Logger.v(tag = "getConsumption", messageString = "DB Cache misses for $period")
-                    val combinedList = mutableListOf<Consumption>()
-                    var page: Int? = requestedPage
+                    val combinedList = mutableListOf<ConsumptionWithCost>()
+                    var afterCursor: String? = null
                     do {
-                        val apiResponse = electricityMeterPointsEndpoint.getConsumption(
-                            apiKey = apiKey,
-                            mpan = mpan,
-                            periodFrom = period.start,
-                            periodTo = period.endInclusive,
-                            meterSerialNumber = meterSerialNumber,
-                            orderBy = orderBy.apiValue,
-                            groupBy = groupBy.apiValue,
-                            page = page,
+                        val response = graphQLEndpoint.getMeasurements(
+                            accountNumber = accountNumber,
+                            deviceId = deviceId,
+                            marketSupplyPointId = mpan,
+                            start = period.start,
+                            end = period.endInclusive,
+                            readingFrequencyType = groupBy,
+                            afterCursor = afterCursor,
                         )
-                        combinedList.addAll(apiResponse?.results?.map { it.toConsumption() } ?: emptyList())
+
+                        combinedList.addAll(
+                            response.account?.properties?.firstOrNull()?.measurements?.edges?.mapNotNull {
+                                it?.node?.toConsumptionWithCost()
+                            } ?: emptyList(),
+                        )
 
                         // cache the results - only for half-hourly
                         if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
-                            apiResponse?.results?.map { it.toConsumptionEntity(meterSerial = meterSerialNumber) }?.let {
+                            response.account?.properties?.firstOrNull()?.measurements?.edges?.mapNotNull {
+                                it?.node?.toConsumptionEntity(deviceId = deviceId)
+                            }?.let {
                                 databaseDataSource.insertConsumptions(consumptionEntity = it)
                             }
                         }
 
-                        page = apiResponse?.getNextPageNumber()
-                    } while (page != null)
+                        afterCursor = if (response.account?.properties?.firstOrNull()?.measurements?.pageInfo?.hasNextPage == true) {
+                            response.account.properties.firstOrNull()?.measurements?.pageInfo?.endCursor
+                        } else {
+                            null
+                        }
+                    } while (afterCursor != null)
 
                     combinedList
                 }
@@ -446,21 +449,24 @@ class OctopusGraphQLRepository(
         }
     }
 
+    /***
+     * Consumption data without proper cost are considered incomplete and aren't cached in DB
+     */
     private suspend fun getConsumptionsFromDatabase(
-        meterSerialNumber: String,
+        deviceId: String,
         period: ClosedRange<Instant>,
         groupBy: ConsumptionTimeFrame,
-    ): List<Consumption>? {
+    ): List<ConsumptionWithCost>? {
         if (groupBy != ConsumptionTimeFrame.HALF_HOURLY) {
             return null
         }
 
         val cachedEntries = databaseDataSource.getConsumptions(
-            meterSerial = meterSerialNumber,
+            deviceId = deviceId,
             interval = period,
         )
         return if (cachedEntries.size == period.getHalfHourlyTimeSlotCount()) {
-            cachedEntries.map { it.toConsumption() }
+            cachedEntries.map { it.toConsumptionWithCost() }
         } else {
             null
         }
