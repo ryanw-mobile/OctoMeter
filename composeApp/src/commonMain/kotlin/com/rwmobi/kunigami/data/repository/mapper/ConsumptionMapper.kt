@@ -15,7 +15,6 @@
 
 package com.rwmobi.kunigami.data.repository.mapper
 
-import co.touchlab.kermit.Logger
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
 import com.rwmobi.kunigami.domain.extensions.roundConsumptionToNearestEvenHundredth
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
@@ -32,15 +31,6 @@ fun ConsumptionEntity.toConsumptionWithCost() = ConsumptionWithCost(
 )
 
 fun GetMeasurementsQuery.Node.toConsumptionWithCost(): ConsumptionWithCost? {
-    Logger.v(tag = "toConsumptionWithCost", messageString = "metaData = $metaData")
-
-    val estimatedAmount = metaData?.statistics?.firstOrNull {
-        it?.type == ReadingStatisticTypeEnum.TOU_BUCKET_COST ||
-            it?.type == ReadingStatisticTypeEnum.CONSUMPTION_COST
-    }?.costInclTax?.estimatedAmount
-
-    Logger.v(tag = "toConsumptionWithCost", messageString = "amount = $estimatedAmount")
-
     return if (onIntervalMeasurementType == null) {
         null
     } else {
@@ -49,16 +39,13 @@ fun GetMeasurementsQuery.Node.toConsumptionWithCost(): ConsumptionWithCost? {
                 kWhConsumed = value,
                 interval = onIntervalMeasurementType.startAt..onIntervalMeasurementType.endAt,
             ),
-            vatInclusiveCost = estimatedAmount,
+            vatInclusiveCost = getEstimatedAmount(),
         )
     }
 }
 
 fun GetMeasurementsQuery.Node.toConsumptionEntity(deviceId: String): ConsumptionEntity? {
-    val estimatedAmount = metaData?.statistics?.firstOrNull {
-        it?.type == ReadingStatisticTypeEnum.TOU_BUCKET_COST ||
-            it?.type == ReadingStatisticTypeEnum.CONSUMPTION_COST
-    }?.costInclTax?.estimatedAmount
+    val estimatedAmount = getEstimatedAmount()
 
     return if (onIntervalMeasurementType == null || estimatedAmount == null) {
         null
@@ -71,4 +58,17 @@ fun GetMeasurementsQuery.Node.toConsumptionEntity(deviceId: String): Consumption
             consumptionCost = estimatedAmount,
         )
     }
+}
+
+private fun GetMeasurementsQuery.Node.getEstimatedAmount(): Double? {
+    return metaData?.statistics
+        ?.mapNotNull {
+            if (it?.type == ReadingStatisticTypeEnum.TOU_BUCKET_COST ||
+                it?.type == ReadingStatisticTypeEnum.CONSUMPTION_COST
+            ) {
+                it.costInclTax?.estimatedAmount
+            } else null
+        }
+        ?.takeIf { it.isNotEmpty() } // Ensures null if no valid values exist
+        ?.sum()
 }
