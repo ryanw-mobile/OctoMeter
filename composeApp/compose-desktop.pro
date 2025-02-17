@@ -4,9 +4,14 @@
 #
 # Reference: https://github.com/Kotlin/kotlinx.coroutines/blob/13f27f729547e5c22d17d5b5de3582d450b037b4/kotlinx-coroutines-core/jvm/resources/META-INF/com.android.tools/proguard/coroutines.pro
 
+-printmapping build/proguard-mapping.txt
+
 # Keep Ktor classes
 -keep class io.ktor.** { *; }
 -dontnote io.ktor.**
+-dontwarn io.ktor.**
+-keep class kotlinx.io.** { *; }
+-dontwarn kotlinx.io.**
 
 # Keep all DTO classes in the package
 -keep class com.rwmobi.kunigami.data.source.network.dto.** { *; }
@@ -16,6 +21,7 @@
 
 # Apollo workarounds
 -dontnote okio.**
+-keep class com.rwmobi.kunigami.graphql.type.** { *; }
 -keep class com.apollographql.apollo.** { *; }
 -dontnote com.apollographql.**
 -keep class okhttp3.** { *; }
@@ -121,3 +127,4 @@
 -keep interface * extends androidx.room.RoomDatabase { *; }
 -keep class com.rwmobi.kunigami.data.source.local.database.dao.** { *; }
 -dontnote com.rwmobi.kunigami.data.source.local.database.dao.**
+-keep class com.rwmobi.kunigami.data.source.local.database.model.** { *; }
