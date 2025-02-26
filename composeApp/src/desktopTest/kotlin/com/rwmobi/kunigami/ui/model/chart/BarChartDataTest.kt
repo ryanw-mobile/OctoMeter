@@ -22,10 +22,10 @@ import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
 import com.rwmobi.kunigami.ui.tools.MultiplatformStringResourceProvider
 import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
-import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.Instant
 
 @Suppress("TooManyFunctions")
 class BarChartDataTest {
@@ -111,20 +111,19 @@ class BarChartDataTest {
 
     // 🗂 fromConsumptions
     // Helper function to create Consumption objects for testing
-    private fun createConsumption(kWhConsumed: Double, consumptionCost: Double, start: String, end: String): Consumption {
+    private fun createConsumption(kWhConsumed: Double, start: String, end: String): Consumption {
         return Consumption(
             kWhConsumed = kWhConsumed,
             interval = Instant.parse(start)..Instant.parse(end),
-            consumptionCost = consumptionCost,
         )
     }
 
     @Test
     fun `fromConsumptions should generate correct verticalBarPlotEntries`() = runBlocking {
         val consumptions = listOf(
-            createConsumption(kWhConsumed = 5.0, consumptionCost = 5.0, start = "2024-07-04T10:00:00Z", end = "2024-07-04T10:30:00Z"),
-            createConsumption(kWhConsumed = 10.0, consumptionCost = 10.0, start = "2024-07-04T10:30:00Z", end = "2024-07-04T11:00:00Z"),
-            createConsumption(kWhConsumed = 15.0, consumptionCost = 15.0, start = "2024-07-04T11:00:00Z", end = "2024-07-04T11:30:00Z"),
+            createConsumption(kWhConsumed = 5.0, start = "2024-07-04T10:00:00Z", end = "2024-07-04T10:30:00Z"),
+            createConsumption(kWhConsumed = 10.0, start = "2024-07-04T10:30:00Z", end = "2024-07-04T11:00:00Z"),
+            createConsumption(kWhConsumed = 15.0, start = "2024-07-04T11:00:00Z", end = "2024-07-04T11:30:00Z"),
         )
         val expectedEntries = listOf(
             DefaultVerticalBarPlotEntry(
@@ -153,10 +152,10 @@ class BarChartDataTest {
     @Test
     fun `fromConsumptions should generate correct labels for DAY_HALF_HOURLY`() = runBlocking {
         val consumptions = listOf(
-            createConsumption(kWhConsumed = 5.0, consumptionCost = 5.0, start = "2024-07-04T01:00:00Z", end = "2024-07-04T01:30:00Z"),
-            createConsumption(kWhConsumed = 10.0, consumptionCost = 10.0, start = "2024-07-04T01:30:00Z", end = "2024-07-04T02:00:00Z"),
-            createConsumption(kWhConsumed = 15.0, consumptionCost = 15.0, start = "2024-07-04T02:00:00Z", end = "2024-07-04T02:30:00Z"),
-            createConsumption(kWhConsumed = 20.0, consumptionCost = 20.0, start = "2024-07-04T02:30:00Z", end = "2024-07-04T03:00:00Z"),
+            createConsumption(kWhConsumed = 5.0, start = "2024-07-04T01:00:00Z", end = "2024-07-04T01:30:00Z"),
+            createConsumption(kWhConsumed = 10.0, start = "2024-07-04T01:30:00Z", end = "2024-07-04T02:00:00Z"),
+            createConsumption(kWhConsumed = 15.0, start = "2024-07-04T02:00:00Z", end = "2024-07-04T02:30:00Z"),
+            createConsumption(kWhConsumed = 20.0, start = "2024-07-04T02:30:00Z", end = "2024-07-04T03:00:00Z"),
         )
         val expectedLabels = mapOf(
             0 to "02",
@@ -174,9 +173,9 @@ class BarChartDataTest {
     @Test
     fun `fromConsumptions should generate correct tooltips for DAY_HALF_HOURLY`() = runBlocking {
         val consumptions = listOf(
-            createConsumption(kWhConsumed = 5.0, consumptionCost = 5.0, start = "2024-07-04T10:00:00Z", end = "2024-07-04T10:30:00Z"),
-            createConsumption(kWhConsumed = 10.0, consumptionCost = 10.0, start = "2024-07-04T10:30:00Z", end = "2024-07-04T11:00:00Z"),
-            createConsumption(kWhConsumed = 15.0, consumptionCost = 15.0, start = "2024-07-04T11:00:00Z", end = "2024-07-04T11:30:00Z"),
+            createConsumption(kWhConsumed = 5.0, start = "2024-07-04T10:00:00Z", end = "2024-07-04T10:30:00Z"),
+            createConsumption(kWhConsumed = 10.0, start = "2024-07-04T10:30:00Z", end = "2024-07-04T11:00:00Z"),
+            createConsumption(kWhConsumed = 15.0, start = "2024-07-04T11:00:00Z", end = "2024-07-04T11:30:00Z"),
         )
         val expectedTooltips = listOf(
             "11:00 - 11:30\n5.00 kWh",
@@ -196,9 +195,9 @@ class BarChartDataTest {
     @Test
     fun `fromConsumptions should generate correct labels for WEEK_SEVEN_DAYS`() = runBlocking {
         val consumptions = listOf(
-            createConsumption(kWhConsumed = 5.0, consumptionCost = 5.0, start = "2024-07-01T00:00:00Z", end = "2024-07-01T23:59:59Z"), // Monday
-            createConsumption(kWhConsumed = 10.0, consumptionCost = 10.0, start = "2024-07-02T00:00:00Z", end = "2024-07-02T23:59:59Z"), // Tuesday
-            createConsumption(kWhConsumed = 15.0, consumptionCost = 15.0, start = "2024-07-03T00:00:00Z", end = "2024-07-03T23:59:59Z"), // Wednesday
+            createConsumption(kWhConsumed = 5.0, start = "2024-07-01T00:00:00Z", end = "2024-07-01T23:59:59Z"), // Monday
+            createConsumption(kWhConsumed = 10.0, start = "2024-07-02T00:00:00Z", end = "2024-07-02T23:59:59Z"), // Tuesday
+            createConsumption(kWhConsumed = 15.0, start = "2024-07-03T00:00:00Z", end = "2024-07-03T23:59:59Z"), // Wednesday
         )
         val expectedLabels = mapOf(
             0 to "Mon",
@@ -218,9 +217,9 @@ class BarChartDataTest {
     @Test
     fun `fromConsumptions should generate correct tooltips for WEEK_SEVEN_DAYS`() = runBlocking {
         val consumptions = listOf(
-            createConsumption(kWhConsumed = 5.0, consumptionCost = 5.0, start = "2024-07-01T00:00:00Z", end = "2024-07-01T23:59:59Z"), // Monday
-            createConsumption(kWhConsumed = 10.0, consumptionCost = 10.0, start = "2024-07-02T00:00:00Z", end = "2024-07-02T23:59:59Z"), // Tuesday
-            createConsumption(kWhConsumed = 15.0, consumptionCost = 15.0, start = "2024-07-03T00:00:00Z", end = "2024-07-03T23:59:59Z"), // Wednesday
+            createConsumption(kWhConsumed = 5.0, start = "2024-07-01T00:00:00Z", end = "2024-07-01T23:59:59Z"), // Monday
+            createConsumption(kWhConsumed = 10.0, start = "2024-07-02T00:00:00Z", end = "2024-07-02T23:59:59Z"), // Tuesday
+            createConsumption(kWhConsumed = 15.0, start = "2024-07-03T00:00:00Z", end = "2024-07-03T23:59:59Z"), // Wednesday
         )
         val expectedTooltips = listOf(
             "01 Jul\n5.00 kWh",
@@ -262,9 +261,9 @@ class BarChartDataTest {
     @Test
     fun `fromConsumptions should generate correct tooltips for YEAR_TWELVE_MONTHS`() = runBlocking {
         val consumptions = listOf(
-            createConsumption(kWhConsumed = 5.0, consumptionCost = 5.0, start = "2024-01-01T00:00:00Z", end = "2024-01-31T23:59:59Z"), // January
-            createConsumption(kWhConsumed = 10.0, consumptionCost = 10.0, start = "2024-02-01T00:00:00Z", end = "2024-02-28T23:59:59Z"), // February
-            createConsumption(kWhConsumed = 15.0, consumptionCost = 15.0, start = "2024-03-01T00:00:00Z", end = "2024-03-31T23:59:59Z"), // March
+            createConsumption(kWhConsumed = 5.0, start = "2024-01-01T00:00:00Z", end = "2024-01-31T23:59:59Z"), // January
+            createConsumption(kWhConsumed = 10.0, start = "2024-02-01T00:00:00Z", end = "2024-02-28T23:59:59Z"), // February
+            createConsumption(kWhConsumed = 15.0, start = "2024-03-01T00:00:00Z", end = "2024-03-31T23:59:59Z"), // March
         )
         val expectedTooltips = listOf(
             "Jan 2024\n5.00 kWh",
