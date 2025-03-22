@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024. RW MobiMedia UK Limited
+ * Copyright (c) 2024-2025. RW MobiMedia UK Limited
  *
  * Contributions made by other developers remain the property of their respective authors but are licensed
  * to RW MobiMedia UK Limited and others under the same licence terms as the main project, as outlined in
@@ -28,8 +28,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.product.Tariff
@@ -54,16 +55,11 @@ internal fun ReferenceTariffTile(
             .clip(shape = MaterialTheme.shapes.large)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .drawBehind {
-                val triangleSize = dimension.grid_1_5.toPx() * 2
-                val path = Path().apply {
-                    moveTo(size.width, 0f)
-                    lineTo(size.width - triangleSize, 0f) // Top edge
-                    lineTo(size.width, triangleSize) // Right edge
-                    close()
-                }
-                drawPath(
-                    path = path,
+                val stripeWidth = dimension.grid_1.toPx()
+                drawRect(
                     color = indicatorColor,
+                    topLeft = Offset(x = size.width - stripeWidth, y = 0f),
+                    size = Size(width = stripeWidth, height = size.height),
                 )
             }
             .padding(dimension.grid_2),
