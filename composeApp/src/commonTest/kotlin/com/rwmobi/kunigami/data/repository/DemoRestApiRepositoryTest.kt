@@ -14,7 +14,9 @@
  */
 
 package com.rwmobi.kunigami.data.repository
-
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionTimeFrame
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
@@ -65,7 +67,9 @@ class DemoRestApiRepositoryTest {
 
     @Test
     fun `getStandardUnitRates should throw NotImplementedError`() = runTest {
-        val now = Clock.System.now()
+        val timeZone = TimeZone.of("Europe/London")
+        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+            .toInstant(timeZone)
         val start = now - Duration.parse("30d")
 
         assertFailsWith<NotImplementedError> {
@@ -89,7 +93,9 @@ class DemoRestApiRepositoryTest {
 
     @Test
     fun `getDayUnitRates should throw NotImplementedError`() = runTest {
-        val now = Clock.System.now()
+        val timeZone = TimeZone.of("Europe/London")
+        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+            .toInstant(timeZone)
         assertFailsWith<NotImplementedError> {
             demoRepository.getDayUnitRates(
                 tariffCode = sampleTariffCode,
@@ -101,7 +107,9 @@ class DemoRestApiRepositoryTest {
 
     @Test
     fun `getNightUnitRates should throw NotImplementedError`() = runTest {
-        val now = Clock.System.now()
+        val timeZone = TimeZone.of("Europe/London")
+        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+            .toInstant(timeZone)
         assertFailsWith<NotImplementedError> {
             demoRepository.getNightUnitRates(
                 tariffCode = sampleTariffCode,
@@ -129,7 +137,9 @@ class DemoRestApiRepositoryTest {
 
     @Test
     fun `getConsumption should generate random consumption data for HALF_HOURLY ConsumptionTimeFrame`() = runTest {
-        val now = Clock.System.now()
+        val timeZone = TimeZone.of("Europe/London")
+        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+            .toInstant(timeZone)
         val start = now - Duration.parse("1d")
 
         val result = demoRepository.getConsumption(
@@ -147,7 +157,9 @@ class DemoRestApiRepositoryTest {
 
     @Test
     fun `getConsumption should generate random consumption data for DAY ConsumptionTimeFrame`() = runTest {
-        val now = Clock.System.now()
+        val timeZone = TimeZone.of("Europe/London")
+        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+            .toInstant(timeZone)
         val start = now - Duration.parse("30d")
 
         val result = demoRepository.getConsumption(
@@ -165,7 +177,9 @@ class DemoRestApiRepositoryTest {
 
     @Test
     fun `getConsumption should generate random consumption data for WEEK ConsumptionTimeFrame`() = runTest {
-        val now = Clock.System.now()
+        val timeZone = TimeZone.of("Europe/London")
+        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+            .toInstant(timeZone)
         val start = now - Duration.parse("7d")
 
         val result = demoRepository.getConsumption(
@@ -183,7 +197,9 @@ class DemoRestApiRepositoryTest {
 
     @Test
     fun `getConsumption should generate random consumption data for MONTH ConsumptionTimeFrame`() = runTest {
-        val now = Clock.System.now()
+        val timeZone = TimeZone.of("Europe/London")
+        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+            .toInstant(timeZone)
         val start = now - Duration.parse("364d")
 
         val result = demoRepository.getConsumption(
@@ -204,7 +220,9 @@ class DemoRestApiRepositoryTest {
 
     @Test
     fun `getConsumption should throw NotImplementedError for QUARTER ConsumptionTimeFrame`() = runTest {
-        val now = Clock.System.now()
+        val timeZone = TimeZone.of("Europe/London")
+        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+            .toInstant(timeZone)
         val start = now - Duration.parse("120d")
 
         assertFailsWith<NotImplementedError> {
