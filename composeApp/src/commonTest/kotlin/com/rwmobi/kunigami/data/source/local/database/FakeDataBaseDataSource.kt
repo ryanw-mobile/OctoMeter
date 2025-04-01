@@ -35,7 +35,7 @@ class FakeDataBaseDataSource : DatabaseDataSource {
 
     var getConsumptionsResponse: List<ConsumptionEntity>? = null
     override suspend fun getConsumptions(
-        meterSerial: String,
+        deviceId: String,
         interval: ClosedRange<Instant>,
     ): List<ConsumptionEntity> {
         exception?.let { throw it }

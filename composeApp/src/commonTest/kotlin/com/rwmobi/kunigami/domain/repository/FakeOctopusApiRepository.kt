@@ -84,7 +84,7 @@ class FakeOctopusApiRepository : OctopusApiRepository {
 
     var setConsumptionResponse: Result<List<ConsumptionWithCost>>? = null
     override suspend fun getConsumption(
-        apiKey: String,
+        accountNumber: String,
         deviceId: String,
         mpan: String,
         period: ClosedRange<Instant>,
