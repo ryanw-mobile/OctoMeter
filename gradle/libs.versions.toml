@@ -39,9 +39,9 @@ room = "2.7.0"
 ksp = "2.1.21-2.0.1"
 sqlite = "2.5.1"
 slf4j = "2.0.17"
-apollographql = "4.1.1"
+apollographql = "4.2.0"
 apollographqlMockServer = "0.1.1"
-apollographqlKotlinxDateTime = "0.0.4"
+apollographqlKotlinxDateTime = "0.0.6"
 testRules = "1.6.1"
 
 # App configurations, not dependencies
