@@ -21,6 +21,7 @@
 
 # Apollo workarounds
 -dontnote okio.**
+-keep class okio.** { *; }
 -keep class com.rwmobi.kunigami.graphql.type.** { *; }
 -keep class com.apollographql.apollo.** { *; }
 -dontnote com.apollographql.**
