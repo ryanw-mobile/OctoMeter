@@ -16,8 +16,8 @@
 package com.rwmobi.kunigami.domain.model.account
 
 import androidx.compose.runtime.Immutable
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 @Immutable
 data class ElectricityMeterPoint(

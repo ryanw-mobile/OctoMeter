@@ -17,7 +17,7 @@ package com.rwmobi.kunigami.test.samples
 
 import com.rwmobi.kunigami.data.source.network.dto.prices.PricesApiResponse
 import com.rwmobi.kunigami.data.source.network.dto.prices.RateDto
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 object GetNightUnitRatesSampleData {
     val json = """{

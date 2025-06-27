@@ -20,7 +20,7 @@ import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeter
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.graphql.PropertiesQuery
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 /***
  * Throws: IllegalArgumentException - if the timestamp return from API is not parsable

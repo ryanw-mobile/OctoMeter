@@ -24,8 +24,8 @@ import com.rwmobi.kunigami.domain.repository.UserPreferencesRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Instant
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Instant
 
 class GetConsumptionAndCostUseCase(
     private val userPreferencesRepository: UserPreferencesRepository,

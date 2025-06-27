@@ -17,12 +17,12 @@ package com.rwmobi.kunigami.data.source.local.cache
 
 import com.rwmobi.kunigami.data.source.network.dto.auth.Token
 import com.rwmobi.kunigami.ui.previewsampledata.AccountSamples
-import kotlinx.datetime.Clock
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.time.Clock
 import kotlin.time.Duration
 
 class InMemoryCacheDataSourceTest {

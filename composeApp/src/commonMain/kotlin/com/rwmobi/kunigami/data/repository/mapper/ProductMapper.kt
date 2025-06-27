@@ -25,7 +25,7 @@ import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
 import com.rwmobi.kunigami.graphql.EnergyProductsQuery
 import com.rwmobi.kunigami.graphql.SingleEnergyProductQuery
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 @Deprecated("RestAPI implementation")
 fun ProductDetailsDto.toProductSummary() = ProductSummary(

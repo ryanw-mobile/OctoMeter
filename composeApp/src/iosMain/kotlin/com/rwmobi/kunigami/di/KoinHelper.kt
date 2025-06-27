@@ -30,7 +30,7 @@ fun initKoin() {
                 platformModule,
                 dispatcherModule,
                 viewModelModule,
-                userCaseModule,
+                useCaseModule,
                 graphQLModule,
                 ktorModule,
                 repositoryModule,

@@ -26,7 +26,7 @@ import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SampleConsumpti
 import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SampleQuotesDto
 import com.rwmobi.kunigami.data.source.network.dto.singleproduct.SingleProductApiResponse
 import com.rwmobi.kunigami.data.source.network.dto.singleproduct.TariffDetailsDto
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 object GetProductSampleData {
 

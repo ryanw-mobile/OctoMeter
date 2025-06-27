@@ -28,7 +28,7 @@ import com.rwmobi.kunigami.di.graphQLModule
 import com.rwmobi.kunigami.di.ktorModule
 import com.rwmobi.kunigami.di.platformModule
 import com.rwmobi.kunigami.di.repositoryModule
-import com.rwmobi.kunigami.di.userCaseModule
+import com.rwmobi.kunigami.di.useCaseModule
 import com.rwmobi.kunigami.di.viewModelModule
 import com.rwmobi.kunigami.ui.composehelper.collectAsStateMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.customizeMacOsAboutMenu
@@ -41,8 +41,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.core.context.GlobalContext.startKoin
-import org.koin.core.logger.Level
-import org.koin.dsl.koinApplication
 import java.awt.Dimension
 
 fun main() {
@@ -58,28 +56,13 @@ fun main() {
         message = aboutAppDescription.format(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, BuildConfig.GITHUB_LINK),
     )
 
-    // TODO: This looks strange but it works. Either later we don't use Koin or we improve it.
-    koinApplication {
-        printLogger(Level.ERROR)
+    startKoin {
         logger(KermitKoinLogger(Logger.withTag("koin")))
         modules(
             platformModule,
             dispatcherModule,
             viewModelModule,
-            userCaseModule,
-            ktorModule,
-            graphQLModule,
-            repositoryModule,
-            dataSourceModule,
-        )
-    }
-
-    startKoin {
-        modules(
-            platformModule,
-            dispatcherModule,
-            viewModelModule,
-            userCaseModule,
+            useCaseModule,
             ktorModule,
             graphQLModule,
             repositoryModule,

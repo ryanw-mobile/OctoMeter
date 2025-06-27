@@ -21,6 +21,7 @@ import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.graphql.GetMeasurementsQuery
 import com.rwmobi.kunigami.graphql.type.ReadingStatisticTypeEnum
+import kotlinx.datetime.toStdlibInstant
 
 fun ConsumptionEntity.toConsumptionWithCost() = ConsumptionWithCost(
     consumption = Consumption(
@@ -38,7 +39,7 @@ fun GetMeasurementsQuery.Node.toConsumptionWithCost(): ConsumptionWithCost? {
         ConsumptionWithCost(
             consumption = Consumption(
                 kWhConsumed = value,
-                interval = onIntervalMeasurementType.startAt..onIntervalMeasurementType.endAt,
+                interval = onIntervalMeasurementType.startAt.toStdlibInstant()..onIntervalMeasurementType.endAt.toStdlibInstant(),
             ),
             vatInclusiveCost = getEstimatedAmount(),
             vatInclusiveStandingCharge = getStandingCharge(),
@@ -55,8 +56,8 @@ fun GetMeasurementsQuery.Node.toConsumptionEntity(deviceId: String): Consumption
     } else {
         ConsumptionEntity(
             deviceId = deviceId,
-            intervalStart = onIntervalMeasurementType.startAt,
-            intervalEnd = onIntervalMeasurementType.endAt,
+            intervalStart = onIntervalMeasurementType.startAt.toStdlibInstant(),
+            intervalEnd = onIntervalMeasurementType.endAt.toStdlibInstant(),
             kWhConsumed = value,
             consumptionCost = estimatedAmount,
             standingCharge = standingCharge,

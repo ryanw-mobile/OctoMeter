@@ -26,7 +26,7 @@ import com.rwmobi.kunigami.domain.model.account.Account
 import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeter
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 object GetAccountSampleData {
     val json = """{

@@ -19,10 +19,10 @@ import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
 import com.rwmobi.kunigami.test.samples.TariffSampleData
 import com.rwmobi.kunigami.ui.model.consumption.Insights
-import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.time.Instant
 
 class GenerateUsageInsightsUseCaseTest {
 

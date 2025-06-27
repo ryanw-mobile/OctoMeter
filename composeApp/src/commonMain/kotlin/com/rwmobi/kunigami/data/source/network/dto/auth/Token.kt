@@ -17,10 +17,9 @@ package com.rwmobi.kunigami.data.source.network.dto.auth
 
 import com.rwmobi.kunigami.graphql.ObtainKrakenTokenMutation
 import io.ktor.util.decodeBase64Bytes
-import io.ktor.utils.io.core.String
-import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlin.time.Clock
 
 data class Token(
     val token: String,
@@ -33,7 +32,8 @@ data class Token(
 
         fun fromObtainKrakenToken(obtainKrakenToken: ObtainKrakenTokenMutation.ObtainKrakenToken): Token {
             val payload = obtainKrakenToken.token.split(".")[1]
-            val decodedPayload = jsonFormat.decodeFromString<TokenPayload>(String(payload.decodeBase64Bytes()))
+            val bytes = payload.decodeBase64Bytes()
+            val decodedPayload = jsonFormat.decodeFromString<TokenPayload>(bytes.decodeToString(0, 0 + bytes.size))
 
             return Token(
                 token = obtainKrakenToken.token,

@@ -17,7 +17,7 @@ package com.rwmobi.kunigami.data.source.local.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 @Entity(
     tableName = "consumption",

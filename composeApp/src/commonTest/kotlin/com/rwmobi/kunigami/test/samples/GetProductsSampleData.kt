@@ -21,7 +21,7 @@ import com.rwmobi.kunigami.data.source.network.dto.products.ProductsApiResponse
 import com.rwmobi.kunigami.domain.model.product.ProductDirection
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 object GetProductsSampleData {
     val json =

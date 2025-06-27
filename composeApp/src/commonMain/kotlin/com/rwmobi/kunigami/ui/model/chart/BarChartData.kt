@@ -31,7 +31,6 @@ import io.github.koalaplot.core.bar.DefaultVerticalBarPlotEntry
 import io.github.koalaplot.core.bar.DefaultVerticalBarPosition
 import io.github.koalaplot.core.bar.VerticalBarPlotEntry
 import io.github.koalaplot.core.util.toString
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kunigami.composeapp.generated.resources.Res
@@ -39,6 +38,7 @@ import kunigami.composeapp.generated.resources.agile_chart_tooltip_range_p
 import kunigami.composeapp.generated.resources.usage_chart_tooltip_range_kwh
 import kunigami.composeapp.generated.resources.usage_chart_tooltip_spot_kwh
 import kotlin.time.Duration.Companion.nanoseconds
+import kotlin.time.Instant
 
 @Immutable
 data class BarChartData(

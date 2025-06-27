@@ -19,7 +19,7 @@ import com.rwmobi.kunigami.data.source.network.dto.consumption.ConsumptionApiRes
 import com.rwmobi.kunigami.data.source.network.dto.consumption.ConsumptionDto
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.domain.model.consumption.ConsumptionWithCost
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 object GetConsumptionSampleData {
     val json = """{

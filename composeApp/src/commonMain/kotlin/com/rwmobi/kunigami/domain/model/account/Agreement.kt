@@ -16,7 +16,7 @@
 package com.rwmobi.kunigami.domain.model.account
 
 import androidx.compose.runtime.Immutable
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 @Immutable
 data class Agreement(

@@ -18,7 +18,7 @@ package com.rwmobi.kunigami.test.samples
 import com.rwmobi.kunigami.domain.model.product.ExitFeesType
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 object GetTariffSampleData {
     val json = """{

@@ -23,8 +23,8 @@ import com.rwmobi.kunigami.graphql.GetMeasurementsQuery
 import com.rwmobi.kunigami.graphql.PropertiesQuery
 import com.rwmobi.kunigami.graphql.SingleEnergyProductQuery
 import com.rwmobi.kunigami.graphql.SmartMeterTelemetryQuery
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 class FakeGraphQLEndpoint : GraphQLEndpoint {
     override suspend fun getEnergyProducts(postcode: String, afterCursor: String?, pageSize: Int): EnergyProductsQuery.Data {

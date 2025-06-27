@@ -16,9 +16,9 @@
 package com.rwmobi.kunigami.domain.model.consumption
 
 import androidx.compose.runtime.Immutable
-import kotlinx.datetime.Instant
 import kotlin.math.ceil
 import kotlin.time.DurationUnit
+import kotlin.time.Instant
 
 @Immutable
 data class Consumption(

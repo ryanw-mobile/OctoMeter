@@ -16,11 +16,11 @@
 package com.rwmobi.kunigami.ui.model.consumption
 
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.plus
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Clock
 
 class ConsumptionGroupedCellsTest {
 

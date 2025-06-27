@@ -24,7 +24,7 @@ import com.rwmobi.kunigami.di.graphQLModule
 import com.rwmobi.kunigami.di.ktorModule
 import com.rwmobi.kunigami.di.platformModule
 import com.rwmobi.kunigami.di.repositoryModule
-import com.rwmobi.kunigami.di.userCaseModule
+import com.rwmobi.kunigami.di.useCaseModule
 import com.rwmobi.kunigami.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -45,7 +45,7 @@ class KunigamiApplication : Application() {
                 dispatcherModule,
                 viewModelModule,
                 dataSourceModule,
-                userCaseModule,
+                useCaseModule,
                 graphQLModule,
                 ktorModule,
                 repositoryModule,

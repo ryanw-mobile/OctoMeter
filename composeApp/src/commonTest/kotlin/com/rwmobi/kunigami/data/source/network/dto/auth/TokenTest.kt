@@ -16,11 +16,11 @@
 package com.rwmobi.kunigami.data.source.network.dto.auth
 
 import com.rwmobi.kunigami.graphql.ObtainKrakenTokenMutation
-import kotlinx.datetime.Clock
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Clock
 
 @OptIn(ExperimentalEncodingApi::class)
 class TokenTest {

@@ -54,8 +54,6 @@ import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionGroupWithPartitions
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionQueryFilter
 import com.rwmobi.kunigami.ui.theme.getDimension
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.bolt
 import kunigami.composeapp.generated.resources.error_screen_no_data_description_no_auth
@@ -67,6 +65,8 @@ import kunigami.composeapp.generated.resources.usage_demo_introduction
 import kunigami.composeapp.generated.resources.usage_energy_consumption_breakdown
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 @Composable
 fun UsageScreen(

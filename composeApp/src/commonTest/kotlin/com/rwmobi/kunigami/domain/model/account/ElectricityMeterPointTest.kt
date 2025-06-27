@@ -15,11 +15,11 @@
 
 package com.rwmobi.kunigami.domain.model.account
 
-import kotlinx.datetime.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Clock
 import kotlin.time.Duration
 
 @Suppress("TooManyFunctions")

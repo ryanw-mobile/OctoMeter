@@ -16,7 +16,7 @@
 package com.rwmobi.kunigami.test.samples
 
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 object ConsumptionEntitySampleData {
     val sample1 = ConsumptionEntity(

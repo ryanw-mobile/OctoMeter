@@ -15,13 +15,13 @@
 
 package com.rwmobi.kunigami.domain.extensions
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 
 @Suppress("TooManyFunctions")
 class InstantExtensionsKtTest {

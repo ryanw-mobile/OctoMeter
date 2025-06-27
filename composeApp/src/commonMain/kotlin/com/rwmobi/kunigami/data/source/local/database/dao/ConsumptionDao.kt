@@ -20,7 +20,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 @Dao
 interface ConsumptionDao {
