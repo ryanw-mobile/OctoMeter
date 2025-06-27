@@ -47,11 +47,11 @@ import com.rwmobi.kunigami.ui.components.TagWithIcon
 import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.Dimension
 import com.rwmobi.kunigami.ui.theme.getDimension
-import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.tariffs_fixed_term_months
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Instant
 
 @Composable
 internal fun ProductListItemAdaptive(

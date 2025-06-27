@@ -43,13 +43,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_load_account
 import kunigami.composeapp.generated.resources.fallback_error_no_consumptions
 import kunigami.composeapp.generated.resources.usage_error_date_out_of_range
+import kotlin.time.Clock
 import kotlin.time.Duration
+import kotlin.time.Instant
 
 class UsageViewModel(
     private val syncUserProfileUseCase: SyncUserProfileUseCase,

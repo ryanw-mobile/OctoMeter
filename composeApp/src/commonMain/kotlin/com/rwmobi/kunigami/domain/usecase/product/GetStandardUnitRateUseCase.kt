@@ -21,8 +21,8 @@ import com.rwmobi.kunigami.domain.repository.OctopusApiRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Instant
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Instant
 
 class GetStandardUnitRateUseCase(
     private val octopusApiRepository: OctopusApiRepository,

@@ -17,7 +17,7 @@ package com.rwmobi.kunigami.domain.model.account
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.util.fastAny
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 @Immutable
 data class Account(

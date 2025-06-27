@@ -17,12 +17,12 @@ package com.rwmobi.kunigami.domain.model.product
 
 import com.rwmobi.kunigami.test.samples.TariffSampleData
 import com.rwmobi.kunigami.ui.model.product.RetailRegion
-import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.time.Instant
 
 @Suppress("TooManyFunctions")
 class TariffTest {

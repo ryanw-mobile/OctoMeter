@@ -32,15 +32,15 @@ import com.rwmobi.kunigami.domain.extensions.toSystemDefaultLocalDateTime
 import com.rwmobi.kunigami.domain.extensions.toSystemDefaultTimeZoneInstant
 import com.rwmobi.kunigami.domain.model.consumption.Consumption
 import com.rwmobi.kunigami.ui.tools.interfaces.StringResourceProvider
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
 import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.grouping_label_month_weeks
 import kunigami.composeapp.generated.resources.presentation_style_week_seven_days
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 @Immutable
 data class ConsumptionQueryFilter(

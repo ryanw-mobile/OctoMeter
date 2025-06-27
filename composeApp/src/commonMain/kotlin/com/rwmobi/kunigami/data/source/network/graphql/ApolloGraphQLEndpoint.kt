@@ -39,8 +39,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Instant
+import kotlinx.datetime.toDeprecatedInstant
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Instant
 
 class ApolloGraphQLEndpoint(
     private val apolloClient: ApolloClient,
@@ -114,8 +115,8 @@ class ApolloGraphQLEndpoint(
             runQuery(
                 query = SmartMeterTelemetryQuery(
                     meterDeviceId = meterDeviceId,
-                    start = Optional.present(start),
-                    end = Optional.present(end),
+                    start = Optional.present(start.toDeprecatedInstant()),
+                    end = Optional.present(end.toDeprecatedInstant()),
                     grouping = Optional.present(TelemetryGrouping.ONE_MINUTE),
                 ),
                 requireAuthentication = true,
@@ -137,8 +138,8 @@ class ApolloGraphQLEndpoint(
             runQuery(
                 query = GetMeasurementsQuery(
                     accountNumber = accountNumber,
-                    startAt = Optional.present(start),
-                    endAt = Optional.present(end),
+                    startAt = Optional.present(start.toDeprecatedInstant()),
+                    endAt = Optional.present(end.toDeprecatedInstant()),
                     first = pageSize,
                     timezone = Optional.present("Europe/London"),
                     afterCursor = afterCursor?.let { Optional.present(it) } ?: Optional.absent(),

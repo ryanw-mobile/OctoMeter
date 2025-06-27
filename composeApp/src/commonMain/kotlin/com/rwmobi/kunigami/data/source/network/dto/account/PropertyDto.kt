@@ -15,9 +15,9 @@
 
 package com.rwmobi.kunigami.data.source.network.dto.account
 
-import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.Instant
 
 @Serializable
 data class PropertyDto(

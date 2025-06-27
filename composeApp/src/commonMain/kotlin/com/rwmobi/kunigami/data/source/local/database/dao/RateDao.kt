@@ -22,7 +22,7 @@ import androidx.room.Query
 import com.rwmobi.kunigami.data.source.local.database.entity.RateEntity
 import com.rwmobi.kunigami.data.source.local.database.model.RateType
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 @Dao
 interface RateDao {

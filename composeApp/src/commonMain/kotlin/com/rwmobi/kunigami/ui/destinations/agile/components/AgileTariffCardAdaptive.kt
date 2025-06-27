@@ -54,10 +54,10 @@ import com.rwmobi.kunigami.ui.theme.cyanish
 import com.rwmobi.kunigami.ui.theme.getDimension
 import com.rwmobi.kunigami.ui.theme.purpleish
 import kotlinx.coroutines.delay
-import kotlinx.datetime.Clock
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_expire_time
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Clock
 import kotlin.time.Duration
 
 private const val DELAY_ONE_SECOND = 1_000L

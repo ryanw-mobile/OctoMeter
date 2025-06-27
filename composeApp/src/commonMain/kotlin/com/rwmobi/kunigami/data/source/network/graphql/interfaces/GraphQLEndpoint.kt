@@ -23,7 +23,7 @@ import com.rwmobi.kunigami.graphql.GetMeasurementsQuery
 import com.rwmobi.kunigami.graphql.PropertiesQuery
 import com.rwmobi.kunigami.graphql.SingleEnergyProductQuery
 import com.rwmobi.kunigami.graphql.SmartMeterTelemetryQuery
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 interface GraphQLEndpoint {
     object Constants {

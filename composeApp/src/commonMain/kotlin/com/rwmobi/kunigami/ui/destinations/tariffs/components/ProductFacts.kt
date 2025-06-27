@@ -37,13 +37,13 @@ import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.ui.components.TagWithIcon
 import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
-import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.tariffs_available_from
 import kunigami.composeapp.generated.resources.tariffs_available_to
 import kunigami.composeapp.generated.resources.tariffs_fixed_term_months
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Instant
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

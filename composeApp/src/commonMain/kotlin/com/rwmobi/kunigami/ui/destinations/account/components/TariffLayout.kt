@@ -40,7 +40,6 @@ import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
-import kotlinx.datetime.Instant
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_tariff_date_range
 import kunigami.composeapp.generated.resources.account_tariff_day_unit_rate
@@ -55,6 +54,7 @@ import kunigami.composeapp.generated.resources.tariffs_half_hourly_rate
 import kunigami.composeapp.generated.resources.unknown
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Instant
 
 @Composable
 internal fun TariffLayout(

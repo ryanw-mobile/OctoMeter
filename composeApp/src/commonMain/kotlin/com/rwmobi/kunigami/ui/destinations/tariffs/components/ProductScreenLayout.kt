@@ -37,7 +37,7 @@ import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.getDimension
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 internal fun LazyListScope.productScreenLayout(
     modifier: Modifier = Modifier,

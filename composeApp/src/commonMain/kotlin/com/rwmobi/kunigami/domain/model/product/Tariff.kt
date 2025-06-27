@@ -17,10 +17,10 @@ package com.rwmobi.kunigami.domain.model.product
 
 import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.ui.model.product.RetailRegion
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Instant
 
 @Immutable
 data class Tariff(

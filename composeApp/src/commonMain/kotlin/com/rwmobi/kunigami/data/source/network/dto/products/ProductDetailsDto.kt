@@ -17,9 +17,9 @@ package com.rwmobi.kunigami.data.source.network.dto.products
 
 import com.rwmobi.kunigami.data.source.network.dto.LinkDto
 import com.rwmobi.kunigami.data.source.network.dto.singleproduct.TariffDetailsDto
-import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.Instant
 
 @Serializable
 data class ProductDetailsDto(

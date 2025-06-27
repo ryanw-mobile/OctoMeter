@@ -16,7 +16,7 @@
 package com.rwmobi.kunigami.data.source.local.database.dao
 
 import com.rwmobi.kunigami.data.source.local.database.entity.ConsumptionEntity
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 class FakeConsumptionDao : ConsumptionDao {
     private val consumptions = mutableListOf<ConsumptionEntity>()

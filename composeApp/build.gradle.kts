@@ -90,6 +90,10 @@ kotlin {
     val skikoTarget = "$targetOs-$targetArch"
 
     sourceSets {
+        all {
+            languageSettings.optIn("kotlin.time.ExperimentalTime")
+        }
+
         androidMain.dependencies {
             // tooling.preview is causing crash
             runtimeOnly(libs.androidx.lifecycle.runtime.compose)

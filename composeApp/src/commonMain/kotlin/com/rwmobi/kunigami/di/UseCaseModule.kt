@@ -30,7 +30,7 @@ import com.rwmobi.kunigami.domain.usecase.product.GetTariffUseCase
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val userCaseModule = module {
+val useCaseModule = module {
     factory {
         GetFilteredProductsUseCase(
             octopusApiRepository = get(),

@@ -16,7 +16,6 @@ package com.rwmobi.kunigami.domain.extensions
 
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
@@ -33,6 +32,7 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlin.math.ceil
+import kotlin.time.Instant
 
 // Time-zone aware conversion utils
 
@@ -152,7 +152,7 @@ fun Instant.getLocalYear(): Int {
  */
 fun Instant.getLocalDayOfMonth(): Int {
     val currentLocalDateTime = toSystemDefaultLocalDateTime()
-    return currentLocalDateTime.dayOfMonth
+    return currentLocalDateTime.day
 }
 
 /***
@@ -195,7 +195,7 @@ fun Instant.getLocalDayOfWeekAndDayString(): String {
     val customFormat = LocalDate.Format {
         dayOfWeek(DayOfWeekNames.ENGLISH_ABBREVIATED)
         char(' ')
-        dayOfMonth(padding = Padding.ZERO)
+        day(padding = Padding.ZERO)
     }
     return localDate.format(customFormat)
 }
@@ -206,7 +206,7 @@ fun Instant.getLocalDayOfWeekAndDayString(): String {
 fun Instant.getLocalDayMonthString(): String {
     val localDate = toSystemDefaultLocalDate()
     val customFormat = LocalDate.Format {
-        dayOfMonth(padding = Padding.ZERO)
+        day(padding = Padding.ZERO)
         char(' ')
         monthName(MonthNames.ENGLISH_ABBREVIATED)
     }

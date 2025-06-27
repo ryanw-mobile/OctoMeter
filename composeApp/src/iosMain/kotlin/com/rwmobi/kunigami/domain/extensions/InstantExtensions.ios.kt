@@ -15,8 +15,8 @@
 
 package com.rwmobi.kunigami.domain.extensions
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSDate
@@ -26,6 +26,7 @@ import platform.Foundation.NSDateFormatterMediumStyle
 import platform.Foundation.NSDateFormatterNoStyle
 import platform.Foundation.NSLocale
 import platform.Foundation.currentLocale
+import kotlin.time.Instant
 
 actual fun Instant.getLocalDateString(): String {
     val dateFormatter = NSDateFormatter().apply {
@@ -37,8 +38,8 @@ actual fun Instant.getLocalDateString(): String {
     val localDate = toLocalDateTime(TimeZone.currentSystemDefault()).date
     val components = NSDateComponents().apply {
         year = localDate.year.toLong()
-        month = localDate.monthNumber.toLong()
-        day = localDate.dayOfMonth.toLong()
+        month = localDate.month.number.toLong()
+        day = localDate.day.toLong()
     }
     val calendar = NSCalendar.currentCalendar
     val date = calendar.dateFromComponents(components) ?: NSDate()

@@ -17,8 +17,8 @@ package com.rwmobi.kunigami.ui.model.rate
 
 import androidx.compose.runtime.Immutable
 import com.rwmobi.kunigami.domain.model.rate.Rate
-import kotlinx.datetime.Instant
 import kotlin.time.Duration
+import kotlin.time.Instant
 
 @Immutable
 data class RateGroup(

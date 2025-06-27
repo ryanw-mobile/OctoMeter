@@ -19,7 +19,7 @@ import com.rwmobi.kunigami.domain.model.product.ExitFeesType
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
 import com.rwmobi.kunigami.graphql.SingleEnergyProductQuery
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 fun SingleEnergyProductQuery.EnergyProduct.toTariff(
     tariffCode: String,

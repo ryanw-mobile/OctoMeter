@@ -18,7 +18,7 @@ package com.rwmobi.kunigami.data.source.local.database
 import androidx.room.TypeConverter
 import com.rwmobi.kunigami.data.source.local.database.model.RateType
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 class DatabaseTypeConverters {
     @TypeConverter

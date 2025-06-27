@@ -21,7 +21,7 @@ import com.rwmobi.kunigami.data.source.network.dto.prices.PricesApiResponse
 import com.rwmobi.kunigami.data.source.network.dto.prices.RateDto
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 object GetStandardUnitRatesSampleData {
     val json = """{

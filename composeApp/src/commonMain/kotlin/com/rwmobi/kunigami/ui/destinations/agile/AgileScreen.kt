@@ -68,7 +68,6 @@ import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.xygraph.HorizontalLineAnnotation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import kotlinx.datetime.Clock
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_demo_introduction
 import kunigami.composeapp.generated.resources.agile_product_code_retail_region
@@ -79,6 +78,7 @@ import kunigami.composeapp.generated.resources.retail_region_unknown
 import kunigami.composeapp.generated.resources.revenue
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Clock
 
 @Composable
 fun AgileScreen(

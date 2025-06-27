@@ -17,8 +17,8 @@ package com.rwmobi.kunigami.data.repository.mapper
 
 import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.graphql.SmartMeterTelemetryQuery
-import kotlinx.datetime.Instant
 import kotlin.math.roundToInt
+import kotlin.time.Instant
 
 fun SmartMeterTelemetryQuery.SmartMeterTelemetry.toLiveConsumption(): LiveConsumption? {
     if (readAt == null || demand == null) return null

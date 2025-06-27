@@ -22,11 +22,11 @@ import com.rwmobi.kunigami.test.samples.ConsumptionEntitySampleData
 import com.rwmobi.kunigami.test.samples.RateEntitySampleData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.Instant
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.time.Instant
 
 @ExperimentalCoroutinesApi
 class RoomDatabaseDataSourceTest {

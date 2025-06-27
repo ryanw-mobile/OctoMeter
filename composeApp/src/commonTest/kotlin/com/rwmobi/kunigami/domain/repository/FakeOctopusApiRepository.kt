@@ -24,7 +24,7 @@ import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 class FakeOctopusApiRepository : OctopusApiRepository {
 

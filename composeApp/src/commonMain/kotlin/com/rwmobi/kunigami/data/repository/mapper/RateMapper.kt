@@ -20,7 +20,7 @@ import com.rwmobi.kunigami.data.source.local.database.model.RateType
 import com.rwmobi.kunigami.data.source.network.dto.prices.RateDto
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 fun RateDto.toRate() = Rate(
     vatInclusivePrice = vatInclusivePrice,
