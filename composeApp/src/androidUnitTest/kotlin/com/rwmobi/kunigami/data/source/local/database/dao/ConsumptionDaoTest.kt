@@ -22,10 +22,10 @@ import com.rwmobi.kunigami.test.samples.ConsumptionEntitySampleData
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import org.junit.After
 import org.junit.runner.RunWith
-import org.koin.core.context.stopKoin
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -33,30 +33,28 @@ import kotlin.time.Duration
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
+@Config(application = NoKoinTestApplication::class)
 internal class ConsumptionDaoTest {
 
     private lateinit var database: OctometerDatabase
 
     @BeforeTest
     fun setupDatabase() {
-        // We don't need Koin in this test
-        stopKoin()
-
         val context = ApplicationProvider.getApplicationContext<Context>()
         database = Room.inMemoryDatabaseBuilder<OctometerDatabase>(
             context = context,
         ).allowMainThreadQueries().build()
     }
 
-    @After
+    @AfterTest
     fun closeDatabase() {
         database.close()
     }
 
     @Test
     fun insertAndRetrieveConsumptionEntity() = runBlocking {
-        val consumption = ConsumptionEntitySampleData.sample1
-        database.consumptionDao.insert(consumption)
+        val sampleConsumption = ConsumptionEntitySampleData.sample1
+        database.consumptionDao.insert(sampleConsumption)
 
         val retrieved = database.consumptionDao.getConsumptions(
             deviceId = ConsumptionEntitySampleData.sample1.deviceId,
@@ -70,11 +68,11 @@ internal class ConsumptionDaoTest {
 
     @Test
     fun insertAndRetrieveMultipleConsumptionEntities() = runBlocking {
-        val consumptions = listOf(
+        val sampleConsumptions = listOf(
             ConsumptionEntitySampleData.sample1,
             ConsumptionEntitySampleData.sample2,
         )
-        database.consumptionDao.insert(consumptions)
+        database.consumptionDao.insert(sampleConsumptions)
 
         val retrieved = database.consumptionDao.getConsumptions(
             deviceId = ConsumptionEntitySampleData.sample1.deviceId,
@@ -83,14 +81,14 @@ internal class ConsumptionDaoTest {
         )
 
         assertEquals(2, retrieved.size)
-        assertEquals(consumptions[0], retrieved[0])
-        assertEquals(consumptions[1], retrieved[1])
+        assertEquals(sampleConsumptions[0], retrieved[0])
+        assertEquals(sampleConsumptions[1], retrieved[1])
     }
 
     @Test
     fun getConsumptions_ShouldReturnEmptyList_IfMeterSerialHasNoDataInDb() = runBlocking {
-        val consumption = ConsumptionEntitySampleData.sample1
-        database.consumptionDao.insert(consumption)
+        val sampleConsumption = ConsumptionEntitySampleData.sample1
+        database.consumptionDao.insert(sampleConsumption)
 
         val retrieved = database.consumptionDao.getConsumptions(
             deviceId = "invalid-device-id",
@@ -103,8 +101,8 @@ internal class ConsumptionDaoTest {
 
     @Test
     fun getConsumptions_ShouldReturnEmptyList_IfMeterSerialHasDataButNotWithinRequestedRange() = runBlocking {
-        val consumption = ConsumptionEntitySampleData.sample1
-        database.consumptionDao.insert(consumption)
+        val sampleConsumption = ConsumptionEntitySampleData.sample1
+        database.consumptionDao.insert(sampleConsumption)
 
         val retrieved = database.consumptionDao.getConsumptions(
             deviceId = ConsumptionEntitySampleData.sample1.deviceId,
@@ -117,11 +115,11 @@ internal class ConsumptionDaoTest {
 
     @Test
     fun getConsumptions_ShouldReturnOneEntry_IfIntervalStartAndIntervalEndCoverOneOfThem() = runBlocking {
-        val consumptions = listOf(
+        val sampleConsumptions = listOf(
             ConsumptionEntitySampleData.sample1,
             ConsumptionEntitySampleData.sample2,
         )
-        database.consumptionDao.insert(consumptions)
+        database.consumptionDao.insert(sampleConsumptions)
 
         val retrieved = database.consumptionDao.getConsumptions(
             deviceId = ConsumptionEntitySampleData.sample1.deviceId,
@@ -130,13 +128,27 @@ internal class ConsumptionDaoTest {
         )
 
         assertEquals(1, retrieved.size)
-        assertEquals(consumptions[0], retrieved[0])
+        assertEquals(sampleConsumptions[0], retrieved[0])
+    }
+
+    @Test
+    fun getConsumptions_ShouldReturnEmpty_WhenStartEqualsEnd() = runBlocking {
+        val sample = ConsumptionEntitySampleData.sample1
+        database.consumptionDao.insert(sample)
+
+        val retrieved = database.consumptionDao.getConsumptions(
+            deviceId = sample.deviceId,
+            intervalStart = sample.intervalStart,
+            intervalEnd = sample.intervalStart, // same
+        )
+
+        assertTrue(retrieved.isEmpty())
     }
 
     @Test
     fun clearConsumptionEntities() = runBlocking {
-        val consumption = ConsumptionEntitySampleData.sample1
-        database.consumptionDao.insert(consumption)
+        val sampleConsumption = ConsumptionEntitySampleData.sample1
+        database.consumptionDao.insert(sampleConsumption)
 
         database.consumptionDao.clear()
         val retrieved = database.consumptionDao.getConsumptions(
