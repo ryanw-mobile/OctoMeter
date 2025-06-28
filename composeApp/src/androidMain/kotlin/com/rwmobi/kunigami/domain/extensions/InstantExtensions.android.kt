@@ -16,6 +16,7 @@
 package com.rwmobi.kunigami.domain.extensions
 
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -24,7 +25,7 @@ import kotlin.time.Instant
 
 actual fun Instant.getLocalDateString(): String {
     val localDate = toLocalDateTime(TimeZone.currentSystemDefault()).date
-    val javaDate = java.time.LocalDate.of(localDate.year, localDate.monthNumber, localDate.dayOfMonth)
+    val javaDate = java.time.LocalDate.of(localDate.year, localDate.month.number, localDate.day)
     val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
         .withLocale(Locale.getDefault())
     return javaDate.format(formatter)

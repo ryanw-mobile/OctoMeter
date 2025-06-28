@@ -15,7 +15,7 @@
 
 package com.rwmobi.kunigami.data.repository
 
-import com.apollographql.adapter.datetime.KotlinxInstantAdapter
+import com.apollographql.adapter.core.KotlinInstantAdapter
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.apollographql.mockserver.MockResponse
@@ -151,7 +151,7 @@ class OctopusGraphQLRepositoryTest {
         }
         val apolloClient = ApolloClient.Builder()
             .serverUrl(mockServer.url())
-            .addCustomScalarAdapter(DateTime.type, KotlinxInstantAdapter)
+            .addCustomScalarAdapter(DateTime.type, KotlinInstantAdapter)
             .build()
         val dispatcher = UnconfinedTestDispatcher()
 

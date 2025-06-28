@@ -31,15 +31,15 @@ class RateTest {
     fun `isActive should return true when point of reference is within the valid period`() {
         val validFrom = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 1,
+            month = 5,
+            day = 1,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
         val validTo = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 10,
+            month = 5,
+            day = 10,
             hour = 23,
             minute = 59,
         ).toInstant(londonZone)
@@ -50,8 +50,8 @@ class RateTest {
         )
         val referencePoint = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 5,
+            month = 5,
+            day = 5,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
@@ -63,15 +63,15 @@ class RateTest {
     fun `isActive should return false when point of reference is before the valid period`() {
         val validFrom = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 1,
+            month = 5,
+            day = 1,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
         val validTo = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 10,
+            month = 5,
+            day = 10,
             hour = 23,
             minute = 59,
             second = 59,
@@ -83,8 +83,8 @@ class RateTest {
         )
         val referencePoint = LocalDateTime(
             year = 2023,
-            monthNumber = 4,
-            dayOfMonth = 30,
+            month = 4,
+            day = 30,
             hour = 23,
             minute = 59,
             second = 59,
@@ -97,15 +97,15 @@ class RateTest {
     fun `isActive should return false when point of reference is after the valid period`() {
         val validFrom = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 1,
+            month = 5,
+            day = 1,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
         val validTo = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 10,
+            month = 5,
+            day = 10,
             hour = 23,
             minute = 59,
             second = 59,
@@ -117,8 +117,8 @@ class RateTest {
         )
         val referencePoint = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 11,
+            month = 5,
+            day = 11,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
@@ -130,8 +130,8 @@ class RateTest {
     fun `isActive should return true when validTo is null and point of reference is after validFrom`() {
         val validFrom = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 1,
+            month = 5,
+            day = 1,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
@@ -142,8 +142,8 @@ class RateTest {
         )
         val referencePoint = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 5,
+            month = 5,
+            day = 5,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
@@ -155,8 +155,8 @@ class RateTest {
     fun `isActive should return false when validTo is null and point of reference is before validFrom`() {
         val validFrom = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 1,
+            month = 5,
+            day = 1,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
@@ -167,8 +167,8 @@ class RateTest {
         )
         val referencePoint = LocalDateTime(
             year = 2023,
-            monthNumber = 4,
-            dayOfMonth = 30,
+            month = 4,
+            day = 30,
             hour = 23,
             minute = 59,
             second = 59,

@@ -157,7 +157,7 @@ kotlin {
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
             implementation(libs.apollo.runtime)
-            implementation(libs.apollo.adapters.kotlinx.datetime)
+            implementation(libs.apollo.adapters.core)
         }
 
         val desktopMain by getting {
@@ -434,7 +434,7 @@ apollo {
     service("service") {
         packageName.set("$productNameSpace.graphql")
         mapScalarToKotlinDouble(graphQLName = "Decimal")
-        mapScalar(graphQLName = "DateTime", "kotlinx.datetime.Instant")
+        mapScalar(graphQLName = "DateTime", "kotlin.time.Instant")
     }
 }
 

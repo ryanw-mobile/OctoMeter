@@ -28,6 +28,7 @@ import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.atTime
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.minus
+import kotlinx.datetime.number
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -74,14 +75,14 @@ class ConsumptionQueryFilterTest {
     @Test
     fun `calculateQueryPeriod should return correct period for MONTH_WEEKS`() {
         val localDateTime = now.toLocalDateTime(timeZone)
-        val startOfThisMonth = LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
+        val startOfThisMonth = LocalDate(year = localDateTime.year, month = localDateTime.month.number, day = 1)
             .atStartOfDayIn(timeZone)
         val daysSinceSunday = startOfThisMonth
             .toLocalDateTime(timeZone).date
             .dayOfWeek.isoDayNumber
         val expectedStartDate = startOfThisMonth.minus((daysSinceSunday - 1).days)
 
-        val startOfNextMonth = LocalDate(year = localDateTime.year, monthNumber = localDateTime.monthNumber, dayOfMonth = 1)
+        val startOfNextMonth = LocalDate(year = localDateTime.year, month = localDateTime.month.number, day = 1)
             .plus(1, DateTimeUnit.MONTH)
             .atStartOfDayIn(timeZone)
         val endOfMonth = (startOfNextMonth - 1.nanoseconds).toLocalDateTime(timeZone)
@@ -99,9 +100,9 @@ class ConsumptionQueryFilterTest {
 
     @Test
     fun `calculateQueryPeriod should return correct period for MONTH_THIRTY_DAYS`() {
-        val expectedStartDate = LocalDate(now.toLocalDateTime(timeZone).year, now.toLocalDateTime(timeZone).monthNumber, 1)
+        val expectedStartDate = LocalDate(now.toLocalDateTime(timeZone).year, now.toLocalDateTime(timeZone).month.number, 1)
             .atStartOfDayIn(timeZone)
-        val startOfNextMonth = LocalDate(now.toLocalDateTime(timeZone).year, now.toLocalDateTime(timeZone).monthNumber, 1)
+        val startOfNextMonth = LocalDate(now.toLocalDateTime(timeZone).year, now.toLocalDateTime(timeZone).month.number, 1)
             .plus(1, DateTimeUnit.MONTH)
             .atStartOfDayIn(timeZone)
         val expectedEndDate = startOfNextMonth - 1.nanoseconds
@@ -294,8 +295,8 @@ class ConsumptionQueryFilterTest {
     /***
      * Tests for the day of GMT to BST transition
      */
-    private val transitionToBST = LocalDate(year = 2012, monthNumber = 3, dayOfMonth = 25).atStartOfDayIn(timeZone) // Last Sunday of March 2012
-    private val transitionToGMT = LocalDate(year = 2012, monthNumber = 10, dayOfMonth = 28).atStartOfDayIn(timeZone) // Last Sunday of October 2012
+    private val transitionToBST = LocalDate(year = 2012, month = 3, day = 25).atStartOfDayIn(timeZone) // Last Sunday of March 2012
+    private val transitionToGMT = LocalDate(year = 2012, month = 10, day = 28).atStartOfDayIn(timeZone) // Last Sunday of October 2012
 
     @Test
     fun `calculateStartDate should handle GMT to BST transition correctly`() {
@@ -345,7 +346,7 @@ class ConsumptionQueryFilterTest {
     fun `navigateBackward should correctly handle the day of GMT to BST transition`() {
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, referencePoint = transitionToBST)
         // Expected timestamp for one day before the BST transition
-        val expectedTimestamp = LocalDate(year = 2012, monthNumber = 3, dayOfMonth = 24).atStartOfDayIn(timeZone)
+        val expectedTimestamp = LocalDate(year = 2012, month = 3, day = 24).atStartOfDayIn(timeZone)
 
         val newFilter = filter.navigateBackward(Instant.DISTANT_PAST) // Assume account move-in date allows backward navigation
 
@@ -356,7 +357,7 @@ class ConsumptionQueryFilterTest {
     fun `navigateForward should correctly handle the day of BST to GMT transition`() {
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, referencePoint = transitionToGMT)
         // Expected timestamp for one day after the GMT transition
-        val expectedTimestamp = LocalDate(year = 2012, monthNumber = 10, dayOfMonth = 29).atStartOfDayIn(timeZone)
+        val expectedTimestamp = LocalDate(year = 2012, month = 10, day = 29).atStartOfDayIn(timeZone)
 
         val newFilter = filter.navigateForward() // Assuming no constraints on moving forward
 
@@ -365,10 +366,10 @@ class ConsumptionQueryFilterTest {
 
     @Test
     fun `navigateBackward should correctly handle the day before transitioning from BST to GMT`() {
-        val dayBeforeTransition = LocalDate(year = 2012, monthNumber = 10, dayOfMonth = 27).atStartOfDayIn(timeZone)
+        val dayBeforeTransition = LocalDate(year = 2012, month = 10, day = 27).atStartOfDayIn(timeZone)
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, referencePoint = dayBeforeTransition)
         // Expected timestamp for two days before the GMT transition
-        val expectedTimestamp = LocalDate(year = 2012, monthNumber = 10, dayOfMonth = 26).atStartOfDayIn(timeZone)
+        val expectedTimestamp = LocalDate(year = 2012, month = 10, day = 26).atStartOfDayIn(timeZone)
 
         val newFilter = filter.navigateBackward(Instant.DISTANT_PAST)
 
@@ -377,10 +378,10 @@ class ConsumptionQueryFilterTest {
 
     @Test
     fun `navigateForward should correctly handle the day before transitioning from BST to GMT`() {
-        val dayBeforeTransition = LocalDate(year = 2012, monthNumber = 10, dayOfMonth = 27).atStartOfDayIn(timeZone)
+        val dayBeforeTransition = LocalDate(year = 2012, month = 10, day = 27).atStartOfDayIn(timeZone)
         val filter = ConsumptionQueryFilter(presentationStyle = ConsumptionPresentationStyle.DAY_HALF_HOURLY, referencePoint = dayBeforeTransition)
         // Forward to the transition day
-        val expectedTimestamp = LocalDate(year = 2012, monthNumber = 10, dayOfMonth = 28).atStartOfDayIn(timeZone)
+        val expectedTimestamp = LocalDate(year = 2012, month = 10, day = 28).atStartOfDayIn(timeZone)
 
         val newFilter = filter.navigateForward()
 

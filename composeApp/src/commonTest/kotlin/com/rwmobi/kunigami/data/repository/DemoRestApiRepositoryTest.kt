@@ -67,7 +67,7 @@ class DemoRestApiRepositoryTest {
     @Test
     fun `getStandardUnitRates should throw NotImplementedError`() = runTest {
         val timeZone = TimeZone.of("Europe/London")
-        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+        val now = LocalDateTime(year = 2025, month = 1, day = 23, hour = 1, minute = 23, second = 0)
             .toInstant(timeZone)
         val start = now - Duration.parse("30d")
 
@@ -93,7 +93,7 @@ class DemoRestApiRepositoryTest {
     @Test
     fun `getDayUnitRates should throw NotImplementedError`() = runTest {
         val timeZone = TimeZone.of("Europe/London")
-        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+        val now = LocalDateTime(year = 2025, month = 1, day = 23, hour = 1, minute = 23, second = 0)
             .toInstant(timeZone)
         assertFailsWith<NotImplementedError> {
             demoRepository.getDayUnitRates(
@@ -107,7 +107,7 @@ class DemoRestApiRepositoryTest {
     @Test
     fun `getNightUnitRates should throw NotImplementedError`() = runTest {
         val timeZone = TimeZone.of("Europe/London")
-        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+        val now = LocalDateTime(year = 2025, month = 1, day = 23, hour = 1, minute = 23, second = 0)
             .toInstant(timeZone)
         assertFailsWith<NotImplementedError> {
             demoRepository.getNightUnitRates(
@@ -137,7 +137,7 @@ class DemoRestApiRepositoryTest {
     @Test
     fun `getConsumption should generate random consumption data for HALF_HOURLY ConsumptionTimeFrame`() = runTest {
         val timeZone = TimeZone.of("Europe/London")
-        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+        val now = LocalDateTime(year = 2025, month = 1, day = 23, hour = 1, minute = 23, second = 0)
             .toInstant(timeZone)
         val start = now - Duration.parse("1d")
 
@@ -157,7 +157,7 @@ class DemoRestApiRepositoryTest {
     @Test
     fun `getConsumption should generate random consumption data for DAY ConsumptionTimeFrame`() = runTest {
         val timeZone = TimeZone.of("Europe/London")
-        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+        val now = LocalDateTime(year = 2025, month = 1, day = 23, hour = 1, minute = 23, second = 0)
             .toInstant(timeZone)
         val start = now - Duration.parse("30d")
 
@@ -177,7 +177,7 @@ class DemoRestApiRepositoryTest {
     @Test
     fun `getConsumption should generate random consumption data for WEEK ConsumptionTimeFrame`() = runTest {
         val timeZone = TimeZone.of("Europe/London")
-        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+        val now = LocalDateTime(year = 2025, month = 1, day = 23, hour = 1, minute = 23, second = 0)
             .toInstant(timeZone)
         val start = now - Duration.parse("7d")
 
@@ -197,7 +197,7 @@ class DemoRestApiRepositoryTest {
     @Test
     fun `getConsumption should generate random consumption data for MONTH ConsumptionTimeFrame`() = runTest {
         val timeZone = TimeZone.of("Europe/London")
-        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+        val now = LocalDateTime(year = 2025, month = 1, day = 23, hour = 1, minute = 23, second = 0)
             .toInstant(timeZone)
         val start = now - Duration.parse("364d")
 
@@ -220,7 +220,7 @@ class DemoRestApiRepositoryTest {
     @Test
     fun `getConsumption should throw NotImplementedError for QUARTER ConsumptionTimeFrame`() = runTest {
         val timeZone = TimeZone.of("Europe/London")
-        val now = LocalDateTime(year = 2025, monthNumber = 1, dayOfMonth = 23, hour = 1, minute = 23, second = 0)
+        val now = LocalDateTime(year = 2025, month = 1, day = 23, hour = 1, minute = 23, second = 0)
             .toInstant(timeZone)
         val start = now - Duration.parse("120d")
 

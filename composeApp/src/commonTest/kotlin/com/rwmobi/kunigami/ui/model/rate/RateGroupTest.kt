@@ -36,15 +36,15 @@ class RateGroupTest {
     fun `findActiveRate should return active rate when it exists`() {
         val validFrom = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 1,
+            month = 5,
+            day = 1,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
         val validTo = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 10,
+            month = 5,
+            day = 10,
             hour = 23,
             minute = 59,
             second = 59,
@@ -62,8 +62,8 @@ class RateGroupTest {
         )
         val referencePoint = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 5,
+            month = 5,
+            day = 5,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
@@ -78,15 +78,15 @@ class RateGroupTest {
     fun `findActiveRate should return null when no active rate exists`() {
         val validFrom = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 1,
+            month = 5,
+            day = 1,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
         val validTo = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 10,
+            month = 5,
+            day = 10,
             hour = 23,
             minute = 59,
             second = 59,
@@ -104,8 +104,8 @@ class RateGroupTest {
         )
         val referencePoint = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 11,
+            month = 5,
+            day = 11,
             hour = 0,
             minute = 0,
 
@@ -120,8 +120,8 @@ class RateGroupTest {
     fun `getRateTrend should return STEADY when active rate has no validTo`() {
         val validFrom = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 1,
+            month = 5,
+            day = 1,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
@@ -146,15 +146,15 @@ class RateGroupTest {
     fun `getRateTrend should return null when no next rate exists`() {
         val validFrom = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 1,
+            month = 5,
+            day = 1,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
         val validTo = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 10,
+            month = 5,
+            day = 10,
             hour = 23,
             minute = 59,
             second = 59,
@@ -180,15 +180,15 @@ class RateGroupTest {
     fun `getRateTrend should return UP when next rate is higher`() {
         val validFrom = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 1,
+            month = 5,
+            day = 1,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
         val validTo = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 10,
+            month = 5,
+            day = 10,
             hour = 23,
             minute = 59,
             second = 59,
@@ -219,15 +219,15 @@ class RateGroupTest {
     fun `getRateTrend should return DOWN when next rate is lower`() {
         val validFrom = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 1,
+            month = 5,
+            day = 1,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
         val validTo = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 10,
+            month = 5,
+            day = 10,
             hour = 23,
             minute = 59,
             second = 59,
@@ -258,15 +258,15 @@ class RateGroupTest {
     fun `getRateTrend should return STEADY when next rate is the same`() {
         val validFrom = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 1,
+            month = 5,
+            day = 1,
             hour = 0,
             minute = 0,
         ).toInstant(londonZone)
         val validTo = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 10,
+            month = 5,
+            day = 10,
             hour = 23,
             minute = 59,
             second = 59,

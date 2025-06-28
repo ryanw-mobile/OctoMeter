@@ -32,8 +32,8 @@ class RateTest {
         val rate = RateSampleData.rateWithValidTo
         val referencePoint = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 5,
+            month = 5,
+            day = 5,
             hour = 0,
             minute = 0,
             second = 0,
@@ -47,8 +47,8 @@ class RateTest {
         val rate = RateSampleData.rateWithValidTo
         val referencePoint = LocalDateTime(
             year = 2023,
-            monthNumber = 4,
-            dayOfMonth = 30,
+            month = 4,
+            day = 30,
             hour = 23,
             minute = 59,
             second = 59,
@@ -62,8 +62,8 @@ class RateTest {
         val rate = RateSampleData.rateWithValidTo
         val referencePoint = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 11,
+            month = 5,
+            day = 11,
             hour = 0,
             minute = 0,
             second = 0,
@@ -77,8 +77,8 @@ class RateTest {
         val rate = RateSampleData.rateWithoutValidTo
         val referencePoint = LocalDateTime(
             year = 2023,
-            monthNumber = 5,
-            dayOfMonth = 5,
+            month = 5,
+            day = 5,
             hour = 0,
             minute = 0,
             second = 0,
@@ -92,8 +92,8 @@ class RateTest {
         val rate = RateSampleData.rateWithoutValidTo
         val referencePoint = LocalDateTime(
             year = 2023,
-            monthNumber = 4,
-            dayOfMonth = 30,
+            month = 4,
+            day = 30,
             hour = 23,
             minute = 59,
             second = 59,
