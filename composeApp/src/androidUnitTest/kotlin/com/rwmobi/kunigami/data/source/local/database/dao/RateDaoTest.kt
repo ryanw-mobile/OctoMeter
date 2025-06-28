@@ -22,10 +22,11 @@ import com.rwmobi.kunigami.test.samples.RateEntitySampleData
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import org.junit.After
 import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -33,30 +34,28 @@ import kotlin.time.Duration
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
+@Config(application = NoKoinTestApplication::class)
 internal class RateDaoTest {
 
     private lateinit var database: OctometerDatabase
 
     @BeforeTest
     fun setupDatabase() {
-        // We don't need Koin in this test
-        stopKoin()
-
         val context = ApplicationProvider.getApplicationContext<Context>()
         database = Room.inMemoryDatabaseBuilder<OctometerDatabase>(
             context = context,
         ).allowMainThreadQueries().build()
     }
 
-    @After
+    @AfterTest
     fun closeDatabase() {
         database.close()
     }
 
     @Test
     fun insertAndRetrieveRateEntity() = runBlocking {
-        val rate = RateEntitySampleData.standingChargeSample2
-        database.rateDao.insert(rateEntity = rate)
+        val sampleRate = RateEntitySampleData.standingChargeSample2
+        database.rateDao.insert(rateEntity = sampleRate)
 
         val retrieved = database.rateDao.getRates(
             tariffCode = RateEntitySampleData.standingChargeSample2.tariffCode,
@@ -72,14 +71,14 @@ internal class RateDaoTest {
 
     @Test
     fun insertAndRetrieveMultipleRateEntities() = runBlocking {
-        val rates = listOf(
+        val sampleRates = listOf(
             RateEntitySampleData.standingChargeSample1,
             RateEntitySampleData.standingChargeSample2,
             RateEntitySampleData.standardUnitRateSample1,
             RateEntitySampleData.standardUnitRateSample2,
             RateEntitySampleData.standardUnitRateSample3,
         )
-        database.rateDao.insert(rateEntity = rates)
+        database.rateDao.insert(rateEntity = sampleRates)
 
         val retrieved = database.rateDao.getRates(
             tariffCode = RateEntitySampleData.standardUnitRateSample1.tariffCode,
@@ -90,14 +89,14 @@ internal class RateDaoTest {
         )
 
         assertEquals(expected = 2, actual = retrieved.size)
-        assertEquals(expected = rates[2], actual = retrieved[0])
-        assertEquals(expected = rates[3], actual = retrieved[1])
+        assertEquals(expected = sampleRates[2], actual = retrieved[0])
+        assertEquals(expected = sampleRates[3], actual = retrieved[1])
     }
 
     @Test
     fun getRates_ShouldReturnEmptyList_IfTariffCodeHasNoDataInDb() = runBlocking {
-        val rate = RateEntitySampleData.standingChargeSample1
-        database.rateDao.insert(rateEntity = rate)
+        val sampleRate = RateEntitySampleData.standingChargeSample1
+        database.rateDao.insert(rateEntity = sampleRate)
 
         val retrieved = database.rateDao.getRates(
             tariffCode = "invalid-code",
@@ -112,8 +111,8 @@ internal class RateDaoTest {
 
     @Test
     fun getRates_ShouldReturnEmptyList_IfRateTypeHasDataButNotWithinRequestedRange() = runBlocking {
-        val rate = RateEntitySampleData.standardUnitRateSample1
-        database.rateDao.insert(rateEntity = rate)
+        val sampleRate = RateEntitySampleData.standardUnitRateSample1
+        database.rateDao.insert(rateEntity = sampleRate)
 
         val retrieved = database.rateDao.getRates(
             tariffCode = RateEntitySampleData.standardUnitRateSample1.tariffCode,
@@ -128,11 +127,11 @@ internal class RateDaoTest {
 
     @Test
     fun getRates_ShouldReturnOneEntry_IfValidFromAndValidToCoverOneOfThem() = runBlocking {
-        val rates = listOf(
+        val sampleRates = listOf(
             RateEntitySampleData.standardUnitRateSample1,
             RateEntitySampleData.standardUnitRateSample2,
         )
-        database.rateDao.insert(rateEntity = rates)
+        database.rateDao.insert(rateEntity = sampleRates)
 
         val retrieved = database.rateDao.getRates(
             tariffCode = RateEntitySampleData.standardUnitRateSample1.tariffCode,
@@ -143,13 +142,13 @@ internal class RateDaoTest {
         )
 
         assertEquals(expected = 1, actual = retrieved.size)
-        assertEquals(expected = rates[0], actual = retrieved[0])
+        assertEquals(expected = sampleRates[0], actual = retrieved[0])
     }
 
     @Test
     fun clearRateEntities() = runBlocking {
-        val rate = RateEntitySampleData.standardUnitRateSample1
-        database.rateDao.insert(rateEntity = rate)
+        val sampleRate = RateEntitySampleData.standardUnitRateSample1
+        database.rateDao.insert(rateEntity = sampleRate)
 
         database.rateDao.clear()
         val retrieved = database.rateDao.getRates(
