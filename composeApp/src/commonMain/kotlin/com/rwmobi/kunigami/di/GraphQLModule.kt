@@ -15,7 +15,7 @@
 
 package com.rwmobi.kunigami.di
 
-import com.apollographql.adapter.datetime.KotlinxInstantAdapter
+import com.apollographql.adapter.core.KotlinInstantAdapter
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.network.http.HttpInterceptor
 import com.rwmobi.kunigami.data.source.network.graphql.ApolloGraphQLEndpoint
@@ -34,7 +34,7 @@ val graphQLModule = module {
                     tokenRepository = get(),
                 ),
             )
-            .addCustomScalarAdapter(DateTime.type, KotlinxInstantAdapter)
+            .addCustomScalarAdapter(DateTime.type, KotlinInstantAdapter)
             .build()
     }
 

@@ -30,9 +30,9 @@
 -dontnote okhttp3.internal.platform.**
 -dontwarn okhttp3.internal.platform.**
 
-# Keep the class and fields of kotlinx.datetime.Instant
--keep class kotlinx.datetime.Instant { *; }
--dontnote kotlinx.datetime.Instant
+# Keep the class and fields of kotlin.time.Instant
+-keep class kotlin.time.Instant { *; }
+-dontnote kotlin.time.Instant
 
 # Kotlinx Serialization
 -keep class kotlinx.serialization.** { *; }
