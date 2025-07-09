@@ -37,31 +37,29 @@ class GetLiveConsumptionUseCase(
      */
     suspend operator fun invoke(
         meterDeviceId: String,
-    ): Result<LiveConsumption?> {
-        return withContext(dispatcher) {
-            runCatching {
-                val isDemoMode = userPreferencesRepository.isDemoMode()
+    ): Result<LiveConsumption?> = withContext(dispatcher) {
+        runCatching {
+            val isDemoMode = userPreferencesRepository.isDemoMode()
 
-                if (isDemoMode) {
-                    null
-                } else {
-                    val end = Clock.System.now()
-                    val start = end - Duration.parse("1m")
+            if (isDemoMode) {
+                null
+            } else {
+                val end = Clock.System.now()
+                val start = end - Duration.parse("1m")
 
-                    octopusApiRepository.getSmartMeterLiveConsumption(
-                        meterDeviceId = meterDeviceId,
-                        start = start,
-                        end = end,
-                    ).fold(
-                        onSuccess = { consumption ->
-                            consumption.maxByOrNull {
-                                it.readAt
-                            }
-                        },
-                        onFailure = { throw it },
-                    )
-                }
-            }.except<CancellationException, _>()
-        }
+                octopusApiRepository.getSmartMeterLiveConsumption(
+                    meterDeviceId = meterDeviceId,
+                    start = start,
+                    end = end,
+                ).fold(
+                    onSuccess = { consumption ->
+                        consumption.maxByOrNull {
+                            it.readAt
+                        }
+                    },
+                    onFailure = { throw it },
+                )
+            }
+        }.except<CancellationException, _>()
     }
 }

@@ -31,19 +31,17 @@ fun ConsumptionEntity.toConsumptionWithCost() = ConsumptionWithCost(
     vatInclusiveStandingCharge = standingCharge,
 )
 
-fun GetMeasurementsQuery.Node.toConsumptionWithCost(): ConsumptionWithCost? {
-    return if (onIntervalMeasurementType == null) {
-        null
-    } else {
-        ConsumptionWithCost(
-            consumption = Consumption(
-                kWhConsumed = value,
-                interval = onIntervalMeasurementType.startAt..onIntervalMeasurementType.endAt,
-            ),
-            vatInclusiveCost = getEstimatedAmount(),
-            vatInclusiveStandingCharge = getStandingCharge(),
-        )
-    }
+fun GetMeasurementsQuery.Node.toConsumptionWithCost(): ConsumptionWithCost? = if (onIntervalMeasurementType == null) {
+    null
+} else {
+    ConsumptionWithCost(
+        consumption = Consumption(
+            kWhConsumed = value,
+            interval = onIntervalMeasurementType.startAt..onIntervalMeasurementType.endAt,
+        ),
+        vatInclusiveCost = getEstimatedAmount(),
+        vatInclusiveStandingCharge = getStandingCharge(),
+    )
 }
 
 fun GetMeasurementsQuery.Node.toConsumptionEntity(deviceId: String): ConsumptionEntity? {
@@ -64,30 +62,26 @@ fun GetMeasurementsQuery.Node.toConsumptionEntity(deviceId: String): Consumption
     }
 }
 
-private fun GetMeasurementsQuery.Node.getEstimatedAmount(): Double? {
-    return metaData?.statistics
-        ?.mapNotNull {
-            if (it?.type == ReadingStatisticTypeEnum.TOU_BUCKET_COST ||
-                it?.type == ReadingStatisticTypeEnum.CONSUMPTION_COST
-            ) {
-                it.costInclTax?.estimatedAmount
-            } else {
-                null
-            }
+private fun GetMeasurementsQuery.Node.getEstimatedAmount(): Double? = metaData?.statistics
+    ?.mapNotNull {
+        if (it?.type == ReadingStatisticTypeEnum.TOU_BUCKET_COST ||
+            it?.type == ReadingStatisticTypeEnum.CONSUMPTION_COST
+        ) {
+            it.costInclTax?.estimatedAmount
+        } else {
+            null
         }
-        ?.takeIf { it.isNotEmpty() } // Ensures null if no valid values exist
-        ?.sum()
-}
+    }
+    ?.takeIf { it.isNotEmpty() } // Ensures null if no valid values exist
+    ?.sum()
 
-private fun GetMeasurementsQuery.Node.getStandingCharge(): Double? {
-    return metaData?.statistics
-        ?.mapNotNull {
-            if (it?.type == ReadingStatisticTypeEnum.STANDING_CHARGE_COST) {
-                it.costInclTax?.estimatedAmount
-            } else {
-                null
-            }
+private fun GetMeasurementsQuery.Node.getStandingCharge(): Double? = metaData?.statistics
+    ?.mapNotNull {
+        if (it?.type == ReadingStatisticTypeEnum.STANDING_CHARGE_COST) {
+            it.costInclTax?.estimatedAmount
+        } else {
+            null
         }
-        ?.takeIf { it.isNotEmpty() } // Ensures null if no valid values exist
-        ?.sum()
-}
+    }
+    ?.takeIf { it.isNotEmpty() } // Ensures null if no valid values exist
+    ?.sum()

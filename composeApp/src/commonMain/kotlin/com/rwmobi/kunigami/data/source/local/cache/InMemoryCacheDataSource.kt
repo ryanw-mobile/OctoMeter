@@ -56,16 +56,14 @@ class InMemoryCacheDataSource {
     /***
      * Return cached profile, if there is an instance kept on the same day
      */
-    fun getProfile(accountNumber: String): Account? {
-        return profileCache?.first?.let { account ->
-            if (account.accountNumber == accountNumber &&
-                Clock.System.now().toSystemDefaultLocalDate() == profileCache?.second?.toSystemDefaultLocalDate()
-            ) {
-                account
-            } else {
-                profileCache = null // clear the cache
-                null
-            }
+    fun getProfile(accountNumber: String): Account? = profileCache?.first?.let { account ->
+        if (account.accountNumber == accountNumber &&
+            Clock.System.now().toSystemDefaultLocalDate() == profileCache?.second?.toSystemDefaultLocalDate()
+        ) {
+            account
+        } else {
+            profileCache = null // clear the cache
+            null
         }
     }
 
@@ -82,15 +80,13 @@ class InMemoryCacheDataSource {
         }
     }
 
-    fun getProductSummary(postcode: String): List<ProductSummary>? {
-        return productSummaryCache?.let {
-            if (it.first == postcode) {
-                it.second
-            } else {
-                // invalidate the cache to prevent the cached result staying for too long
-                productSummaryCache = null
-                null
-            }
+    fun getProductSummary(postcode: String): List<ProductSummary>? = productSummaryCache?.let {
+        if (it.first == postcode) {
+            it.second
+        } else {
+            // invalidate the cache to prevent the cached result staying for too long
+            productSummaryCache = null
+            null
         }
     }
 
@@ -99,9 +95,7 @@ class InMemoryCacheDataSource {
         return productDetailsCache[key]
     }
 
-    fun getTariff(tariffCode: String): Tariff? {
-        return tariffCache[tariffCode]
-    }
+    fun getTariff(tariffCode: String): Tariff? = tariffCache[tariffCode]
 
     fun clear() {
         profileCache = null

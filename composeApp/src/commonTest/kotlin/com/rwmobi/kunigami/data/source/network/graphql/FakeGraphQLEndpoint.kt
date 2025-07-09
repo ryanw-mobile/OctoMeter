@@ -43,27 +43,23 @@ class FakeGraphQLEndpoint : GraphQLEndpoint {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getAuthorizationToken(apiKey: String): Result<Token> {
-        return Result.success(
-            Token(
-                token = "newToken",
-                expiresIn = Clock.System.now().epochSeconds + 3600,
-                refreshToken = "refreshToken",
-                refreshExpiresIn = Clock.System.now().epochSeconds + 7200,
-            ),
-        )
-    }
+    override suspend fun getAuthorizationToken(apiKey: String): Result<Token> = Result.success(
+        Token(
+            token = "newToken",
+            expiresIn = Clock.System.now().epochSeconds + 3600,
+            refreshToken = "refreshToken",
+            refreshExpiresIn = Clock.System.now().epochSeconds + 7200,
+        ),
+    )
 
-    override suspend fun refreshAuthorizationToken(refreshToken: String): Result<Token> {
-        return Result.success(
-            Token(
-                token = "refreshedToken",
-                expiresIn = Clock.System.now().epochSeconds + 3600,
-                refreshToken = "refreshToken",
-                refreshExpiresIn = Clock.System.now().epochSeconds + 7200,
-            ),
-        )
-    }
+    override suspend fun refreshAuthorizationToken(refreshToken: String): Result<Token> = Result.success(
+        Token(
+            token = "refreshedToken",
+            expiresIn = Clock.System.now().epochSeconds + 3600,
+            refreshToken = "refreshToken",
+            refreshExpiresIn = Clock.System.now().epochSeconds + 7200,
+        ),
+    )
 
     override suspend fun getSmartMeterTelemetry(meterDeviceId: String, start: Instant, end: Instant): SmartMeterTelemetryQuery.Data {
         TODO("Not yet implemented")

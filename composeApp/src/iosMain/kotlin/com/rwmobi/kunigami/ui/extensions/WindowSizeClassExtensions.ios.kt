@@ -24,6 +24,4 @@ actual fun WindowSizeClass.getPlatformType() = PlatformType.IOS
 
 @Composable
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-actual fun calculateWindowSizeClass(): WindowSizeClass {
-    return androidx.compose.material3.windowsizeclass.calculateWindowSizeClass()
-}
+actual fun calculateWindowSizeClass(): WindowSizeClass = androidx.compose.material3.windowsizeclass.calculateWindowSizeClass()

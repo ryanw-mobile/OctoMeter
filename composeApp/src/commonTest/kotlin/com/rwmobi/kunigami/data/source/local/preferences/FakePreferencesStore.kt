@@ -25,9 +25,7 @@ class FakePreferencesStore : PreferencesStore {
         stringData[key] = value
     }
 
-    override suspend fun getStringData(key: String): String? {
-        return stringData[key]
-    }
+    override suspend fun getStringData(key: String): String? = stringData[key]
 
     override suspend fun removeData(key: String) {
         stringData.remove(key)
@@ -43,7 +41,5 @@ class FakePreferencesStore : PreferencesStore {
         floatData[key] = value
     }
 
-    override suspend fun getFloatData(key: String): Float? {
-        return floatData[key]
-    }
+    override suspend fun getFloatData(key: String): Float? = floatData[key]
 }

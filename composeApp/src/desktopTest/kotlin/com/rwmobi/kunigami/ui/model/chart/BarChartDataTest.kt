@@ -111,12 +111,10 @@ class BarChartDataTest {
 
     // 🗂 fromConsumptions
     // Helper function to create Consumption objects for testing
-    private fun createConsumption(kWhConsumed: Double, start: String, end: String): Consumption {
-        return Consumption(
-            kWhConsumed = kWhConsumed,
-            interval = Instant.parse(start)..Instant.parse(end),
-        )
-    }
+    private fun createConsumption(kWhConsumed: Double, start: String, end: String): Consumption = Consumption(
+        kWhConsumed = kWhConsumed,
+        interval = Instant.parse(start)..Instant.parse(end),
+    )
 
     @Test
     fun `fromConsumptions should generate correct verticalBarPlotEntries`() = runBlocking {

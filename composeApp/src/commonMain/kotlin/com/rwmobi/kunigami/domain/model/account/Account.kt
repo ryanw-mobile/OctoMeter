@@ -32,9 +32,7 @@ data class Account(
     /**
      * Pick the active or last tariff code
      */
-    fun getDefaultLatestTariffCode(): String? {
-        return electricityMeterPoints.getOrNull(0)?.getLatestAgreement()?.tariffCode
-    }
+    fun getDefaultLatestTariffCode(): String? = electricityMeterPoints.getOrNull(0)?.getLatestAgreement()?.tariffCode
 
     fun getDefaultLatestTariffCode(mpan: String?): String? {
         if (mpan == null) return null
@@ -44,34 +42,25 @@ data class Account(
         }?.getLatestAgreement()?.tariffCode
     }
 
-    fun getDefaultMpan(): String? {
-        return electricityMeterPoints.getOrNull(0)?.mpan
+    fun getDefaultMpan(): String? = electricityMeterPoints.getOrNull(0)?.mpan
+
+    fun containsMpan(mpan: String?): Boolean = electricityMeterPoints.any {
+        it.mpan == mpan
     }
 
-    fun containsMpan(mpan: String?): Boolean {
-        return electricityMeterPoints.any {
-            it.mpan == mpan
-        }
+    fun getElectricityMeterPoint(mpan: String): ElectricityMeterPoint? = electricityMeterPoints.firstOrNull {
+        it.mpan == mpan
     }
 
-    fun getElectricityMeterPoint(mpan: String): ElectricityMeterPoint? {
-        return electricityMeterPoints.firstOrNull {
-            it.mpan == mpan
-        }
-    }
-
-    fun getElectricityMeterPoint(mpan: String, meterSerialNumber: String): ElectricityMeterPoint? {
-        return electricityMeterPoints.firstOrNull {
-            it.mpan == mpan && it.meters.fastAny { meter ->
+    fun getElectricityMeterPoint(mpan: String, meterSerialNumber: String): ElectricityMeterPoint? = electricityMeterPoints.firstOrNull {
+        it.mpan == mpan &&
+            it.meters.fastAny { meter ->
                 meter.serialNumber == meterSerialNumber
             }
-        }
     }
 
-    fun getDefaultMeterSerialNumber(): String? {
-        return electricityMeterPoints.getOrNull(0)
-            ?.meters?.getOrNull(0)?.serialNumber
-    }
+    fun getDefaultMeterSerialNumber(): String? = electricityMeterPoints.getOrNull(0)
+        ?.meters?.getOrNull(0)?.serialNumber
 
     fun containsMeterSerialNumber(mpan: String?, meterSerialNumber: String?): Boolean {
         if (mpan == null || meterSerialNumber == null) {
@@ -79,9 +68,10 @@ data class Account(
         }
 
         return electricityMeterPoints.firstOrNull {
-            it.mpan == mpan && it.meters.fastAny { meter ->
-                meter.serialNumber == meterSerialNumber
-            }
+            it.mpan == mpan &&
+                it.meters.fastAny { meter ->
+                    meter.serialNumber == meterSerialNumber
+                }
         } != null
     }
 
@@ -89,8 +79,6 @@ data class Account(
      * Returns true when the account has at least one electricity meter.
      * Does not mean it is the meter user prefers
      */
-    fun hasValidMeter(): Boolean {
-        return electricityMeterPoints.isNotEmpty() &&
-            electricityMeterPoints[0].meters.isNotEmpty()
-    }
+    fun hasValidMeter(): Boolean = electricityMeterPoints.isNotEmpty() &&
+        electricityMeterPoints[0].meters.isNotEmpty()
 }

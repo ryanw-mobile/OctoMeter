@@ -25,9 +25,7 @@ class GetTariffUseCase(
     private val octopusApiRepository: OctopusApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
-    suspend operator fun invoke(tariffCode: String): Result<Tariff> {
-        return withContext(dispatcher) {
-            octopusApiRepository.getTariff(tariffCode = tariffCode)
-        }
+    suspend operator fun invoke(tariffCode: String): Result<Tariff> = withContext(dispatcher) {
+        octopusApiRepository.getTariff(tariffCode = tariffCode)
     }
 }

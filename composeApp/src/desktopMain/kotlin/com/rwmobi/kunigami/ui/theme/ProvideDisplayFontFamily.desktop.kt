@@ -19,6 +19,4 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 
 @Composable
-actual fun provideDisplayFontFamily(fontFamily: FontFamily): FontFamily {
-    return fontFamily
-}
+actual fun provideDisplayFontFamily(fontFamily: FontFamily): FontFamily = fontFamily

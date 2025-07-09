@@ -27,46 +27,44 @@ class GenerateUsageInsightsUseCase {
     operator fun invoke(
         tariff: Tariff?,
         consumptionWithCost: List<ConsumptionWithCost>?,
-    ): Insights? {
-        return if (tariff == null || consumptionWithCost.isNullOrEmpty()) {
-            null
+    ): Insights? = if (tariff == null || consumptionWithCost.isNullOrEmpty()) {
+        null
+    } else {
+        val consumptionAggregated = consumptionWithCost.sumOf { it.consumption.kWhConsumed }
+        val consumptionDaySpan = consumptionWithCost.map { it.consumption }.getConsumptionDaySpan()
+        val isTrueCost = !consumptionWithCost.any { it.vatInclusiveCost == null }
+
+        val consumptionCharge = if (isTrueCost) {
+            consumptionWithCost.sumOf { it.vatInclusiveCost ?: 0.0 }
         } else {
-            val consumptionAggregated = consumptionWithCost.sumOf { it.consumption.kWhConsumed }
-            val consumptionDaySpan = consumptionWithCost.map { it.consumption }.getConsumptionDaySpan()
-            val isTrueCost = !consumptionWithCost.any { it.vatInclusiveCost == null }
-
-            val consumptionCharge = if (isTrueCost) {
-                consumptionWithCost.sumOf { it.vatInclusiveCost ?: 0.0 }
-            } else {
-                consumptionAggregated * (tariff.resolveUnitRate() ?: 0.0)
-            }
-
-            // if consumption range is a single day OR data missing from ConsumptionWithCost, we apply the provided tariff standing charge.
-            val hasValidStandingCharge = (consumptionDaySpan > 1) && !consumptionWithCost.any { it.vatInclusiveStandingCharge == null }
-            val standingCharge = if (hasValidStandingCharge) {
-                consumptionWithCost.sumOf { it.vatInclusiveStandingCharge ?: 0.0 }
-            } else {
-                tariff.vatInclusiveStandingCharge * consumptionDaySpan
-            }
-
-            val costWithCharges = (standingCharge + consumptionCharge) / 100.0
-            val consumptionChargeRatio = (consumptionCharge / 100.0) / costWithCharges
-            val consumptionDailyAverage = consumptionAggregated / consumptionDaySpan
-            val costDailyAverage = costWithCharges / consumptionDaySpan
-            val consumptionAnnualProjection = consumptionDailyAverage * 365
-            val costAnnualProjection = costDailyAverage * 365
-
-            Insights(
-                consumptionAggregateRounded = consumptionAggregated.roundConsumptionToNearestEvenHundredth(),
-                consumptionTimeSpan = consumptionDaySpan,
-                consumptionChargeRatio = consumptionChargeRatio.roundToTwoDecimalPlaces(),
-                costWithCharges = costWithCharges.roundToTwoDecimalPlaces(),
-                isTrueCost = isTrueCost,
-                consumptionDailyAverage = consumptionDailyAverage.roundConsumptionToNearestEvenHundredth(),
-                costDailyAverage = costDailyAverage.roundToTwoDecimalPlaces(),
-                consumptionAnnualProjection = consumptionAnnualProjection.roundConsumptionToNearestEvenHundredth(),
-                costAnnualProjection = costAnnualProjection.roundToTwoDecimalPlaces(),
-            )
+            consumptionAggregated * (tariff.resolveUnitRate() ?: 0.0)
         }
+
+        // if consumption range is a single day OR data missing from ConsumptionWithCost, we apply the provided tariff standing charge.
+        val hasValidStandingCharge = (consumptionDaySpan > 1) && !consumptionWithCost.any { it.vatInclusiveStandingCharge == null }
+        val standingCharge = if (hasValidStandingCharge) {
+            consumptionWithCost.sumOf { it.vatInclusiveStandingCharge ?: 0.0 }
+        } else {
+            tariff.vatInclusiveStandingCharge * consumptionDaySpan
+        }
+
+        val costWithCharges = (standingCharge + consumptionCharge) / 100.0
+        val consumptionChargeRatio = (consumptionCharge / 100.0) / costWithCharges
+        val consumptionDailyAverage = consumptionAggregated / consumptionDaySpan
+        val costDailyAverage = costWithCharges / consumptionDaySpan
+        val consumptionAnnualProjection = consumptionDailyAverage * 365
+        val costAnnualProjection = costDailyAverage * 365
+
+        Insights(
+            consumptionAggregateRounded = consumptionAggregated.roundConsumptionToNearestEvenHundredth(),
+            consumptionTimeSpan = consumptionDaySpan,
+            consumptionChargeRatio = consumptionChargeRatio.roundToTwoDecimalPlaces(),
+            costWithCharges = costWithCharges.roundToTwoDecimalPlaces(),
+            isTrueCost = isTrueCost,
+            consumptionDailyAverage = consumptionDailyAverage.roundConsumptionToNearestEvenHundredth(),
+            costDailyAverage = costDailyAverage.roundToTwoDecimalPlaces(),
+            consumptionAnnualProjection = consumptionAnnualProjection.roundConsumptionToNearestEvenHundredth(),
+            costAnnualProjection = costAnnualProjection.roundToTwoDecimalPlaces(),
+        )
     }
 }

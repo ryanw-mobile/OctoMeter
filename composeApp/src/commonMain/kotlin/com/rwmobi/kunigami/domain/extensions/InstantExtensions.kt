@@ -143,9 +143,7 @@ fun Instant.getNextHalfHourCountdownMillis(): Long {
 
 // Formatting utils
 
-fun Instant.getLocalYear(): Int {
-    return toSystemDefaultLocalDateTime().year
-}
+fun Instant.getLocalYear(): Int = toSystemDefaultLocalDateTime().year
 
 /***
  * Returns the integer day of month as Integer. To avoid confusion, caller may apply padding manually if needed.

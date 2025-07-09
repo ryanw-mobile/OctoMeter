@@ -26,37 +26,27 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
     var meterSerialNumber: String? = null
     var windowSize: DpSize? = null
 
-    override suspend fun isDemoMode(): Boolean {
-        return demoMode ?: throw RuntimeException("isDemoMode not defined")
-    }
+    override suspend fun isDemoMode(): Boolean = demoMode ?: throw RuntimeException("isDemoMode not defined")
 
-    override suspend fun getApiKey(): String? {
-        return apiKey
-    }
+    override suspend fun getApiKey(): String? = apiKey
 
     override suspend fun setApiKey(apiKey: String) {
         this.apiKey = apiKey
     }
 
-    override suspend fun getAccountNumber(): String? {
-        return accountNumber
-    }
+    override suspend fun getAccountNumber(): String? = accountNumber
 
     override suspend fun setAccountNumber(accountNumber: String) {
         this.accountNumber = accountNumber
     }
 
-    override suspend fun getMpan(): String? {
-        return mpan
-    }
+    override suspend fun getMpan(): String? = mpan
 
     override suspend fun setMpan(mpan: String) {
         this.mpan = mpan
     }
 
-    override suspend fun getMeterSerialNumber(): String? {
-        return meterSerialNumber
-    }
+    override suspend fun getMeterSerialNumber(): String? = meterSerialNumber
 
     override suspend fun setMeterSerialNumber(meterSerialNumber: String) {
         this.meterSerialNumber = meterSerialNumber
@@ -74,9 +64,7 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
         clearCredentials()
     }
 
-    override suspend fun getWindowSize(): DpSize? {
-        return windowSize
-    }
+    override suspend fun getWindowSize(): DpSize? = windowSize
 
     override suspend fun setWindowSize(size: DpSize) {
         windowSize = size

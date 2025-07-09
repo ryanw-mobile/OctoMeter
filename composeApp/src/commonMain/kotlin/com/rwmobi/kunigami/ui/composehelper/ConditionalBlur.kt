@@ -25,13 +25,11 @@ fun Modifier.conditionalBlur(
     enabled: Boolean,
     radius: Dp = 8.dp,
     edgeTreatment: BlurredEdgeTreatment = BlurredEdgeTreatment.Unbounded,
-): Modifier {
-    return if (enabled) {
-        this.blur(
-            radius = radius,
-            edgeTreatment = edgeTreatment,
-        )
-    } else {
-        this
-    }
+): Modifier = if (enabled) {
+    this.blur(
+        radius = radius,
+        edgeTreatment = edgeTreatment,
+    )
+} else {
+    this
 }

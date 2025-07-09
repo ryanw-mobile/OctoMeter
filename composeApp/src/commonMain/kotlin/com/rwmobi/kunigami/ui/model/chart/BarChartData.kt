@@ -92,15 +92,13 @@ data class BarChartData(
             }
         }
 
-        private fun generateRateLabels(rates: List<Rate>): Map<Int, String> {
-            return buildMap {
-                var lastRateValue: Int? = null
-                rates.forEachIndexed { index, rate ->
-                    val currentTime = rate.validity.start.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
-                    if (currentTime != lastRateValue) {
-                        put(key = index, value = currentTime.toString().padStart(length = 2, padChar = '0'))
-                        lastRateValue = currentTime
-                    }
+        private fun generateRateLabels(rates: List<Rate>): Map<Int, String> = buildMap {
+            var lastRateValue: Int? = null
+            rates.forEachIndexed { index, rate ->
+                val currentTime = rate.validity.start.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
+                if (currentTime != lastRateValue) {
+                    put(key = index, value = currentTime.toString().padStart(length = 2, padChar = '0'))
+                    lastRateValue = currentTime
                 }
             }
         }
@@ -108,21 +106,19 @@ data class BarChartData(
         private suspend fun generateRateToolTips(
             rates: List<Rate>,
             stringResourceProvider: StringResourceProvider,
-        ): List<String> {
-            return rates.map { rate ->
-                val validToString = if (rate.validity.endInclusive != Instant.DISTANT_FUTURE) {
-                    " - ${rate.validity.endInclusive.getLocalHHMMString()}"
-                } else {
-                    ""
-                }
-                val timeRange = rate.validity.start.getLocalHHMMString() + validToString
-
-                stringResourceProvider.getString(
-                    resource = Res.string.agile_chart_tooltip_range_p,
-                    timeRange,
-                    rate.vatInclusivePrice.roundToTwoDecimalPlaces(),
-                )
+        ): List<String> = rates.map { rate ->
+            val validToString = if (rate.validity.endInclusive != Instant.DISTANT_FUTURE) {
+                " - ${rate.validity.endInclusive.getLocalHHMMString()}"
+            } else {
+                ""
             }
+            val timeRange = rate.validity.start.getLocalHHMMString() + validToString
+
+            stringResourceProvider.getString(
+                resource = Res.string.agile_chart_tooltip_range_p,
+                timeRange,
+                rate.vatInclusivePrice.roundToTwoDecimalPlaces(),
+            )
         }
 
         // Consumption - Usage
@@ -140,57 +136,55 @@ data class BarChartData(
         private fun generateConsumptionLabels(
             presentationStyle: ConsumptionPresentationStyle,
             consumptions: List<Consumption>,
-        ): Map<Int, String> {
-            return buildMap {
-                when (presentationStyle) {
-                    ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
-                        var lastRateValue: Int? = null
-                        consumptions.forEachIndexed { index, consumption ->
-                            val currentTime = consumption.interval.start.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
-                            if (currentTime != lastRateValue && currentTime % 2 == 0) {
-                                put(
-                                    key = index,
-                                    value = currentTime.toString().padStart(length = 2, padChar = '0'),
-                                )
-                            }
-                            lastRateValue = currentTime
-                        }
-                    }
-
-                    ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
-                        consumptions.forEachIndexed { index, consumption ->
+        ): Map<Int, String> = buildMap {
+            when (presentationStyle) {
+                ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
+                    var lastRateValue: Int? = null
+                    consumptions.forEachIndexed { index, consumption ->
+                        val currentTime = consumption.interval.start.toLocalDateTime(TimeZone.currentSystemDefault()).time.hour
+                        if (currentTime != lastRateValue && currentTime % 2 == 0) {
                             put(
                                 key = index,
-                                value = consumption.interval.start.getLocalEnglishAbbreviatedDayOfWeekName(),
+                                value = currentTime.toString().padStart(length = 2, padChar = '0'),
                             )
                         }
+                        lastRateValue = currentTime
                     }
+                }
 
-                    ConsumptionPresentationStyle.MONTH_WEEKS -> {
-                        consumptions.forEachIndexed { index, consumption ->
-                            put(
-                                key = index,
-                                value = consumption.interval.start.getLocalDayMonthString(),
-                            )
-                        }
+                ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
+                    consumptions.forEachIndexed { index, consumption ->
+                        put(
+                            key = index,
+                            value = consumption.interval.start.getLocalEnglishAbbreviatedDayOfWeekName(),
+                        )
                     }
+                }
 
-                    ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
-                        consumptions.forEachIndexed { index, consumption ->
-                            put(
-                                key = index,
-                                value = consumption.interval.start.getLocalDayOfMonth().toString(),
-                            )
-                        }
+                ConsumptionPresentationStyle.MONTH_WEEKS -> {
+                    consumptions.forEachIndexed { index, consumption ->
+                        put(
+                            key = index,
+                            value = consumption.interval.start.getLocalDayMonthString(),
+                        )
                     }
+                }
 
-                    ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
-                        consumptions.forEachIndexed { index, consumption ->
-                            put(
-                                key = index,
-                                value = consumption.interval.start.getLocalMonthString(),
-                            )
-                        }
+                ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
+                    consumptions.forEachIndexed { index, consumption ->
+                        put(
+                            key = index,
+                            value = consumption.interval.start.getLocalDayOfMonth().toString(),
+                        )
+                    }
+                }
+
+                ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
+                    consumptions.forEachIndexed { index, consumption ->
+                        put(
+                            key = index,
+                            value = consumption.interval.start.getLocalMonthString(),
+                        )
                     }
                 }
             }
@@ -200,58 +194,56 @@ data class BarChartData(
             presentationStyle: ConsumptionPresentationStyle,
             consumptions: List<Consumption>,
             stringResourceProvider: StringResourceProvider,
-        ): List<String> {
-            return when (presentationStyle) {
-                ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
-                    consumptions.map { consumption ->
-                        stringResourceProvider.getString(
-                            resource = Res.string.usage_chart_tooltip_range_kwh,
-                            consumption.interval.start.getLocalHHMMString(),
-                            consumption.interval.endInclusive.getLocalHHMMString(),
-                            consumption.kWhConsumed.toString(precision = 2),
-                        )
-                    }
+        ): List<String> = when (presentationStyle) {
+            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
+                consumptions.map { consumption ->
+                    stringResourceProvider.getString(
+                        resource = Res.string.usage_chart_tooltip_range_kwh,
+                        consumption.interval.start.getLocalHHMMString(),
+                        consumption.interval.endInclusive.getLocalHHMMString(),
+                        consumption.kWhConsumed.toString(precision = 2),
+                    )
                 }
+            }
 
-                ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
-                    consumptions.map { consumption ->
-                        stringResourceProvider.getString(
-                            resource = Res.string.usage_chart_tooltip_spot_kwh,
-                            consumption.interval.start.getLocalDayMonthString(),
-                            consumption.kWhConsumed.toString(precision = 2),
-                        )
-                    }
+            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
+                consumptions.map { consumption ->
+                    stringResourceProvider.getString(
+                        resource = Res.string.usage_chart_tooltip_spot_kwh,
+                        consumption.interval.start.getLocalDayMonthString(),
+                        consumption.kWhConsumed.toString(precision = 2),
+                    )
                 }
+            }
 
-                ConsumptionPresentationStyle.MONTH_WEEKS -> {
-                    consumptions.map { consumption ->
-                        stringResourceProvider.getString(
-                            resource = Res.string.usage_chart_tooltip_range_kwh,
-                            consumption.interval.start.getLocalDayMonthString(),
-                            (consumption.interval.endInclusive - 1.nanoseconds).getLocalDayMonthString(),
-                            consumption.kWhConsumed.toString(precision = 2),
-                        )
-                    }
+            ConsumptionPresentationStyle.MONTH_WEEKS -> {
+                consumptions.map { consumption ->
+                    stringResourceProvider.getString(
+                        resource = Res.string.usage_chart_tooltip_range_kwh,
+                        consumption.interval.start.getLocalDayMonthString(),
+                        (consumption.interval.endInclusive - 1.nanoseconds).getLocalDayMonthString(),
+                        consumption.kWhConsumed.toString(precision = 2),
+                    )
                 }
+            }
 
-                ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
-                    consumptions.map { consumption ->
-                        stringResourceProvider.getString(
-                            resource = Res.string.usage_chart_tooltip_spot_kwh,
-                            consumption.interval.start.getLocalDayMonthString(),
-                            consumption.kWhConsumed.toString(precision = 2),
-                        )
-                    }
+            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
+                consumptions.map { consumption ->
+                    stringResourceProvider.getString(
+                        resource = Res.string.usage_chart_tooltip_spot_kwh,
+                        consumption.interval.start.getLocalDayMonthString(),
+                        consumption.kWhConsumed.toString(precision = 2),
+                    )
                 }
+            }
 
-                ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
-                    consumptions.map { consumption ->
-                        stringResourceProvider.getString(
-                            resource = Res.string.usage_chart_tooltip_spot_kwh,
-                            consumption.interval.start.getLocalMonthYearString(),
-                            consumption.kWhConsumed.toString(precision = 2),
-                        )
-                    }
+            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
+                consumptions.map { consumption ->
+                    stringResourceProvider.getString(
+                        resource = Res.string.usage_chart_tooltip_spot_kwh,
+                        consumption.interval.start.getLocalMonthYearString(),
+                        consumption.kWhConsumed.toString(precision = 2),
+                    )
                 }
             }
         }

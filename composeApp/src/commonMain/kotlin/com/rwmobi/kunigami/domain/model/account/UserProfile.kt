@@ -23,7 +23,5 @@ data class UserProfile(
     val selectedMeterSerialNumber: String,
     val account: Account,
 ) {
-    fun getSelectedElectricityMeterPoint(): ElectricityMeterPoint? {
-        return account.electricityMeterPoints.firstOrNull { it.mpan == selectedMpan }
-    }
+    fun getSelectedElectricityMeterPoint(): ElectricityMeterPoint? = account.electricityMeterPoints.firstOrNull { it.mpan == selectedMpan }
 }

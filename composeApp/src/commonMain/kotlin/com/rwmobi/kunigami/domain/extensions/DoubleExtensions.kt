@@ -38,6 +38,4 @@ fun Double.roundConsumptionToNearestEvenHundredth(): Double {
     return rounded / 100.0
 }
 
-fun Double.roundToTwoDecimalPlaces(): Double {
-    return round(this * 100) / 100
-}
+fun Double.roundToTwoDecimalPlaces(): Double = round(this * 100) / 100

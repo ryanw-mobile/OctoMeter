@@ -57,11 +57,9 @@ internal fun customizeMacOsAboutMenu(
     java.awt.Frame.getFrames().forEach { it.menuBar = menuBar }
 }
 
-private fun loadImage(path: String): BufferedImage? {
-    return try {
-        ImageIO.read(File(path))
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
+private fun loadImage(path: String): BufferedImage? = try {
+    ImageIO.read(File(path))
+} catch (e: Exception) {
+    e.printStackTrace()
+    null
 }

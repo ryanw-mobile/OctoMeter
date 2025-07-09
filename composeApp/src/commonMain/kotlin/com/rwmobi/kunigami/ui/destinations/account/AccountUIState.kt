@@ -50,25 +50,23 @@ data class AccountUIState(
         )
     }
 
-    suspend fun filterErrorAndStopLoading(throwable: Throwable): AccountUIState {
-        return when (val translatedThrowable = throwable.mapFromPlatform()) {
-            is HttpException -> {
-                copy(
-                    requestedScreenType = AccountScreenType.Error(SpecialErrorScreen.HttpError(statusCode = translatedThrowable.httpStatusCode)),
-                    isLoading = false,
-                )
-            }
+    suspend fun filterErrorAndStopLoading(throwable: Throwable): AccountUIState = when (val translatedThrowable = throwable.mapFromPlatform()) {
+        is HttpException -> {
+            copy(
+                requestedScreenType = AccountScreenType.Error(SpecialErrorScreen.HttpError(statusCode = translatedThrowable.httpStatusCode)),
+                isLoading = false,
+            )
+        }
 
-            is UnresolvedAddressException -> {
-                copy(
-                    requestedScreenType = AccountScreenType.Error(SpecialErrorScreen.NetworkError),
-                    isLoading = false,
-                )
-            }
+        is UnresolvedAddressException -> {
+            copy(
+                requestedScreenType = AccountScreenType.Error(SpecialErrorScreen.NetworkError),
+                isLoading = false,
+            )
+        }
 
-            else -> {
-                handleMessageAndStopLoading(message = throwable.message ?: getString(resource = Res.string.tariffs_error_load_tariffs))
-            }
+        else -> {
+            handleMessageAndStopLoading(message = throwable.message ?: getString(resource = Res.string.tariffs_error_load_tariffs))
         }
     }
 

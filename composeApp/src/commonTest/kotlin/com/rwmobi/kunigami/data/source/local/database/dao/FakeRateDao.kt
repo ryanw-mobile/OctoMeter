@@ -37,14 +37,12 @@ class FakeRateDao : RateDao {
         paymentMethod: PaymentMethod,
         validFrom: Instant,
         validTo: Instant?,
-    ): List<RateEntity> {
-        return rates.filter {
-            it.tariffCode == tariffCode &&
-                it.rateType == rateType &&
-                it.paymentMethod == paymentMethod &&
-                it.validFrom >= validFrom &&
-                (validTo == null || it.validFrom < validTo)
-        }
+    ): List<RateEntity> = rates.filter {
+        it.tariffCode == tariffCode &&
+            it.rateType == rateType &&
+            it.paymentMethod == paymentMethod &&
+            it.validFrom >= validFrom &&
+            (validTo == null || it.validFrom < validTo)
     }
 
     override suspend fun clear() {

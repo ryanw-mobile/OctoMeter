@@ -38,19 +38,17 @@ fun List<RateGroup>.findActiveRate(referencePoint: Instant): Rate? {
     return null
 }
 
-fun List<RateGroup>.getRateTrend(activeRate: Rate?): RateTrend? {
-    return activeRate?.let {
-        if (it.validity.endInclusive == Instant.DISTANT_FUTURE) {
-            RateTrend.STEADY
-        } else {
-            val nextRate = findActiveRate(referencePoint = it.validity.endInclusive.plus(Duration.parse("5m")))
+fun List<RateGroup>.getRateTrend(activeRate: Rate?): RateTrend? = activeRate?.let {
+    if (it.validity.endInclusive == Instant.DISTANT_FUTURE) {
+        RateTrend.STEADY
+    } else {
+        val nextRate = findActiveRate(referencePoint = it.validity.endInclusive.plus(Duration.parse("5m")))
 
-            when {
-                nextRate == null -> null
-                it.vatInclusivePrice > nextRate.vatInclusivePrice -> RateTrend.DOWN
-                it.vatInclusivePrice == nextRate.vatInclusivePrice -> RateTrend.STEADY
-                else -> RateTrend.UP
-            }
+        when {
+            nextRate == null -> null
+            it.vatInclusivePrice > nextRate.vatInclusivePrice -> RateTrend.DOWN
+            it.vatInclusivePrice == nextRate.vatInclusivePrice -> RateTrend.STEADY
+            else -> RateTrend.UP
         }
     }
 }

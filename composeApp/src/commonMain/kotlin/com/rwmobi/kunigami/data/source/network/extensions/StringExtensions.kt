@@ -20,10 +20,6 @@ import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 @OptIn(ExperimentalEncodingApi::class)
-internal fun encodeApiKey(apiKey: String): String {
-    return Base64.encode("$apiKey:".toByteArray())
-}
+internal fun encodeApiKey(apiKey: String): String = Base64.encode("$apiKey:".toByteArray())
 
-internal fun String.capitalizeWords(): String {
-    return lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
-}
+internal fun String.capitalizeWords(): String = lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }

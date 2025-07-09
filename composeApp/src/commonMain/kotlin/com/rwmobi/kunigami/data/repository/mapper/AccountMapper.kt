@@ -44,13 +44,11 @@ fun PropertiesQuery.Property.toAccount(accountNumber: String, preferredName: Str
     )
 }
 
-fun PropertiesQuery.ElectricityMeterPoint.toElectricityMeterPoint(): ElectricityMeterPoint {
-    return ElectricityMeterPoint(
-        mpan = mpan,
-        meters = meters?.mapNotNull { it?.toElectricityMeter() } ?: emptyList(),
-        agreements = agreements?.filterNotNull()?.toAgreement()?.filterNotNull() ?: emptyList(),
-    )
-}
+fun PropertiesQuery.ElectricityMeterPoint.toElectricityMeterPoint(): ElectricityMeterPoint = ElectricityMeterPoint(
+    mpan = mpan,
+    meters = meters?.mapNotNull { it?.toElectricityMeter() } ?: emptyList(),
+    agreements = agreements?.filterNotNull()?.toAgreement()?.filterNotNull() ?: emptyList(),
+)
 
 fun PropertiesQuery.Meter.toElectricityMeter(): ElectricityMeter {
     val reading = this.meterPoint.meters
@@ -91,132 +89,122 @@ fun PropertiesQuery.Agreement.toAgreement(): Agreement? {
     }
 }
 
-private fun PropertiesQuery.OnStandardTariff.toAgreement(period: ClosedRange<Instant>): Agreement? {
-    return if (tariffCode != null &&
-        fullName != null &&
-        displayName != null &&
-        description != null &&
-        standingCharge != null
-    ) {
-        Agreement(
-            tariffCode = tariffCode,
-            period = period,
-            fullName = fullName,
-            displayName = displayName,
-            description = description,
-            isHalfHourlyTariff = false,
-            vatInclusiveStandingCharge = standingCharge,
-            vatInclusiveStandardUnitRate = unitRate,
-            vatInclusiveDayUnitRate = null,
-            vatInclusiveNightUnitRate = null,
-            vatInclusiveOffPeakRate = null,
-            agilePriceCap = null,
-        )
-    } else {
-        null
-    }
+private fun PropertiesQuery.OnStandardTariff.toAgreement(period: ClosedRange<Instant>): Agreement? = if (tariffCode != null &&
+    fullName != null &&
+    displayName != null &&
+    description != null &&
+    standingCharge != null
+) {
+    Agreement(
+        tariffCode = tariffCode,
+        period = period,
+        fullName = fullName,
+        displayName = displayName,
+        description = description,
+        isHalfHourlyTariff = false,
+        vatInclusiveStandingCharge = standingCharge,
+        vatInclusiveStandardUnitRate = unitRate,
+        vatInclusiveDayUnitRate = null,
+        vatInclusiveNightUnitRate = null,
+        vatInclusiveOffPeakRate = null,
+        agilePriceCap = null,
+    )
+} else {
+    null
 }
 
-private fun PropertiesQuery.OnHalfHourlyTariff.toAgreement(period: ClosedRange<Instant>): Agreement? {
-    return if (tariffCode != null &&
-        fullName != null &&
-        displayName != null &&
-        description != null &&
-        standingCharge != null
-    ) {
-        Agreement(
-            tariffCode = tariffCode,
-            period = period,
-            fullName = fullName,
-            displayName = displayName,
-            description = description,
-            isHalfHourlyTariff = true,
-            vatInclusiveStandingCharge = standingCharge,
-            vatInclusiveStandardUnitRate = null,
-            vatInclusiveDayUnitRate = null,
-            vatInclusiveNightUnitRate = null,
-            vatInclusiveOffPeakRate = null,
-            agilePriceCap = agileCalculationInfo?.priceCap,
-        )
-    } else {
-        null
-    }
+private fun PropertiesQuery.OnHalfHourlyTariff.toAgreement(period: ClosedRange<Instant>): Agreement? = if (tariffCode != null &&
+    fullName != null &&
+    displayName != null &&
+    description != null &&
+    standingCharge != null
+) {
+    Agreement(
+        tariffCode = tariffCode,
+        period = period,
+        fullName = fullName,
+        displayName = displayName,
+        description = description,
+        isHalfHourlyTariff = true,
+        vatInclusiveStandingCharge = standingCharge,
+        vatInclusiveStandardUnitRate = null,
+        vatInclusiveDayUnitRate = null,
+        vatInclusiveNightUnitRate = null,
+        vatInclusiveOffPeakRate = null,
+        agilePriceCap = agileCalculationInfo?.priceCap,
+    )
+} else {
+    null
 }
 
-private fun PropertiesQuery.OnDayNightTariff.toAgreement(period: ClosedRange<Instant>): Agreement? {
-    return if (tariffCode != null &&
-        fullName != null &&
-        displayName != null &&
-        description != null &&
-        standingCharge != null
-    ) {
-        Agreement(
-            tariffCode = tariffCode,
-            period = period,
-            fullName = fullName,
-            displayName = displayName,
-            description = description,
-            isHalfHourlyTariff = false,
-            vatInclusiveStandingCharge = standingCharge,
-            vatInclusiveStandardUnitRate = null,
-            vatInclusiveDayUnitRate = dayRate,
-            vatInclusiveNightUnitRate = nightRate,
-            vatInclusiveOffPeakRate = null,
-            agilePriceCap = null,
-        )
-    } else {
-        null
-    }
+private fun PropertiesQuery.OnDayNightTariff.toAgreement(period: ClosedRange<Instant>): Agreement? = if (tariffCode != null &&
+    fullName != null &&
+    displayName != null &&
+    description != null &&
+    standingCharge != null
+) {
+    Agreement(
+        tariffCode = tariffCode,
+        period = period,
+        fullName = fullName,
+        displayName = displayName,
+        description = description,
+        isHalfHourlyTariff = false,
+        vatInclusiveStandingCharge = standingCharge,
+        vatInclusiveStandardUnitRate = null,
+        vatInclusiveDayUnitRate = dayRate,
+        vatInclusiveNightUnitRate = nightRate,
+        vatInclusiveOffPeakRate = null,
+        agilePriceCap = null,
+    )
+} else {
+    null
 }
 
-private fun PropertiesQuery.OnThreeRateTariff.toAgreement(period: ClosedRange<Instant>): Agreement? {
-    return if (tariffCode != null &&
-        fullName != null &&
-        displayName != null &&
-        description != null &&
-        standingCharge != null
-    ) {
-        Agreement(
-            tariffCode = tariffCode,
-            period = period,
-            fullName = fullName,
-            displayName = displayName,
-            description = description,
-            isHalfHourlyTariff = false,
-            vatInclusiveStandingCharge = standingCharge,
-            vatInclusiveStandardUnitRate = null,
-            vatInclusiveDayUnitRate = dayRate,
-            vatInclusiveNightUnitRate = nightRate,
-            vatInclusiveOffPeakRate = offPeakRate,
-            agilePriceCap = null,
-        )
-    } else {
-        null
-    }
+private fun PropertiesQuery.OnThreeRateTariff.toAgreement(period: ClosedRange<Instant>): Agreement? = if (tariffCode != null &&
+    fullName != null &&
+    displayName != null &&
+    description != null &&
+    standingCharge != null
+) {
+    Agreement(
+        tariffCode = tariffCode,
+        period = period,
+        fullName = fullName,
+        displayName = displayName,
+        description = description,
+        isHalfHourlyTariff = false,
+        vatInclusiveStandingCharge = standingCharge,
+        vatInclusiveStandardUnitRate = null,
+        vatInclusiveDayUnitRate = dayRate,
+        vatInclusiveNightUnitRate = nightRate,
+        vatInclusiveOffPeakRate = offPeakRate,
+        agilePriceCap = null,
+    )
+} else {
+    null
 }
 
-private fun PropertiesQuery.OnPrepayTariff.toAgreement(period: ClosedRange<Instant>): Agreement? {
-    return if (tariffCode != null &&
-        fullName != null &&
-        displayName != null &&
-        description != null &&
-        standingCharge != null
-    ) {
-        Agreement(
-            tariffCode = tariffCode,
-            period = period,
-            fullName = fullName,
-            displayName = displayName,
-            description = description,
-            isHalfHourlyTariff = false,
-            vatInclusiveStandingCharge = standingCharge,
-            vatInclusiveStandardUnitRate = unitRate,
-            vatInclusiveDayUnitRate = null,
-            vatInclusiveNightUnitRate = null,
-            vatInclusiveOffPeakRate = null,
-            agilePriceCap = null,
-        )
-    } else {
-        null
-    }
+private fun PropertiesQuery.OnPrepayTariff.toAgreement(period: ClosedRange<Instant>): Agreement? = if (tariffCode != null &&
+    fullName != null &&
+    displayName != null &&
+    description != null &&
+    standingCharge != null
+) {
+    Agreement(
+        tariffCode = tariffCode,
+        period = period,
+        fullName = fullName,
+        displayName = displayName,
+        description = description,
+        isHalfHourlyTariff = false,
+        vatInclusiveStandingCharge = standingCharge,
+        vatInclusiveStandardUnitRate = unitRate,
+        vatInclusiveDayUnitRate = null,
+        vatInclusiveNightUnitRate = null,
+        vatInclusiveOffPeakRate = null,
+        agilePriceCap = null,
+    )
+} else {
+    null
 }

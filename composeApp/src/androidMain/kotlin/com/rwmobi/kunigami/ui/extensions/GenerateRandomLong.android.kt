@@ -17,6 +17,4 @@ package com.rwmobi.kunigami.ui.extensions
 
 import java.util.UUID
 
-actual fun generateRandomLong(): Long {
-    return UUID.randomUUID().mostSignificantBits
-}
+actual fun generateRandomLong(): Long = UUID.randomUUID().mostSignificantBits

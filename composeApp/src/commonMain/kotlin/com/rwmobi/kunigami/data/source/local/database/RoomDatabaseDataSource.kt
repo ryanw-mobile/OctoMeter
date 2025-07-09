@@ -51,28 +51,24 @@ class RoomDatabaseDataSource(
     override suspend fun getConsumptions(
         deviceId: String,
         interval: ClosedRange<Instant>,
-    ): List<ConsumptionEntity> {
-        return consumptionDao.getConsumptions(
-            deviceId = deviceId,
-            intervalStart = interval.start,
-            intervalEnd = interval.endInclusive,
-        )
-    }
+    ): List<ConsumptionEntity> = consumptionDao.getConsumptions(
+        deviceId = deviceId,
+        intervalStart = interval.start,
+        intervalEnd = interval.endInclusive,
+    )
 
     override suspend fun getRates(
         tariffCode: String,
         rateType: RateType,
         validity: ClosedRange<Instant>,
         paymentMethod: PaymentMethod,
-    ): List<RateEntity> {
-        return rateDao.getRates(
-            tariffCode = tariffCode,
-            rateType = rateType,
-            validFrom = validity.start,
-            validTo = if (validity.endInclusive == Instant.DISTANT_FUTURE) null else validity.endInclusive,
-            paymentMethod = paymentMethod,
-        )
-    }
+    ): List<RateEntity> = rateDao.getRates(
+        tariffCode = tariffCode,
+        rateType = rateType,
+        validFrom = validity.start,
+        validTo = if (validity.endInclusive == Instant.DISTANT_FUTURE) null else validity.endInclusive,
+        paymentMethod = paymentMethod,
+    )
 
     override suspend fun clear() {
         consumptionDao.clear()

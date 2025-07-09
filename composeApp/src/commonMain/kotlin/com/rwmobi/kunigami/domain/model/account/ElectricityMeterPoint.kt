@@ -30,12 +30,10 @@ data class ElectricityMeterPoint(
      * Note: previous agreement end day = new agreement start day
      * Returns null if not found
      */
-    fun lookupAgreement(referencePoint: Instant = Clock.System.now()): Agreement? {
-        return agreements.firstOrNull { agreement ->
-            val isAvailableFrom = agreement.period.start <= referencePoint
-            val isAvailableTo = agreement.period.endInclusive > referencePoint
-            isAvailableFrom && isAvailableTo
-        }
+    fun lookupAgreement(referencePoint: Instant = Clock.System.now()): Agreement? = agreements.firstOrNull { agreement ->
+        val isAvailableFrom = agreement.period.start <= referencePoint
+        val isAvailableTo = agreement.period.endInclusive > referencePoint
+        isAvailableFrom && isAvailableTo
     }
 
     /**
@@ -43,24 +41,18 @@ data class ElectricityMeterPoint(
      * Note: previous agreement end day = new agreement start day
      * Returns empty list if no matching result
      */
-    fun lookupAgreements(period: ClosedRange<Instant>): List<Agreement> {
-        return agreements.filter { agreement ->
-            agreement.period.start <= period.endInclusive && agreement.period.endInclusive > period.start
-        }
+    fun lookupAgreements(period: ClosedRange<Instant>): List<Agreement> = agreements.filter { agreement ->
+        agreement.period.start <= period.endInclusive && agreement.period.endInclusive > period.start
     }
 
     /**
      * Get the agreement with the latest validTo date.
      * Returns null if the list is empty
      */
-    fun getLatestAgreement(): Agreement? {
-        return agreements.maxByOrNull { it.period.endInclusive }
-    }
+    fun getLatestAgreement(): Agreement? = agreements.maxByOrNull { it.period.endInclusive }
 
     /**
      * Returns the start date of the first tariff for this MPAN
      */
-    fun getFirstTariffStartDate(): Instant? {
-        return agreements.minByOrNull { it.period.start }?.period?.start
-    }
+    fun getFirstTariffStartDate(): Instant? = agreements.minByOrNull { it.period.start }?.period?.start
 }

@@ -81,56 +81,52 @@ data class ConsumptionQueryFilter(
     /***
      * This is for UI display
      */
-    fun getConsumptionPeriodString(): String {
-        return when (presentationStyle) {
-            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> "${referencePoint.getLocalEnglishAbbreviatedDayOfWeekName()}, ${referencePoint.getLocalDateString()}"
-            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> "${requestedPeriod.start.getLocalDateString().substringBefore(delimiter = ",")} - ${requestedPeriod.endInclusive.getLocalDateString()}"
-            ConsumptionPresentationStyle.MONTH_WEEKS -> referencePoint.getLocalMonthYearString()
-            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> referencePoint.getLocalMonthYearString()
-            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> referencePoint.getLocalYear().toString()
-        }
+    fun getConsumptionPeriodString(): String = when (presentationStyle) {
+        ConsumptionPresentationStyle.DAY_HALF_HOURLY -> "${referencePoint.getLocalEnglishAbbreviatedDayOfWeekName()}, ${referencePoint.getLocalDateString()}"
+        ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> "${requestedPeriod.start.getLocalDateString().substringBefore(delimiter = ",")} - ${requestedPeriod.endInclusive.getLocalDateString()}"
+        ConsumptionPresentationStyle.MONTH_WEEKS -> referencePoint.getLocalMonthYearString()
+        ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> referencePoint.getLocalMonthYearString()
+        ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> referencePoint.getLocalYear().toString()
     }
 
     suspend fun groupChartCells(
         consumptions: List<Consumption>,
         stringResourceProvider: StringResourceProvider,
-    ): List<ConsumptionGroupedCells> {
-        return when (presentationStyle) {
-            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
-                consumptions
-                    .groupBy { it.interval.start.getLocalDateString() }
-                    .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
-            }
+    ): List<ConsumptionGroupedCells> = when (presentationStyle) {
+        ConsumptionPresentationStyle.DAY_HALF_HOURLY -> {
+            consumptions
+                .groupBy { it.interval.start.getLocalDateString() }
+                .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+        }
 
-            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
-                listOf(
-                    ConsumptionGroupedCells(
-                        title = stringResourceProvider.getString(resource = Res.string.presentation_style_week_seven_days),
-                        consumptions = consumptions,
-                    ),
-                )
-            }
+        ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> {
+            listOf(
+                ConsumptionGroupedCells(
+                    title = stringResourceProvider.getString(resource = Res.string.presentation_style_week_seven_days),
+                    consumptions = consumptions,
+                ),
+            )
+        }
 
-            ConsumptionPresentationStyle.MONTH_WEEKS -> {
-                listOf(
-                    ConsumptionGroupedCells(
-                        title = stringResourceProvider.getString(resource = Res.string.grouping_label_month_weeks),
-                        consumptions = consumptions,
-                    ),
-                )
-            }
+        ConsumptionPresentationStyle.MONTH_WEEKS -> {
+            listOf(
+                ConsumptionGroupedCells(
+                    title = stringResourceProvider.getString(resource = Res.string.grouping_label_month_weeks),
+                    consumptions = consumptions,
+                ),
+            )
+        }
 
-            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
-                consumptions
-                    .groupBy { it.interval.start.getLocalMonthYearString() }
-                    .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
-            }
+        ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> {
+            consumptions
+                .groupBy { it.interval.start.getLocalMonthYearString() }
+                .map { (date, items) -> ConsumptionGroupedCells(title = date, consumptions = items) }
+        }
 
-            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
-                consumptions
-                    .groupBy { it.interval.start.getLocalYear() }
-                    .map { (date, items) -> ConsumptionGroupedCells(title = date.toString(), consumptions = items) }
-            }
+        ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> {
+            consumptions
+                .groupBy { it.interval.start.getLocalYear() }
+                .map { (date, items) -> ConsumptionGroupedCells(title = date.toString(), consumptions = items) }
         }
     }
 
@@ -200,61 +196,57 @@ data class ConsumptionQueryFilter(
      * and we only work out the actual Instant after that.
      * It is because 2 months before 1/May 00:00 should always be 1/Mar 00:00 to users, although the GMT representations are not.
      */
-    private fun getBackwardReferencePoint(): Instant {
-        return when (presentationStyle) {
-            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> with(referencePoint.toSystemDefaultLocalDateTime()) {
-                val newDate = date.minus(value = 1, unit = DateTimeUnit.DAY)
-                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
-            }
+    private fun getBackwardReferencePoint(): Instant = when (presentationStyle) {
+        ConsumptionPresentationStyle.DAY_HALF_HOURLY -> with(referencePoint.toSystemDefaultLocalDateTime()) {
+            val newDate = date.minus(value = 1, unit = DateTimeUnit.DAY)
+            newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+        }
 
-            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
-                val newDate = date.minus(value = 1, unit = DateTimeUnit.WEEK)
-                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
-            }
+        ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
+            val newDate = date.minus(value = 1, unit = DateTimeUnit.WEEK)
+            newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+        }
 
-            ConsumptionPresentationStyle.MONTH_WEEKS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
-                val newDate = date.minus(value = 1, unit = DateTimeUnit.MONTH)
-                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
-            }
+        ConsumptionPresentationStyle.MONTH_WEEKS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
+            val newDate = date.minus(value = 1, unit = DateTimeUnit.MONTH)
+            newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+        }
 
-            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
-                val newDate = date.minus(value = 1, unit = DateTimeUnit.MONTH)
-                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
-            }
+        ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
+            val newDate = date.minus(value = 1, unit = DateTimeUnit.MONTH)
+            newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+        }
 
-            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
-                val newDate = date.minus(value = 1, unit = DateTimeUnit.YEAR)
-                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
-            }
+        ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
+            val newDate = date.minus(value = 1, unit = DateTimeUnit.YEAR)
+            newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
         }
     }
 
-    private fun getForwardReferencePoint(): Instant {
-        return when (presentationStyle) {
-            ConsumptionPresentationStyle.DAY_HALF_HOURLY -> with(referencePoint.toSystemDefaultLocalDateTime()) {
-                val newDate = date.plus(value = 1, unit = DateTimeUnit.DAY)
-                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
-            }
+    private fun getForwardReferencePoint(): Instant = when (presentationStyle) {
+        ConsumptionPresentationStyle.DAY_HALF_HOURLY -> with(referencePoint.toSystemDefaultLocalDateTime()) {
+            val newDate = date.plus(value = 1, unit = DateTimeUnit.DAY)
+            newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+        }
 
-            ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
-                val newDate = date.plus(value = 1, unit = DateTimeUnit.WEEK)
-                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
-            }
+        ConsumptionPresentationStyle.WEEK_SEVEN_DAYS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
+            val newDate = date.plus(value = 1, unit = DateTimeUnit.WEEK)
+            newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+        }
 
-            ConsumptionPresentationStyle.MONTH_WEEKS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
-                val newDate = date.plus(value = 1, unit = DateTimeUnit.MONTH)
-                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
-            }
+        ConsumptionPresentationStyle.MONTH_WEEKS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
+            val newDate = date.plus(value = 1, unit = DateTimeUnit.MONTH)
+            newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+        }
 
-            ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
-                val newDate = date.plus(value = 1, unit = DateTimeUnit.MONTH)
-                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
-            }
+        ConsumptionPresentationStyle.MONTH_THIRTY_DAYS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
+            val newDate = date.plus(value = 1, unit = DateTimeUnit.MONTH)
+            newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
+        }
 
-            ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
-                val newDate = date.plus(value = 1, unit = DateTimeUnit.YEAR)
-                newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
-            }
+        ConsumptionPresentationStyle.YEAR_TWELVE_MONTHS -> with(referencePoint.toSystemDefaultLocalDateTime()) {
+            val newDate = date.plus(value = 1, unit = DateTimeUnit.YEAR)
+            newDate.atTime(time = time).toSystemDefaultTimeZoneInstant()
         }
     }
 }

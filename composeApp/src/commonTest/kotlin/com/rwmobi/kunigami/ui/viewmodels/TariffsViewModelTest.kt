@@ -293,22 +293,21 @@ class TariffsViewModelTest {
     }
 
     @Test
-    fun `getFilteredProducts should handle 403 Forbidden failure with specific message`() =
-        runTest {
-            userPreferencesRepository.demoMode = true
-            octopusApiRepository.setProductsResponse =
-                Result.failure(HttpException(httpStatusCode = 403))
+    fun `getFilteredProducts should handle 403 Forbidden failure with specific message`() = runTest {
+        userPreferencesRepository.demoMode = true
+        octopusApiRepository.setProductsResponse =
+            Result.failure(HttpException(httpStatusCode = 403))
 
-            tariffsViewModel.refresh()
-            val uiState = tariffsViewModel.uiState.value
+        tariffsViewModel.refresh()
+        val uiState = tariffsViewModel.uiState.value
 
-            assertFalse(uiState.isLoading)
-            assertTrue(uiState.requestedScreenType is TariffsScreenType.Error)
-            val errorScreen = uiState.requestedScreenType as TariffsScreenType.Error
-            assertTrue(errorScreen.specialErrorScreen is SpecialErrorScreen.HttpError)
-            assertEquals(
-                403,
-                (errorScreen.specialErrorScreen as SpecialErrorScreen.HttpError).statusCode,
-            )
-        }
+        assertFalse(uiState.isLoading)
+        assertTrue(uiState.requestedScreenType is TariffsScreenType.Error)
+        val errorScreen = uiState.requestedScreenType as TariffsScreenType.Error
+        assertTrue(errorScreen.specialErrorScreen is SpecialErrorScreen.HttpError)
+        assertEquals(
+            403,
+            (errorScreen.specialErrorScreen as SpecialErrorScreen.HttpError).statusCode,
+        )
+    }
 }

@@ -34,10 +34,8 @@ class MultiplatformPreferencesStore(
         }
     }
 
-    override suspend fun getStringData(key: String): String? {
-        return withContext(dispatcher) {
-            settings[key]
-        }
+    override suspend fun getStringData(key: String): String? = withContext(dispatcher) {
+        settings[key]
     }
 
     override suspend fun saveFloatData(key: String, value: Float) {
@@ -46,21 +44,15 @@ class MultiplatformPreferencesStore(
         }
     }
 
-    override suspend fun getFloatData(key: String): Float? {
-        return withContext(dispatcher) {
-            settings[key]
-        }
+    override suspend fun getFloatData(key: String): Float? = withContext(dispatcher) {
+        settings[key]
     }
 
-    override suspend fun removeData(key: String) {
-        return withContext(dispatcher) {
-            settings.remove(key)
-        }
+    override suspend fun removeData(key: String) = withContext(dispatcher) {
+        settings.remove(key)
     }
 
-    override suspend fun clearAll() {
-        return withContext(dispatcher) {
-            settings.clear()
-        }
+    override suspend fun clearAll() = withContext(dispatcher) {
+        settings.clear()
     }
 }

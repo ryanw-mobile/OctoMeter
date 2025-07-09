@@ -27,31 +27,29 @@ import platform.Foundation.NSURLErrorNotConnectedToInternet
 /***
  * This is needed to handle Ktor Darwin Engine exceptions which does not exist in CommonMain
  */
-actual fun Throwable.mapFromPlatform(): Throwable {
-    return when (this) {
-        is DarwinHttpRequestException -> {
-            // Check if the underlying error indicates no network
-            val nsError = (origin as? NSError)
-            if (nsError?.code == NSURLErrorNotConnectedToInternet) {
-                // No network connection available
-                UnresolvedAddressException()
-            } else {
-                this
-            }
-        }
-
-        is ClientRequestException -> {
-            HttpException(httpStatusCode = response.status.value)
-        }
-
-        is ApolloHttpException -> {
-            HttpException(httpStatusCode = statusCode)
-        }
-
-        is ApolloNetworkException -> {
+actual fun Throwable.mapFromPlatform(): Throwable = when (this) {
+    is DarwinHttpRequestException -> {
+        // Check if the underlying error indicates no network
+        val nsError = (origin as? NSError)
+        if (nsError?.code == NSURLErrorNotConnectedToInternet) {
+            // No network connection available
             UnresolvedAddressException()
+        } else {
+            this
         }
-
-        else -> this
     }
+
+    is ClientRequestException -> {
+        HttpException(httpStatusCode = response.status.value)
+    }
+
+    is ApolloHttpException -> {
+        HttpException(httpStatusCode = statusCode)
+    }
+
+    is ApolloNetworkException -> {
+        UnresolvedAddressException()
+    }
+
+    else -> this
 }

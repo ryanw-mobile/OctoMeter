@@ -30,9 +30,7 @@ data class ConsumptionGroupedCells(
      * but this rounding introduces error. If it does not match the exact billing period,
      * either way will not produce the exact the billed amount.
      */
-    fun getAggregateConsumption(): Double {
-        return consumptions.sumOf { it.kWhConsumed }
-    }
+    fun getAggregateConsumption(): Double = consumptions.sumOf { it.kWhConsumed }
 }
 
 /**
@@ -40,12 +38,10 @@ data class ConsumptionGroupedCells(
  * This rounding introduces error. If it does not match the exact billing period,
  * this will not match exactly the billable amount.
  */
-fun List<ConsumptionGroupedCells>.getAggregateConsumption(rounded: Boolean): Double {
-    return sumOf { it.getAggregateConsumption() }.run {
-        if (rounded) {
-            roundConsumptionToNearestEvenHundredth()
-        } else {
-            this
-        }
+fun List<ConsumptionGroupedCells>.getAggregateConsumption(rounded: Boolean): Double = sumOf { it.getAggregateConsumption() }.run {
+    if (rounded) {
+        roundConsumptionToNearestEvenHundredth()
+    } else {
+        this
     }
 }

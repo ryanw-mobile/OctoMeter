@@ -43,53 +43,39 @@ import kotlin.time.Instant
 class DemoOctopusApiRepository : OctopusApiRepository {
     private val defaultException = NotImplementedError("Disabled in demo mode")
 
-    override suspend fun getTariff(tariffCode: String): Result<Tariff> {
-        throw defaultException
-    }
+    override suspend fun getTariff(tariffCode: String): Result<Tariff> = throw defaultException
 
-    override suspend fun getProducts(postcode: String): Result<List<ProductSummary>> {
-        throw defaultException
-    }
+    override suspend fun getProducts(postcode: String): Result<List<ProductSummary>> = throw defaultException
 
     override suspend fun getProductDetails(
         productCode: String,
         postcode: String,
-    ): Result<ProductDetails> {
-        throw defaultException
-    }
+    ): Result<ProductDetails> = throw defaultException
 
     override suspend fun getStandardUnitRates(
         tariffCode: String,
         period: ClosedRange<Instant>,
         requestedPage: Int?,
-    ): Result<List<Rate>> {
-        throw defaultException
-    }
+    ): Result<List<Rate>> = throw defaultException
 
     override suspend fun getStandingCharges(
         tariffCode: String,
         paymentMethod: PaymentMethod,
         period: ClosedRange<Instant>?,
         requestedPage: Int?,
-    ): Result<List<Rate>> {
-        throw defaultException
-    }
+    ): Result<List<Rate>> = throw defaultException
 
     override suspend fun getDayUnitRates(
         tariffCode: String,
         period: ClosedRange<Instant>?,
         requestedPage: Int?,
-    ): Result<List<Rate>> {
-        throw defaultException
-    }
+    ): Result<List<Rate>> = throw defaultException
 
     override suspend fun getNightUnitRates(
         tariffCode: String,
         period: ClosedRange<Instant>?,
         requestedPage: Int?,
-    ): Result<List<Rate>> {
-        throw defaultException
-    }
+    ): Result<List<Rate>> = throw defaultException
 
     /**
      * For Usage Screen Demo, we generate random fake data.
@@ -154,11 +140,7 @@ class DemoOctopusApiRepository : OctopusApiRepository {
         throw defaultException
     }
 
-    override suspend fun getAccount(accountNumber: String): Result<Account?> {
-        throw defaultException
-    }
+    override suspend fun getAccount(accountNumber: String): Result<Account?> = throw defaultException
 
-    override suspend fun clearCache() {
-        throw defaultException
-    }
+    override suspend fun clearCache(): Unit = throw defaultException
 }
