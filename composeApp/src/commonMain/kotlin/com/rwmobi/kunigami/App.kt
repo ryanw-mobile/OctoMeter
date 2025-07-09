@@ -42,7 +42,6 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
@@ -53,6 +52,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.rwmobi.kunigami.ui.components.AppBottomNavigationBar
 import com.rwmobi.kunigami.ui.components.AppNavigationRail
+import com.rwmobi.kunigami.ui.extensions.calculateWindowSizeClass
 import com.rwmobi.kunigami.ui.navigation.AppDestination
 import com.rwmobi.kunigami.ui.navigation.AppNavigationHost
 import com.rwmobi.kunigami.ui.theme.AppTheme

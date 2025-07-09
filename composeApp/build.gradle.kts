@@ -57,6 +57,10 @@ kotlin {
         compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
     }
 
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
+
     jvm("desktop")
     jvmToolchain(17)
 

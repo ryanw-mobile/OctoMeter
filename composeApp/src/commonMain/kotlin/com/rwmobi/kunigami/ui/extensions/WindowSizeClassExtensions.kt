@@ -16,6 +16,10 @@
 package com.rwmobi.kunigami.ui.extensions
 
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.runtime.Composable
 import com.rwmobi.kunigami.ui.model.PlatformType
 
 expect fun WindowSizeClass.getPlatformType(): PlatformType
+
+@Composable
+expect fun calculateWindowSizeClass(): WindowSizeClass
