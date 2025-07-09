@@ -116,7 +116,7 @@ kotlin {
         val androidInstrumentedTest by getting {
             dependencies {
                 implementation(project.dependencies.platform(libs.compose.bom))
-                implementation(libs.material3.windowsizeclass.multiplatform)
+                implementation(libs.material3.windowsizeclass)
                 implementation(libs.androidx.junit)
                 implementation(libs.androidx.espresso.core)
                 implementation(libs.ui.test.junit4)
@@ -141,7 +141,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.navigation.compose)
-            implementation(libs.material3.windowsizeclass.multiplatform)
+            implementation(libs.material3.windowsizeclass)
             implementation(libs.kermit)
             implementation(libs.kermit.koin)
             implementation(libs.ktor.client.core)
@@ -338,7 +338,7 @@ android {
         }
 
         managedDevices {
-            devices {
+            allDevices {
                 create<ManagedVirtualDevice>("pixel2Api33") {
                     device = "Pixel 2"
                     apiLevel = 33
