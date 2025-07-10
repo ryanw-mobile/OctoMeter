@@ -15,11 +15,18 @@
 
 package com.rwmobi.kunigami.ui.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.dp
+import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 
 private val mediumContrastLightColorScheme = lightColorScheme(
@@ -106,14 +113,65 @@ fun AppTheme(
 ) {
     val shouldUseDarkTheme = useDarkTheme ?: shouldUseDarkTheme()
     val colorScheme = if (shouldUseDarkTheme) mediumContrastDarkColorScheme else mediumContrastLightColorScheme
+    val screenSizeInfo = getScreenSizeInfo()
+    val dimensions = if (screenSizeInfo.widthDp <= 360.dp) smallDimension else sw360Dimension
 
     androidStatusBarSideEffect?.let {
         it(colorScheme.secondary.toArgb(), shouldUseDarkTheme)
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = AppTypography(),
-        content = content,
-    )
+    ProvideDimens(dimensions = dimensions) {
+        ProvideColorScheme(colorScheme = colorScheme) {
+            MaterialTheme(
+                colorScheme = colorScheme,
+                typography = AppTypography(),
+                content = content,
+            )
+        }
+    }
+}
+
+private val LocalAppColorScheme = staticCompositionLocalOf {
+    mediumContrastLightColorScheme
+}
+
+@Composable
+fun ProvideColorScheme(
+    colorScheme: ColorScheme,
+    content: @Composable () -> Unit,
+) {
+    val colorPalette = remember { colorScheme }
+    CompositionLocalProvider(LocalAppColorScheme provides colorPalette, content = content)
+}
+
+private val LocalAppDimens = staticCompositionLocalOf {
+    smallDimension
+}
+
+@Composable
+fun ProvideDimens(
+    dimensions: Dimension,
+    content: @Composable () -> Unit,
+) {
+    val dimensionSet = remember { dimensions }
+    CompositionLocalProvider(LocalAppDimens provides dimensionSet, content = content)
+}
+
+object AppTheme {
+    val colorScheme: ColorScheme
+        @Composable
+        get() = LocalAppColorScheme.current
+
+    val dimens: Dimension
+        @Composable
+        get() = LocalAppDimens.current
+
+    val typography: androidx.compose.material3.Typography
+        @Composable
+        get() = AppTypography()
+
+    // We have not customised shapes yet, so we use the default
+    val shapes: Shapes
+        @Composable
+        get() = MaterialTheme.shapes
 }

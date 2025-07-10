@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,9 +49,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.HorizontalAnimatedTintedPainterResource
 import com.rwmobi.kunigami.ui.components.VerticalAnimatedTintedPainterResource
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.rate.RateTrend
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import io.github.koalaplot.core.util.toString
 import kotlinx.coroutines.delay
 import kunigami.composeapp.generated.resources.Res
@@ -70,12 +68,11 @@ internal fun CurrentRateTile(
     rateTrend: RateTrend?,
     rateTrendIconTint: Color? = null,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     Column(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.large)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(dimension.grid_2),
+            .clip(shape = AppTheme.shapes.large)
+            .background(AppTheme.colorScheme.surfaceContainer)
+            .padding(AppTheme.dimens.grid_2),
         verticalArrangement = Arrangement.Top,
     ) {
         val animatedVatInclusivePrice by animateFloatAsState(
@@ -91,13 +88,13 @@ internal fun CurrentRateTile(
                     modifier = Modifier.wrapContentSize(),
                     maxLines = 1,
                     overflow = TextOverflow.Clip,
-                    style = MaterialTheme.typography.displayMedium,
+                    style = AppTheme.typography.displayMedium,
                     text = animatedVatInclusivePrice.toString(precision = 2),
                 )
 
                 if (rateTrend != null && rateTrendIconTint != null) {
                     val rateTrendModifier = Modifier
-                        .size(size = dimension.grid_4)
+                        .size(size = AppTheme.dimens.grid_4)
                         .semantics { contentDescription = rateTrend.name }
 
                     when (rateTrend) {
@@ -137,11 +134,11 @@ internal fun CurrentRateTile(
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
+            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_1),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                style = MaterialTheme.typography.bodyMedium,
+                style = AppTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
                 text = stringResource(resource = Res.string.p_kwh),
             )
@@ -153,10 +150,10 @@ internal fun CurrentRateTile(
             ) {
                 Text(
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.errorContainer)
-                        .padding(horizontal = dimension.grid_1),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onErrorContainer,
+                        .background(AppTheme.colorScheme.errorContainer)
+                        .padding(horizontal = AppTheme.dimens.grid_1),
+                    style = AppTheme.typography.labelSmall,
+                    color = AppTheme.colorScheme.onErrorContainer,
                     fontWeight = FontWeight.Bold,
                     text = stringResource(resource = Res.string.overpriced).uppercase(),
                 )
@@ -167,7 +164,7 @@ internal fun CurrentRateTile(
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.bodyMedium,
+            style = AppTheme.typography.bodyMedium,
             text = stringResource(resource = Res.string.agile_current_rate),
         )
     }
@@ -176,11 +173,11 @@ internal fun CurrentRateTile(
 @Preview
 @Composable
 private fun Preview() {
-    CommonPreviewSetup { dimension ->
+    CommonPreviewSetup {
         CurrentRateTile(
             modifier = Modifier
-                .width(dimension.widgetWidthFull)
-                .height(dimension.widgetHeight),
+                .width(AppTheme.dimens.widgetWidthFull)
+                .height(AppTheme.dimens.widgetHeight),
             isCurrentRateOverpriced = true,
             rateTrendIconTint = Color.Red,
             rateTrend = RateTrend.DOWN,

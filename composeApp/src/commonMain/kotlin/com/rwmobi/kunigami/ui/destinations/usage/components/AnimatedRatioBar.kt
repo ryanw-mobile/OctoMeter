@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import io.github.koalaplot.core.util.toString
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.unit_percent
@@ -48,8 +48,8 @@ internal fun AnimatedRatioBar(
     modifier: Modifier = Modifier,
     consumptionRatio: Double, // Ratio between 0.0 and 1.0
 ) {
-    val consumptionColor = MaterialTheme.colorScheme.primary
-    val standingChargeColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+    val consumptionColor = AppTheme.colorScheme.primary
+    val standingChargeColor = AppTheme.colorScheme.onSurface.copy(alpha = 0.3f)
 
     var targetRatio by remember { mutableStateOf(0f) }
     // Trigger the animation when the composable is first composed
@@ -63,7 +63,7 @@ internal fun AnimatedRatioBar(
 
     Box(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.large)
+            .clip(shape = AppTheme.shapes.large)
             .drawBehind {
                 val consumptionWidth = size.width * animatedRatio
                 val standingChargeWidth = size.width - consumptionWidth
@@ -86,7 +86,7 @@ internal fun AnimatedRatioBar(
     ) {
         Text(
             modifier = Modifier.align(alignment = Alignment.Center),
-            style = MaterialTheme.typography.labelSmall,
+            style = AppTheme.typography.labelSmall,
             color = Color.White,
             text = stringResource(resource = Res.string.unit_percent, (animatedRatio * 100).toString(precision = 0)),
         )
@@ -98,11 +98,11 @@ internal fun AnimatedRatioBar(
 private fun Preview() {
     CommonPreviewSetup(
         modifier = Modifier.padding(all = 8.dp),
-    ) { dimension ->
+    ) {
         AnimatedRatioBar(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(dimension.grid_2),
+                .height(AppTheme.dimens.grid_2),
             consumptionRatio = 0.64,
         )
     }

@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -35,10 +34,9 @@ import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.cyanish
-import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.p_kwh
 import org.jetbrains.compose.resources.stringResource
@@ -49,32 +47,32 @@ internal fun ReferenceTariffTile(
     tariff: Tariff,
     indicatorColor: Color,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
+    val dimensGrid1 = AppTheme.dimens.grid_1
     Column(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.large)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .clip(shape = AppTheme.shapes.large)
+            .background(AppTheme.colorScheme.surfaceContainer)
             .drawBehind {
-                val stripeWidth = dimension.grid_1.toPx()
+                val stripeWidth = dimensGrid1.toPx()
                 drawRect(
                     color = indicatorColor,
                     topLeft = Offset(x = size.width - stripeWidth, y = 0f),
                     size = Size(width = stripeWidth, height = size.height),
                 )
             }
-            .padding(dimension.grid_2),
+            .padding(AppTheme.dimens.grid_2),
         verticalArrangement = Arrangement.Top,
     ) {
         tariff.vatInclusiveStandardUnitRate?.let { unitRate ->
             Text(
                 text = unitRate.roundToTwoDecimalPlaces().toString(),
-                style = MaterialTheme.typography.headlineMedium,
+                style = AppTheme.typography.headlineMedium,
                 modifier = Modifier.fillMaxWidth(),
             )
 
             Text(
                 text = stringResource(resource = Res.string.p_kwh),
-                style = MaterialTheme.typography.bodySmall,
+                style = AppTheme.typography.bodySmall,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -84,15 +82,15 @@ internal fun ReferenceTariffTile(
 
         Text(
             text = tariff.displayName,
-            style = MaterialTheme.typography.labelMedium,
+            style = AppTheme.typography.labelMedium,
             fontWeight = FontWeight.Normal,
             modifier = Modifier.fillMaxWidth(),
         )
 
         Text(
             text = tariff.tariffCode,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface.copy(
+            style = AppTheme.typography.labelSmall,
+            color = AppTheme.colorScheme.onSurface.copy(
                 alpha = 0.5f,
             ),
             fontWeight = FontWeight.Normal,

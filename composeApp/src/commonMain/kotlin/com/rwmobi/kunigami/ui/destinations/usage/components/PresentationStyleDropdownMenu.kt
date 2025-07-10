@@ -23,7 +23,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,9 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.circle_check
 import kunigami.composeapp.generated.resources.selected
@@ -49,12 +47,10 @@ internal fun PresentationStyleDropdownMenu(
     onDismiss: () -> Unit,
     onSwitchPresentationStyle: (consumptionPresentationStyle: ConsumptionPresentationStyle) -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     DropdownMenu(
         modifier = modifier,
         expanded = expanded,
-        offset = DpOffset(0.dp, dimension.grid_1),
+        offset = DpOffset(0.dp, AppTheme.dimens.grid_1),
         onDismissRequest = { onDismiss() },
     ) {
         ConsumptionPresentationStyle.entries.forEach { presentationStyle ->
@@ -62,13 +58,13 @@ internal fun PresentationStyleDropdownMenu(
                 modifier = Modifier,
                 enabled = currentPresentationStyle != presentationStyle,
                 colors = MenuDefaults.itemColors().copy(
-                    textColor = MaterialTheme.colorScheme.onSurface,
+                    textColor = AppTheme.colorScheme.onSurface,
                 ),
                 contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                 trailingIcon = {
                     if (currentPresentationStyle == presentationStyle) {
                         Icon(
-                            modifier = Modifier.size(size = dimension.grid_3),
+                            modifier = Modifier.size(size = AppTheme.dimens.grid_3),
                             painter = painterResource(resource = Res.drawable.circle_check),
                             contentDescription = stringResource(resource = Res.string.selected),
                         )
@@ -77,7 +73,7 @@ internal fun PresentationStyleDropdownMenu(
                 onClick = { onSwitchPresentationStyle(presentationStyle) },
                 text = {
                     Text(
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = AppTheme.typography.bodyLarge,
                         text = stringResource(resource = presentationStyle.stringResource),
                     )
                 },

@@ -32,7 +32,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -44,14 +43,13 @@ import com.rwmobi.kunigami.ui.components.ErrorScreenHandler
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.ButtonTitleBar
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.PostcodeInputBar
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.ProductBottomSheetWrapper
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.ProductListItemAdaptive
 import com.rwmobi.kunigami.ui.destinations.tariffs.components.ProductPaneWrapper
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.arrow_ios_back_fill
 import kunigami.composeapp.generated.resources.close_fill
@@ -78,7 +76,6 @@ fun TariffsScreen(
         }
     }
 
-    val dimension = getScreenSizeInfo().getDimension()
     val mainLazyListState = rememberLazyListState()
 
     Box(modifier = modifier) {
@@ -104,9 +101,9 @@ fun TariffsScreen(
                         ) {
                             DualTitleBar(
                                 modifier = Modifier
-                                    .background(color = MaterialTheme.colorScheme.secondary)
+                                    .background(color = AppTheme.colorScheme.secondary)
                                     .fillMaxWidth()
-                                    .height(height = dimension.minListItemHeight),
+                                    .height(height = AppTheme.dimens.minListItemHeight),
                                 title = stringResource(resource = Res.string.navigation_tariffs),
                             )
 
@@ -134,7 +131,7 @@ fun TariffsScreen(
                                                     },
                                                 )
                                                 .fillMaxWidth()
-                                                .padding(vertical = dimension.grid_1),
+                                                .padding(vertical = AppTheme.dimens.grid_1),
                                             productSummary = product,
                                             useWideLayout = uiState.requestedWideListLayout,
                                         )
@@ -142,7 +139,7 @@ fun TariffsScreen(
                                         if (index < uiState.productSummaries.lastIndex) {
                                             HorizontalDivider(
                                                 modifier = Modifier.fillMaxWidth(),
-                                                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                                color = AppTheme.colorScheme.surfaceContainerHighest,
                                             )
                                         }
                                     }
@@ -164,7 +161,7 @@ fun TariffsScreen(
                     if (uiState.requestedLayout == TariffScreenLayoutStyle.ListDetailPane) {
                         VerticalDivider(
                             modifier = Modifier.fillMaxHeight(),
-                            color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                            color = AppTheme.colorScheme.surfaceContainerHighest,
                         )
 
                         ProductPaneWrapper(
@@ -174,16 +171,16 @@ fun TariffsScreen(
                             uiState.productDetails?.let { productDetails ->
                                 ButtonTitleBar(
                                     modifier = Modifier
-                                        .background(color = MaterialTheme.colorScheme.secondary)
+                                        .background(color = AppTheme.colorScheme.secondary)
                                         .fillMaxWidth()
-                                        .height(height = dimension.minListItemHeight),
+                                        .height(height = AppTheme.dimens.minListItemHeight),
                                     title = productDetails.displayName,
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    color = AppTheme.colorScheme.onSecondaryContainer,
                                     rightButton = {
                                         IconButton(onClick = uiEvent.onProductDetailsDismissed) {
                                             Icon(
                                                 painter = painterResource(resource = Res.drawable.close_fill),
-                                                tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                                                tint = AppTheme.colorScheme.onSecondaryContainer,
                                                 contentDescription = stringResource(resource = Res.string.content_description_dismiss_this_pane),
                                             )
                                         }
@@ -204,16 +201,16 @@ fun TariffsScreen(
                 ) {
                     ButtonTitleBar(
                         modifier = Modifier
-                            .background(color = MaterialTheme.colorScheme.secondary)
+                            .background(color = AppTheme.colorScheme.secondary)
                             .fillMaxWidth()
-                            .height(height = dimension.minListItemHeight),
+                            .height(height = AppTheme.dimens.minListItemHeight),
                         title = uiState.productDetails?.displayName ?: "",
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = AppTheme.colorScheme.onSecondary,
                         leftButton = {
                             IconButton(onClick = uiEvent.onProductDetailsDismissed) {
                                 Icon(
                                     painter = painterResource(resource = Res.drawable.arrow_ios_back_fill),
-                                    tint = MaterialTheme.colorScheme.onSecondary,
+                                    tint = AppTheme.colorScheme.onSecondary,
                                     contentDescription = stringResource(resource = Res.string.content_description_navigate_back),
                                 )
                             }

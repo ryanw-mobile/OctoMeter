@@ -32,7 +32,6 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -122,7 +121,7 @@ fun App(
                         Column {
                             HorizontalDivider(
                                 modifier = Modifier.fillMaxWidth(),
-                                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                color = AppTheme.colorScheme.surfaceContainerHighest,
                             )
 
                             AppBottomNavigationBar(
@@ -159,7 +158,7 @@ fun App(
                             VerticalDivider(
                                 modifier = Modifier.fillMaxHeight()
                                     .wrapContentWidth(),
-                                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                color = AppTheme.colorScheme.surfaceContainerHighest,
                             )
                         }
                     }

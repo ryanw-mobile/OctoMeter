@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,8 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import com.rwmobi.kunigami.domain.model.consumption.LiveConsumption
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_live_consumption
 import kunigami.composeapp.generated.resources.w
@@ -50,12 +48,11 @@ internal fun LiveConsumptionTile(
     modifier: Modifier = Modifier,
     liveConsumption: LiveConsumption,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     Column(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.large)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(dimension.grid_2),
+            .clip(shape = AppTheme.shapes.large)
+            .background(AppTheme.colorScheme.surfaceContainer)
+            .padding(AppTheme.dimens.grid_2),
         verticalArrangement = Arrangement.Top,
     ) {
         val animatedVatInclusivePrice by animateIntAsState(
@@ -65,20 +62,20 @@ internal fun LiveConsumptionTile(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
+            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_1),
         ) {
             Text(
                 modifier = Modifier.wrapContentSize(),
                 maxLines = 1,
                 overflow = TextOverflow.Clip,
-                style = MaterialTheme.typography.displayMedium,
+                style = AppTheme.typography.displayMedium,
                 text = animatedVatInclusivePrice.toString(),
             )
 
             Text(
                 modifier = Modifier.wrapContentSize(),
                 maxLines = 1,
-                style = MaterialTheme.typography.titleMedium,
+                style = AppTheme.typography.titleMedium,
                 text = stringResource(resource = Res.string.w),
             )
         }
@@ -87,7 +84,7 @@ internal fun LiveConsumptionTile(
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.bodyMedium,
+            style = AppTheme.typography.bodyMedium,
             text = stringResource(resource = Res.string.agile_live_consumption),
         )
     }
@@ -96,11 +93,11 @@ internal fun LiveConsumptionTile(
 @Preview
 @Composable
 private fun Preview() {
-    CommonPreviewSetup { dimension ->
+    CommonPreviewSetup {
         LiveConsumptionTile(
             modifier = Modifier
-                .width(dimension.widgetWidthFull)
-                .height(dimension.widgetHeight),
+                .width(AppTheme.dimens.widgetWidthFull)
+                .height(AppTheme.dimens.widgetHeight),
             LiveConsumption(
                 readAt = Clock.System.now(),
                 demand = 1560,

@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,11 +35,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
 import com.rwmobi.kunigami.ui.destinations.account.components.CredentialsInputForm
 import com.rwmobi.kunigami.ui.theme.AppTheme
-import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.bulb
 import kunigami.composeapp.generated.resources.onboarding_introduction_1
@@ -59,7 +56,6 @@ internal fun OnboardingScreen(
     uiState: AccountUIState,
     uiEvent: AccountUIEvent,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     val focusManager = LocalFocusManager.current
 
     Column(
@@ -70,56 +66,56 @@ internal fun OnboardingScreen(
                 )
             },
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+        verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_2),
     ) {
         Text(
-            style = MaterialTheme.typography.displaySmall,
+            style = AppTheme.typography.displaySmall,
             text = stringResource(resource = Res.string.onboarding_welcome_aboard),
         )
 
         Text(
-            style = MaterialTheme.typography.bodyMedium,
+            style = AppTheme.typography.bodyMedium,
             text = stringResource(resource = Res.string.onboarding_introduction_1),
         )
 
         Image(
             modifier = Modifier
-                .size(size = dimension.grid_6)
+                .size(size = AppTheme.dimens.grid_6)
                 .align(alignment = Alignment.CenterHorizontally),
             painter = painterResource(Res.drawable.bulb),
-            colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.secondary),
+            colorFilter = ColorFilter.tint(color = AppTheme.colorScheme.secondary),
             contentDescription = null,
         )
 
         Text(
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium,
+            style = AppTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             text = stringResource(resource = Res.string.onboarding_question_1),
         )
 
         Text(
-            style = MaterialTheme.typography.bodyMedium,
+            style = AppTheme.typography.bodyMedium,
             text = stringResource(resource = Res.string.onboarding_introduction_2),
         )
 
         CredentialsInputForm(
             modifier = Modifier.fillMaxWidth()
-                .padding(vertical = dimension.grid_2),
+                .padding(vertical = AppTheme.dimens.grid_2),
             isSubmitButtonEnabled = !uiState.isLoading,
             onSubmitCredentials = uiEvent.onSubmitCredentials,
         )
 
         Text(
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            style = AppTheme.typography.bodyMedium,
+            color = AppTheme.colorScheme.onSurface,
             text = stringResource(resource = Res.string.onboarding_reminder_1),
         )
 
         Text(
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            style = AppTheme.typography.bodyMedium,
+            color = AppTheme.colorScheme.onSurface,
             text = stringResource(resource = Res.string.onboarding_reminder_2),
         )
 

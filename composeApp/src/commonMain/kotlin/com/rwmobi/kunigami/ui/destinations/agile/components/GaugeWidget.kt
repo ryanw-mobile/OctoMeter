@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -51,6 +50,7 @@ import com.rwmobi.kunigami.ui.composehelper.drawPlainColorArc
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.composehelper.palette.generateGYRHueSpectrum
 import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_expire
 import org.jetbrains.compose.resources.stringResource
@@ -143,7 +143,7 @@ internal fun GaugeWidget(
                     verticalArrangement = Arrangement.Bottom,
                 ) {
                     Text(
-                        style = MaterialTheme.typography.bodyMedium.copy(
+                        style = AppTheme.typography.bodyMedium.copy(
                             lineHeightStyle = LineHeightStyle(
                                 alignment = LineHeightStyle.Alignment.Bottom,
                                 trim = LineHeightStyle.Trim.Both,
@@ -154,7 +154,7 @@ internal fun GaugeWidget(
                         text = stringResource(resource = Res.string.agile_expire),
                     )
                     Text(
-                        style = MaterialTheme.typography.headlineMedium.copy(
+                        style = AppTheme.typography.headlineMedium.copy(
                             lineHeightStyle = LineHeightStyle(
                                 alignment = LineHeightStyle.Alignment.Bottom,
                                 trim = LineHeightStyle.Trim.Both,

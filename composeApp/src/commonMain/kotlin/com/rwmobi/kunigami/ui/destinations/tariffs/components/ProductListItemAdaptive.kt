@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -44,9 +43,7 @@ import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.ProductSummary
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.TagWithIcon
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.Dimension
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.tariffs_fixed_term_months
 import org.jetbrains.compose.resources.painterResource
@@ -77,19 +74,17 @@ private fun ProductListItemCompact(
     modifier: Modifier = Modifier,
     productSummary: ProductSummary,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Column(
         modifier = modifier.padding(
-            vertical = dimension.grid_1,
-            horizontal = dimension.grid_2,
+            vertical = AppTheme.dimens.grid_1,
+            horizontal = AppTheme.dimens.grid_2,
         ),
     ) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            style = MaterialTheme.typography.titleMedium,
+            style = AppTheme.typography.titleMedium,
             fontWeight = FontWeight.ExtraBold,
             text = productSummary.displayName,
         )
@@ -99,36 +94,35 @@ private fun ProductListItemCompact(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
-                style = MaterialTheme.typography.titleSmall,
+                style = AppTheme.typography.titleSmall,
                 text = productSummary.fullName,
             )
         }
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_1))
+        Spacer(modifier = Modifier.size(size = AppTheme.dimens.grid_1))
 
         productSummary.term?.let {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = AppTheme.typography.bodyMedium,
                 text = stringResource(resource = Res.string.tariffs_fixed_term_months, it),
             )
 
-            Spacer(modifier = Modifier.size(size = dimension.grid_1))
+            Spacer(modifier = Modifier.size(size = AppTheme.dimens.grid_1))
         }
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_1))
+        Spacer(modifier = Modifier.size(size = AppTheme.dimens.grid_1))
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.bodyMedium,
+            style = AppTheme.typography.bodyMedium,
             text = productSummary.description,
         )
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_1))
+        Spacer(modifier = Modifier.size(size = AppTheme.dimens.grid_1))
 
         if (productSummary.features.isNotEmpty()) {
             ProductFeaturesFlowRow(
-                dimension = dimension,
                 productSummary = productSummary,
             )
         }
@@ -140,16 +134,14 @@ internal fun ProductListItemWide(
     modifier: Modifier = Modifier,
     productSummary: ProductSummary,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Row(
         modifier = modifier
             .height(intrinsicSize = IntrinsicSize.Min)
             .padding(
-                vertical = dimension.grid_1,
-                horizontal = dimension.grid_2,
+                vertical = AppTheme.dimens.grid_1,
+                horizontal = AppTheme.dimens.grid_2,
             ),
-        horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+        horizontalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_2),
     ) {
         Column(
             modifier = Modifier
@@ -158,7 +150,7 @@ internal fun ProductListItemWide(
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.titleMedium,
+                style = AppTheme.typography.titleMedium,
                 fontWeight = FontWeight.ExtraBold,
                 text = productSummary.displayName,
             )
@@ -166,21 +158,21 @@ internal fun ProductListItemWide(
             if (productSummary.fullName != productSummary.displayName) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.titleSmall,
+                    style = AppTheme.typography.titleSmall,
                     text = productSummary.fullName,
                 )
             }
 
-            Spacer(modifier = Modifier.size(size = dimension.grid_1))
+            Spacer(modifier = Modifier.size(size = AppTheme.dimens.grid_1))
 
             productSummary.term?.let {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = AppTheme.typography.bodyMedium,
                     text = stringResource(resource = Res.string.tariffs_fixed_term_months, it),
                 )
 
-                Spacer(modifier = Modifier.size(size = dimension.grid_1))
+                Spacer(modifier = Modifier.size(size = AppTheme.dimens.grid_1))
             }
         }
 
@@ -188,17 +180,16 @@ internal fun ProductListItemWide(
             modifier = Modifier
                 .weight(weight = 2f)
                 .fillMaxHeight(),
-            verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_1),
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = AppTheme.typography.bodyMedium,
                 text = productSummary.description,
             )
 
             if (productSummary.features.isNotEmpty()) {
                 ProductFeaturesFlowRow(
-                    dimension = dimension,
                     productSummary = productSummary,
                 )
             }
@@ -209,7 +200,6 @@ internal fun ProductListItemWide(
 @Composable
 private fun ProductFeaturesFlowRow(
     modifier: Modifier = Modifier,
-    dimension: Dimension,
     productSummary: ProductSummary,
 ) {
     val currentDensity = LocalDensity.current
@@ -217,13 +207,13 @@ private fun ProductFeaturesFlowRow(
         FlowRow(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(vertical = dimension.grid_1),
-            verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+                .padding(vertical = AppTheme.dimens.grid_1),
+            verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_1),
             horizontalArrangement = Arrangement.End,
         ) {
             productSummary.features.forEach {
                 TagWithIcon(
-                    modifier = Modifier.padding(end = dimension.grid_0_5),
+                    modifier = Modifier.padding(end = AppTheme.dimens.grid_0_5),
                     icon = painterResource(resource = it.iconResource),
                     text = stringResource(resource = it.stringResource),
                 )

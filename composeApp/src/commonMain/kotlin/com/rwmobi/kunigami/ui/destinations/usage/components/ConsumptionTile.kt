@@ -24,17 +24,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.consumption.Insights
 import com.rwmobi.kunigami.ui.previewsampledata.InsightsSamples
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.kwh
 import kunigami.composeapp.generated.resources.usage_insights_consumption
@@ -46,23 +44,22 @@ internal fun ConsumptionTile(
     modifier: Modifier = Modifier,
     insights: Insights,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     Column(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.large)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(dimension.grid_2),
+            .clip(shape = AppTheme.shapes.large)
+            .background(AppTheme.colorScheme.surfaceContainer)
+            .padding(AppTheme.dimens.grid_2),
         verticalArrangement = Arrangement.Top,
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.headlineMedium,
+            style = AppTheme.typography.headlineMedium,
             text = insights.consumptionAggregateRounded.toString(),
         )
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.bodySmall,
+            style = AppTheme.typography.bodySmall,
             fontWeight = FontWeight.Bold,
             text = stringResource(resource = Res.string.kwh),
         )
@@ -71,9 +68,9 @@ internal fun ConsumptionTile(
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.labelSmall,
+            style = AppTheme.typography.labelSmall,
             fontWeight = FontWeight.Normal,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = AppTheme.colorScheme.onSurface,
             text = pluralStringResource(
                 resource = Res.plurals.usage_insights_consumption,
                 quantity = insights.consumptionTimeSpan,
@@ -86,11 +83,11 @@ internal fun ConsumptionTile(
 @Preview
 @Composable
 private fun Preview() {
-    CommonPreviewSetup { dimension ->
+    CommonPreviewSetup {
         ConsumptionTile(
             modifier = Modifier
-                .height(dimension.widgetHeight)
-                .width(dimension.widgetWidthHalf),
+                .height(AppTheme.dimens.widgetHeight)
+                .width(AppTheme.dimens.widgetWidthHalf),
             insights = InsightsSamples.trueCost,
         )
     }

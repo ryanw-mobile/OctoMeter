@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,8 +42,7 @@ import androidx.compose.ui.unit.Density
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeter
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_meter_serial
 import kunigami.composeapp.generated.resources.dashboard
@@ -62,7 +60,6 @@ internal fun MeterSerialNumberEntry(
     onMeterSerialNumberSelected: () -> Unit,
 ) {
     val currentDensity = LocalDensity.current
-    val dimension = getScreenSizeInfo().getDimension()
     CompositionLocalProvider(
         LocalDensity provides Density(currentDensity.density, fontScale = 1f),
     ) {
@@ -71,9 +68,9 @@ internal fun MeterSerialNumberEntry(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(shape = MaterialTheme.shapes.small)
-                .background(color = MaterialTheme.colorScheme.surfaceContainerLow)
-                .heightIn(min = dimension.minTouchTarget)
+                .clip(shape = AppTheme.shapes.small)
+                .background(color = AppTheme.colorScheme.surfaceContainerLow)
+                .heightIn(min = AppTheme.dimens.minTouchTarget)
                 .selectable(
                     selected = isMeterSelected,
                     role = Role.RadioButton,
@@ -84,16 +81,16 @@ internal fun MeterSerialNumberEntry(
                     },
                 )
                 .padding(
-                    horizontal = dimension.grid_1,
-                    vertical = dimension.grid_0_5,
+                    horizontal = AppTheme.dimens.grid_1,
+                    vertical = AppTheme.dimens.grid_0_5,
                 ),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+            horizontalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_1),
         ) {
             Image(
                 modifier = Modifier
-                    .size(size = dimension.grid_3),
-                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurfaceVariant),
+                    .size(size = AppTheme.dimens.grid_3),
+                colorFilter = ColorFilter.tint(color = AppTheme.colorScheme.onSurfaceVariant),
                 painter = painterResource(resource = Res.drawable.dashboard),
                 contentDescription = null,
             )
@@ -104,7 +101,7 @@ internal fun MeterSerialNumberEntry(
                         modifier = Modifier.fillMaxWidth(),
                         overflow = TextOverflow.Ellipsis,
                         style = meterSerialNumberTextStyle,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = AppTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         text = stringResource(Res.string.account_meter_serial, serialNumber),
                     )
@@ -113,7 +110,7 @@ internal fun MeterSerialNumberEntry(
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = AppTheme.typography.bodySmall,
                             maxLines = 1,
                             text = it,
                         )
@@ -122,7 +119,7 @@ internal fun MeterSerialNumberEntry(
                     if (readingSource != null && readAt != null && value != null) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = AppTheme.typography.bodySmall,
                             text = "$readingSource: ${value.toInt()} (${readAt.getLocalDateString()})",
                         )
                     }
@@ -153,7 +150,7 @@ private fun Preview() {
                 readAt = Instant.parse("2024-07-21T00:00:00+00:00"),
                 value = 2480.10,
             ),
-            meterSerialNumberTextStyle = MaterialTheme.typography.titleMedium,
+            meterSerialNumberTextStyle = AppTheme.typography.titleMedium,
             onMeterSerialNumberSelected = {},
         )
     }

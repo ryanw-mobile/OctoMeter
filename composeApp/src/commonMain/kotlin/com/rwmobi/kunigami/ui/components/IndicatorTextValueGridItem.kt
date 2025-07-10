@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,8 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 
 @Composable
 fun IndicatorTextValueGridItem(
@@ -50,32 +48,32 @@ fun IndicatorTextValueGridItem(
     value: String,
     blinkingAlpha: Float = 1f,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
+    val grid1Width = AppTheme.dimens.grid_1
 
     Row(
         modifier = modifier.fillMaxWidth()
             .alpha(blinkingAlpha)
             .drawBehind {
-                val width = dimension.grid_1.toPx()
+                val width = grid1Width.toPx()
                 drawRect(
                     color = indicatorColor,
                     size = Size(width, size.height),
                 )
             }
-            .padding(vertical = dimension.grid_0_25),
-        horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+            .padding(vertical = AppTheme.dimens.grid_0_25),
+        horizontalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_1),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Spacer(modifier = Modifier.width(width = dimension.grid_1))
+        Spacer(modifier = Modifier.width(width = AppTheme.dimens.grid_1))
 
         Text(
             modifier = Modifier.wrapContentWidth(),
             fontFamily = FontFamily.Monospace,
-            style = MaterialTheme.typography.bodyMedium,
+            style = AppTheme.typography.bodyMedium,
             text = label,
         )
 
-        val dottedLineColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.16f)
+        val dottedLineColor = AppTheme.colorScheme.onBackground.copy(alpha = 0.16f)
         Box(
             modifier = Modifier
                 .weight(1.0f)
@@ -100,7 +98,7 @@ fun IndicatorTextValueGridItem(
         Text(
             modifier = Modifier.wrapContentWidth(),
             fontFamily = FontFamily.Monospace,
-            style = MaterialTheme.typography.bodyMedium,
+            style = AppTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             text = value,
         )

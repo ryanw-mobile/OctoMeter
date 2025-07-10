@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,8 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 
 @Composable
 internal fun DualTitleBar(
@@ -41,18 +39,17 @@ internal fun DualTitleBar(
     title: String,
     subtitle: String? = null,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     Surface {
         Column(
-            modifier = modifier.padding(horizontal = dimension.grid_3),
+            modifier = modifier.padding(horizontal = AppTheme.dimens.grid_3),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                style = AppTheme.typography.titleMedium,
+                color = AppTheme.colorScheme.onSecondaryContainer,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -63,8 +60,8 @@ internal fun DualTitleBar(
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(
+                    style = AppTheme.typography.bodySmall,
+                    color = AppTheme.colorScheme.onSecondaryContainer.copy(
                         alpha = 0.68f,
                     ),
                     maxLines = 1,
@@ -82,7 +79,7 @@ private fun Preview() {
     CommonPreviewSetup {
         DualTitleBar(
             modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.secondary)
+                .background(color = AppTheme.colorScheme.secondary)
                 .fillMaxWidth()
                 .height(height = 64.dp),
             title = "Sample title",

@@ -19,14 +19,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 
 @Composable
 fun LargeTitleWithIcon(
@@ -34,15 +32,14 @@ fun LargeTitleWithIcon(
     icon: Painter,
     label: String,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+        horizontalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_1),
     ) {
         Icon(
-            modifier = Modifier.size(size = dimension.grid_3),
-            tint = MaterialTheme.colorScheme.onBackground.copy(
+            modifier = Modifier.size(size = AppTheme.dimens.grid_3),
+            tint = AppTheme.colorScheme.onBackground.copy(
                 alpha = 0.32f,
             ),
             painter = icon,
@@ -51,7 +48,7 @@ fun LargeTitleWithIcon(
 
         Text(
             modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.titleLarge,
+            style = AppTheme.typography.titleLarge,
             text = label,
         )
     }

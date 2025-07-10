@@ -23,10 +23,9 @@ import androidx.compose.ui.Modifier
 import com.rwmobi.kunigami.domain.extensions.getLocalHHMMString
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.components.IndicatorTextValueGridItem
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import io.github.koalaplot.core.util.toString
 
 @Composable
@@ -39,11 +38,9 @@ internal fun RateGroupCells(
     minimumVatInclusivePrice: Double,
     blinkingAlpha: Float = 1f,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_3),
+        horizontalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_3),
     ) {
         val columnRangeToRender = if (shouldHideLastColumn) {
             0..<partitionedItems.lastIndex

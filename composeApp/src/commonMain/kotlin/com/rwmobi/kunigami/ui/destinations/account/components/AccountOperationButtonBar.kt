@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,8 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.components.SquareButton
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_clear_cache
 import kunigami.composeapp.generated.resources.account_demo_mode
@@ -49,13 +47,12 @@ internal fun AccountOperationButtonBar(
     onClearCache: () -> Unit,
     onSwitchToDemoMode: () -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     var shouldShowDemoModeConfirmDialog by rememberSaveable { mutableStateOf(false) }
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(
-            dimension.grid_4,
+            AppTheme.dimens.grid_4,
             alignment = Alignment.CenterHorizontally,
         ),
     ) {
@@ -66,8 +63,8 @@ internal fun AccountOperationButtonBar(
             icon = painterResource(resource = Res.drawable.key),
             text = stringResource(resource = Res.string.account_update_api_key),
             colors = ButtonDefaults.buttonColors().copy(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                containerColor = AppTheme.colorScheme.secondaryContainer,
+                contentColor = AppTheme.colorScheme.onSecondaryContainer,
             ),
             onClick = onUpdateApiKey,
         )
@@ -79,8 +76,8 @@ internal fun AccountOperationButtonBar(
             icon = painterResource(resource = Res.drawable.database_remove_outline),
             text = stringResource(resource = Res.string.account_clear_cache),
             colors = ButtonDefaults.buttonColors().copy(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                containerColor = AppTheme.colorScheme.secondaryContainer,
+                contentColor = AppTheme.colorScheme.onSecondaryContainer,
             ),
             onClick = onClearCache,
         )
@@ -92,8 +89,8 @@ internal fun AccountOperationButtonBar(
             icon = painterResource(resource = Res.drawable.eraser),
             text = stringResource(resource = Res.string.account_demo_mode),
             colors = ButtonDefaults.buttonColors().copy(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                containerColor = AppTheme.colorScheme.secondaryContainer,
+                contentColor = AppTheme.colorScheme.onSecondaryContainer,
             ),
             onClick = { shouldShowDemoModeConfirmDialog = true },
         )

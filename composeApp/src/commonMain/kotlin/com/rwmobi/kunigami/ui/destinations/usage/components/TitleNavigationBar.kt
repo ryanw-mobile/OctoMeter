@@ -30,7 +30,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,9 +42,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionPresentationStyle
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.chevron_left_circle
 import kunigami.composeapp.generated.resources.chevron_right_circle
@@ -64,7 +62,6 @@ internal fun TitleNavigationBar(
     onNavigateForward: () -> Unit,
     onSwitchPresentationStyle: (consumptionPresentationStyle: ConsumptionPresentationStyle) -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     var presentationStyleDropdownMenuExpanded by remember { mutableStateOf(false) }
 
     Surface {
@@ -74,7 +71,7 @@ internal fun TitleNavigationBar(
         ) {
             Box(
                 modifier = Modifier
-                    .size(size = dimension.minTouchTarget)
+                    .size(size = AppTheme.dimens.minTouchTarget)
                     .clickable(
                         enabled = canNavigateBack,
                         onClick = onNavigateBack,
@@ -83,8 +80,8 @@ internal fun TitleNavigationBar(
             ) {
                 if (canNavigateBack) {
                     Icon(
-                        modifier = Modifier.padding(all = dimension.grid_1),
-                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        modifier = Modifier.padding(all = AppTheme.dimens.grid_1),
+                        tint = AppTheme.colorScheme.onSecondaryContainer,
                         painter = painterResource(resource = Res.drawable.chevron_left_circle),
                         contentDescription = stringResource(resource = Res.string.content_description_previous_period),
                     )
@@ -93,13 +90,13 @@ internal fun TitleNavigationBar(
 
             BoxWithConstraints(
                 modifier = Modifier
-                    .padding(vertical = dimension.grid_1)
+                    .padding(vertical = AppTheme.dimens.grid_1)
                     .weight(weight = 1f),
             ) {
                 Button(
                     modifier = Modifier.fillMaxSize(),
                     colors = ButtonDefaults.buttonColors().copy(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(
+                        containerColor = AppTheme.colorScheme.secondaryContainer.copy(
                             alpha = 0.32f,
                         ),
                     ),
@@ -108,8 +105,8 @@ internal fun TitleNavigationBar(
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        style = AppTheme.typography.titleMedium,
+                        color = AppTheme.colorScheme.onSecondaryContainer,
                         text = title,
                     )
                 }
@@ -117,7 +114,7 @@ internal fun TitleNavigationBar(
                 PresentationStyleDropdownMenu(
                     modifier = Modifier
                         .width(width = maxWidth)
-                        .background(color = MaterialTheme.colorScheme.surface),
+                        .background(color = AppTheme.colorScheme.surface),
                     currentPresentationStyle = currentPresentationStyle,
                     expanded = presentationStyleDropdownMenuExpanded,
                     onDismiss = { presentationStyleDropdownMenuExpanded = false },
@@ -130,7 +127,7 @@ internal fun TitleNavigationBar(
 
             Box(
                 modifier = Modifier
-                    .size(size = dimension.minTouchTarget)
+                    .size(size = AppTheme.dimens.minTouchTarget)
                     .clickable(
                         enabled = canNavigateForward,
                         onClick = onNavigateForward,
@@ -139,8 +136,8 @@ internal fun TitleNavigationBar(
             ) {
                 if (canNavigateForward) {
                     Icon(
-                        modifier = Modifier.padding(all = dimension.grid_1),
-                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        modifier = Modifier.padding(all = AppTheme.dimens.grid_1),
+                        tint = AppTheme.colorScheme.onSecondaryContainer,
                         painter = painterResource(resource = Res.drawable.chevron_right_circle),
                         contentDescription = stringResource(resource = Res.string.content_description_previous_period),
                     )
@@ -156,7 +153,7 @@ private fun Preview() {
     CommonPreviewSetup {
         TitleNavigationBar(
             modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.secondary)
+                .background(color = AppTheme.colorScheme.secondary)
                 .fillMaxWidth()
                 .height(height = 64.dp),
             title = "Sample title",

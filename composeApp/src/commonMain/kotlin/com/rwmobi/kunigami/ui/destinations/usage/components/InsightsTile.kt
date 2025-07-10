@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -33,10 +32,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.consumption.Insights
 import com.rwmobi.kunigami.ui.previewsampledata.InsightsSamples
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.standing_charge
 import kunigami.composeapp.generated.resources.unit_pound
@@ -50,18 +48,16 @@ internal fun InsightsTile(
     modifier: Modifier = Modifier,
     insights: Insights,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Column(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.large)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(dimension.grid_2),
+            .clip(shape = AppTheme.shapes.large)
+            .background(AppTheme.colorScheme.surfaceContainer)
+            .padding(AppTheme.dimens.grid_2),
         verticalArrangement = Arrangement.Top,
     ) {
         Text(
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            style = AppTheme.typography.headlineMedium,
+            color = AppTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             text = stringResource(
                 resource = Res.string.unit_pound,
@@ -76,8 +72,8 @@ internal fun InsightsTile(
         }
 
         Text(
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            style = AppTheme.typography.titleMedium,
+            color = AppTheme.colorScheme.onSurface,
             textAlign = TextAlign.Left,
             text = costLabel,
         )
@@ -94,12 +90,12 @@ internal fun InsightsTile(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                style = MaterialTheme.typography.labelSmall,
+                style = AppTheme.typography.labelSmall,
                 text = stringResource(resource = Res.string.usage_consumption),
             )
-            Spacer(modifier = Modifier.width(dimension.grid_1))
+            Spacer(modifier = Modifier.width(AppTheme.dimens.grid_1))
             Text(
-                style = MaterialTheme.typography.labelSmall,
+                style = AppTheme.typography.labelSmall,
                 text = stringResource(resource = Res.string.standing_charge),
             )
         }
@@ -109,11 +105,11 @@ internal fun InsightsTile(
 @Preview
 @Composable
 private fun Preview() {
-    CommonPreviewSetup { dimension ->
+    CommonPreviewSetup {
         InsightsTile(
             modifier = Modifier
-                .width(dimension.widgetWidthFull)
-                .height(dimension.widgetHeight),
+                .width(AppTheme.dimens.widgetWidthFull)
+                .height(AppTheme.dimens.widgetHeight),
             insights = InsightsSamples.trueCost,
         )
     }

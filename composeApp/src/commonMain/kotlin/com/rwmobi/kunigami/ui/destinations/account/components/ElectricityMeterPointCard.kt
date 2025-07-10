@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,9 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import com.rwmobi.kunigami.domain.model.account.ElectricityMeterPoint
 import com.rwmobi.kunigami.ui.components.IconTextButton
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenLayoutStyle
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_error_null_tariff
 import kunigami.composeapp.generated.resources.account_mpan
@@ -55,25 +53,23 @@ internal fun ElectricityMeterPointCard(
     onReloadTariff: () -> Unit,
     onMeterSerialNumberSelected: (mpan: String, meterSerialNumber: String) -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Card(modifier = modifier) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = dimension.grid_2),
-            verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+                .padding(bottom = AppTheme.dimens.grid_2),
+            verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_1),
         ) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.secondaryContainer)
+                    .background(color = AppTheme.colorScheme.secondaryContainer)
                     .padding(
-                        horizontal = dimension.grid_2,
-                        vertical = dimension.grid_0_5,
+                        horizontal = AppTheme.dimens.grid_2,
+                        vertical = AppTheme.dimens.grid_0_5,
                     ),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                style = AppTheme.typography.titleMedium,
+                color = AppTheme.colorScheme.onSecondaryContainer,
                 text = stringResource(resource = Res.string.account_mpan, meterPoint.mpan),
             )
 
@@ -85,9 +81,9 @@ internal fun ElectricityMeterPointCard(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(
-                                    start = dimension.grid_2,
-                                    end = dimension.grid_2,
-                                    bottom = dimension.grid_1,
+                                    start = AppTheme.dimens.grid_2,
+                                    end = AppTheme.dimens.grid_2,
+                                    bottom = AppTheme.dimens.grid_1,
                                 )
                                 .wrapContentHeight(),
                             agreement = agreement,
@@ -99,12 +95,12 @@ internal fun ElectricityMeterPointCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
-                            start = dimension.grid_2,
-                            end = dimension.grid_2,
-                            bottom = dimension.grid_2,
+                            start = AppTheme.dimens.grid_2,
+                            end = AppTheme.dimens.grid_2,
+                            bottom = AppTheme.dimens.grid_2,
                         ),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+                    verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_2),
                 ) {
                     Text(text = stringResource(resource = Res.string.account_error_null_tariff))
 
@@ -120,21 +116,21 @@ internal fun ElectricityMeterPointCard(
             if (meterPoint.meters.isNotEmpty()) {
                 HorizontalDivider(
                     modifier = Modifier
-                        .padding(horizontal = dimension.grid_2, vertical = dimension.grid_1)
+                        .padding(horizontal = AppTheme.dimens.grid_2, vertical = AppTheme.dimens.grid_1)
                         .alpha(0.5f),
                 )
             }
 
             val meterSerialNumberTextStyle = if (requestedLayout is AccountScreenLayoutStyle.Compact) {
-                MaterialTheme.typography.labelMedium
+                AppTheme.typography.labelMedium
             } else {
-                MaterialTheme.typography.titleMedium
+                AppTheme.typography.titleMedium
             }
 
             Column(
                 modifier = Modifier.fillMaxWidth()
-                    .padding(horizontal = dimension.grid_2),
-                verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+                    .padding(horizontal = AppTheme.dimens.grid_2),
+                verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_1),
             ) {
                 meterPoint.meters.forEach { meter ->
                     MeterSerialNumberEntry(
