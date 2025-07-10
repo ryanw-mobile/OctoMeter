@@ -15,8 +15,8 @@
 
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import com.apollographql.apollo.exception.ApolloHttpException
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.domain.repository.FakeOctopusApiRepository
@@ -93,11 +93,10 @@ class AccountViewModelTest {
         // initialise a default screen type
         accountViewModel.notifyWindowSizeClassChanged(
             windowSizeClass = WindowSizeClass.calculateFromSize(
-                size = Size(
-                    width = 1280f,
-                    height = 1024f,
+                size = DpSize(
+                    width = 1280.dp,
+                    height = 1024.dp,
                 ),
-                density = Density(density = 2.0f),
             ),
         )
     }
