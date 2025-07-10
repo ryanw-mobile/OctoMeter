@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -43,8 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.onboarding_button_connect
 import kunigami.composeapp.generated.resources.onboarding_getting_started
@@ -63,14 +61,12 @@ internal fun CredentialsInputForm(
     isSubmitButtonEnabled: Boolean,
     onSubmitCredentials: (apiKey: String, accountNumber: String, stringResolver: suspend (resId: StringResource) -> String) -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Column(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.medium)
-            .background(color = MaterialTheme.colorScheme.surfaceContainer)
-            .padding(all = dimension.grid_3),
-        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+            .clip(shape = AppTheme.shapes.medium)
+            .background(color = AppTheme.colorScheme.surfaceContainer)
+            .padding(all = AppTheme.dimens.grid_3),
+        verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_2),
     ) {
         val keyboardController = LocalSoftwareKeyboardController.current
         val accountFocusRequester = FocusRequester()
@@ -78,7 +74,7 @@ internal fun CredentialsInputForm(
         var account by rememberSaveable { mutableStateOf("") }
 
         Text(
-            style = MaterialTheme.typography.titleLarge,
+            style = AppTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             text = stringResource(resource = Res.string.onboarding_getting_started),
         )

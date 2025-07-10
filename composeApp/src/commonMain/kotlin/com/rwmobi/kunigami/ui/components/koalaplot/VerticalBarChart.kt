@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,10 +41,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import io.github.koalaplot.core.ChartLayout
 import io.github.koalaplot.core.bar.DefaultVerticalBar
 import io.github.koalaplot.core.bar.VerticalBarPlot
@@ -74,8 +72,6 @@ fun VerticalBarChart(
     yAxisTitle: String? = null,
     backgroundPlot: @Composable ((scope: XYGraphScope<Int, Double>) -> Unit)? = null,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Box {
         var showTooltipIndex: Int? by remember { mutableStateOf(null) }
         ChartLayout(modifier = modifier) {
@@ -88,13 +84,13 @@ fun VerticalBarChart(
                 xAxisLabels = { index ->
                     labelGenerator(index)?.let { label ->
                         AxisLabel(
-                            modifier = Modifier.padding(horizontal = dimension.grid_1),
+                            modifier = Modifier.padding(horizontal = AppTheme.dimens.grid_1),
                             label = label,
                         )
                     }
                 },
                 xAxisStyle = AxisStyle(
-                    color = MaterialTheme.colorScheme.onBackground.copy(
+                    color = AppTheme.colorScheme.onBackground.copy(
                         alpha = 0.25f,
                     ),
                     majorTickSize = 4.dp,
@@ -106,7 +102,7 @@ fun VerticalBarChart(
                         XAxisTitle(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = dimension.grid_1),
+                                .padding(top = AppTheme.dimens.grid_1),
                             title = it,
                         )
                     }
@@ -126,7 +122,7 @@ fun VerticalBarChart(
                 ),
                 yAxisLabels = {
                     AxisLabel(
-                        modifier = Modifier.absolutePadding(right = dimension.grid_0_25),
+                        modifier = Modifier.absolutePadding(right = AppTheme.dimens.grid_0_25),
                         label = it.toString(precision = 1),
                     )
                 },
@@ -135,13 +131,13 @@ fun VerticalBarChart(
                         YAxisTitle(
                             modifier = Modifier
                                 .fillMaxHeight()
-                                .padding(end = dimension.grid_1),
+                                .padding(end = AppTheme.dimens.grid_1),
                             title = it,
                         )
                     }
                 },
                 horizontalMajorGridLineStyle = LineStyle(
-                    brush = SolidColor(MaterialTheme.colorScheme.onBackground),
+                    brush = SolidColor(AppTheme.colorScheme.onBackground),
                     strokeWidth = 1.dp,
                     pathEffect = null,
                     alpha = 0.5f,
@@ -149,7 +145,7 @@ fun VerticalBarChart(
                     blendMode = DrawScope.DefaultBlendMode,
                 ),
                 horizontalMinorGridLineStyle = LineStyle(
-                    brush = SolidColor(MaterialTheme.colorScheme.onBackground),
+                    brush = SolidColor(AppTheme.colorScheme.onBackground),
                     strokeWidth = 1.dp,
                     pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 4f), 0f), // Configure dashed pattern
                     alpha = 0.25f,
@@ -218,7 +214,7 @@ fun VerticalBarChart(
             HoverElement(
                 modifier = Modifier
                     .align(alignment = Alignment.TopCenter)
-                    .offset(y = dimension.grid_2),
+                    .offset(y = AppTheme.dimens.grid_2),
                 text = tooltipGenerator(index),
             )
         }
@@ -230,18 +226,16 @@ private fun HoverElement(
     modifier: Modifier = Modifier,
     text: String,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Text(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.small)
-            .background(color = MaterialTheme.colorScheme.inverseSurface)
+            .clip(shape = AppTheme.shapes.small)
+            .background(color = AppTheme.colorScheme.inverseSurface)
             .padding(
-                horizontal = dimension.grid_2,
-                vertical = dimension.grid_1,
+                horizontal = AppTheme.dimens.grid_2,
+                vertical = AppTheme.dimens.grid_1,
             ),
-        style = MaterialTheme.typography.labelMedium,
-        color = MaterialTheme.colorScheme.inverseOnSurface,
+        style = AppTheme.typography.labelMedium,
+        color = AppTheme.colorScheme.inverseOnSurface,
         textAlign = TextAlign.Center,
         text = text,
     )

@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,6 +35,7 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.coin
 import org.jetbrains.compose.resources.painterResource
@@ -98,7 +98,7 @@ private fun Preview() {
     CommonPreviewSetup {
         Surface(modifier = Modifier.padding(all = 24.dp)) {
             val iconPainter = painterResource(resource = Res.drawable.coin)
-            val colorFilter = MaterialTheme.colorScheme.onSurface
+            val colorFilter = AppTheme.colorScheme.onSurface
             Box(
                 modifier = Modifier
                     .width(512.dp)

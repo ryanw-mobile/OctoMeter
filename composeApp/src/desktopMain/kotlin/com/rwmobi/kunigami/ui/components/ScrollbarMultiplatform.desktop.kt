@@ -34,7 +34,6 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.v2.ScrollbarAdapter
 import androidx.compose.foundation.v2.maxScrollOffset
 import androidx.compose.material.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,9 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.AppTheme
-import com.rwmobi.kunigami.ui.theme.getDimension
 import kotlinx.coroutines.delay
 
 @Composable
@@ -102,15 +99,15 @@ private fun ScrollbarMultiplatform(
     scrollbarAdapter: ScrollbarAdapter,
     content: @Composable (contentModifier: Modifier) -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     val density = LocalDensity.current
 
     var isScrollbarVisible by remember { mutableStateOf(false) }
 
     // Debounce mechanism to stabilize the scrollbar visibility state
+    val dimensGrid3 = AppTheme.dimens.grid_3
     LaunchedEffect(scrollbarAdapter.maxScrollOffset) {
         with(density) {
-            if (scrollbarAdapter.maxScrollOffset > dimension.grid_3.roundToPx()) {
+            if (scrollbarAdapter.maxScrollOffset > dimensGrid3.roundToPx()) {
                 isScrollbarVisible = true
             } else {
                 delay(1000) // Adjust the delay as needed
@@ -131,24 +128,24 @@ private fun ScrollbarMultiplatform(
                 VerticalDivider(
                     modifier = Modifier.fillMaxHeight(),
                     thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    color = AppTheme.colorScheme.surfaceContainerHighest,
                 )
 
                 VerticalScrollbar(
                     adapter = scrollbarAdapter,
                     style = LocalScrollbarStyle.current.copy(
-                        thickness = dimension.grid_1,
-                        unhoverColor = MaterialTheme.colorScheme.outlineVariant.copy(
+                        thickness = AppTheme.dimens.grid_1,
+                        unhoverColor = AppTheme.colorScheme.outlineVariant.copy(
                             alpha = 0.5f,
                         ),
-                        hoverColor = MaterialTheme.colorScheme.outline.copy(
+                        hoverColor = AppTheme.colorScheme.outline.copy(
                             alpha = 0.5f,
                         ),
                     ),
                     modifier = Modifier
                         .fillMaxHeight()
-                        .background(color = MaterialTheme.colorScheme.surface)
-                        .padding(horizontal = dimension.grid_0_5),
+                        .background(color = AppTheme.colorScheme.surface)
+                        .padding(horizontal = AppTheme.dimens.grid_0_5),
                 )
             }
         }

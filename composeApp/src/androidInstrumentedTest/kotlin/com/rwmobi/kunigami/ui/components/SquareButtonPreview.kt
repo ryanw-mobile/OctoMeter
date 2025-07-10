@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -53,8 +52,8 @@ private fun Preview(
                     icon = painterResource(resource = Res.drawable.coin),
                     text = "Money Generator",
                     colors = ButtonDefaults.buttonColors().copy(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        containerColor = AppTheme.colorScheme.secondaryContainer,
+                        contentColor = AppTheme.colorScheme.onSecondaryContainer,
                     ),
                     onClick = {},
                 )
@@ -66,8 +65,8 @@ private fun Preview(
                     icon = painterResource(resource = Res.drawable.coin),
                     text = "Money",
                     colors = ButtonDefaults.buttonColors().copy(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        containerColor = AppTheme.colorScheme.secondaryContainer,
+                        contentColor = AppTheme.colorScheme.onSecondaryContainer,
                     ),
                     onClick = {},
                 )

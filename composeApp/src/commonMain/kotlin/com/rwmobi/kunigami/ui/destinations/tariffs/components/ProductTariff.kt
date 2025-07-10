@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,9 +34,8 @@ import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.LabelValueRow
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.day_unit_rate
 import kunigami.composeapp.generated.resources.night_unit_rate
@@ -58,11 +56,9 @@ internal fun RegionTariff(
     modifier: Modifier,
     tariff: Tariff,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Column(
         modifier = modifier.wrapContentHeight(),
-        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+        verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_2),
     ) {
         with(tariff) {
             Row(
@@ -72,14 +68,14 @@ internal fun RegionTariff(
                 val region = stringResource(resource = getRetailRegion()?.stringResource ?: Res.string.retail_region_unknown)
                 Text(
                     modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.titleLarge,
+                    style = AppTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = AppTheme.colorScheme.secondary,
                     text = region,
                 )
 
                 Text(
-                    style = MaterialTheme.typography.titleSmall,
+                    style = AppTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     text = tariffCode,
                 )
@@ -88,7 +84,7 @@ internal fun RegionTariff(
             if (tariffPaymentTerm == TariffPaymentTerm.DIRECT_DEBIT_MONTHLY) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = AppTheme.typography.titleMedium,
                     fontStyle = FontStyle.Italic,
                     text = stringResource(resource = Res.string.tariffs_direct_debit_monthly),
                 )
@@ -96,7 +92,7 @@ internal fun RegionTariff(
 
             LabelValueRow(
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = AppTheme.typography.bodyMedium,
                 label = stringResource(resource = Res.string.tariffs_exit_fees),
                 value = if (exitFeesType != ExitFeesType.NONE) {
                     stringResource(
@@ -110,7 +106,7 @@ internal fun RegionTariff(
 
             LabelValueRow(
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = AppTheme.typography.bodyMedium,
                 label = stringResource(resource = Res.string.standing_charge),
                 value = stringResource(
                     resource = Res.string.unit_p_day,
@@ -121,7 +117,7 @@ internal fun RegionTariff(
             vatInclusiveStandardUnitRate?.let { unitRate ->
                 LabelValueRow(
                     modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = AppTheme.typography.bodyMedium,
                     label = stringResource(resource = Res.string.standard_unit_rate),
                     value = stringResource(
                         resource = Res.string.unit_p_kwh,
@@ -133,7 +129,7 @@ internal fun RegionTariff(
             vatInclusiveDayUnitRate?.let { unitRate ->
                 LabelValueRow(
                     modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = AppTheme.typography.bodyMedium,
                     label = stringResource(resource = Res.string.day_unit_rate),
                     value = stringResource(
                         resource = Res.string.unit_p_kwh,
@@ -145,7 +141,7 @@ internal fun RegionTariff(
             vatInclusiveNightUnitRate?.let { unitRate ->
                 LabelValueRow(
                     modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = AppTheme.typography.bodyMedium,
                     label = stringResource(resource = Res.string.night_unit_rate),
                     value = stringResource(
                         resource = Res.string.unit_p_kwh,
@@ -157,7 +153,7 @@ internal fun RegionTariff(
             vatInclusiveOffPeakRate?.let { unitRate ->
                 LabelValueRow(
                     modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = AppTheme.typography.bodyMedium,
                     label = stringResource(resource = Res.string.off_peak_rate),
                     value = stringResource(
                         resource = Res.string.unit_p_kwh,

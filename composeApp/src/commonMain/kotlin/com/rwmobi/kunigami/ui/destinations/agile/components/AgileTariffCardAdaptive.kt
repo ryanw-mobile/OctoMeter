@@ -42,7 +42,6 @@ import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.rate.PaymentMethod
 import com.rwmobi.kunigami.domain.model.rate.Rate
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.composehelper.palette.RatePalette
 import com.rwmobi.kunigami.ui.composehelper.shouldUseDarkTheme
 import com.rwmobi.kunigami.ui.model.rate.RateGroup
@@ -50,8 +49,8 @@ import com.rwmobi.kunigami.ui.model.rate.RateTrend
 import com.rwmobi.kunigami.ui.model.rate.findActiveRate
 import com.rwmobi.kunigami.ui.model.rate.getRateTrend
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.cyanish
-import com.rwmobi.kunigami.ui.theme.getDimension
 import com.rwmobi.kunigami.ui.theme.purpleish
 import kotlinx.coroutines.delay
 import kunigami.composeapp.generated.resources.Res
@@ -184,17 +183,16 @@ private fun AgileTariffCardCompact(
     latestFixedTariff: Tariff? = null,
     latestFlexibleTariff: Tariff? = null,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_1),
     ) {
         val tileModifier = Modifier
             .weight(1f)
-            .height(dimension.widgetHeight)
+            .height(AppTheme.dimens.widgetHeight)
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
+            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_1),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(intrinsicSize = IntrinsicSize.Min),
@@ -216,7 +214,7 @@ private fun AgileTariffCardCompact(
         }
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
+            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_1),
         ) {
             ReferenceTariffTiles(
                 modifier = tileModifier,
@@ -273,16 +271,15 @@ private fun AgileTariffCardExpanded(
     latestFixedTariff: Tariff? = null,
     latestFlexibleTariff: Tariff? = null,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     FlowRow(
         modifier = modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,
-        verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_1),
     ) {
         val tileModifier = Modifier
-            .width(dimension.widgetWidthFull)
-            .height(dimension.widgetHeight)
-            .padding(horizontal = dimension.grid_0_5)
+            .width(AppTheme.dimens.widgetWidthFull)
+            .height(AppTheme.dimens.widgetHeight)
+            .padding(horizontal = AppTheme.dimens.grid_0_5)
 
         CurrentRateTile(
             modifier = tileModifier,
@@ -317,14 +314,14 @@ private fun AgileTariffCardExpanded(
 @Preview
 @Composable
 private fun PreviewCompact() {
-    CommonPreviewSetup { dimension ->
+    CommonPreviewSetup {
         AgileTariffCardAdaptive(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    start = dimension.grid_3,
-                    end = dimension.grid_3,
-                    top = dimension.grid_1,
+                    start = AppTheme.dimens.grid_3,
+                    end = AppTheme.dimens.grid_3,
+                    top = AppTheme.dimens.grid_1,
                 ),
             rateRange = 0.0..5.0,
             rateGroupedCells = listOf(
@@ -353,14 +350,14 @@ private fun PreviewCompact() {
 @Preview
 @Composable
 private fun PreviewExpanded() {
-    CommonPreviewSetup { dimension ->
+    CommonPreviewSetup {
         AgileTariffCardAdaptive(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    start = dimension.grid_3,
-                    end = dimension.grid_3,
-                    top = dimension.grid_1,
+                    start = AppTheme.dimens.grid_3,
+                    end = AppTheme.dimens.grid_3,
+                    top = AppTheme.dimens.grid_1,
                 ),
             rateRange = 0.0..5.0,
             rateGroupedCells = listOf(

@@ -23,8 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 
 @Composable
 internal fun LabelValueRow(
@@ -33,10 +32,9 @@ internal fun LabelValueRow(
     label: String?,
     value: String?,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+        horizontalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_1),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         label?.let {

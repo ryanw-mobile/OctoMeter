@@ -16,19 +16,19 @@
 package com.rwmobi.kunigami.ui.components.koalaplot
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.rwmobi.kunigami.ui.theme.AppTheme
 
 @Composable
 fun ChartTitle(title: String) {
     Column {
         Text(
             text = title,
-            color = MaterialTheme.colorScheme.onBackground,
-            style = MaterialTheme.typography.titleLarge,
+            color = AppTheme.colorScheme.onBackground,
+            style = AppTheme.typography.titleLarge,
             modifier = Modifier.align(Alignment.CenterHorizontally),
         )
     }

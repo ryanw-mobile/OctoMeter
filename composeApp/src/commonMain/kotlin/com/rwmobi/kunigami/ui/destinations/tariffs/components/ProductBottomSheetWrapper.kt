@@ -25,8 +25,7 @@ import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,19 +35,20 @@ internal fun ProductBottomSheetWrapper(
     bottomSheetState: SheetState,
     onDismissRequest: () -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     ModalBottomSheet(
         modifier = modifier,
         containerColor = CardDefaults.cardColors().containerColor,
         onDismissRequest = onDismissRequest,
         sheetState = bottomSheetState,
     ) {
+        val productScreenLayoutModifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = AppTheme.dimens.grid_1)
+
         LazyColumn {
             productDetails?.let {
                 productScreenLayout(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = dimension.grid_1),
+                    modifier = productScreenLayoutModifier,
                     productDetails = it,
                 )
             }

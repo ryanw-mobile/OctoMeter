@@ -33,11 +33,10 @@ import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.TariffSummaryTile
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.consumption.Insights
 import com.rwmobi.kunigami.ui.previewsampledata.InsightsSamples
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 
 @Composable
 internal fun TariffProjectionTilesAdaptive(
@@ -73,15 +72,14 @@ private fun TariffProjectionsTileFLinear(
     tariff: Tariff?,
     insights: Insights?,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_1),
     ) {
         val fullWidthModifier = Modifier
             .fillMaxWidth()
-            .height(dimension.widgetHeight)
+            .height(AppTheme.dimens.widgetHeight)
 
         tariff?.let {
             TariffSummaryTile(
@@ -97,11 +95,11 @@ private fun TariffProjectionsTileFLinear(
             )
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
+                horizontalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_1),
             ) {
                 val halfWidthModifier = Modifier
                     .weight(1f)
-                    .height(dimension.widgetHeight)
+                    .height(AppTheme.dimens.widgetHeight)
 
                 if (insights.consumptionTimeSpan > 1) {
                     ConsumptionTile(
@@ -143,21 +141,20 @@ private fun TariffProjectionsTileFlowRow(
     tariff: Tariff?,
     insights: Insights?,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     val halfWidthModifier = Modifier
-        .width(dimension.widgetWidthHalf)
-        .height(dimension.widgetHeight)
-        .padding(horizontal = dimension.grid_0_5)
+        .width(AppTheme.dimens.widgetWidthHalf)
+        .height(AppTheme.dimens.widgetHeight)
+        .padding(horizontal = AppTheme.dimens.grid_0_5)
 
     val fullWidthModifier = Modifier
-        .width(dimension.widgetWidthFull)
-        .height(dimension.widgetHeight)
-        .padding(horizontal = dimension.grid_0_5)
+        .width(AppTheme.dimens.widgetWidthFull)
+        .height(AppTheme.dimens.widgetHeight)
+        .padding(horizontal = AppTheme.dimens.grid_0_5)
 
     FlowRow(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
-        verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_1),
     ) {
         tariff?.let {
             TariffSummaryTile(

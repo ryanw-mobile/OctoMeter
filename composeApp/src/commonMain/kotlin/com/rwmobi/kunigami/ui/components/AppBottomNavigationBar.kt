@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -32,9 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.navigation.AppDestination
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.content_description_navigation_bar
 import org.jetbrains.compose.resources.painterResource
@@ -46,13 +44,11 @@ fun AppBottomNavigationBar(
     navController: NavController,
     onCurrentRouteSecondTapped: (item: AppDestination) -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     val navigationBarContentDescription = stringResource(Res.string.content_description_navigation_bar)
     NavigationBar(
         modifier = modifier.semantics { contentDescription = navigationBarContentDescription },
         tonalElevation = 0.dp,
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = AppTheme.colorScheme.background,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -78,7 +74,7 @@ fun AppBottomNavigationBar(
                 },
                 icon = {
                     Icon(
-                        modifier = Modifier.size(size = dimension.navigationIconSize),
+                        modifier = Modifier.size(size = AppTheme.dimens.navigationIconSize),
                         painter = painterResource(resource = item.iconResId),
                         contentDescription = null,
                     )
@@ -86,7 +82,7 @@ fun AppBottomNavigationBar(
                 label = {
                     Text(
                         text = stringResource(resource = item.titleResId).uppercase(),
-                        style = MaterialTheme.typography.labelSmall,
+                        style = AppTheme.typography.labelSmall,
                     )
                 },
             )

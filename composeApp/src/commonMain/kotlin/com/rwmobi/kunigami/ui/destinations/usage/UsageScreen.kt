@@ -28,7 +28,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,7 +41,6 @@ import com.rwmobi.kunigami.ui.components.MessageActionScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.destinations.usage.components.ConsumptionGroupCells
 import com.rwmobi.kunigami.ui.destinations.usage.components.NavigationOptionsBar
 import com.rwmobi.kunigami.ui.destinations.usage.components.RateGroupTitle
@@ -53,7 +51,7 @@ import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionGroupWithPartitions
 import com.rwmobi.kunigami.ui.model.consumption.ConsumptionQueryFilter
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.bolt
 import kunigami.composeapp.generated.resources.error_screen_no_data_description_no_auth
@@ -84,7 +82,6 @@ fun UsageScreen(
         }
     }
 
-    val dimension = getScreenSizeInfo().getDimension()
     val lazyListState = rememberLazyListState()
 
     Box(modifier = modifier) {
@@ -126,9 +123,9 @@ fun UsageScreen(
 
                         TitleNavigationBar(
                             modifier = Modifier
-                                .background(color = MaterialTheme.colorScheme.secondary)
+                                .background(color = AppTheme.colorScheme.secondary)
                                 .fillMaxWidth()
-                                .height(height = dimension.minListItemHeight),
+                                .height(height = AppTheme.dimens.minListItemHeight),
                             currentPresentationStyle = consumptionQueryFilter.presentationStyle,
                             title = consumptionQueryFilter.getConsumptionPeriodString(),
                             canNavigateBack = consumptionQueryFilter.canNavigateBackward(firstTariffStartDate = firstTariffStartDate),
@@ -164,7 +161,7 @@ fun UsageScreen(
                     ) { contentModifier ->
                         LazyColumn(
                             modifier = contentModifier.conditionalBlur(enabled = uiState.isLoading),
-                            contentPadding = PaddingValues(bottom = dimension.grid_4),
+                            contentPadding = PaddingValues(bottom = AppTheme.dimens.grid_4),
                             state = lazyListState,
                         ) {
                             if (uiState.isDemoMode == true) {
@@ -172,7 +169,7 @@ fun UsageScreen(
                                     DemoModeCtaAdaptive(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(all = dimension.grid_2),
+                                            .padding(all = AppTheme.dimens.grid_2),
                                         description = stringResource(resource = Res.string.usage_demo_introduction),
                                         ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
                                         onCtaButtonClicked = uiEvent.onNavigateToAccountTab,
@@ -206,8 +203,8 @@ fun UsageScreen(
                                             .background(color = CardDefaults.cardColors().containerColor)
                                             .fillMaxWidth()
                                             .padding(
-                                                horizontal = dimension.grid_3,
-                                                vertical = dimension.grid_1,
+                                                horizontal = AppTheme.dimens.grid_3,
+                                                vertical = AppTheme.dimens.grid_1,
                                             ),
                                         layoutType = uiState.requestedAdaptiveLayout,
                                         tariff = uiState.tariff,
@@ -219,7 +216,7 @@ fun UsageScreen(
                                     LargeTitleWithIcon(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(all = dimension.grid_2),
+                                            .padding(all = AppTheme.dimens.grid_2),
                                         icon = painterResource(resource = Res.drawable.bolt),
                                         label = stringResource(resource = Res.string.usage_energy_consumption_breakdown),
                                     )
@@ -267,7 +264,6 @@ private fun LazyListScope.consumptionBarChart(
 ) {
     item(key = "chart") {
         Box {
-            val dimension = getScreenSizeInfo().getDimension()
             val constraintModifier = when (uiState.requestedChartLayout) {
                 is RequestedChartLayout.Portrait -> {
                     Modifier
@@ -283,7 +279,7 @@ private fun LazyListScope.consumptionBarChart(
             }
 
             VerticalBarChart(
-                modifier = constraintModifier.padding(all = dimension.grid_2),
+                modifier = constraintModifier.padding(all = AppTheme.dimens.grid_2),
                 showToolTipOnClick = uiState.showToolTipOnClick,
                 entries = barChartData.verticalBarPlotEntries,
                 yAxisRange = uiState.consumptionRange,
@@ -307,13 +303,12 @@ private fun LazyListScope.consumptionBreakdown(
 ) {
     consumptionGroupsWithPartitions.forEach { consumptionGroupWithPartitions ->
         item(key = "${consumptionGroupWithPartitions.title}Title") {
-            val dimension = getScreenSizeInfo().getDimension()
             RateGroupTitle(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        vertical = dimension.grid_2,
-                        horizontal = dimension.grid_4,
+                        vertical = AppTheme.dimens.grid_2,
+                        horizontal = AppTheme.dimens.grid_4,
                     ),
                 consumptionGroupWithPartitions = consumptionGroupWithPartitions,
             )
@@ -321,13 +316,12 @@ private fun LazyListScope.consumptionBreakdown(
 
         val maxRows = consumptionGroupWithPartitions.partitionedItems.maxOf { it.size }
         items(maxRows) { rowIndex ->
-            val dimension = getScreenSizeInfo().getDimension()
             ConsumptionGroupCells(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = dimension.grid_4,
-                        vertical = dimension.grid_0_25,
+                        horizontal = AppTheme.dimens.grid_4,
+                        vertical = AppTheme.dimens.grid_0_25,
                     ),
                 partitionedItems = consumptionGroupWithPartitions.partitionedItems,
                 shouldHideLastColumn = shouldHideLastConsumptionGroupColumn,

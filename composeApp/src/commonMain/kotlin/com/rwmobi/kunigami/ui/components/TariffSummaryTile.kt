@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,9 +37,8 @@ import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.product.ElectricityTariffType
 import com.rwmobi.kunigami.domain.model.product.Tariff
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.previewsampledata.TariffSamples
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.day_unit_rate
 import kunigami.composeapp.generated.resources.night_unit_rate
@@ -58,20 +56,19 @@ internal fun TariffSummaryTile(
     modifier: Modifier = Modifier,
     tariff: Tariff,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     Column(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.large)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(dimension.grid_2),
+            .clip(shape = AppTheme.shapes.large)
+            .background(AppTheme.colorScheme.surfaceContainer)
+            .padding(AppTheme.dimens.grid_2),
         verticalArrangement = Arrangement.Top,
     ) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = dimension.grid_1),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+                .padding(bottom = AppTheme.dimens.grid_1),
+            style = AppTheme.typography.bodyMedium,
+            color = AppTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
             text = tariff.displayName,
         )
@@ -79,18 +76,18 @@ internal fun TariffSummaryTile(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
+            horizontalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_0_5),
         ) {
             Text(
                 modifier = Modifier.weight(weight = 1f),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                style = AppTheme.typography.bodyMedium,
+                color = AppTheme.colorScheme.onSurface,
                 text = stringResource(resource = Res.string.standing_charge),
             )
             Text(
                 modifier = Modifier.wrapContentWidth(),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                style = AppTheme.typography.bodyMedium,
+                color = AppTheme.colorScheme.onSurface,
                 text = stringResource(resource = Res.string.unit_p_day, tariff.vatInclusiveStandingCharge),
             )
         }
@@ -106,7 +103,7 @@ internal fun TariffSummaryTile(
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.labelSmall,
+            style = AppTheme.typography.labelSmall,
             fontWeight = FontWeight.Normal,
             text = stringResource(resource = Res.string.usage_applied_tariff),
         )
@@ -118,10 +115,9 @@ private fun UnitRateLayout(
     modifier: Modifier = Modifier,
     tariff: Tariff,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     HorizontalDivider(
         modifier = Modifier
-            .padding(vertical = dimension.grid_1)
+            .padding(vertical = AppTheme.dimens.grid_1)
             .alpha(0.5f),
     )
 
@@ -137,18 +133,18 @@ private fun UnitRateLayout(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
+                    horizontalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_0_5),
                 ) {
                     Text(
                         modifier = Modifier.weight(weight = 1f),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        style = AppTheme.typography.bodyMedium,
+                        color = AppTheme.colorScheme.onSurface,
                         text = stringResource(resource = Res.string.standard_unit_rate),
                     )
                     Text(
                         modifier = Modifier.wrapContentWidth(),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        style = AppTheme.typography.bodyMedium,
+                        color = AppTheme.colorScheme.onSurface,
                         text = rateString,
                     )
                 }
@@ -160,18 +156,18 @@ private fun UnitRateLayout(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
+                    horizontalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_0_5),
                 ) {
                     Text(
                         modifier = Modifier.weight(weight = 1f),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        style = AppTheme.typography.bodyMedium,
+                        color = AppTheme.colorScheme.onSurface,
                         text = stringResource(resource = Res.string.day_unit_rate),
                     )
                     Text(
                         modifier = Modifier.wrapContentWidth(),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        style = AppTheme.typography.bodyMedium,
+                        color = AppTheme.colorScheme.onSurface,
                         text = stringResource(resource = Res.string.unit_p_kwh, rate.roundToTwoDecimalPlaces()),
                     )
                 }
@@ -181,18 +177,18 @@ private fun UnitRateLayout(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
+                    horizontalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_0_5),
                 ) {
                     Text(
                         modifier = Modifier.weight(weight = 1f),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        style = AppTheme.typography.bodyMedium,
+                        color = AppTheme.colorScheme.onSurface,
                         text = stringResource(resource = Res.string.night_unit_rate),
                     )
                     Text(
                         modifier = Modifier.wrapContentWidth(),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        style = AppTheme.typography.bodyMedium,
+                        color = AppTheme.colorScheme.onSurface,
                         text = stringResource(resource = Res.string.unit_p_kwh, rate.roundToTwoDecimalPlaces()),
                     )
                 }
@@ -202,18 +198,18 @@ private fun UnitRateLayout(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_0_5),
+                    horizontalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_0_5),
                 ) {
                     Text(
                         modifier = Modifier.weight(weight = 1f),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        style = AppTheme.typography.bodyMedium,
+                        color = AppTheme.colorScheme.onSurface,
                         text = stringResource(resource = Res.string.off_peak_rate),
                     )
                     Text(
                         modifier = Modifier.wrapContentWidth(),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        style = AppTheme.typography.bodyMedium,
+                        color = AppTheme.colorScheme.onSurface,
                         text = stringResource(resource = Res.string.unit_p_kwh, rate.roundToTwoDecimalPlaces()),
                     )
                 }
@@ -225,21 +221,21 @@ private fun UnitRateLayout(
 @Preview
 @Composable
 private fun Preview() {
-    CommonPreviewSetup { dimension ->
+    CommonPreviewSetup {
         Column(
-            verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_1),
         ) {
             TariffSummaryTile(
                 modifier = Modifier
-                    .width(dimension.widgetWidthFull)
-                    .height(dimension.widgetHeight),
+                    .width(AppTheme.dimens.widgetWidthFull)
+                    .height(AppTheme.dimens.widgetHeight),
                 tariff = TariffSamples.var221101,
             )
 
             TariffSummaryTile(
                 modifier = Modifier
-                    .width(dimension.widgetWidthFull)
-                    .height(dimension.widgetHeight),
+                    .width(AppTheme.dimens.widgetWidthFull)
+                    .height(AppTheme.dimens.widgetHeight),
                 tariff = TariffSamples.fix12M240411,
             )
         }

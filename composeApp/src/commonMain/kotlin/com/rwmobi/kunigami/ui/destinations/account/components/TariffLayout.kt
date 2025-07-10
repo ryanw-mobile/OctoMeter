@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,8 +37,7 @@ import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.domain.model.account.Agreement
 import com.rwmobi.kunigami.domain.model.product.Tariff
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_tariff_date_range
 import kunigami.composeapp.generated.resources.account_tariff_day_unit_rate
@@ -62,21 +60,19 @@ internal fun TariffLayout(
     agreement: Agreement,
     showDivider: Boolean = false,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Column(
         modifier = modifier,
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.titleMedium,
+            style = AppTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             text = agreement.displayName,
         )
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.bodySmall,
+            style = AppTheme.typography.bodySmall,
             text = agreement.fullName,
         )
 
@@ -86,11 +82,11 @@ internal fun TariffLayout(
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.bodySmall,
+            style = AppTheme.typography.bodySmall,
             text = stringResource(resource = Res.string.agile_product_code_retail_region, agreement.tariffCode, regionCodeStringResource),
         )
 
-        Spacer(modifier = Modifier.height(height = dimension.grid_2))
+        Spacer(modifier = Modifier.height(height = AppTheme.dimens.grid_2))
 
         val tariffPeriod = if (agreement.period.endInclusive != Instant.DISTANT_FUTURE) {
             stringResource(
@@ -106,11 +102,11 @@ internal fun TariffLayout(
         }
 
         Text(
-            style = MaterialTheme.typography.bodyMedium,
+            style = AppTheme.typography.bodyMedium,
             text = tariffPeriod,
         )
 
-        Spacer(modifier = Modifier.height(height = dimension.grid_1))
+        Spacer(modifier = Modifier.height(height = AppTheme.dimens.grid_1))
 
         if (agreement.isHalfHourlyTariff) {
             showHalfHourlyRate()
@@ -127,7 +123,7 @@ internal fun TariffLayout(
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = dimension.grid_2),
+                    .padding(top = AppTheme.dimens.grid_2),
             )
         }
     }
@@ -160,7 +156,6 @@ private fun RateRow(
     label: String,
     rate: Double,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -169,15 +164,15 @@ private fun RateRow(
         horizontalArrangement = Arrangement.End,
     ) {
         Text(
-            style = MaterialTheme.typography.bodyMedium,
+            style = AppTheme.typography.bodyMedium,
             textAlign = TextAlign.End,
             text = label,
         )
 
-        Spacer(modifier = Modifier.width(dimension.grid_2))
+        Spacer(modifier = Modifier.width(AppTheme.dimens.grid_2))
 
         Text(
-            style = MaterialTheme.typography.titleLarge,
+            style = AppTheme.typography.titleLarge,
             text = rate.roundToTwoDecimalPlaces().toString(),
         )
     }
@@ -187,7 +182,7 @@ private fun RateRow(
 private fun showHalfHourlyRate() {
     Text(
         modifier = Modifier.fillMaxWidth(),
-        style = MaterialTheme.typography.titleMedium,
+        style = AppTheme.typography.titleMedium,
         textAlign = TextAlign.End,
         text = stringResource(resource = Res.string.tariffs_half_hourly_rate),
     )

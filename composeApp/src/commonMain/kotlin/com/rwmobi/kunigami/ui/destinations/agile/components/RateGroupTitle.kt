@@ -20,13 +20,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_vat_unit_rate
 import org.jetbrains.compose.resources.stringResource
@@ -42,14 +42,14 @@ internal fun RateGroupTitle(
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.titleMedium,
+            style = AppTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             text = title,
         )
 
         Text(
             modifier = Modifier.wrapContentSize(),
-            style = MaterialTheme.typography.labelMedium,
+            style = AppTheme.typography.labelMedium,
             fontWeight = FontWeight.Bold,
             text = stringResource(resource = Res.string.agile_vat_unit_rate),
         )
@@ -59,13 +59,13 @@ internal fun RateGroupTitle(
 @Preview
 @Composable
 private fun Preview() {
-    CommonPreviewSetup { dimension ->
+    CommonPreviewSetup {
         RateGroupTitle(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    vertical = dimension.grid_2,
-                    horizontal = dimension.grid_4,
+                    vertical = AppTheme.dimens.grid_2,
+                    horizontal = AppTheme.dimens.grid_4,
                 ),
             title = "Sample title",
         )

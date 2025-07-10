@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewFontScale
@@ -42,7 +41,7 @@ private fun Preview() {
                 icon = org.jetbrains.compose.resources.painterResource(resource = Res.drawable.coin),
                 text = "Money Generator",
                 colors = ButtonDefaults.buttonColors().copy(
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    contentColor = AppTheme.colorScheme.onPrimaryContainer,
                 ),
                 onClick = {},
             )
@@ -50,10 +49,10 @@ private fun Preview() {
             IconTextButton(
                 icon = org.jetbrains.compose.resources.painterResource(resource = Res.drawable.coin),
                 text = "Money Generator",
-                shape = MaterialTheme.shapes.large,
+                shape = AppTheme.shapes.large,
                 colors = ButtonDefaults.buttonColors().copy(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    containerColor = AppTheme.colorScheme.secondaryContainer,
+                    contentColor = AppTheme.colorScheme.onSecondaryContainer,
                 ),
                 onClick = {},
             )

@@ -17,13 +17,13 @@ package com.rwmobi.kunigami.ui.components.koalaplot
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import com.rwmobi.kunigami.ui.theme.AppTheme
 
 @Composable
 fun XAxisTitle(
@@ -39,9 +39,9 @@ fun XAxisTitle(
             maxLines = 1,
             textAlign = TextAlign.Center,
             text = title,
-            color = MaterialTheme.colorScheme.onBackground,
+            color = AppTheme.colorScheme.onBackground,
             fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.labelMedium,
+            style = AppTheme.typography.labelMedium,
         )
     }
 }

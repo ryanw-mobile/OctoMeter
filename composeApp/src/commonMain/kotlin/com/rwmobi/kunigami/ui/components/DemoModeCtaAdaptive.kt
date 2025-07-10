@@ -24,14 +24,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.agile_demo_introduction
 import kunigami.composeapp.generated.resources.blackboard
@@ -72,31 +70,29 @@ private fun DemoModeCTACompact(
     ctaButtonLabel: String,
     onCtaButtonClicked: () -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Column(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.medium)
-            .background(color = MaterialTheme.colorScheme.surfaceContainerHighest)
-            .padding(all = dimension.grid_2),
-        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+            .clip(shape = AppTheme.shapes.medium)
+            .background(color = AppTheme.colorScheme.surfaceContainerHighest)
+            .padding(all = AppTheme.dimens.grid_2),
+        verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_2),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+            horizontalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_2),
         ) {
             Icon(
-                modifier = Modifier.size(size = dimension.grid_4),
+                modifier = Modifier.size(size = AppTheme.dimens.grid_4),
                 painter = painterResource(resource = Res.drawable.blackboard),
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = AppTheme.colorScheme.onSurface,
                 contentDescription = null,
             )
 
             Text(
                 modifier = Modifier.weight(weight = 1f),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                style = AppTheme.typography.bodyMedium,
+                color = AppTheme.colorScheme.onSurface,
                 text = description,
             )
         }
@@ -117,34 +113,32 @@ private fun DemoModeCTAWide(
     ctaButtonLabel: String,
     onCtaButtonClicked: () -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Column(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.medium)
-            .background(color = MaterialTheme.colorScheme.surfaceContainerHighest)
+            .clip(shape = AppTheme.shapes.medium)
+            .background(color = AppTheme.colorScheme.surfaceContainerHighest)
             .padding(
-                vertical = dimension.grid_1,
-                horizontal = dimension.grid_2,
+                vertical = AppTheme.dimens.grid_1,
+                horizontal = AppTheme.dimens.grid_2,
             ),
-        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+        verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_2),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+            horizontalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_2),
         ) {
             Icon(
-                modifier = Modifier.size(size = dimension.grid_4),
+                modifier = Modifier.size(size = AppTheme.dimens.grid_4),
                 painter = painterResource(resource = Res.drawable.blackboard),
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = AppTheme.colorScheme.onSurface,
                 contentDescription = null,
             )
 
             Text(
                 modifier = Modifier.weight(weight = 1f),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                style = AppTheme.typography.bodyMedium,
+                color = AppTheme.colorScheme.onSurface,
                 text = description,
             )
 

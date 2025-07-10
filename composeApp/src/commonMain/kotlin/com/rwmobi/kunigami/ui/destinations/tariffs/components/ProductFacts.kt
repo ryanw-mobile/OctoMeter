@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -35,8 +34,7 @@ import androidx.compose.ui.unit.Density
 import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.ui.components.TagWithIcon
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.tariffs_available_from
 import kunigami.composeapp.generated.resources.tariffs_available_to
@@ -51,19 +49,17 @@ internal fun ProductFacts(
     modifier: Modifier = Modifier,
     productDetails: ProductDetails,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Column(
         modifier = modifier.padding(
-            vertical = dimension.grid_1,
-            horizontal = dimension.grid_2,
+            vertical = AppTheme.dimens.grid_1,
+            horizontal = AppTheme.dimens.grid_2,
         ),
     ) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            style = MaterialTheme.typography.headlineMedium,
+            style = AppTheme.typography.headlineMedium,
             fontWeight = FontWeight.ExtraBold,
             text = productDetails.displayName,
         )
@@ -73,18 +69,18 @@ internal fun ProductFacts(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(),
-                style = MaterialTheme.typography.titleMedium,
+                style = AppTheme.typography.titleMedium,
                 text = productDetails.fullName,
             )
         }
 
         Text(
             modifier = Modifier.wrapContentSize(),
-            style = MaterialTheme.typography.labelMedium,
+            style = AppTheme.typography.labelMedium,
             text = productDetails.code,
         )
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_1))
+        Spacer(modifier = Modifier.size(size = AppTheme.dimens.grid_1))
 
         val availableFromDate = productDetails.availability.start.getLocalDateString()
         val availableTo = if (productDetails.availability.endInclusive != Instant.DISTANT_FUTURE) {
@@ -95,7 +91,7 @@ internal fun ProductFacts(
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.bodyMedium,
+            style = AppTheme.typography.bodyMedium,
             text = stringResource(
                 resource = Res.string.tariffs_available_from,
                 availableFromDate,
@@ -106,22 +102,22 @@ internal fun ProductFacts(
         productDetails.term?.let {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = AppTheme.typography.bodyMedium,
                 text = stringResource(resource = Res.string.tariffs_fixed_term_months, it),
             )
         }
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_1))
+        Spacer(modifier = Modifier.size(size = AppTheme.dimens.grid_1))
 
         if (productDetails.features.isNotEmpty()) {
             val currentDensity = LocalDensity.current
             CompositionLocalProvider(
                 LocalDensity provides Density(currentDensity.density, fontScale = 1f),
             ) {
-                FlowRow(modifier = Modifier.padding(vertical = dimension.grid_1)) {
+                FlowRow(modifier = Modifier.padding(vertical = AppTheme.dimens.grid_1)) {
                     productDetails.features.forEach {
                         TagWithIcon(
-                            modifier = Modifier.padding(end = dimension.grid_0_5),
+                            modifier = Modifier.padding(end = AppTheme.dimens.grid_0_5),
                             icon = painterResource(resource = it.iconResource),
                             text = stringResource(resource = it.stringResource),
                         )
@@ -130,11 +126,11 @@ internal fun ProductFacts(
             }
         }
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_1))
+        Spacer(modifier = Modifier.size(size = AppTheme.dimens.grid_1))
 
         Text(
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.bodyMedium,
+            style = AppTheme.typography.bodyMedium,
             text = productDetails.description,
         )
     }

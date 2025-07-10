@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -37,11 +36,9 @@ import com.rwmobi.kunigami.ui.components.ErrorScreenHandler
 import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.previewsampledata.FakeDemoUserProfile
 import com.rwmobi.kunigami.ui.theme.AppTheme
-import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.navigation_account
 import org.jetbrains.compose.resources.stringResource
@@ -62,7 +59,6 @@ fun AccountScreen(
         }
     }
 
-    val dimension = getScreenSizeInfo().getDimension()
     val lazyListState = rememberLazyListState()
 
     Box(modifier = modifier) {
@@ -90,9 +86,9 @@ fun AccountScreen(
                     if (accountNumber != null) {
                         DualTitleBar(
                             modifier = Modifier
-                                .background(color = MaterialTheme.colorScheme.secondary)
+                                .background(color = AppTheme.colorScheme.secondary)
                                 .fillMaxWidth()
-                                .height(height = dimension.minListItemHeight),
+                                .height(height = AppTheme.dimens.minListItemHeight),
                             title = stringResource(resource = Res.string.navigation_account),
                         )
                     }
@@ -111,11 +107,11 @@ fun AccountScreen(
                                         val widthConstraintModifier = when (uiState.requestedLayout) {
                                             is AccountScreenLayoutStyle.Compact -> Modifier.fillMaxWidth()
                                             is AccountScreenLayoutStyle.Wide -> Modifier.fillMaxWidth()
-                                            else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                                            else -> Modifier.widthIn(max = AppTheme.dimens.windowWidthMedium)
                                         }
 
                                         OnboardingScreen(
-                                            modifier = widthConstraintModifier.padding(all = dimension.grid_2),
+                                            modifier = widthConstraintModifier.padding(all = AppTheme.dimens.grid_2),
                                             uiState = uiState,
                                             uiEvent = uiEvent,
                                         )
@@ -132,11 +128,11 @@ fun AccountScreen(
                                         val widthConstraintModifier = when (uiState.requestedLayout) {
                                             is AccountScreenLayoutStyle.Compact -> Modifier.fillMaxWidth()
                                             is AccountScreenLayoutStyle.Wide -> Modifier.fillMaxWidth()
-                                            else -> Modifier.widthIn(max = dimension.windowWidthMedium)
+                                            else -> Modifier.widthIn(max = AppTheme.dimens.windowWidthMedium)
                                         }
 
                                         AccountInformationScreen(
-                                            modifier = widthConstraintModifier.padding(horizontal = dimension.grid_2),
+                                            modifier = widthConstraintModifier.padding(horizontal = AppTheme.dimens.grid_2),
                                             uiState = uiState,
                                             uiEvent = uiEvent,
                                         )

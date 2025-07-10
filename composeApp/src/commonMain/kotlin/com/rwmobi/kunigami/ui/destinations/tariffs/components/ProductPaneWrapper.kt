@@ -25,8 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 
 @Composable
 internal fun ProductPaneWrapper(
@@ -34,8 +33,6 @@ internal fun ProductPaneWrapper(
     productDetails: ProductDetails? = null,
     header: @Composable () -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     val detailLazyListState = rememberLazyListState()
     ScrollbarMultiplatform(
         modifier = modifier,
@@ -44,12 +41,14 @@ internal fun ProductPaneWrapper(
         Column(modifier = contentModifier.fillMaxSize()) {
             header()
 
+            val productScreenLayoutModifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = AppTheme.dimens.grid_1)
+
             LazyColumn(state = detailLazyListState) {
                 productDetails?.let { product ->
                     productScreenLayout(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = dimension.grid_1),
+                        modifier = productScreenLayoutModifier,
                         productDetails = product,
                     )
                 }

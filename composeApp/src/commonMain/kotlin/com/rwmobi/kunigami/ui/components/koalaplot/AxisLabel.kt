@@ -15,11 +15,11 @@
 
 package com.rwmobi.kunigami.ui.components.koalaplot
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import com.rwmobi.kunigami.ui.theme.AppTheme
 
 @Composable
 fun AxisLabel(
@@ -28,8 +28,8 @@ fun AxisLabel(
 ) {
     Text(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.onBackground,
-        style = MaterialTheme.typography.labelMedium,
+        color = AppTheme.colorScheme.onBackground,
+        style = AppTheme.typography.labelMedium,
         overflow = TextOverflow.Visible,
         maxLines = 1,
         text = label,

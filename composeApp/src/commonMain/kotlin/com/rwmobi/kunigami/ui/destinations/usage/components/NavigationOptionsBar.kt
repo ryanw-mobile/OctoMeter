@@ -27,14 +27,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.dashboard
 import kunigami.composeapp.generated.resources.skip_forward
@@ -48,26 +46,25 @@ internal fun NavigationOptionsBar(
     selectedMpan: String?,
     onNavigateToLatest: () -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     Column(modifier = modifier) {
         Row(
             modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.surfaceContainerLow)
+                .background(color = AppTheme.colorScheme.surfaceContainerLow)
                 .fillMaxWidth()
-                .height(height = dimension.minListItemHeight),
+                .height(height = AppTheme.dimens.minListItemHeight),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             selectedMpan?.let { mpan ->
                 Icon(
                     modifier = Modifier
-                        .size(size = dimension.grid_4)
-                        .padding(start = dimension.grid_2),
+                        .size(size = AppTheme.dimens.grid_4)
+                        .padding(start = AppTheme.dimens.grid_2),
                     painter = painterResource(resource = Res.drawable.dashboard),
                     contentDescription = null,
                 )
                 Text(
-                    modifier = Modifier.padding(start = dimension.grid_1),
-                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(start = AppTheme.dimens.grid_1),
+                    style = AppTheme.typography.bodyMedium,
                     text = mpan,
                 )
             }
@@ -75,13 +72,13 @@ internal fun NavigationOptionsBar(
             Spacer(modifier = Modifier.weight(1f))
 
             IconButton(
-                modifier = Modifier.size(size = dimension.imageButtonSize),
+                modifier = Modifier.size(size = AppTheme.dimens.imageButtonSize),
                 onClick = onNavigateToLatest,
             ) {
                 Icon(
                     modifier = Modifier.padding(
-                        horizontal = dimension.grid_1,
-                        vertical = dimension.grid_0_5,
+                        horizontal = AppTheme.dimens.grid_1,
+                        vertical = AppTheme.dimens.grid_0_5,
                     ),
                     painter = painterResource(resource = Res.drawable.skip_forward),
                     contentDescription = stringResource(resource = Res.string.usage_latest),
@@ -91,7 +88,7 @@ internal fun NavigationOptionsBar(
 
         HorizontalDivider(
             modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colorScheme.surfaceContainerHighest,
+            color = AppTheme.colorScheme.surfaceContainerHighest,
         )
     }
 }

@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,8 +31,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.IconTextButton
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_update_api_key
 import kunigami.composeapp.generated.resources.key
@@ -49,24 +47,22 @@ internal fun SimpleTitleButtonCard(
     buttonPainter: Painter,
     onButtonClicked: () -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Row(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.medium)
-            .background(color = MaterialTheme.colorScheme.surfaceContainerHighest)
-            .padding(all = dimension.grid_2),
+            .clip(shape = AppTheme.shapes.medium)
+            .background(color = AppTheme.colorScheme.surfaceContainerHighest)
+            .padding(all = AppTheme.dimens.grid_2),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            style = AppTheme.typography.titleMedium,
+            color = AppTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
             text = title,
         )
 
-        Spacer(modifier = Modifier.size(size = dimension.grid_4))
+        Spacer(modifier = Modifier.size(size = AppTheme.dimens.grid_4))
 
         IconTextButton(
             icon = buttonPainter,

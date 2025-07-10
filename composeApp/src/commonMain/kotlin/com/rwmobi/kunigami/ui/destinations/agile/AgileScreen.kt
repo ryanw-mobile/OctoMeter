@@ -30,7 +30,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -52,7 +51,6 @@ import com.rwmobi.kunigami.ui.components.LoadingScreen
 import com.rwmobi.kunigami.ui.components.ScrollbarMultiplatform
 import com.rwmobi.kunigami.ui.components.koalaplot.VerticalBarChart
 import com.rwmobi.kunigami.ui.composehelper.conditionalBlur
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.destinations.agile.components.AgileTariffCardAdaptive
 import com.rwmobi.kunigami.ui.destinations.agile.components.RateGroupCells
 import com.rwmobi.kunigami.ui.destinations.agile.components.RateGroupTitle
@@ -61,8 +59,8 @@ import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.model.chart.BarChartData
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.rate.RateGroupWithPartitions
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import com.rwmobi.kunigami.ui.theme.cyanish
-import com.rwmobi.kunigami.ui.theme.getDimension
 import com.rwmobi.kunigami.ui.theme.purpleish
 import io.github.koalaplot.core.style.LineStyle
 import io.github.koalaplot.core.xygraph.HorizontalLineAnnotation
@@ -96,7 +94,6 @@ fun AgileScreen(
         }
     }
 
-    val dimension = getScreenSizeInfo().getDimension()
     val lazyListState = rememberLazyListState()
 
     Box(modifier = modifier) {
@@ -139,9 +136,9 @@ fun AgileScreen(
 
                     DualTitleBar(
                         modifier = Modifier
-                            .background(color = MaterialTheme.colorScheme.secondary)
+                            .background(color = AppTheme.colorScheme.secondary)
                             .fillMaxWidth()
-                            .height(height = dimension.minListItemHeight),
+                            .height(height = AppTheme.dimens.minListItemHeight),
                         title = uiState.agileTariff?.displayName ?: "",
                         subtitle = subtitle,
                     )
@@ -163,7 +160,7 @@ fun AgileScreen(
 
                         LazyColumn(
                             modifier = contentModifier.conditionalBlur(enabled = uiState.isLoading && uiState.barChartData == null),
-                            contentPadding = PaddingValues(bottom = dimension.grid_4),
+                            contentPadding = PaddingValues(bottom = AppTheme.dimens.grid_4),
                             state = lazyListState,
                         ) {
                             if (uiState.isDemoMode == true) {
@@ -171,7 +168,7 @@ fun AgileScreen(
                                     DemoModeCtaAdaptive(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(all = dimension.grid_2),
+                                            .padding(all = AppTheme.dimens.grid_2),
                                         description = stringResource(resource = Res.string.agile_demo_introduction),
                                         ctaButtonLabel = stringResource(resource = Res.string.provide_api_key),
                                         onCtaButtonClicked = uiEvent.onNavigateToAccountTab,
@@ -193,8 +190,8 @@ fun AgileScreen(
                                         .background(color = CardDefaults.cardColors().containerColor)
                                         .fillMaxWidth()
                                         .padding(
-                                            horizontal = dimension.grid_3,
-                                            vertical = dimension.grid_1,
+                                            horizontal = AppTheme.dimens.grid_3,
+                                            vertical = AppTheme.dimens.grid_1,
                                         ),
                                     latestFixedTariff = uiState.latestFixedTariff,
                                     latestFlexibleTariff = uiState.latestFlexibleTariff,
@@ -207,12 +204,12 @@ fun AgileScreen(
 
                             if (uiState.rateGroupedCells.isNotEmpty()) {
                                 item(key = "headingUnitRateDetails") {
-                                    Spacer(modifier = Modifier.height(height = dimension.grid_1))
+                                    Spacer(modifier = Modifier.height(height = AppTheme.dimens.grid_1))
 
                                     LargeTitleWithIcon(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(all = dimension.grid_2),
+                                            .padding(all = AppTheme.dimens.grid_2),
                                         icon = painterResource(resource = Res.drawable.revenue),
                                         label = stringResource(resource = Res.string.agile_unit_rate_details),
                                     )
@@ -225,8 +222,8 @@ fun AgileScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(
-                                                vertical = dimension.grid_2,
-                                                horizontal = dimension.grid_4,
+                                                vertical = AppTheme.dimens.grid_2,
+                                                horizontal = AppTheme.dimens.grid_4,
                                             ),
                                         title = rateGroupsWithPartitions.title,
                                     )
@@ -238,8 +235,8 @@ fun AgileScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(
-                                                horizontal = dimension.grid_4,
-                                                vertical = dimension.grid_0_25,
+                                                horizontal = AppTheme.dimens.grid_4,
+                                                vertical = AppTheme.dimens.grid_0_25,
                                             ),
                                         partitionedItems = rateGroupsWithPartitions.partitionedItems,
                                         shouldHideLastColumn = shouldHideLastRateGroupColumn,
@@ -300,9 +297,8 @@ private fun LazyListScope.renderChart(
     barChartData: BarChartData,
 ) {
     item(key = "chart") {
-        val dimension = getScreenSizeInfo().getDimension()
         Box(
-            modifier = Modifier.padding(top = dimension.grid_1),
+            modifier = Modifier.padding(top = AppTheme.dimens.grid_1),
         ) {
             val constraintModifier = when (uiState.requestedChartLayout) {
                 is RequestedChartLayout.Portrait -> {
@@ -319,7 +315,7 @@ private fun LazyListScope.renderChart(
             }
 
             VerticalBarChart(
-                modifier = constraintModifier.padding(all = dimension.grid_2),
+                modifier = constraintModifier.padding(all = AppTheme.dimens.grid_2),
                 showToolTipOnClick = uiState.showToolTipOnClick,
                 entries = barChartData.verticalBarPlotEntries,
                 yAxisRange = uiState.rateRange,
@@ -336,7 +332,7 @@ private fun LazyListScope.renderChart(
                             location = fixedUnitRate,
                             lineStyle = LineStyle(
                                 brush = SolidColor(purpleish),
-                                strokeWidth = dimension.grid_0_25,
+                                strokeWidth = AppTheme.dimens.grid_0_25,
                                 pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 16f), 0f),
                                 alpha = 0.8f,
                                 colorFilter = null, // No color filter
@@ -350,7 +346,7 @@ private fun LazyListScope.renderChart(
                             location = flexibleUnitRate,
                             lineStyle = LineStyle(
                                 brush = SolidColor(cyanish),
-                                strokeWidth = dimension.grid_0_25,
+                                strokeWidth = AppTheme.dimens.grid_0_25,
                                 pathEffect = PathEffect.dashPathEffect(floatArrayOf(4f, 16f), 0f),
                                 alpha = 0.8f,
                                 colorFilter = null, // No color filter

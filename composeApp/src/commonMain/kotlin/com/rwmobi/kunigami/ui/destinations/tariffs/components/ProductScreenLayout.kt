@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,8 +34,7 @@ import com.rwmobi.kunigami.domain.model.product.ProductFeature
 import com.rwmobi.kunigami.domain.model.product.Tariff
 import com.rwmobi.kunigami.domain.model.product.TariffPaymentTerm
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kotlin.time.Instant
 
 internal fun LazyListScope.productScreenLayout(
@@ -44,20 +42,19 @@ internal fun LazyListScope.productScreenLayout(
     productDetails: ProductDetails,
 ) {
     item(key = "productFacts") {
-        val dimension = getScreenSizeInfo().getDimension()
         Column(
-            modifier = modifier.padding(horizontal = dimension.grid_2),
+            modifier = modifier.padding(horizontal = AppTheme.dimens.grid_2),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+            verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_2),
         ) {
             val blockModifier = Modifier
-                .clip(shape = MaterialTheme.shapes.large)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
-                .padding(dimension.grid_1)
+                .clip(shape = AppTheme.shapes.large)
+                .background(AppTheme.colorScheme.surfaceContainer)
+                .padding(AppTheme.dimens.grid_1)
 
             Column(modifier = blockModifier) {
                 ProductFacts(
-                    modifier = Modifier.widthIn(max = dimension.windowWidthCompact),
+                    modifier = Modifier.widthIn(max = AppTheme.dimens.windowWidthCompact),
                     productDetails = productDetails,
                 )
             }
@@ -66,8 +63,8 @@ internal fun LazyListScope.productScreenLayout(
                 productDetails.electricityTariff?.let { tariffDetails ->
                     RegionTariff(
                         modifier = Modifier
-                            .widthIn(max = dimension.windowWidthCompact)
-                            .padding(all = dimension.grid_2),
+                            .widthIn(max = AppTheme.dimens.windowWidthCompact)
+                            .padding(all = AppTheme.dimens.grid_2),
                         tariff = tariffDetails,
                     )
                 }

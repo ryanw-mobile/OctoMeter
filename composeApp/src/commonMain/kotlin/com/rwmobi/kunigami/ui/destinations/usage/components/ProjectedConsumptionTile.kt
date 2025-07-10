@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,10 +36,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import com.rwmobi.kunigami.domain.extensions.roundToTwoDecimalPlaces
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.consumption.Insights
 import com.rwmobi.kunigami.ui.previewsampledata.InsightsSamples
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.kwh
 import kunigami.composeapp.generated.resources.usage_kwh_month
@@ -53,12 +51,11 @@ internal fun ProjectedConsumptionTile(
     modifier: Modifier = Modifier,
     insights: Insights,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     Column(
         modifier = modifier
-            .clip(shape = MaterialTheme.shapes.large)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(dimension.grid_2),
+            .clip(shape = AppTheme.shapes.large)
+            .background(AppTheme.colorScheme.surfaceContainer)
+            .padding(AppTheme.dimens.grid_2),
         verticalArrangement = Arrangement.Top,
     ) {
         UsageBlock(
@@ -68,7 +65,7 @@ internal fun ProjectedConsumptionTile(
 
         HorizontalDivider(
             modifier = Modifier
-                .padding(vertical = dimension.grid_1)
+                .padding(vertical = AppTheme.dimens.grid_1)
                 .alpha(0.5f),
         )
 
@@ -82,7 +79,7 @@ internal fun ProjectedConsumptionTile(
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(resource = Res.string.usage_projected_consumption),
-            style = MaterialTheme.typography.labelSmall,
+            style = AppTheme.typography.labelSmall,
             fontWeight = FontWeight.Normal,
         )
     }
@@ -93,30 +90,29 @@ private fun UsageBlock(
     usage: String,
     period: String,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(dimension.grid_1),
+        horizontalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_1),
     ) {
         Text(
             modifier = Modifier.wrapContentWidth(),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            style = AppTheme.typography.titleMedium,
+            color = AppTheme.colorScheme.onSurface,
             text = usage,
         )
 
         Text(
             modifier = Modifier.wrapContentWidth(),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
+            style = AppTheme.typography.bodyMedium,
+            color = AppTheme.colorScheme.onSurface,
             text = stringResource(resource = Res.string.kwh),
         )
     }
 
     Text(
         modifier = Modifier.fillMaxWidth(),
-        style = MaterialTheme.typography.labelMedium,
-        color = MaterialTheme.colorScheme.onSurface.copy(
+        style = AppTheme.typography.labelMedium,
+        color = AppTheme.colorScheme.onSurface.copy(
             alpha = 0.5f,
         ),
         text = period,
@@ -126,10 +122,10 @@ private fun UsageBlock(
 @Preview
 @Composable
 private fun Preview() {
-    CommonPreviewSetup { dimension ->
+    CommonPreviewSetup {
         ProjectedConsumptionTile(
-            modifier = Modifier.height(dimension.widgetHeight)
-                .width(dimension.widgetWidthHalf),
+            modifier = Modifier.height(AppTheme.dimens.widgetHeight)
+                .width(AppTheme.dimens.widgetWidthHalf),
             insights = InsightsSamples.trueCost,
         )
     }

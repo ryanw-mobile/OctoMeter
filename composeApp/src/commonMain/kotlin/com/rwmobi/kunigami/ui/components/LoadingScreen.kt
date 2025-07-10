@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,8 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kunigami.composeapp.generated.resources.Res
@@ -44,8 +42,6 @@ import org.jetbrains.compose.resources.painterResource
 fun LoadingScreen(
     modifier: Modifier = Modifier,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -65,12 +61,12 @@ fun LoadingScreen(
     ) {
         Column(
             modifier = Modifier
-                .clip(shape = MaterialTheme.shapes.large)
+                .clip(shape = AppTheme.shapes.large)
                 .background(
                     color = Color.DarkGray.copy(alpha = 0.48f),
                 )
                 .wrapContentSize()
-                .padding(all = dimension.grid_2),
+                .padding(all = AppTheme.dimens.grid_2),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {

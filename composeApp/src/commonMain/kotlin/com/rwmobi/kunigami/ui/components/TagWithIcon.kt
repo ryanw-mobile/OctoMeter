@@ -21,15 +21,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.model.product.ProductFeature
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -39,29 +37,27 @@ fun TagWithIcon(
     icon: Painter,
     text: String,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Row(
         modifier = modifier
             .background(
-                color = MaterialTheme.colorScheme.secondaryContainer,
-                shape = MaterialTheme.shapes.medium,
+                color = AppTheme.colorScheme.secondaryContainer,
+                shape = AppTheme.shapes.medium,
             )
             .padding(
-                horizontal = dimension.grid_1,
-                vertical = dimension.grid_0_5,
+                horizontal = AppTheme.dimens.grid_1,
+                vertical = AppTheme.dimens.grid_0_5,
             ),
     ) {
         Icon(
             modifier = Modifier.size(size = 16.dp),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSecondaryContainer,
+            tint = AppTheme.colorScheme.onSecondaryContainer,
             painter = icon,
         )
         Text(
-            modifier = Modifier.padding(start = dimension.grid_1),
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-            style = MaterialTheme.typography.labelMedium,
+            modifier = Modifier.padding(start = AppTheme.dimens.grid_1),
+            color = AppTheme.colorScheme.onSecondaryContainer,
+            style = AppTheme.typography.labelMedium,
             text = text.uppercase(),
         )
     }

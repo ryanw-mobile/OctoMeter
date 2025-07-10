@@ -22,14 +22,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 
 @Composable
 fun WidgetCard(
@@ -38,24 +36,22 @@ fun WidgetCard(
     contents: @Composable () -> Unit,
     footer: @Composable (() -> Unit)? = null,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Column(
         modifier = modifier
             .sizeIn(
-                minWidth = dimension.windowWidthMedium / 2,
-                maxWidth = dimension.windowWidthCompact,
+                minWidth = AppTheme.dimens.windowWidthMedium / 2,
+                maxWidth = AppTheme.dimens.windowWidthCompact,
             )
             .fillMaxSize()
-            .padding(all = dimension.grid_2),
-        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_1),
+            .padding(all = AppTheme.dimens.grid_2),
+        verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_1),
     ) {
         heading?.let { headingText ->
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.labelMedium,
+                style = AppTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = AppTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 text = headingText,
             )

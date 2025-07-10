@@ -28,18 +28,13 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.theme.AppTheme
-import com.rwmobi.kunigami.ui.theme.Dimension
-import com.rwmobi.kunigami.ui.theme.getDimension
 
 @Composable
 internal fun CommonPreviewSetup(
     modifier: Modifier = Modifier,
-    content: @Composable (dimension: Dimension) -> Unit = {},
+    content: @Composable () -> Unit = {},
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -63,7 +58,7 @@ internal fun CommonPreviewSetup(
             .verticalScroll(
                 state = rememberScrollState(),
             ),
-        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_4),
+        verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_4),
     ) {
         AppTheme(
             useDarkTheme = false,
@@ -71,9 +66,9 @@ internal fun CommonPreviewSetup(
             Surface {
                 Column(
                     modifier = modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+                    verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_2),
                 ) {
-                    content(dimension)
+                    content()
                 }
             }
         }
@@ -84,9 +79,9 @@ internal fun CommonPreviewSetup(
             Surface {
                 Column(
                     modifier = modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(space = dimension.grid_2),
+                    verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_2),
                 ) {
-                    content(dimension)
+                    content()
                 }
             }
         }

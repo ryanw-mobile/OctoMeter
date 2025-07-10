@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -36,8 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.wallet
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -54,8 +52,6 @@ fun MessageActionScreen(
     secondaryButtonLabel: String? = null,
     onSecondaryButtonClicked: (() -> Unit)? = null,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -63,54 +59,54 @@ fun MessageActionScreen(
     ) {
         Icon(
             modifier = Modifier
-                .padding(all = dimension.grid_4)
-                .size(size = dimension.minTouchTarget),
+                .padding(all = AppTheme.dimens.grid_4)
+                .size(size = AppTheme.dimens.minTouchTarget),
             painter = icon,
-            tint = MaterialTheme.colorScheme.error,
+            tint = AppTheme.colorScheme.error,
             contentDescription = null,
         )
 
         Text(
-            modifier = Modifier.padding(horizontal = dimension.grid_4),
-            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(horizontal = AppTheme.dimens.grid_4),
+            style = AppTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             text = text,
         )
 
-        Spacer(modifier = Modifier.height(height = dimension.grid_1))
+        Spacer(modifier = Modifier.height(height = AppTheme.dimens.grid_1))
 
         description?.let {
             Text(
-                modifier = Modifier.padding(horizontal = dimension.grid_4),
+                modifier = Modifier.padding(horizontal = AppTheme.dimens.grid_4),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium,
+                style = AppTheme.typography.titleMedium,
                 text = it,
             )
         }
 
         if (primaryButtonLabel != null && onPrimaryButtonClicked != null) {
-            Spacer(modifier = Modifier.height(height = dimension.grid_4))
+            Spacer(modifier = Modifier.height(height = AppTheme.dimens.grid_4))
 
             Button(
                 onClick = onPrimaryButtonClicked,
             ) {
                 Text(
-                    modifier = Modifier.padding(horizontal = dimension.grid_2),
-                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.padding(horizontal = AppTheme.dimens.grid_2),
+                    style = AppTheme.typography.labelMedium,
                     text = primaryButtonLabel.uppercase(),
                 )
             }
         }
 
         if (secondaryButtonLabel != null && onSecondaryButtonClicked != null) {
-            Spacer(modifier = Modifier.height(height = dimension.grid_2))
+            Spacer(modifier = Modifier.height(height = AppTheme.dimens.grid_2))
 
             TextButton(
                 onClick = onSecondaryButtonClicked,
             ) {
                 Text(
-                    modifier = Modifier.padding(horizontal = dimension.grid_2),
-                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.padding(horizontal = AppTheme.dimens.grid_2),
+                    style = AppTheme.typography.labelMedium,
                     text = secondaryButtonLabel,
                 )
             }

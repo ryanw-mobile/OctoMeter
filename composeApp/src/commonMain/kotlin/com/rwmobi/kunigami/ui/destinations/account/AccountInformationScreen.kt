@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,7 +41,6 @@ import com.rwmobi.kunigami.domain.extensions.getLocalDateString
 import com.rwmobi.kunigami.domain.model.account.UserProfile
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.components.MessageActionScreen
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.destinations.account.components.AccountOperationButtonBar
 import com.rwmobi.kunigami.ui.destinations.account.components.AppInfoFooter
 import com.rwmobi.kunigami.ui.destinations.account.components.ElectricityMeterPointCard
@@ -50,7 +48,6 @@ import com.rwmobi.kunigami.ui.destinations.account.components.UpdateApiKeyDialog
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.previewsampledata.AccountSamples
 import com.rwmobi.kunigami.ui.theme.AppTheme
-import com.rwmobi.kunigami.ui.theme.getDimension
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_clear_credential_title
 import kunigami.composeapp.generated.resources.account_error_account_empty
@@ -71,11 +68,9 @@ internal fun AccountInformationScreen(
     uiState: AccountUIState,
     uiEvent: AccountUIEvent,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
-
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(space = dimension.grid_3),
+        verticalArrangement = Arrangement.spacedBy(space = AppTheme.dimens.grid_3),
     ) {
         if (uiState.userProfile?.account == null) {
             MessageActionScreen(
@@ -88,7 +83,7 @@ internal fun AccountInformationScreen(
                 onSecondaryButtonClicked = uiEvent.onClearCredentialButtonClicked,
             )
         } else {
-            Spacer(modifier = Modifier.height(height = dimension.grid_1))
+            Spacer(modifier = Modifier.height(height = AppTheme.dimens.grid_1))
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -96,12 +91,12 @@ internal fun AccountInformationScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(dimension.grid_2),
-                    verticalArrangement = Arrangement.spacedBy(dimension.grid_2),
+                        .padding(AppTheme.dimens.grid_2),
+                    verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_2),
                 ) {
                     Column {
                         Text(
-                            style = MaterialTheme.typography.titleLarge,
+                            style = AppTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
                             maxLines = 1,
                             text = "Welcome back ${uiState.userProfile.account.preferredName}!",
@@ -109,7 +104,7 @@ internal fun AccountInformationScreen(
 
                         Text(
                             modifier = Modifier.alpha(0.5f),
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = AppTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold,
                             maxLines = 1,
                             text = stringResource(resource = Res.string.account_number, uiState.userProfile.account.accountNumber),
@@ -118,12 +113,12 @@ internal fun AccountInformationScreen(
 
                     uiState.userProfile.account.fullAddress?.let {
                         Text(
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = AppTheme.typography.bodyLarge,
                             text = it,
                         )
                     } ?: run {
                         Text(
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = AppTheme.typography.bodyLarge,
                             text = stringResource(resource = Res.string.account_unknown_installation_address),
                         )
                     }
@@ -131,14 +126,14 @@ internal fun AccountInformationScreen(
                     Column {
                         uiState.userProfile.account.movedInAt?.let {
                             Text(
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = AppTheme.typography.bodyMedium,
                                 text = stringResource(resource = Res.string.account_moved_in, it.getLocalDateString()),
                             )
                         }
 
                         uiState.userProfile.account.movedOutAt?.let {
                             Text(
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = AppTheme.typography.bodyMedium,
                                 text = stringResource(resource = Res.string.account_moved_out, it.getLocalDateString()),
                             )
                         }

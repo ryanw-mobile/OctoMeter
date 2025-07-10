@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
+import com.rwmobi.kunigami.ui.theme.AppTheme
 
 fun generateFreezingBlueSpectrum(
     initialSaturation: Float = 0.4f, // Starting with a moderate saturation
@@ -55,11 +56,11 @@ private fun Preview() {
     val gradient = Brush.horizontalGradient(colors)
     CommonPreviewSetup(
         modifier = Modifier,
-    ) { dimension ->
+    ) {
         Box(
             modifier = Modifier
-                .padding(dimension.grid_6)
-                .height(dimension.grid_6)
+                .padding(AppTheme.dimens.grid_6)
+                .height(AppTheme.dimens.grid_6)
                 .fillMaxWidth()
                 .background(brush = gradient),
         )

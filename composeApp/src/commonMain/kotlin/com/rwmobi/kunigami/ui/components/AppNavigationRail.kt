@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
@@ -33,9 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
 import com.rwmobi.kunigami.ui.navigation.AppDestination
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.content_description_navigation_rail
 import org.jetbrains.compose.resources.painterResource
@@ -50,11 +48,10 @@ fun AppNavigationRail(
     val navigationRailContentDescription = stringResource(Res.string.content_description_navigation_rail)
     NavigationRail(
         modifier = modifier.semantics { contentDescription = navigationRailContentDescription },
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = AppTheme.colorScheme.background,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
-        val dimension = getScreenSizeInfo().getDimension()
 
         Spacer(Modifier.weight(1f))
 
@@ -64,7 +61,7 @@ fun AppNavigationRail(
             val itemContentDescription = stringResource(item.titleResId)
             NavigationRailItem(
                 modifier = Modifier
-                    .padding(vertical = dimension.defaultFullPadding)
+                    .padding(vertical = AppTheme.dimens.defaultFullPadding)
                     .semantics { contentDescription = itemContentDescription },
                 selected = selected,
                 onClick = {
@@ -81,7 +78,7 @@ fun AppNavigationRail(
                 },
                 icon = {
                     Icon(
-                        modifier = Modifier.size(size = dimension.navigationIconSize),
+                        modifier = Modifier.size(size = AppTheme.dimens.navigationIconSize),
                         painter = painterResource(resource = item.iconResId),
                         contentDescription = null,
                     )
@@ -89,7 +86,7 @@ fun AppNavigationRail(
                 label = {
                     Text(
                         text = stringResource(resource = item.titleResId).uppercase(),
-                        style = MaterialTheme.typography.labelMedium,
+                        style = AppTheme.typography.labelMedium,
                     )
                 },
             )

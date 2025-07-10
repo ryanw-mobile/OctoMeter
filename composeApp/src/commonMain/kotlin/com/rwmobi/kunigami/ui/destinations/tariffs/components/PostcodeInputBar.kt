@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,8 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.content_description_edit_postcode
 import kunigami.composeapp.generated.resources.settings_24_regular
@@ -51,7 +49,6 @@ internal fun PostcodeInputBar(
     postcode: String,
     onUpdatePostcode: (String) -> Unit,
 ) {
-    val dimension = getScreenSizeInfo().getDimension()
     var showEditPostcodeDialog by remember { mutableStateOf(false) }
 
     if (showEditPostcodeDialog) {
@@ -68,26 +65,26 @@ internal fun PostcodeInputBar(
     Column(modifier = modifier) {
         Row(
             modifier = Modifier
-                .background(color = MaterialTheme.colorScheme.surfaceContainerLow)
+                .background(color = AppTheme.colorScheme.surfaceContainerLow)
                 .fillMaxWidth()
-                .height(height = dimension.minListItemHeight)
-                .padding(start = dimension.grid_2),
+                .height(height = AppTheme.dimens.minListItemHeight)
+                .padding(start = AppTheme.dimens.grid_2),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.bodyMedium,
+                style = AppTheme.typography.bodyMedium,
                 text = stringResource(resource = Res.string.tariffs_postcode, postcode),
             )
 
             IconButton(
-                modifier = Modifier.size(size = dimension.imageButtonSize),
+                modifier = Modifier.size(size = AppTheme.dimens.imageButtonSize),
                 onClick = { showEditPostcodeDialog = true },
             ) {
                 Icon(
                     modifier = Modifier.padding(
-                        horizontal = dimension.grid_1,
-                        vertical = dimension.grid_0_5,
+                        horizontal = AppTheme.dimens.grid_1,
+                        vertical = AppTheme.dimens.grid_0_5,
                     ),
                     painter = painterResource(resource = Res.drawable.settings_24_regular),
                     contentDescription = stringResource(resource = Res.string.content_description_edit_postcode),
@@ -97,7 +94,7 @@ internal fun PostcodeInputBar(
 
         HorizontalDivider(
             modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colorScheme.surfaceContainerHighest,
+            color = AppTheme.colorScheme.surfaceContainerHighest,
         )
     }
 }

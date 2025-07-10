@@ -27,7 +27,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -41,8 +40,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import com.rwmobi.kunigami.ui.composehelper.getScreenSizeInfo
-import com.rwmobi.kunigami.ui.theme.getDimension
+import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.coin
 import org.jetbrains.compose.resources.painterResource
@@ -53,8 +51,8 @@ internal fun SquareButton(
     icon: Painter,
     text: String,
     colors: ButtonColors = ButtonDefaults.buttonColors().copy(
-        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        containerColor = AppTheme.colorScheme.secondaryContainer,
+        contentColor = AppTheme.colorScheme.onSecondaryContainer,
     ),
     onClick: () -> Unit,
 ) {
@@ -62,7 +60,6 @@ internal fun SquareButton(
     CompositionLocalProvider(
         LocalDensity provides Density(currentDensity.density, fontScale = 1f),
     ) {
-        val dimension = getScreenSizeInfo().getDimension()
         Column(
             modifier = modifier
                 .wrapContentHeight()
@@ -70,13 +67,13 @@ internal fun SquareButton(
                     role = Role.Button
                     contentDescription = text
                 },
-            verticalArrangement = Arrangement.spacedBy(dimension.grid_1),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.dimens.grid_1),
         ) {
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(ratio = 1f),
-                shape = MaterialTheme.shapes.medium,
+                shape = AppTheme.shapes.medium,
                 colors = colors,
                 onClick = onClick,
             ) {
@@ -92,9 +89,9 @@ internal fun SquareButton(
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.labelMedium,
+                style = AppTheme.typography.labelMedium,
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = AppTheme.colorScheme.onSurface,
                 text = text,
             )
         }
@@ -114,8 +111,8 @@ private fun Preview(
             icon = painterResource(resource = Res.drawable.coin),
             text = "Money Generator",
             colors = ButtonDefaults.buttonColors().copy(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                containerColor = AppTheme.colorScheme.secondaryContainer,
+                contentColor = AppTheme.colorScheme.onSecondaryContainer,
             ),
             onClick = {},
         )
