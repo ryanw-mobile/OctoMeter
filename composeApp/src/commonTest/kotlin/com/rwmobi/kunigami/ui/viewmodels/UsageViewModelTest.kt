@@ -325,13 +325,13 @@ class UsageViewModelTest {
             screenSizeInfo = ScreenSizeInfo(
                 heightPx = 720,
                 widthPx = 1280,
-                heightDp = 360.dp,
-                widthDp = 640.dp,
+                heightDp = 320.dp,
+                widthDp = 500.dp,
             ),
             windowSizeClass = WindowSizeClass.calculateFromSize(
                 size = DpSize(
-                    width = 640.dp,
-                    height = 360.dp,
+                    width = 500.dp,
+                    height = 320.dp,
                 ),
             ),
         )
