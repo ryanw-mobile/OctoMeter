@@ -34,29 +34,27 @@ class GetDefaultPostcodeUseCase(
      * In any case we cannot resolve it (e.g. demo mode), we return the default postcode.
      * This is only good for suggesting a postcode for query.
      */
-    suspend operator fun invoke(): String {
-        return withContext(dispatcher) {
-            if (userPreferencesRepository.isDemoMode()) {
-                defaultPostcode
-            } else {
-                val accountNumber = userPreferencesRepository.getAccountNumber()
+    suspend operator fun invoke(): String = withContext(dispatcher) {
+        if (userPreferencesRepository.isDemoMode()) {
+            defaultPostcode
+        } else {
+            val accountNumber = userPreferencesRepository.getAccountNumber()
 
-                // isDemoMode should have rejected null cases. This is to avoid using !! below
-                checkNotNull(value = accountNumber, lazyMessage = { "Expect Account Number but null" })
+            // isDemoMode should have rejected null cases. This is to avoid using !! below
+            checkNotNull(value = accountNumber, lazyMessage = { "Expect Account Number but null" })
 
-                octopusApiRepository.getAccount(
-                    accountNumber = accountNumber,
-                ).fold(
-                    onFailure = { throwable ->
-                        Logger.e("GetDefaultPostcodeUseCase", throwable)
-                        defaultPostcode
-                    },
+            octopusApiRepository.getAccount(
+                accountNumber = accountNumber,
+            ).fold(
+                onFailure = { throwable ->
+                    Logger.e("GetDefaultPostcodeUseCase", throwable)
+                    defaultPostcode
+                },
 
-                    onSuccess = { account ->
-                        account?.postcode ?: defaultPostcode
-                    },
-                )
-            }
+                onSuccess = { account ->
+                    account?.postcode ?: defaultPostcode
+                },
+            )
         }
     }
 }

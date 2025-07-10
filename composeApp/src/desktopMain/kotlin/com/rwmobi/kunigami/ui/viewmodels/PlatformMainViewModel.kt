@@ -41,10 +41,8 @@ class PlatformMainViewModel(
         }
     }
 
-    suspend fun loadPreferredWindowSize(): DpSize {
-        return withContext(dispatcher) {
-            userPreferencesRepository.getWindowSize() ?: DpSize(width = 800.dp, height = 560.dp)
-        }
+    suspend fun loadPreferredWindowSize(): DpSize = withContext(dispatcher) {
+        userPreferencesRepository.getWindowSize() ?: DpSize(width = 800.dp, height = 560.dp)
     }
 
     fun cachePreferredWindowSize(size: DpSize) {

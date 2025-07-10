@@ -35,13 +35,11 @@ enum class ConsumptionPresentationStyle(val stringResource: StringResource) {
     /***
      * UI uses interprets the grouping differently. This is to map to the Enum that the API expects.
      */
-    fun getConsumptionDataGroup(): ConsumptionTimeFrame {
-        return when (this) {
-            DAY_HALF_HOURLY -> ConsumptionTimeFrame.HALF_HOURLY
-            WEEK_SEVEN_DAYS -> ConsumptionTimeFrame.DAY
-            MONTH_WEEKS -> ConsumptionTimeFrame.WEEK
-            MONTH_THIRTY_DAYS -> ConsumptionTimeFrame.DAY
-            YEAR_TWELVE_MONTHS -> ConsumptionTimeFrame.MONTH
-        }
+    fun getConsumptionDataGroup(): ConsumptionTimeFrame = when (this) {
+        DAY_HALF_HOURLY -> ConsumptionTimeFrame.HALF_HOURLY
+        WEEK_SEVEN_DAYS -> ConsumptionTimeFrame.DAY
+        MONTH_WEEKS -> ConsumptionTimeFrame.WEEK
+        MONTH_THIRTY_DAYS -> ConsumptionTimeFrame.DAY
+        YEAR_TWELVE_MONTHS -> ConsumptionTimeFrame.MONTH
     }
 }

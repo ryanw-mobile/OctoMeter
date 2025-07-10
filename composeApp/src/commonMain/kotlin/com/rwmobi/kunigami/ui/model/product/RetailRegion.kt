@@ -109,8 +109,6 @@ enum class RetailRegion(val code: String, val postcode: String, val stringResour
     ;
 
     companion object {
-        fun fromCode(code: String?): RetailRegion? {
-            return entries.find { it.code == code }
-        }
+        fun fromCode(code: String?): RetailRegion? = entries.find { it.code == code }
     }
 }

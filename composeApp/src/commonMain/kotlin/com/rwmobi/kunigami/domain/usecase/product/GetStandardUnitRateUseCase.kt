@@ -31,21 +31,19 @@ class GetStandardUnitRateUseCase(
     suspend operator fun invoke(
         tariffCode: String,
         period: ClosedRange<Instant>,
-    ): Result<List<Rate>> {
-        return withContext(dispatcher) {
-            runCatching {
-                octopusApiRepository.getStandardUnitRates(
-                    tariffCode = tariffCode,
-                    period = period,
-                ).fold(
-                    onSuccess = { rates ->
-                        rates.sortedBy { it.validity.start }
-                    },
-                    onFailure = { throwable ->
-                        throw throwable
-                    },
-                )
-            }.except<CancellationException, _>()
-        }
+    ): Result<List<Rate>> = withContext(dispatcher) {
+        runCatching {
+            octopusApiRepository.getStandardUnitRates(
+                tariffCode = tariffCode,
+                period = period,
+            ).fold(
+                onSuccess = { rates ->
+                    rates.sortedBy { it.validity.start }
+                },
+                onFailure = { throwable ->
+                    throw throwable
+                },
+            )
+        }.except<CancellationException, _>()
     }
 }

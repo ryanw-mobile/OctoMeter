@@ -26,35 +26,27 @@ import kotlinx.datetime.number
 import kotlinx.datetime.plus
 import kotlin.time.Instant
 
-fun LocalDateTime.startOfYear(): Instant {
-    return LocalDate(year = year, month = 1, day = 1)
-        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
-        .toSystemDefaultTimeZoneInstant()
-        .atStartOfDay()
-}
+fun LocalDateTime.startOfYear(): Instant = LocalDate(year = year, month = 1, day = 1)
+    .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
+    .toSystemDefaultTimeZoneInstant()
+    .atStartOfDay()
 
-fun LocalDateTime.endOfYear(): Instant {
-    return LocalDate(year = year, month = 12, day = 31)
-        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
-        .toSystemDefaultTimeZoneInstant()
-        .atEndOfDay()
-}
+fun LocalDateTime.endOfYear(): Instant = LocalDate(year = year, month = 12, day = 31)
+    .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
+    .toSystemDefaultTimeZoneInstant()
+    .atEndOfDay()
 
-fun LocalDateTime.startOfMonth(): Instant {
-    return LocalDate(year = year, month = month.number, day = 1)
-        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
-        .toSystemDefaultTimeZoneInstant()
-        .atStartOfDay()
-}
+fun LocalDateTime.startOfMonth(): Instant = LocalDate(year = year, month = month.number, day = 1)
+    .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
+    .toSystemDefaultTimeZoneInstant()
+    .atStartOfDay()
 
-fun LocalDateTime.endOfMonth(): Instant {
-    return LocalDate(year = year, month = month.number, day = 1)
-        .plus(1, DateTimeUnit.MONTH)
-        .minus(1, DateTimeUnit.DAY)
-        .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
-        .toSystemDefaultTimeZoneInstant()
-        .atEndOfDay()
-}
+fun LocalDateTime.endOfMonth(): Instant = LocalDate(year = year, month = month.number, day = 1)
+    .plus(1, DateTimeUnit.MONTH)
+    .minus(1, DateTimeUnit.DAY)
+    .atTime(hour = 12, minute = 0) // Make it GMT-BST transition safe
+    .toSystemDefaultTimeZoneInstant()
+    .atEndOfDay()
 
 fun LocalDateTime.startOfWeek(): Instant {
     val dayOfWeek = date.dayOfWeek

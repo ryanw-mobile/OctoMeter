@@ -32,29 +32,27 @@ class InitialiseAccountUseCase(
     suspend operator fun invoke(
         apiKey: String,
         accountNumber: String,
-    ): Result<Unit> {
-        return withContext(dispatcher) {
-            runCatching {
-                userPreferencesRepository.setApiKey(apiKey = apiKey)
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            userPreferencesRepository.setApiKey(apiKey = apiKey)
 
-                octopusApiRepository.getAccount(
-                    accountNumber = accountNumber,
-                ).fold(
-                    onSuccess = { account ->
-                        // Most users should have only 1 MPAN and 1 Meter in an account.
-                        // We automatically pick the first MPAN and Meter Serial
-                        // Users can change that on Account screen
-                        if (account == null || !account.hasValidMeter()) {
-                            throw NoValidMeterException()
-                        }
+            octopusApiRepository.getAccount(
+                accountNumber = accountNumber,
+            ).fold(
+                onSuccess = { account ->
+                    // Most users should have only 1 MPAN and 1 Meter in an account.
+                    // We automatically pick the first MPAN and Meter Serial
+                    // Users can change that on Account screen
+                    if (account == null || !account.hasValidMeter()) {
+                        throw NoValidMeterException()
+                    }
 
-                        userPreferencesRepository.setAccountNumber(accountNumber = accountNumber)
-                        userPreferencesRepository.setMpan(mpan = account.electricityMeterPoints[0].mpan)
-                        userPreferencesRepository.setMeterSerialNumber(meterSerialNumber = account.electricityMeterPoints[0].meters[0].serialNumber)
-                    },
-                    onFailure = { throw it },
-                )
-            }.except<CancellationException, _>()
-        }
+                    userPreferencesRepository.setAccountNumber(accountNumber = accountNumber)
+                    userPreferencesRepository.setMpan(mpan = account.electricityMeterPoints[0].mpan)
+                    userPreferencesRepository.setMeterSerialNumber(meterSerialNumber = account.electricityMeterPoints[0].meters[0].serialNumber)
+                },
+                onFailure = { throw it },
+            )
+        }.except<CancellationException, _>()
     }
 }

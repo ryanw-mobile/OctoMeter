@@ -30,16 +30,14 @@ class UpdateMeterPreferenceUseCase(
     suspend operator fun invoke(
         mpan: String,
         meterSerialNumber: String,
-    ): Result<Unit> {
-        return withContext(dispatcher) {
-            runCatching {
-                Logger.v("Update MPAN = $mpan, meterSerialNumber = $meterSerialNumber")
-                userPreferencesRepository.apply {
-                    setMpan(mpan = mpan)
-                    setMeterSerialNumber(meterSerialNumber = meterSerialNumber)
-                }
-                Unit
-            }.except<CancellationException, _>()
-        }
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            Logger.v("Update MPAN = $mpan, meterSerialNumber = $meterSerialNumber")
+            userPreferencesRepository.apply {
+                setMpan(mpan = mpan)
+                setMeterSerialNumber(meterSerialNumber = meterSerialNumber)
+            }
+            Unit
+        }.except<CancellationException, _>()
     }
 }

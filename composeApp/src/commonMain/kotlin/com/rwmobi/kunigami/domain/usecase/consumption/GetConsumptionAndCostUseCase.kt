@@ -44,60 +44,56 @@ class GetConsumptionAndCostUseCase(
         userProfile: UserProfile,
         period: ClosedRange<Instant>,
         groupBy: ConsumptionTimeFrame,
-    ): Result<List<ConsumptionWithCost>> {
-        return withContext(dispatcher) {
-            runCatching {
-                val isDemoMode = userPreferencesRepository.isDemoMode()
-                if (isDemoMode) {
-                    generateDemoResponse(
-                        period = period,
-                        groupBy = groupBy,
-                    )
-                } else {
-                    val apiKey = userPreferencesRepository.getApiKey()
-                    val mpan = userProfile.selectedMpan
-                    val accountNumber = userProfile.account.accountNumber
-                    val deviceId = userProfile.getSelectedElectricityMeterPoint()
-                        ?.meters?.firstOrNull {
-                            it.serialNumber == userProfile.selectedMeterSerialNumber
-                        }?.deviceId
+    ): Result<List<ConsumptionWithCost>> = withContext(dispatcher) {
+        runCatching {
+            val isDemoMode = userPreferencesRepository.isDemoMode()
+            if (isDemoMode) {
+                generateDemoResponse(
+                    period = period,
+                    groupBy = groupBy,
+                )
+            } else {
+                val apiKey = userPreferencesRepository.getApiKey()
+                val mpan = userProfile.selectedMpan
+                val accountNumber = userProfile.account.accountNumber
+                val deviceId = userProfile.getSelectedElectricityMeterPoint()
+                    ?.meters?.firstOrNull {
+                        it.serialNumber == userProfile.selectedMeterSerialNumber
+                    }?.deviceId
 
-                    requireNotNull(value = apiKey, lazyMessage = { "Assertion failed: API Key is null" })
-                    requireNotNull(value = deviceId, lazyMessage = { "Assertion failed: deviceId is null" })
+                requireNotNull(value = apiKey, lazyMessage = { "Assertion failed: API Key is null" })
+                requireNotNull(value = deviceId, lazyMessage = { "Assertion failed: deviceId is null" })
 
-                    octopusApiRepository.getConsumption(
-                        accountNumber = accountNumber,
-                        deviceId = deviceId,
-                        mpan = mpan,
-                        period = period,
-                        groupBy = groupBy,
-                    ).fold(
-                        onSuccess = { consumptionWithCost ->
-                            consumptionWithCost.sortedBy {
-                                it.consumption.interval.start
-                            }
-                        },
-                        onFailure = { throw it },
-                    )
-                }
-            }.except<CancellationException, _>()
-        }
+                octopusApiRepository.getConsumption(
+                    accountNumber = accountNumber,
+                    deviceId = deviceId,
+                    mpan = mpan,
+                    period = period,
+                    groupBy = groupBy,
+                ).fold(
+                    onSuccess = { consumptionWithCost ->
+                        consumptionWithCost.sortedBy {
+                            it.consumption.interval.start
+                        }
+                    },
+                    onFailure = { throw it },
+                )
+            }
+        }.except<CancellationException, _>()
     }
 
-    private suspend fun generateDemoResponse(period: ClosedRange<Instant>, groupBy: ConsumptionTimeFrame): List<ConsumptionWithCost> {
-        return demoOctopusApiRepository.getConsumption(
-            accountNumber = "",
-            deviceId = "",
-            mpan = "",
-            period = period,
-            groupBy = groupBy,
-        ).fold(
-            onSuccess = { consumption ->
-                consumption.sortedBy {
-                    it.consumption.interval.start
-                }
-            },
-            onFailure = { throw it },
-        )
-    }
+    private suspend fun generateDemoResponse(period: ClosedRange<Instant>, groupBy: ConsumptionTimeFrame): List<ConsumptionWithCost> = demoOctopusApiRepository.getConsumption(
+        accountNumber = "",
+        deviceId = "",
+        mpan = "",
+        period = period,
+        groupBy = groupBy,
+    ).fold(
+        onSuccess = { consumption ->
+            consumption.sortedBy {
+                it.consumption.interval.start
+            }
+        },
+        onFailure = { throw it },
+    )
 }

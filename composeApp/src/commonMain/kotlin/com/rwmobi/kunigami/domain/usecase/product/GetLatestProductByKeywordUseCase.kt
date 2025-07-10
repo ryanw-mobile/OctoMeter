@@ -25,24 +25,22 @@ class GetLatestProductByKeywordUseCase(
     private val octopusApiRepository: OctopusApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
-    suspend operator fun invoke(keyword: String, postcode: String): String? {
-        return withContext(dispatcher) {
-            val getProductsResult = octopusApiRepository.getProducts(postcode = postcode)
-            getProductsResult.fold(
-                onSuccess = { products ->
-                    val productCode = products.sortedByDescending {
-                        it.availability.start
-                    }.firstOrNull {
-                        it.code.startsWith(keyword) &&
-                            it.brand == "OCTOPUS_ENERGY"
-                    }?.code
-                    productCode
-                },
-                onFailure = {
-                    Logger.e("GetLatestProductByKeywordUseCase", throwable = it)
-                    null
-                },
-            )
-        }
+    suspend operator fun invoke(keyword: String, postcode: String): String? = withContext(dispatcher) {
+        val getProductsResult = octopusApiRepository.getProducts(postcode = postcode)
+        getProductsResult.fold(
+            onSuccess = { products ->
+                val productCode = products.sortedByDescending {
+                    it.availability.start
+                }.firstOrNull {
+                    it.code.startsWith(keyword) &&
+                        it.brand == "OCTOPUS_ENERGY"
+                }?.code
+                productCode
+            },
+            onFailure = {
+                Logger.e("GetLatestProductByKeywordUseCase", throwable = it)
+                null
+            },
+        )
     }
 }

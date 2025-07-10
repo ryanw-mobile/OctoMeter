@@ -29,18 +29,16 @@ class GetTariffRatesUseCase(
 ) {
     suspend operator fun invoke(
         tariffCode: String,
-    ): Result<Tariff> {
-        return withContext(dispatcher) {
-            runCatching {
-                octopusApiRepository.getTariff(tariffCode = tariffCode).fold(
-                    onSuccess = { tariff ->
-                        tariff
-                    },
-                    onFailure = { throwable ->
-                        throw throwable
-                    },
-                )
-            }.except<CancellationException, _>()
-        }
+    ): Result<Tariff> = withContext(dispatcher) {
+        runCatching {
+            octopusApiRepository.getTariff(tariffCode = tariffCode).fold(
+                onSuccess = { tariff ->
+                    tariff
+                },
+                onFailure = { throwable ->
+                    throw throwable
+                },
+            )
+        }.except<CancellationException, _>()
     }
 }

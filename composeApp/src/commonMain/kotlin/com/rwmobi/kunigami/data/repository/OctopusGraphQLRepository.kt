@@ -171,45 +171,43 @@ class OctopusGraphQLRepository(
         tariffCode: String,
         period: ClosedRange<Instant>,
         requestedPage: Int?,
-    ): Result<List<Rate>> {
-        return withContext(dispatcher) {
-            runCatching {
-                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+    ): Result<List<Rate>> = withContext(dispatcher) {
+        runCatching {
+            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
 
-                getRatesFromDatabase(
-                    tariffCode = tariffCode,
-                    rateType = RateType.STANDARD_UNIT_RATE,
-                    validity = period,
-                    paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
-                ) ?: run {
-                    Logger.v(tag = "getStandardUnitRates", messageString = "DB Cache misses for $period")
-                    val combinedList = mutableListOf<Rate>()
-                    var page: Int? = requestedPage
-                    do {
-                        val apiResponse = productsEndpoint.getStandardUnitRates(
-                            productCode = productCode,
-                            tariffCode = tariffCode,
-                            periodFrom = period.start,
-                            periodTo = period.endInclusive,
-                            page = page,
-                        )
-                        combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
+            getRatesFromDatabase(
+                tariffCode = tariffCode,
+                rateType = RateType.STANDARD_UNIT_RATE,
+                validity = period,
+                paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
+            ) ?: run {
+                Logger.v(tag = "getStandardUnitRates", messageString = "DB Cache misses for $period")
+                val combinedList = mutableListOf<Rate>()
+                var page: Int? = requestedPage
+                do {
+                    val apiResponse = productsEndpoint.getStandardUnitRates(
+                        productCode = productCode,
+                        tariffCode = tariffCode,
+                        periodFrom = period.start,
+                        periodTo = period.endInclusive,
+                        page = page,
+                    )
+                    combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
 
-                        // cache the results
-                        apiResponse?.results?.map {
-                            it.toRateEntity(tariffCode = tariffCode, rateType = RateType.STANDARD_UNIT_RATE)
-                        }?.let {
-                            databaseDataSource.insertRates(rateEntity = it)
-                        }
+                    // cache the results
+                    apiResponse?.results?.map {
+                        it.toRateEntity(tariffCode = tariffCode, rateType = RateType.STANDARD_UNIT_RATE)
+                    }?.let {
+                        databaseDataSource.insertRates(rateEntity = it)
+                    }
 
-                        page = apiResponse?.getNextPageNumber()
-                    } while (page != null)
+                    page = apiResponse?.getNextPageNumber()
+                } while (page != null)
 
-                    combinedList
-                }
-            }.except<CancellationException, _>()
-        }
+                combinedList
+            }
+        }.except<CancellationException, _>()
     }
 
     /**
@@ -248,45 +246,43 @@ class OctopusGraphQLRepository(
         paymentMethod: PaymentMethod,
         period: ClosedRange<Instant>?,
         requestedPage: Int?,
-    ): Result<List<Rate>> {
-        return withContext(dispatcher) {
-            runCatching {
-                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+    ): Result<List<Rate>> = withContext(dispatcher) {
+        runCatching {
+            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
 
-                getRatesFromDatabase(
-                    tariffCode = tariffCode,
-                    rateType = RateType.STANDING_CHARGE,
-                    validity = period ?: Instant.DISTANT_PAST..Instant.DISTANT_FUTURE,
-                    paymentMethod = paymentMethod,
-                ) ?: run {
-                    Logger.v(tag = "getStandingCharges", messageString = "DB Cache misses for $period")
-                    val combinedList = mutableListOf<Rate>()
-                    var page: Int? = requestedPage
-                    do {
-                        val apiResponse = productsEndpoint.getStandingCharges(
-                            productCode = productCode,
-                            tariffCode = tariffCode,
-                            periodFrom = period?.start,
-                            periodTo = period?.endInclusive,
-                            page = page,
-                        )
-                        combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
+            getRatesFromDatabase(
+                tariffCode = tariffCode,
+                rateType = RateType.STANDING_CHARGE,
+                validity = period ?: Instant.DISTANT_PAST..Instant.DISTANT_FUTURE,
+                paymentMethod = paymentMethod,
+            ) ?: run {
+                Logger.v(tag = "getStandingCharges", messageString = "DB Cache misses for $period")
+                val combinedList = mutableListOf<Rate>()
+                var page: Int? = requestedPage
+                do {
+                    val apiResponse = productsEndpoint.getStandingCharges(
+                        productCode = productCode,
+                        tariffCode = tariffCode,
+                        periodFrom = period?.start,
+                        periodTo = period?.endInclusive,
+                        page = page,
+                    )
+                    combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
 
-                        // cache the results
-                        apiResponse?.results?.map {
-                            it.toRateEntity(tariffCode = tariffCode, rateType = RateType.STANDING_CHARGE)
-                        }?.let {
-                            databaseDataSource.insertRates(rateEntity = it)
-                        }
+                    // cache the results
+                    apiResponse?.results?.map {
+                        it.toRateEntity(tariffCode = tariffCode, rateType = RateType.STANDING_CHARGE)
+                    }?.let {
+                        databaseDataSource.insertRates(rateEntity = it)
+                    }
 
-                        page = apiResponse?.getNextPageNumber()
-                    } while (page != null)
+                    page = apiResponse?.getNextPageNumber()
+                } while (page != null)
 
-                    combinedList
-                }
-            }.except<CancellationException, _>()
-        }
+                combinedList
+            }
+        }.except<CancellationException, _>()
     }
 
     /***
@@ -298,45 +294,43 @@ class OctopusGraphQLRepository(
         tariffCode: String,
         period: ClosedRange<Instant>?,
         requestedPage: Int?,
-    ): Result<List<Rate>> {
-        return withContext(dispatcher) {
-            runCatching {
-                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+    ): Result<List<Rate>> = withContext(dispatcher) {
+        runCatching {
+            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
 
-                getRatesFromDatabase(
-                    tariffCode = tariffCode,
-                    rateType = RateType.DAY_UNIT_RATE,
-                    validity = period ?: Instant.DISTANT_PAST..Instant.DISTANT_FUTURE,
-                    paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
-                ) ?: run {
-                    Logger.v(tag = "getDayUnitRates", messageString = "DB Cache misses for $period")
-                    val combinedList = mutableListOf<Rate>()
-                    var page: Int? = requestedPage
-                    do {
-                        val apiResponse = productsEndpoint.getDayUnitRates(
-                            productCode = productCode,
-                            tariffCode = tariffCode,
-                            periodFrom = period?.start,
-                            periodTo = period?.endInclusive,
-                            page = page,
-                        )
-                        combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
+            getRatesFromDatabase(
+                tariffCode = tariffCode,
+                rateType = RateType.DAY_UNIT_RATE,
+                validity = period ?: Instant.DISTANT_PAST..Instant.DISTANT_FUTURE,
+                paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
+            ) ?: run {
+                Logger.v(tag = "getDayUnitRates", messageString = "DB Cache misses for $period")
+                val combinedList = mutableListOf<Rate>()
+                var page: Int? = requestedPage
+                do {
+                    val apiResponse = productsEndpoint.getDayUnitRates(
+                        productCode = productCode,
+                        tariffCode = tariffCode,
+                        periodFrom = period?.start,
+                        periodTo = period?.endInclusive,
+                        page = page,
+                    )
+                    combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
 
-                        // cache the results
-                        apiResponse?.results?.map {
-                            it.toRateEntity(tariffCode = tariffCode, rateType = RateType.DAY_UNIT_RATE)
-                        }?.let {
-                            databaseDataSource.insertRates(rateEntity = it)
-                        }
+                    // cache the results
+                    apiResponse?.results?.map {
+                        it.toRateEntity(tariffCode = tariffCode, rateType = RateType.DAY_UNIT_RATE)
+                    }?.let {
+                        databaseDataSource.insertRates(rateEntity = it)
+                    }
 
-                        page = apiResponse?.getNextPageNumber()
-                    } while (page != null)
+                    page = apiResponse?.getNextPageNumber()
+                } while (page != null)
 
-                    combinedList
-                }
-            }.except<CancellationException, _>()
-        }
+                combinedList
+            }
+        }.except<CancellationException, _>()
     }
 
     /***
@@ -348,45 +342,43 @@ class OctopusGraphQLRepository(
         tariffCode: String,
         period: ClosedRange<Instant>?,
         requestedPage: Int?,
-    ): Result<List<Rate>> {
-        return withContext(dispatcher) {
-            runCatching {
-                val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
-                requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
+    ): Result<List<Rate>> = withContext(dispatcher) {
+        runCatching {
+            val productCode = Tariff.extractProductCode(tariffCode = tariffCode)
+            requireNotNull(productCode) { "Unable to resolve product code for $tariffCode" }
 
-                getRatesFromDatabase(
-                    tariffCode = tariffCode,
-                    rateType = RateType.NIGHT_UNIT_RATE,
-                    validity = period ?: Instant.DISTANT_PAST..Instant.DISTANT_FUTURE,
-                    paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
-                ) ?: run {
-                    Logger.v(tag = "getNightUnitRates", messageString = "DB Cache misses for $period")
-                    val combinedList = mutableListOf<Rate>()
-                    var page: Int? = requestedPage
-                    do {
-                        val apiResponse = productsEndpoint.getNightUnitRates(
-                            productCode = productCode,
-                            tariffCode = tariffCode,
-                            periodFrom = period?.start,
-                            periodTo = period?.endInclusive,
-                            page = page,
-                        )
-                        combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
+            getRatesFromDatabase(
+                tariffCode = tariffCode,
+                rateType = RateType.NIGHT_UNIT_RATE,
+                validity = period ?: Instant.DISTANT_PAST..Instant.DISTANT_FUTURE,
+                paymentMethod = PaymentMethod.UNKNOWN, // TODO: Not work for flexible tariffs
+            ) ?: run {
+                Logger.v(tag = "getNightUnitRates", messageString = "DB Cache misses for $period")
+                val combinedList = mutableListOf<Rate>()
+                var page: Int? = requestedPage
+                do {
+                    val apiResponse = productsEndpoint.getNightUnitRates(
+                        productCode = productCode,
+                        tariffCode = tariffCode,
+                        periodFrom = period?.start,
+                        periodTo = period?.endInclusive,
+                        page = page,
+                    )
+                    combinedList.addAll(apiResponse?.results?.map { it.toRate() } ?: emptyList())
 
-                        // cache the results
-                        apiResponse?.results?.map {
-                            it.toRateEntity(tariffCode = tariffCode, rateType = RateType.NIGHT_UNIT_RATE)
-                        }?.let {
-                            databaseDataSource.insertRates(rateEntity = it)
-                        }
+                    // cache the results
+                    apiResponse?.results?.map {
+                        it.toRateEntity(tariffCode = tariffCode, rateType = RateType.NIGHT_UNIT_RATE)
+                    }?.let {
+                        databaseDataSource.insertRates(rateEntity = it)
+                    }
 
-                        page = apiResponse?.getNextPageNumber()
-                    } while (page != null)
+                    page = apiResponse?.getNextPageNumber()
+                } while (page != null)
 
-                    combinedList
-                }
-            }.except<CancellationException, _>()
-        }
+                combinedList
+            }
+        }.except<CancellationException, _>()
     }
 
     /***
@@ -398,55 +390,53 @@ class OctopusGraphQLRepository(
         mpan: String,
         period: ClosedRange<Instant>,
         groupBy: ConsumptionTimeFrame,
-    ): Result<List<ConsumptionWithCost>> {
-        return withContext(dispatcher) {
-            runCatching {
-                // cache: if half-hourly, calculate the expected number of entries and see if the cache has them
-                getConsumptionsFromDatabase(
-                    deviceId = deviceId,
-                    period = period,
-                    groupBy = groupBy,
-                ) ?: run {
-                    Logger.v(tag = "getConsumption", messageString = "DB Cache misses for $period")
-                    val combinedList = mutableListOf<ConsumptionWithCost>()
-                    var afterCursor: String? = null
-                    do {
-                        val response = graphQLEndpoint.getMeasurements(
-                            accountNumber = accountNumber,
-                            deviceId = deviceId,
-                            marketSupplyPointId = mpan,
-                            start = period.start,
-                            end = period.endInclusive,
-                            readingFrequencyType = groupBy,
-                            afterCursor = afterCursor,
-                        )
+    ): Result<List<ConsumptionWithCost>> = withContext(dispatcher) {
+        runCatching {
+            // cache: if half-hourly, calculate the expected number of entries and see if the cache has them
+            getConsumptionsFromDatabase(
+                deviceId = deviceId,
+                period = period,
+                groupBy = groupBy,
+            ) ?: run {
+                Logger.v(tag = "getConsumption", messageString = "DB Cache misses for $period")
+                val combinedList = mutableListOf<ConsumptionWithCost>()
+                var afterCursor: String? = null
+                do {
+                    val response = graphQLEndpoint.getMeasurements(
+                        accountNumber = accountNumber,
+                        deviceId = deviceId,
+                        marketSupplyPointId = mpan,
+                        start = period.start,
+                        end = period.endInclusive,
+                        readingFrequencyType = groupBy,
+                        afterCursor = afterCursor,
+                    )
 
-                        combinedList.addAll(
-                            response.account?.properties?.firstOrNull()?.measurements?.edges?.mapNotNull {
-                                it?.node?.toConsumptionWithCost()
-                            } ?: emptyList(),
-                        )
+                    combinedList.addAll(
+                        response.account?.properties?.firstOrNull()?.measurements?.edges?.mapNotNull {
+                            it?.node?.toConsumptionWithCost()
+                        } ?: emptyList(),
+                    )
 
-                        // cache the results - only for half-hourly
-                        if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
-                            response.account?.properties?.firstOrNull()?.measurements?.edges?.mapNotNull {
-                                it?.node?.toConsumptionEntity(deviceId = deviceId)
-                            }?.let {
-                                databaseDataSource.insertConsumptions(consumptionEntity = it)
-                            }
+                    // cache the results - only for half-hourly
+                    if (groupBy == ConsumptionTimeFrame.HALF_HOURLY) {
+                        response.account?.properties?.firstOrNull()?.measurements?.edges?.mapNotNull {
+                            it?.node?.toConsumptionEntity(deviceId = deviceId)
+                        }?.let {
+                            databaseDataSource.insertConsumptions(consumptionEntity = it)
                         }
+                    }
 
-                        afterCursor = if (response.account?.properties?.firstOrNull()?.measurements?.pageInfo?.hasNextPage == true) {
-                            response.account.properties.firstOrNull()?.measurements?.pageInfo?.endCursor
-                        } else {
-                            null
-                        }
-                    } while (afterCursor != null)
+                    afterCursor = if (response.account?.properties?.firstOrNull()?.measurements?.pageInfo?.hasNextPage == true) {
+                        response.account.properties.firstOrNull()?.measurements?.pageInfo?.endCursor
+                    } else {
+                        null
+                    }
+                } while (afterCursor != null)
 
-                    combinedList
-                }
-            }.except<CancellationException, _>()
-        }
+                combinedList
+            }
+        }.except<CancellationException, _>()
     }
 
     /***
@@ -508,22 +498,20 @@ class OctopusGraphQLRepository(
         meterDeviceId: String,
         start: Instant,
         end: Instant,
-    ): Result<List<LiveConsumption>> {
-        return withContext(dispatcher) {
-            runCatching {
-                val response = graphQLEndpoint.getSmartMeterTelemetry(
-                    meterDeviceId = meterDeviceId,
-                    start = start,
-                    end = end,
-                )
+    ): Result<List<LiveConsumption>> = withContext(dispatcher) {
+        runCatching {
+            val response = graphQLEndpoint.getSmartMeterTelemetry(
+                meterDeviceId = meterDeviceId,
+                start = start,
+                end = end,
+            )
 
-                response.smartMeterTelemetry
-                    ?.filterNotNull()
-                    ?.mapNotNull { it.toLiveConsumption() }
-                    ?: emptyList()
-            }
-        }.except<CancellationException, _>()
-    }
+            response.smartMeterTelemetry
+                ?.filterNotNull()
+                ?.mapNotNull { it.toLiveConsumption() }
+                ?: emptyList()
+        }
+    }.except<CancellationException, _>()
 
     override suspend fun clearCache() {
         inMemoryCacheDataSource.clear()

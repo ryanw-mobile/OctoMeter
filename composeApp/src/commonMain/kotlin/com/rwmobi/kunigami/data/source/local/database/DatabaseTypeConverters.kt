@@ -22,32 +22,20 @@ import kotlin.time.Instant
 
 class DatabaseTypeConverters {
     @TypeConverter
-    fun toInstant(value: Long?): Instant? {
-        return value?.let { Instant.fromEpochMilliseconds(it) }
-    }
+    fun toInstant(value: Long?): Instant? = value?.let { Instant.fromEpochMilliseconds(it) }
 
     @TypeConverter
-    fun fromInstant(instant: Instant?): Long? {
-        return instant?.toEpochMilliseconds()
-    }
+    fun fromInstant(instant: Instant?): Long? = instant?.toEpochMilliseconds()
 
     @TypeConverter
-    fun fromRateType(rateType: RateType): Int {
-        return rateType.id
-    }
+    fun fromRateType(rateType: RateType): Int = rateType.id
 
     @TypeConverter
-    fun toRateType(id: Int): RateType {
-        return RateType.entries.first { it.id == id }
-    }
+    fun toRateType(id: Int): RateType = RateType.entries.first { it.id == id }
 
     @TypeConverter
-    fun fromPaymentMethod(paymentMethod: PaymentMethod): String {
-        return paymentMethod.name
-    }
+    fun fromPaymentMethod(paymentMethod: PaymentMethod): String = paymentMethod.name
 
     @TypeConverter
-    fun toPaymentMethod(value: String): PaymentMethod {
-        return PaymentMethod.fromValue(value = value)
-    }
+    fun toPaymentMethod(value: String): PaymentMethod = PaymentMethod.fromValue(value = value)
 }

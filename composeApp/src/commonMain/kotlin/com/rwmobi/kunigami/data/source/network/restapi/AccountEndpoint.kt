@@ -41,24 +41,22 @@ class AccountEndpoint(
     suspend fun getAccount(
         apiKey: String,
         accountNumber: String,
-    ): AccountApiResponse? {
-        return withContext(dispatcher) {
-            val response = httpClient.get("$endpointUrl/$accountNumber") {
-                header("Authorization", "Basic ${encodeApiKey(apiKey)}")
+    ): AccountApiResponse? = withContext(dispatcher) {
+        val response = httpClient.get("$endpointUrl/$accountNumber") {
+            header("Authorization", "Basic ${encodeApiKey(apiKey)}")
+        }
+
+        when (response.status) {
+            HttpStatusCode.OK -> {
+                response.body() as AccountApiResponse?
             }
 
-            when (response.status) {
-                HttpStatusCode.OK -> {
-                    response.body() as AccountApiResponse?
-                }
+            HttpStatusCode.NotFound -> {
+                null
+            }
 
-                HttpStatusCode.NotFound -> {
-                    null
-                }
-
-                else -> {
-                    throw HttpException(response.status.value)
-                }
+            else -> {
+                throw HttpException(response.status.value)
             }
         }
     }

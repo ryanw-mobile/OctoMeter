@@ -48,27 +48,25 @@ fun ProductDetailsDto.toProductSummary() = ProductSummary(
     brand = brand,
 )
 
-fun EnergyProductsQuery.Node.toProductSummary(): ProductSummary {
-    return ProductSummary(
-        code = code,
-        direction = ProductDirection.fromApiValue(direction?.rawValue),
-        fullName = fullName,
-        displayName = displayName,
-        description = description,
-        features = mutableListOf<ProductFeature>().apply {
-            if (isVariable) add(ProductFeature.VARIABLE)
-            if (isGreen) add(ProductFeature.GREEN)
-            if (isPrepay) add(ProductFeature.PREPAY)
-            if (isBusiness) add(ProductFeature.BUSINESS)
-            if (isChargedHalfHourly) add(ProductFeature.CHARGEDHALFHOURLY)
-            // if (isTracker) add(ProductFeature.TRACKER)
-            // if (isRestricted) add(ProductFeature.RESTRICTED)
-        }.toList(),
-        term = term,
-        availability = Instant.parse(availableFrom.toString())..(availableTo?.let { Instant.parse(it.toString()) } ?: Instant.DISTANT_FUTURE),
-        brand = "OCTOPUS_ENERGY", // Filtered in GraphQL query
-    )
-}
+fun EnergyProductsQuery.Node.toProductSummary(): ProductSummary = ProductSummary(
+    code = code,
+    direction = ProductDirection.fromApiValue(direction?.rawValue),
+    fullName = fullName,
+    displayName = displayName,
+    description = description,
+    features = mutableListOf<ProductFeature>().apply {
+        if (isVariable) add(ProductFeature.VARIABLE)
+        if (isGreen) add(ProductFeature.GREEN)
+        if (isPrepay) add(ProductFeature.PREPAY)
+        if (isBusiness) add(ProductFeature.BUSINESS)
+        if (isChargedHalfHourly) add(ProductFeature.CHARGEDHALFHOURLY)
+        // if (isTracker) add(ProductFeature.TRACKER)
+        // if (isRestricted) add(ProductFeature.RESTRICTED)
+    }.toList(),
+    term = term,
+    availability = Instant.parse(availableFrom.toString())..(availableTo?.let { Instant.parse(it.toString()) } ?: Instant.DISTANT_FUTURE),
+    brand = "OCTOPUS_ENERGY", // Filtered in GraphQL query
+)
 
 fun SingleEnergyProductQuery.EnergyProduct.toProductDetails(): ProductDetails {
     // In GraphQL currently we default to direct debit

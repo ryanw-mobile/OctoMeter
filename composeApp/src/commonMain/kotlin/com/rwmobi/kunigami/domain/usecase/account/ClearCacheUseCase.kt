@@ -26,11 +26,9 @@ class ClearCacheUseCase(
     private val octopusApiRepository: OctopusApiRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) {
-    suspend operator fun invoke(): Result<Unit> {
-        return withContext(dispatcher) {
-            runCatching {
-                octopusApiRepository.clearCache()
-            }.except<CancellationException, _>()
-        }
+    suspend operator fun invoke(): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            octopusApiRepository.clearCache()
+        }.except<CancellationException, _>()
     }
 }

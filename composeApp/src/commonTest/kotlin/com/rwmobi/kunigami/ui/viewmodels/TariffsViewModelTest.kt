@@ -15,8 +15,7 @@
 
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.rwmobi.kunigami.domain.exceptions.HttpException
 import com.rwmobi.kunigami.domain.model.product.ProductDetails
@@ -97,11 +96,10 @@ class TariffsViewModelTest {
                 widthDp = 1024.dp,
             ),
             windowSizeClass = WindowSizeClass.calculateFromSize(
-                size = Size(
-                    width = 1280f,
-                    height = 1024f,
+                size = DpSize(
+                    width = 1280.dp,
+                    height = 1024.dp,
                 ),
-                density = Density(density = 2.0f),
             ),
         )
     }
@@ -293,22 +291,21 @@ class TariffsViewModelTest {
     }
 
     @Test
-    fun `getFilteredProducts should handle 403 Forbidden failure with specific message`() =
-        runTest {
-            userPreferencesRepository.demoMode = true
-            octopusApiRepository.setProductsResponse =
-                Result.failure(HttpException(httpStatusCode = 403))
+    fun `getFilteredProducts should handle 403 Forbidden failure with specific message`() = runTest {
+        userPreferencesRepository.demoMode = true
+        octopusApiRepository.setProductsResponse =
+            Result.failure(HttpException(httpStatusCode = 403))
 
-            tariffsViewModel.refresh()
-            val uiState = tariffsViewModel.uiState.value
+        tariffsViewModel.refresh()
+        val uiState = tariffsViewModel.uiState.value
 
-            assertFalse(uiState.isLoading)
-            assertTrue(uiState.requestedScreenType is TariffsScreenType.Error)
-            val errorScreen = uiState.requestedScreenType as TariffsScreenType.Error
-            assertTrue(errorScreen.specialErrorScreen is SpecialErrorScreen.HttpError)
-            assertEquals(
-                403,
-                (errorScreen.specialErrorScreen as SpecialErrorScreen.HttpError).statusCode,
-            )
-        }
+        assertFalse(uiState.isLoading)
+        assertTrue(uiState.requestedScreenType is TariffsScreenType.Error)
+        val errorScreen = uiState.requestedScreenType as TariffsScreenType.Error
+        assertTrue(errorScreen.specialErrorScreen is SpecialErrorScreen.HttpError)
+        assertEquals(
+            403,
+            (errorScreen.specialErrorScreen as SpecialErrorScreen.HttpError).statusCode,
+        )
+    }
 }

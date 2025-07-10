@@ -53,17 +53,15 @@ class ApolloGraphQLEndpoint(
         postcode: String,
         afterCursor: String?,
         pageSize: Int,
-    ): EnergyProductsQuery.Data {
-        return withContext(dispatcher) {
-            runQuery(
-                query = EnergyProductsQuery(
-                    postcode = postcode,
-                    pageSize = pageSize,
-                    afterCursor = afterCursor?.let { Optional.present(it) } ?: Optional.absent(),
-                ),
-                requireAuthentication = false,
-            )
-        }
+    ): EnergyProductsQuery.Data = withContext(dispatcher) {
+        runQuery(
+            query = EnergyProductsQuery(
+                postcode = postcode,
+                pageSize = pageSize,
+                afterCursor = afterCursor?.let { Optional.present(it) } ?: Optional.absent(),
+            ),
+            requireAuthentication = false,
+        )
     }
 
     /***
@@ -74,18 +72,16 @@ class ApolloGraphQLEndpoint(
         postcode: String,
         afterCursor: String?,
         pageSize: Int,
-    ): SingleEnergyProductQuery.Data {
-        return withContext(dispatcher) {
-            runQuery(
-                query = SingleEnergyProductQuery(
-                    productCode = productCode,
-                    postcode = postcode,
-                    pageSize = pageSize,
-                    afterCursor = afterCursor?.let { Optional.present(it) } ?: Optional.absent(),
-                ),
-                requireAuthentication = false,
-            )
-        }
+    ): SingleEnergyProductQuery.Data = withContext(dispatcher) {
+        runQuery(
+            query = SingleEnergyProductQuery(
+                productCode = productCode,
+                postcode = postcode,
+                pageSize = pageSize,
+                afterCursor = afterCursor?.let { Optional.present(it) } ?: Optional.absent(),
+            ),
+            requireAuthentication = false,
+        )
     }
 
     /***
@@ -94,33 +90,29 @@ class ApolloGraphQLEndpoint(
      */
     override suspend fun getAccount(
         accountNumber: String,
-    ): PropertiesQuery.Data {
-        return withContext(dispatcher) {
-            runQuery(
-                query = PropertiesQuery(
-                    accountNumber = accountNumber,
-                ),
-                requireAuthentication = true,
-            )
-        }
+    ): PropertiesQuery.Data = withContext(dispatcher) {
+        runQuery(
+            query = PropertiesQuery(
+                accountNumber = accountNumber,
+            ),
+            requireAuthentication = true,
+        )
     }
 
     override suspend fun getSmartMeterTelemetry(
         meterDeviceId: String,
         start: Instant,
         end: Instant,
-    ): SmartMeterTelemetryQuery.Data {
-        return withContext(dispatcher) {
-            runQuery(
-                query = SmartMeterTelemetryQuery(
-                    meterDeviceId = meterDeviceId,
-                    start = Optional.present(start),
-                    end = Optional.present(end),
-                    grouping = Optional.present(TelemetryGrouping.ONE_MINUTE),
-                ),
-                requireAuthentication = true,
-            )
-        }
+    ): SmartMeterTelemetryQuery.Data = withContext(dispatcher) {
+        runQuery(
+            query = SmartMeterTelemetryQuery(
+                meterDeviceId = meterDeviceId,
+                start = Optional.present(start),
+                end = Optional.present(end),
+                grouping = Optional.present(TelemetryGrouping.ONE_MINUTE),
+            ),
+            requireAuthentication = true,
+        )
     }
 
     override suspend fun getMeasurements(
@@ -132,34 +124,32 @@ class ApolloGraphQLEndpoint(
         readingFrequencyType: ConsumptionTimeFrame,
         afterCursor: String?,
         pageSize: Int,
-    ): GetMeasurementsQuery.Data {
-        return withContext(dispatcher) {
-            runQuery(
-                query = GetMeasurementsQuery(
-                    accountNumber = accountNumber,
-                    startAt = Optional.present(start),
-                    endAt = Optional.present(end),
-                    first = pageSize,
-                    timezone = Optional.present("Europe/London"),
-                    afterCursor = afterCursor?.let { Optional.present(it) } ?: Optional.absent(),
-                    utilityFilters = Optional.present(
-                        listOf(
-                            UtilityFiltersInput(
-                                electricityFilters = Optional.present(
-                                    ElectricityFiltersInput(
-                                        deviceId = Optional.present(deviceId),
-                                        marketSupplyPointId = Optional.present(marketSupplyPointId),
-                                        readingDirection = Optional.present(ReadingDirectionType.CONSUMPTION),
-                                        readingFrequencyType = Optional.present(ReadingFrequencyType.valueOf(readingFrequencyType.apiValue)),
-                                    ),
+    ): GetMeasurementsQuery.Data = withContext(dispatcher) {
+        runQuery(
+            query = GetMeasurementsQuery(
+                accountNumber = accountNumber,
+                startAt = Optional.present(start),
+                endAt = Optional.present(end),
+                first = pageSize,
+                timezone = Optional.present("Europe/London"),
+                afterCursor = afterCursor?.let { Optional.present(it) } ?: Optional.absent(),
+                utilityFilters = Optional.present(
+                    listOf(
+                        UtilityFiltersInput(
+                            electricityFilters = Optional.present(
+                                ElectricityFiltersInput(
+                                    deviceId = Optional.present(deviceId),
+                                    marketSupplyPointId = Optional.present(marketSupplyPointId),
+                                    readingDirection = Optional.present(ReadingDirectionType.CONSUMPTION),
+                                    readingFrequencyType = Optional.present(ReadingFrequencyType.valueOf(readingFrequencyType.apiValue)),
                                 ),
                             ),
                         ),
                     ),
                 ),
-                requireAuthentication = true,
-            )
-        }
+            ),
+            requireAuthentication = true,
+        )
     }
 
     //region Token Management
@@ -201,28 +191,26 @@ class ApolloGraphQLEndpoint(
         }
     }
 
-    private suspend fun obtainKrakenToken(input: ObtainJSONWebTokenInput): Result<Token> {
-        return withContext(dispatcher) {
-            runCatching {
-                val response = apolloClient.mutation(ObtainKrakenTokenMutation(input)).execute()
+    private suspend fun obtainKrakenToken(input: ObtainJSONWebTokenInput): Result<Token> = withContext(dispatcher) {
+        runCatching {
+            val response = apolloClient.mutation(ObtainKrakenTokenMutation(input)).execute()
 
-                response.data?.obtainKrakenToken?.let {
-                    // Handle (potentially partial) data
-                    Token.fromObtainKrakenToken(obtainKrakenToken = it)
+            response.data?.obtainKrakenToken?.let {
+                // Handle (potentially partial) data
+                Token.fromObtainKrakenToken(obtainKrakenToken = it)
+            } ?: run {
+                // Something wrong happened
+                response.exception?.let {
+                    // Handle fetch errors
+                    it.printStackTrace()
+                    throw it
                 } ?: run {
-                    // Something wrong happened
-                    response.exception?.let {
-                        // Handle fetch errors
-                        it.printStackTrace()
-                        throw it
-                    } ?: run {
-                        // Handle GraphQL errors in response.errors
-                        val concatenatedMessages = response.errors?.joinToString(separator = ",") { it.message }
-                        throw IllegalStateException("Unhandled response errors: $concatenatedMessages")
-                    }
+                    // Handle GraphQL errors in response.errors
+                    val concatenatedMessages = response.errors?.joinToString(separator = ",") { it.message }
+                    throw IllegalStateException("Unhandled response errors: $concatenatedMessages")
                 }
             }
-        }.except<CancellationException, _>()
-    }
+        }
+    }.except<CancellationException, _>()
     //endregion
 }

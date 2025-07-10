@@ -28,55 +28,43 @@ class OctopusUserPreferencesRepository(
     private val preferencesStore: PreferencesStore,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : UserPreferencesRepository {
-    override suspend fun isDemoMode(): Boolean {
-        return withContext(dispatcher) {
-            when {
-                getApiKey() == null -> true
-                getAccountNumber() == null -> true
-                getMpan() == null -> true
-                getMeterSerialNumber() == null -> true
-                else -> false
-            }
+    override suspend fun isDemoMode(): Boolean = withContext(dispatcher) {
+        when {
+            getApiKey() == null -> true
+            getAccountNumber() == null -> true
+            getMpan() == null -> true
+            getMeterSerialNumber() == null -> true
+            else -> false
         }
     }
 
-    override suspend fun getApiKey(): String? {
-        return withContext(dispatcher) {
-            preferencesStore.getStringData(key = PreferencesKeys.API_KEY.name)
-        }
+    override suspend fun getApiKey(): String? = withContext(dispatcher) {
+        preferencesStore.getStringData(key = PreferencesKeys.API_KEY.name)
     }
 
-    override suspend fun getAccountNumber(): String? {
-        return withContext(dispatcher) {
-            preferencesStore.getStringData(key = PreferencesKeys.ACCOUNT_NUMBER.name)
-        }
+    override suspend fun getAccountNumber(): String? = withContext(dispatcher) {
+        preferencesStore.getStringData(key = PreferencesKeys.ACCOUNT_NUMBER.name)
     }
 
-    override suspend fun getMpan(): String? {
-        return withContext(dispatcher) {
-            preferencesStore.getStringData(key = PreferencesKeys.MPAN.name)
-        }
+    override suspend fun getMpan(): String? = withContext(dispatcher) {
+        preferencesStore.getStringData(key = PreferencesKeys.MPAN.name)
     }
 
-    override suspend fun getMeterSerialNumber(): String? {
-        return withContext(dispatcher) {
-            preferencesStore.getStringData(key = PreferencesKeys.METER_SERIAL_NUMBER.name)
-        }
+    override suspend fun getMeterSerialNumber(): String? = withContext(dispatcher) {
+        preferencesStore.getStringData(key = PreferencesKeys.METER_SERIAL_NUMBER.name)
     }
 
     /**
      * This is currently used by desktop only.
      */
-    override suspend fun getWindowSize(): DpSize? {
-        return withContext(dispatcher) {
-            val width = preferencesStore.getFloatData(key = PreferencesKeys.WINDOW_WIDTH.name)
-            val height = preferencesStore.getFloatData(key = PreferencesKeys.WINDOW_HEIGHT.name)
+    override suspend fun getWindowSize(): DpSize? = withContext(dispatcher) {
+        val width = preferencesStore.getFloatData(key = PreferencesKeys.WINDOW_WIDTH.name)
+        val height = preferencesStore.getFloatData(key = PreferencesKeys.WINDOW_HEIGHT.name)
 
-            if (width == null || height == null) {
-                null
-            } else {
-                DpSize(width = width.dp, height = height.dp)
-            }
+        if (width == null || height == null) {
+            null
+        } else {
+            DpSize(width = width.dp, height = height.dp)
         }
     }
 

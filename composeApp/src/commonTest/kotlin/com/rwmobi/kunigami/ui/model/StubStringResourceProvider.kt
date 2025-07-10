@@ -18,7 +18,5 @@ import com.rwmobi.kunigami.ui.tools.interfaces.StringResourceProvider
 import org.jetbrains.compose.resources.StringResource
 
 class StubStringResourceProvider : StringResourceProvider {
-    override suspend fun getString(resource: StringResource, vararg formatArgs: Any): String {
-        return "Stubbed string"
-    }
+    override suspend fun getString(resource: StringResource, vararg formatArgs: Any): String = "Stubbed string"
 }

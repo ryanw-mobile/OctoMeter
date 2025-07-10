@@ -21,20 +21,18 @@ import com.rwmobi.kunigami.domain.exceptions.HttpException
 import io.ktor.util.network.UnresolvedAddressException
 import java.net.UnknownHostException
 
-actual fun Throwable.mapFromPlatform(): Throwable {
-    return when (this) {
-        is UnknownHostException -> {
-            UnresolvedAddressException()
-        }
-
-        is ApolloHttpException -> {
-            HttpException(httpStatusCode = statusCode)
-        }
-
-        is ApolloNetworkException -> {
-            UnresolvedAddressException()
-        }
-
-        else -> this
+actual fun Throwable.mapFromPlatform(): Throwable = when (this) {
+    is UnknownHostException -> {
+        UnresolvedAddressException()
     }
+
+    is ApolloHttpException -> {
+        HttpException(httpStatusCode = statusCode)
+    }
+
+    is ApolloNetworkException -> {
+        UnresolvedAddressException()
+    }
+
+    else -> this
 }

@@ -43,10 +43,8 @@ fun List<Consumption>.getConsumptionDaySpan(): Int {
     }
 }
 
-fun List<Consumption>.getConsumptionRange(): ClosedFloatingPointRange<Double> {
-    return if (isEmpty()) {
-        0.0..0.0 // Return a default range if the list is empty
-    } else {
-        0.0..ceil(maxOf { it.kWhConsumed } * 10) / 10.0
-    }
+fun List<Consumption>.getConsumptionRange(): ClosedFloatingPointRange<Double> = if (isEmpty()) {
+    0.0..0.0 // Return a default range if the list is empty
+} else {
+    0.0..ceil(maxOf { it.kWhConsumed } * 10) / 10.0
 }

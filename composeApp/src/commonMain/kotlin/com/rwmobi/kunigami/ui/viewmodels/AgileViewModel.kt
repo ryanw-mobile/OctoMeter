@@ -256,15 +256,13 @@ class AgileViewModel(
     /***
      * Return the max of flexible unit rate (if available), fixed unit rate (if available) and the given max rate supplied by the caller.
      */
-    private fun calculateMaxChartRange(vatIncludedUnitRate: Double): Double {
-        return ceil(
-            maxOf(
-                _uiState.value.latestFixedTariff?.vatInclusiveStandardUnitRate ?: 0.0,
-                _uiState.value.latestFlexibleTariff?.vatInclusiveStandardUnitRate ?: 0.0,
-                vatIncludedUnitRate,
-            ) * 10,
-        ) / 10.0
-    }
+    private fun calculateMaxChartRange(vatIncludedUnitRate: Double): Double = ceil(
+        maxOf(
+            _uiState.value.latestFixedTariff?.vatInclusiveStandardUnitRate ?: 0.0,
+            _uiState.value.latestFlexibleTariff?.vatInclusiveStandardUnitRate ?: 0.0,
+            vatIncludedUnitRate,
+        ) * 10,
+    ) / 10.0
 
     private suspend fun getAgileTariffAndStopLoading(
         productCode: String,
@@ -293,15 +291,11 @@ class AgileViewModel(
         )
     }
 
-    private fun groupChartCells(rates: List<Rate>): List<RateGroup> {
-        return rates
-            .groupBy { it.validity.start.getLocalDateString() }
-            .map { (date, items) -> RateGroup(title = date, rates = items) }
-    }
+    private fun groupChartCells(rates: List<Rate>): List<RateGroup> = rates
+        .groupBy { it.validity.start.getLocalDateString() }
+        .map { (date, items) -> RateGroup(title = date, rates = items) }
 
-    private suspend fun getLatestAgileProductCode(postcode: String): String {
-        return getLatestProductByKeywordUseCase(keyword = agileTariffKeyword, postcode = postcode) ?: fallBackAgileProductCode
-    }
+    private suspend fun getLatestAgileProductCode(postcode: String): String = getLatestProductByKeywordUseCase(keyword = agileTariffKeyword, postcode = postcode) ?: fallBackAgileProductCode
 
     /**
      * Best effort to fetch reference tariffs for comparison. No harm if it fails, so it won't stop loading.
@@ -358,12 +352,10 @@ class AgileViewModel(
         )
     }
 
-    private fun getMinimumVatInclusivePrice(rateGroupedCells: List<RateGroup>): Double {
-        return rateGroupedCells
-            .flatMap { it.rates }
-            .map { it.vatInclusivePrice }
-            .minOrNull() ?: 0.0
-    }
+    private fun getMinimumVatInclusivePrice(rateGroupedCells: List<RateGroup>): Double = rateGroupedCells
+        .flatMap { it.rates }
+        .map { it.vatInclusivePrice }
+        .minOrNull() ?: 0.0
 
     override fun onCleared() {
         super.onCleared()

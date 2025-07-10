@@ -49,11 +49,9 @@ data class TariffsUIState(
 ) {
     private val windowWidthCompact: Dp = 599.dp
 
-    fun shouldUseBottomSheet(): Boolean {
-        return with(requestedLayout) {
-            (this is TariffScreenLayoutStyle.Wide && useBottomSheet) ||
-                (this is TariffScreenLayoutStyle.Compact && useBottomSheet)
-        }
+    fun shouldUseBottomSheet(): Boolean = with(requestedLayout) {
+        (this is TariffScreenLayoutStyle.Wide && useBottomSheet) ||
+            (this is TariffScreenLayoutStyle.Compact && useBottomSheet)
     }
 
     // Make it less intrusive when hopping among products
@@ -79,37 +77,33 @@ data class TariffsUIState(
         ) // .updateScreenType()
     }
 
-    fun updateScreenType(): TariffsUIState {
-        return copy(
-            requestedScreenType = when {
-                // Error Screen is kept until being told to dismiss
-                isErrorScreen() -> requestedScreenType
-                shouldShowTariffsList() -> TariffsScreenType.List
-                hasProductDetailsLoaded() -> TariffsScreenType.FullScreenDetail
-                else -> requestedScreenType // nothing triggered for a change, just keep it
-            },
-        )
-    }
+    fun updateScreenType(): TariffsUIState = copy(
+        requestedScreenType = when {
+            // Error Screen is kept until being told to dismiss
+            isErrorScreen() -> requestedScreenType
+            shouldShowTariffsList() -> TariffsScreenType.List
+            hasProductDetailsLoaded() -> TariffsScreenType.FullScreenDetail
+            else -> requestedScreenType // nothing triggered for a change, just keep it
+        },
+    )
 
-    suspend fun filterErrorAndStopLoading(throwable: Throwable): TariffsUIState {
-        return when (val translatedThrowable = throwable.mapFromPlatform()) {
-            is HttpException -> {
-                copy(
-                    requestedScreenType = TariffsScreenType.Error(SpecialErrorScreen.HttpError(statusCode = translatedThrowable.httpStatusCode)),
-                    isLoading = false,
-                )
-            }
+    suspend fun filterErrorAndStopLoading(throwable: Throwable): TariffsUIState = when (val translatedThrowable = throwable.mapFromPlatform()) {
+        is HttpException -> {
+            copy(
+                requestedScreenType = TariffsScreenType.Error(SpecialErrorScreen.HttpError(statusCode = translatedThrowable.httpStatusCode)),
+                isLoading = false,
+            )
+        }
 
-            is UnresolvedAddressException -> {
-                copy(
-                    requestedScreenType = TariffsScreenType.Error(SpecialErrorScreen.NetworkError),
-                    isLoading = false,
-                )
-            }
+        is UnresolvedAddressException -> {
+            copy(
+                requestedScreenType = TariffsScreenType.Error(SpecialErrorScreen.NetworkError),
+                isLoading = false,
+            )
+        }
 
-            else -> {
-                handleErrorAndStopLoading(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
-            }
+        else -> {
+            handleErrorAndStopLoading(message = throwable.message ?: getString(resource = Res.string.account_error_load_account))
         }
     }
 
@@ -128,18 +122,12 @@ data class TariffsUIState(
         )
     }
 
-    private fun shouldShowTariffsList(): Boolean {
-        return productDetails == null ||
-            requestedLayout is TariffScreenLayoutStyle.ListDetailPane ||
-            requestedLayout == TariffScreenLayoutStyle.Compact(useBottomSheet = true) ||
-            requestedLayout == TariffScreenLayoutStyle.Wide(useBottomSheet = true)
-    }
+    private fun shouldShowTariffsList(): Boolean = productDetails == null ||
+        requestedLayout is TariffScreenLayoutStyle.ListDetailPane ||
+        requestedLayout == TariffScreenLayoutStyle.Compact(useBottomSheet = true) ||
+        requestedLayout == TariffScreenLayoutStyle.Wide(useBottomSheet = true)
 
-    private fun isErrorScreen(): Boolean {
-        return requestedScreenType is TariffsScreenType.Error
-    }
+    private fun isErrorScreen(): Boolean = requestedScreenType is TariffsScreenType.Error
 
-    private fun hasProductDetailsLoaded(): Boolean {
-        return productDetails != null
-    }
+    private fun hasProductDetailsLoaded(): Boolean = productDetails != null
 }

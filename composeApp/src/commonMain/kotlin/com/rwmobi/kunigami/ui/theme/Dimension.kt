@@ -89,6 +89,4 @@ val sw360Dimension = Dimension(
 )
 
 @Composable
-fun ScreenSizeInfo.getDimension(): Dimension {
-    return if (widthDp <= 360.dp) smallDimension else sw360Dimension
-}
+fun ScreenSizeInfo.getDimension(): Dimension = if (widthDp <= 360.dp) smallDimension else sw360Dimension

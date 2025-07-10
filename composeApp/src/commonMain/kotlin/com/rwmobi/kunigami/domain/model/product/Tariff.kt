@@ -67,9 +67,7 @@ data class Tariff(
             return RetailRegion.fromCode(regionCode)
         }
 
-        fun isSingleFuel(tariffCode: String): Boolean {
-            return tariffCode.toCharArray().getOrNull(2)?.equals('1') == true
-        }
+        fun isSingleFuel(tariffCode: String): Boolean = tariffCode.toCharArray().getOrNull(2)?.equals('1') == true
 
         fun isAgileProduct(tariffCode: String) = extractProductCode(tariffCode = tariffCode)?.contains("AGILE") == true
     }
@@ -79,86 +77,80 @@ data class Tariff(
     fun isSingleFuel(): Boolean = isSingleFuel(tariffCode = tariffCode)
     fun isSameTariff(tariffCode: String?) = this.tariffCode == tariffCode
 
-    fun getElectricityTariffType(): ElectricityTariffType {
-        return when {
-            vatInclusiveOffPeakRate != null && vatInclusiveDayUnitRate != null && vatInclusiveNightUnitRate != null -> ElectricityTariffType.THREE_RATE
-            vatInclusiveDayUnitRate != null && vatInclusiveNightUnitRate != null -> ElectricityTariffType.DAY_NIGHT
-            vatInclusiveStandardUnitRate != null -> ElectricityTariffType.STANDARD
-            else -> ElectricityTariffType.UNKNOWN
-        }
+    fun getElectricityTariffType(): ElectricityTariffType = when {
+        vatInclusiveOffPeakRate != null && vatInclusiveDayUnitRate != null && vatInclusiveNightUnitRate != null -> ElectricityTariffType.THREE_RATE
+        vatInclusiveDayUnitRate != null && vatInclusiveNightUnitRate != null -> ElectricityTariffType.DAY_NIGHT
+        vatInclusiveStandardUnitRate != null -> ElectricityTariffType.STANDARD
+        else -> ElectricityTariffType.UNKNOWN
     }
 
-    fun containsValidUnitRate(): Boolean {
-        return when (getElectricityTariffType()) {
-            ElectricityTariffType.STANDARD -> {
-                vatInclusiveStandardUnitRate != null || isVariable
-            }
-
-            ElectricityTariffType.DAY_NIGHT -> {
-                vatInclusiveDayUnitRate != null &&
-                    vatInclusiveNightUnitRate != null
-            }
-
-            ElectricityTariffType.THREE_RATE -> {
-                vatInclusiveDayUnitRate != null &&
-                    vatInclusiveNightUnitRate != null &&
-                    vatInclusiveOffPeakRate != null
-            }
-
-            else -> false
+    fun containsValidUnitRate(): Boolean = when (getElectricityTariffType()) {
+        ElectricityTariffType.STANDARD -> {
+            vatInclusiveStandardUnitRate != null || isVariable
         }
+
+        ElectricityTariffType.DAY_NIGHT -> {
+            vatInclusiveDayUnitRate != null &&
+                vatInclusiveNightUnitRate != null
+        }
+
+        ElectricityTariffType.THREE_RATE -> {
+            vatInclusiveDayUnitRate != null &&
+                vatInclusiveNightUnitRate != null &&
+                vatInclusiveOffPeakRate != null
+        }
+
+        else -> false
     }
 
     // TODO: This function will be removed once we have migrated to get billing data from GraphQL
-    fun resolveUnitRate(referencePoint: Instant? = null): Double? {
-        return when (getElectricityTariffType()) {
-            ElectricityTariffType.STANDARD -> {
-                vatInclusiveStandardUnitRate
-            }
+    fun resolveUnitRate(referencePoint: Instant? = null): Double? = when (getElectricityTariffType()) {
+        ElectricityTariffType.STANDARD -> {
+            vatInclusiveStandardUnitRate
+        }
 
-            ElectricityTariffType.DAY_NIGHT -> {
-                // TODO: Each tariff may have different time range
-                // Night: 00:30 - 07:30 UTC
-                referencePoint?.let { timestamp ->
-                    val utcTime = timestamp.toLocalDateTime(timeZone = TimeZone.UTC).time
-                    val nightRateStart = LocalTime(hour = 0, minute = 30)
-                    val nightRateEnd = LocalTime(hour = 7, minute = 30)
-                    if (utcTime in nightRateStart..nightRateEnd) {
+        ElectricityTariffType.DAY_NIGHT -> {
+            // TODO: Each tariff may have different time range
+            // Night: 00:30 - 07:30 UTC
+            referencePoint?.let { timestamp ->
+                val utcTime = timestamp.toLocalDateTime(timeZone = TimeZone.UTC).time
+                val nightRateStart = LocalTime(hour = 0, minute = 30)
+                val nightRateEnd = LocalTime(hour = 7, minute = 30)
+                if (utcTime in nightRateStart..nightRateEnd) {
+                    vatInclusiveNightUnitRate
+                } else {
+                    vatInclusiveDayUnitRate
+                }
+            }
+        }
+
+        ElectricityTariffType.THREE_RATE -> {
+            // TODO: Each tariff may have different time range
+            // Peak: 16:00 - 19:00
+            // Night: 00:30 - 07:30 UTC
+            referencePoint?.let { timestamp ->
+                val localtime = timestamp.toLocalDateTime(timeZone = TimeZone.of("Europe/London")).time
+                val peakRateStart = LocalTime(hour = 16, minute = 0)
+                val peakRateEnd = LocalTime(hour = 19, minute = 0)
+                val nightRateStart = LocalTime(hour = 2, minute = 0)
+                val nightRateEnd = LocalTime(hour = 5, minute = 0)
+                when (localtime) {
+                    in nightRateStart..nightRateEnd -> {
                         vatInclusiveNightUnitRate
-                    } else {
+                    }
+
+                    in peakRateStart..peakRateEnd -> {
                         vatInclusiveDayUnitRate
                     }
-                }
-            }
 
-            ElectricityTariffType.THREE_RATE -> {
-                // TODO: Each tariff may have different time range
-                // Peak: 16:00 - 19:00
-                // Night: 00:30 - 07:30 UTC
-                referencePoint?.let { timestamp ->
-                    val localtime = timestamp.toLocalDateTime(timeZone = TimeZone.of("Europe/London")).time
-                    val peakRateStart = LocalTime(hour = 16, minute = 0)
-                    val peakRateEnd = LocalTime(hour = 19, minute = 0)
-                    val nightRateStart = LocalTime(hour = 2, minute = 0)
-                    val nightRateEnd = LocalTime(hour = 5, minute = 0)
-                    when (localtime) {
-                        in nightRateStart..nightRateEnd -> {
-                            vatInclusiveNightUnitRate
-                        }
-
-                        in peakRateStart..peakRateEnd -> {
-                            vatInclusiveDayUnitRate
-                        }
-
-                        else -> {
-                            vatInclusiveOffPeakRate
-                        }
+                    else -> {
+                        vatInclusiveOffPeakRate
                     }
                 }
             }
-
-            else -> null
         }
+
+        else -> null
     }
 
     fun isAgileProduct() = extractProductCode()?.contains("AGILE") == true

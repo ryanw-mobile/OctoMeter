@@ -20,6 +20,4 @@ import com.russhwolf.settings.KeychainSettings
 import com.russhwolf.settings.Settings
 
 @OptIn(ExperimentalSettingsImplementation::class)
-fun provideSettings(serviceName: String): Settings {
-    return KeychainSettings(serviceName)
-}
+fun provideSettings(serviceName: String): Settings = KeychainSettings(serviceName)

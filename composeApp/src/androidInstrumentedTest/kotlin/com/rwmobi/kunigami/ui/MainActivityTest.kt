@@ -51,24 +51,23 @@ class MainActivityTest {
      * crashes triggered by some known high-risk dependencies like Jetpack LifeCycle.
      */
     @Test
-    fun navigationLayoutIsShownCorrectly() =
-        runBlocking {
-            with(mainActivityTestRobot) {
-                // Make sure we start with Natural orientation
-                uiDevice.setOrientationNatural()
-                assertNavigationBarIsDisplayed()
+    fun navigationLayoutIsShownCorrectly() = runBlocking {
+        with(mainActivityTestRobot) {
+            // Make sure we start with Natural orientation
+            uiDevice.setOrientationNatural()
+            assertNavigationBarIsDisplayed()
 
-                composeTestRule.waitForIdle()
+            composeTestRule.waitForIdle()
 
-                // Rotate to landscape
-                uiDevice.setOrientationLeft()
-                assertNavigationRailIsDisplayed()
+            // Rotate to landscape
+            uiDevice.setOrientationLeft()
+            assertNavigationRailIsDisplayed()
 
-                composeTestRule.waitForIdle()
+            composeTestRule.waitForIdle()
 
-                // Rotate to portrait
-                uiDevice.setOrientationNatural()
-                assertNavigationBarIsDisplayed()
-            }
+            // Rotate to portrait
+            uiDevice.setOrientationNatural()
+            assertNavigationBarIsDisplayed()
         }
+    }
 }

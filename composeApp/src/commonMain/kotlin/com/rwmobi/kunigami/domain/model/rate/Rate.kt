@@ -24,7 +24,5 @@ data class Rate(
     val validity: ClosedRange<Instant>, // Caller should end using Instant.DISTANT_FUTURE if API returns null
     val paymentMethod: PaymentMethod,
 ) {
-    fun isActive(referencePoint: Instant): Boolean {
-        return validity.contains(referencePoint)
-    }
+    fun isActive(referencePoint: Instant): Boolean = validity.contains(referencePoint)
 }
