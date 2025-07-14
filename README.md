@@ -1,4 +1,4 @@
-## OctoMeter: Empowering Smart Electricity Usage<br/>[![Pull request](https://img.shields.io/badge/PRs-welcome-success?style=flat)](https://github.com/ryanw-mobile/OctoMeter/pulls) ![GitHub Repo stars](https://img.shields.io/github/stars/ryanw-mobile/OctoMeter?style=flat) ![Gradle Build](https://github.com/ryanw-mobile/OctoMeter/actions/workflows/main_build.yml/badge.svg) [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage) [![Codacy Grade Badge](https://app.codacy.com/project/badge/Grade/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
+## OctoMeter: Empowering Smart Electricity Usage<br/>![GitHub Repo stars](https://img.shields.io/github/stars/ryanw-mobile/OctoMeter?style=flat) ![Gradle Build](https://github.com/ryanw-mobile/OctoMeter/actions/workflows/main_build.yml/badge.svg) [![Codacy Coverage Badge](https://app.codacy.com/project/badge/Coverage/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage) [![Codacy Grade Badge](https://app.codacy.com/project/badge/Grade/76861cc9ba88455d9c7eb1abd856b056)](https://app.codacy.com/gh/ryanw-mobile/OctoMeter/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 
 ### Production-grade Kotlin Multiplatform App targeting Desktop, Android, iOS<BR />🇬🇧 Made in the UK, For the UK.
 > 📝 Complementary article: [Releasing my First True Kotlin Multiplatform App](https://medium.com/@callmeryan/releasing-my-first-true-kotlin-multiplatform-app-60d81e739eb0)<br/>⭐️ If you like this app, consider to star this repository.
@@ -26,24 +26,19 @@ The main purposes of this app are:
 <p align="center"><img src="https://github.com/ryanw-mobile/OctoMeter/blob/main/screenshots/240603_agile_animation.gif" style="width: 100%; max-width: 1000px; height: auto;" alt="cover image" style="width: 100%; max-width: 1000px; height: auto;"></p>
 <br />
 
-This is a fully functional app that I developed and **tested by myself every day** to see my energy
-expenses reduced by more than 50%. 
+This is a fully functional app that I developed and tested myself every day, successfully reducing my personal energy expenses by more than 50%.
 
-At the time of development, this project is an independent third-party product that accesses Octopus 
-Energy’s public APIs, with no official affiliation with Octopus Energy Ltd. I am not an employee 
-of Octopus Energy or any of its related businesses.
+This project accesses Octopus Energy’s public APIs, but has no official affiliation with Octopus Energy Ltd.
 
 > [!NOTE]
-> This project is **incubating** - an experimental product sponsored by and sublicensed to RW MobiMedia UK
-> * It aims to reach production level, as a general release distributable on Google Play/ App Stores.
-> * However, it is currently not mature yet - while it should technically work for some
-> other Octopus Energy customers, I do not have enough sample data to cover all use cases.
-> 
-> **Octopus Energy customers:** You are invited to collaborate. If this app is not working correctly
-> for your account. [Report an issue](https://github.com/ryanw-mobile/OctoMeter/issues) to start a conversation.
-> 
-> * For non-Octopus Energy customers, or non-UK residents, the demo mode will display random meter
->  readings and default tariff rates to illustrate the app’s functionality.
+> This is an experimental product sponsored by and sublicensed to RW MobiMedia UK.
+> As of **July 2025**, OctoMeter has entered **maintenance mode**. The app remains functional and continues to serve my personal needs. However:
+> * No further feature development is planned.
+> * Dependency updates will continue via Renovate.
+> * Critical fixes may be addressed if time permits, but active maintenance is not guaranteed.
+> * The iOS TestFlight build will **expire and be removed starting 24 August 2025**.
+>
+> I want to ensure my time and efforts remain fairly aligned with my professional commitments. Keeping OctoMeter in active development could unintentionally benefit organisations that have chosen not to work with me - and it’s important for me to manage my open-source involvement responsibly.
 
 <br /><br />
 
@@ -58,24 +53,18 @@ the [Release Section](https://github.com/ryanw-mobile/OctoMeter/releases).
 * MacOS Desktop App: We provide a DMG installer.
 * Windows Desktop App: We provide both EXE and MSI installers.
 * Android: We provide signed APK and App Bundle.
-* iOS: Join as a tester at [Test Flight](https://testflight.apple.com/join/T6I940RE).
+* iOS: [Test Flight](https://testflight.apple.com/join/T6I940RE) distribution is scheduled to expire on **24 August 2025**. Existing testers can continue using the app until expiry. No new TestFlight builds will be uploaded..
 * To build and run the Desktop app yourself, execute `./gradlew run`
-
-<br />
-<p align="center"><img src="testflight_qrcode.png" style="width: 100%; max-width: 1000px; height: auto;" alt="Testflight QR Code" style="width: 100%; max-width: 1000px; height: auto;"></p>
-<br />
 
 <br /><br />
 
 ## To-do lists
 
-Planned enhancements are logged as [issues](https://github.com/ryanw-mobile/OctoMeter/issues).
+[Archived To-Do List](https://github.com/ryanw-mobile/OctoMeter/issues): There were planned enhancements during active development but are no longer being actively pursued. Logged issues are kept for reference. Outstanding items are now all closed.
 
 ### RestAPI and GraphQL
 
-Octopus Energy and Kraken prefer GraphQL over REST API. Accordingly, the second phase of this
-project has migrated most REST APIs to GraphQL. Currently, this app has a mixed use of both, while
-the migration is in progress.
+Octopus Energy and Kraken prefer GraphQL over REST API. This project migrated most REST APIs to GraphQL, although both are still used.
 
 | Features                      | Implementation                                      |
 |-------------------------------|-----------------------------------------------------|
