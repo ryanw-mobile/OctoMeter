@@ -42,7 +42,7 @@ slf4j = "2.0.17"
 apollographql = "4.3.2"
 apollographqlMockServer = "0.1.1"
 apollographqlAdaptersCore = "0.7.0"
-testRules = "1.6.1"
+testRules = "1.7.0"
 
 # App configurations, not dependencies
 versionCode = "17"
