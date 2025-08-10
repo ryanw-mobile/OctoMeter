@@ -48,7 +48,6 @@ val productApkName = "OctoMeter"
 val productNameSpace = "com.rwmobi.kunigami"
 val isRunningOnCI = System.getenv("CI") == "true"
 
-
 buildConfig {
     packageName("composeapp.kunigami")
     buildConfigField("PACKAGE_NAME", provider { "$productNameSpace" })
@@ -221,7 +220,6 @@ android {
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
-
 
     defaultConfig {
         applicationId = productNameSpace
@@ -450,9 +448,9 @@ private fun BaseAppModuleExtension.setupSigningAndBuildTypes() {
     val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
     val baseName = "$productApkName-${libs.versions.versionName.get()}-$timestamp"
     val isReleaseBuild = gradle.startParameter.taskNames.any {
-        it.contains("Release", ignoreCase = true)
-                || it.contains("Bundle", ignoreCase = true)
-                || it.equals("build", ignoreCase = true)
+        it.contains("Release", ignoreCase = true) ||
+            it.contains("Bundle", ignoreCase = true) ||
+            it.equals("build", ignoreCase = true)
     }
 
     extensions.configure<BasePluginExtension> { archivesName.set(baseName) }
