@@ -31,7 +31,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Gradle build
-        run: ./gradlew bundleRelease assembleRelease --no-daemon
+        run: ./gradlew bundleRelease assembleRelease
         env:
           CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}

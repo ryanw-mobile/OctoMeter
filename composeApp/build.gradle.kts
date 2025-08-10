@@ -14,6 +14,7 @@
  */
 
 import com.android.build.api.dsl.ManagedVirtualDevice
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -41,8 +42,12 @@ plugins {
     alias(libs.plugins.detekt)
 }
 
+// Configuration
 val productName = "OctoMeter"
+val productApkName = "OctoMeter"
 val productNameSpace = "com.rwmobi.kunigami"
+val isRunningOnCI = System.getenv("CI") == "true"
+
 
 buildConfig {
     packageName("composeapp.kunigami")
@@ -208,102 +213,23 @@ dependencies {
 }
 
 android {
-    fun setOutputFileName() {
-        applicationVariants.all {
-            val variant = this
-            variant.outputs
-                .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
-                .forEach { output ->
-                    val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
-                    val outputFileName =
-                        "$productName-${variant.versionName}-$timestamp-${variant.name}.apk"
-                    output.outputFileName = outputFileName
-                }
-        }
-    }
-
     namespace = productNameSpace
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+
+    setupSdkVersionsFromVersionCatalog()
+    setupSigningAndBuildTypes()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
-    signingConfigs {
-        create("release") {
-            val isRunningOnCI = System.getenv("CI") == "true"
-            val keystorePropertiesFile = file("../../keystore.properties")
-
-            if (isRunningOnCI) {
-                println("Signing Config: using environment variables")
-                keyAlias = System.getenv("CI_ANDROID_KEYSTORE_ALIAS")
-                keyPassword = System.getenv("CI_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
-                storeFile = file(System.getenv("KEYSTORE_LOCATION"))
-                storePassword = System.getenv("CI_ANDROID_KEYSTORE_PASSWORD")
-            } else if (keystorePropertiesFile.exists()) {
-                println("Signing Config: using keystore properties")
-                val properties = Properties()
-                InputStreamReader(
-                    FileInputStream(keystorePropertiesFile),
-                    Charsets.UTF_8,
-                ).use { reader ->
-                    properties.load(reader)
-                }
-
-                keyAlias = properties.getProperty("alias")
-                keyPassword = properties.getProperty("pass")
-                storeFile = file(properties.getProperty("store"))
-                storePassword = properties.getProperty("storePass")
-            } else {
-                println("Signing Config: skipping signing")
-            }
-        }
-    }
 
     defaultConfig {
         applicationId = productNameSpace
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = libs.versions.versionCode.get().toInt()
-        versionName = libs.versions.versionName.get()
 
-        androidResources {
-            localeFilters.add("en")
-        }
+        androidResources { localeFilters.add("en") }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-
-        // Bundle output filename
-        val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
-        setProperty("archivesBaseName", "$productName-$versionName-$timestamp")
-    }
-
-    buildTypes {
-        getByName("debug") {
-            applicationIdSuffix = ".debug"
-            isMinifyEnabled = false
-            isShrinkResources = false
-            isDebuggable = true
-            setOutputFileName()
-        }
-
-        getByName("release") {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            isDebuggable = false
-            setProguardFiles(
-                listOf(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro",
-                ),
-            )
-
-            signingConfigs.getByName("release").keyAlias?.let {
-                signingConfig = signingConfigs.getByName("release")
-            }
-            setOutputFileName()
-        }
     }
 
     compileOptions {
@@ -507,4 +433,95 @@ kover.reports.filters.excludes {
             "kunigami.composeapp.generated.*",
         ),
     )
+}
+
+// Gradle Build Utilities
+private fun BaseAppModuleExtension.setupSdkVersionsFromVersionCatalog() {
+    compileSdk = libs.versions.compileSdk.get().toInt()
+    defaultConfig {
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
+    }
+}
+private fun BaseAppModuleExtension.setupSigningAndBuildTypes() {
+    val releaseSigningConfigName = "releaseSigningConfig"
+    val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
+    val baseName = "$productApkName-${libs.versions.versionName.get()}-$timestamp"
+    val isReleaseBuild = gradle.startParameter.taskNames.any {
+        it.contains("Release", ignoreCase = true)
+                || it.contains("Bundle", ignoreCase = true)
+                || it.equals("build", ignoreCase = true)
+    }
+
+    extensions.configure<BasePluginExtension> { archivesName.set(baseName) }
+
+    signingConfigs.create(releaseSigningConfigName) {
+        // Only initialise the signing config when a Release or Bundle task is being executed.
+        // This prevents Gradle sync or debug builds from attempting to load the keystore,
+        // which could fail if the keystore or environment variables are not available.
+        // SigningConfig itself is only wired to the 'release' build type, so this guard avoids unnecessary setup.
+        if (isReleaseBuild) {
+            val keystorePropertiesFile = file("../../keystore.properties")
+
+            if (isRunningOnCI || !keystorePropertiesFile.exists()) {
+                println("⚠\uFE0F Signing Config: using environment variables")
+                keyAlias = System.getenv("CI_ANDROID_KEYSTORE_ALIAS")
+                keyPassword = System.getenv("CI_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+                storeFile = file(System.getenv("KEYSTORE_LOCATION"))
+                storePassword = System.getenv("CI_ANDROID_KEYSTORE_PASSWORD")
+            } else {
+                println("⚠\uFE0F Signing Config: using keystore properties")
+                val properties = Properties()
+                InputStreamReader(
+                    FileInputStream(keystorePropertiesFile),
+                    Charsets.UTF_8,
+                ).use { reader ->
+                    properties.load(reader)
+                }
+
+                keyAlias = properties.getProperty("alias")
+                keyPassword = properties.getProperty("pass")
+                storeFile = file(properties.getProperty("store"))
+                storePassword = properties.getProperty("storePass")
+            }
+        } else {
+            println("⚠\uFE0F Signing Config: not created for non-release builds.")
+        }
+    }
+
+    buildTypes {
+        fun setOutputFileName() {
+            applicationVariants.all {
+                outputs
+                    .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+                    .forEach { output ->
+                        val outputFileName = "$productApkName-$name-$versionName-$timestamp.apk"
+                        output.outputFileName = outputFileName
+                    }
+            }
+        }
+
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
+            isMinifyEnabled = false
+            isDebuggable = true
+            setOutputFileName()
+        }
+
+        getByName("release") {
+            isShrinkResources = true
+            isMinifyEnabled = true
+            isDebuggable = false
+            setProguardFiles(
+                listOf(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro",
+                ),
+            )
+            signingConfig = signingConfigs.getByName(name = releaseSigningConfigName)
+            setOutputFileName()
+        }
+    }
 }
