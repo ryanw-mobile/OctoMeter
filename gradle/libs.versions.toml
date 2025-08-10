@@ -45,12 +45,11 @@ apollographqlAdaptersCore = "0.7.0"
 testRules = "1.7.0"
 
 # App configurations, not dependencies
+minSdk = "26"
+targetSdk = "36"
+compileSdk = "36"
 versionCode = "17"
 versionName = "2.5.0"
-android-minSdk = "26"
-android-targetSdk = "34"
-android-compileSdk = "35"
-
 
 [libraries]
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }

@@ -33,7 +33,7 @@ import kotlin.time.Duration
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
-@Config(application = NoKoinTestApplication::class)
+@Config(application = NoKoinTestApplication::class, sdk = [35])
 internal class RateDaoTest {
 
     private lateinit var database: OctometerDatabase
