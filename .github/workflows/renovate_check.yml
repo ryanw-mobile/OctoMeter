@@ -25,7 +25,7 @@ jobs:
           fileName: 'release.jks'
           encodedString: ${{ secrets.KEYSTORE }}
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set timezone
         run: echo "TZ=Europe/London" >> $GITHUB_ENV
