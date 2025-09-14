@@ -349,10 +349,6 @@ detekt {
     parallel = true
 }
 
-tasks.named("kspReleaseKotlinAndroid") {
-    dependsOn("generateServiceApolloSources")
-}
-
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
     exclude { element -> element.file.path.contains("generated/") }
 }

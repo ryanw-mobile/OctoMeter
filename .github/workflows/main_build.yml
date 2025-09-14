@@ -39,7 +39,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Gradle build
-        run: xvfb-run ./gradlew :composeApp:buildReleasePreBundle koverXmlReportRelease
+        run: xvfb-run ./gradlew :composeApp:generateServiceApolloSources :composeApp:buildReleasePreBundle koverXmlReportRelease
         env:
           CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}

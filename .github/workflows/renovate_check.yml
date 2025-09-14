@@ -41,7 +41,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Prepare RoomDB actual declaration
-        run: ./gradlew :composeApp:kspCommonMainKotlinMetadata
+        run: ./gradlew :composeApp:kspCommonMainKotlinMetadata :composeApp:generateServiceApolloSources
         env:
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
 
