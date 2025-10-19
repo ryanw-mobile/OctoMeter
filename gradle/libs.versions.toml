@@ -25,7 +25,8 @@ leakcanary = "2.14"
 lifecycleRuntimeCompose = "2.9.4"
 material3WindowSizeClass = "1.9.0"
 multiplatformSettings = "1.3.0"
-navigationCompose = "2.8.0-alpha10"
+navigationCompose = "2.9.1"
+lifecycleViewModelCompose = "2.9.5"
 buildconfig = "5.7.0"
 securityCrypto = "1.1.0"
 junitVersion = "1.3.0"
@@ -89,6 +90,7 @@ koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = 
 leakcanary-android = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
 multiplatform-settings = { group = "com.russhwolf", name = "multiplatform-settings", version.ref = "multiplatformSettings" }
 navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+lifecycle-viewmodel-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleViewModelCompose" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 themedetector = { group = "com.github.Dansoftowner", name = "jSystemThemeDetector", version.ref = "jSystemThemeDetector" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

@@ -149,6 +149,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.navigation.compose)
+            implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.material3.windowsizeclass)
             implementation(libs.kermit)
             implementation(libs.kermit.koin)
