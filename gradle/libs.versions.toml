@@ -2,7 +2,7 @@
 agp = "8.13.0"
 compose-bom = "2025.11.00"
 androidx-activityCompose = "1.11.0"
-compose-plugin = "1.9.2"
+compose-plugin = "1.9.3"
 composeUiTooling = "1.9.4"
 coreSplashscreen = "1.2.0"
 desugar_jdk_libs = "2.1.5"
