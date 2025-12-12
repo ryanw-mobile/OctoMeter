@@ -43,7 +43,7 @@ jobs:
         run: echo "version=${GITHUB_REF#refs/tags/androidBuild/}" >> $GITHUB_ENV
 
       - name: Upload Mapping File Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: mapping-${{ env.version }}.txt
           path: ./composeApp/build/outputs/mapping/release/mapping.txt
@@ -54,7 +54,7 @@ jobs:
           echo "apk_path=$apk_path" >> $GITHUB_ENV
 
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: OctoMeter-${{ env.version }}.apk
           path: ${{ env.apk_path }}
@@ -65,7 +65,7 @@ jobs:
           echo "aab_path=$aab_path" >> $GITHUB_ENV
 
       - name: Upload AAB Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: OctoMeter-${{ env.version }}.aab
           path: ${{ env.aab_path }}
