@@ -1,7 +1,7 @@
 [versions]
 agp = "8.13.2"
 compose-bom = "2025.12.00"
-androidx-activityCompose = "1.12.1"
+androidx-activityCompose = "1.12.2"
 compose-plugin = "1.9.3"
 composeUiTooling = "1.10.0"
 coreSplashscreen = "1.2.0"
