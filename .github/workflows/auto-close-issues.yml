@@ -26,7 +26,11 @@ jobs:
               });
               return false; // Is collaborator
             } catch (error) {
-              return true; // Not collaborator
+              if (error.status === 404) {
+                return true; // Not collaborator
+              }
+              throw error; // Re-throw other errors
+            }
             }
 
       - name: Close issue if not collaborator
@@ -34,17 +38,22 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            github.rest.issues.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              state: 'closed',
-              state_reason: 'not_planned'
-            });
-            
-            github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: 'This repository is in maintenance mode. Only critical issues from collaborators are being addressed. Thank you for your interest.'
-            });
+            try {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: 'This repository is in maintenance mode. Only critical issues from collaborators are being addressed. Thank you for your interest.'
+              });
+              
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                state: 'closed',
+                state_reason: 'not_planned'
+              });
+            } catch (error) {
+              console.error('Failed to close issue or add comment:', error);
+              throw error;
+            }
