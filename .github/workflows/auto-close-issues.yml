@@ -1,0 +1,59 @@
+name: Auto-close non-collaborator issues
+
+on:
+  issues:
+    types: [ opened ]
+
+jobs:
+  auto-close:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Check if author is collaborator
+        id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const author = context.payload.issue.user.login;
+            const repo = context.repo;
+            
+            try {
+              await github.rest.repos.checkCollaborator({
+                owner: repo.owner,
+                repo: repo.repo,
+                username: author
+              });
+              return false; // Is collaborator
+            } catch (error) {
+              if (error.status === 404) {
+                return true; // Not collaborator
+              }
+              throw error; // Re-throw other errors
+            }
+
+      - name: Close issue if not collaborator
+        if: steps.check.outputs.result == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: 'This repository is in maintenance mode. Only critical issues from collaborators are being addressed. Thank you for your interest.'
+              });
+            
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                state: 'closed',
+                state_reason: 'not_planned'
+              });
+            } catch (error) {
+              console.error('Failed to close issue or add comment:', error);
+              throw error;
+            }
