@@ -8,6 +8,7 @@ jobs:
   auto-close:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       issues: write
     steps:
       - name: Check if author is collaborator
