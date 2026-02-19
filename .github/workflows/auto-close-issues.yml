@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Check if author is collaborator
         id: check
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const author = context.payload.issue.user.login;
@@ -35,7 +35,7 @@ jobs:
 
       - name: Close issue if not collaborator
         if: steps.check.outputs.result == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             try {
