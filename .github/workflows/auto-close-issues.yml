@@ -31,7 +31,6 @@ jobs:
               }
               throw error; // Re-throw other errors
             }
-            }
 
       - name: Close issue if not collaborator
         if: steps.check.outputs.result == 'true'
@@ -45,7 +44,7 @@ jobs:
                 issue_number: context.issue.number,
                 body: 'This repository is in maintenance mode. Only critical issues from collaborators are being addressed. Thank you for your interest.'
               });
-              
+            
               await github.rest.issues.update({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
