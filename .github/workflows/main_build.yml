@@ -39,7 +39,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Gradle build
-        run: xvfb-run ./gradlew :composeApp:buildReleasePreBundle koverXmlReportRelease
+        run: xvfb-run ./gradlew :composeApp:buildReleasePreBundle jacocoTestReportDebug
         env:
           CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
@@ -58,4 +58,4 @@ jobs:
         uses: codacy/codacy-coverage-reporter-action@v1.3.0
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: composeApp/build/reports/kover/reportRelease.xml
+          coverage-reports: composeApp/build/reports/jacoco/jacocoTestReportDebug/jacocoTestReportDebug.xml

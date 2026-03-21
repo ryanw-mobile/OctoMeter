@@ -15,6 +15,7 @@
 
 import com.android.build.api.dsl.ManagedVirtualDevice
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -30,7 +31,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlinxKover)
+    id("jacoco")
     alias(libs.plugins.gradleKtlint)
     alias(libs.plugins.serialization)
     alias(libs.plugins.buildConfig)
@@ -382,54 +383,76 @@ powerAssert {
     )
 }
 
-kover {
-    useJacoco()
+jacoco {
+    toolVersion = "0.8.12"
 }
 
-// common exclusion filters for all reports of all variants
-kover.reports.filters.excludes {
-    // excludes class by fully-qualified JVM class name, wildcards '*' and '?' are available
-    classes(
-        listOf(
-            "$productNameSpace.KunigamiApplication*",
-            "$productNameSpace.MainActivity*",
-            "$productNameSpace.*.*MembersInjector",
-            "$productNameSpace.*.*Factory",
-            "$productNameSpace.data.source.local.*_Impl*",
-            "$productNameSpace.data.source.local.*Impl_Factory",
-            "$productNameSpace.BR",
-            "$productNameSpace.BuildConfig",
-            "$productNameSpace.ComposableSingletons*",
-            "$productNameSpace.App*",
-            "$productNameSpace.MainKt*",
-            "$productNameSpace.NavigationLayoutType",
-            "$productNameSpace.ui.extensions.WindowSizeClassExtensions*",
-            "$productNameSpace.ui.extensions.ThrowableExtensions*",
-            "$productNameSpace.ui.extensions.GenerateRandomLong*",
-            "$productNameSpace.data.source.local.preferences.ProvideSettings*",
-            "$productNameSpace.data.source.local.preferences.MultiplatformPreferencesStore*",
-            "*Fragment",
-            "*Fragment\$*",
-            "*Activity",
-            "*Activity\$*",
-            "*.BuildConfig",
-            "*.DebugUtil",
+tasks.register<JacocoReport>("jacocoTestReportDebug") {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    val fileFilter = listOf(
+        // Excluded classes
+        "**/KunigamiApplication*.class",
+        "**/MainActivity*.class",
+        "**/*MembersInjector.class",
+        "**/*Factory.class",
+        "**/data/source/local/*_Impl*.class",
+        "**/data/source/local/*Impl_Factory.class",
+        "**/BR.class",
+        "**/BuildConfig.class",
+        "**/ComposableSingletons*.class",
+        "**/App*.class",
+        "**/MainKt*.class",
+        "**/NavigationLayoutType.class",
+        "**/ui/extensions/WindowSizeClassExtensions*.class",
+        "**/ui/extensions/ThrowableExtensions*.class",
+        "**/ui/extensions/GenerateRandomLong*.class",
+        "**/data/source/local/preferences/ProvideSettings*.class",
+        "**/data/source/local/preferences/MultiplatformPreferencesStore*.class",
+        "**/*Fragment.class",
+        "**/*Fragment\$*.class",
+        "**/*Activity.class",
+        "**/*Activity\$*.class",
+        "**/DebugUtil.class",
+        // Excluded packages
+        "**/com/rwmobi/kunigami/di/**",
+        "**/com/rwmobi/kunigami/ui/components/**",
+        "**/com/rwmobi/kunigami/ui/composehelper/**",
+        "**/com/rwmobi/kunigami/ui/destinations/**",
+        "**/com/rwmobi/kunigami/ui/navigation/**",
+        "**/com/rwmobi/kunigami/ui/previewparameter/**",
+        "**/com/rwmobi/kunigami/ui/theme/**",
+        "**/com/rwmobi/kunigami/ui/previewsampledata/**",
+        "**/com/rwmobi/kunigami/graphql/**",
+        "**/androidx/**",
+        "**/kunigami/composeapp/generated/**",
+    )
+
+    classDirectories.setFrom(
+        files(
+            fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
+                exclude(fileFilter)
+            },
+            fileTree("${layout.buildDirectory.get()}/intermediates/javac/debug") {
+                exclude(fileFilter)
+            },
         ),
     )
-    // excludes all classes located in specified package and it subpackages, wildcards '*' and '?' are available
-    packages(
-        listOf(
-            "$productNameSpace.di",
-            "$productNameSpace.ui.components",
-            "$productNameSpace.ui.composehelper",
-            "$productNameSpace.ui.destinations",
-            "$productNameSpace.ui.navigation",
-            "$productNameSpace.ui.previewparameter",
-            "$productNameSpace.ui.theme",
-            "$productNameSpace.ui.previewsampledata",
-            "$productNameSpace.graphql.*",
-            "androidx",
-            "kunigami.composeapp.generated.*",
+    sourceDirectories.setFrom(
+        files(
+            "src/commonMain/kotlin",
+            "src/androidMain/kotlin",
+        ),
+    )
+    executionData.setFrom(
+        fileTree(layout.buildDirectory.get()).include(
+            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+            "jacoco/testDebugUnitTest.exec",
         ),
     )
 }
