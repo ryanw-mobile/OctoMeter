@@ -13,6 +13,8 @@
  * Please refer to the LICENSE file for the full terms and conditions.
  */
 
+package com.rwmobi.kunigami.ui.viewmodels
+
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -39,7 +41,6 @@ import com.rwmobi.kunigami.ui.model.StubStringResourceProvider
 import com.rwmobi.kunigami.ui.model.chart.RequestedChartLayout
 import com.rwmobi.kunigami.ui.model.product.RetailRegion
 import com.rwmobi.kunigami.ui.previewsampledata.AccountSamples
-import com.rwmobi.kunigami.ui.viewmodels.AgileViewModel
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

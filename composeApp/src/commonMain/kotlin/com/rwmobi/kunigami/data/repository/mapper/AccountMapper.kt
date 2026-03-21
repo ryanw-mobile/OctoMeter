@@ -78,9 +78,13 @@ fun PropertiesQuery.Agreement.toAgreement(): Agreement? {
 
     return when {
         tariff?.onStandardTariff != null -> tariff.onStandardTariff.toAgreement(period = period)
+
         tariff?.onHalfHourlyTariff != null -> tariff.onHalfHourlyTariff.toAgreement(period = period)
+
         tariff?.onDayNightTariff != null -> tariff.onDayNightTariff.toAgreement(period = period)
+
         tariff?.onThreeRateTariff != null -> tariff.onThreeRateTariff.toAgreement(period = period)
+
         tariff?.onPrepayTariff != null -> tariff.onPrepayTariff.toAgreement(period = period)
 
         else -> {
