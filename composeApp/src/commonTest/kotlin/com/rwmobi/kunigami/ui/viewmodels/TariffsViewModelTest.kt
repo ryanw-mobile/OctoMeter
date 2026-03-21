@@ -13,6 +13,8 @@
  * Please refer to the LICENSE file for the full terms and conditions.
  */
 
+package com.rwmobi.kunigami.ui.viewmodels
+
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.ui.unit.DpSize
@@ -29,7 +31,6 @@ import com.rwmobi.kunigami.test.samples.GetProductsSampleData
 import com.rwmobi.kunigami.ui.destinations.tariffs.TariffsScreenType
 import com.rwmobi.kunigami.ui.model.ScreenSizeInfo
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
-import com.rwmobi.kunigami.ui.viewmodels.TariffsViewModel
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher

@@ -66,8 +66,12 @@ data class TariffsUIState(
         }
         val requestedWideListLayout = when {
             windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact -> false
+
             windowSizeClass.widthSizeClass == WindowWidthSizeClass.Medium -> true
-            (screenSizeInfo.widthDp / 2) > windowWidthCompact -> true // List pane width
+
+            (screenSizeInfo.widthDp / 2) > windowWidthCompact -> true
+
+            // List pane width
             else -> false
         }
 
@@ -81,8 +85,11 @@ data class TariffsUIState(
         requestedScreenType = when {
             // Error Screen is kept until being told to dismiss
             isErrorScreen() -> requestedScreenType
+
             shouldShowTariffsList() -> TariffsScreenType.List
+
             hasProductDetailsLoaded() -> TariffsScreenType.FullScreenDetail
+
             else -> requestedScreenType // nothing triggered for a change, just keep it
         },
     )

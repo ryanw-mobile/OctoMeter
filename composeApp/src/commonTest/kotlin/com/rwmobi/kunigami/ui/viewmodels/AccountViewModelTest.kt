@@ -13,6 +13,8 @@
  * Please refer to the LICENSE file for the full terms and conditions.
  */
 
+package com.rwmobi.kunigami.ui.viewmodels
+
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.ui.unit.DpSize
@@ -28,7 +30,6 @@ import com.rwmobi.kunigami.domain.usecase.account.UpdateMeterPreferenceUseCase
 import com.rwmobi.kunigami.ui.destinations.account.AccountScreenType
 import com.rwmobi.kunigami.ui.model.SpecialErrorScreen
 import com.rwmobi.kunigami.ui.previewsampledata.AccountSamples
-import com.rwmobi.kunigami.ui.viewmodels.AccountViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher

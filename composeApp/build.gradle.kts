@@ -15,16 +15,19 @@
 
 import com.android.build.api.dsl.ManagedVirtualDevice
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Properties
+import org.jmailen.gradle.kotlinter.tasks.FormatTask
+import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -32,7 +35,6 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     id("jacoco")
-    alias(libs.plugins.gradleKtlint)
     alias(libs.plugins.serialization)
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.baselineprofile)
@@ -41,6 +43,7 @@ plugins {
     alias(libs.plugins.androidxRoom)
     alias(libs.plugins.apollographql)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlinter)
 }
 
 // Configuration
@@ -330,32 +333,31 @@ tasks.withType<Test> {
     jvmArgs("-Duser.timezone=Europe/London")
 }
 
-configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-    android.set(false)
-    ignoreFailures.set(true)
-    outputColorName.set("RED")
-    reporters {
-        reporter(ReporterType.PLAIN)
-        reporter(ReporterType.CHECKSTYLE)
-        reporter(ReporterType.SARIF)
-    }
-    filter {
-        exclude("**/BuildConfig.kt")
-        exclude { element -> element.file.path.contains("generated/") }
-        exclude("**/MainViewController.kt")
-        include("**/kotlin/**")
-    }
+kotlinter {
+    reporters = arrayOf("plain", "checkstyle", "sarif")
+}
+
+tasks.withType<LintTask>().configureEach {
+    exclude("**/BuildConfig.kt")
+    exclude { element -> element.file.path.contains("generated/") }
+    exclude("**/MainViewController.kt")
+}
+
+tasks.withType<FormatTask>().configureEach {
+    exclude("**/BuildConfig.kt")
+    exclude { element -> element.file.path.contains("generated/") }
+    exclude("**/MainViewController.kt")
 }
 
 detekt {
     parallel = true
 }
 
-tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+tasks.withType<Detekt>().configureEach {
     exclude { element -> element.file.path.contains("generated/") }
 }
 
-tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+tasks.withType<DetektCreateBaselineTask>().configureEach {
     // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
     exclude { element -> element.file.path.contains("generated/") }
 }

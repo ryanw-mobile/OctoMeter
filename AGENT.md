@@ -50,8 +50,8 @@ All tests run with timezone fixed to `Europe/London`.
 ## Code Quality
 
 ```bash
-./gradlew ktlintCheck        # Check Kotlin style
-./gradlew ktlintFormat       # Auto-format code
+./gradlew lintKotlin         # Check Kotlin style
+./gradlew formatKotlin       # Auto-format code
 ./gradlew detekt             # Static analysis
 ./gradlew lint               # Android lint
 ./gradlew :composeApp:jacocoTestReportDebug  # Code coverage report
