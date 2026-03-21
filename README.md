@@ -149,7 +149,7 @@ This app does not have write access to any of your customer data kept at Octopus
 * [Kotlin CocoaPods Plugin](https://kotlinlang.org/docs/native-cocoapods.html) - JetBrains - Plugin for integrating with CocoaPods
 * [Kotlin Power Assert Plugin](https://kotlinlang.org/docs/reference/power-assert.html) - JetBrains - Plugin for enhanced assertions in Kotlin
 * [Ktlint Plugin](https://github.com/JLLeitschuh/ktlint-gradle) - JLLeitschuh - Plugin for Kotlin linter
-* [Kover Plugin](https://github.com/Kotlin/kotlinx-kover) - JetBrains - Code coverage tool for Kotlin
+* [JaCoCo Plugin](https://docs.gradle.org/current/userguide/jacoco_plugin.html) - Gradle - Java/Kotlin code coverage tool
 * [Serialization Plugin](https://github.com/Kotlin/kotlinx.serialization) - JetBrains - Plugin for Kotlin serialization
 * [BuildConfig Plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) - gmazzo - Plugin for generating BuildConfig classes
 * [Baseline Profile Plugin](https://developer.android.com/studio/profile/baselineprofile) - AndroidX - Plugin for generating baseline profiles

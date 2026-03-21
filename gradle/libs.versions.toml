@@ -19,7 +19,6 @@ kotlinxSerialization = "1.10.0"
 ktor = "3.4.0"
 jSystemThemeDetector = "3.9.1"
 robolectric = "4.16.1"
-kover = "0.9.7"
 ktlint = "14.2.0"
 leakcanary = "2.14"
 lifecycleRuntimeCompose = "2.10.0"
@@ -124,7 +123,6 @@ serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref 
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
-kotlinxKover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 gradleKtlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
