@@ -45,6 +45,13 @@
       "matchPackageNames": [
         "/org.jetbrains.compose.*/"
       ]
+    },
+    {
+      "groupName": "material3",
+      "matchPackageNames": [
+        "androidx.compose.material3:material3",
+        "androidx.compose.material3:material3-adaptive-navigation-suite"
+      ]
     }
   ],
   "automerge": true,
