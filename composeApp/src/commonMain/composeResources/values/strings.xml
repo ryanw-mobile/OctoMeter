@@ -167,6 +167,7 @@
     <string name="account_tariff_off_peak_unit_rate">Off Peak Unit Rate (p/kWh)</string>
     <string name="account_tariff_standing_charge">Standing Charge (p/day)</string>
     <string name="account_meter_serial">Meter: %1$s</string>
+    <string name="account_smart_meter_reading">Smart meter</string>
     <string name="account_meter_selected">SELECTED</string>
     <string name="account_meter_select">SELECT</string>
 

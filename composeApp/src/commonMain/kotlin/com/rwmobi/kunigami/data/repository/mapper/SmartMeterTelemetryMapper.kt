@@ -26,5 +26,6 @@ fun SmartMeterTelemetryQuery.SmartMeterTelemetry.toLiveConsumption(): LiveConsum
     return LiveConsumption(
         readAt = Instant.parse(readAt.toString()),
         demand = demand.roundToInt(),
+        cumulativeConsumptionKwh = consumption?.let { it / 1000.0 },
     )
 }

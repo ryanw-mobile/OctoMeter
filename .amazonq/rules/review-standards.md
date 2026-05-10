@@ -10,3 +10,24 @@
 **Example (rejected finding):** `token.split(".")[1]` in `Token.fromObtainKrakenToken`, called from `ApolloGraphQLEndpoint.obtainKrakenToken` which wraps the call in `runCatching`.
 
 Do not flag array/list index access as a crash risk unless the access is provably outside any exception-catching scope.
+
+### Redundant null check after lastOrNull predicate
+**Pattern:** Flagging `if (result?.field != null)` as redundant when `result` came from `lastOrNull { it.field != null }` wrapped in `runCatching { }.getOrNull()`.
+
+**Reason to suppress:** The outer null check is NOT redundant. If `runCatching` catches an exception, `getOrNull()` returns null regardless of what `lastOrNull` would have returned. The check also enables Kotlin smart casting to a non-nullable type inside the if-block.
+
+Do not flag defensive null checks as redundant when the value originates from a `runCatching { }.getOrNull()` chain.
+
+### Integer display format for meter readings
+**Pattern:** Flagging `value.toInt()` or `displayValue.toInt()` in UI display code as "data loss" for meter reading values.
+
+**Reason to suppress:** This codebase intentionally displays meter readings as whole-number kWh (e.g. "23800") for UI clarity. This is a deliberate display choice, not a bug. The underlying `Double` precision is preserved in the domain model; only the UI label is rounded.
+
+Do not flag `.toInt()` on meter reading display values as data loss.
+
+### Inconsistent live/billing field pairing in ElectricityMeter
+**Pattern:** Flagging `liveConsumption ?: value` / `liveReadAt ?: readAt` display logic as potentially pairing a telemetry source label with a billing timestamp when `liveConsumption != null` but `liveReadAt == null`.
+
+**Reason to suppress:** `liveConsumption` and `liveReadAt` on `ElectricityMeter` are always set atomically together in `SyncUserProfileUseCase.withLiveReadings()` from the same `LiveConsumption` object. `LiveConsumption.readAt` is a non-nullable `Instant`, so `liveReadAt == null` implies `liveConsumption == null`. The inconsistent-pairing scenario is structurally impossible.
+
+Do not flag theoretical null-pairing scenarios for fields that are guaranteed to be set atomically.

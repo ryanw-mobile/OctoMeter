@@ -45,6 +45,7 @@ import com.rwmobi.kunigami.ui.components.CommonPreviewSetup
 import com.rwmobi.kunigami.ui.theme.AppTheme
 import kunigami.composeapp.generated.resources.Res
 import kunigami.composeapp.generated.resources.account_meter_serial
+import kunigami.composeapp.generated.resources.account_smart_meter_reading
 import kunigami.composeapp.generated.resources.dashboard
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -116,11 +117,14 @@ internal fun MeterSerialNumberEntry(
                         )
                     }
 
-                    if (readingSource != null && readAt != null && value != null) {
+                    val displayValue = liveConsumption ?: value
+                    val displayReadAt = liveReadAt ?: readAt
+                    val displaySource = readingSource ?: if (liveConsumption != null) stringResource(Res.string.account_smart_meter_reading) else null
+                    if (displaySource != null && displayReadAt != null && displayValue != null) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
                             style = AppTheme.typography.bodySmall,
-                            text = "$readingSource: ${value.toInt()} (${readAt.getLocalDateString()})",
+                            text = "$displaySource: ${displayValue.toInt()} (${displayReadAt.getLocalDateString()})",
                         )
                     }
                 }

@@ -26,4 +26,6 @@ data class ElectricityMeter(
     val readingSource: String?,
     val readAt: Instant?,
     val value: Double?,
+    val liveReadAt: Instant? = null,
+    val liveConsumption: Double? = null,
 )
