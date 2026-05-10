@@ -16,9 +16,10 @@
 package com.rwmobi.kunigami.data.source.network.dto.auth
 
 import com.rwmobi.kunigami.graphql.ObtainKrakenTokenMutation
-import io.ktor.util.decodeBase64Bytes
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.time.Clock
 
 data class Token(
@@ -30,10 +31,12 @@ data class Token(
     companion object {
         private val jsonFormat = Json { ignoreUnknownKeys = true }
 
+        @OptIn(ExperimentalEncodingApi::class)
         fun fromObtainKrakenToken(obtainKrakenToken: ObtainKrakenTokenMutation.ObtainKrakenToken): Token {
             val payload = obtainKrakenToken.token.split(".")[1]
-            val bytes = payload.decodeBase64Bytes()
-            val decodedPayload = jsonFormat.decodeFromString<TokenPayload>(bytes.decodeToString(0, 0 + bytes.size))
+            // JWT uses Base64URL encoding without padding
+            val bytes = Base64.UrlSafe.withPadding(Base64.PaddingOption.ABSENT).decode(payload)
+            val decodedPayload = jsonFormat.decodeFromString<TokenPayload>(bytes.decodeToString())
 
             return Token(
                 token = obtainKrakenToken.token,

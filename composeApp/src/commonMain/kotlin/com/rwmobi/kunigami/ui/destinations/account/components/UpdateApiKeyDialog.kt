@@ -87,7 +87,7 @@ fun UpdateApiKeyDialog(
         },
         confirmButton = {
             TextButton(
-                onClick = { onUpdateAPIKey(initialValue.trim()) },
+                onClick = { onUpdateAPIKey(inputValue.trim()) },
                 enabled = inputValue.isNotBlank(),
             ) {
                 Text(
