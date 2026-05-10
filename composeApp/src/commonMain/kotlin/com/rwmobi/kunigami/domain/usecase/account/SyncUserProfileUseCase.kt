@@ -25,6 +25,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.hours
 
 class SyncUserProfileUseCase(
     private val userPreferencesRepository: UserPreferencesRepository,
@@ -50,6 +52,8 @@ class SyncUserProfileUseCase(
                 },
 
                 onSuccess = { account ->
+                    @Suppress("NAME_SHADOWING")
+                    val account = account.withLiveReadings()
                     var selectedAccount: Account? = null
                     var selectedMpan = userPreferencesRepository.getMpan()
                     var selectedMeterSerialNumber = userPreferencesRepository.getMeterSerialNumber()
@@ -92,5 +96,39 @@ class SyncUserProfileUseCase(
                 },
             )
         }.except<CancellationException, _>()
+    }
+
+    private suspend fun Account?.withLiveReadings(): Account? {
+        this ?: return null
+        val now = Clock.System.now()
+        val start = now - 2.hours
+        return copy(
+            electricityMeterPoints = electricityMeterPoints.map { meterPoint ->
+                meterPoint.copy(
+                    meters = meterPoint.meters.map { meter ->
+                        if (meter.deviceId == null) {
+                            meter
+                        } else {
+                            val latestReading = runCatching {
+                                octopusApiRepository.getSmartMeterLiveConsumption(
+                                    meterDeviceId = meter.deviceId,
+                                    start = start,
+                                    end = now,
+                                ).getOrNull()
+                                    ?.lastOrNull { it.cumulativeConsumptionKwh != null }
+                            }.getOrNull()
+                            if (latestReading?.cumulativeConsumptionKwh != null) {
+                                meter.copy(
+                                    liveReadAt = latestReading.readAt,
+                                    liveConsumption = latestReading.cumulativeConsumptionKwh,
+                                )
+                            } else {
+                                meter
+                            }
+                        }
+                    },
+                )
+            },
+        )
     }
 }

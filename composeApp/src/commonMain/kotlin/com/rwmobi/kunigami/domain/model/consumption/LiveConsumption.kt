@@ -22,4 +22,5 @@ import kotlin.time.Instant
 data class LiveConsumption(
     val readAt: Instant,
     val demand: Int,
+    val cumulativeConsumptionKwh: Double? = null,
 )
