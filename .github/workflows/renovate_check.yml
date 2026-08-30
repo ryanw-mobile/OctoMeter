@@ -27,10 +27,29 @@ jobs:
 
       - uses: actions/checkout@v6
 
+      # Skips the Gradle/emulator steps below entirely for updates that
+      # can't possibly affect the app (GitHub Actions digest bumps, etc.) -
+      # so e.g. an action digest bump doesn't pay for a full Gradle build +
+      # emulator boot it has no way of affecting.
+      - name: Detect build-relevant changes
+        id: filter
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4
+        with:
+          base: main
+          filters: |
+            code:
+              - 'composeApp/**'
+              - 'baselineprofile/**'
+              - 'gradle/**'
+              - '*.gradle.kts'
+              - 'gradle.properties'
+
       - name: Set timezone
+        if: steps.filter.outputs.code == 'true'
         run: echo "TZ=Europe/London" >> $GITHUB_ENV
 
       - name: set up JDK 17
+        if: steps.filter.outputs.code == 'true'
         uses: actions/setup-java@v5
         with:
           distribution: 'corretto'
@@ -38,23 +57,28 @@ jobs:
           cache: gradle
 
       - name: Grant execute permission for gradlew
+        if: steps.filter.outputs.code == 'true'
         run: chmod +x gradlew
 
       - name: Prepare RoomDB actual declaration
+        if: steps.filter.outputs.code == 'true'
         run: ./gradlew :composeApp:kspCommonMainKotlinMetadata
         env:
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
 
       - name: Debug Android Test
+        if: steps.filter.outputs.code == 'true'
         run: ./gradlew :composeApp:pixel2Api35DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1 -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=180
         env:
           CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
 
       - name: Install Xvfb
+        if: steps.filter.outputs.code == 'true'
         run: sudo apt-get install -y xvfb
 
       - name: Gradle Check
+        if: steps.filter.outputs.code == 'true'
         run: xvfb-run ./gradlew check assembleDebug
         env:
           CI: 'true'
