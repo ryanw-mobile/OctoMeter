@@ -11,26 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-          ls /dev/kvm
-
-      - name: Decode Keystore
-        id: decode_keystore
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: 'release.jks'
-          encodedString: ${{ secrets.KEYSTORE }}
-
       - uses: actions/checkout@v6
 
       # Skips the Gradle/emulator steps below entirely for updates that
       # can't possibly affect the app (GitHub Actions digest bumps, etc.) -
       # so e.g. an action digest bump doesn't pay for a full Gradle build +
-      # emulator boot it has no way of affecting.
+      # emulator boot it has no way of affecting. Moved ahead of KVM setup
+      # and keystore decoding (per Amazon Q review on #463) so neither
+      # unconditionally materializes a decoded secret on disk nor configures
+      # KVM when no build/emulator step is going to run.
       - name: Detect build-relevant changes
         id: filter
         uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4
@@ -43,6 +32,22 @@ jobs:
               - 'gradle/**'
               - '*.gradle.kts'
               - 'gradle.properties'
+
+      - name: Enable KVM group perms
+        if: steps.filter.outputs.code == 'true'
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls /dev/kvm
+
+      - name: Decode Keystore
+        if: steps.filter.outputs.code == 'true'
+        id: decode_keystore
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'release.jks'
+          encodedString: ${{ secrets.KEYSTORE }}
 
       - name: Set timezone
         if: steps.filter.outputs.code == 'true'
