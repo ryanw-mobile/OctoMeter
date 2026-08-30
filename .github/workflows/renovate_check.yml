@@ -46,7 +46,7 @@ jobs:
 
       - name: Set timezone
         if: steps.filter.outputs.code == 'true'
-        run: echo "TZ=Europe/London" >> $GITHUB_ENV
+        run: echo "TZ=Europe/London" >> "$GITHUB_ENV"
 
       - name: set up JDK 17
         if: steps.filter.outputs.code == 'true'
