@@ -10,18 +10,18 @@ jobs:
     steps:
       - name: Decode Keystore
         id: decode_keystore
-        uses: timheuer/base64-to-file@v1.2
+        uses: timheuer/base64-to-file@adaa40c0c581f276132199d4cf60afa07ce60eac # v1.2
         with:
           fileName: 'release.jks'
           encodedString: ${{ secrets.KEYSTORE }}
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Set timezone
         run: echo "TZ=Europe/London" >> $GITHUB_ENV
 
       - name: set up JDK 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: 'corretto'
           java-version: '17'
@@ -44,7 +44,7 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # v1
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
         with:
@@ -57,7 +57,7 @@ jobs:
 
       - name: Upload Release Asset Mapping
         if: ${{ vars.EXPORT_MAPPING == 'true' }}
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
         with:
@@ -72,7 +72,7 @@ jobs:
           echo "apk_path=$apk_path" >> $GITHUB_ENV
 
       - name: Upload Release Asset APK
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
         with:
@@ -87,7 +87,7 @@ jobs:
           echo "aab_path=$aab_path" >> $GITHUB_ENV
 
       - name: Upload Release Asset AAB
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
         with:
@@ -102,11 +102,11 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Get the Release ID
         id: get_release
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
         with:
@@ -125,7 +125,7 @@ jobs:
           result-encoding: string
 
       - name: set up JDK 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: 'corretto'
           java-version: '17'
@@ -156,7 +156,7 @@ jobs:
           echo "msi_path=$msi_path" >> $env:GITHUB_ENV
 
       - name: Upload MSI Release Asset
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
         with:
@@ -172,7 +172,7 @@ jobs:
           echo "exe_path=$exe_path" >> $env:GITHUB_ENV
 
       - name: Upload EXE Release Asset
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_FOR_RELEASES }}
         with:
