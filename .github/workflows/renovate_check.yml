@@ -28,6 +28,7 @@ jobs:
           filters: |
             code:
               - 'composeApp/**'
+              - 'androidApp/**'
               - 'baselineprofile/**'
               - 'gradle/**'
               - '*.gradle.kts'
@@ -73,7 +74,7 @@ jobs:
 
       - name: Debug Android Test
         if: steps.filter.outputs.code == 'true'
-        run: ./gradlew :composeApp:pixel2Api35DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1 -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=180
+        run: ./gradlew :androidApp:pixel2Api35DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1 -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=180
         env:
           CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
@@ -94,4 +95,6 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: test-report
-          path: composeApp/build/reports/tests/
+          path: |
+            composeApp/build/reports/tests/
+            androidApp/build/reports/tests/

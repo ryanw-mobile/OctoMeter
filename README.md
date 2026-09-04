@@ -95,11 +95,16 @@ This app does not have write access to any of your customer data kept at Octopus
 
 ## Some technical details
 
-* `/composeApp` is for Kotlin code shared across the Compose Multiplatform application.
-  It contains several subfolders:
+* `/composeApp` is a Kotlin Multiplatform library module for code shared across the Compose Multiplatform
+  application (built with AGP 9's `com.android.kotlin.multiplatform.library` plugin for its Android target,
+  since AGP 9 no longer allows `com.android.application`/`com.android.library` in the same module as the
+  Kotlin Multiplatform plugin). It contains several subfolders:
     - `commonMain` is for code that’s common for all targets.
     - `androidMain` is the traditional Android project root.
     - `desktopMain` is for the desktop (JVM) app.
+* `/androidApp` is the actual Android application module (`com.android.application`). It holds only the
+  Android entry point — `MainActivity`, the `Application` class, the manifest, and launcher resources —
+  and depends on `/composeApp` for everything else.
     - `iosMain` is for the Kotlin code to be exposed to the iOS app.
 
 * `/iosApp` contains the iOS application. Open `OctoMeter.xcworkspace` to build the App.

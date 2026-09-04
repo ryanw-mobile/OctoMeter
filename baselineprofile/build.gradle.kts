@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.test)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.baselineprofile)
 }
 
@@ -20,7 +19,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    targetProjectPath = ":composeApp"
+    targetProjectPath = ":androidApp"
 
 }
 
