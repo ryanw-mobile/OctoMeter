@@ -15,7 +15,7 @@ Package namespace: `com.rwmobi.kunigami`
 ./gradlew run
 
 # Build Android debug APK
-./gradlew :composeApp:assembleDebug
+./gradlew :androidApp:assembleDebug
 
 # Full build with all checks
 ./gradlew build
@@ -39,7 +39,7 @@ Package namespace: `com.rwmobi.kunigami`
 ./gradlew :composeApp:testDebugUnitTest --tests "com.rwmobi.kunigami.ui.viewmodels.AgileViewModelTest.methodName"
 
 # Android instrumented tests (Pixel 2 API 35 managed device)
-./gradlew :composeApp:pixel2Api35DebugAndroidTest
+./gradlew :androidApp:pixel2Api35DebugAndroidTest
 
 # Before running tests after Room schema changes
 ./gradlew :composeApp:kspCommonMainKotlinMetadata
@@ -60,6 +60,8 @@ All tests run with timezone fixed to `Europe/London`.
 CI enforces all of these — run `./gradlew check assembleDebug` to replicate the CI gate.
 
 ## Architecture
+
+**Modules:** `composeApp` is a Kotlin Multiplatform library (AGP 9's `com.android.kotlin.multiplatform.library` for its Android target, plus desktop/iOS targets) holding all shared UI and business logic. `androidApp` is a plain `com.android.application` module containing only the Android entry point (`MainActivity`, `KunigamiApplication`, manifest, launcher icons) and depends on `composeApp`.
 
 Clean Architecture with three layers in `composeApp/src/commonMain/`:
 
@@ -96,7 +98,7 @@ di/            → Koin dependency injection modules
 ## Source Sets
 
 - `commonMain` / `commonTest` — shared code and tests (primary location for logic)
-- `androidMain` / `androidUnitTest` / `androidInstrumentedTest`
+- `androidMain` / `androidHostTest` (in `composeApp`; `main` / `androidTest` in `androidApp`)
 - `desktopMain` / `desktopTest`
 - `iosMain`
 

@@ -13,31 +13,23 @@
  * Please refer to the LICENSE file for the full terms and conditions.
  */
 
-import com.android.build.api.dsl.ManagedVirtualDevice
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import java.io.FileInputStream
-import java.io.InputStreamReader
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Properties
 import org.jmailen.gradle.kotlinter.tasks.FormatTask
 import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     id("jacoco")
     alias(libs.plugins.serialization)
     alias(libs.plugins.buildConfig)
-    alias(libs.plugins.baselineprofile)
     alias(libs.plugins.kotlinPowerAssert)
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidxRoom)
@@ -47,10 +39,7 @@ plugins {
 }
 
 // Configuration
-val productName = "OctoMeter"
-val productApkName = "OctoMeter"
 val productNameSpace = "com.rwmobi.kunigami"
-val isRunningOnCI = System.getenv("CI") == "true"
 
 buildConfig {
     packageName("composeapp.kunigami")
@@ -61,8 +50,29 @@ buildConfig {
 }
 
 kotlin {
-    androidTarget {
-        compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
+    android {
+        namespace = "$productNameSpace.shared"
+        compileSdk = libs.versions.compileSdk.get().toInt()
+        minSdk = libs.versions.minSdk.get().toInt()
+
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
+
+        androidResources {
+            enable = true
+        }
+
+        withHostTestBuilder {}.configure {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+        }
+
+        withDeviceTestBuilder {
+            sourceSetTreeName = "test"
+        }.configure {
+            instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
     }
 
     compilerOptions {
@@ -118,30 +128,10 @@ kotlin {
             implementation(libs.koin.android)
         }
 
-        val androidUnitTest by getting {
+        val androidHostTest by getting {
             dependencies {
                 implementation(libs.androidx.test.core.ktx)
                 implementation(libs.robolectric)
-            }
-        }
-
-        val androidInstrumentedTest by getting {
-            dependencies {
-                implementation(project.dependencies.platform(libs.compose.bom))
-                implementation(libs.material3.windowsizeclass)
-                implementation(libs.androidx.junit)
-                implementation(libs.androidx.espresso.core)
-                implementation(libs.ui.test.junit4)
-                implementation(libs.androidx.test.rules)
-                implementation(libs.androidx.uiautomator)
-            }
-        }
-
-        // https://kotlinlang.org/docs/multiplatform-android-layout.html#adjust-the-implementation-of-android-flavors
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        invokeWhenCreated("androidDebug") {
-            dependencies {
-                implementation(libs.leakcanary.android)
             }
         }
 
@@ -211,75 +201,12 @@ kotlin {
 dependencies {
     "kspAndroid"(libs.androidx.room.compiler) // For AndroidUnitTest
     "kspCommonMainMetadata"(libs.androidx.room.compiler)
-    implementation(libs.androidx.profileinstaller)
-    "baselineProfile"(project(":baselineprofile"))
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
 
-android {
-    namespace = productNameSpace
-
-    setupSdkVersionsFromVersionCatalog()
-    setupSigningAndBuildTypes()
-
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].res.srcDirs("src/androidMain/res")
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
-
-    defaultConfig {
-        applicationId = productNameSpace
-
-        androidResources { localeFilters.add("en") }
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-
-        // Kotlinx DateTime backward compatibility
-        isCoreLibraryDesugaringEnabled = true
-    }
-
-    buildFeatures {
-        compose = true
-        buildConfig = true
-    }
-
-    packaging {
-        resources {
-            excludes += listOf(
-                "META-INF/AL2.0",
-                "META-INF/LGPL2.1",
-                "META-INF/licenses/ASM",
-            )
-            pickFirsts += listOf(
-                "win32-x86-64/attach_hotspot_windows.dll",
-                "win32-x86/attach_hotspot_windows.dll",
-            )
-        }
-    }
-
-    testOptions {
-        animationsDisabled = true
-
-        unitTests {
-            isIncludeAndroidResources = true
-            isReturnDefaultValues = true
-        }
-
-        managedDevices {
-            allDevices {
-                create<ManagedVirtualDevice>("pixel2Api35") {
-                    device = "Pixel 2"
-                    apiLevel = 35
-                    systemImageSource = "aosp-atd"
-                }
-            }
-        }
-    }
+compose.resources {
+    // The generated Res class defaults to internal visibility, which composeApp's own androidMain
+    // code doesn't need, but androidApp (a separate module depending on composeApp) does.
+    publicResClass = true
 }
 
 compose.desktop {
@@ -288,7 +215,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Deb)
-            packageName = productName
+            packageName = "OctoMeter"
             packageVersion = libs.versions.versionName.get()
             description = "OctoMeter: Empowering Smart Electricity Usage"
             copyright = "© 2024-2025 RW MobiMedia UK Limited. All rights reserved."
@@ -298,7 +225,7 @@ compose.desktop {
 
             macOS {
                 bundleID = productNameSpace
-                dockName = productName
+                dockName = "OctoMeter"
                 iconFile.set(project.file("icons/ic_launcher_macos.icns"))
                 notarization {
                     val providers = project.providers
@@ -309,7 +236,7 @@ compose.desktop {
             }
             windows {
                 iconFile.set(project.file("icons/ic_launcher_windows.ico"))
-                menuGroup = productName
+                menuGroup = "OctoMeter"
                 shortcut = true
                 dirChooser = true
                 perUserInstall = true
@@ -390,7 +317,7 @@ jacoco {
 }
 
 tasks.register<JacocoReport>("jacocoTestReportDebug") {
-    dependsOn("testDebugUnitTest")
+    dependsOn("testAndroidHostTest")
 
     reports {
         xml.required.set(true)
@@ -399,8 +326,6 @@ tasks.register<JacocoReport>("jacocoTestReportDebug") {
 
     val fileFilter = listOf(
         // Excluded classes
-        "**/KunigamiApplication*.class",
-        "**/MainActivity*.class",
         "**/*MembersInjector.class",
         "**/*Factory.class",
         "**/data/source/local/*_Impl*.class",
@@ -409,7 +334,6 @@ tasks.register<JacocoReport>("jacocoTestReportDebug") {
         "**/BuildConfig.class",
         "**/ComposableSingletons*.class",
         "**/App*.class",
-        "**/MainKt*.class",
         "**/NavigationLayoutType.class",
         "**/ui/extensions/WindowSizeClassExtensions*.class",
         "**/ui/extensions/ThrowableExtensions*.class",
@@ -436,14 +360,11 @@ tasks.register<JacocoReport>("jacocoTestReportDebug") {
     )
 
     classDirectories.setFrom(
-        files(
-            fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
+        layout.buildDirectory.dir("classes/kotlin/android/main").map { dir ->
+            fileTree(dir) {
                 exclude(fileFilter)
-            },
-            fileTree("${layout.buildDirectory.get()}/intermediates/javac/debug") {
-                exclude(fileFilter)
-            },
-        ),
+            }
+        },
     )
     sourceDirectories.setFrom(
         files(
@@ -452,100 +373,8 @@ tasks.register<JacocoReport>("jacocoTestReportDebug") {
         ),
     )
     executionData.setFrom(
-        fileTree(layout.buildDirectory.get()).include(
-            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
-            "jacoco/testDebugUnitTest.exec",
-        ),
+        layout.buildDirectory.dir("jacoco").map { dir ->
+            fileTree(dir).include("*.exec")
+        },
     )
-}
-
-// Gradle Build Utilities
-private fun BaseAppModuleExtension.setupSdkVersionsFromVersionCatalog() {
-    compileSdk = libs.versions.compileSdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = libs.versions.versionCode.get().toInt()
-        versionName = libs.versions.versionName.get()
-    }
-}
-private fun BaseAppModuleExtension.setupSigningAndBuildTypes() {
-    val releaseSigningConfigName = "releaseSigningConfig"
-    val timestamp = SimpleDateFormat("yyyyMMdd-HHmmss").format(Date())
-    val baseName = "$productApkName-${libs.versions.versionName.get()}-$timestamp"
-    val isReleaseBuild = gradle.startParameter.taskNames.any {
-        it.contains("Release", ignoreCase = true) ||
-            it.contains("Bundle", ignoreCase = true) ||
-            it.equals("build", ignoreCase = true)
-    }
-
-    extensions.configure<BasePluginExtension> { archivesName.set(baseName) }
-
-    signingConfigs.create(releaseSigningConfigName) {
-        // Only initialise the signing config when a Release or Bundle task is being executed.
-        // This prevents Gradle sync or debug builds from attempting to load the keystore,
-        // which could fail if the keystore or environment variables are not available.
-        // SigningConfig itself is only wired to the 'release' build type, so this guard avoids unnecessary setup.
-        if (isReleaseBuild) {
-            val keystorePropertiesFile = file("../../keystore.properties")
-
-            if (isRunningOnCI || !keystorePropertiesFile.exists()) {
-                println("⚠\uFE0F Signing Config: using environment variables")
-                keyAlias = System.getenv("CI_ANDROID_KEYSTORE_ALIAS")
-                keyPassword = System.getenv("CI_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
-                storeFile = file(System.getenv("KEYSTORE_LOCATION"))
-                storePassword = System.getenv("CI_ANDROID_KEYSTORE_PASSWORD")
-            } else {
-                println("⚠\uFE0F Signing Config: using keystore properties")
-                val properties = Properties()
-                InputStreamReader(
-                    FileInputStream(keystorePropertiesFile),
-                    Charsets.UTF_8,
-                ).use { reader ->
-                    properties.load(reader)
-                }
-
-                keyAlias = properties.getProperty("alias")
-                keyPassword = properties.getProperty("pass")
-                storeFile = file(properties.getProperty("store"))
-                storePassword = properties.getProperty("storePass")
-            }
-        } else {
-            println("⚠\uFE0F Signing Config: not created for non-release builds.")
-        }
-    }
-
-    buildTypes {
-        fun setOutputFileName() {
-            applicationVariants.all {
-                outputs
-                    .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
-                    .forEach { output ->
-                        val outputFileName = "$productApkName-$name-$versionName-$timestamp.apk"
-                        output.outputFileName = outputFileName
-                    }
-            }
-        }
-
-        getByName("debug") {
-            applicationIdSuffix = ".debug"
-            isMinifyEnabled = false
-            isDebuggable = true
-            setOutputFileName()
-        }
-
-        getByName("release") {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            isDebuggable = false
-            setProguardFiles(
-                listOf(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro",
-                ),
-            )
-            signingConfig = signingConfigs.getByName(name = releaseSigningConfigName)
-            setOutputFileName()
-        }
-    }
 }

@@ -39,7 +39,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Gradle build
-        run: xvfb-run ./gradlew :composeApp:buildReleasePreBundle jacocoTestReportDebug
+        run: xvfb-run ./gradlew :androidApp:buildReleasePreBundle :composeApp:jacocoTestReportDebug
         env:
           CI: 'true'
           KEYSTORE_LOCATION: ${{ steps.decode_keystore.outputs.filePath }}
